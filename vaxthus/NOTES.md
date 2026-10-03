@@ -3,12 +3,12 @@
 Byggd av Hugo i Claude (desktop). En fil, `index.html`, three.js r128 från cdnjs och typsnitten Archivo + IBM Plex Mono. Ljust och mörkt tema följer systemet.
 
 ## Geometri (meter i koden, mm i gränssnittet)
-- `A` = halva bredden (3,5 → 7 000 mm), `H` = nockhöjd (4,2).
+- `A` = halva bredden, `H` = nockhöjd. Standard nu **4 800 × 4 500 mm** (Hugos val, okt 2026). Originalet var 7 000 × 4 200.
 - Bågen är en **cirkelbåge** med centrum under marken, förskjutet i sidled:
   - `C = (H² − A²) / 2A` → förskjutning 0,77 m
   - `R = C + A` → radie 4,27 m
   - `ARC = R·(π − atan2(H, −C))` → halvbåge 5,933 m, hel båge 11,866 m
-- **Spetsighet (tillagd av Vickan):** `YC` är radiecentrums höjd. Det var 0 i originalet, alltså centrum i marknivå, och nu är det −1,0 m som standard. Bredd och nockhöjd är låsta, så när centrum sänks växer radien och bågarna möts i en spetsigare (gotisk) nock.
+- **Spetsighet (tillagd av Vickan):** `YC` är radiecentrums höjd. Det var 0 i originalet, alltså centrum i marknivå, och det är 0 även som standard nu. Hugos spetsiga form kommer från proportionerna (smalt och högt: 4,8 × 4,5 m ger R 5 419, båge 5 310 och 34° vid nock, med lodräta bågfötter). Bredd och nockhöjd är låsta, så när centrum sänks växer radien och bågarna möts i en spetsigare (gotisk) nock.
   - `C = (H² − A² − 2·H·YC) / 2A`, `R = √((C+A)² + YC²)`
   - Taklutning vid nock = atan(C / (H − YC)). Den gamla rundade bågen gav 10°, standard nu 21° och max (YC = −2,5) ca 30°.
   - Bågen möter marken något lutad i stället för lodrät. Reglaget "Spetsighet" går från 0 (rund) till 2,5 m.
