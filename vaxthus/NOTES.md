@@ -49,4 +49,10 @@ Varje regel har `t0` och `t1` och "växer" fram längs sin egen längd. Alla reg
 - Skruv, lim, beslag och gångjärn ingår inte.
 - Dimensionerna är antaganden och ska stämmas av mot snö- och vindlast.
 - "Kopiera" ger tabbseparerad text för Excel och Sheets.
-- "Exportera CSV" använder `window.claude.use('downloads')`, som bara finns inne i Claude. På en vanlig webbsida är knappen dold.
+- "Exportera CSV" använder Claudes nedladdning (`window.claude.use('downloads')`) när sidan körs inne i Claude. Annars blir det en vanlig nedladdning via webbläsaren, med semikolon och BOM så att Excel läser åäö rätt.
+
+## GLB-export (tillagd av Vickan)
+- Knappen "Exportera 3D (GLB)". Använder GLTFExporter för three r128 från jsdelivr (`examples/js`, ingen modul).
+- Exporterar alltid det **färdigbyggda** huset, oavsett var byggreglaget står, och ställer sedan tillbaka reglaget.
+- Struktur: `Bagvaxthus_<B>x<L>m` → `Stomme` (en nod per regel), `Dorrar` (4 blad), `Film` (tak + 2 gavlar).
+- Två material: `Tra` och `Polyetenfilm`. Enhet meter, Y uppåt. Öppnas i Blender, SketchUp (via import) och Rhino.

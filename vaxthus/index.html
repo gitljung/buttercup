@@ -148,7 +148,7 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
 
   <div class="bomhead">
     <h2>Inköpslista trästomme</h2>
-    <div><span id="bmsg" role="status"></span><button class="btn" id="bcopy" type="button">Kopiera</button><button class="btn pri" id="bexp" type="button" hidden>Exportera CSV</button></div>
+    <div><span id="bmsg" role="status"></span><button class="btn" id="bcopy" type="button">Kopiera</button><button class="btn pri" id="bexp" type="button">Exportera CSV</button><button class="btn" id="bglb" type="button">Exportera 3D (GLB)</button></div>
   </div>
   <div class="tw"><table>
     <thead><tr><th>Del</th><th>Dimension</th><th class="n">Antal</th><th class="n">Kaplängd</th><th class="n">Att köpa</th></tr></thead>
@@ -158,6 +158,7 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js"></script>
 <script>
 (function(){
   var stageEl=document.getElementById('stage'), cv=document.getElementById('cv');
@@ -533,8 +534,8 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
     catch(e){ say('Kunde inte kopiera här. Använd Exportera CSV.'); }
   });
   bexp.addEventListener('click',function(){
-    if(!saver) return;
     var name='inkopslista-bagvaxthus-'+String(2*A).replace('.','_')+'x'+L+'m.csv';
+    if(!saver){ dl(new Blob(['\ufeff'+bomCsv(';')],{type:'text/csv;charset=utf-8'}),name); say('Sparad som '+name+'.'); return; }
     saver.save({filename:name,data:'\ufeff'+bomCsv(';')}).then(function(){ say('Sparad som '+name+'.'); },function(e){
       var c=e&&e.code;
       say(c==='declined'?'Exporten avbröts.':c==='rate_limited'?'En sparruta är redan öppen. Försök igen strax.':'Export går inte i den här vyn. Använd Kopiera.');
@@ -547,6 +548,35 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme);
     new MutationObserver(applyTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
   }catch(e){}
+
+  // ---- nedladdning + GLB-export ----
+  function dl(blob,name){ var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name;
+    document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500); }
+  document.getElementById('bglb').addEventListener('click',function(){
+    if(!T.GLTFExporter){ say('3D-exporten kunde inte laddas. Ladda om sidan.'); return; }
+    var keep=p; p=1; update();                      // exportera alltid det färdiga huset
+    model.updateMatrixWorld(true);
+    var out=new T.Group(); out.name='Bagvaxthus_'+String(2*A).replace('.','_')+'x'+L+'m';
+    var wood=new T.MeshStandardMaterial({color:0xc8863a,roughness:.85}); wood.name='Tra';
+    var film=new T.MeshStandardMaterial({color:0xe4f1f4,transparent:true,opacity:.35,side:T.DoubleSide,roughness:.2}); film.name='Polyetenfilm';
+    var stomme=new T.Group(); stomme.name='Stomme'; out.add(stomme);
+    var m4=new T.Matrix4();
+    for(var i=0;i<beams.length;i++){ inst.getMatrixAt(i,m4);
+      var me=new T.Mesh(unit,wood); me.name='Regel_'+i; me.applyMatrix4(m4); stomme.add(me); }
+    var dorrar=new T.Group(); dorrar.name='Dorrar'; out.add(dorrar);
+    doors.forEach(function(d,k){ var g=new T.Group(); g.name='Dorrblad_'+(k+1);
+      d.g.traverse(function(o){ if(o.isMesh){ var c=new T.Mesh(o.geometry,o===d.pane?film:wood); c.applyMatrix4(o.matrixWorld); g.add(c); } });
+      dorrar.add(g); });
+    var f=new T.Group(); f.name='Film'; out.add(f);
+    var rf=new T.Mesh(roof.geometry.clone(),film); rf.geometry.setDrawRange(0,Infinity); rf.name='Takfilm'; rf.applyMatrix4(roof.matrixWorld); f.add(rf);
+    gables.forEach(function(gm,k){ var c=new T.Mesh(gm.geometry,film); c.name='Gavelfilm_'+(k+1); c.applyMatrix4(gm.matrixWorld); f.add(c); });
+    p=keep; update();
+    new T.GLTFExporter().parse(out,function(res){
+      var name='bagvaxthus-'+String(2*A).replace('.','_')+'x'+L+'m.glb';
+      dl(new Blob([res],{type:'model/gltf-binary'}),name); say('Sparad som '+name+' (meter, Y uppåt).');
+    },{binary:true});
+  });
+  window.__vx={setP:setP,getP:function(){return p;},n:function(){return beams.length;}};
 
   build(); resize(); applyTheme();
 })();
