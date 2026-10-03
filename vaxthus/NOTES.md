@@ -8,6 +8,10 @@ Byggd av Hugo i Claude (desktop). En fil, `index.html`, three.js r128 från cdnj
   - `C = (H² − A²) / 2A` → förskjutning 0,77 m
   - `R = C + A` → radie 4,27 m
   - `ARC = R·(π − atan2(H, −C))` → halvbåge 5,933 m, hel båge 11,866 m
+- **Spetsighet (tillagd av Vickan):** `YC` är radiecentrums höjd. Det var 0 i originalet, alltså centrum i marknivå, och nu är det −1,0 m som standard. Bredd och nockhöjd är låsta, så när centrum sänks växer radien och bågarna möts i en spetsigare (gotisk) nock.
+  - `C = (H² − A² − 2·H·YC) / 2A`, `R = √((C+A)² + YC²)`
+  - Taklutning vid nock = atan(C / (H − YC)). Den gamla rundade bågen gav 10°, standard nu 21° och max (YC = −2,5) ca 30°.
+  - Bågen möter marken något lutad i stället för lodrät. Reglaget "Spetsighet" går från 0 (rund) till 2,5 m.
 - `ap(u, side, r)` ger punkten längs bågen (u = 0 vid marken, 1 vid nocken). `xa(y)` ger bågens x vid höjden y.
 - `fit()` håller dörr och överljus under bågen. Om de inte får plats krymps först överljuset och sedan dörrhöjden, i steg om 5 cm, med 20 cm marginal.
 

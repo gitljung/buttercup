@@ -130,6 +130,7 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
     <div class="hrow"><span class="lab">Dörrhöjd</span><input id="dhi" type="range" min="1.8" max="3" step="0.05" value="2" aria-label="Dörrhöjd"><output id="dho" for="dhi"></output></div>
     <div class="hrow"><span class="lab">Överljus</span><input id="tri" type="range" min="0" max="1.5" step="0.05" value="1" aria-label="Överljusets höjd"><output id="tro" for="tri"></output></div>
     <div class="hrow"><span class="lab">Bågavstånd</span><input id="spi" type="range" min="0.6" max="3" step="0.05" value="1" aria-label="Avstånd mellan bågarna"><output id="spo" for="spi"></output></div>
+    <div class="hrow"><span class="lab">Spetsighet</span><input id="pti" type="range" min="0" max="2.5" step="0.05" value="1" aria-label="Hur spetsig bågen är"><output id="pto" for="pti"></output></div>
   </section>
   </div>
 
@@ -151,6 +152,8 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
     <div><dt>Båglängd, halvbåge</dt><dd id="dB"></dd></div>
     <div><dt>Båglängd, hel båge</dt><dd id="dB2"></dd></div>
     <div><dt>Radiecentrum förskjutet</dt><dd id="dC"></dd></div>
+    <div><dt>Radiecentrum under mark</dt><dd id="dY"></dd></div>
+    <div><dt>Taklutning vid nock</dt><dd id="dP"></dd></div>
     <div><dt>Längd</dt><dd id="dL"></dd></div>
     <div><dt>Dörröppning</dt><dd id="dD"></dd></div>
     <div><dt>Överljus</dt><dd id="dT"></dd></div>
@@ -179,19 +182,20 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
   var T=THREE, V=function(x,y,z){return new T.Vector3(x,y,z);};
 
   // ---- geometry constants (metres) ----
-  var A=3.5, H=4.2, C, R, TH1, ARC;
-  function geo(){ C=(H*H-A*A)/(2*A); R=C+A; TH1=Math.atan2(H,-C); ARC=R*(Math.PI-TH1); }
+  var A=3.5, H=4.2, YC=-1, C, R, TH0, TH1, ARC;
+  function geo(){ C=(H*H-A*A-2*H*YC)/(2*A); R=Math.sqrt((C+A)*(C+A)+YC*YC); TH0=Math.PI-Math.asin(-YC/R); TH1=Math.atan2(H-YC,-C); ARC=R*(TH0-TH1); }
+  function slope(){ return Math.atan(C/(H-YC))*180/Math.PI; }
   var DW=1, DH=2, TR=1;                      // half door width, door height, transom height
   function fit(){                            // keep the door frame under the arch
     DW=Math.min(DW,A-1);
-    var lim=Math.sqrt(R*R-(DW+C)*(DW+C))-.2;
+    var lim=YC+Math.sqrt(R*R-(DW+C)*(DW+C))-.2;
     if(DH+TR>lim) TR=Math.max(0,Math.floor((lim-DH)*20+1e-6)/20);
     if(DH+TR>lim) DH=Math.floor(lim*20+1e-6)/20;
   }
   geo(); fit();
   function fmt(v){ return String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g,' '); }
-  function ap(u,side,r){ r=r||R; var t1=Math.acos(-C/r), th=Math.PI-u*(Math.PI-t1); var x=C+r*Math.cos(th); return [side<0?x:-x, r*Math.sin(th)]; }
-  function xa(y){ return Math.sqrt(R*R-y*y)-C; }
+  function ap(u,side,r){ r=r||R; var t0=Math.PI-Math.asin(Math.min(1,-YC/r)), t1=Math.acos(-C/r), th=t0-u*(t0-t1); var x=C+r*Math.cos(th); return [side<0?x:-x, YC+r*Math.sin(th)]; }
+  function xa(y){ return Math.sqrt(R*R-(y-YC)*(y-YC))-C; }
 
   var STEPS=[
     {n:'Syllram',a:0,b:.10},{n:'Bågar',a:.10,b:.52},{n:'Nock och sidoreglar',a:.52,b:.64},
@@ -344,6 +348,8 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
     document.getElementById('dB').textContent=fmt(ARC*1000)+' mm';
     document.getElementById('dB2').textContent=fmt(2*ARC*1000)+' mm';
     document.getElementById('dC').textContent=fmt(C*1000)+' mm';
+    document.getElementById('dY').textContent=fmt(-YC*1000)+' mm';
+    document.getElementById('dP').textContent=Math.round(slope())+'°';
     document.getElementById('dN').textContent=n+' st';
     document.getElementById('dNl').textContent='Bågar c/c '+fmt(L/(n-1)*1000)+' mm';
     document.getElementById('dA').textContent=fmt(2*A*L)+' m²';
@@ -451,13 +457,13 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
     function ln(c,x1,y1,x2,y2){ return '<line class="'+c+'" x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'"/>'; }
     function tx(x,yy,t,an,c,rot){ return '<text x="'+x+'" y="'+yy+'" text-anchor="'+(an||'middle')+'"'+(c?' class="'+c+'"':'')+(rot?' transform="rotate(-90 '+x+' '+yy+')"':'')+'>'+t+'</text>'; }
     o+=ln('s-gnd',-A-1.4,YG,A+1.4,YG);
-    [R-.047,R+.047].forEach(function(r){ var ay=YG-Math.sqrt(r*r-C*C); o+='<path class="s-arch" d="M'+(C-r)+' '+YG+' A'+r+' '+r+' 0 0 1 0 '+ay+' A'+r+' '+r+' 0 0 1 '+(r-C)+' '+YG+'"/>'; });
+    [R-.047,R+.047].forEach(function(r){ var bx=Math.sqrt(r*r-YC*YC)-C, ay=YG-(YC+Math.sqrt(r*r-C*C)); o+='<path class="s-arch" d="M'+(-bx)+' '+YG+' A'+r+' '+r+' 0 0 1 0 '+ay+' A'+r+' '+r+' 0 0 1 '+bx+' '+YG+'"/>'; });
     var nb=Math.max(12,Math.round(ARC/.3)), bj, bs, b0, b1;
     for(bj=0;bj<nb;bj++) for(bs=-1;bs<=1;bs+=2){ b0=ap((bj+.5)/nb,bs,R-.04); b1=ap((bj+.5)/nb,bs,R+.04); o+=ln('s-blk',b0[0],YG-b0[1],b1[0],YG-b1[1]); }
     o+='<rect class="s-wood" x="'+(-DW)+'" y="'+(YG-DH)+'" width="'+(2*DW)+'" height="'+DH+'"/><rect class="s-wood" x="'+(-DW)+'" y="'+(YG-top)+'" width="'+(2*DW)+'" height="'+TR+'"/>';
     o+=ln('s-wood',0,YG-DH,0,YG)+ln('s-wood',0,YG-top,0,y)+ln('s-wood',-DW,YG-top,-x3,YG-top)+ln('s-wood',DW,YG-top,x3,YG-top);
     // radius
-    o+=ln('s-dash',C,YG,m[0],YG-m[1])+'<circle cx="'+C+'" cy="'+YG+'" r=".07" fill="var(--muted)"/><circle cx="'+(-C)+'" cy="'+YG+'" r=".07" fill="var(--muted)"/>';
+    o+=ln('s-dash',C,YG-YC,m[0],YG-m[1])+'<circle cx="'+C+'" cy="'+(YG-YC)+'" r=".07" fill="var(--muted)"/><circle cx="'+(-C)+'" cy="'+(YG-YC)+'" r=".07" fill="var(--muted)"/>';
     o+=tx(m[0]-.2,YG-m[1]-.15,'R '+fmt(R*1000),'end','mut');
     // arc length
     o+=tx(ml[0],YG-ml[1],'Båge '+fmt(ARC*1000),'start');
@@ -478,6 +484,7 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
     dhi.value=DH; dho.textContent=fmt(DH*1000)+' mm';
     tri.value=TR; tro.textContent=fmt(TR*1000)+' mm';
     spo.textContent=fmt(L/(nArch()-1)*1000)+' mm';
+    pti.value=-YC; pto.textContent=Math.round(slope())+'° vid nock';
   }
   var wid=document.getElementById('wid'), wout=document.getElementById('wout');
   var dwi=document.getElementById('dwi'), dwo=document.getElementById('dwo'), dhi=document.getElementById('dhi'), dho=document.getElementById('dho'), tri=document.getElementById('tri'), tro=document.getElementById('tro');
@@ -487,6 +494,8 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
   tri.addEventListener('input',function(){ TR=parseFloat(tri.value); refresh(); });
   var spi=document.getElementById('spi'), spo=document.getElementById('spo');
   spi.addEventListener('input',function(){ SP=parseFloat(spi.value); refresh(); });
+  var pti=document.getElementById('pti'), pto=document.getElementById('pto');
+  pti.addEventListener('input',function(){ YC=-parseFloat(pti.value); refresh(); });
   function setHW(h,w){
     w=Math.round(Math.min(12,Math.max(4,w))*10)/10; var a=w/2;
     h=Math.round(Math.min(7,Math.max(3.5,a,h))*20)/20;
@@ -535,7 +544,7 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
   }
   function bomCsv(sep){
     var head=['Del','Dimension','Antal','Kaplängd','Att köpa','Kommentar'];
-    var meta='Bågväxthus '+fmt(2*A*1000)+' × '+fmt(L*1000)+' mm, nockhöjd '+fmt(H*1000)+' mm, dörr '+fmt(DW*2000)+' × '+fmt(DH*1000)+' mm, överljus '+fmt(TR*1000)+' mm';
+    var meta='Bågväxthus '+fmt(2*A*1000)+' × '+fmt(L*1000)+' mm, nockhöjd '+fmt(H*1000)+' mm, R '+fmt(R*1000)+' mm (centrum '+fmt(-YC*1000)+' mm under mark), dörr '+fmt(DW*2000)+' × '+fmt(DH*1000)+' mm, överljus '+fmt(TR*1000)+' mm';
     function q(v){ v=String(v); return /[";\t\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }
     return [meta,head.join(sep)].concat(bomRows().map(function(r){ return [r.del,r.dim,r.qty,r.len,r.buy,r.info].map(q).join(sep); })).join('\r\n');
   }
@@ -589,7 +598,7 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
       dl(new Blob([res],{type:'model/gltf-binary'}),name); say('Sparad som '+name+' (meter, Y uppåt).');
     },{binary:true});
   });
-  window.__vx={setP:setP,getP:function(){return p;},n:function(){return beams.length;}};
+  window.__vx={setP:setP,getP:function(){return p;},n:function(){return beams.length;},scene:scene,cam:cam,renderer:renderer,inst:function(){return inst;},model:function(){return model;},doors:function(){return doors;}};
 
   build(); resize(); applyTheme();
 })();
