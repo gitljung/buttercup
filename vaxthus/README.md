@@ -1,4 +1,4 @@
-# Bågväxthus 4,8 × 10 m
+# Bågväxthus 4 × 10 m
 
 Dra i reglaget för att resa stommen. Sista steget klär huset i polyetenfilm.
 

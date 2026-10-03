@@ -3,7 +3,7 @@
 Byggd av Hugo i Claude (desktop). En fil, `index.html`, three.js r128 från cdnjs och typsnitten Archivo + IBM Plex Mono. Ljust och mörkt tema följer systemet.
 
 ## Geometri (meter i koden, mm i gränssnittet)
-- `A` = halva bredden, `H` = nockhöjd. Standard nu **4 800 × 4 500 mm** (Hugos val, okt 2026). Originalet var 7 000 × 4 200.
+- `A` = halva bredden, `H` = nockhöjd. Standard nu **4 000 × 3 500 mm**, dörr 2 000 × 2 000, överljus 450, bågavstånd 2 000 (Hugos val, okt 2026). Originalet var 7 000 × 4 200.
 - Bågen är en **cirkelbåge** med centrum under marken, förskjutet i sidled:
   - `C = (H² − A²) / 2A` → förskjutning 0,77 m
   - `R = C + A` → radie 4,27 m
