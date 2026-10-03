@@ -164,7 +164,7 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
 
   <div class="bomhead">
     <h2>Inköpslista trästomme</h2>
-    <div><span id="bmsg" role="status"></span><button class="btn" id="bcopy" type="button">Kopiera</button><button class="btn pri" id="bexp" type="button">Exportera CSV</button><button class="btn" id="bglb" type="button">Exportera 3D (GLB)</button></div>
+    <div><span id="bmsg" role="status"></span><button class="btn" id="bcopy" type="button">Kopiera</button><button class="btn pri" id="bexp" type="button">Exportera CSV</button><button class="btn" id="bglb" type="button">Exportera 3D (GLB)</button><button class="btn" id="bstep" type="button">Exportera CAD (STEP)</button></div>
   </div>
   <div class="tw"><table>
     <thead><tr><th>Del</th><th>Dimension</th><th class="n">Antal</th><th class="n">Kaplängd</th><th class="n">Att köpa</th></tr></thead>
@@ -175,6 +175,7 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js"></script>
+<script src="../lib/step.js"></script>
 <script>
 (function(){
   var stageEl=document.getElementById('stage'), cv=document.getElementById('cv');
@@ -598,6 +599,21 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
       dl(new Blob([res],{type:'model/gltf-binary'}),name); say('Sparad som '+name+' (meter, Y uppåt).');
     },{binary:true});
   });
+  document.getElementById('bstep').addEventListener('click',function(){
+    if(!window.StepExport){ say('STEP-exporten kunde inte laddas. Ladda om sidan.'); return; }
+    var keep=p; p=1; update(); model.updateMatrixWorld(true);
+    var tag=String(2*A).replace('.','_')+'x'+L+'m', w=StepExport.create('Bagvaxthus '+tag), wood='#c8863a', m4=new T.Matrix4();
+    for(var i=0;i<beams.length;i++){ inst.getMatrixAt(i,m4); w.unitBox(m4.elements,'Regel_'+(i+1),wood); }
+    doors.forEach(function(d,k){ d.g.traverse(function(o){ if(o.isMesh && o!==d.pane) w.unitBox(o.matrixWorld.elements,'Dorrblad_'+(k+1),wood); }); });
+    p=keep; update();
+    var name='bagvaxthus-'+tag+'.step';
+    dl(new Blob([w.toString(name)],{type:'application/step'}),name);
+    say('Sparad som '+name+': '+w.count()+' solider, mm, Z uppåt.');
+  });
+  window.__step=function(){ var keep=p; p=1; update(); model.updateMatrixWorld(true); var w=StepExport.create('Bagvaxthus'), m4=new T.Matrix4();
+    for(var i=0;i<beams.length;i++){ inst.getMatrixAt(i,m4); w.unitBox(m4.elements,'Regel_'+(i+1),'#c8863a'); }
+    doors.forEach(function(d,k){ d.g.traverse(function(o){ if(o.isMesh && o!==d.pane) w.unitBox(o.matrixWorld.elements,'Dorrblad_'+(k+1),'#c8863a'); }); });
+    p=keep; update(); return w.toString('test.step'); };
   window.__vx={setP:setP,getP:function(){return p;},n:function(){return beams.length;},scene:scene,cam:cam,renderer:renderer,inst:function(){return inst;},model:function(){return model;},doors:function(){return doors;}};
 
   build(); resize(); applyTheme();

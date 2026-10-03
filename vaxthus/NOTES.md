@@ -60,3 +60,9 @@ Varje regel har `t0` och `t1` och "växer" fram längs sin egen längd. Alla reg
 - Exporterar alltid det **färdigbyggda** huset, oavsett var byggreglaget står, och ställer sedan tillbaka reglaget.
 - Struktur: `Bagvaxthus_<B>x<L>m` → `Stomme` (en nod per regel), `Dorrar` (4 blad), `Film` (tak + 2 gavlar).
 - Två material: `Tra` och `Polyetenfilm`. Enhet meter, Y uppåt. Öppnas i Blender, SketchUp (via import) och Rhino.
+
+## STEP-export (tillagd av Vickan)
+- Knappen "Exportera CAD (STEP)". Den delade skrivaren ligger i `../lib/step.js` och används även av hönshuset.
+- AP214, riktiga solider (MANIFOLD_SOLID_BREP med plana ytor), mm, Z uppåt. Varje regel och kloss blir en egen solid med namn och träfärg.
+- Film och glas är bara ytor, inga solider, och följer därför inte med i STEP. Ta GLB om du vill ha dem.
+- Kontrollerad med OpenCascade: 547 solider, 0 ogiltiga, bbox 4 120 × 10 120 × 3 570 mm.
