@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BAGL Box – 3D</title>
+<meta name="description" content="BAGL Box i 3D: välj 6, 12 eller 24 bagels och se lådan packas med schmears och pålägg.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Buttercup">
+<meta property="og:title" content="BAGL Box – 3D">
+<meta property="og:description" content="Välj 6, 12 eller 24 bagels och se lådan packas med schmears och pålägg.">
+<meta property="og:url" content="https://buttercup-omega.vercel.app/baglbox/">
+<meta property="og:image" content="https://buttercup-omega.vercel.app/baglbox/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://buttercup-omega.vercel.app/baglbox/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500&display=swap">
+<style>
+:root{--ink:#151514;--paper:#fff;--board:#f5f4f1;--muted:#55524d;--rule:#cfccc5;
+  --display:"Barlow Condensed","Arial Narrow",sans-serif;--body:"Barlow",system-ui,sans-serif;color-scheme:light}
+html,body{margin:0;height:100%;background:var(--board);color:var(--ink);font-family:var(--body);overflow:hidden}
+#stage{position:fixed;top:0;right:0;bottom:0;left:352px}
+#stage canvas{display:block;touch-action:none}
+.panel{position:fixed;left:16px;top:16px;bottom:16px;width:320px;box-sizing:border-box;background:var(--paper);
+  border:1px solid var(--rule);padding:22px 20px 18px;overflow:auto;z-index:5}
+.brand{font-family:var(--display);font-weight:600;font-size:40px;letter-spacing:.42em;margin:0;line-height:1}
+.brand-sub{font-family:var(--display);font-weight:500;font-size:12px;letter-spacing:.42em;margin:8px 0 4px}
+h2{font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin:20px 0 8px;color:var(--muted)}
+.sizes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.sizes button{font-family:var(--display);border:1px solid var(--ink);background:var(--paper);color:var(--ink);padding:9px 4px 8px;cursor:pointer;text-align:center}
+.sizes button b{display:block;font-size:30px;font-weight:600;letter-spacing:.04em;line-height:1}
+.sizes button span{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-top:4px}
+.sizes button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.ppl{font-size:13px;color:var(--muted);margin:8px 0 0}
+.row{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:13px}
+.row label,.row .lab{flex:0 0 64px;color:var(--muted);font-family:var(--display);letter-spacing:.14em;text-transform:uppercase;font-size:12px}
+.row input[type=range]{flex:1;min-width:0;accent-color:var(--ink)}
+.row output{flex:0 0 42px;text-align:right;font-variant-numeric:tabular-nums;font-size:12px}
+.seg{display:flex;flex:1;border:1px solid var(--ink)}
+.seg button{flex:1;font-family:var(--display);letter-spacing:.12em;text-transform:uppercase;font-size:12px;border:0;background:var(--paper);color:var(--ink);padding:6px 0;cursor:pointer}
+.seg button+button{border-left:1px solid var(--ink)}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.btn{font-family:var(--display);letter-spacing:.14em;text-transform:uppercase;font-size:12px;border:1px solid var(--ink);background:var(--paper);color:var(--ink);padding:7px 10px;cursor:pointer}
+.btn.pri{background:var(--ink);color:var(--paper)}
+.btns{display:flex;flex-wrap:wrap;gap:6px}
+.list{font-size:13px;line-height:1.4;margin:0;padding:0;list-style:none}
+.list li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #ebe8e2;padding:5px 0}
+.list li span:last-child{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.list li.head{border-bottom:1px solid var(--ink);font-family:var(--display);letter-spacing:.14em;text-transform:uppercase;font-size:12px;padding-top:12px}
+.chk{display:flex;align-items:center;gap:8px;font-size:13px;margin:8px 0}
+.chk input{accent-color:var(--ink)}
+.note{font-size:11px;color:var(--muted);line-height:1.45;margin:16px 0 0}
+#msg{font-size:12px;color:var(--muted);margin:8px 0 0;min-height:1em}
+.dim{font-family:var(--display);font-size:12px;letter-spacing:.08em;background:var(--paper);border:1px solid var(--ink);padding:1px 6px;white-space:nowrap;color:var(--ink)}
+.err{position:fixed;inset:0;display:grid;place-items:center;font-family:var(--display);letter-spacing:.1em}
+@media (max-width:760px){
+  #stage{left:0;bottom:46vh}
+  .panel{left:0;right:0;top:auto;bottom:0;width:auto;height:46vh;border-left:0;border-right:0;border-bottom:0;
+    padding:14px 16px calc(16px + env(safe-area-inset-bottom))}
+  .brand{font-size:26px}.brand-sub{margin-bottom:0}
+}
+</style>
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+}}
+</script>
+</head>
+<body>
+<div id="stage"></div>
+<aside class="panel">
+  <p class="brand">BAGL</p>
+  <p class="brand-sub">BOX · NYC STYLE BAGELS</p>
+
+  <h2>Storlek</h2>
+  <div class="sizes" id="sizes" role="group" aria-label="Välj storlek"></div>
+  <p class="ppl" id="ppl"></p>
+
+  <h2>Lådan</h2>
+  <div class="row"><label for="lid">Lock</label><input id="lid" type="range" min="0" max="180" step="1" value="110"><output id="lido"></output></div>
+  <div class="row"><label for="pack">Packa</label><input id="pack" type="range" min="0" max="1000" step="1" value="860"><output id="packo"></output></div>
+  <div class="row"><span class="lab"></span><button class="btn pri" id="play" type="button">Packa lådan</button></div>
+  <div class="row"><span class="lab">Färg</span><div class="seg" id="finish" role="group" aria-label="Lådans färg"></div></div>
+  <label class="chk"><input type="checkbox" id="dims" checked> Visa mått</label>
+
+  <h2>Innehåll</h2>
+  <ul class="list" id="list"></ul>
+
+  <h2>Export</h2>
+  <div class="btns">
+    <button class="btn" id="xpng" type="button">Bild (PNG)</button>
+    <button class="btn" id="xglb" type="button">3D (GLB)</button>
+    <button class="btn" id="xstep" type="button">CAD (STEP)</button>
+  </div>
+  <p id="msg" role="status"></p>
+  <p class="note">Lådans mått räknas fram av innehållet: bagels Ø 108 mm lutade 35°, koppar Ø 88 mm (8 oz) i en insats med hål. STEP-filen innehåller bara förpackningen. Ett förslag, inte ett tryckunderlag.</p>
+</aside>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+import '../lib/step.js';
+
+const $ = id => document.getElementById(id);
+const DEG = Math.PI / 180;
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const ease = t => t * t * (3 - 2 * t);
+const mm = m => Math.round(m * 1000);
+function rng(seed) { let s = (seed * 2654435761) >>> 0 || 1; return () => { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; }
+
+const INK = '#151514', PAPER = '#ffffff', BOARD = '#f5f4f1';
+const FINISH = { svart: { n: 'Svart', c: '#1b1b1a' }, vit: { n: 'Vit', c: '#f4f3ef' }, kraft: { n: 'Kraft', c: '#b0875c' } };
+
+/* ---------- Innehåll (från bagl.se) ---------- */
+const BAGELS = [
+  { k: 'PLN', n: 'Plain', seeds: [] },
+  { k: 'SES', n: 'Sesame', seeds: [['sesame', 230]] },
+  { k: 'EVR', n: 'Everything', seeds: [['sesame', 90], ['poppy', 120], ['onion', 30], ['salt', 22]] },
+  { k: 'POP', n: 'Poppy', seeds: [['poppy', 340]] },
+  { k: 'SSG', n: 'Sausage sesame', seeds: [['sesame', 150], ['sausage', 16]] },
+  { k: 'VBJ', n: 'Västerbotten jalapeño', seeds: [['cheese', 14], ['jalapeno', 12]], tint: '#ffe7c4' },
+];
+const FOOD = {
+  plain:        { n: 'Plain schmear', g: 'schmear', c: '#f4efe4' },
+  dpc:          { n: 'Dill pickle chive', g: 'schmear', c: '#eef0dd', sp: ['#5f8a3a', '#3e6a2b'] },
+  sot:          { n: 'Sundried tomato', g: 'schmear', c: '#f3d8c6', sp: ['#b8432f', '#8f2c22'] },
+  vbj:          { n: 'Västerbotten jalapeño', g: 'schmear', c: '#f4e6bb', sp: ['#5c8a34', '#d9993a'] },
+  lox:          { n: 'Kallrökt lax', g: 'fold', c: '#f0875a', st: '#ffd6c2' },
+  pastrami:     { n: 'Pastrami', g: 'fold', c: '#7f322b', st: '#d58c84', edge: '#2a1b17' },
+  skinka:       { n: 'Rökt skinka', g: 'fold', c: '#e7a39e', st: '#f8dad6' },
+  emmentaler:   { n: 'Emmentaler', g: 'slices', c: '#f1dc8c' },
+  vasterbotten: { n: 'Västerbottensost', g: 'cubes', c: '#f1d27a' },
+  kapris:       { n: 'Kapris', g: 'balls', c: '#6b7a37' },
+  rodlok:       { n: 'Picklad rödlök', g: 'rings', c: '#c24f8d' },
+  gurka:        { n: 'Gurka', g: 'discs', c: '#d4e5a8', rim: '#46732f' },
+  saltgurka:    { n: 'Saltgurka', g: 'spears', c: '#8b9a45' },
+  dill:         { n: 'Dill', g: 'fluff', c: '#7ea94b' },
+  citron:       { n: 'Citron', g: 'wedges', c: '#f2d33b' },
+  tomat:        { n: 'Tomat', g: 'discs', c: '#e0563f', rim: '#b52a1e' },
+  gront:        { n: 'Sallad', g: 'leaves', c: '#78ad4c' },
+};
+const BOXES = {
+  6:  { key: '06', name: 'Lox Box', ppl: '6 bagels · 4–6 personer', mix: 1, trays: [
+        { sub: 'LOX BOX', sections: [{ t: 'bagels', n: 6 }, { t: 'cups', rows: 2, items: ['plain', 'dpc', 'lox', 'kapris', 'rodlok', 'gurka', 'dill', 'citron'] }, { t: 'cutlery', n: 6 }] }] },
+  12: { key: '12', name: 'Deli Box', ppl: '12 bagels · 8–10 personer', mix: 2, trays: [
+        { sub: 'DELI BOX', sections: [{ t: 'bagels', n: 12 }, { t: 'cups', rows: 2, items: ['plain', 'dpc', 'sot', 'lox', 'lox', 'pastrami', 'emmentaler', 'saltgurka', 'rodlok', 'citron'] }, { t: 'cutlery', n: 12 }] }] },
+  24: { key: '24', name: 'Full Spread', ppl: '24 bagels · 16–20 personer', mix: 4, trays: [
+        { sub: 'FULL SPREAD · 1/2', sections: [{ t: 'bagels', n: 12 }, { t: 'bagels', n: 12 }, { t: 'cups', rows: 1, items: ['plain', 'dpc', 'sot', 'vbj'] }] },
+        { sub: 'FULL SPREAD · 2/2', sections: [{ t: 'cups', rows: 2, items: ['lox', 'lox', 'pastrami', 'skinka', 'emmentaler', 'vasterbotten', 'saltgurka', 'rodlok', 'kapris', 'tomat', 'gront', 'citron'] }, { t: 'cutlery', n: 24 }] }] },
+};
+
+const S = { size: 12, lid: 110, p: 0.86, finish: 'svart', dims: true, playing: false };
+
+/* ---------- Renderare ---------- */
+const stage = $('stage');
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true }); }
+catch (e) { document.body.insertAdjacentHTML('beforeend', '<p class="err">3D-grafik (WebGL) kunde inte starta i den här webbläsaren.</p>'); throw e; }
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+stage.appendChild(renderer.domElement);
+const labelR = new CSS2DRenderer();
+Object.assign(labelR.domElement.style, { position: 'absolute', inset: '0', pointerEvents: 'none' });
+stage.appendChild(labelR.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(BOARD);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.5;
+const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 50);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.maxPolarAngle = Math.PI * 0.48; controls.minDistance = 0.25; controls.maxDistance = 6;
+const sun = new THREE.DirectionalLight(0xffffff, 2.0);
+sun.position.set(-1.1, 2.6, 1.7); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -0.0003; sun.shadow.normalBias = 0.004;
+Object.assign(sun.shadow.camera, { left: -1.3, right: 1.3, top: 1.3, bottom: -1.3, near: 0.1, far: 8 });
+scene.add(sun);
+scene.add(new THREE.HemisphereLight(0xffffff, 0xe9e5db, 0.55));
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.ShadowMaterial({ opacity: 0.15 }));
+ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+
+function resize() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  renderer.setSize(w, h); labelR.setSize(w, h);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(stage);
+
+/* ---------- Texturer ---------- */
+const FONT = w => `${w} {S}px "Barlow Condensed","Arial Narrow",sans-serif`;
+function canvasTex(w, h, draw, rep) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const g = c.getContext('2d'); draw(g, w, h);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  if (rep) t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  return t;
+}
+// text med spärrning (letter-spacing), ritas tecken för tecken
+function spaced(g, text, x, y, size, weight, track, align, draw = true) {
+  g.font = FONT(weight).replace('{S}', size);
+  const ch = [...text], ws = ch.map(c => g.measureText(c).width), sp = size * track;
+  const w = ws.reduce((a, b) => a + b, 0) + sp * (ch.length - 1);
+  if (!draw) return w;
+  let cx = align === 'center' ? x - w / 2 : align === 'right' ? x - w : x;
+  ch.forEach((c, i) => { g.fillText(c, cx, y); cx += ws[i] + sp; });
+  return w;
+}
+function logoTex(L, D, sub, tag) {
+  const W = 2048, H = Math.max(256, Math.round(2048 * D / L));
+  return canvasTex(W, H, g => {
+    g.fillStyle = PAPER; g.fillRect(0, 0, W, H); g.fillStyle = INK; g.textBaseline = 'alphabetic';
+    let size = H * 0.36; const w = spaced(g, 'BAGL', 0, 0, size, 600, 0.5, 'center', false);
+    if (w > W * 0.6) size *= W * 0.6 / w;
+    const y = H * 0.52 + size * 0.3;
+    spaced(g, 'BAGL', W / 2 + size * 0.25, y, size, 600, 0.5, 'center');
+    spaced(g, 'NYC STYLE BAGELS', W / 2 + size * 0.03, y + size * 0.34, size * 0.12, 500, 0.6, 'center');
+    const s = Math.max(18, size * 0.075);
+    spaced(g, tag, W * 0.035, H * 0.05 + s, s, 600, 0.3, 'left');
+    spaced(g, sub, W * 0.965, H * 0.05 + s, s, 600, 0.3, 'right');
+    g.fillRect(W * 0.035, H * 0.905, W * 0.93, Math.max(2, H * 0.004));
+    spaced(g, 'GOOD BAGELS → GOOD DAYS', W * 0.035, H * 0.955, s * 0.9, 500, 0.3, 'left');
+    spaced(g, 'BOILED · BAKED · EVERY HOUR', W * 0.965, H * 0.955, s * 0.9, 500, 0.3, 'right');
+  });
+}
+function insideTex(L, D, tag) {
+  const W = 2048, H = Math.max(256, Math.round(2048 * D / L));
+  return canvasTex(W, H, g => {
+    g.fillStyle = PAPER; g.fillRect(0, 0, W, H); g.fillStyle = INK; g.textBaseline = 'alphabetic';
+    let size = H * 0.2; const w = spaced(g, 'GOOD BAGELS', 0, 0, size, 600, 0.12, 'center', false);
+    if (w > W * 0.8) size *= W * 0.8 / w;
+    spaced(g, 'GOOD BAGELS', W / 2, H * 0.44, size, 600, 0.12, 'center');
+    spaced(g, '→ GOOD DAYS', W / 2, H * 0.44 + size * 1.02, size, 600, 0.12, 'center');
+    const s = Math.max(16, size * 0.16);
+    spaced(g, 'RECIPE FROM 1911 · HELSINGBORG', W / 2, H * 0.44 + size * 1.55, s, 500, 0.45, 'center');
+    spaced(g, 'BAGL ' + tag, W / 2, H * 0.12 + s, s, 600, 0.45, 'center');
+  });
+}
+function skirtTex(L, h, tag, name) {
+  const W = 2048, H = Math.max(48, Math.round(2048 * h / L));
+  return canvasTex(W, H, g => {
+    g.fillStyle = PAPER; g.fillRect(0, 0, W, H); g.fillStyle = INK; g.textBaseline = 'middle';
+    const s = H * 0.42;
+    spaced(g, `${tag} · ${name}`, W * 0.03, H * 0.52, s, 600, 0.3, 'left');
+    spaced(g, 'OPEN UNTIL SOLD OUT', W * 0.97, H * 0.52, s, 500, 0.3, 'right');
+  });
+}
+const stickerTex = canvasTex(512, 512, (g, W, H) => {
+  g.clearRect(0, 0, W, H); g.fillStyle = INK; g.beginPath(); g.arc(W / 2, H / 2, W / 2 - 2, 0, Math.PI * 2); g.fill();
+  g.fillStyle = PAPER; g.textBaseline = 'alphabetic';
+  spaced(g, 'BAGL', W / 2 + 20, H * 0.56, 120, 600, 0.35, 'center');
+  spaced(g, 'NYC', W / 2 + 8, H * 0.72, 40, 500, 0.5, 'center');
+});
+const tissueTex = canvasTex(512, 512, (g, W, H) => {
+  g.fillStyle = '#fbfbf8'; g.fillRect(0, 0, W, H); g.fillStyle = INK; g.textBaseline = 'middle';
+  for (let r = 0; r < 4; r++) {
+    const y = H * (r + 0.5) / 4, off = (r % 2) * W / 4;
+    for (let k = -1; k < 3; k++) spaced(g, 'BAGL', off + k * W / 2 + W / 4, y, 58, 600, 0.35, 'center');
+  }
+}, true);
+function speckTex(base, specks) {
+  return canvasTex(256, 256, (g, W, H) => {
+    g.fillStyle = base; g.fillRect(0, 0, W, H);
+    const r = rng(base.length * 97 + (specks ? specks.length : 0));
+    for (let i = 0; i < 1400; i++) { g.globalAlpha = 0.07; g.fillStyle = r() < 0.5 ? '#ffffff' : '#c9c1b0'; g.beginPath(); g.arc(r() * W, r() * H, 1 + r() * 5, 0, 7); g.fill(); }
+    g.globalAlpha = 1;
+    if (specks) for (let i = 0; i < 420; i++) { g.fillStyle = specks[i % specks.length]; g.fillRect(r() * W, r() * H, 1.5 + r() * 3.5, 1 + r() * 2.5); }
+  }, true);
+}
+function stripeTex(base, stripe, edge) {
+  return canvasTex(256, 128, (g, W, H) => {
+    g.fillStyle = base; g.fillRect(0, 0, W, H); g.strokeStyle = stripe; g.globalAlpha = 0.75;
+    for (let i = -4; i < 14; i++) { g.lineWidth = 3 + (i % 3) * 2; g.beginPath(); for (let x = 0; x <= W; x += 8) { const y = i * 14 + x * 0.35 + Math.sin(x / 23 + i) * 5; x ? g.lineTo(x, y) : g.moveTo(x, y); } g.stroke(); }
+    g.globalAlpha = 1; if (edge) { g.fillStyle = edge; g.fillRect(0, 0, W, 9); g.fillRect(0, H - 9, W, 9); }
+  });
+}
+const holesTex = canvasTex(256, 256, (g, W, H) => {
+  g.fillStyle = '#f1dc8c'; g.fillRect(0, 0, W, H); const r = rng(5);
+  for (let i = 0; i < 9; i++) { const x = r() * W, y = r() * H, s = 10 + r() * 18; g.fillStyle = '#d9bf62'; g.beginPath(); g.ellipse(x, y, s, s * 0.8, 0, 0, 7); g.fill(); g.fillStyle = '#c9ad52'; g.beginPath(); g.ellipse(x + 2, y + 2, s * 0.7, s * 0.55, 0, 0, 7); g.fill(); }
+});
+function uvScale(geo, su, sv) { const uv = geo.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * su, uv.getY(i) * sv); return geo; }
+
+/* ---------- Material ---------- */
+const mat = (c, o = {}) => new THREE.MeshStandardMaterial(Object.assign({ color: c, roughness: 0.7 }, o));
+const EXT = mat(FINISH.svart.c, { roughness: 0.75 });
+const WHITE = mat('#fbfaf7', { roughness: 0.85 });
+const LIDW = mat('#ffffff', { roughness: 0.8 });
+const TISSUE = new THREE.MeshStandardMaterial({ map: tissueTex, roughness: 0.95, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1 });
+const PLASTIC = new THREE.MeshPhysicalMaterial({ color: 0xffffff, transparent: true, opacity: 0.22, roughness: 0.06, metalness: 0, side: THREE.DoubleSide, depthWrite: false, clearcoat: 1 });
+const PRINT = t => new THREE.MeshStandardMaterial({ map: t, roughness: 0.8, polygonOffset: true, polygonOffsetFactor: -2 });
+
+/* ---------- Bagel ---------- */
+const BR = 0.034, Br = 0.02, BSZ = 0.88;
+const bagelGeo = (() => {
+  const g = new THREE.TorusGeometry(BR, Br, 22, 60); g.scale(1, 1, BSZ); g.computeVertexNormals();
+  const n = g.attributes.normal, p = g.attributes.position, col = new Float32Array(p.count * 3);
+  const lo = new THREE.Color('#e9bd82'), mid = new THREE.Color('#d0904b'), hi = new THREE.Color('#a9652b'), c = new THREE.Color();
+  const r = rng(11);
+  for (let i = 0; i < p.count; i++) {
+    const t = clamp(n.getZ(i) * 0.55 + 0.5);
+    if (t < 0.5) c.copy(lo).lerp(mid, t * 2); else c.copy(mid).lerp(hi, (t - 0.5) * 2);
+    if (Math.hypot(p.getX(i), p.getY(i)) < BR) c.lerp(lo, 0.3);
+    c.multiplyScalar(0.94 + r() * 0.1);
+    col.set([c.r, c.g, c.b], i * 3);
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  return g;
+})();
+const G_SPH = new THREE.SphereGeometry(1, 8, 6), G_BOX = new THREE.BoxGeometry(1, 1, 1), G_CYL = new THREE.CylinderGeometry(1, 1, 1, 10);
+const SEED = {
+  sesame:   { geo: G_SPH, m: mat('#efe1bd', { roughness: 0.5 }), s: [0.0013, 0.0006, 0.0024] },
+  poppy:    { geo: G_SPH, m: mat('#24252b', { roughness: 0.6 }), s: [0.0007, 0.0006, 0.0007] },
+  onion:    { geo: G_BOX, m: mat('#7a4a22'), s: [0.003, 0.0007, 0.002] },
+  salt:     { geo: G_BOX, m: mat('#ffffff', { roughness: 0.3 }), s: [0.0016, 0.0016, 0.0016] },
+  sausage:  { geo: G_BOX, m: mat('#7a3324'), s: [0.006, 0.0025, 0.0045] },
+  cheese:   { geo: G_SPH, m: mat('#e09d38', { roughness: 0.45 }), s: [0.0065, 0.0016, 0.005] },
+  jalapeno: { geo: G_CYL, m: mat('#4f7d2c'), s: [0.0036, 0.0009, 0.0036] },
+};
+function seedMesh(kind, count, r) {
+  const d = SEED[kind], im = new THREE.InstancedMesh(d.geo, d.m, count);
+  const m = new THREE.Matrix4(), q = new THREE.Quaternion(), q2 = new THREE.Quaternion(), p = new THREE.Vector3(), nr = new THREE.Vector3(), s = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0);
+  for (let i = 0; i < count; i++) {
+    const u = r() * Math.PI * 2, v = 0.15 + r() * (Math.PI - 0.3), cv = Math.cos(v), sv = Math.sin(v);
+    p.set((BR + Br * cv) * Math.cos(u), (BR + Br * cv) * Math.sin(u), Br * sv * BSZ);
+    nr.set(cv * Math.cos(u), cv * Math.sin(u), sv / BSZ).normalize();
+    p.addScaledVector(nr, d.s[1] * 0.35);
+    q.setFromUnitVectors(up, nr).multiply(q2.setFromAxisAngle(up, r() * Math.PI * 2));
+    const k = 0.8 + r() * 0.4; s.set(d.s[0] * k, d.s[1] * k, d.s[2] * k);
+    im.setMatrixAt(i, m.compose(p, q, s));
+  }
+  return im;
+}
+const bagelMats = {};
+function makeBagel(type, seed) {
+  const g = new THREE.Group(); g.name = 'Bagel_' + type.k;
+  bagelMats[type.k] ||= new THREE.MeshStandardMaterial({ vertexColors: true, color: type.tint || '#ffffff', roughness: 0.55 });
+  const m = new THREE.Mesh(bagelGeo, bagelMats[type.k]); m.castShadow = m.receiveShadow = true; g.add(m);
+  const r = rng(seed); type.seeds.forEach(([k, n]) => g.add(seedMesh(k, n, r)));
+  return g;
+}
+// bageln står på kant och lutar 35° (som dominobrickor), skorpan uppåt-framåt
+const LEAN = 35 * DEG;
+const BQ = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), LEAN)
+  .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2));
+const BEXT = (() => { const b = new THREE.Box3(), v = new THREE.Vector3(), p = bagelGeo.attributes.position; for (let i = 0; i < p.count; i++) b.expandByPoint(v.fromBufferAttribute(p, i).applyQuaternion(BQ)); return b; })();
+const PITCH = 0.043, BAG_W = BEXT.max.x - BEXT.min.x, BAG_H = BEXT.max.y - BEXT.min.y;
+
+/* ---------- Koppar och pålägg ---------- */
+const CUP_H = 0.05, CUP_RT = 0.044, CUP_RB = 0.038, CUPP = 0.11;
+const radAt = h => CUP_RB + (CUP_RT - CUP_RB) * h / CUP_H - 0.002;
+const cupWall = new THREE.CylinderGeometry(CUP_RT, CUP_RB, CUP_H, 40, 1, true);
+const cupRim = new THREE.TorusGeometry(CUP_RT, 0.0012, 6, 48);
+const cupBot = new THREE.CircleGeometry(CUP_RB, 32);
+const dome = new THREE.SphereGeometry(1, 28, 10, 0, Math.PI * 2, 0, Math.PI / 2);
+const swirl = new THREE.TorusGeometry(0.013, 0.0045, 8, 28).rotateX(Math.PI / 2);
+const foldGeo = (() => { const g = new THREE.PlaneGeometry(0.064, 0.034, 18, 3), p = g.attributes.position; for (let i = 0; i < p.count; i++) p.setZ(i, Math.sin(p.getX(i) / 0.064 * Math.PI * 2.4) * 0.0055); g.rotateX(-Math.PI / 2); g.computeVertexNormals(); return g; })();
+const wedgeGeo = (() => { const s = new THREE.Shape(); s.moveTo(0, 0); s.absarc(0, 0, 0.022, 0, Math.PI / 2.3, false); s.lineTo(0, 0); return new THREE.ExtrudeGeometry(s, { depth: 0.014, bevelEnabled: true, bevelSize: 0.0015, bevelThickness: 0.0015, bevelSegments: 2, curveSegments: 10 }).translate(0, 0, -0.007); })();
+const ringGeo = new THREE.TorusGeometry(0.0095, 0.0018, 6, 20);
+const leafGeo = (() => { const g = new THREE.IcosahedronGeometry(1, 1), p = g.attributes.position, r = rng(3); for (let i = 0; i < p.count; i++) p.setXYZ(i, p.getX(i) * (0.8 + r() * 0.5), p.getY(i) * 0.35, p.getZ(i) * (0.8 + r() * 0.5)); g.computeVertexNormals(); return g; })();
+
+function pile(geo, material, count, r, o = {}) {
+  const im = new THREE.InstancedMesh(geo, material, count), m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), p = new THREE.Vector3(), s = new THREE.Vector3();
+  const R = o.R || 0.03, H = o.h || 0.03;
+  for (let i = 0; i < count; i++) {
+    const rr = Math.sqrt(r()) * R, a = r() * Math.PI * 2;
+    p.set(Math.cos(a) * rr, (o.y0 || 0.004) + r() * H * (1 - 0.5 * rr / R), Math.sin(a) * rr);
+    e.set(o.flat ? (r() - 0.5) * o.flat : r() * 6.28, r() * 6.28, o.flat ? (r() - 0.5) * o.flat : r() * 6.28);
+    const k = (o.k || 1) * (0.85 + r() * 0.3); s.set(k, k, k); if (o.sc) s.multiply(o.sc);
+    im.setMatrixAt(i, m.compose(p, q.setFromEuler(e), s));
+  }
+  im.castShadow = im.receiveShadow = true; return im;
+}
+const texCache = {};
+function food(kind, r) {
+  const f = FOOD[kind], g = new THREE.Group(); g.name = f.n;
+  const fill = (h, c) => { const m = new THREE.Mesh(new THREE.CylinderGeometry(radAt(h), CUP_RB - 0.002, h, 32), mat(c, { roughness: 0.85 })); m.position.y = h / 2 + 0.001; g.add(m); };
+  switch (f.g) {
+    case 'schmear': {
+      const h = 0.033; fill(h, f.c);
+      const tm = new THREE.MeshStandardMaterial({ map: texCache[kind] ||= speckTex(f.c, f.sp), roughness: 0.75 });
+      const t = new THREE.Mesh(dome, tm); const rr = radAt(h); t.scale.set(rr, 0.009, rr); t.position.y = h + 0.001; g.add(t);
+      const sw = new THREE.Mesh(swirl, tm); sw.position.set((r() - 0.5) * 0.012, h + 0.0085, (r() - 0.5) * 0.012); sw.scale.set(1, 0.7, 1); g.add(sw);
+      break;
+    }
+    case 'fold': {
+      fill(0.012, f.c);
+      const m = new THREE.MeshStandardMaterial({ map: texCache[kind] ||= stripeTex(f.c, f.st, f.edge), roughness: 0.5, side: THREE.DoubleSide });
+      for (let i = 0; i < 6; i++) { const s = new THREE.Mesh(foldGeo, m); s.position.set((r() - 0.5) * 0.02, 0.017 + i * 0.0045, (r() - 0.5) * 0.02); s.rotation.set((r() - 0.5) * 0.4, r() * Math.PI * 2, (r() - 0.5) * 0.35); g.add(s); }
+      break;
+    }
+    case 'slices': {
+      const m = new THREE.MeshStandardMaterial({ map: holesTex, roughness: 0.6 });
+      for (let i = 0; i < 6; i++) { const s = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.003, 0.05), m); s.position.set((r() - 0.5) * 0.006, 0.006 + i * 0.0045, (r() - 0.5) * 0.006); s.rotation.set((r() - 0.5) * 0.12, r() * 0.9, (r() - 0.5) * 0.12); g.add(s); }
+      break;
+    }
+    case 'cubes':  g.add(pile(new THREE.BoxGeometry(0.011, 0.011, 0.011), mat(f.c, { roughness: 0.6 }), 38, r, { R: 0.028, h: 0.026 })); break;
+    case 'balls':  fill(0.008, '#5a6630'); g.add(pile(new THREE.SphereGeometry(0.0038, 8, 6), mat(f.c, { roughness: 0.45 }), 85, r, { R: 0.033, h: 0.024 })); break;
+    case 'rings':  fill(0.006, '#d78ab4'); g.add(pile(ringGeo, mat(f.c, { roughness: 0.4 }), 34, r, { R: 0.028, h: 0.028 })); break;
+    case 'discs': {
+      const R = kind === 'tomat' ? 0.021 : 0.016, n = kind === 'tomat' ? 7 : 13;
+      const m = [mat(f.rim, { roughness: 0.5 }), mat(f.c, { roughness: 0.5 }), mat(f.c, { roughness: 0.5 })];
+      g.add(pile(new THREE.CylinderGeometry(R, R, 0.005, 22), m, n, r, { R: 0.022, h: 0.026, flat: 1.1 })); break;
+    }
+    case 'spears': g.add(pile(new THREE.CylinderGeometry(0.0075, 0.0075, 0.06, 8), mat(f.c, { roughness: 0.55 }), 8, r, { R: 0.012, h: 0.028, flat: 0.4, sc: new THREE.Vector3(1, 1, 1) }));
+      g.children.at(-1).geometry.rotateZ(Math.PI / 2); break;
+    case 'fluff':  fill(0.01, '#5f8a3a'); g.add(pile(leafGeo, mat(f.c, { roughness: 0.8 }), 120, r, { R: 0.034, h: 0.024, k: 0.0042 })); break;
+    case 'leaves': g.add(pile(leafGeo, mat(f.c, { roughness: 0.7, side: THREE.DoubleSide }), 26, r, { R: 0.026, h: 0.03, k: 0.016, flat: 1.2 })); break;
+    case 'wedges': g.add(pile(wedgeGeo, mat(f.c, { roughness: 0.45 }), 6, r, { R: 0.02, h: 0.024, flat: 1.4 })); break;
+  }
+  g.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+  return g;
+}
+function makeCup(kind, seed) {
+  const g = new THREE.Group(); g.name = 'Kopp_' + kind;
+  g.add(food(kind, rng(seed)));
+  const w = new THREE.Mesh(cupWall, PLASTIC); w.position.y = CUP_H / 2; w.renderOrder = 3; g.add(w);
+  const rim = new THREE.Mesh(cupRim, PLASTIC); rim.rotation.x = Math.PI / 2; rim.position.y = CUP_H; rim.renderOrder = 3; g.add(rim);
+  const b = new THREE.Mesh(cupBot, PLASTIC); b.rotation.x = -Math.PI / 2; b.position.y = 0.0008; g.add(b);
+  return g;
+}
+
+/* ---------- Förpackning ---------- */
+function packMesh(geo, m, part) { const o = new THREE.Mesh(geo, m); o.castShadow = o.receiveShadow = true; o.userData.pack = true; o.userData.part = part; return o; }
+function boxAt(parent, w, h, d, m, x, y, z, part) { const o = packMesh(new THREE.BoxGeometry(w, h, d), m, part); o.position.set(x, y, z); parent.add(o); return o; }
+function rrect(path, cx, cy, w, h, r) {
+  path.moveTo(cx - w / 2 + r, cy - h / 2); path.lineTo(cx + w / 2 - r, cy - h / 2); path.absarc(cx + w / 2 - r, cy, r, -Math.PI / 2, Math.PI / 2, false);
+  path.lineTo(cx - w / 2 + r, cy + h / 2); path.absarc(cx - w / 2 + r, cy, r, Math.PI / 2, Math.PI * 1.5, false); return path;
+}
+function handleWall(w, h, d, m) {
+  const s = new THREE.Shape(); s.moveTo(-w / 2, 0); s.lineTo(w / 2, 0); s.lineTo(w / 2, h); s.lineTo(-w / 2, h); s.lineTo(-w / 2, 0);
+  s.holes.push(rrect(new THREE.Path(), 0, h - 0.032, 0.085, 0.024, 0.012));
+  return packMesh(new THREE.ExtrudeGeometry(s, { depth: d, bevelEnabled: false, curveSegments: 12 }), m, 'Kortsida');
+}
+function plan(spec) {
+  return spec.sections.map(s => {
+    if (s.t === 'bagels') return { ...s, depth: 0.122, len: (s.n - 1) * PITCH + BAG_W + 0.01 };
+    if (s.t === 'cups') { const cols = Math.ceil(s.items.length / s.rows); return { ...s, cols, depth: s.rows * CUPP + 0.016, len: cols * CUPP + 0.01 }; }
+    return { ...s, depth: 0.07, len: 0.36 };
+  });
+}
+const BUILT = { textures: [] };
+function buildTray(secs, iL, iD, iH, cfg, spec, queue, seed0, items) {
+  const t = 0.004, Lo = iL + 2 * t, Do = iD + 2 * t, Ho = iH + 0.003;
+  const root = new THREE.Group(); root.name = 'BAGL_Box_' + cfg.key;
+  // botten
+  boxAt(root, Lo, 0.0025, Do, EXT, 0, 0.00125, 0, 'Botten');
+  boxAt(root, iL, 0.0005, iD, WHITE, 0, 0.00275, 0, 'Botten_insida');
+  // långsidor, två lager (utsida i lådans färg, insida vit)
+  for (const s of [-1, 1]) {
+    boxAt(root, Lo, Ho, 0.0025, EXT, 0, Ho / 2, s * (Do / 2 - 0.00125), 'Langsida');
+    boxAt(root, iL, Ho - 0.003, 0.0015, WHITE, 0, (Ho + 0.003) / 2, s * (Do / 2 - 0.0025 - 0.00075), 'Langsida_insida');
+  }
+  // kortsidor med utstansade handtag
+  for (const s of [-1, 1]) {
+    const o = handleWall(iD, Ho, 0.0025, EXT), n = handleWall(iD, Ho - 0.003, 0.0015, WHITE);
+    o.rotation.y = n.rotation.y = Math.PI / 2; n.position.y = 0.003;
+    if (s < 0) { o.position.x = -Lo / 2; n.position.x = -Lo / 2 + 0.0025; } else { o.position.x = Lo / 2 - 0.0025; n.position.x = Lo / 2 - 0.004; }
+    root.add(o, n);
+  }
+  // silkespapper
+  const tf = new THREE.Mesh(uvScale(new THREE.PlaneGeometry(iL - 0.004, iD - 0.004), (iL - 0.004) / 0.11, (iD - 0.004) / 0.11), TISSUE);
+  tf.rotation.x = -Math.PI / 2; tf.position.y = 0.0033; tf.receiveShadow = true; root.add(tf);
+  for (const s of [-1, 1]) { const tw = new THREE.Mesh(uvScale(new THREE.PlaneGeometry(iL - 0.004, 0.034), (iL - 0.004) / 0.11, 0.034 / 0.11), TISSUE); tw.position.set(0, 0.02, s * (iD / 2 - 0.0004)); tw.rotation.y = s > 0 ? Math.PI : 0; tw.receiveShadow = true; root.add(tw); }
+
+  let z = -iD / 2;
+  secs.forEach((s, si) => {
+    const zc = z + s.depth / 2;
+    if (si > 0) boxAt(root, iL, 0.065, 0.002, WHITE, 0, 0.003 + 0.0325, z, 'Mellanvagg');
+    if (s.t === 'bagels') {
+      const row = (s.n - 1) * PITCH + BAG_W;
+      for (let i = 0; i < s.n; i++) {
+        const b = makeBagel(queue.shift(), seed0 + si * 131 + i * 17);
+        b.quaternion.copy(BQ);
+        b.position.set(-row / 2 - BEXT.min.x + i * PITCH, 0.0034 - BEXT.min.y, zc - (BEXT.min.z + BEXT.max.z) / 2);
+        b.userData.base = b.position.clone(); root.add(b); items.push(b);
+      }
+    }
+    if (s.t === 'cups') {
+      const iy = 0.042, sd = s.depth - 0.004, sl = iL - 0.004;
+      const sh = new THREE.Shape(); sh.moveTo(-sl / 2, -sd / 2); sh.lineTo(sl / 2, -sd / 2); sh.lineTo(sl / 2, sd / 2); sh.lineTo(-sl / 2, sd / 2); sh.lineTo(-sl / 2, -sd / 2);
+      const centers = [];
+      for (let ri = 0; ri < s.rows; ri++) for (let ci = 0; ci < s.cols; ci++) {
+        const k = ri * s.cols + ci; if (k >= s.items.length) continue;
+        const x = (ci - (s.cols - 1) / 2) * CUPP, cz = z + 0.008 + (ri + 0.5) * CUPP;
+        centers.push([x, cz, s.items[k]]);
+        const h = new THREE.Path(); h.absarc(x, -(cz - zc), 0.0445, 0, Math.PI * 2, true); sh.holes.push(h);
+      }
+      const ins = packMesh(new THREE.ExtrudeGeometry(sh, { depth: 0.002, bevelEnabled: false, curveSegments: 28 }), WHITE, 'Insats');
+      ins.rotation.x = -Math.PI / 2; ins.position.set(0, iy, zc); root.add(ins);
+      for (const e of [-1, 1]) boxAt(root, sl, iy - 0.003, 0.002, WHITE, 0, 0.003 + (iy - 0.003) / 2, zc + e * (sd / 2 - 0.001), 'Insats_ben');
+      centers.forEach(([x, cz, kind], i) => { const c = makeCup(kind, seed0 + 911 + i * 29); c.position.set(x, 0.0034, cz); c.userData.base = c.position.clone(); root.add(c); items.push(c); });
+    }
+    if (s.t === 'cutlery') {
+      const g = new THREE.Group(); g.name = 'Bestick_servetter';
+      const nb = Math.min(4, Math.ceil(s.n / 6));
+      const wrap = new THREE.MeshStandardMaterial({ map: tissueTex, roughness: 0.95 });
+      for (let i = 0; i < nb; i++) { const b = new THREE.Mesh(new THREE.BoxGeometry(0.19, 0.022, 0.034), wrap); b.position.set(-iL / 2 + 0.115 + i * 0.012, 0.012 + i * 0.022, 0); b.rotation.y = (i % 2 ? 1 : -1) * 0.03; b.castShadow = b.receiveShadow = true; g.add(b); }
+      const nap = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.022, 0.05), mat('#ffffff', { roughness: 0.95 })); nap.position.set(iL / 2 - 0.08, 0.012, 0); nap.castShadow = nap.receiveShadow = true; g.add(nap);
+      const st = new THREE.Mesh(new THREE.CircleGeometry(0.016, 32), new THREE.MeshStandardMaterial({ map: stickerTex, transparent: true, roughness: 0.6 }));
+      st.rotation.x = -Math.PI / 2; st.position.set(iL / 2 - 0.08, 0.0232, 0); g.add(st);
+      g.position.set(0, 0.0034, zc); g.userData.base = g.position.clone(); root.add(g); items.push(g);
+    }
+    z += s.depth;
+  });
+
+  // lock, gångjärn i bakkant
+  const pt = 0.003, sk = 0.035, Ll = Lo + 0.008, Dl = Do + 0.006;
+  const pivot = new THREE.Group(); pivot.name = 'Lock'; pivot.position.set(0, Ho, -Do / 2 - 0.002); root.add(pivot);
+  boxAt(pivot, Ll, pt, Dl, LIDW, 0, pt / 2, Dl / 2, 'Lock');
+  boxAt(pivot, Ll, sk, pt, LIDW, 0, -sk / 2 + pt, Dl - pt / 2, 'Lock_framkant');
+  for (const s of [-1, 1]) boxAt(pivot, pt, sk, Dl - pt, LIDW, s * (Ll / 2 - pt / 2), -sk / 2 + pt, (Dl - pt) / 2, 'Lock_sida');
+  const lt = logoTex(Ll, Dl, spec.sub, cfg.key), it = insideTex(Ll, Dl, cfg.key), kt = skirtTex(Ll, sk, cfg.key, cfg.name.toUpperCase());
+  BUILT.textures.push(lt, it, kt);
+  const top = new THREE.Mesh(new THREE.PlaneGeometry(Ll - 0.004, Dl - 0.004).rotateX(-Math.PI / 2), PRINT(lt)); top.position.set(0, pt + 0.0002, Dl / 2); top.receiveShadow = true; pivot.add(top);
+  const ins = new THREE.Mesh(new THREE.PlaneGeometry(Ll - 0.012, Dl - 0.012).rotateX(Math.PI / 2), PRINT(it)); ins.position.set(0, -0.0002, Dl / 2); ins.receiveShadow = true; pivot.add(ins);
+  const skp = new THREE.Mesh(new THREE.PlaneGeometry(Ll - 0.01, sk - 0.008), PRINT(kt)); skp.position.set(0, -sk / 2 + pt, Dl + 0.0002); pivot.add(skp);
+  const stk = new THREE.Mesh(new THREE.CircleGeometry(0.021, 48), new THREE.MeshStandardMaterial({ map: stickerTex, transparent: true, roughness: 0.5, polygonOffset: true, polygonOffsetFactor: -4 }));
+  stk.position.set(0, -sk / 2 + pt, Dl + 0.0004); pivot.add(stk);
+
+  // måttlinjer
+  const dims = new THREE.Group(); dims.name = 'Matt'; dims.userData.dims = true; root.add(dims);
+  const lm = new THREE.LineBasicMaterial({ color: INK });
+  const seg = pts => dims.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lm));
+  const lab = (txt, p) => { const d = document.createElement('div'); d.className = 'dim'; d.textContent = txt; const o = new CSS2DObject(d); o.position.copy(p); dims.add(o); };
+  const V = (x, y, z) => new THREE.Vector3(x, y, z);
+  const zf = Dl - Do / 2 - 0.002 + 0.045, xr = Ll / 2 + 0.045, Hc = Ho + pt;
+  seg([V(-Ll / 2, 0.001, zf), V(Ll / 2, 0.001, zf)]); seg([V(-Ll / 2, 0.001, zf - 0.012), V(-Ll / 2, 0.001, zf + 0.012)]); seg([V(Ll / 2, 0.001, zf - 0.012), V(Ll / 2, 0.001, zf + 0.012)]);
+  lab(`${mm(Ll)} mm`, V(0, 0.002, zf));
+  const z0 = -Do / 2 - 0.002, z1 = z0 + Dl;
+  seg([V(xr, 0.001, z0), V(xr, 0.001, z1)]); seg([V(xr - 0.012, 0.001, z0), V(xr + 0.012, 0.001, z0)]); seg([V(xr - 0.012, 0.001, z1), V(xr + 0.012, 0.001, z1)]);
+  lab(`${mm(Dl)} mm`, V(xr, 0.002, (z0 + z1) / 2));
+  seg([V(xr, 0, zf), V(xr, Hc, zf)]); seg([V(xr - 0.01, Hc, zf), V(xr + 0.01, Hc, zf)]);
+  lab(`${mm(Hc)} mm`, V(xr, Hc / 2, zf));
+
+  return { root, pivot, outer: { L: Ll, D: Dl, H: Hc } };
+}
+
+/* ---------- Bygg vald storlek ---------- */
+let ROOT = null, ITEMS = [], LIDS = [], TRAYS = [];
+function bagelQueue(cfg) { const q = []; BAGELS.forEach(b => { for (let i = 0; i < cfg.mix; i++) q.push(b); }); return q; }
+function build() {
+  if (ROOT) {
+    scene.remove(ROOT);
+    ROOT.traverse(o => { if (o.element) o.element.remove(); });
+    BUILT.textures.forEach(t => t.dispose()); BUILT.textures = [];
+  }
+  const cfg = BOXES[S.size];
+  ROOT = new THREE.Group(); ROOT.name = 'BAGL_Box_' + cfg.key; ITEMS = []; LIDS = []; TRAYS = [];
+  const plans = cfg.trays.map(plan);
+  const iL = Math.max(...plans.flat().map(s => s.len)) + 0.02;
+  const iD = Math.max(...plans.map(p => p.reduce((a, s) => a + s.depth, 0))) + 0.008;
+  const iH = BAG_H + 0.008;
+  const queue = bagelQueue(cfg), gap = 0.14;
+  const total = cfg.trays.length * (iL + 0.016) + (cfg.trays.length - 1) * gap;
+  cfg.trays.forEach((spec, i) => {
+    const t = buildTray(plans[i], iL, iD, iH, cfg, spec, queue, 1000 * S.size + i * 7919, ITEMS);
+    t.root.position.x = -total / 2 + (iL + 0.016) / 2 + i * (iL + 0.016 + gap);
+    ROOT.add(t.root); LIDS.push(t.pivot); TRAYS.push(t);
+  });
+  scene.add(ROOT);
+  frame(); apply(); renderList(cfg); setDims();
+}
+function frame() {
+  const cfg = BOXES[S.size], n = cfg.trays.length, o = TRAYS[0].outer;
+  const w = n * o.L + (n - 1) * 0.14, size = Math.max(w, o.D * 1.6);
+  const fov = camera.fov * DEG, asp = Math.max(0.6, camera.aspect || 1);
+  const dist = (size * 0.62) / Math.tan(fov / 2) / Math.min(1, asp * 0.95) + 0.15;
+  const dir = new THREE.Vector3(0.42, 0.74, 1).normalize();
+  controls.target.set(0, 0.06, 0.02);
+  camera.position.copy(dir.multiplyScalar(dist)).add(controls.target);
+  controls.update();
+  const r = size * 0.75 + 0.3; Object.assign(sun.shadow.camera, { left: -r, right: r, top: r, bottom: -r }); sun.shadow.camera.updateProjectionMatrix();
+}
+function apply() {
+  const N = ITEMS.length;
+  ITEMS.forEach((it, i) => {
+    const t0 = (i / N) * 0.78, e = ease(clamp((S.p - t0) / 0.07));
+    it.visible = e > 0.001; it.position.y = it.userData.base.y + (1 - e) * 0.26;
+  });
+  const lc = ease(clamp((S.p - 0.86) / 0.14)), a = S.lid * (1 - lc);
+  LIDS.forEach(l => l.rotation.x = -a * DEG);
+  $('lido').textContent = Math.round(a) + '°';
+  $('packo').textContent = Math.round(S.p * 100) + ' %';
+  $('pack').value = Math.round(S.p * 1000);
+}
+function setDims() { ROOT.traverse(o => { if (o.userData.dims) o.visible = S.dims; }); }
+
+/* ---------- Innehållslista ---------- */
+function renderList(cfg) {
+  const li = (a, b, cls = '') => `<li class="${cls}"><span>${a}</span><span>${b}</span></li>`;
+  let h = li('Bagels', cfg.trays.reduce((a, t) => a + t.sections.filter(s => s.t === 'bagels').reduce((x, s) => x + s.n, 0), 0) + ' st', 'head');
+  BAGELS.forEach(b => h += li(b.n, '× ' + cfg.mix));
+  const cnt = {}; cfg.trays.forEach(t => t.sections.filter(s => s.t === 'cups').forEach(s => s.items.forEach(k => cnt[k] = (cnt[k] || 0) + 1)));
+  const sch = Object.keys(cnt).filter(k => FOOD[k].g === 'schmear'), rest = Object.keys(cnt).filter(k => FOOD[k].g !== 'schmear');
+  h += li('Schmears', sch.length + ' koppar', 'head'); sch.forEach(k => h += li(FOOD[k].n, '× ' + cnt[k]));
+  h += li('Pålägg', rest.reduce((a, k) => a + cnt[k], 0) + ' koppar', 'head'); rest.forEach(k => h += li(FOOD[k].n, '× ' + cnt[k]));
+  h += li('Övrigt', '', 'head') + li('Bestick och servetter', 'för ' + (S.size === 6 ? 6 : S.size === 12 ? 10 : 20));
+  h += li(cfg.trays.length > 1 ? 'Lådor (stängda)' : 'Låda (stängd)', '', 'head');
+  TRAYS.forEach((t, i) => h += li(cfg.trays.length > 1 ? `Låda ${i + 1}` : 'B × D × H', `${mm(t.outer.L)} × ${mm(t.outer.D)} × ${mm(t.outer.H)} mm`));
+  $('list').innerHTML = h;
+  $('ppl').textContent = `${cfg.key} ${cfg.name} · ${cfg.ppl}`;
+}
+
+/* ---------- UI ---------- */
+const sizeBtns = Object.keys(BOXES).map(k => {
+  const c = BOXES[k], b = document.createElement('button'); b.type = 'button';
+  b.innerHTML = `<b>${c.key}</b><span>${c.name}</span>`;
+  b.addEventListener('click', () => { S.size = +k; sizeBtns.forEach(x => x.setAttribute('aria-pressed', x === b)); build(); });
+  b.setAttribute('aria-pressed', +k === S.size); $('sizes').appendChild(b); return b;
+});
+const finBtns = Object.keys(FINISH).map(k => {
+  const b = document.createElement('button'); b.type = 'button'; b.textContent = FINISH[k].n;
+  b.addEventListener('click', () => { S.finish = k; EXT.color.set(FINISH[k].c); finBtns.forEach(x => x.setAttribute('aria-pressed', x === b)); });
+  b.setAttribute('aria-pressed', k === S.finish); $('finish').appendChild(b); return b;
+});
+$('lid').addEventListener('input', e => { stop(); S.lid = +e.target.value; if (S.p > 0.86) S.p = 0.86; apply(); });
+$('pack').addEventListener('input', e => { stop(); S.p = e.target.value / 1000; apply(); });
+$('dims').addEventListener('change', e => { S.dims = e.target.checked; setDims(); });
+let last = 0;
+function stop() { S.playing = false; $('play').textContent = 'Packa lådan'; }
+$('play').addEventListener('click', () => {
+  if (S.playing) { stop(); return; }
+  if (S.p >= 0.999) S.p = 0;
+  S.playing = true; last = 0; $('play').textContent = 'Pausa';
+});
+
+/* ---------- Export ---------- */
+function dl(blob, name) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500); }
+const say = t => $('msg').textContent = t;
+const fname = ext => `bagl-box-${BOXES[S.size].key}.${ext}`;
+$('xpng').addEventListener('click', () => { renderer.render(scene, camera); renderer.domElement.toBlob(b => { dl(b, fname('png')); say('Sparad som ' + fname('png')); }); });
+$('xglb').addEventListener('click', () => {
+  const d = []; ROOT.traverse(o => { if (o.userData.dims) { d.push([o, o.visible]); o.visible = false; } });
+  new GLTFExporter().parse(ROOT, res => { d.forEach(([o, v]) => o.visible = v); dl(new Blob([res], { type: 'model/gltf-binary' }), fname('glb')); say('Sparad som ' + fname('glb') + ' (meter, Y uppåt).'); },
+    e => { d.forEach(([o, v]) => o.visible = v); say('GLB-exporten misslyckades: ' + e); }, { binary: true });
+});
+function stepText() {
+  ROOT.updateMatrixWorld(true);
+  const w = StepExport.create('BAGL Box ' + BOXES[S.size].key); let i = 0;
+  ROOT.traverse(o => {
+    if (!o.isMesh || !o.userData.pack) return;
+    for (let q = o; q; q = q.parent) if (!q.visible) return;
+    w.threeMesh(o, `${o.userData.part}_${++i}`, '#' + o.material.color.getHexString());
+  });
+  return { txt: w.toString(fname('step')), n: w.count() };
+}
+$('xstep').addEventListener('click', () => {
+  if (!window.StepExport) { say('STEP-exporten kunde inte laddas.'); return; }
+  const r = stepText(); dl(new Blob([r.txt], { type: 'application/step' }), fname('step'));
+  say(`Sparad som ${fname('step')}: ${r.n} solider, mm, Z uppåt.`);
+});
+
+/* ---------- Start ---------- */
+await Promise.race([
+  Promise.all(['500', '600'].map(w => document.fonts.load(`${w} 100px "Barlow Condensed"`))),
+  new Promise(r => setTimeout(r, 2500)),
+]);
+resize(); build();
+renderer.setAnimationLoop(ts => {
+  if (S.playing) {
+    const dt = last ? (ts - last) / 1000 : 0; last = ts;
+    S.p = Math.min(1, S.p + dt / 7); apply();
+    if (S.p >= 1) stop();
+  }
+  controls.update(); renderer.render(scene, camera); labelR.render(scene, camera);
+});
+window.__bb = { S, build, apply, frame, scene, camera, renderer, controls, stepText, root: () => ROOT, trays: () => TRAYS, items: () => ITEMS };
+</script>
+</body>
+</html>

@@ -4,6 +4,7 @@ Samlingsrepo för allt vi bygger. Statiska sidor, ingen build. Varje projekt lig
 
 | Projekt | Mapp | Beskrivning |
 |---|---|---|
+| BAGL Box i 3D | [`baglbox/`](baglbox/) | Cateringlåda 6/12/24 bagels med insatser, lock och export |
 | Bågväxthus 4 × 10 m | [`vaxthus/`](vaxthus/) | Bågväxthus med byggsteg, gavelsektion och inköpslista |
 | Hönshus i 3D | [`honshus/`](honshus/) | Parametrisk three.js-modell av ett hönshus med kompostgrop |
 
