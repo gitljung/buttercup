@@ -1,17 +1,14 @@
-# Buttercup – parametriskt hönshus i 3D
+# Buttercup
 
-Interaktiv three.js-modell av ett hönshus i The Bearded Builders stil (100-årig design: ventilation, ljus, kompostgrop under sittpinnarna).
+Samlingsrepo för allt vi bygger. Statiska sidor, ingen build. Varje projekt ligger i en egen mapp med en `index.html`.
 
-**Öppna:** `index.html` – ingen build, statisk sida. Deployas som den är på Vercel.
+| Projekt | Mapp | Beskrivning |
+|---|---|---|
+| Hönshus i 3D | [`honshus/`](honshus/) | Parametrisk three.js-modell av ett hönshus med kompostgrop |
 
-## Funktioner
-- Förinställningar: Original 8×16 ft (~50 höns), Mini 6×12 ft (~25), Mikro 5×8 ft (~15)
-- Justerbart: bredd, längd, vägghöjd, taklutning, takutsprång, dörrar (storlek + öppning), fönster, övre plan, kompostgrop, avstånd mellan sittpinnar, värpredesfack, ljuspaneler
-- Sittpinnestegen står på övre planet och hänger i gavelns regel en regel ovanför pardörrarna, så gropen är fri för en lastare
-- Vinterluckor, genomskärning, nedgrävt nätförkläde, måttlinjer, kvällsläge
-- Export: PNG och GLB (Blender/SketchUp)
+## Lägga till ett projekt
+1. Skapa en ny mapp, t.ex. `mitt-projekt/`, med en `index.html`.
+2. Lägg till ett kort överst i rotens `index.html` och en rad i tabellen ovan.
 
-## Källor
-Planlösning och mått från @the_bearded_builder_homestead (Instagram). Detaljmått är uppskattade från bilderna. Exakta ritningar: https://stan.store/Beardedbuilder
-
-Se `SPEC.md` för hela specifikationen.
+## Publicering
+Repot är tänkt att kopplas till Vercel. Roten blir startsidan och varje mapp blir en egen sökväg, t.ex. `/honshus/`.
