@@ -4,6 +4,7 @@ Samlingsrepo för allt vi bygger. Statiska sidor, ingen build. Varje projekt lig
 
 | Projekt | Mapp | Beskrivning |
 |---|---|---|
+| Bågväxthus 7 × 10 m | [`vaxthus/`](vaxthus/) | Bågväxthus med byggsteg, gavelsektion och inköpslista |
 | Hönshus i 3D | [`honshus/`](honshus/) | Parametrisk three.js-modell av ett hönshus med kompostgrop |
 
 ## Lägga till ett projekt

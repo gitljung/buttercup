@@ -1,0 +1,555 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Bågväxthus 7 m</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one working surface. 3D stage on top, build slider directly under it, measurements last. */
+:root{
+  --bg:#e8eef0; --panel:#f5f8f9; --fg:#15242a; --muted:#56676e; --line:#c3cfd3;
+  --accent:#1c6e5a; --accent-fg:#ffffff; --wood:#c8863a; --ground:#d3ddda; --film:#e4f1f4;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --body:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f181b; --panel:#162125; --fg:#e5eef0; --muted:#8fa2a9; --line:#2a3b41;
+    --accent:#5cc7a6; --accent-fg:#0b1a16; --wood:#d59546; --ground:#1b292b; --film:#cfe6ec;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f181b; --panel:#162125; --fg:#e5eef0; --muted:#8fa2a9; --line:#2a3b41;
+  --accent:#5cc7a6; --accent-fg:#0b1a16; --wood:#d59546; --ground:#1b292b; --film:#cfe6ec;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.45}
+.wrap{max-width:1100px;margin:0 auto;padding-inline:16px;padding-block:20px 28px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 20px}
+h1{font-family:var(--display);font-stretch:78%;font-weight:700;font-size:clamp(26px,5vw,40px);line-height:1;margin:0;letter-spacing:.01em;text-transform:uppercase;text-wrap:balance}
+.sub{color:var(--muted);margin:0;font-size:14px}
+.stage{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:4px;overflow:hidden;height:min(60vh,560px);min-height:300px}
+.stage canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:pan-y}
+.stage canvas:active{cursor:grabbing}
+.hint{position:absolute;left:12px;bottom:10px;font-family:var(--mono);font-size:11px;color:var(--muted);pointer-events:none}
+.now{position:absolute;left:12px;top:10px;display:flex;flex-direction:column;gap:2px;pointer-events:none}
+.now b{font-family:var(--display);font-stretch:80%;font-size:20px;text-transform:uppercase;letter-spacing:.03em}
+.now span{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ctrl{display:flex;align-items:center;gap:12px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#play{flex:none;background:var(--accent);color:var(--accent-fg);border:0;border-radius:4px;padding:9px 16px;font-weight:600;min-width:104px}
+#build{flex:1;min-width:0;accent-color:var(--accent);height:28px}
+.steps,.lens{display:flex;flex-wrap:wrap;gap:6px}
+.steps button,.lens button{background:transparent;border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--muted)}
+.steps button.on,.lens button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.steps button.done{color:var(--fg);border-color:var(--muted)}
+.lens button{font-family:var(--mono);font-size:12px;border-radius:4px;padding:5px 9px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.lab{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.bomhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px;margin-top:10px}
+.bomhead h2{font-family:var(--display);font-stretch:80%;font-size:22px;text-transform:uppercase;letter-spacing:.03em;margin:0}
+.bomhead div{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.btn{background:transparent;border:1px solid var(--fg);border-radius:4px;padding:7px 14px;font-weight:600}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+#bmsg{font-size:13px;color:var(--muted)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+th{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:left;padding:8px 12px 8px 0;border-bottom:1px solid var(--fg)}
+td{padding:8px 12px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+td small{display:block;color:var(--muted);font-size:12px}
+.note{color:var(--muted);font-size:13px;margin:0;max-width:70ch}
+dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0;margin:0;border-top:1px solid var(--line)}
+dl div{padding:10px 12px 10px 0;border-bottom:1px solid var(--line);min-width:0}
+dt{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums}
+.views{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:14px;align-items:stretch}
+@media (max-width:820px){.views{grid-template-columns:minmax(0,1fr)}}
+.dims{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.dims div{position:absolute;left:0;top:0;white-space:nowrap;font-family:var(--mono);font-size:11px;line-height:1;padding:3px 5px;background:var(--panel);border:1px solid var(--line);border-radius:3px;color:var(--fg);font-variant-numeric:tabular-nums}
+.sect{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.sect h2{font-family:var(--display);font-stretch:80%;font-size:20px;text-transform:uppercase;letter-spacing:.03em;margin:0;line-height:1.1}
+.sect p{margin:0;font-size:13px;color:var(--muted)}
+.sect svg{display:block;width:100%;flex:1;min-height:240px;max-height:440px}
+.sect svg text{font-family:var(--mono);font-size:.38px;fill:var(--fg)}
+.sect svg .mut{fill:var(--muted)}
+.s-arch{fill:none;stroke:var(--wood);stroke-width:.04;stroke-linejoin:round}
+.s-blk{stroke:var(--wood);stroke-width:.13}
+.s-wood{fill:none;stroke:var(--wood);stroke-width:.07}
+.s-dim{fill:none;stroke:var(--muted);stroke-width:.025}
+.s-dash{fill:none;stroke:var(--muted);stroke-width:.025;stroke-dasharray:.12 .1}
+.s-gnd{stroke:var(--fg);stroke-width:.04}
+#handle{cursor:ns-resize;touch-action:none}
+#handle .dot{fill:var(--accent);stroke:var(--panel);stroke-width:.06}
+#handle .hit{fill:transparent}
+#handle path{fill:none;stroke:var(--accent);stroke-width:.06;stroke-linecap:round;stroke-linejoin:round}
+.hrow .lab{min-width:96px}
+.hrow{display:flex;align-items:center;gap:10px}
+.hrow input{flex:1;min-width:0;accent-color:var(--accent)}
+.hrow output{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;min-width:76px;text-align:right}
+.err{padding:24px;color:var(--muted)}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Bågväxthus <span id="hw">7</span> × <span id="hl">10</span> m</h1>
+    <p class="sub">Dra i reglaget för att resa stommen. Sista steget klär huset i polyetenfilm.</p>
+  </header>
+
+  <div class="views">
+  <div class="stage" id="stage">
+    <canvas id="cv" aria-label="3D-modell av bågväxthus"></canvas>
+    <div class="now"><b id="sname">Polyetenfilm</b><span id="spct">100 %</span></div>
+    <div class="dims" id="dims"></div>
+    <div class="hint">Dra för att rotera · scrolla för att zooma · mått i mm</div>
+  </div>
+  <section class="sect">
+    <h2>Gavelsektion</h2>
+    <p>Dra nocken upp eller ner. Alla mått räknas om.</p>
+    <svg id="sec" viewBox="-7.6 -1 15.2 9.7" role="img" aria-label="Gavelsektion med mått">
+      <g id="dyn"></g>
+      <g id="handle"><circle class="hit" r=".6"/><circle class="dot" r=".2"/><path d="M-.16 -.36 L0 -.54 L.16 -.36 M-.16 .36 L0 .54 L.16 .36"/></g>
+    </svg>
+    <div class="hrow"><span class="lab">Nockhöjd</span><input id="hgt" type="range" min="3.5" max="7" step="0.05" value="4.2" aria-label="Nockhöjd"><output id="hout" for="hgt"></output></div>
+    <div class="hrow"><span class="lab">Bredd</span><input id="wid" type="range" min="4" max="12" step="0.1" value="7" aria-label="Bredd"><output id="wout" for="wid"></output></div>
+    <div class="hrow"><span class="lab">Dörrbredd</span><input id="dwi" type="range" min="1" max="4" step="0.1" value="2" aria-label="Dörrbredd"><output id="dwo" for="dwi"></output></div>
+    <div class="hrow"><span class="lab">Dörrhöjd</span><input id="dhi" type="range" min="1.8" max="3" step="0.05" value="2" aria-label="Dörrhöjd"><output id="dho" for="dhi"></output></div>
+    <div class="hrow"><span class="lab">Överljus</span><input id="tri" type="range" min="0" max="1.5" step="0.05" value="1" aria-label="Överljusets höjd"><output id="tro" for="tri"></output></div>
+    <div class="hrow"><span class="lab">Bågavstånd</span><input id="spi" type="range" min="0.6" max="3" step="0.05" value="1" aria-label="Avstånd mellan bågarna"><output id="spo" for="spi"></output></div>
+  </section>
+  </div>
+
+  <div class="ctrl">
+    <button id="play" type="button">Spela upp</button>
+    <input id="build" type="range" min="0" max="1000" value="1000" aria-label="Byggförlopp">
+  </div>
+  <div class="steps" id="steps"></div>
+
+  <div class="row">
+    <span class="lab">Längd</span>
+    <div class="lens" id="lens"></div>
+  </div>
+
+  <dl>
+    <div><dt>Bredd</dt><dd id="dW"></dd></div>
+    <div><dt>Nockhöjd</dt><dd id="dH"></dd></div>
+    <div><dt>Bågradie</dt><dd id="dR"></dd></div>
+    <div><dt>Båglängd, halvbåge</dt><dd id="dB"></dd></div>
+    <div><dt>Båglängd, hel båge</dt><dd id="dB2"></dd></div>
+    <div><dt>Radiecentrum förskjutet</dt><dd id="dC"></dd></div>
+    <div><dt>Längd</dt><dd id="dL"></dd></div>
+    <div><dt>Dörröppning</dt><dd id="dD"></dd></div>
+    <div><dt>Överljus</dt><dd id="dT"></dd></div>
+    <div><dt id="dNl">Bågar</dt><dd id="dN"></dd></div>
+    <div><dt>Golvyta</dt><dd id="dA"></dd></div>
+    <div><dt>Film, tak + gavlar</dt><dd id="dF"></dd></div>
+  </dl>
+
+  <div class="bomhead">
+    <h2>Inköpslista trästomme</h2>
+    <div><span id="bmsg" role="status"></span><button class="btn" id="bcopy" type="button">Kopiera</button><button class="btn pri" id="bexp" type="button" hidden>Exportera CSV</button></div>
+  </div>
+  <div class="tw"><table>
+    <thead><tr><th>Del</th><th>Dimension</th><th class="n">Antal</th><th class="n">Kaplängd</th><th class="n">Att köpa</th></tr></thead>
+    <tbody id="bom"></tbody>
+  </table></div>
+  <p class="note">Listan följer modellens aktuella mått. Virke är räknat i löpmeter med 10 % spill. Skruv, lim, beslag och gångjärn ingår inte. Dimensionerna är antaganden från fotot och ska stämmas av mot en hållfasthetsbedömning för snö och vind innan du beställer.</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  var stageEl=document.getElementById('stage'), cv=document.getElementById('cv');
+  if(!window.THREE){ stageEl.innerHTML='<p class="err">3D-biblioteket kunde inte laddas. Ladda om sidan.</p>'; return; }
+  var T=THREE, V=function(x,y,z){return new T.Vector3(x,y,z);};
+
+  // ---- geometry constants (metres) ----
+  var A=3.5, H=4.2, C, R, TH1, ARC;
+  function geo(){ C=(H*H-A*A)/(2*A); R=C+A; TH1=Math.atan2(H,-C); ARC=R*(Math.PI-TH1); }
+  var DW=1, DH=2, TR=1;                      // half door width, door height, transom height
+  function fit(){                            // keep the door frame under the arch
+    DW=Math.min(DW,A-1);
+    var lim=Math.sqrt(R*R-(DW+C)*(DW+C))-.2;
+    if(DH+TR>lim) TR=Math.max(0,Math.floor((lim-DH)*20+1e-6)/20);
+    if(DH+TR>lim) DH=Math.floor(lim*20+1e-6)/20;
+  }
+  geo(); fit();
+  function fmt(v){ return String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g,' '); }
+  function ap(u,side,r){ r=r||R; var t1=Math.acos(-C/r), th=Math.PI-u*(Math.PI-t1); var x=C+r*Math.cos(th); return [side<0?x:-x, r*Math.sin(th)]; }
+  function xa(y){ return Math.sqrt(R*R-y*y)-C; }
+
+  var STEPS=[
+    {n:'Syllram',a:0,b:.10},{n:'Bågar',a:.10,b:.52},{n:'Nock och sidoreglar',a:.52,b:.64},
+    {n:'Gavlar',a:.64,b:.78},{n:'Dörrar',a:.78,b:.87},{n:'Polyetenfilm',a:.87,b:1}
+  ];
+  var LENS=[10,12,14,16,18,20,30,40];
+  var L=10, p=1, filmArea=0, SP=1;
+  function nArch(){ return Math.max(2,Math.ceil(L/SP-1e-9)+1); }
+
+  // ---- three setup ----
+  var renderer;
+  try{ renderer=new T.WebGLRenderer({canvas:cv,antialias:true,alpha:true}); }
+  catch(e){ stageEl.innerHTML='<p class="err">Webbläsaren kunde inte starta 3D-grafik (WebGL).</p>'; return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  var scene=new T.Scene(), cam=new T.PerspectiveCamera(35,1,.1,500);
+  scene.add(new T.HemisphereLight(0xffffff,0x8a8778,.9));
+  var sun=new T.DirectionalLight(0xffffff,.65); sun.position.set(-8,14,12); scene.add(sun);
+
+  var woodMat=new T.MeshLambertMaterial({color:0xc8863a});
+  var filmMat=new T.MeshPhongMaterial({color:0xe4f1f4,transparent:true,opacity:.3,side:T.DoubleSide,depthWrite:false,shininess:90,specular:0xffffff});
+  var gableMat=filmMat.clone();
+  var dimMat=new T.LineBasicMaterial({color:0x56676e});
+  var dimsEl=document.getElementById('dims'), labels=[];
+  var groundMat=new T.MeshBasicMaterial({color:0xd3ddda});
+  var unit=new T.BoxGeometry(1,1,1);
+
+  var model=null, beams=[], inst=null, doors=[], roof=null, roofRows=0, roofCols=0, gables=[];
+
+  function css(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function applyTheme(){
+    try{ dimMat.color.set(css('--muted')); groundMat.color.set(css('--ground')); woodMat.color.set(css('--wood')); filmMat.color.set(css('--film')); gableMat.color.set(css('--film')); }catch(e){}
+    draw();
+  }
+
+  function beam(p1,p2,w,h,t0,t1,up){
+    var d=p2.clone().sub(p1), len=d.length(); d.normalize();
+    up=up||(Math.abs(d.y)>.9?V(0,0,1):V(0,1,0));
+    var x=up.clone().cross(d).normalize(), y=d.clone().cross(x);
+    beams.push({p:p1,d:d,len:len,x:x,y:y,w:w,h:h,t0:t0,t1:t1});
+  }
+
+  function build(){
+    if(model){ scene.remove(model); model.traverse(function(o){ if(o.geometry&&o.geometry!==unit) o.geometry.dispose(); }); }
+    model=new T.Group(); scene.add(model); beams=[]; doors=[]; gables=[];
+    var z0=L/2, z1=-L/2, n=nArch(), zUp=V(0,0,1);
+
+    // ground
+    var g=new T.Mesh(new T.PlaneGeometry(2*A+4.5,L+4.5),groundMat); g.rotation.x=-Math.PI/2; g.position.y=-.01; model.add(g);
+
+    // sills
+    [-1,1].forEach(function(s){
+      beam(V(s*A,.06,z0),V(s*A,.06,z1),.12,.12,0,.07);
+      [z0,z1].forEach(function(z){ beam(V(s*A,.06,z),V(s*(DW+.05),.06,z),.12,.12,.06,.10); });
+    });
+
+    // arches
+    var NS=Math.max(12,Math.round(ARC/.3)), CH=.047, BL=.06/ARC;
+    for(var i=0;i<n;i++){
+      var z=z0-(L*i/(n-1)), s0=.10+(i/(n-1))*.42*.7, dur=.42*.3;
+      [-1,1].forEach(function(side){
+        for(var j=0;j<NS;j++){
+          // ladder arch: two thin plywood chords with spacer blocks between them
+          var ta=s0+dur*j/NS, tb=s0+dur*(j+1)/NS;
+          [R-CH,R+CH].forEach(function(rr){
+            var a=ap(j/NS,side,rr), b=ap((j+1)/NS,side,rr);
+            var P=V(a[0],a[1],z), Q=V(b[0],b[1],z);
+            Q.add(Q.clone().sub(P).multiplyScalar(.03));
+            beam(P,Q,.024,.07,ta,tb,zUp);
+          });
+          var c0=ap((j+.5)/NS-BL,side), c1=ap((j+.5)/NS+BL,side);
+          beam(V(c0[0],c0[1],z),V(c1[0],c1[1],z),2*CH-.024,.07,(ta+tb)/2,tb,zUp);
+        }
+      });
+    }
+
+    // ridge + purlins
+    beam(V(0,H-.13,z0),V(0,H-.13,z1),.045,.145,.52,.60);
+    var py=1.9, px=xa(py)-.11;
+    [-1,1].forEach(function(s){ beam(V(s*px,py,z0),V(s*px,py,z1),.034,.145,.55,.64); });
+
+    // gables
+    var top=DH+TR, lw=DW-.05;
+    [z0,z1].forEach(function(z){
+      [-1,1].forEach(function(s){
+        beam(V(s*DW,0,z),V(s*DW,top+.05,z),.1,.1,.64,.70);
+        beam(V(s*(DW+.05),top,z),V(s*(xa(top)-.04),top,z),.09,.09,.72,.75);
+      });
+      beam(V(-DW,DH,z),V(DW,DH,z),.1,.1,.69,.72);
+      beam(V(-DW,top,z),V(DW,top,z),.1,.1,.70,.73);
+      beam(V(0,top,z),V(0,H-.08,z),.1,.1,.74,.78);
+    });
+
+    // dimension lines + labels
+    dimsEl.innerHTML=''; labels=[];
+    var dp=[];
+    function seg(a,b){ dp.push(a.x,a.y,a.z,b.x,b.y,b.z); }
+    function label(pos,text){ var e=document.createElement('div'); e.textContent=text; dimsEl.appendChild(e); labels.push({el:e,pos:pos}); }
+    function dim(a,b,t,text){ seg(a,b); seg(a.clone().add(t),a.clone().sub(t)); seg(b.clone().add(t),b.clone().sub(t)); label(a.clone().lerp(b,.5),text); }
+    dim(V(-A,.02,z0+1.4),V(A,.02,z0+1.4),V(0,0,.18),fmt(2*A*1000));
+    dim(V(A+1.3,.02,z0),V(A+1.3,.02,z1),V(.18,0,0),fmt(L*1000));
+    dim(V(-A-1,0,z0),V(-A-1,H,z0),V(.18,0,0),fmt(H*1000));
+    seg(V(-A-1.2,H,z0),V(0,H,z0));
+    var am=ap(.5,1,R+.55); label(V(am[0],am[1],z0),'Båge '+fmt(ARC*1000)+' · R '+fmt(R*1000));
+    var dg=new T.BufferGeometry(); dg.setAttribute('position',new T.Float32BufferAttribute(dp,3));
+    var dls=new T.LineSegments(dg,dimMat); dls.frustumCulled=false; model.add(dls);
+
+    inst=new T.InstancedMesh(unit,woodMat,beams.length); inst.frustumCulled=false; model.add(inst);
+
+    // doors
+    [z0,z1].forEach(function(z,k){
+      var end=new T.Group(); end.position.z=z; end.rotation.y=k?Math.PI:0; model.add(end);
+      [1,-1].forEach(function(sg){
+        var leaf=new T.Group(); leaf.position.x=-sg*lw; end.add(leaf);
+        function bx(w,h,x,y){ var m=new T.Mesh(unit,woodMat); m.scale.set(w,h,.05); m.position.set(sg*x,y,0); leaf.add(m); }
+        bx(.07,DH-.06,.035,DH/2-.02); bx(.07,DH-.06,lw-.035,DH/2-.02);
+        bx(lw,.07,lw/2,.045); bx(lw,.07,lw/2,DH/2); bx(lw,.07,lw/2,DH-.085);
+        var pane=new T.Mesh(new T.PlaneGeometry(lw-.07,DH-.14),gableMat); pane.position.set(sg*lw/2,DH/2-.02,0); leaf.add(pane);
+        doors.push({g:leaf,sg:sg,pane:pane});
+      });
+    });
+
+    // roof film, rows along the length so it can roll out
+    var NA=24, outline=[], Rf=R+.085, k;
+    for(k=0;k<=NA;k++) outline.push(ap(k/NA,-1,Rf));
+    for(k=NA-1;k>=0;k--) outline.push(ap(k/NA,1,Rf));
+    roofCols=outline.length-1; roofRows=Math.max(20,Math.round(L*2));
+    var pos=[], idx=[], row=roofCols+1;
+    for(var r=0;r<=roofRows;r++){ var zz=z0+.04-(L+.08)*r/roofRows; outline.forEach(function(o){ pos.push(o[0],o[1],zz); }); }
+    for(r=0;r<roofRows;r++) for(k=0;k<roofCols;k++){ var q=r*row+k; idx.push(q,q+row,q+1,q+1,q+row,q+row+1); }
+    var rg=new T.BufferGeometry(); rg.setAttribute('position',new T.Float32BufferAttribute(pos,3)); rg.setIndex(idx); rg.computeVertexNormals();
+    roof=new T.Mesh(rg,filmMat); roof.frustumCulled=false; model.add(roof);
+
+    // gable film, door opening left out
+    var sh=new T.Shape(); sh.moveTo(outline[0][0],0);
+    outline.forEach(function(o){ sh.lineTo(o[0],o[1]); });
+    sh.lineTo(DW,0); sh.lineTo(DW,DH); sh.lineTo(-DW,DH); sh.lineTo(-DW,0);
+    [z0+.06,z1-.06].forEach(function(z){ var m=new T.Mesh(new T.ShapeGeometry(sh),gableMat); m.position.z=z; model.add(m); gables.push(m); });
+
+    // numbers
+    var gab=0; for(k=0;k<outline.length-1;k++) gab+=(outline[k][0]*outline[k+1][1]-outline[k+1][0]*outline[k][1]);
+    gab=Math.abs(gab)/2;
+    document.getElementById('hl').textContent=L;
+    document.getElementById('dL').textContent=fmt(L*1000)+' mm';
+    document.getElementById('hw').textContent=String(Math.round(2*A*10)/10).replace('.',',');
+    document.getElementById('dW').textContent=fmt(2*A*1000)+' mm';
+    document.getElementById('dD').textContent=fmt(DW*2000)+' × '+fmt(DH*1000)+' mm';
+    document.getElementById('dT').textContent=TR>0?fmt(DW*2000)+' × '+fmt(TR*1000)+' mm':'inget';
+    document.getElementById('dH').textContent=fmt(H*1000)+' mm';
+    document.getElementById('dR').textContent=fmt(R*1000)+' mm';
+    document.getElementById('dB').textContent=fmt(ARC*1000)+' mm';
+    document.getElementById('dB2').textContent=fmt(2*ARC*1000)+' mm';
+    document.getElementById('dC').textContent=fmt(C*1000)+' mm';
+    document.getElementById('dN').textContent=n+' st';
+    document.getElementById('dNl').textContent='Bågar c/c '+fmt(L/(n-1)*1000)+' mm';
+    document.getElementById('dA').textContent=fmt(2*A*L)+' m²';
+    filmArea=2*ARC*L+2*gab;
+    document.getElementById('dF').textContent='ca '+fmt(2*ARC*L+2*gab)+' m²';
+    renderBom();
+    update();
+  }
+
+  var M=new T.Matrix4(), ZERO=new T.Matrix4().makeScale(0,0,0), S=new T.Vector3(), P=new T.Vector3();
+  function clamp(v){ return v<0?0:v>1?1:v; }
+  function ease(v){ return v*v*(3-2*v); }
+
+  function update(){
+    for(var i=0;i<beams.length;i++){
+      var b=beams[i], t=clamp((p-b.t0)/(b.t1-b.t0));
+      if(t<=0){ inst.setMatrixAt(i,ZERO); continue; }
+      M.makeBasis(b.x,b.y,b.d); M.scale(S.set(b.w,b.h,b.len*t));
+      M.setPosition(P.copy(b.d).multiplyScalar(b.len*t/2).add(b.p));
+      inst.setMatrixAt(i,M);
+    }
+    inst.instanceMatrix.needsUpdate=true;
+
+    var dk=ease(clamp((p-.78)/.09));
+    doors.forEach(function(d){ d.g.visible=p>.78; d.g.rotation.y=-d.sg*(1-dk)*1.9; });
+
+    var rk=clamp((p-.87)/.10), gk=clamp((p-.95)/.05);
+    roof.visible=rk>0; roof.geometry.setDrawRange(0,Math.round(rk*roofRows)*roofCols*6);
+    gableMat.opacity=.3*gk;
+    gables.forEach(function(m){ m.visible=gk>0; });
+    doors.forEach(function(d){ d.pane.visible=gk>0; });
+
+    var si=0; for(var k=0;k<STEPS.length;k++) if(p>=STEPS[k].a) si=k;
+    document.getElementById('sname').textContent=p<=0?'Tom tomt':STEPS[si].n;
+    document.getElementById('spct').textContent=Math.round(p*100)+' %';
+    stepBtns.forEach(function(bn,k){ bn.classList.toggle('on',k===si&&p>0); bn.classList.toggle('done',k<si); });
+    draw();
+  }
+
+  // ---- camera ----
+  var az=-.72, el=.3, zoom=1, raf=0;
+  function draw(){ if(!raf) raf=requestAnimationFrame(render); }
+  function render(){
+    raf=0;
+    var w=stageEl.clientWidth, h=stageEl.clientHeight; if(!w||!h) return;
+    var asp=w/h, dist=(6+2*A+L*.95)*Math.max(1,1.35/asp)*zoom;
+    cam.aspect=asp; cam.updateProjectionMatrix();
+    var ty=H*.4;
+    cam.position.set(dist*Math.cos(el)*Math.sin(az),ty+dist*Math.sin(el),dist*Math.cos(el)*Math.cos(az));
+    cam.lookAt(0,ty,0); cam.updateMatrixWorld();
+    renderer.render(scene,cam);
+    for(var i=0;i<labels.length;i++){
+      P.copy(labels[i].pos).project(cam);
+      labels[i].el.style.transform='translate(-50%,-50%) translate('+((P.x*.5+.5)*w).toFixed(1)+'px,'+((-P.y*.5+.5)*h).toFixed(1)+'px)';
+    }
+  }
+  function resize(){ renderer.setSize(stageEl.clientWidth,stageEl.clientHeight,false); draw(); }
+  if(window.ResizeObserver) new ResizeObserver(resize).observe(stageEl); else window.addEventListener('resize',resize);
+
+  var drag=null;
+  cv.addEventListener('pointerdown',function(e){ drag={x:e.clientX,y:e.clientY}; try{cv.setPointerCapture(e.pointerId);}catch(_){} });
+  cv.addEventListener('pointermove',function(e){
+    if(!drag) return;
+    az-=(e.clientX-drag.x)*.008;
+    if(e.pointerType==='mouse') el=Math.min(1.35,Math.max(.03,el+(e.clientY-drag.y)*.006));
+    drag={x:e.clientX,y:e.clientY}; draw();
+  });
+  ['pointerup','pointercancel'].forEach(function(n){ cv.addEventListener(n,function(){ drag=null; }); });
+  cv.addEventListener('wheel',function(e){ e.preventDefault(); zoom=Math.min(2.2,Math.max(.35,zoom*(e.deltaY>0?1.08:.93))); draw(); },{passive:false});
+
+  // ---- controls ----
+  var slider=document.getElementById('build'), playBtn=document.getElementById('play'), playing=false, last=0;
+  var stepBtns=STEPS.map(function(s,k){
+    var b=document.createElement('button'); b.type='button'; b.textContent=(k+1)+'. '+s.n;
+    b.addEventListener('click',function(){ stop(); setP(s.b); });
+    document.getElementById('steps').appendChild(b); return b;
+  });
+  var lenBtns=LENS.map(function(v){
+    var b=document.createElement('button'); b.type='button'; b.textContent=v+' m';
+    b.addEventListener('click',function(){ L=v; lenBtns.forEach(function(o){ o.classList.toggle('on',o===b); }); build(); if(window.__sec) window.__sec(); });
+    if(v===L) b.classList.add('on');
+    document.getElementById('lens').appendChild(b); return b;
+  });
+  function setP(v){ p=clamp(v); slider.value=Math.round(p*1000); update(); }
+  function stop(){ playing=false; playBtn.textContent='Spela upp'; }
+  function tick(ts){
+    if(!playing) return;
+    var dt=last?(ts-last)/1000:0; last=ts;
+    setP(p+dt/10);
+    if(p>=1){ stop(); return; }
+    requestAnimationFrame(tick);
+  }
+  playBtn.addEventListener('click',function(){
+    if(playing){ stop(); return; }
+    if(p>=.999) setP(0);
+    playing=true; last=0; playBtn.textContent='Pausa'; requestAnimationFrame(tick);
+  });
+  slider.addEventListener('input',function(){ stop(); p=slider.value/1000; update(); });
+
+  // ---- gable section with draggable ridge ----
+  var sec=document.getElementById('sec'), dyn=document.getElementById('dyn'), handle=document.getElementById('handle');
+  var hgt=document.getElementById('hgt'), hout=document.getElementById('hout'), YG=7.6, hq=0, secDrag=false;
+  function section(){
+    var y=YG-H, m=ap(.5,-1), ml=ap(.52,1,R+.3), top=DH+TR, x3=xa(top), o='';
+    function ln(c,x1,y1,x2,y2){ return '<line class="'+c+'" x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'"/>'; }
+    function tx(x,yy,t,an,c,rot){ return '<text x="'+x+'" y="'+yy+'" text-anchor="'+(an||'middle')+'"'+(c?' class="'+c+'"':'')+(rot?' transform="rotate(-90 '+x+' '+yy+')"':'')+'>'+t+'</text>'; }
+    o+=ln('s-gnd',-A-1.4,YG,A+1.4,YG);
+    [R-.047,R+.047].forEach(function(r){ var ay=YG-Math.sqrt(r*r-C*C); o+='<path class="s-arch" d="M'+(C-r)+' '+YG+' A'+r+' '+r+' 0 0 1 0 '+ay+' A'+r+' '+r+' 0 0 1 '+(r-C)+' '+YG+'"/>'; });
+    var nb=Math.max(12,Math.round(ARC/.3)), bj, bs, b0, b1;
+    for(bj=0;bj<nb;bj++) for(bs=-1;bs<=1;bs+=2){ b0=ap((bj+.5)/nb,bs,R-.04); b1=ap((bj+.5)/nb,bs,R+.04); o+=ln('s-blk',b0[0],YG-b0[1],b1[0],YG-b1[1]); }
+    o+='<rect class="s-wood" x="'+(-DW)+'" y="'+(YG-DH)+'" width="'+(2*DW)+'" height="'+DH+'"/><rect class="s-wood" x="'+(-DW)+'" y="'+(YG-top)+'" width="'+(2*DW)+'" height="'+TR+'"/>';
+    o+=ln('s-wood',0,YG-DH,0,YG)+ln('s-wood',0,YG-top,0,y)+ln('s-wood',-DW,YG-top,-x3,YG-top)+ln('s-wood',DW,YG-top,x3,YG-top);
+    // radius
+    o+=ln('s-dash',C,YG,m[0],YG-m[1])+'<circle cx="'+C+'" cy="'+YG+'" r=".07" fill="var(--muted)"/><circle cx="'+(-C)+'" cy="'+YG+'" r=".07" fill="var(--muted)"/>';
+    o+=tx(m[0]-.2,YG-m[1]-.15,'R '+fmt(R*1000),'end','mut');
+    // arc length
+    o+=tx(ml[0],YG-ml[1],'Båge '+fmt(ARC*1000),'start');
+    // door
+    o+=tx(0,YG-DH/2-.25,'b '+fmt(DW*2000),'middle','mut')+tx(0,YG-DH/2+.3,'h '+fmt(DH*1000),'middle','mut');
+    if(TR>=.45) o+=tx(0,YG-DH-TR/2+.13,fmt(TR*1000),'middle','mut');
+    // width
+    o+=ln('s-dim',-A,YG+.5,A,YG+.5)+ln('s-dim',-A,YG+.3,-A,YG+.7)+ln('s-dim',A,YG+.3,A,YG+.7)+tx(0,YG+.95,fmt(2*A*1000));
+    // centre offset
+    if(C>.25) o+=ln('s-dim',0,YG+.12,C,YG+.12)+tx(C+.12,YG+.3,'c '+fmt(C*1000),'start','mut');
+    // height
+    o+=ln('s-dim',-A-.8,YG,-A-.8,y)+ln('s-dim',-A-1,YG,-A-.6,YG)+ln('s-dim',-A-1,y,-A-.6,y)+ln('s-dash',-A-.6,y,-.4,y)+tx(-A-1,YG-H/2,fmt(H*1000),'middle','',true);
+    dyn.innerHTML=o;
+    handle.setAttribute('transform','translate(0 '+y+')');
+    hgt.min=Math.max(3.5,A); hgt.value=H; hout.textContent=fmt(H*1000)+' mm';
+    wid.value=2*A; wout.textContent=fmt(2*A*1000)+' mm';
+    dwi.max=Math.min(4,2*A-2); dwi.value=2*DW; dwo.textContent=fmt(DW*2000)+' mm';
+    dhi.value=DH; dho.textContent=fmt(DH*1000)+' mm';
+    tri.value=TR; tro.textContent=fmt(TR*1000)+' mm';
+    spo.textContent=fmt(L/(nArch()-1)*1000)+' mm';
+  }
+  var wid=document.getElementById('wid'), wout=document.getElementById('wout');
+  var dwi=document.getElementById('dwi'), dwo=document.getElementById('dwo'), dhi=document.getElementById('dhi'), dho=document.getElementById('dho'), tri=document.getElementById('tri'), tro=document.getElementById('tro');
+  function refresh(){ geo(); fit(); section(); if(!hq){ hq=requestAnimationFrame(function(){ hq=0; build(); }); } }
+  dwi.addEventListener('input',function(){ DW=parseFloat(dwi.value)/2; refresh(); });
+  dhi.addEventListener('input',function(){ DH=parseFloat(dhi.value); refresh(); });
+  tri.addEventListener('input',function(){ TR=parseFloat(tri.value); refresh(); });
+  var spi=document.getElementById('spi'), spo=document.getElementById('spo');
+  spi.addEventListener('input',function(){ SP=parseFloat(spi.value); refresh(); });
+  function setHW(h,w){
+    w=Math.round(Math.min(12,Math.max(4,w))*10)/10; var a=w/2;
+    h=Math.round(Math.min(7,Math.max(3.5,a,h))*20)/20;
+    if(h===H&&a===A) return;
+    H=h; A=a; refresh();
+  }
+  function setH(v){ setHW(v,2*A); }
+  wid.addEventListener('input',function(){ setHW(H,parseFloat(wid.value)); });
+  handle.addEventListener('pointerdown',function(e){ secDrag=true; try{handle.setPointerCapture(e.pointerId);}catch(_){} e.preventDefault(); });
+  handle.addEventListener('pointermove',function(e){
+    if(!secDrag) return;
+    var pt=sec.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY;
+    setH(YG-pt.matrixTransform(sec.getScreenCTM().inverse()).y);
+  });
+  ['pointerup','pointercancel'].forEach(function(n){ handle.addEventListener(n,function(){ secDrag=false; }); });
+  hgt.addEventListener('input',function(){ setH(parseFloat(hgt.value)); });
+  section(); window.__sec=section;
+
+  // ---- purchase list ----
+  function bomRows(){
+    var n=nArch(), NS=Math.max(12,Math.round(ARC/.3)), top=DH+TR, rows=[];
+    function dec(v,d){ return v.toFixed(d).replace('.',','); }
+    function tim(del,dim,qty,len,info){ rows.push({del:del,dim:dim,qty:qty,len:fmt(len*1000)+' mm',buy:dec(qty*len*1.1,1)+' lpm',info:info||''}); }
+    var stripM=n*2*2*2*ARC, strips=Math.ceil(stripM*1.1/2.44), sheets=Math.ceil(strips/15);
+    rows.push({del:'Bågskivor, plywood',dim:'12 mm, 1220 × 2440',qty:strips,len:'70 × 2 440 mm',buy:sheets+' skivor',
+      info:n+' bågar × 2 halvor × 2 skivor × 2 limmade lager à '+fmt(ARC*1000)+' mm = '+dec(stripM,0)+' m remsa. 15 remsor per skiva.'});
+    tim('Klossar i bågarna','70 × 70',n*2*NS,.12,NS+' st per halvbåge, c/c ca '+fmt(ARC/NS*1000)+' mm');
+    tim('Syll, långsidor','120 × 120 tryckimpregnerad',2,L);
+    tim('Syll, gavlar','120 × 120 tryckimpregnerad',4,A-DW);
+    tim('Nockregel','45 × 145',1,L);
+    tim('Sidoreglar','34 × 145',2,L);
+    tim('Dörrstolpar','95 × 95',4,top+.05);
+    tim(TR>0?'Överliggare, dörr och överljus':'Överliggare, dörr','95 × 95',TR>0?4:2,2*DW);
+    tim('Nockstolpar i gavel','95 × 95',2,Math.max(0,H-.08-top));
+    tim('Gavelstag mot båge','95 × 95',4,Math.max(0,xa(top)-DW-.09));
+    tim('Dörrblad, stående','45 × 70',8,DH-.06,'4 dörrblad');
+    tim('Dörrblad, liggande','45 × 70',12,DW-.05);
+    rows.push({del:'Polyetenfilm',dim:'tak + gavlar',qty:'',len:'',buy:'ca '+fmt(filmArea*1.1)+' m²',info:'Yta '+fmt(filmArea)+' m² plus 10 % för överlapp och infästning'});
+    return rows;
+  }
+  function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function renderBom(){
+    document.getElementById('bom').innerHTML=bomRows().map(function(r){
+      return '<tr><td>'+esc(r.del)+(r.info?'<small>'+esc(r.info)+'</small>':'')+'</td><td>'+esc(r.dim)+'</td><td class="n">'+esc(r.qty)+'</td><td class="n">'+esc(r.len)+'</td><td class="n">'+esc(r.buy)+'</td></tr>';
+    }).join('');
+  }
+  function bomCsv(sep){
+    var head=['Del','Dimension','Antal','Kaplängd','Att köpa','Kommentar'];
+    var meta='Bågväxthus '+fmt(2*A*1000)+' × '+fmt(L*1000)+' mm, nockhöjd '+fmt(H*1000)+' mm, dörr '+fmt(DW*2000)+' × '+fmt(DH*1000)+' mm, överljus '+fmt(TR*1000)+' mm';
+    function q(v){ v=String(v); return /[";\t\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }
+    return [meta,head.join(sep)].concat(bomRows().map(function(r){ return [r.del,r.dim,r.qty,r.len,r.buy,r.info].map(q).join(sep); })).join('\r\n');
+  }
+  var bmsg=document.getElementById('bmsg'), bexp=document.getElementById('bexp'), saver=null;
+  function say(t){ bmsg.textContent=t; }
+  document.getElementById('bcopy').addEventListener('click',function(){
+    var t=bomCsv('\t');
+    try{ navigator.clipboard.writeText(t).then(function(){ say('Kopierad. Klistra in i Excel eller Sheets.'); },function(){ say('Kunde inte kopiera här. Använd Exportera CSV.'); }); }
+    catch(e){ say('Kunde inte kopiera här. Använd Exportera CSV.'); }
+  });
+  bexp.addEventListener('click',function(){
+    if(!saver) return;
+    var name='inkopslista-bagvaxthus-'+String(2*A).replace('.','_')+'x'+L+'m.csv';
+    saver.save({filename:name,data:'\ufeff'+bomCsv(';')}).then(function(){ say('Sparad som '+name+'.'); },function(e){
+      var c=e&&e.code;
+      say(c==='declined'?'Exporten avbröts.':c==='rate_limited'?'En sparruta är redan öppen. Försök igen strax.':'Export går inte i den här vyn. Använd Kopiera.');
+    });
+  });
+  try{ if(window.claude&&window.claude.use) window.claude.use('downloads').then(function(d){ if(d){ saver=d; bexp.hidden=false; } },function(){}); }catch(e){}
+
+  // theme follow
+  try{
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme);
+    new MutationObserver(applyTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  }catch(e){}
+
+  build(); resize(); applyTheme();
+})();
+</script>
+
+</body></html>
