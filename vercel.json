@@ -1,0 +1,6 @@
+{
+  "redirects": [
+    { "source": "/baglbox", "destination": "/bagl/", "permanent": true },
+    { "source": "/baglbox/:path*", "destination": "/bagl/:path*", "permanent": true }
+  ]
+}
