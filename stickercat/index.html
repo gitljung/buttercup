@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="sv"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shtickercat – grafisk profil & animation</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Grafisk profil för StickerApps maskot Shtickercat: färger, hierarki, alla katter och ChatGPT-prompter för animation.">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Buttercup.nu">
+<meta property="og:title" content="Shtickercat – grafisk profil & animation">
+<meta property="og:description" content="Färger, hierarki, 37 katter och promptmall för att animera dem med ChatGPT.">
+<meta property="og:url" content="https://www.buttercup.nu/stickercat/">
+<meta property="og:image" content="https://www.buttercup.nu/stickercat/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://www.buttercup.nu/stickercat/og.jpg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@700&family=Barlow:wght@400;500;700&display=swap">
+<style>
+:root{--k:#010303;--r:#D95447;--y:#FDDB0B;--c:#FAF6EC;--g:#727171}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--c);color:var(--k);font:16px/1.55 Barlow,system-ui,sans-serif}
+.bc-bar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:#C8340A;color:#FFF6DC;font:700 14px "Barlow Condensed","Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:.08em}
+.bc-bar a{color:#FFF6DC;text-decoration:none} .bc-bar b{font:400 18px Anton,Impact,sans-serif;letter-spacing:.04em;color:#FCC222}
+@media(max-width:600px){.bc-bar span{display:none}}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+header.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:30px;align-items:center;padding:50px 0 30px}
+header.hero img.logo{width:100%;max-width:560px}
+header.hero .face{width:100%;max-width:380px;justify-self:center;animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-2deg)}}
+@media(prefers-reduced-motion:reduce){header.hero .face{animation:none}}
+.lead{font-size:19px;max-width:620px}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
+nav.toc a,.btn{display:inline-block;border:3px solid var(--k);border-radius:999px;padding:6px 14px;font:700 13px "Barlow Condensed",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--k);text-decoration:none;background:#fff}
+.btn.y{background:var(--y)} nav.toc a:hover,.btn:hover{background:var(--k);color:var(--c)}
+section{padding:40px 0;border-top:3px dashed var(--k)}
+h2{font:400 clamp(32px,5vw,52px)/1 Anton,Impact,sans-serif;text-transform:uppercase;margin:0 0 6px}
+h2 .n{color:var(--r)}
+h3{font:700 20px "Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.06em;margin:26px 0 10px}
+.sub{color:var(--g);margin:0 0 20px}
+.sws{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.sw{display:flex;flex-direction:column;gap:2px} .sw code{color:var(--g)} .sw small{color:var(--g);line-height:1.3}
+.chip{height:120px;border:3px solid var(--k);border-radius:20px;cursor:copy;margin-bottom:8px;box-shadow:5px 5px 0 var(--k)}
+@media(max-width:800px){.sws{grid-template-columns:repeat(2,1fr)}header.hero{grid-template-columns:1fr;padding-top:30px}header.hero .face{max-width:220px;order:-1}}
+.logos{display:grid;grid-template-columns:2fr 1.3fr;gap:16px}
+.panel{background:#fff;border:3px solid var(--k);border-radius:22px;padding:18px}
+.panel.k{background:var(--k)} .panel.y{background:var(--y)}
+.panel img{width:100%;display:block}
+.panel{display:flex;align-items:center}
+@media(max-width:700px){.logos{grid-template-columns:1fr}}
+ul.rules{padding-left:20px} ul.rules li{margin:4px 0}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}}
+.cat{margin:0;background:#fff;border:3px solid var(--k);border-radius:20px;padding:10px;text-align:center;transition:transform .15s}
+.cat:hover{transform:rotate(-2deg) scale(1.03)}
+.cat img{width:100%;height:auto;display:block}
+.cat figcaption{font:700 14px "Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.05em}
+.cat figcaption b{color:var(--r)}
+.tier{display:flex;align-items:baseline;gap:10px} .tier .num{font:400 34px Anton,sans-serif;color:var(--r)}
+.tablewrap{overflow-x:auto;border:3px solid var(--k);border-radius:20px;background:#fff}
+table{border-collapse:collapse;width:100%;min-width:760px}
+th,td{padding:6px 10px;border-bottom:1px solid #e6e0cf;text-align:left;vertical-align:middle;font-size:14px}
+th{background:var(--k);color:var(--c);font:700 13px "Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.08em;position:sticky;top:0}
+td img{width:56px;height:56px;object-fit:contain;display:block}
+.pill{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:700;white-space:nowrap}
+.pill.loop{background:var(--y)} .pill.once{background:var(--r);color:#fff}
+td.dl a{color:var(--k);font-weight:700;font-size:12px}
+pre{position:relative;background:var(--k);color:var(--c);border-radius:20px;padding:18px 18px 18px;overflow-x:auto;font:13px/1.55 ui-monospace,Menlo,monospace;white-space:pre-wrap}
+pre button{position:absolute;top:10px;right:10px;background:var(--y);border:0;border-radius:999px;padding:5px 12px;font:700 12px Barlow,sans-serif;cursor:pointer}
+.steps{counter-reset:s;list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.steps li{counter-increment:s;background:#fff;border:3px solid var(--k);border-radius:20px;padding:14px 16px}
+.steps li::before{content:counter(s);display:block;font:400 34px Anton,sans-serif;color:var(--r);line-height:1}
+.note{background:var(--y);border:3px solid var(--k);border-radius:20px;padding:14px 18px;font-weight:500}
+.tbl2{border-collapse:collapse;min-width:0;width:auto} .tbl2 td{border:0;padding:3px 16px 3px 0}
+footer{padding:40px 0 60px;border-top:3px dashed var(--k);text-align:center}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--k);color:var(--c);padding:8px 16px;border-radius:999px;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+</style></head><body>
+<div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Projekt · StickerApp</span><b>Plan B(lommeröd)</b></div>
+<div class="wrap">
+<header class="hero">
+  <div>
+    <img class="logo" src="web/38-logo-rak.png" alt="SHTICKERCAT">
+    <p class="lead">Grafisk profil för StickerApps maskot och en arbetsgång för att animera varje katt med ChatGPT, en i taget.</p>
+    <nav class="toc"><a href="#logo">Logotyp</a><a href="#farger">Färger</a><a href="#stil">Stil</a><a href="#hierarki">Hierarki</a><a href="#alla">Alla katter</a><a href="#chatgpt">ChatGPT</a><a href="#prompt">Prompt</a></nav>
+    <p style="margin-top:18px"><a class="btn y" href="Shtickercat_profil.zip" download>Ladda ner allt (zip)</a> <a class="btn" href="SHTICKERCAT_Grafisk_profil_och_animation.md" download>Profil som .md</a></p>
+  </div>
+  <img class="face" src="web/16-ansikte.png" alt="Shtickercat">
+</header>
+
+<section id="logo"><h2><span class="n">1.</span> Logotyp</h2>
+<p class="sub">Handskurna, lutande versaler. Varje bokstav har egen vinkel och baslinje.</p>
+<div class="logos">
+  <div class="panel"><img src="web/38-logo-rak.png" alt="Logotyp, en rad"></div>
+  <div class="panel"><img src="web/39-logo-tva-rader.png" alt="Logotyp, två rader"></div>
+</div>
+<ul class="rules">
+<li><b>En rad</b> för banners och breda format. <b>Två rader</b> för kvadrat, profilbild och stickerark.</li>
+<li>Bokstävernas färgordning är fast. Färglägg dem aldrig om och räta inte upp dem.</li>
+<li>Låt det vara luft runt logotypen, minst höjden av ett "C".</li>
+<li>Logotypen står på vit eller cream yta. <b>Aldrig på gult</b>, för då försvinner de gula bokstäverna. På svart yta byts de svarta bokstäverna mot cream.</li>
+</ul></section>
+
+<section id="farger"><h2><span class="n">2.</span> Färger</h2>
+<p class="sub">Uppmätta i originalfilen. Klicka på en färg för att kopiera HEX-koden.</p>
+<div class="sws"><div class="sw"><button class="chip" style="background:#010303" data-copy="#010303" aria-label="Kopiera #010303"></button><b>Kattsvart</b><code>#010303</code><small>Kropp, konturer, logobokstäver</small></div><div class="sw"><button class="chip" style="background:#D95447" data-copy="#D95447" aria-label="Kopiera #D95447"></button><b>Korall</b><code>#D95447</code><small>Näsa, mun, tassdynor, hjärtan, fisk</small></div><div class="sw"><button class="chip" style="background:#FDDB0B" data-copy="#FDDB0B" aria-label="Kopiera #FDDB0B"></button><b>Shticker-gul</b><code>#FDDB0B</code><small>Ögon, sol, logobokstäver, accentytor</small></div><div class="sw"><button class="chip" style="background:#FAF6EC" data-copy="#FAF6EC" aria-label="Kopiera #FAF6EC"></button><b>Cream</b><code>#FAF6EC</code><small>Morrhår, tänder, ljusa detaljer</small></div><div class="sw"><button class="chip" style="background:#727171" data-copy="#727171" aria-label="Kopiera #727171"></button><b>Grå</b><code>#727171</code><small>Tår, svansspetsar, platt skugga</small></div></div>
+<p>Platta färger rakt igenom, utan gradienter, skuggor eller brus. <b>Svart och gult bär varumärket</b> och korall är kryddan. Gult kan användas som stor bakgrundsyta, korall bara i små ytor. Kartongbrunt <code>#C89972</code> används bara till StickerApp-lådan.</p>
+</section>
+
+<section id="stil"><h2><span class="n">3.</span> Stil & form</h2>
+<ul class="rules">
+<li>Bred, rundad, något ojämn siluett, som tusch med tjock pensel. Kroppen är en enda svart form utan separat kontur.</li>
+<li>Ögonen är gula mandlar med svarta pupiller, gärna halvslutna och busiga. Näsan är en korallröd triangel.</li>
+<li>Morrhåren är tre till fyra cream-streck per sida. De sticker ut utanför siluetten och är kattens viktigaste "rörelsedel".</li>
+<li>Detaljerna är negativa ytor (hål i svart) eller små platta färgfält.</li>
+<li>Text är handritad som i logotypen. Använd inte ett vanligt typsnitt i bilden.</li>
+</ul></section>
+
+<section id="hierarki"><h2><span class="n">4.</span> Hierarki</h2>
+<p class="sub">Vilka katter som används först och mest.</p>
+<div class="tier"><span class="num">1</span><h3>Logotypen – avsändaren</h3></div>
+<div class="tier"><span class="num">2</span><h3>Hjältekatter</h3></div>
+<div class="grid"><figure class="cat big"><a href="png/16-ansikte.png" target="_blank" rel="noopener"><img src="web/16-ansikte.png" alt="Ansikte" loading="lazy" width="600" height="600"></a><figcaption><b>16</b> Ansikte</figcaption></figure><figure class="cat big"><a href="png/04-sitter.png" target="_blank" rel="noopener"><img src="web/04-sitter.png" alt="Sitter" loading="lazy" width="600" height="600"></a><figcaption><b>04</b> Sitter</figcaption></figure><figure class="cat big"><a href="png/26-shticker-hjartan.png" target="_blank" rel="noopener"><img src="web/26-shticker-hjartan.png" alt="SHTICKER med hjärtan" loading="lazy" width="600" height="600"></a><figcaption><b>26</b> SHTICKER med hjärtan</figcaption></figure><figure class="cat big"><a href="png/02-stickerapp-lada.png" target="_blank" rel="noopener"><img src="web/02-stickerapp-lada.png" alt="StickerApp-lådan" loading="lazy" width="600" height="600"></a><figcaption><b>02</b> StickerApp-lådan</figcaption></figure></div>
+<div class="tier"><span class="num">3</span><h3>Känslokatter – en per reaktion</h3></div>
+<div class="grid"><figure class="cat"><a href="png/01-hjartogon.png" target="_blank" rel="noopener"><img src="web/01-hjartogon.png" alt="Hjärtögon" loading="lazy" width="600" height="600"></a><figcaption><b>01</b> Kär</figcaption></figure><figure class="cat"><a href="png/30-flinar.png" target="_blank" rel="noopener"><img src="web/30-flinar.png" alt="Flinar" loading="lazy" width="600" height="600"></a><figcaption><b>30</b> Glad</figcaption></figure><figure class="cat"><a href="png/27-sur.png" target="_blank" rel="noopener"><img src="web/27-sur.png" alt="Sur" loading="lazy" width="600" height="600"></a><figcaption><b>27</b> Sur</figcaption></figure><figure class="cat"><a href="png/29-arg-tittar-fram.png" target="_blank" rel="noopener"><img src="web/29-arg-tittar-fram.png" alt="Arg, tittar fram" loading="lazy" width="600" height="600"></a><figcaption><b>29</b> Arg</figcaption></figure><figure class="cat"><a href="png/31-skramd.png" target="_blank" rel="noopener"><img src="web/31-skramd.png" alt="Skrämd" loading="lazy" width="600" height="600"></a><figcaption><b>31</b> Rädd</figcaption></figure><figure class="cat"><a href="png/17-dont-sleep-on-this.png" target="_blank" rel="noopener"><img src="web/17-dont-sleep-on-this.png" alt="Don&#x27;t sleep on this" loading="lazy" width="600" height="600"></a><figcaption><b>17</b> Sömnig</figcaption></figure><figure class="cat"><a href="png/23-dagdrommer-fisk.png" target="_blank" rel="noopener"><img src="web/23-dagdrommer-fisk.png" alt="Dagdrömmer om fisk" loading="lazy" width="600" height="600"></a><figcaption><b>23</b> Sugen</figcaption></figure><figure class="cat"><a href="png/08-skateboard.png" target="_blank" rel="noopener"><img src="web/08-skateboard.png" alt="Skateboard" loading="lazy" width="600" height="600"></a><figcaption><b>08</b> Cool</figcaption></figure></div>
+<div class="tier"><span class="num">4</span><h3>Rörelsekatter – laddning, övergångar, "skickat!"</h3></div>
+<div class="grid"><figure class="cat"><a href="png/33-springer.png" target="_blank" rel="noopener"><img src="web/33-springer.png" alt="Springer" loading="lazy" width="600" height="600"></a><figcaption><b>33</b> Springer</figcaption></figure><figure class="cat"><a href="png/03-smyger.png" target="_blank" rel="noopener"><img src="web/03-smyger.png" alt="Smyger" loading="lazy" width="600" height="600"></a><figcaption><b>03</b> Smyger</figcaption></figure><figure class="cat"><a href="png/24-faller-mus.png" target="_blank" rel="noopener"><img src="web/24-faller-mus.png" alt="Faller med mus" loading="lazy" width="600" height="600"></a><figcaption><b>24</b> Faller med mus</figcaption></figure><figure class="cat"><a href="png/11-hanger.png" target="_blank" rel="noopener"><img src="web/11-hanger.png" alt="Hänger" loading="lazy" width="600" height="600"></a><figcaption><b>11</b> Hänger</figcaption></figure></div>
+<div class="tier"><span class="num">5</span><h3>Rekvisita & småmotiv</h3></div>
+<div class="grid"><figure class="cat"><a href="png/36-fisk.png" target="_blank" rel="noopener"><img src="web/36-fisk.png" alt="Fisk" loading="lazy" width="600" height="600"></a><figcaption><b>36</b> Fisk</figcaption></figure><figure class="cat"><a href="png/09-tass-upp.png" target="_blank" rel="noopener"><img src="web/09-tass-upp.png" alt="Tass upp" loading="lazy" width="600" height="600"></a><figcaption><b>09</b> Tass upp</figcaption></figure><figure class="cat"><a href="png/13-tass-ner.png" target="_blank" rel="noopener"><img src="web/13-tass-ner.png" alt="Tass ner" loading="lazy" width="600" height="600"></a><figcaption><b>13</b> Tass ner</figcaption></figure><figure class="cat"><a href="png/22-tre-humor.png" target="_blank" rel="noopener"><img src="web/22-tre-humor.png" alt="Tre humör" loading="lazy" width="600" height="600"></a><figcaption><b>22</b> Tre humör</figcaption></figure></div>
+</section>
+
+<section id="alla"><h2><span class="n">5.</span> Alla katter & rörelser</h2>
+<p class="sub">Rörelserna är förslag att provspela. Bara den del av katten som behövs rör sig, resten står stilla. PNG är 600 dpi med transparent bakgrund.</p>
+<div class="tablewrap"><table>
+<thead><tr><th></th><th>#</th><th>Motiv</th><th>Rörelse</th><th>Uppspelning</th><th>Filer</th></tr></thead>
+<tbody><tr><td><img src="web/01-hjartogon.png" alt="" loading="lazy"></td><td><b>01</b></td><td>Hjärtögon</td><td>Hjärtögonen pulserar, morrhåren vickar</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/01-hjartogon.png" download>PNG</a> <a href="svg/01-hjartogon.svg" download>SVG</a></td></tr><tr><td><img src="web/02-stickerapp-lada.png" alt="" loading="lazy"></td><td><b>02</b></td><td>StickerApp-lådan</td><td>Katten tittar upp ur lådan, gnistrorna blinkar</td><td><span class="pill once">En gång, sedan gnistrorna i loop</span></td><td class="dl"><a href="png/02-stickerapp-lada.png" download>PNG</a> <a href="svg/02-stickerapp-lada.svg" download>SVG</a></td></tr><tr><td><img src="web/03-smyger.png" alt="" loading="lazy"></td><td><b>03</b></td><td>Smyger</td><td>Lågt smygande på stället med tassarna i tur och ordning</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/03-smyger.png" download>PNG</a> <a href="svg/03-smyger.svg" download>SVG</a></td></tr><tr><td><img src="web/04-sitter.png" alt="" loading="lazy"></td><td><b>04</b></td><td>Sitter</td><td>Svansen slår långsamt, ett blink</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/04-sitter.png" download>PNG</a> <a href="svg/04-sitter.svg" download>SVG</a></td></tr><tr><td><img src="web/05-tvattar-sig.png" alt="" loading="lazy"></td><td><b>05</b></td><td>Tvättar sig</td><td>Slickar sig på benet, huvudet guppar</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/05-tvattar-sig.png" download>PNG</a> <a href="svg/05-tvattar-sig.svg" download>SVG</a></td></tr><tr><td><img src="web/06-sol-ansikte.png" alt="" loading="lazy"></td><td><b>06</b></td><td>Sol-ansikte</td><td>Solstrålarna roterar, katten blinkar</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/06-sol-ansikte.png" download>PNG</a> <a href="svg/06-sol-ansikte.svg" download>SVG</a></td></tr><tr><td><img src="web/07-solbad.png" alt="" loading="lazy"></td><td><b>07</b></td><td>Solbad</td><td>Solen strålar, svansen vippar</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/07-solbad.png" download>PNG</a> <a href="svg/07-solbad.svg" download>SVG</a></td></tr><tr><td><img src="web/08-skateboard.png" alt="" loading="lazy"></td><td><b>08</b></td><td>Skateboard</td><td>Fartstrecken rör sig, kroppen guppar, hjulen snurrar</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/08-skateboard.png" download>PNG</a> <a href="svg/08-skateboard.svg" download>SVG</a></td></tr><tr><td><img src="web/09-tass-upp.png" alt="" loading="lazy"></td><td><b>09</b></td><td>Tass upp</td><td>Tummen-upp som studsar till</td><td><span class="pill once">Loop eller en gång</span></td><td class="dl"><a href="png/09-tass-upp.png" download>PNG</a> <a href="svg/09-tass-upp.svg" download>SVG</a></td></tr><tr><td><img src="web/10-straecker-pa-sig.png" alt="" loading="lazy"></td><td><b>10</b></td><td>Sträcker på sig</td><td>Sträcker sig framåt och tillbaka</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/10-straecker-pa-sig.png" download>PNG</a> <a href="svg/10-straecker-pa-sig.svg" download>SVG</a></td></tr><tr><td><img src="web/11-hanger.png" alt="" loading="lazy"></td><td><b>11</b></td><td>Hänger</td><td>Svänger lätt i fasthållningspunkten</td><td><span class="pill loop">Loop (pendel)</span></td><td class="dl"><a href="png/11-hanger.png" download>PNG</a> <a href="svg/11-hanger.svg" download>SVG</a></td></tr><tr><td><img src="web/12-vinkar.png" alt="" loading="lazy"></td><td><b>12</b></td><td>Vinkar</td><td>Tassen vinkar, tre gånger</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/12-vinkar.png" download>PNG</a> <a href="svg/12-vinkar.svg" download>SVG</a></td></tr><tr><td><img src="web/13-tass-ner.png" alt="" loading="lazy"></td><td><b>13</b></td><td>Tass ner</td><td>Tummen-ner, en liten tung studs</td><td><span class="pill once">En gång</span></td><td class="dl"><a href="png/13-tass-ner.png" download>PNG</a> <a href="svg/13-tass-ner.svg" download>SVG</a></td></tr><tr><td><img src="web/14-supporter.png" alt="" loading="lazy"></td><td><b>14</b></td><td>Supporter</td><td>Banderollen och skumhanden vajar i takt</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/14-supporter.png" download>PNG</a> <a href="svg/14-supporter.svg" download>SVG</a></td></tr><tr><td><img src="web/15-laptop.png" alt="" loading="lazy"></td><td><b>15</b></td><td>Laptop</td><td>Tassarna knappar, skärmen blinkar</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/15-laptop.png" download>PNG</a> <a href="svg/15-laptop.svg" download>SVG</a></td></tr><tr><td><img src="web/16-ansikte.png" alt="" loading="lazy"></td><td><b>16</b></td><td>Ansikte</td><td>Blinkar, morrhåren vickar, munnen öppnas lite</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/16-ansikte.png" download>PNG</a> <a href="svg/16-ansikte.svg" download>SVG</a></td></tr><tr><td><img src="web/17-dont-sleep-on-this.png" alt="" loading="lazy"></td><td><b>17</b></td><td>Don&#x27;t sleep on this</td><td>Andas långsamt, z-z-z stiger</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/17-dont-sleep-on-this.png" download>PNG</a> <a href="svg/17-dont-sleep-on-this.svg" download>SVG</a></td></tr><tr><td><img src="web/18-kutrygg.png" alt="" loading="lazy"></td><td><b>18</b></td><td>Kutrygg</td><td>Svansen viftar, katten tittar åt sidan</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/18-kutrygg.png" download>PNG</a> <a href="svg/18-kutrygg.svg" download>SVG</a></td></tr><tr><td><img src="web/19-fisk-i-munnen.png" alt="" loading="lazy"></td><td><b>19</b></td><td>Fisk i munnen</td><td>Fisken sprattlar, kinderna tuggar</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/19-fisk-i-munnen.png" download>PNG</a> <a href="svg/19-fisk-i-munnen.svg" download>SVG</a></td></tr><tr><td><img src="web/20-star.png" alt="" loading="lazy"></td><td><b>20</b></td><td>Står</td><td>Huvudet lutar på sned, svansen vickar</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/20-star.png" download>PNG</a> <a href="svg/20-star.svg" download>SVG</a></td></tr><tr><td><img src="web/21-ihoprullad.png" alt="" loading="lazy"></td><td><b>21</b></td><td>Ihoprullad</td><td>Andas, ena örat rycker</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/21-ihoprullad.png" download>PNG</a> <a href="svg/21-ihoprullad.svg" download>SVG</a></td></tr><tr><td><img src="web/22-tre-humor.png" alt="" loading="lazy"></td><td><b>22</b></td><td>Tre humör</td><td>Huvudena byter ansiktsuttryck i tur och ordning</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/22-tre-humor.png" download>PNG</a> <a href="svg/22-tre-humor.svg" download>SVG</a></td></tr><tr><td><img src="web/23-dagdrommer-fisk.png" alt="" loading="lazy"></td><td><b>23</b></td><td>Dagdrömmer om fisk</td><td>Tankebubblan växer och fisken simmar, dreglet droppar</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/23-dagdrommer-fisk.png" download>PNG</a> <a href="svg/23-dagdrommer-fisk.svg" download>SVG</a></td></tr><tr><td><img src="web/24-faller-mus.png" alt="" loading="lazy"></td><td><b>24</b></td><td>Faller med mus</td><td>Faller och snurrar sakta, musen hänger med</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/24-faller-mus.png" download>PNG</a> <a href="svg/24-faller-mus.svg" download>SVG</a></td></tr><tr><td><img src="web/25-nice.png" alt="" loading="lazy"></td><td><b>25</b></td><td>NICE</td><td>Bokstäverna poppar fram en i taget, katten flinar, rökpuffarna driver</td><td><span class="pill once">En gång, sedan loop</span></td><td class="dl"><a href="png/25-nice.png" download>PNG</a> <a href="svg/25-nice.svg" download>SVG</a></td></tr><tr><td><img src="web/26-shticker-hjartan.png" alt="" loading="lazy"></td><td><b>26</b></td><td>SHTICKER med hjärtan</td><td>Hjärtan stiger, bokstäverna gungar</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/26-shticker-hjartan.png" download>PNG</a> <a href="svg/26-shticker-hjartan.svg" download>SVG</a></td></tr><tr><td><img src="web/27-sur.png" alt="" loading="lazy"></td><td><b>27</b></td><td>Sur</td><td>Svansen piskar, örat vrids</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/27-sur.png" download>PNG</a> <a href="svg/27-sur.svg" download>SVG</a></td></tr><tr><td><img src="web/28-tittar-fram.png" alt="" loading="lazy"></td><td><b>28</b></td><td>Tittar fram</td><td>Glider upp bakom en kant, tittar höger–vänster</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/28-tittar-fram.png" download>PNG</a> <a href="svg/28-tittar-fram.svg" download>SVG</a></td></tr><tr><td><img src="web/29-arg-tittar-fram.png" alt="" loading="lazy"></td><td><b>29</b></td><td>Arg, tittar fram</td><td>Ögonen smalnar, morrhåren darrar</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/29-arg-tittar-fram.png" download>PNG</a> <a href="svg/29-arg-tittar-fram.svg" download>SVG</a></td></tr><tr><td><img src="web/30-flinar.png" alt="" loading="lazy"></td><td><b>30</b></td><td>Flinar</td><td>Ena ögonbrynet höjs, flinet blir bredare</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/30-flinar.png" download>PNG</a> <a href="svg/30-flinar.svg" download>SVG</a></td></tr><tr><td><img src="web/31-skramd.png" alt="" loading="lazy"></td><td><b>31</b></td><td>Skrämd</td><td>Hoppar till med burrig svans och darrar</td><td><span class="pill once">En gång eller loop</span></td><td class="dl"><a href="png/31-skramd.png" download>PNG</a> <a href="svg/31-skramd.svg" download>SVG</a></td></tr><tr><td><img src="web/32-pa-huvudet.png" alt="" loading="lazy"></td><td><b>32</b></td><td>På huvudet</td><td>Gungar på huvudet med benen i luften</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/32-pa-huvudet.png" download>PNG</a> <a href="svg/32-pa-huvudet.svg" download>SVG</a></td></tr><tr><td><img src="web/33-springer.png" alt="" loading="lazy"></td><td><b>33</b></td><td>Springer</td><td>Springer på stället med fartstreck</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/33-springer.png" download>PNG</a> <a href="svg/33-springer.svg" download>SVG</a></td></tr><tr><td><img src="web/34-lapp-i-munnen.png" alt="" loading="lazy"></td><td><b>34</b></td><td>Gul lapp i munnen</td><td>Lappen vippar, katten tuggar</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/34-lapp-i-munnen.png" download>PNG</a> <a href="svg/34-lapp-i-munnen.svg" download>SVG</a></td></tr><tr><td><img src="web/35-fisk-pa-huvudet.png" alt="" loading="lazy"></td><td><b>35</b></td><td>Fisk på huvudet</td><td>Fisken balanserar och vickar, katten tittar upp</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/35-fisk-pa-huvudet.png" download>PNG</a> <a href="svg/35-fisk-pa-huvudet.svg" download>SVG</a></td></tr><tr><td><img src="web/36-fisk.png" alt="" loading="lazy"></td><td><b>36</b></td><td>Fisk</td><td>Sprattlar och slår med stjärten</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/36-fisk.png" download>PNG</a> <a href="svg/36-fisk.svg" download>SVG</a></td></tr><tr><td><img src="web/37-fun-garnnystan.png" alt="" loading="lazy"></td><td><b>37</b></td><td>FUN med garnnystan</td><td>Leker med nystanet, bokstäverna studsar</td><td><span class="pill loop">Loop</span></td><td class="dl"><a href="png/37-fun-garnnystan.png" download>PNG</a> <a href="svg/37-fun-garnnystan.svg" download>SVG</a></td></tr><tr><td><img src="web/38-logo-rak.png" alt="" loading="lazy"></td><td><b>38</b></td><td>Logotyp</td><td>Bokstäverna hoppar upp en i taget och landar i sin vinkel</td><td><span class="pill once">En gång</span></td><td class="dl"><a href="png/38-logo-rak.png" download>PNG</a> <a href="svg/38-logo-rak.svg" download>SVG</a></td></tr><tr><td><img src="web/39-logo-tva-rader.png" alt="" loading="lazy"></td><td><b>39</b></td><td>Logotyp</td><td>Bokstäverna hoppar upp en i taget och landar i sin vinkel</td><td><span class="pill once">En gång</span></td><td class="dl"><a href="png/39-logo-tva-rader.png" download>PNG</a> <a href="svg/39-logo-tva-rader.svg" download>SVG</a></td></tr></tbody></table></div>
+</section>
+
+<section id="chatgpt"><h2><span class="n">6.</span> Animera med ChatGPT</h2>
+<ol class="steps">
+<li><b>En katt per konversation.</b> Ladda upp kattens PNG från tabellen ovan.</li>
+<li><b>Be om ett sprite sheet</b> på 4 × 4 = 16 bilder med prompten nedan.</li>
+<li><b>Kontrollera arket.</b> Samma storlek, katten står stilla där den ska och formerna glider inte.</li>
+<li><b>Glider formen?</b> Animera i så fall originalets SVG-delar direkt i stället, så förändras formen inte alls.</li>
+<li><b>Exportera</b> till GIF, WebP eller APNG i 512 × 512 och provspela.</li>
+</ol>
+<p class="note">Bildgenerering ändrar ofta konturer, ögon och storlek lite från ruta till ruta. Granska alltid genom att faktiskt spela upp. Försök inte dölja trasiga bilder med långsammare tempo.</p>
+<h3>Tidslinje</h3>
+<ul class="rules">
+<li>16 bilder läses från vänster till höger, uppifrån och ner, med samma pixelmått, skala och fasta punkt.</li>
+<li><b>Loop:</b> sista bilden leder tillbaka till den första. Rita inte startbilden en gång till som sista ruta.</li>
+<li><b>En gång:</b> spela upp och stanna på sista bilden (lådan, NICE, logotypen).</li>
+<li>Spela inte rörelser framåt och sedan bakåt (springa, falla, z-z-z), eftersom de då ser bakvända ut.</li>
+</ul>
+<h3>Tempo – startvärden</h3>
+<table class="tbl2"><tr><td>Springer, skateboard</td><td><b>0,6–1 s</b></td></tr><tr><td>Vinkar, tummen upp</td><td><b>1–1,5 s</b></td></tr><tr><td>Blinkar, morrhår</td><td><b>2–3 s</b></td></tr><tr><td>Svansviftning</td><td><b>2–4 s</b></td></tr><tr><td>Andning, sover</td><td><b>3–5 s</b></td></tr><tr><td>Text som poppar fram (en gång)</td><td><b>1,5–2,5 s</b></td></tr></table>
+<h3>Leverans</h3>
+<ul class="rules">
+<li><b>Sprite sheet:</b> PNG 2048 × 2048 med 4 × 4 rutor à 512 × 512 och riktig transparens.</li>
+<li><b>Sticker:</b> GIF/WebP/APNG, 512 × 512, 12–16 bilder per sekund, med transparent säkerhetsmarginal.</li>
+<li><b>Testa</b> på vitt, gult och svart. Morrhår och hål ska vara transparenta, inte vita.</li>
+</ul>
+<h3>Kontrollista</h3>
+<ol>
+<li>Står katten still där den ska, med samma fasta punkt i alla rutor?</li>
+<li>Behåller ögon, öron och morrhår form och antal?</li>
+<li>Är färgerna exakt profilens, utan nya nyanser eller gradienter?</li>
+<li>Är övergången från sista till första bild mjuk?</li>
+<li>Finns det klippta detaljer, vita kanter eller rutskarvar?</li>
+<li>Är det läsbart som liten sticker (cirka 120 px)?</li>
+</ol>
+</section>
+
+<section id="prompt"><h2><span class="n">7.</span> Promptmall</h2>
+<p class="sub">Kopiera, fyll i hakparenteserna och bifoga kattens PNG.</p>
+<pre><button data-copy-pre>Kopiera</button>Använd den bifogade bilden som exakt form- och stilreferens: StickerApps maskot Shtickercat.
+Skapa ett 4 × 4 sprite sheet med exakt 16 sekventiella bilder av samma katt.
+Behåll siluetten, proportionerna, ögonen, morrhåren och den tjocka, handritade stilen exakt.
+Platta färger ENDAST: svart #010303, korall #D95447, gul #FDDB0B, cream #FAF6EC, grå #727171.
+Äkta transparent bakgrund och transparenta hål. Inga skuggor, gradienter, ramar, siffror eller brus.
+Samma skala, kamera och fasta punkt i alla rutor: [TASSARNA I GOLVET / HUVUDETS MITT / UPPHÄNGNINGEN].
+Ordning: vänster till höger, uppifrån och ner.
+Rörelse: [VAD SOM RÖR SIG]. Allt annat står helt stilla.
+Bild 1–4: [...]. Bild 5–8: [...]. Bild 9–12: [...]. Bild 13–16: [...].
+Varje bild är en liten naturlig fortsättning på den föregående.
+[Sömlös loop: bild 16 ska leda tillbaka till bild 1, upprepa inte startbilden / Engångsrörelse som stannar på slutbilden.]
+Lika stora rutor med transparent säkerhetsmarginal.</pre>
+<h3>Exempel: 16 Ansikte – blinkar och morrhår</h3>
+<pre><button data-copy-pre>Kopiera</button>Rörelse: katten blinkar en gång och morrhåren vickar mjukt. Huvudet och öronen står helt stilla.
+Bild 1–4: öppna ögon, morrhåren böjs svagt uppåt.
+Bild 5–8: ögonlocken sluts och öppnas (blink på bild 6–7).
+Bild 9–12: morrhåren böjs svagt nedåt, munnen öppnas lite.
+Bild 13–16: tillbaka mot startläget, munnen stängs.
+Sömlös loop.</pre>
+<h3>Exempel: 33 Springer</h3>
+<pre><button data-copy-pre>Kopiera</button>Rörelse: galopp på stället. Benen, svansen och öronen rör sig i en samordnad löpcykel och fartstrecken bakom katten flimrar.
+Kroppens mitt ligger kvar på samma höjd ±3 %.
+Bild 1–16: en hel löpcykel jämnt fördelad: utsträckt, samlad, utsträckt.
+Sömlös loop, upprepa inte startbilden.</pre>
+</section>
+</div>
+<footer><div class="wrap"><img src="web/39-logo-tva-rader.png" alt="SHTICKERCAT" style="width:220px;max-width:60%"><p class="sub" style="margin-top:10px">Original: sticker cat separate.ai · 37 motiv + 2 logotyper</p>
+<a class="btn y" href="Shtickercat_profil.zip" download>Ladda ner allt (zip)</a></div></footer>
+<div class="toast" id="toast">Kopierat!</div>
+<script>
+const toast=t=>{const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1200)};
+const copy=async s=>{try{await navigator.clipboard.writeText(s);toast('Kopierat!')}catch(e){toast('Kunde inte kopiera')}};
+document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',()=>copy(b.dataset.copy)));
+document.querySelectorAll('[data-copy-pre]').forEach(b=>b.addEventListener('click',()=>{const p=b.parentElement.cloneNode(true);p.querySelector('button').remove();copy(p.textContent.trim())}));
+</script>
+</body></html>
