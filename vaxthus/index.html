@@ -171,7 +171,7 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
     <p class="note" id="aintro"></p>
     <div class="arcwrap"><svg id="arc" viewBox="0 0 1000 620" role="img" aria-label="Halvbåge med skarvar och kapschema"></svg></div>
     <div class="tw"><table class="atab">
-      <thead><tr><th>Lager</th><th>Bitar från foten och upp till nock (mm)</th><th class="n">Skarvar på kloss nr</th><th class="n">Per halvbåge</th></tr></thead>
+      <thead><tr><th>Båge</th><th>Bitar från foten och upp till nock (mm)</th><th class="n">Skarvar på kloss nr</th><th class="n">Per halvbåge</th></tr></thead>
       <tbody id="atab"></tbody>
     </table></div>
     <p class="note" id="anote"></p>
@@ -268,21 +268,21 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
     });
 
     // arches
-    var NS=Math.max(12,Math.round(ARC/.3)), CH=.047, BL=.06/ARC;
+    var NS=Math.max(12,Math.round(ARC/.3)), CH=.0425, BL=.06/ARC;   // 15 mm plywood + 70 mm kloss + 15 mm plywood
     for(var i=0;i<n;i++){
       var z=z0-(L*i/(n-1)), s0=.10+(i/(n-1))*.42*.7, dur=.42*.3;
       [-1,1].forEach(function(side){
         for(var j=0;j<NS;j++){
-          // ladder arch: two thin plywood chords with spacer blocks between them
+          // ladder arch: 15 mm plywood – kloss 70 – 15 mm plywood
           var ta=s0+dur*j/NS, tb=s0+dur*(j+1)/NS;
           [R-CH,R+CH].forEach(function(rr){
             var a=ap(j/NS,side,rr), b=ap((j+1)/NS,side,rr);
             var P=V(a[0],a[1],z), Q=V(b[0],b[1],z);
             Q.add(Q.clone().sub(P).multiplyScalar(.03));
-            beam(P,Q,.024,.07,ta,tb,zUp);
+            beam(P,Q,.015,.07,ta,tb,zUp);
           });
           var c0=ap((j+.5)/NS-BL,side), c1=ap((j+.5)/NS+BL,side);
-          beam(V(c0[0],c0[1],z),V(c1[0],c1[1],z),2*CH-.024,.07,(ta+tb)/2,tb,zUp);
+          beam(V(c0[0],c0[1],z),V(c1[0],c1[1],z),2*CH-.015,.07,(ta+tb)/2,tb,zUp);
         }
       });
     }
@@ -473,7 +473,7 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
     function ln(c,x1,y1,x2,y2){ return '<line class="'+c+'" x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'"/>'; }
     function tx(x,yy,t,an,c,rot){ return '<text x="'+x+'" y="'+yy+'" text-anchor="'+(an||'middle')+'"'+(c?' class="'+c+'"':'')+(rot?' transform="rotate(-90 '+x+' '+yy+')"':'')+'>'+t+'</text>'; }
     o+=ln('s-gnd',-A-1.4,YG,A+1.4,YG);
-    [R-.047,R+.047].forEach(function(r){ var bx=Math.sqrt(r*r-YC*YC)-C, ay=YG-(YC+Math.sqrt(r*r-C*C)); o+='<path class="s-arch" d="M'+(-bx)+' '+YG+' A'+r+' '+r+' 0 0 1 0 '+ay+' A'+r+' '+r+' 0 0 1 '+bx+' '+YG+'"/>'; });
+    [R-.0425,R+.0425].forEach(function(r){ var bx=Math.sqrt(r*r-YC*YC)-C, ay=YG-(YC+Math.sqrt(r*r-C*C)); o+='<path class="s-arch" d="M'+(-bx)+' '+YG+' A'+r+' '+r+' 0 0 1 0 '+ay+' A'+r+' '+r+' 0 0 1 '+bx+' '+YG+'"/>'; });
     var nb=Math.max(12,Math.round(ARC/.3)), bj, bs, b0, b1;
     for(bj=0;bj<nb;bj++) for(bs=-1;bs<=1;bs+=2){ b0=ap((bj+.5)/nb,bs,R-.04); b1=ap((bj+.5)/nb,bs,R+.04); o+=ln('s-blk',b0[0],YG-b0[1],b1[0],YG-b1[1]); }
     o+='<rect class="s-wood" x="'+(-DW)+'" y="'+(YG-DH)+'" width="'+(2*DW)+'" height="'+DH+'"/><rect class="s-wood" x="'+(-DW)+'" y="'+(YG-top)+'" width="'+(2*DW)+'" height="'+TR+'"/>';
@@ -531,7 +531,7 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
   section(); window.__sec=section;
 
   // ---- bågritning: skarvplan för plywoodremsor (max 2 440 mm) ----
-  var SHEET=2.44, USE=2.40, KERF=.004, CHD=.047;   // remslängd, användbar längd efter kapning av ändar, sågsnitt, halv bågbredd (som i 3D-modellen)
+  var SHEET=2.44, USE=2.40, KERF=.004, CHD=.0425;   // remslängd, användbar längd efter kapning av ändar, sågsnitt, halv bågbredd (som i 3D-modellen)
   function arcLenR(r){ var t0=Math.PI-Math.asin(Math.min(1,-YC/r)), t1=Math.acos(Math.max(-1,Math.min(1,-C/r))); return r*(t0-t1); }
   function arcPlan(){
     var NS=Math.max(12,Math.round(ARC/.3)), Lo=arcLenR(R+CHD), Li=arcLenR(R-CHD), bu=[], k;
@@ -539,19 +539,26 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
     function snap(t){ var b=0,d=9; for(var i=0;i<NS;i++){ var e=Math.abs(bu[i]-t); if(e<d){d=e;b=i;} } return b; }
     function pieces(ks,len){ var u=[0].concat(ks.map(function(i){return bu[i];}),[1]), out=[]; for(var i=1;i<u.length;i++) out.push((u[i]-u[i-1])*len); return out; }
     function ok(ks){ return pieces(ks,Lo).every(function(v){return v<=USE+1e-9;}) && ks.every(function(v,i){return i===0||v>ks[i-1];}); }
+    function okL(ks,len){ return pieces(ks,len).every(function(v){return v<=USE+1e-9;}) && ks.every(function(v,i){return i===0||v>ks[i-1];}); }
     var JA=[], JB=[], m=Math.ceil(Lo/USE-1e-9);
     if(m>1){
       for(var tries=0;tries<6;tries++,m++){
-        JA=[]; JB=[];
-        for(k=1;k<m;k++) JA.push(snap(k/m));
-        for(k=0;k<m;k++) JB.push(snap((k+.5)/m));                  // förskjutet en halv bit
-        JB=JB.filter(function(v,i,a){ return a.indexOf(v)===i; });
-        if(ok(JA)&&ok(JB)) break;
+        JA=[]; for(k=1;k<m;k++) JA.push(snap(k/m));
+        if(!okL(JA,Lo)) continue;
+        // innerbågen: samma antal bitar, men varje skarv flyttad till närmaste kloss som inte är ytterbågens
+        var cand=JA.slice(), good=true;
+        for(var q=0;q<cand.length;q++){
+          var best=null;
+          [1,-1,2,-2,3,-3].some(function(d){ var c=JA[q]+d; if(c<0||c>=NS||JA.indexOf(c)>=0) return false;
+            var tr=cand.slice(); tr[q]=c; if(okL(tr.slice(0,q+1).concat(JA.slice(q+1)),Li)||q===cand.length-1&&okL(tr,Li)){ best=c; return true; } return false; });
+          if(best===null){ good=false; break; } cand[q]=best;
+        }
+        if(good&&okL(cand,Li)){ JB=cand; break; }
       }
     }
     var layers=[
-      {n:'Ytterbåge, lager A',r:R+CHD,L:Lo,j:JA,ab:'A'},{n:'Ytterbåge, lager B',r:R+CHD,L:Lo,j:JB,ab:'B'},
-      {n:'Innerbåge, lager A',r:R-CHD,L:Li,j:JA,ab:'A'},{n:'Innerbåge, lager B',r:R-CHD,L:Li,j:JB,ab:'B'}
+      {n:'Ytterbåge, 15 mm',r:R+CHD,L:Lo,j:JA,ab:'A'},
+      {n:'Innerbåge, 15 mm',r:R-CHD,L:Li,j:JB,ab:'B'}
     ];
     layers.forEach(function(l){ l.p=pieces(l.j,l.L); });
     // kapschema: lägg alla bitar i hela huset på remsor (first fit decreasing)
@@ -571,26 +578,24 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
     function L_(x1,y1,x2,y2,c,w,da){ return '<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="'+c+'" stroke-width="'+w+'"'+(da?' stroke-dasharray="'+da+'"':'')+' stroke-linecap="round"/>'; }
     o+='<rect x="0" y="0" width="1000" height="620" fill="'+COL.bg+'"/>';
     o+=t(24,30,'BÅGVÄXTHUS '+fmt(2*A*1000)+' × '+fmt(L*1000)+' – HALVBÅGE, SKARVPLAN',{fs:17,w:1});
-    o+=t(24,50,'R '+fmt(R*1000)+' mm · nock '+fmt(H*1000)+' mm · '+P.NS+' klossar per halvbåge · remsor 12 × 70 mm, max '+fmt(SHEET*1000)+' mm',{fs:12,c:COL.mut});
+    o+=t(24,50,'R '+fmt(R*1000)+' mm · nock '+fmt(H*1000)+' mm · '+P.NS+' klossar per halvbåge · 15 mm plywood – kloss 70 – 15 mm plywood · remsor 70 mm, max '+fmt(SHEET*1000)+' mm',{fs:12,c:COL.mut});
     // vänster: halvbågen i skala
     var X0=56, Y0=570, s=Math.min(330/A,500/(H+.15));
     function px(x){ return X0+(x+A)*s; } function py(y){ return Y0-y*s; }
     function pt(u,r){ var a=ap(u,-1,r); return [px(a[0]),py(a[1])]; }
     o+=L_(X0-30,Y0,px(0)+40,Y0,COL.fg,2);
     var off=3.2/s;
-    [[R+CHD,'o'],[R-CHD,'i']].forEach(function(ch){
-      [[off,COL.wood],[-off,'#d9a066']].forEach(function(ly){
-        var d='', N=80; for(var q=0;q<=N;q++){ var p=pt(q/N,ch[0]+ly[0]); d+=(q?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1); }
-        o+='<path d="'+d+'" fill="none" stroke="'+ly[1]+'" stroke-width="3.2"/>';
-      });
+    [[R+CHD,COL.wood],[R-CHD,'#d9a066']].forEach(function(ch){
+      var d='', N=80; for(var q=0;q<=N;q++){ var p=pt(q/N,ch[0]); d+=(q?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1); }
+      o+='<path d="'+d+'" fill="none" stroke="'+ch[1]+'" stroke-width="4.5"/>';
     });
     P.bu.forEach(function(u,k){
       var a=pt(u,R-CHD-.02), b=pt(u,R+CHD+.02), lb=pt(u,R+CHD+.17);
       o+=L_(a[0],a[1],b[0],b[1],COL.blk,7);
       o+=t(lb[0],lb[1]+4,String(k+1),{fs:11,a:'middle',c:COL.mut});
     });
-    function jdot(ks,dr,c){ ks.forEach(function(k){ [R+CHD,R-CHD].forEach(function(r){ var p=pt(P.bu[k],r+dr); o+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4.6" fill="'+c+'" stroke="'+COL.bg+'" stroke-width="1.2"/>'; }); }); }
-    jdot(P.JA,off,COL.line); jdot(P.JB,-off,COL.fg);
+    function jdot(ks,r,c){ ks.forEach(function(k){ var p=pt(P.bu[k],r); o+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="5.2" fill="'+c+'" stroke="'+COL.bg+'" stroke-width="1.2"/>'; }); }
+    jdot(P.JA,R+CHD,COL.line); jdot(P.JB,R-CHD,COL.fg);
     var f0=pt(0,R+CHD), n0=pt(1,R+CHD);
     o+=t(f0[0]+28,Y0+16,'Fot',{fs:12,a:'start',c:COL.mut})+t(n0[0]+8,n0[1]+4,'Nock',{fs:12,c:COL.mut});
     var mid=pt(.5,R-CHD-.55); o+=t(mid[0],mid[1],'ytterbåge '+fmt(P.Lo*1000),{fs:12,a:'middle',c:COL.mut,rot:-58})+'';
@@ -606,7 +611,7 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
         x+=w;
         if(pi<l.j.length){ o+=L_(x,y-4,x,y+34,l.ab==='A'?COL.line:COL.fg,2.4); o+=t(x,y+48,'kloss '+(l.j[pi]+1),{fs:10,a:'middle',c:l.ab==='A'?COL.line:COL.fg}); }
       });
-      y+=li===1?82:68;
+      y+=96;
     });
     // kapschema
     y+=8;
@@ -616,17 +621,17 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
     if(P.pats.length>6) o+=t(X1,y,'+ '+(P.pats.length-6)+' kombinationer till',{fs:11,c:COL.mut});
     // legend
     var ly=600;
-    o+='<circle cx="'+(X1+6)+'" cy="'+(ly-4)+'" r="4.6" fill="'+COL.line+'"/>'+t(X1+16,ly,'skarv lager A',{fs:11});
-    o+='<circle cx="'+(X1+116)+'" cy="'+(ly-4)+'" r="4.6" fill="'+COL.fg+'"/>'+t(X1+126,ly,'skarv lager B',{fs:11});
-    o+=L_(X1+226,ly-4,X1+244,ly-4,COL.blk,7)+t(X1+252,ly,'kloss 70 × 70 (nr från foten)',{fs:11});
+    o+='<circle cx="'+(X1+6)+'" cy="'+(ly-4)+'" r="4.6" fill="'+COL.line+'"/>'+t(X1+16,ly,'skarv ytterbåge',{fs:11});
+    o+='<circle cx="'+(X1+136)+'" cy="'+(ly-4)+'" r="4.6" fill="'+COL.fg+'"/>'+t(X1+146,ly,'skarv innerbåge',{fs:11});
+    o+=L_(X1+266,ly-4,X1+284,ly-4,COL.blk,7)+t(X1+292,ly,'kloss 70 × 70 (nr från foten)',{fs:11});
     svg.innerHTML=o;
     // text + tabell
     var jn=P.JA.length+P.JB.length;
-    document.getElementById('aintro').textContent='Varje halvbåge är två bågar (ytter och inner) med klossar emellan, och varje båge är två limmade lager 12 mm plywood. Remsorna är max '+fmt(SHEET*1000)+' mm, så bågen skarvas. Skarvarna ligger alltid mitt på en kloss, och lager A och B skarvas förskjutet en halv bitlängd så att det aldrig finns två skarvar på samma ställe i samma båge.';
+    document.getElementById('aintro').textContent='Varje halvbåge är byggd som en stege: en remsa 15 mm plywood ytterst, klossar 70 × 70 emellan och en remsa 15 mm plywood innerst, totalt 100 mm. Remsorna är max '+fmt(SHEET*1000)+' mm, så bågen skarvas. Skarvarna ligger alltid på en kloss, och ytter- och innerbågen skarvas på olika klossar så att skarvarna aldrig hamnar mitt emot varandra.';
     document.getElementById('atab').innerHTML=P.layers.map(function(l){
       return '<tr><td>'+esc(l.n)+'</td><td>'+l.p.map(function(v){return fmt(v*1000);}).join(' + ')+' = '+fmt(l.L*1000)+'</td><td class="n">'+(l.j.length?l.j.map(function(k){return k+1;}).join(', '):'–')+'</td><td class="n">'+l.p.length+' st</td></tr>';
     }).join('');
-    document.getElementById('anote').textContent=(jn?'Vid skarvarna: byt den vanliga klossen mot en längre skarvkloss (ca 250 mm) så att båda bitarna får minst 100 mm anliggning, limma och skruva. ':'Bågen är kortare än en remsa, så den behöver inga skarvar. ')+'Mått längs bågen, räknat från foten. Kaplängden är mätt på bågens centrumlinje för respektive ytter- och innerbåge; kapa ändarna i vinkel på plats. '+fmt(USE*1000)+' mm används av varje remsa för att ge plats åt rak kapning.';
+    document.getElementById('anote').textContent=(jn?'Vid skarvarna: byt den vanliga klossen mot en längre skarvkloss (ca 250 mm) så att båda bitarna får minst 100 mm anliggning, och lägg en lask av 15 mm plywood (ca 400 mm) på utsidan över skarven. Limma och skruva. ':'Bågen är kortare än en remsa, så den behöver inga skarvar. ')+'Mått längs bågen, räknat från foten. Kaplängden är mätt på bågens centrumlinje för respektive ytter- och innerbåge; kapa ändarna i vinkel på plats. '+fmt(USE*1000)+' mm används av varje remsa för att ge plats åt rak kapning.';
     return P;
   }
   document.getElementById('asvg').addEventListener('click',function(){
@@ -644,9 +649,10 @@ dd{margin:2px 0 0;font-family:var(--mono);font-size:15px;font-variant-numeric:ta
     function dec(v,d){ return v.toFixed(d).replace('.',','); }
     function tim(del,dim,qty,len,info){ rows.push({del:del,dim:dim,qty:qty,len:fmt(len*1000)+' mm',buy:dec(qty*len*1.1,1)+' lpm',info:info||''}); }
     var AP=arcPlan(), strips=Math.ceil(AP.strips*1.05), sheets=Math.ceil(strips/15);
-    rows.push({del:'Bågskivor, plywood',dim:'12 mm, 1220 × 2440',qty:strips,len:'70 × 2 440 mm',buy:sheets+' skivor',
-      info:n+' bågar × 2 halvor × 2 bågar × 2 limmade lager, '+AP.pieces+' bitar enligt skarvplanen = '+AP.strips+' remsor + 5 % reserv. 15 remsor per skiva.'});
+    rows.push({del:'Bågskivor, plywood',dim:'15 mm, 1220 × 2440',qty:strips,len:'70 × 2 440 mm',buy:sheets+' skivor',
+      info:n+' bågar × 2 halvor × ytter- och innerbåge, '+AP.pieces+' bitar enligt skarvplanen = '+AP.strips+' remsor + 5 % reserv. 15 remsor per skiva.'});
     tim('Klossar i bågarna','70 × 70',n*2*NS,.12,NS+' st per halvbåge, c/c ca '+fmt(ARC/NS*1000)+' mm');
+    var nj=AP.JA.length+AP.JB.length; if(nj){ tim('Skarvklossar','70 × 70',n*2*nj,.25,'Ersätter vanliga klossar vid skarvarna, '+nj+' per halvbåge'); rows.push({del:'Lask över skarvar, plywood',dim:'15 mm, 70 × 400',qty:n*2*nj,len:'400 mm',buy:'ur restbitar',info:'En per skarv, på utsidan'}); }
     tim('Syll, långsidor','120 × 120 tryckimpregnerad',2,L);
     tim('Syll, gavlar','120 × 120 tryckimpregnerad',4,A-DW);
     tim('Nockregel','45 × 145',1,L);
