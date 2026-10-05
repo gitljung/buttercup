@@ -38,6 +38,22 @@
   .bc-bar b{font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.04em;font-size:18px;color:#FCC222}
   
   .bc-bar{position:fixed;top:0;left:0;right:0;z-index:2000001}
+  #info .tgl{display:none}
+  @media (max-width:700px){
+    .bc-bar{padding:6px 12px;font-size:12px;gap:8px}
+    .bc-bar span{display:none}
+    .bc-bar b{font-size:15px}
+    #info{position:fixed;top:auto;left:8px;right:auto;bottom:calc(8px + env(safe-area-inset-bottom));max-width:min(250px,calc(100vw - 16px));
+          padding:8px 12px;font-size:12px;line-height:1.4;border-radius:14px;box-shadow:3px 3px 0 #C8340A;cursor:pointer;
+          max-height:45vh;overflow:auto}
+    #info h1{font-size:15px;margin:0 0 3px;padding-right:18px}
+    #info .tgl{display:block;position:absolute;top:6px;right:9px;color:#C8340A;font-weight:700;font-size:13px}
+    #info:not(.open) .x,#info:not(.open) .small{display:none}
+    #info.open .tgl{transform:rotate(180deg)}
+    .lil-gui.root{margin-top:38px;--width:min(280px,calc(100vw - 30px));max-height:calc(100vh - 48px);overflow-y:auto;border-width:2px;border-radius:12px}
+    .lil-gui{--font-size:11px;--widget-height:22px}
+    .dim{font-size:10px;padding:1px 4px}
+  }
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@700&family=Barlow:wght@400;500&display=swap">
 <script type="importmap">
@@ -51,6 +67,7 @@
 <body>
 <div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Pågående projekt · Hönshus</span><b>Plan B(lommeröd)</b></div>
 <div id="info">
+  <span class="tgl">▴</span>
   <h1>Hönshus · The Bearded Builder-stil</h1>
   <div id="stats"></div>
   <div class="small">Mått och planlösning från hans filmer. Detaljerna är uppskattade från bilderna.
@@ -509,9 +526,9 @@ function build(){
   document.getElementById('stats').innerHTML=
     `<b>${(W/FT).toFixed(1)} × ${(L/FT).toFixed(1)} ft</b> · ${W.toFixed(2)} × ${L.toFixed(2)} m<br>`+
     `Golvyta ${area.toFixed(1).replace('.',',')} m² → ca <b>${birds} höns</b><br>`+
-    `<span style="color:#666;font-size:11px">(hans egna siffror: 8×16 = 50, 6×12 = 25, 5×8 = 15 höns ≈ 0,24 m²/höna)</span><br>`+
+    `<span class="x"><span style="color:#666;font-size:11px">(hans egna siffror: 8×16 = 50, 6×12 = 25, 5×8 = 15 höns ≈ 0,24 m²/höna)</span><br>`+
     `Nockhöjd ${ridgeTop.toFixed(2)} m · pardörr ${DW.toFixed(2)} × ${DH.toFixed(2)} m<br>`+
-    `Sittpinnar: <b>${ROOSTS.n} st</b> à ${(P.W-0.34).toFixed(2)} m = ${(ROOSTS.n*(P.W-0.34)).toFixed(1)} löpmeter (≈ ${Math.round(ROOSTS.n*(P.W-0.34)/0.22)} höns à 22 cm)`;
+    `Sittpinnar: <b>${ROOSTS.n} st</b> à ${(P.W-0.34).toFixed(2)} m = ${(ROOSTS.n*(P.W-0.34)).toFixed(1)} löpmeter (≈ ${Math.round(ROOSTS.n*(P.W-0.34)/0.22)} höns à 22 cm)</span>`;
 }
 
 /* ---------------- Ljus dag/kväll ---------------- */
@@ -525,6 +542,8 @@ function applyLighting(){
 let needsBuild=true;
 const rebuild=()=>{ needsBuild=true; };
 const gui=new GUI({title:'Hönshus – inställningar'});
+if(matchMedia('(max-width:700px)').matches) gui.close();
+document.getElementById('info').addEventListener('click',e=>{ if(e.target.closest('a')) return; e.currentTarget.classList.toggle('open'); });
 gui.add(P,'preset',Object.keys(PRESETS)).name('Förinställning').onChange(v=>{ Object.assign(P,PRESETS[v]); gui.controllersRecursive().forEach(c=>c.updateDisplay()); rebuild(); });
 const fM=gui.addFolder('Mått');
 fM.add(P,'W',1.2,3.6,.01).name('Bredd (gavel), m').onChange(rebuild);
