@@ -73,6 +73,7 @@ footer{padding:40px 0 60px;border-top:3px dashed var(--k);text-align:center}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--k);color:var(--c);padding:8px 16px;border-radius:999px;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
 .cat .live{display:inline-block;margin-left:6px;background:#FDDB0B;border-radius:999px;padding:0 7px;font-size:10px;letter-spacing:.06em;vertical-align:middle}.tsub{margin:-4px 0 12px}
+.vo{display:flex;gap:14px;align-items:center;margin-top:18px;background:#fff;border:2px solid #010303;border-radius:16px;padding:10px 14px;max-width:560px}.vo-btn{flex:0 0 46px;height:46px;border-radius:50%;border:2px solid #010303;background:#FDDB0B;font-size:16px;cursor:pointer;color:#010303}.vo-btn:hover{background:#D95447;color:#FAF6EC}.vo-t{font-size:14px;line-height:1.4}.vo-t small{color:#727171}.vo-t a{color:#010303}
 </style></head><body>
 <div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Projekt · StickerApp</span><b>Plan B(lommeröd)</b></div>
 <div class="wrap">
@@ -81,6 +82,7 @@ footer{padding:40px 0 60px;border-top:3px dashed var(--k);text-align:center}
     <img class="logo" src="web/38-logo-rak.png" alt="SHTICKERCAT">
     <p class="lead">Grafisk profil för StickerApps maskot och en arbetsgång för att animera varje katt med ChatGPT, en i taget.</p>
     <nav class="toc"><a href="#animerat">Animerat</a><a href="#logo">Logotyp</a><a href="#farger">Färger</a><a href="#stil">Stil</a><a href="#hierarki">Hierarki</a><a href="#alla">Alla katter</a><a href="#chatgpt">ChatGPT</a><a href="#prompt">Prompt</a></nav>
+    <div class="vo" id="vo"><button type="button" class="vo-btn" aria-label="Spela välkomströsten" onclick="(function(b){var a=document.getElementById('vo-a');if(a.paused){a.currentTime=0;a.play();}else{a.pause();}})(this)"><span class="vo-ic">▶</span></button><div class="vo-t"><b>Lyssna:</b> ”Welcome to Shtickercat! CAT-tent for your everyday needs. Laser precision, very fast, very good!”<br><small>Röst: ElevenLabs · <a href="audio/welcome-shtickercat.mp3" download>MP3</a></small></div><audio id="vo-a" src="audio/welcome-shtickercat.mp3" preload="none" onplay="document.querySelector('.vo-ic').textContent='❚❚'" onpause="document.querySelector('.vo-ic').textContent='▶'" onended="document.querySelector('.vo-ic').textContent='▶'"></audio></div>
     <p style="margin-top:18px"><a class="btn y" href="Shtickercat_profil.zip" download>Ladda ner allt (zip)</a> <a class="btn" href="SHTICKERCAT_Grafisk_profil_och_animation.md" download>Profil som .md</a></p>
   </div>
   <img class="face" src="web/16-ansikte.png" alt="Shtickercat">
