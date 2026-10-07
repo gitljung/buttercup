@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <title>Gyoza — Eight Grams at a Time</title>
-<meta name="description" content="An interactive, hands-on gyoza lesson. Knead, chop, fold, fry — and listen to the pan.">
+<meta name="description" content="An 80-second animated gyoza lesson with a Dutch narrator. Knead, chop, fold, fry — and listen to the pan.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Buttercup">
 <meta property="og:title" content="Gyoza — Eight Grams at a Time">
-<meta property="og:description" content="Knead, chop, fold, fry — and listen to the pan. An interactive gyoza lesson.">
+<meta property="og:description" content="An 80-second animated gyoza lesson. Knead, chop, fold, fry — and listen to the pan.">
 <meta property="og:url" content="https://www.buttercup.nu/gyoza/">
 <meta property="og:image" content="https://www.buttercup.nu/gyoza/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -22,106 +22,80 @@
 :root{
   --buttercup:#FCC222; --chili:#C8340A; --oxblood:#8F1A00; --cream:#FFF6DC; --ink:#2A1206;
   --display:"Anton","Impact",sans-serif; --label:"Barlow Condensed","Arial Narrow",sans-serif; --body:"Barlow",system-ui,sans-serif;
+  --ease:cubic-bezier(.45,0,.2,1.4);
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
 body{margin:0;background:var(--buttercup);color:var(--oxblood);font-family:var(--body);font-size:17px;line-height:1.5;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
 button{font:inherit;cursor:pointer}
-img{max-width:100%;display:block}
+img{display:block;max-width:100%}
 
-/* back bar */
 .bc-bar{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 8px) 14px 8px;background:var(--chili);color:var(--cream);font:700 15px/1 var(--label);letter-spacing:.08em;text-transform:uppercase}
 .bc-bar a{color:var(--cream);text-decoration:none}
 .mute{background:none;border:2px solid var(--cream);color:var(--cream);border-radius:99px;padding:4px 10px;font:700 13px/1 var(--label);letter-spacing:.08em}
 
-/* drifting pattern */
 .bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .bg img{position:absolute;width:80px;opacity:.22;animation:bob 5s ease-in-out infinite;animation-delay:var(--d)}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(var(--r))}50%{transform:translateY(-10px) rotate(calc(var(--r) + 6deg))}}
 
-main{position:relative;z-index:1;overflow-x:clip;max-width:680px;margin:0 auto;padding:70px 14px 60px}
-.card{background:var(--cream);border:3px solid var(--oxblood);outline:2px dashed var(--chili);outline-offset:-12px;border-radius:6px;padding:30px 24px 26px;margin:0 0 34px;box-shadow:8px 8px 0 var(--oxblood);position:relative}
-.kicker{font:700 14px/1 var(--label);letter-spacing:.18em;text-transform:uppercase;color:var(--chili);margin:0 0 6px}
-h1,h2{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.95;margin:0 0 12px;color:var(--oxblood)}
-h1{font-size:clamp(48px,13vw,92px)}
-h2{font-size:clamp(34px,8.5vw,56px)}
-.cap{font-style:italic;color:var(--ink);margin:4px 0 14px;font-size:16px;border-left:4px solid var(--buttercup);padding-left:10px}
-.cap::before{content:"🔊 ";font-style:normal}
-p{margin:0 0 12px}
-.stage{position:relative;display:flex;justify-content:center;align-items:center;margin:10px auto 14px;min-height:200px;user-select:none;-webkit-user-select:none;touch-action:none}
-.spr{width:min(100%,380px);background-size:1600% 100%;background-repeat:no-repeat;background-position:0 0}
-.row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;margin:8px 0}
-.btn{background:var(--chili);color:var(--cream);border:3px solid var(--oxblood);border-radius:99px;padding:10px 20px;font:700 18px/1 var(--label);letter-spacing:.08em;text-transform:uppercase;box-shadow:3px 3px 0 var(--oxblood);transition:transform .08s}
-.btn:active,.btn.on{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--oxblood)}
-.btn.alt{background:var(--buttercup);color:var(--oxblood)}
-.btn:disabled{opacity:.35;cursor:default}
-.chip{background:var(--cream);color:var(--oxblood);border:2px solid var(--oxblood);border-radius:99px;padding:6px 12px;font:700 15px/1 var(--label);letter-spacing:.06em;text-transform:uppercase}
-.chip.on{background:var(--buttercup)}
-.status{font:700 17px/1.2 var(--label);letter-spacing:.1em;text-transform:uppercase;text-align:center;min-height:22px;color:var(--chili);margin:6px 0}
-.meter{height:16px;border:3px solid var(--oxblood);border-radius:99px;background:#fff;overflow:hidden;margin:8px auto;max-width:360px}
-.meter i{display:block;height:100%;width:0;background:var(--chili);transition:width .12s}
-.meterlab{display:flex;justify-content:space-between;max-width:360px;margin:0 auto;font:700 13px/1 var(--label);letter-spacing:.12em;text-transform:uppercase}
-.hide{display:none!important}
-.done-stamp{position:absolute;right:-14px;top:-22px;z-index:3;background:var(--buttercup);border:3px solid var(--oxblood);color:var(--oxblood);border-radius:50%;width:74px;height:74px;display:grid;place-items:center;font:400 15px/1 var(--display);text-align:center;transform:rotate(12deg) scale(0);transition:transform .35s cubic-bezier(.45,0,.2,1.6)}
-.card.done .done-stamp{transform:rotate(12deg) scale(1)}
-.hint{font:600 14px/1.3 var(--label);letter-spacing:.08em;text-transform:uppercase;color:var(--oxblood);opacity:.7;text-align:center}
-.shake{animation:shake .4s}
-@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
-.pop{animation:pop .35s cubic-bezier(.45,0,.2,1.6)}
-@keyframes pop{0%{transform:scale(.6)}100%{transform:scale(1)}}
+main{position:relative;z-index:1;max-width:620px;margin:0 auto;padding:64px 12px 60px;overflow-x:clip}
+.card{background:var(--cream);border:3px solid var(--oxblood);outline:2px dashed var(--chili);outline-offset:-12px;border-radius:6px;padding:24px 20px;margin:0 0 30px;box-shadow:8px 8px 0 var(--oxblood);position:relative}
+.kicker{font:700 14px/1 var(--label);letter-spacing:.18em;text-transform:uppercase;color:var(--chili);margin:0 0 8px}
+h2{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.95;margin:0 0 12px;font-size:clamp(34px,8.5vw,52px)}
 
-/* intro */
-.intro .stage{cursor:pointer}
-.big-num{font-family:var(--display);font-size:clamp(28px,7vw,40px);color:var(--chili);line-height:1}
-.facts{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;text-align:center;margin:10px 0 4px}
-.facts div{font:700 13px/1.1 var(--label);letter-spacing:.12em;text-transform:uppercase}
-.tap-me{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);background:var(--oxblood);color:var(--cream);font:700 14px/1 var(--label);letter-spacing:.14em;padding:7px 12px;border-radius:99px;animation:pulse 1.2s infinite}
-@keyframes pulse{50%{transform:translateX(-50%) scale(1.08)}}
-
-/* dough */
-.prop{width:160px;transition:transform .2s}
-.kettle{width:130px;transform-origin:70% 60%;transition:transform .2s;position:absolute;left:4%;top:0}
-.kettle.pour{transform:rotate(-24deg) translateX(10px)}
-.clock{width:120px;height:120px;border:5px solid var(--oxblood);border-radius:50%;position:relative;background:#fff}
-.clock i{position:absolute;left:50%;top:50%;width:4px;height:46px;margin-left:-2px;background:var(--chili);transform-origin:50% 100%;transform:translateY(-100%) rotate(0)}
-.clock b{position:absolute;inset:0;display:grid;place-items:center;font:400 20px/1 var(--display);padding-top:54px}
-
-/* scale */
-.scalewrap{display:flex;align-items:center;gap:16px;justify-content:center;flex-wrap:wrap}
-.readout{font:400 44px/1 var(--display);color:var(--oxblood);min-width:90px;text-align:center}
-input[type=range]{width:min(100%,300px);accent-color:var(--chili)}
-
-/* beat */
-.beat{width:22px;height:22px;border-radius:50%;background:var(--buttercup);border:3px solid var(--oxblood)}
-.beat.hit{background:var(--chili);transform:scale(1.3)}
-
-/* pork bowl */
-.bowl{width:220px;border-radius:50%;cursor:grab}
-
-/* fridge dial */
-.dial{width:130px;height:130px;border-radius:50%;border:5px solid var(--oxblood);background:conic-gradient(var(--buttercup) var(--a,0deg),#fff 0);display:grid;place-items:center;font:400 24px/1 var(--display)}
-
-/* tray */
-.tray{display:flex;gap:4px;justify-content:center;min-height:52px;flex-wrap:wrap}
-.tray img{width:58px}
-
-/* pan */
-.panbox{position:relative;width:min(100%,380px)}
-.lid{position:absolute;left:10%;top:6%;width:62%;aspect-ratio:1;border-radius:50%;background:rgba(255,246,220,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:6px solid var(--oxblood);box-shadow:inset 0 0 0 10px rgba(143,26,0,.15);transition:transform .7s cubic-bezier(.45,0,.2,1),opacity .7s}
-.lid::after{content:"";position:absolute;left:50%;top:50%;width:22%;height:22%;margin:-11%;border-radius:50%;background:var(--chili);border:4px solid var(--oxblood)}
-.lid.off{transform:translate(70%,-80%) rotate(30deg);opacity:0}
-.panbox.burnt .spr{filter:brightness(.5) sepia(.6) saturate(1.6)}
-canvas.wave{width:100%;max-width:380px;height:56px;display:block;margin:0 auto;background:#fff;border:3px solid var(--oxblood);border-radius:8px}
-
-/* flip */
-.flip{width:min(100%,340px);aspect-ratio:336/264;perspective:900px;margin:0 auto}
-.flip-in{position:relative;width:100%;height:100%;transition:transform 1s cubic-bezier(.45,0,.2,1);transform-style:preserve-3d}
-.flip.flipped .flip-in{transform:rotateX(180deg)}
+/* ---------- the film ---------- */
+.player{padding:16px 14px 14px}
+.stage{position:relative;aspect-ratio:4/5;background:var(--cream);border:3px solid var(--oxblood);border-radius:6px;overflow:hidden;container-type:inline-size}
+.scene{position:absolute;inset:0;opacity:0;transition:opacity .45s;pointer-events:none}
+.scene.on{opacity:1}
+.sh{position:absolute;left:6%;right:6%;top:4.5%;margin:0;font:400 11.5cqw/0.92 var(--display);text-transform:uppercase;color:var(--oxblood)}
+.sh small{display:block;font:700 3.6cqw/1 var(--label);letter-spacing:.18em;color:var(--chili);margin-bottom:1.6cqw}
+.a{position:absolute}
+.spr{position:absolute;background-size:1600% 100%;background-repeat:no-repeat;background-position:0 0}
+.fx{opacity:0;transform:scale(.8);transition:opacity .3s,transform .35s var(--ease)}
+.fx.vis{opacity:1;transform:none}
+.word{font:400 9cqw/1 var(--display);color:var(--chili);text-transform:uppercase}
+.tag{font:700 4.2cqw/1 var(--label);letter-spacing:.1em;text-transform:uppercase;background:var(--buttercup);color:var(--oxblood);border:.6cqw solid var(--oxblood);border-radius:99px;padding:1.4cqw 3cqw;white-space:nowrap}
+.stamp{width:22cqw;height:22cqw;border-radius:50%;background:var(--buttercup);border:.9cqw solid var(--oxblood);display:grid;place-items:center;text-align:center;font:400 5cqw/1 var(--display);color:var(--oxblood);transform:rotate(12deg) scale(0);transition:transform .35s var(--ease)}
+.stamp.vis{transform:rotate(12deg) scale(1)}
+.facts{position:absolute;left:6%;right:6%;bottom:7%;display:flex;justify-content:space-between;text-align:center}
+.facts div{font:700 3.4cqw/1.1 var(--label);letter-spacing:.1em;text-transform:uppercase}
+.facts b{display:block;font:400 10cqw/1 var(--display);color:var(--chili);letter-spacing:0}
+.clock{width:40cqw;height:40cqw;border:1.4cqw solid var(--oxblood);border-radius:50%;background:#fff}
+.clock i{position:absolute;left:50%;top:50%;width:1.3cqw;height:15cqw;margin-left:-.65cqw;background:var(--chili);transform-origin:50% 100%;border-radius:1cqw}
+.clock b{position:absolute;left:0;right:0;top:58%;text-align:center;font:400 6.5cqw/1 var(--display)}
+.readout{font:400 16cqw/1 var(--display);color:var(--oxblood)}
+.meter{height:4cqw;border:.8cqw solid var(--oxblood);border-radius:99px;background:#fff;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--chili)}
+.mlab{display:flex;justify-content:space-between;font:700 3.4cqw/1 var(--label);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1cqw}
+.dial{width:44cqw;height:44cqw;border-radius:50%;border:1.4cqw solid var(--oxblood);background:conic-gradient(var(--buttercup) var(--a,0deg),#fff 0);display:grid;place-items:center;font:400 9cqw/1 var(--display)}
+.lid{position:absolute;border-radius:50%;background:rgba(255,246,220,.8);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);border:1.6cqw solid var(--oxblood);transition:transform .8s cubic-bezier(.45,0,.2,1),opacity .8s}
+.lid::after{content:"";position:absolute;left:50%;top:50%;width:22%;height:22%;margin:-11%;border-radius:50%;background:var(--chili);border:1cqw solid var(--oxblood)}
+.lid.off{transform:translate(60%,-90%) rotate(30deg);opacity:0}
+canvas.wave{position:absolute;left:8%;width:84%;bottom:6%;height:11%;background:#fff;border:.8cqw solid var(--oxblood);border-radius:2cqw}
+.flip{perspective:900px}
+.flip-in{position:relative;width:100%;height:100%;transform-style:preserve-3d}
 .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:grid;place-items:center}
 .face.back{transform:rotateX(180deg)}
-.plate{width:86%;aspect-ratio:1.25;border-radius:50%;background:#fff;border:6px solid var(--oxblood);box-shadow:inset 0 0 0 12px var(--cream);display:grid;place-items:center;overflow:hidden}
-.plate .spr{width:118%;transform:scaleY(-1);clip-path:circle(31% at 45% 50%)}
-.bite{font:400 22px/1.1 var(--display);text-align:center;color:var(--oxblood);min-height:28px}
+.plate{width:92%;aspect-ratio:1.2;border-radius:50%;background:#fff;border:1.6cqw solid var(--oxblood);box-shadow:inset 0 0 0 3cqw var(--cream);display:grid;place-items:center;overflow:hidden;position:relative}
+.plate .spr{position:relative;width:118%;transform:scaleY(-1);clip-path:circle(31% at 45% 50%)}
+
+/* overlays */
+.ov{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3cqw;background:rgba(255,246,220,.86);text-align:center;padding:6%}
+.ov h1{margin:0;font:400 19cqw/.9 var(--display);text-transform:uppercase;color:var(--oxblood)}
+.ov p{margin:0;font:700 4.4cqw/1.2 var(--label);letter-spacing:.12em;text-transform:uppercase}
+.ov.hide{display:none}
+.btn{background:var(--chili);color:var(--cream);border:3px solid var(--oxblood);border-radius:99px;padding:12px 26px;font:700 20px/1 var(--label);letter-spacing:.1em;text-transform:uppercase;box-shadow:3px 3px 0 var(--oxblood)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--oxblood)}
+.btn.alt{background:var(--buttercup);color:var(--oxblood)}
+.linkbtn{background:none;border:0;color:var(--oxblood);text-decoration:underline;font:600 15px/1 var(--label);letter-spacing:.06em;text-transform:uppercase}
+
+.cap{min-height:3.2em;margin:12px 2px 6px;font-style:italic;color:var(--ink);font-size:16px;border-left:4px solid var(--buttercup);padding-left:10px}
+.ctrl{display:flex;align-items:center;gap:10px}
+.pp{width:44px;height:44px;flex:none;border-radius:50%;background:var(--chili);color:var(--cream);border:3px solid var(--oxblood);font:700 16px/1 var(--label);display:grid;place-items:center;padding:0}
+.bar{position:relative;flex:1;height:14px;border:3px solid var(--oxblood);border-radius:99px;background:#fff;cursor:pointer;overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--chili)}
+.bar s{position:absolute;top:0;bottom:0;width:2px;background:var(--oxblood);opacity:.45}
+.time{font:700 15px/1 var(--label);letter-spacing:.06em;min-width:74px;text-align:right}
 
 /* recipe */
 .recipe h3{font:400 26px/1 var(--display);text-transform:uppercase;margin:18px 0 8px}
@@ -133,11 +107,7 @@ canvas.wave{width:100%;max-width:380px;height:56px;display:block;margin:0 auto;b
 .est{display:inline-block;background:var(--buttercup);border:2px solid var(--oxblood);padding:2px 8px;border-radius:4px;font:700 13px/1.3 var(--label);letter-spacing:.08em;text-transform:uppercase}
 .credits{font-size:14px;color:var(--ink)}
 .credits a{color:var(--chili)}
-@media print{
-  .bc-bar,.bg,.card:not(.recipe){display:none!important}
-  body{background:#fff}.card{box-shadow:none;outline:none}
-  .no-print{display:none}
-}
+@media print{.bc-bar,.bg,.player{display:none!important}body{background:#fff}.card{box-shadow:none;outline:none}.no-print{display:none}}
 </style>
 </head>
 <body>
@@ -145,169 +115,128 @@ canvas.wave{width:100%;max-width:380px;height:56px;display:block;margin:0 auto;b
 <div class="bg" id="bg" aria-hidden="true"></div>
 
 <main>
+<section class="card player">
+  <p class="kicker" id="kick">Gyozanomise Okei · Tokyo</p>
+  <div class="stage" id="stage">
 
-<!-- 0 INTRO -->
-<section class="card intro" id="s0">
-  <p class="kicker">Gyozanomise Okei · Tokyo</p>
-  <h1>Gyoza.<br>Eight grams at a time.</h1>
-  <div class="facts">
-    <div><span class="big-num">1</span><br>dish on the menu</div>
-    <div><span class="big-num">~60</span><br>years, same recipe</div>
-    <div><span class="big-num">1,320</span><br>dumplings a day</div>
-  </div>
-  <div class="stage" id="introStage" role="button" aria-label="Lift the lid">
-    <div class="spr" data-s="pan"></div>
-    <span class="tap-me" id="tapMe">TAP THE LID</span>
-  </div>
-  <p class="cap hide" id="cap0">There is a little shop in Tokyo that serves exactly one thing: gyoza. Same recipe for almost sixty years. So… let's make some, ja?</p>
-  <p class="hint">Sound on? This lesson has a narrator. Scroll down when the steam clears.</p>
-</section>
-
-<!-- 1 DOUGH -->
-<section class="card" id="s1" data-vo="01_dough">
-  <div class="done-stamp">DOUGH<br>OK!</div>
-  <p class="kicker">Step 1 · The dough</p>
-  <h2>Little by little</h2>
-  <p class="cap">Hot water, a little at a time. Pour it all at once and the dough gets grumpy. Then — and this is the hard part — you let it rest. Five minutes. Then thirty more. Patience, ja?</p>
-  <p>Strong flour, a little cake flour for smoothness, hot water and a drop of sesame oil.</p>
-  <div class="stage" id="doughStage">
-    <img class="kettle" id="kettle" src="img/prop_06.webp" alt="kettle">
-    <img class="prop" id="doughImg" src="img/prop_03.webp" alt="dough" style="transform:scale(.6)">
-    <div class="spr hide" data-s="knead" id="kneadSpr"></div>
-    <div class="clock hide" id="clock"><i></i><b id="clockLab">5 MIN</b></div>
-  </div>
-  <div class="meter" id="waterMeter"><i></i></div>
-  <div class="status" id="doughStatus">Hold to pour — short splashes!</div>
-  <div class="row">
-    <button class="btn" id="pourBtn">Hold to pour</button>
-    <button class="btn alt hide" id="doughRetry">Start over</button>
-    <button class="btn alt hide" id="restBtn">Let it rest</button>
-  </div>
-  <p class="hint hide" id="kneadHint">↔ Swipe across the hands to knead</p>
-</section>
-
-<!-- 2 EARLOBE -->
-<section class="card" id="s2" data-vo="02_earlobe">
-  <div class="done-stamp">8 G<br>★</div>
-  <p class="kicker">Step 2 · The wrappers</p>
-  <h2>The earlobe test</h2>
-  <p class="cap">Soft like an earlobe. Yes, really. And every piece weighs eight grams. Not seven. Eight. Lekker precise.</p>
-  <div class="stage" id="logStage" style="cursor:pointer"><img class="prop" id="logImg" src="img/prop_02.webp" alt="dough log" style="width:280px"></div>
-  <div class="status" id="pokeStatus">Poke the dough (gently)</div>
-  <div id="cutPart" class="hide">
-    <div class="scalewrap">
-      <img class="prop" src="img/prop_05.webp" alt="scale" style="width:110px">
-      <div class="readout" id="gram">12 g</div>
+    <!-- 0 intro -->
+    <div class="scene" id="sc0">
+      <h1 class="sh fx" id="t0" style="font-size:17cqw"><small>One dish · Tokyo</small>Gyoza.</h1>
+      <div class="spr" data-s="pan" id="p0" style="left:10%;top:30%;width:80%"></div>
+      <div class="facts">
+        <div class="fx" id="f0a"><b>1</b>dish</div>
+        <div class="fx" id="f0b"><b>~60</b>years</div>
+        <div class="fx" id="f0c"><b>1,320</b>a day</div>
+      </div>
     </div>
-    <div class="row"><input type="range" id="gramRange" min="4" max="16" step="1" value="12" aria-label="piece size"></div>
-    <div class="row"><button class="btn" id="cutBtn">Cut</button></div>
-    <div class="status" id="cutStatus"></div>
-  </div>
-  <div id="rollPart" class="hide">
-    <div class="stage" id="rollStage"><div class="spr" data-s="roll" id="rollSpr"></div></div>
-    <p class="hint">↔ Swipe to roll out a wrapper</p>
-    <div class="meter" id="rollMeter"><i></i></div>
-  </div>
-</section>
 
-<!-- 3 FILLING -->
-<section class="card" id="s3a" data-vo="03a_cabbage">
-  <div class="done-stamp">HAK<br>HAK!</div>
-  <p class="kicker">Step 3 · The filling</p>
-  <h2>Napa cabbage only</h2>
-  <p class="cap">Most shops use normal cabbage. Here? Only napa cabbage. Chopped, not sliced. Hak hak hak!</p>
-  <p>Blanched, chilled, then chopped with a Chinese cleaver — the hard stems first.</p>
-  <div class="stage"><div class="spr" data-s="chop" id="chopSpr"></div></div>
-  <div class="row"><span class="beat" id="beat"></span><button class="btn" id="chopBtn">Chop!</button><span class="status" id="chopCount" style="margin:0">0 / 12</span></div>
-  <p class="hint">Chop on the beat for style points</p>
-</section>
+    <!-- 1 dough -->
+    <div class="scene" id="sc1">
+      <h2 class="sh"><small>Step 1 · The dough</small>Little by little</h2>
+      <img class="a fx" id="kettle" src="img/prop_06.webp" alt="" style="left:4%;top:28%;width:42%;transform-origin:70% 60%">
+      <img class="a fx" id="dough1" src="img/prop_03.webp" alt="" style="left:44%;top:48%;width:42%">
+      <div class="spr fx" data-s="knead" id="k1" style="left:8%;top:30%;width:84%"></div>
+      <div class="a fx" id="clock1" style="left:30%;top:34%"><div class="clock"><i id="hand1"></i><b id="clab1">5 MIN</b></div></div>
+      <div class="a fx tag" id="tag1" style="left:6%;bottom:6%">Hot water · strong flour · rest</div>
+    </div>
 
-<section class="card" id="s3b" data-vo="03b_chives">
-  <div class="done-stamp">SLOW<br>&amp; OK</div>
-  <p class="kicker">Step 3 · The filling</p>
-  <h2>Chives, slowly</h2>
-  <p class="cap">Chives. A little bit bitter, and they keep the pork honest.</p>
-  <div class="stage" id="chiveStage" style="cursor:pointer"><img class="prop" id="chiveImg" src="img/prop_09.webp" alt="garlic chives" style="width:230px"></div>
-  <div class="status" id="chiveStatus">Tap to chop — take your time</div>
-</section>
+    <!-- 2 earlobe -->
+    <div class="scene" id="sc2">
+      <h2 class="sh"><small>Step 2 · The wrappers</small>Soft as an earlobe</h2>
+      <img class="a fx" id="log2" src="img/prop_02.webp" alt="" style="left:10%;top:40%;width:80%">
+      <img class="a fx" id="scale2" src="img/prop_05.webp" alt="" style="left:8%;top:38%;width:38%">
+      <div class="a fx readout" id="read2" style="left:52%;top:42%">14 g</div>
+      <div class="a stamp" id="star2" style="right:8%;top:24%">8 G<br>★</div>
+      <div class="spr fx" data-s="roll" id="r2" style="left:12%;top:30%;width:76%"></div>
+    </div>
 
-<section class="card" id="s3c" data-vo="03c_pork">
-  <div class="done-stamp">SMOOTH</div>
-  <p class="kicker">Step 3 · The filling</p>
-  <h2>Work it in your palm</h2>
-  <p class="cap">Fatty pork belly, salt, two kinds of pepper, ginger, and a very generous splash of sesame oil. Work it in your palm until nothing feels grainy.</p>
-  <div class="row" id="seasonings">
-    <button class="chip" data-k="salt">Salt</button>
-    <button class="chip" data-k="black">Black pepper</button>
-    <button class="chip" data-k="white">White pepper</button>
-    <button class="chip" data-k="ginger">Ginger</button>
-    <button class="chip" data-k="oil">Sesame oil <span id="oilN">0</span>/3</button>
-  </div>
-  <div class="stage" id="bowlStage"><img class="bowl" id="bowl" src="img/prop_10.webp" alt="bowl of pork"></div>
-  <div class="meterlab"><span>Grainy</span><span>Smooth</span></div>
-  <div class="meter" id="mixMeter"><i></i></div>
-  <div class="status" id="mixStatus">Season first</div>
-</section>
+    <!-- 3a cabbage -->
+    <div class="scene" id="sc3">
+      <h2 class="sh"><small>Step 3 · The filling</small>Napa cabbage only</h2>
+      <div class="spr" data-s="chop" id="c3" style="left:10%;top:28%;width:80%"></div>
+      <div class="a" style="left:6%;bottom:7%;display:flex;gap:4cqw"><span class="word fx" id="h3a">Hak</span><span class="word fx" id="h3b">hak</span><span class="word fx" id="h3c">hak!</span></div>
+    </div>
 
-<section class="card" id="s3d" data-vo="03d_rest">
-  <div class="done-stamp">24 H<br>LATER</div>
-  <p class="kicker">Step 3 · The filling</p>
-  <h2>A whole day's rest</h2>
-  <p class="cap">Then the meat rests a whole day. Patience is the secret ingredient. Sorry, it's true.</p>
-  <div class="stage"><div class="dial" id="dial">0 H</div></div>
-  <div class="row"><button class="btn" id="fridgeBtn">Into the fridge</button></div>
-  <div class="status" id="fridgeStatus"></div>
-</section>
+    <!-- 3b chives -->
+    <div class="scene" id="sc4">
+      <h2 class="sh"><small>Step 3 · The filling</small>Chives, slowly</h2>
+      <img class="a" id="chive4" src="img/prop_09.webp" alt="" style="left:16%;top:32%;width:68%">
+      <div class="a tag" style="left:6%;bottom:7%">Keeps the pork honest</div>
+    </div>
 
-<!-- 4 FOLD -->
-<section class="card" id="s4" data-vo="04_fold">
-  <div class="done-stamp">6<br>FOLDED</div>
-  <p class="kicker">Step 4 · The fold</p>
-  <h2>Two years of practice</h2>
-  <p class="cap">It took the chef two years to learn this. Your left hand learns how much is enough. Don't be greedy, hè?</p>
-  <div class="stage" id="foldStage"><div class="spr" data-s="fold" id="foldSpr"></div></div>
-  <div class="row"><button class="btn alt" id="spoonBtn">+ Filling</button><span class="status" id="spoonN" style="margin:0">0 spoons</span><button class="btn" id="pleatBtn" disabled>Pleat</button></div>
-  <div class="status" id="foldStatus">Add filling — about two spoons</div>
-  <div class="tray" id="tray"></div>
-  <div class="row"><button class="btn alt hide" id="fiveBtn">Fold the other five</button></div>
-</section>
+    <!-- 3c pork -->
+    <div class="scene" id="sc5">
+      <h2 class="sh"><small>Step 3 · The filling</small>Work it in your palm</h2>
+      <img class="a" id="bowl5" src="img/prop_10.webp" alt="" style="left:22%;top:30%;width:56%">
+      <div class="a" style="left:5%;right:5%;top:70%;display:flex;flex-wrap:wrap;gap:1.6cqw;justify-content:center">
+        <span class="tag fx" id="s5a">Salt</span><span class="tag fx" id="s5b">Black pepper</span><span class="tag fx" id="s5c">White pepper</span><span class="tag fx" id="s5d">Ginger</span><span class="tag fx" id="s5e">Sesame oil ×3</span>
+      </div>
+      <div class="a" style="left:10%;right:10%;bottom:5%"><div class="mlab"><span>Grainy</span><span>Smooth</span></div><div class="meter"><i id="m5"></i></div></div>
+    </div>
 
-<!-- 5 PAN -->
-<section class="card" id="s5" data-vo="05_pan">
-  <div class="done-stamp" id="panStamp">WINGS!</div>
-  <p class="kicker">Step 5 · The pan</p>
-  <h2>Don't watch. Listen.</h2>
-  <p class="cap">About six and a half minutes. But don't watch the clock. Listen. When the sizzle changes its voice, it's done.</p>
-  <p>Oil, gyoza in a ring, a splash of hot water with a little flour, lid on. The lid is foggy — use your ears.</p>
-  <div class="stage"><div class="panbox" id="panbox"><div class="spr" data-s="wings" id="wingSpr"></div><div class="lid" id="lid"></div></div></div>
-  <canvas class="wave" id="wave" width="760" height="112"></canvas>
-  <div class="row"><button class="btn" id="fryBtn">Pour &amp; lid on</button><button class="btn alt" id="liftBtn" disabled>Lift the lid!</button></div>
-  <div class="status" id="panStatus">Headphones help 🎧</div>
-</section>
+    <!-- 3d rest -->
+    <div class="scene" id="sc6">
+      <h2 class="sh"><small>Step 3 · The filling</small>A whole day's rest</h2>
+      <div class="a" style="left:28%;top:36%"><div class="dial" id="dial6">0 H</div></div>
+      <div class="a tag fx" id="tag6" style="left:6%;bottom:7%">Then fold in cabbage &amp; chives</div>
+    </div>
 
-<!-- 6 EAT -->
-<section class="card" id="s6" data-vo="06_eat">
-  <div class="done-stamp">ITADA-<br>KIMASU</div>
-  <p class="kicker">Step 6 · Eat</p>
-  <h2>Plain first</h2>
-  <p class="cap">First bite: nothing on it. Just taste. After that, do what you like. I won't tell anyone. Eet smakelijk!</p>
-  <div class="flip" id="flip">
-    <div class="flip-in">
-      <div class="face"><div class="spr" data-s="wings" data-f="15" style="width:100%"></div></div>
-      <div class="face back"><div class="plate"><div class="spr" data-s="wings" data-f="15"></div></div></div>
+    <!-- 4 fold -->
+    <div class="scene" id="sc7">
+      <h2 class="sh"><small>Step 4 · The fold</small>Two years of practice</h2>
+      <div class="spr" data-s="fold" id="f7" style="left:4%;top:28%;width:92%"></div>
+      <div class="a" id="tray7" style="left:4%;right:4%;bottom:5%;display:flex;justify-content:center;gap:1cqw"></div>
+    </div>
+
+    <!-- 5 pan -->
+    <div class="scene" id="sc8">
+      <h2 class="sh"><small>Step 5 · The pan</small>Don't watch. Listen.</h2>
+      <div class="a" style="left:8%;top:25%;width:84%">
+        <div class="spr" data-s="wings" id="w8" style="position:relative;width:100%"></div>
+        <div class="lid" id="lid8" style="left:9%;top:4%;width:64%;aspect-ratio:1"></div>
+      </div>
+      <div class="a stamp" id="st8" style="right:5%;top:22%">WINGS!</div>
+      <canvas class="wave" id="wave" width="760" height="112"></canvas>
+    </div>
+
+    <!-- 6 eat -->
+    <div class="scene" id="sc9">
+      <h2 class="sh"><small>Step 6 · Eat</small>Plain first</h2>
+      <div class="a flip" style="left:11%;top:22%;width:78%;aspect-ratio:336/264">
+        <div class="flip-in" id="flip9">
+          <div class="face"><div class="spr" data-s="wings" data-f="15" style="position:relative;width:100%"></div></div>
+          <div class="face back"><div class="plate"><div class="spr" data-s="wings" data-f="15"></div></div></div>
+        </div>
+      </div>
+      <img class="a fx" id="sticks9" src="img/prop_14.webp" alt="" style="right:0;top:18%;width:36%;transform:rotate(-20deg)">
+      <div class="a word fx" id="w9a" style="left:6%;bottom:13%">Nothing on it.</div>
+      <div class="a word fx" id="w9b" style="left:6%;bottom:5%;color:var(--oxblood)">Eet smakelijk!</div>
+    </div>
+
+    <!-- overlays -->
+    <div class="ov" id="poster">
+      <p>An 80-second gyoza lesson</p>
+      <h1>Gyoza.</h1>
+      <p style="color:var(--chili)">Eight grams at a time</p>
+      <button class="btn" id="playBtn">▶ Play</button>
+      <button class="linkbtn" id="silentBtn">Play without sound</button>
+    </div>
+    <div class="ov hide" id="endOv">
+      <h1>Lekker.</h1>
+      <p>Now make them yourself</p>
+      <button class="btn" id="againBtn">↺ Watch again</button>
+      <a class="linkbtn" href="#recipe">Recipe card ↓</a>
     </div>
   </div>
-  <div class="row"><button class="btn" id="flipBtn">Flip onto the plate</button></div>
-  <div class="row hide" id="eatRow">
-    <button class="btn alt" id="plainBtn">Plain bite</button>
-    <button class="chip dip" data-d="soy">Soy</button>
-    <button class="chip dip" data-d="vinegar">Vinegar</button>
-    <button class="chip dip" data-d="chili">Chili oil</button>
+
+  <p class="cap" id="cap">Tap play. Sound on — there is a narrator.</p>
+  <div class="ctrl">
+    <button class="pp" id="pp" aria-label="Play/pause">▶</button>
+    <div class="bar" id="bar"><i id="prog"></i></div>
+    <span class="time" id="time">0:00 / 1:20</span>
   </div>
-  <div class="bite" id="bite"></div>
 </section>
 
-<!-- RECIPE -->
 <section class="card recipe" id="recipe">
   <p class="kicker">Take it home</p>
   <h2>The recipe card</h2>
@@ -339,155 +268,101 @@ canvas.wave{width:100%;max-width:380px;height:56px;display:block;margin:0 auto;b
     <li>Hot oiled pan, gyoza in a ring. Add hot water with a spoon of flour stirred in, lid on, about 6½ minutes — until the sizzle changes. Lid off, let the lacy wings crisp, flip onto a plate.</li>
     <li>First bite plain. Then soy, vinegar or chili oil as you like.</li>
   </ol>
-  <div class="row no-print" style="margin-top:16px"><button class="btn" onclick="window.print()">Print the card</button></div>
+  <div class="no-print" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn" onclick="window.print()">Print the card</button><a class="btn alt" href="interaktiv/" style="text-decoration:none">Try it hands-on</a></div>
   <p class="credits">Based on Eater's <em>The Experts</em> episode with chef Hitoshi Umamichi of Gyozanomise Okei, Tokyo — <a href="https://youtu.be/_qApr4UmCGY" target="_blank" rel="noopener">watch the original</a>. Illustrations and narration made for this page; the chef's words are paraphrased. Unofficial — go eat at Okei.</p>
 </section>
-
 </main>
 
 <script>
-/* ---------- sprites ---------- */
-const DIM={knead:[338,246],roll:[308,257],chop:[317,265],fold:[370,246],pan:[330,258],wings:[336,264]};
-class Spr{
-  constructor(el){this.el=el;const n=el.dataset.s;el.style.aspectRatio=DIM[n][0]+'/'+DIM[n][1];el.style.backgroundImage='url(img/'+n+'.webp)';this.set(+(el.dataset.f||0))}
-  set(f){this.f=Math.max(0,Math.min(15,Math.round(f)));this.el.style.backgroundPosition=(this.f*100/15)+'% 0'}
-  play(a,b,ms=90,loop=false){clearInterval(this.t);let f=a;this.set(f);return new Promise(res=>{this.t=setInterval(()=>{f++;if(f>b){if(loop)f=a;else{clearInterval(this.t);res();return}}this.set(f)},ms)})}
-  stop(){clearInterval(this.t)}
-}
-const S={};document.querySelectorAll('.spr').forEach(el=>{const s=new Spr(el);if(el.id)S[el.id]=s;el._spr=s});
 const $=id=>document.getElementById(id);
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-const done=id=>$(id).classList.add('done');
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const ramp=(t,a,b)=>clamp((t-a)/(b-a));
+const loop=(t,fps,a=0,b=15)=>a+Math.floor(Math.max(0,t)*fps)%(b-a+1);
+const vis=(id,on)=>$(id).classList.toggle('vis',!!on);
 
-/* ---------- background pattern (half-drop) ---------- */
-(()=>{const bg=$('bg'),icons=['prop_12','prop_14','prop_07','prop_13','prop_15'];const gx=150,gy=150;let k=0;
- for(let x=-40;x<innerWidth+gx;x+=gx){const col=Math.round(x/gx);for(let y=-40;y<innerHeight+gy;y+=gy){const im=document.createElement('img');im.src='img/'+icons[k++%icons.length]+'.webp';im.style.left=x+'px';im.style.top=(y+(col%2?gy/2:0))+'px';im.style.setProperty('--r',((k*37)%60-30)+'deg');im.style.setProperty('--d',(-(k*0.7)%5)+'s');bg.appendChild(im)}}})();
+/* sprites */
+const DIM={knead:[338,246],roll:[308,257],chop:[317,265],fold:[370,246],pan:[330,258],wings:[336,264]};
+document.querySelectorAll('.spr').forEach(el=>{const n=el.dataset.s;el.style.aspectRatio=DIM[n][0]+'/'+DIM[n][1];el.style.backgroundImage='url(img/'+n+'.webp)';if(el.dataset.f)spr(el,+el.dataset.f)});
+function spr(el,f){if(typeof el==='string')el=$(el);el.style.backgroundPosition=(clamp(Math.floor(f),0,15)*100/15)+'% 0'}
 
-/* ---------- narration ---------- */
-let muted=false,unlocked=false;const vo=new Audio();vo.preload='auto';const played=new Set();
-function say(id){if(muted||!unlocked)return;played.add(id);vo.pause();vo.src='vo/'+id+'.m4a';vo.play().catch(()=>{})}
-$('mute').onclick=()=>{muted=!muted;$('mute').textContent=muted?'🔇 Sound off':'🔊 Sound on';$('mute').setAttribute('aria-pressed',muted);if(muted){vo.pause();sizzleGain(0)}};
-const io=new IntersectionObserver(es=>es.forEach(e=>{const id=e.target.dataset.vo;if(e.isIntersecting&&id&&!played.has(id))say(id)}),{threshold:.6});
-document.querySelectorAll('[data-vo]').forEach(s=>io.observe(s));
+/* background pattern */
+(()=>{const bg=$('bg'),icons=['prop_12','prop_14','prop_07','prop_13','prop_15'];const g=150;let k=0;
+ for(let x=-40;x<innerWidth+g;x+=g){const col=Math.round(x/g);for(let y=-40;y<innerHeight+g;y+=g){const im=document.createElement('img');im.src='img/'+icons[k++%icons.length]+'.webp';im.style.left=x+'px';im.style.top=(y+(col%2?g/2:0))+'px';im.style.setProperty('--r',((k*37)%60-30)+'deg');im.style.setProperty('--d',(-(k*.7)%5)+'s');bg.appendChild(im)}}})();
 
-/* ---------- 0 intro ---------- */
-S.introPan=$('introStage').querySelector('.spr')._spr;S.introPan.play(0,3,260,true);
-let introDone=false;
-$('introStage').onclick=async()=>{if(introDone)return;introDone=true;unlocked=true;audioCtx();$('tapMe').remove();$('cap0').classList.remove('hide');say('00_intro');await S.introPan.play(4,15,110);S.introPan.play(12,15,240,true)};
+/* tray for fold scene */
+for(let i=0;i<6;i++){const im=document.createElement('img');im.src='img/prop_12.webp';im.className='fx';im.id='g7'+i;im.style.width='14cqw';$('tray7').appendChild(im)}
 
-/* ---------- 1 dough ---------- */
-(()=>{let water=0,holdStart=0,timer=null,state='pour',kneaded=0,lastX=null;
- const meter=$('waterMeter').firstElementChild,st=$('doughStatus'),img=$('doughImg');
- function start(e){e.preventDefault();if(state!=='pour')return;holdStart=performance.now();$('kettle').classList.add('pour');$('pourBtn').classList.add('on');
-  let tl=performance.now();timer=setInterval(()=>{const now=performance.now();water+=(now-tl)*0.044;tl=now;meter.style.width=Math.min(100,water)+'%';img.style.transform='scale('+(.6+water/250)+')';
-   if(performance.now()-holdStart>900){fail()}else if(water>=100){finish()}},50)}
- function stop(){clearInterval(timer);$('kettle').classList.remove('pour');$('pourBtn').classList.remove('on')}
- function fail(){stop();state='fail';img.src='img/prop_01.webp';img.style.transform='scale(1)';st.textContent='Separated! Too much at once.';$('doughStage').classList.add('shake');setTimeout(()=>$('doughStage').classList.remove('shake'),400);$('pourBtn').classList.add('hide');$('doughRetry').classList.remove('hide')}
- function finish(){stop();state='knead';img.classList.add('hide');$('kettle').classList.add('hide');$('waterMeter').classList.add('hide');$('pourBtn').classList.add('hide');$('kneadSpr').classList.remove('hide');$('kneadHint').classList.remove('hide');st.textContent='Shaggy dough — now knead it'}
- $('pourBtn').addEventListener('pointerdown',start);['pointerup','pointerleave','pointercancel'].forEach(ev=>$('pourBtn').addEventListener(ev,stop));
- $('doughRetry').onclick=()=>{water=0;state='pour';meter.style.width='0';img.src='img/prop_03.webp';img.style.transform='scale(.6)';st.textContent='Hold to pour — short splashes!';$('pourBtn').classList.remove('hide');$('doughRetry').classList.add('hide')};
- const ks=$('kneadSpr');
- ks.addEventListener('pointerdown',e=>{lastX=e.clientX;ks.setPointerCapture(e.pointerId)});
- ks.addEventListener('pointermove',e=>{if(lastX===null||(state!=='knead'&&state!=='knead2'))return;const d=Math.abs(e.clientX-lastX);if(d>14){lastX=e.clientX;kneaded++;S.kneadSpr.set(kneaded%16);
-   if(kneaded>=24){kneaded=0;lastX=null;if(state==='knead'){state='rest5';st.textContent='Smooth-ish. Now: rest.';$('restBtn').classList.remove('hide');$('restBtn').textContent='Rest 5 min'}else{state='rest30';st.textContent='Shaped. One more rest.';$('restBtn').classList.remove('hide');$('restBtn').textContent='Rest 30 min'}}}});
- ks.addEventListener('pointerup',()=>lastX=null);
- $('restBtn').onclick=async()=>{if(state!=='rest5'&&state!=='rest30')return;const long=state==='rest30';state='resting';$('restBtn').classList.add('hide');ks.classList.add('hide');$('kneadHint').classList.add('hide');const c=$('clock');c.classList.remove('hide');$('clockLab').textContent=long?'30 MIN':'5 MIN';
-  const hand=c.querySelector('i');const turns=long?6:1;hand.style.transition='none';hand.style.transform='translateY(-100%) rotate(0)';await sleep(30);hand.style.transition='transform '+(long?2.4:1.2)+'s cubic-bezier(.45,0,.2,1)';hand.style.transform='translateY(-100%) rotate('+(360*turns)+'deg)';await sleep(long?2500:1300);c.classList.add('hide');
-  if(!long){state='knead2';ks.classList.remove('hide');$('kneadHint').classList.remove('hide');st.textContent='Firm now. Knead again & shape.'}else{state='done';ks.classList.remove('hide');S.kneadSpr.play(0,15,120,true);st.textContent='Chewy, smooth, ready.';done('s1')}};
-})();
-
-/* ---------- 2 earlobe / scale / roll ---------- */
-(()=>{let pokes=0;const li=$('logImg');
- $('logStage').onclick=()=>{if(pokes>=3)return;pokes++;li.style.transform='scale(1.06,.9)';setTimeout(()=>li.style.transform='',160);
-  $('pokeStatus').textContent=['','Hmm… a bit firm','Softer…','Ping! Earlobe-soft ✓'][pokes];if(pokes===3)setTimeout(()=>$('cutPart').classList.remove('hide'),400)};
- const r=$('gramRange');r.oninput=()=>$('gram').textContent=r.value+' g';
- $('cutBtn').onclick=()=>{const g=+r.value;const cs=$('cutStatus');if(g===8){cs.textContent='★ Eight grams. Perfect.';$('gram').classList.add('pop');$('cutBtn').disabled=true;r.disabled=true;setTimeout(()=>$('rollPart').classList.remove('hide'),500)}else{cs.textContent=g>8?'Too big — not '+g+'. Eight.':'Too small — not '+g+'. Eight.';$('gram').classList.add('shake');setTimeout(()=>$('gram').classList.remove('shake'),400)}};
- let rolled=0,lx=null;const rs=$('rollSpr'),rm=$('rollMeter').firstElementChild;
- rs.addEventListener('pointerdown',e=>{lx=e.clientX;rs.setPointerCapture(e.pointerId)});
- rs.addEventListener('pointermove',e=>{if(lx===null||rolled>=32)return;if(Math.abs(e.clientX-lx)>12){lx=e.clientX;rolled++;S.rollSpr.set(rolled%16);rm.style.width=(rolled/32*100)+'%';if(rolled>=32){done('s2');S.rollSpr.set(0)}}});
- rs.addEventListener('pointerup',()=>lx=null);
-})();
-
-/* ---------- 3a chop (rhythm) ---------- */
-(()=>{let n=0,style=0,busy=false;const BPM=100,per=60000/BPM,t0=performance.now();const beat=$('beat');
- setInterval(()=>{beat.classList.add('hit');setTimeout(()=>beat.classList.remove('hit'),110)},per);
- S.chopSpr.set(0);
- $('chopBtn').onclick=async()=>{if(n>=12)return;const ph=((performance.now()-t0)%per);const off=Math.min(ph,per-ph);if(off<120)style++;n++;$('chopCount').textContent=n+' / 12'+(style?' · '+style+'★':'');
-  if(!busy){busy=true;await S.chopSpr.play(1,3,55);S.chopSpr.set(0);busy=false}
-  if(n>=12){done('s3a');$('chopCount').textContent='Chopped! '+style+'★ on the beat'}};
-})();
-
-/* ---------- 3b chives (slowly) ---------- */
-(()=>{let n=0,last=0;const im=$('chiveImg');
- $('chiveStage').onclick=()=>{if(n>=5)return;const now=performance.now();if(now-last<700&&n>0){$('chiveStatus').textContent='Slowly! Slowly…';$('chiveStage').classList.add('shake');setTimeout(()=>$('chiveStage').classList.remove('shake'),400);last=now;return}
-  last=now;n++;im.style.clipPath='inset(0 '+(n*14)+'% 0 0)';$('chiveStatus').textContent=n<5?'Chop '+n+' / 5 — nice and slow':'Done. Bitter, green, honest.';if(n>=5)done('s3b')};
-})();
-
-/* ---------- 3c pork ---------- */
-(()=>{const need={salt:1,black:1,white:1,ginger:1,oil:3},have={salt:0,black:0,white:0,ginger:0,oil:0};let mix=0,ang=null;
- const ready=()=>Object.keys(need).every(k=>have[k]>=need[k]);
- document.querySelectorAll('#seasonings .chip').forEach(b=>b.onclick=()=>{const k=b.dataset.k;if(have[k]>=need[k])return;have[k]++;if(k==='oil')$('oilN').textContent=have.oil;if(have[k]>=need[k])b.classList.add('on');b.classList.add('pop');setTimeout(()=>b.classList.remove('pop'),350);
-  if(ready())$('mixStatus').textContent='Now circle the bowl with your finger';else if(k==='oil'&&have.oil<3)$('mixStatus').textContent='More oil. Generous!'});
- const bowl=$('bowl');
- bowl.addEventListener('pointerdown',e=>{bowl.setPointerCapture(e.pointerId);ang=null});
- bowl.addEventListener('pointermove',e=>{if(!e.buttons&&e.pointerType==='mouse')return;if(!ready()){$('mixStatus').textContent='Season first';return}if(mix>=100)return;
-  const r=bowl.getBoundingClientRect(),a=Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2));
-  if(ang!==null){let d=a-ang;if(d>Math.PI)d-=2*Math.PI;if(d<-Math.PI)d+=2*Math.PI;mix=Math.min(100,mix+Math.abs(d)*100/(2*Math.PI*4));$('mixMeter').firstElementChild.style.width=mix+'%';bowl.style.transform='rotate('+(mix*3.6)+'deg)';
-   $('mixStatus').textContent=mix<35?'Grainy…':mix<75?'Getting there…':mix<100?'Almost smooth…':'Smooth. Nothing grainy.';if(mix>=100)done('s3c')}
-  ang=a});
- bowl.addEventListener('pointerup',()=>ang=null);
-})();
-
-/* ---------- 3d fridge ---------- */
-$('fridgeBtn').onclick=async()=>{$('fridgeBtn').disabled=true;const d=$('dial');for(let h=0;h<=24;h++){d.style.setProperty('--a',(h*15)+'deg');d.textContent=h+' H';await sleep(70)}$('fridgeStatus').textContent='Next day: fold in cabbage & chives.';done('s3d')};
-
-/* ---------- 4 fold ---------- */
-(()=>{let spoons=0,frame=0,count=0;const fs=S.foldSpr;fs.set(0);const tray=$('tray');
- $('spoonBtn').onclick=()=>{if(frame>0)return;spoons++;$('spoonN').textContent=spoons+(spoons===1?' spoon':' spoons');
-  if(spoons>=3){$('foldStage').classList.add('shake');setTimeout(()=>$('foldStage').classList.remove('shake'),400);$('foldStatus').textContent='It oozed out! It took him two years — try 2.';spoons=0;$('spoonN').textContent='0 spoons';$('pleatBtn').disabled=true;return}
-  if(spoons===2){$('foldStatus').textContent='Just right. Now pleat!';$('pleatBtn').disabled=false}else $('foldStatus').textContent='A little more…'};
- $('pleatBtn').onclick=()=>{frame=Math.min(15,frame+(frame<3?3:2));fs.set(frame);
-  if(frame>=15){count++;const im=document.createElement('img');im.src='img/prop_12.webp';im.className='pop';tray.appendChild(im);$('foldStatus').textContent='Gyoza '+count+' / 6';$('pleatBtn').disabled=true;$('spoonBtn').disabled=true;$('fiveBtn').classList.remove('hide')}};
- $('fiveBtn').onclick=async()=>{$('fiveBtn').classList.add('hide');for(let i=count;i<6;i++){await fs.play(0,15,40);const im=document.createElement('img');im.src='img/prop_12.webp';im.className='pop';tray.appendChild(im);$('foldStatus').textContent='Gyoza '+(i+1)+' / 6'}
-  $('foldStatus').textContent='Six gyoza. Your left hand is learning.';done('s4')};
-})();
-
-/* ---------- audio: sizzle ---------- */
+/* sizzle (Web Audio noise) */
 let AC=null,NG=null,NF=null,AN=null;
-function audioCtx(){if(AC)return;try{AC=new (window.AudioContext||window.webkitAudioContext)();const len=AC.sampleRate*2,buf=AC.createBuffer(1,len,AC.sampleRate),d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+function audioInit(){if(AC)return;try{AC=new (window.AudioContext||window.webkitAudioContext)();const len=AC.sampleRate*2,buf=AC.createBuffer(1,len,AC.sampleRate),d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
  const src=AC.createBufferSource();src.buffer=buf;src.loop=true;NF=AC.createBiquadFilter();NF.type='bandpass';NF.Q.value=.9;NG=AC.createGain();NG.gain.value=0;AN=AC.createAnalyser();AN.fftSize=512;src.connect(NF).connect(NG).connect(AN).connect(AC.destination);src.start()}catch(e){}}
-function sizzleGain(v){if(NG)NG.gain.setTargetAtTime(muted?0:v,AC.currentTime,.03)}
+function sizzle(v,f){if(!NG)return;NG.gain.setTargetAtTime((muted||!playing)?0:v,AC.currentTime,.03);if(f)NF.frequency.value=f}
+const cv=$('wave'),cx=cv.getContext('2d');
+function wave(amp){cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);cx.strokeStyle='#C8340A';cx.lineWidth=4;cx.beginPath();
+ if(AN&&!muted&&playing){const a=new Uint8Array(AN.fftSize);AN.getByteTimeDomainData(a);for(let i=0;i<a.length;i++){const x=i/a.length*cv.width,y=cv.height/2+(a[i]-128)/128*cv.height*1.6;i?cx.lineTo(x,y):cx.moveTo(x,y)}}
+ else{for(let x=0;x<=cv.width;x+=6){const y=cv.height/2+(Math.random()-.5)*amp*cv.height;x?cx.lineTo(x,y):cx.moveTo(x,y)}}cx.stroke()}
 
-/* ---------- 5 pan ---------- */
-(()=>{const DUR=20000;let t0=0,raf=0,on=false,p=0;const cv=$('wave'),cx=cv.getContext('2d');const ws=S.wingSpr;ws.set(0);
- function draw(){cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);cx.strokeStyle='#C8340A';cx.lineWidth=3;cx.beginPath();
-  if(AN){const a=new Uint8Array(AN.fftSize);AN.getByteTimeDomainData(a);for(let i=0;i<a.length;i++){const x=i/a.length*cv.width,y=cv.height/2+(a[i]-128)/128*cv.height*1.6;i?cx.lineTo(x,y):cx.moveTo(x,y)}}
-  else{for(let x=0;x<cv.width;x+=4){const y=cv.height/2+(Math.random()-.5)*(on?60:2);x?cx.lineTo(x,y):cx.moveTo(x,y)}}cx.stroke()}
- function tick(){p=(performance.now()-t0)/DUR;ws.set(Math.min(15,p*16));
-  if(NF){if(p<.6){NF.frequency.value=500+Math.random()*200;sizzleGain(.25+Math.random()*.25)}            // boiling burble
-   else if(p<.95){NF.frequency.value=2500+3000*(p-.6);sizzleGain(Math.random()<.35?.6:.08)}           // crackle, the voice changes
-   else{NF.frequency.value=1200;NF.Q.value=.4;sizzleGain(.55+Math.random()*.2)}}                      // harsh, too far
-  $('panbox').classList.toggle('burnt',p>1.15);
-  draw();if(p>1.4){lift(true);return}raf=requestAnimationFrame(tick)}
- $('fryBtn').onclick=()=>{audioCtx();if(AC&&AC.state==='suspended')AC.resume();unlocked=true;$('panbox').classList.remove('burnt');$('lid').classList.remove('off');ws.set(0);
-  if(NF)NF.Q.value=.9;on=true;t0=performance.now();$('fryBtn').disabled=true;$('liftBtn').disabled=false;$('panStatus').textContent='Listen… lift when the sizzle changes';$('s5').classList.remove('done');raf=requestAnimationFrame(tick)};
- function lift(auto){cancelAnimationFrame(raf);on=false;sizzleGain(0);$('lid').classList.add('off');$('liftBtn').disabled=true;$('fryBtn').disabled=false;$('fryBtn').textContent='Try again';draw();
-  const st=$('panStatus');
-  if(auto||p>1.15){st.textContent='Burnt! The sizzle had gone harsh. Try again.';$('panbox').classList.add('burnt')}
-  else if(p<.7){st.textContent='Too early — pale and soggy. Wait for the crackle.'}
-  else{ws.set(15);st.textContent='Golden lace wings! You heard it.';done('s5')}}
- $('liftBtn').onclick=()=>lift(false);
- draw();
-})();
+/* ---------- the timeline ---------- */
+const SC=[
+ {id:'sc0',vo:'00_intro',dur:11.5,kick:'Gyozanomise Okei · Tokyo',cap:'There is a little shop in Tokyo that serves exactly one thing: gyoza. Same recipe for almost sixty years. So… let\u2019s make some, ja?',
+  r(t){vis('t0',t>.2);spr('p0',t<2.6?loop(t,4,0,3):t<4.2?4+ramp(t,2.6,4.2)*11:loop(t-4.2,4,12,15));vis('f0a',t>5.2);vis('f0b',t>6.2);vis('f0c',t>7.4)}},
+ {id:'sc1',vo:'01_dough',dur:12,kick:'Step 1 · The dough',cap:'Hot water, a little at a time. Pour it all at once and the dough gets grumpy. Then — the hard part — you let it rest. Five minutes. Then thirty more.',
+  r(t){const pour=t<3.4;vis('kettle',pour);vis('dough1',pour);$('kettle').style.transform=pour?'rotate('+(-16-7*Math.sin(t*7))+'deg)':'';$('dough1').style.transform=pour?'scale('+(.6+ramp(t,0,3.2)*.45)+')':'';
+   vis('k1',t>=3.4&&t<8.3);spr('k1',loop(t-3.4,10));vis('clock1',t>=8.3);
+   const ang=t<10?ramp(t,8.5,10)*360:360+ramp(t,10,11.8)*2160;$('hand1').style.transform='translateY(-100%) rotate('+ang+'deg)';$('clab1').textContent=t<10?'5 MIN':'30 MIN';vis('tag1',t>1)}},
+ {id:'sc2',vo:'02_earlobe',dur:8.5,kick:'Step 2 · The wrappers',cap:'Soft like an earlobe. Yes, really. And every piece weighs eight grams. Not seven. Eight.',
+  r(t){vis('log2',t<2.7);const poke=(t>.9&&t<1.1)||(t>1.7&&t<1.9);$('log2').style.transform=t<2.7?(poke?'scale(1.06,.88)':'none'):'';
+   const sc=t>=2.7&&t<5.6;vis('scale2',sc);vis('read2',sc);$('read2').textContent=Math.round(14-6*ramp(t,2.9,4.4))+' g';vis('star2',t>4.5&&t<5.6);
+   vis('r2',t>=5.6);spr('r2',loop(t-5.6,10))}},
+ {id:'sc3',vo:'03a_cabbage',dur:6,kick:'Step 3 · The filling',cap:'Most shops use regular cabbage. Here? Only napa cabbage. Chopped, not sliced.',
+  r(t){spr('c3',loop(t,12));vis('h3a',t>1.6);vis('h3b',t>2.4);vis('h3c',t>3.2)}},
+ {id:'sc4',vo:'03b_chives',dur:4.2,kick:'Step 3 · The filling',cap:'Chives. A little bit bitter, and they keep the pork honest.',
+  r(t){$('chive4').style.clipPath='inset(0 '+(Math.floor(ramp(t,.4,3.6)*5)*13)+'% 0 0)'}},
+ {id:'sc5',vo:'03c_pork',dur:10.5,kick:'Step 3 · The filling',cap:'Fatty pork belly, salt, two kinds of pepper, ginger, and a very generous splash of sesame oil. Work it until nothing feels grainy.',
+  r(t){$('bowl5').style.transform='rotate('+(t>4.6?(t-4.6)*70:0)+'deg)';['a','b','c','d','e'].forEach((k,i)=>vis('s5'+k,t>.8+i*.8));$('m5').style.width=(ramp(t,4.8,9.8)*100)+'%'}},
+ {id:'sc6',vo:'03d_rest',dur:5.6,kick:'Step 3 · The filling',cap:'Then the meat rests a whole day. Patience is the secret ingredient. Sorry, it\u2019s true.',
+  r(t){const p=ramp(t,.5,4.4);$('dial6').style.setProperty('--a',(p*360)+'deg');$('dial6').textContent=Math.round(p*24)+' H';vis('tag6',t>4.4)}},
+ {id:'sc7',vo:'04_fold',dur:7.6,kick:'Step 4 · The fold',cap:'It took the chef two years to learn this. Your left hand learns how much is enough. Don\u2019t be greedy.',
+  r(t){spr('f7',ramp(t,.3,4.6)*15);for(let i=0;i<6;i++)vis('g7'+i,t>4.8+i*.4)}},
+ {id:'sc8',vo:'05_pan',dur:8.4,kick:'Step 5 · The pan',cap:'About six and a half minutes. But don\u2019t watch the clock — listen. When the sizzle changes its voice, it\u2019s done.',
+  r(t){spr('w8',ramp(t,.3,6.2)*16);$('lid8').classList.toggle('off',t>6);vis('st8',t>6.8);
+   if(t<3.6){sizzle(.22+Math.random()*.22,500+Math.random()*200);wave(.25)}else if(t<6){sizzle(Math.random()<.35?.55:.07,2600+900*(t-3.6));wave(.6)}else{sizzle(0);wave(0)}}},
+ {id:'sc9',vo:'06_eat',dur:7.6,kick:'Step 6 · Eat',cap:'First bite: nothing on it. Just taste. After that, do what you like. Eet smakelijk!',
+  r(t){const a=ramp(t,.8,1.8);$('flip9').style.transform='rotateX('+(a*a*(3-2*a)*180)+'deg)';vis('sticks9',t>2.6);vis('w9a',t>3.2);vis('w9b',t>5.4)}},
+];
+const starts=[];let TOTAL=0;SC.forEach(s=>{starts.push(TOTAL);TOTAL+=s.dur});
+// chapter ticks
+SC.forEach((s,i)=>{if(!i)return;const m=document.createElement('s');m.style.left=(starts[i]/TOTAL*100)+'%';$('bar').appendChild(m)});
 
-/* ---------- 6 eat ---------- */
-(()=>{let plain=false;
- $('flipBtn').onclick=()=>{$('flip').classList.add('flipped');$('flipBtn').classList.add('hide');setTimeout(()=>$('eatRow').classList.remove('hide'),900)};
- $('plainBtn').onclick=()=>{plain=true;$('bite').textContent='Crunch… juicy… the flavour spreads to the back of your mouth.';$('plainBtn').disabled=true};
- document.querySelectorAll('.dip').forEach(b=>b.onclick=()=>{if(!plain){$('bite').textContent='Plain first! Then the sauce.';return}
-  document.querySelectorAll('.dip').forEach(x=>x.classList.remove('on'));b.classList.add('on');
-  $('bite').textContent={soy:'Soy. Classic.',vinegar:'Vinegar — bright and clean. (Try it with lots of pepper.)',chili:'Chili oil. Brave. Lekker.'}[b.dataset.d];done('s6')});
-})();
+let T=0,playing=false,muted=false,cur=-1,last=performance.now(),ended=false;
+const vo=new Audio();vo.preload='auto';
+const fmt=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+function sceneAt(t){let i=SC.length-1;while(i>0&&starts[i]>t)i--;return i}
+function startVo(i,off){vo.pause();if(muted||!playing)return;const d=SC[i];vo.src='vo/'+d.vo+'.m4a';
+ const go=()=>{if(off>0.25){if(off>=(vo.duration||99)-.1)return;try{vo.currentTime=off}catch(e){}}vo.play().catch(()=>{})};
+ if(off>0.25)vo.addEventListener('loadedmetadata',go,{once:true});else go()}
+function enter(i){cur=i;SC.forEach((s,k)=>$(s.id).classList.toggle('on',k===i));$('kick').textContent=SC[i].kick;$('cap').textContent=SC[i].cap;if(i!==8)sizzle(0);startVo(i,T-starts[i])}
+function render(){const i=sceneAt(Math.min(T,TOTAL-.001));if(i!==cur)enter(i);SC[i].r(T-starts[i]);
+ $('prog').style.width=(T/TOTAL*100)+'%';$('time').textContent=fmt(T)+' / '+fmt(TOTAL)}
+function frame(now){const dt=Math.min(.1,(now-last)/1000);last=now;if(playing){T+=dt;if(T>=TOTAL){T=TOTAL;finish()}}render();requestAnimationFrame(frame)}
+function play(){if(ended){T=0;ended=false;cur=-1;$('endOv').classList.add('hide')}audioInit();if(AC&&AC.state==='suspended')AC.resume();playing=true;$('poster').classList.add('hide');$('pp').textContent='❚❚';
+ if(cur>=0&&!muted&&vo.src&&vo.paused&&!vo.ended&&vo.currentTime>0)vo.play().catch(()=>{});else if(cur>=0)startVo(cur,T-starts[cur])}
+function pause(){playing=false;vo.pause();sizzle(0);$('pp').textContent='▶'}
+function finish(){playing=false;ended=true;sizzle(0);$('pp').textContent='↺';$('endOv').classList.remove('hide')}
+function seek(t){T=clamp(t,0,TOTAL-.05);ended=false;$('endOv').classList.add('hide');cur=-1;render()}
+
+$('playBtn').onclick=()=>{muted=false;play()};
+$('silentBtn').onclick=()=>{muted=true;$('mute').textContent='🔇 Sound off';play()};
+$('againBtn').onclick=()=>{T=0;ended=false;cur=-1;$('endOv').classList.add('hide');play()};
+$('pp').onclick=()=>{if(!$('poster').classList.contains('hide')){$('playBtn').click();return}playing?pause():play()};
+$('bar').onclick=e=>{const r=$('bar').getBoundingClientRect();seek((e.clientX-r.left)/r.width*TOTAL);if(!$('poster').classList.contains('hide'))$('poster').classList.add('hide')};
+$('mute').onclick=()=>{muted=!muted;$('mute').textContent=muted?'🔇 Sound off':'🔊 Sound on';$('mute').setAttribute('aria-pressed',muted);if(muted){vo.pause();sizzle(0)}else if(playing&&cur>=0)startVo(cur,T-starts[cur])};
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&playing)pause()});
+// poster frame: show the pan with steam behind the play button
+render();SC[0].r(5);
+// hook for rendering to video later
+window.GYOZA={TOTAL,seek,pause,play,get t(){return T}};
+requestAnimationFrame(frame);
 </script>
 </body>
 </html>
