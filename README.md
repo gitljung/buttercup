@@ -11,7 +11,7 @@ Samlingsrepo för allt vi bygger. Statiska sidor, ingen build. Varje projekt lig
 | Shtickercat profil | [`stickercat/`](stickercat/) | StickerApp-maskotens grafiska profil, alla katter (PNG/SVG) och ChatGPT-promptar. **Olänkad**, noindex |
 | Bågväxthus 4 × 10 m | [`vaxthus/`](vaxthus/) | Bågväxthus med byggsteg, gavelsektion och inköpslista |
 | Hönshus i 3D | [`honshus/`](honshus/) | Parametrisk three.js-modell av ett hönshus med kompostgrop |
-| Yamay Tizón, vedspis | [`tizon/`](tizon/) | **Olänkad**, noindex. Sprängskiss ur Fusion (mesh.json från ~/code/yamay_tizon), varmvalsad gunmetal |
+| Yamay Tizón, vedspis | [`tizon/`](tizon/) | Kort på startsidan. Sprängskiss ur Fusion (mesh.json från ~/code/yamay_tizon), varmvalsad gunmetal |
 
 ## Lägga till ett projekt
 1. Skapa en ny mapp, t.ex. `mitt-projekt/`, med en `index.html`.

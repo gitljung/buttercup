@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="robots" content="noindex">
 <title>Yamay Tizón – sprängskiss · Buttercup.nu</title>
 <meta name="description" content="Vedspis i Yamay-teknik: 3 mm varmvalsad plåt, skruvad med M6. Dra isär den och se varje del.">
 <meta property="og:type" content="website">
@@ -193,6 +192,12 @@ addEventListener('pointermove', e => {
 });
 addEventListener('resize', () => { cam.aspect = innerWidth/innerHeight; cam.updateProjectionMatrix(); R.setSize(innerWidth,innerHeight); });
 window.__setE = v => { anim=null; E=v; ex.value=v; apply(); };
+window.__thumb = () => {   // chili-wireframe för projektkortet
+  const lm = new THREE.LineBasicMaterial({color:0xC8340A, transparent:true, opacity:.85});
+  for(const m of all){ if(!m.visible) continue;
+    const l = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry, 25), lm); l.position.copy(m.position); scene.add(l); m.visible=false; }
+  ground.visible=false; scene.environment=null;
+};
 
 R.setAnimationLoop(now => {
   if(anim){ const k = Math.min(1,(now-anim.t0)/2600); E = anim.from + (anim.to-anim.from)*k; ex.value = E; apply(); if(k>=1) anim=null; }
