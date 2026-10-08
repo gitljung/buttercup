@@ -12,6 +12,7 @@ Samlingsrepo för allt vi bygger. Statiska sidor, ingen build. Varje projekt lig
 | Bågväxthus 4 × 10 m | [`vaxthus/`](vaxthus/) | Bågväxthus med byggsteg, gavelsektion och inköpslista |
 | Hönshus i 3D | [`honshus/`](honshus/) | Parametrisk three.js-modell av ett hönshus med kompostgrop |
 | Yamay utekök | [`utekok/`](utekok/) | Parametrisk köksö: bockad cortenstomme, ek TP1 i liv med 6 mm rostfri topp, rostfria luckor, wok i mitten, kapplista. Källa: ~/code/yamay_utekok (`make_buttercup.py`) |
+| Foderautomat | [`foderautomat/`](foderautomat/) | Blommeröd foderautomat 200 L med skruvmatning (Hugos Claude-export), dosering + inköpslista. Källa: ~/code/foderautomat (`make_buttercup.py`) |
 | Yamay Tizón, vedspis | [`tizon/`](tizon/) | Kort på startsidan. Sprängskiss ur Fusion (mesh.json från ~/code/yamay_tizon), varmvalsad gunmetal |
 
 ## Lägga till ett projekt

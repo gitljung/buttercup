@@ -1,0 +1,354 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><meta property="og:type" content="website">
+<meta property="og:site_name" content="Buttercup">
+<meta property="og:title" content="Foderautomat – Buttercup.nu">
+<meta property="og:description" content="Foderautomat 200 L med skruvmatning för grisarna på Blommeröd: tratt, spiralskruv Ø75, 24 V-motor och Shelly-styrning. Räkna dosering och körtid, med inköpslista.">
+<meta property="og:url" content="https://www.buttercup.nu/foderautomat/">
+<meta property="og:image" content="https://www.buttercup.nu/foderautomat/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="3D-modell av foderautomaten vid grishagen">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.buttercup.nu/foderautomat/og.jpg">
+<meta name="description" content="Foderautomat 200 L med skruvmatning för grisarna på Blommeröd: tratt, spiralskruv Ø75, 24 V-motor och Shelly-styrning. Räkna dosering och körtid, med inköpslista.">
+<style>
+  body{padding-top:40px}
+  .bc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:#C8340A;color:#FFF6DC;font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px;position:fixed;top:0;left:0;right:0;z-index:2000001}
+  .bc-bar a{color:#FFF6DC;text-decoration:none}
+  .bc-bar a:hover{text-decoration:underline}
+  .bc-bar b{font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.04em;font-size:18px;color:#FCC222}
+  @media (max-width:700px){body{padding-top:34px}.bc-bar{padding:6px 12px;font-size:12px}.bc-bar span{display:none}.bc-bar b{font-size:15px}}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
+</head><body>
+<div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Pågående projekt · Foderautomat</span><b>Plan B(lommeröd)</b></div>
+
+<title>Blommeröd Foderautomat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: verkstadsritning — stor 3D-vy till vänster, specblad + kalkyl i en smal kolumn till höger */
+:root{
+  --paper:#EEF0EA; --panel:#F8F9F5; --ink:#1E2622; --muted:#5C6660; --line:#CDD2C9;
+  --feed:#B9822A; --steel:#8E989D; --scene:#E4E7DF; --accent:#2F6B4F;
+  --display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --body:"Barlow",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#141917; --panel:#1B211E; --ink:#E3E7E1; --muted:#98A29B; --line:#2E3632;
+  --feed:#D9A048; --steel:#9AA4A9; --scene:#1A201D; --accent:#6FBF95; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#141917; --panel:#1B211E; --ink:#E3E7E1; --muted:#98A29B; --line:#2E3632;
+  --feed:#D9A048; --steel:#9AA4A9; --scene:#1A201D; --accent:#6FBF95; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1320px;margin:0 auto;padding-inline:16px;padding-block:20px 40px;display:grid;gap:16px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 24px;border-bottom:2px solid var(--ink);padding-bottom:10px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,4vw,40px);letter-spacing:.01em;margin:0;line-height:1;text-wrap:balance}
+.meta{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:16px;align-items:start}
+@media (max-width:900px){.main{grid-template-columns:1fr}}
+.stage{position:relative;background:var(--scene);border:1px solid var(--line);border-radius:4px;overflow:hidden;aspect-ratio:4/3;max-width:100%;min-height:340px}
+.stage canvas{display:block;width:100%;height:100%;cursor:grab}
+.stage canvas:active{cursor:grabbing}
+.lbl{position:absolute;left:0;top:0;pointer-events:none;font-family:var(--mono);font-size:11px;color:var(--ink);background:var(--panel);border:1px solid var(--line);padding:2px 6px;border-radius:2px;white-space:nowrap;transform:translate(-50%,-120%)}
+.lbl b{font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.03em;text-transform:uppercase}
+.lbl.dim{background:transparent;border:none;color:var(--accent);font-weight:500}
+.toolbar{position:absolute;left:10px;bottom:10px;display:flex;flex-wrap:wrap;gap:6px;right:10px}
+.btn{font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.04em;text-transform:uppercase;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:3px;padding:6px 12px;cursor:pointer}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.btn:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{position:absolute;right:10px;top:10px;font-size:12px;color:var(--muted)}
+aside{display:grid;gap:16px;min-width:0}
+section.card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:14px 16px;display:grid;gap:10px}
+h2{font-family:var(--display);font-weight:700;font-size:20px;text-transform:uppercase;letter-spacing:.04em;margin:0}
+.row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center}
+.row label{font-size:14px}
+.row output{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
+input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--accent)}
+.res{display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:1px solid var(--line);padding-top:10px}
+.res div{display:grid}
+.res span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.res strong{font-family:var(--mono);font-size:20px;font-weight:500;font-variant-numeric:tabular-nums}
+.note{font-size:12.5px;color:var(--muted);margin:0}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+td{padding:6px 0;border-bottom:1px solid var(--line);vertical-align:top}
+td:last-child{text-align:right;font-family:var(--mono);font-size:12.5px;white-space:nowrap;padding-left:10px}
+td small{display:block;color:var(--muted);font-size:12px}
+td a{color:var(--accent);text-underline-offset:2px}
+tfoot td{border-bottom:none;font-weight:600}
+.specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.specs section{min-width:0}
+ul{margin:0;padding-left:18px;font-size:14px;display:grid;gap:4px}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Foderautomat 200 L · skruvmatning</h1>
+    <div class="meta"><span>Torrfoder / pellets</span><span>230 V + Wi-Fi</span><span>Mått i mm</span></div>
+  </header>
+
+  <div class="main">
+    <div class="stage" id="stage">
+      <div class="hint">Dra för att rotera · scrolla för zoom</div>
+      <div class="toolbar">
+        <button class="btn" id="bRun" aria-pressed="true">Kör skruv</button>
+        <button class="btn" id="bCut" aria-pressed="false">Genomskärning</button>
+        <button class="btn" id="bDim" aria-pressed="true">Mått</button>
+        <button class="btn" id="bReset">Återställ vy</button>
+      </div>
+    </div>
+
+    <aside>
+      <section class="card" aria-labelledby="h-calc">
+        <h2 id="h-calc">Dosering</h2>
+        <div class="row"><label for="pigs">Antal grisar</label><output id="oPigs"></output><input id="pigs" type="range" min="2" max="30" value="8"></div>
+        <div class="row"><label for="kgpd">Foder per gris och dag</label><output id="oKg"></output><input id="kgpd" type="range" min="1" max="5" step="0.25" value="2.5"></div>
+        <div class="row"><label for="meals">Utfodringar per dag</label><output id="oMeals"></output><input id="meals" type="range" min="1" max="6" value="2"></div>
+        <div class="row"><label for="rpm">Motorvarvtal</label><output id="oRpm"></output><input id="rpm" type="range" min="20" max="120" step="5" value="50"></div>
+        <div class="res">
+          <div><span>Skruvkapacitet</span><strong id="rCap"></strong></div>
+          <div><span>Körtid per utfodring</span><strong id="rRun"></strong></div>
+          <div><span>Per utfodring</span><strong id="rMeal"></strong></div>
+          <div><span>Påfyllning var</span><strong id="rFill"></strong></div>
+        </div>
+        <p class="note">Spiral Ø75, stigning 75, 30° lutning, fyllnadsgrad ca 35 %, pellets 0,65 kg/L. Kalibrera på plats: kör 60 s, väg ut, justera körtiden i Shelly-schemat.</p>
+      </section>
+
+      <section class="card" aria-labelledby="h-bom">
+        <h2 id="h-bom">Inköpslista</h2>
+        <table>
+          <tbody>
+          <tr><td>Tratt 600×600, kona till 150×150<small>Beställ av lokal plåtslagare, eller bygg av <a href="https://www.bauhaus.se/platskiva-gah-alberts-stal-0-75x600x1000mm-galvaniserad" target="_blank" rel="noopener">galv plåtskiva 0,75×600×1000</a> (Bauhaus, 4 st)</small></td><td>1 500–3 000</td></tr>
+          <tr><td>Stativ<small><a href="https://www.hornbach.se/p/fyrkantsror-kaiserthal-rektangulart-stal-40x30x1-5mm-2m/799699/" target="_blank" rel="noopener">Fyrkantsrör stål 40×30×1,5, 2 m</a> (Hornbach, 3 st)</small></td><td>600</td></tr>
+          <tr><td>Inmatningslåda 75 mm med ändlager<small><a href="https://www.agrar.shop/hof-landtechnik/fuetterungstechnik/futterspiralen/aufnahmetrichter-modell-75-mm-fuer-spirale-modell-75-mm-mit-einem-endlager" target="_blank" rel="noopener">Aufnahmetrichter 75 mm</a> (agrar.shop, 202 €)</small></td><td>2 300</td></tr>
+          <tr><td>Spiral + transportrör 75 mm, 2 m<small><a href="https://shop.bigdutchman.com/bd300/pig-production/feeding/flexvey-75" target="_blank" rel="noopener">Big Dutchman FlexVey 75</a> (pris via återförsäljare) eller <a href="https://www.blocket.se/annonser/hela_sverige?q=foderspiral" target="_blank" rel="noopener">begagnat på Blocket</a></small></td><td>1 500–2 500</td></tr>
+          <tr><td>Motoranslutning 75 mm<small><a href="https://www.agrar.shop/hof-landtechnik/fuetterungstechnik/futterspiralen/motoranschluss-modell-75-mm-getriebemotor-fuer-chore-time-futterspirale" target="_blank" rel="noopener">Motoranschluss 75 mm</a> (agrar.shop, 36 €)</small></td><td>420</td></tr>
+          <tr><td>Fallrörstratt + skarvmuff 75 mm<small><a href="https://www.agrar.shop/hof-landtechnik/fuetterungstechnik/futterspiralen/trichter-pvc-transparent-milchig-fuer-75-mm-fallrohr" target="_blank" rel="noopener">Trichter PVC</a> + <a href="https://www.agrar.shop/hof-landtechnik/fuetterungstechnik/futterspiralen/pvc-schiebemuffe-75mm-fuer-futterrohr" target="_blank" rel="noopener">Schiebemuffe</a> (agrar.shop)</small></td><td>300</td></tr>
+          <tr><td>Växelmotor 24 V, 150 W, 50 rpm<small><a href="https://www.ebay.de/itm/404910172645" target="_blank" rel="noopener">Snäckväxelmotor</a> (eBay, välj 24V / 150W / 50 rpm)</small></td><td>1 000</td></tr>
+          <tr><td>Nätdel 24 V 10 A<small><a href="https://www.electrokit.com/nataggregat-24v-10a-240w-din-skena" target="_blank" rel="noopener">Mean Well NDR-240-24</a> (Electrokit, 649 kr)</small></td><td>650</td></tr>
+          <tr><td>Wi-Fi-relä med effektmätning<small><a href="https://www.shelly.com/products/shelly-1pm-gen3" target="_blank" rel="noopener">Shelly 1PM Gen3</a> (shelly.com, 14,90 €) eller <a href="https://ahlsell.se/en/products/electric/installation-equipment-11-18/17-17-property-automation--iot/shelly/relay/1302004e---rela-wifi-1pm-gen3" target="_blank" rel="noopener">Ahlsell</a></small></td><td>170</td></tr>
+          <tr><td>Kapsling IP65<small><a href="https://www.electrokit.com/apparatlada-morkgra-abs-ip65-200x150x75mm" target="_blank" rel="noopener">Apparatlåda 200×150×75</a> (Electrokit), nätdelen ligger ned</small></td><td>200</td></tr>
+          <tr><td>Våg, valfri<small>4× <a href="https://www.electrokit.com/lastcell-60kg-med-hx711-lastcellsforstarkare" target="_blank" rel="noopener">Lastcell 60 kg + HX711</a> (159 kr/st, restnoterad) + <a href="https://www.electrokit.com/esp32-utvecklingskort/" target="_blank" rel="noopener">ESP32-kort</a></small></td><td>760</td></tr>
+          <tr><td>Tråg<small><a href="https://www.blocket.se/annonser/hela_sverige?q=grisho" target="_blank" rel="noopener">Grisho på Blocket</a> eller gjut i betong</small></td><td>0–800</td></tr>
+          </tbody>
+          <tfoot><tr><td>Totalt ca<small>Euro räknat på ca 11 kr</small></td><td>9 000–12 500 kr</td></tr></tfoot>
+        </table>
+      </section>
+    </aside>
+  </div>
+
+  <div class="specs">
+    <section class="card"><h2>Funktion</h2>
+      <ul>
+        <li>Fodret rinner ner i inmatningslådan under tratten.</li>
+        <li>Spiralen drar det upp genom röret, över stängslet.</li>
+        <li>Fallröret släpper ner det i tråget på grishagens sida.</li>
+        <li>Motorn sitter i övre änden och drar spiralen, inte trycker.</li>
+      </ul>
+    </section>
+    <section class="card"><h2>Styrning</h2>
+      <ul>
+        <li>Shelly 1PM Gen3 slår på nätdelen enligt schema i appen.</li>
+        <li>Körtid i sekunder styr mängden.</li>
+        <li>Effekt över normalt = spiralen kärvar, larm.</li>
+        <li>Effekt under normalt = tom tratt, larm.</li>
+      </ul>
+    </section>
+    <section class="card"><h2>Att tänka på</h2>
+      <ul>
+        <li>Grisarna ska inte nå röret eller motorn. Håll allt utanför stängslet.</li>
+        <li>Lock på tratten mot regn och fåglar.</li>
+        <li>Kona minst 60° mot horisontalen, annars valvar fodret.</li>
+        <li>230 V-installationen görs av behörig elektriker.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+const stage=document.getElementById('stage');
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+stage.prepend(renderer.domElement);
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(38,1,0.05,50);
+const HOME=new THREE.Vector3(2.6,2.1,3.2), TARGET=new THREE.Vector3(0.55,0.7,0);
+camera.position.copy(HOME);
+const controls=new THREE.OrbitControls(camera,renderer.domElement);
+controls.target.copy(TARGET);controls.enableDamping=true;controls.maxPolarAngle=Math.PI*0.49;controls.minDistance=1.2;controls.maxDistance=8;
+
+scene.add(new THREE.HemisphereLight(0xffffff,0x667060,0.75));
+const sun=new THREE.DirectionalLight(0xffffff,0.85);sun.position.set(3,5,2.5);sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-3,right:3,top:3,bottom:-3});scene.add(sun);
+
+// materials
+const M={
+  galv:new THREE.MeshStandardMaterial({color:0xb7c0c4,metalness:.55,roughness:.45,transparent:true,opacity:1,side:THREE.DoubleSide}),
+  frame:new THREE.MeshStandardMaterial({color:0x4d5a55,metalness:.4,roughness:.6}),
+  tube:new THREE.MeshStandardMaterial({color:0x9aa6ab,metalness:.5,roughness:.4,transparent:true,opacity:1,side:THREE.DoubleSide}),
+  spiral:new THREE.MeshStandardMaterial({color:0xd9dde0,metalness:.8,roughness:.25}),
+  motor:new THREE.MeshStandardMaterial({color:0x2f6b4f,metalness:.3,roughness:.5}),
+  box:new THREE.MeshStandardMaterial({color:0xe9e6dc,roughness:.7}),
+  feed:new THREE.MeshStandardMaterial({color:0xb9822a,roughness:.9}),
+  wood:new THREE.MeshStandardMaterial({color:0x8a6a48,roughness:.9}),
+  concrete:new THREE.MeshStandardMaterial({color:0xa9a69c,roughness:.95}),
+  cell:new THREE.MeshStandardMaterial({color:0xc9a227,metalness:.4,roughness:.5}),
+  ground:new THREE.MeshStandardMaterial({color:0x7d8b6a,roughness:1}),
+  cable:new THREE.MeshStandardMaterial({color:0x222222,roughness:.6})
+};
+const mesh=(g,m,cast=true)=>{const o=new THREE.Mesh(g,m);o.castShadow=cast;o.receiveShadow=true;return o};
+const box=(w,h,d,m,x,y,z)=>{const o=mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);scene.add(o);return o};
+
+// ground
+const ground=mesh(new THREE.CircleGeometry(4.5,64),M.ground,false);ground.rotation.x=-Math.PI/2;scene.add(ground);
+
+// ---- hopper (origin centre, mm→m) ----
+const S=0.6, S0=0.15, yOut=0.45, yCone=0.80, yTop=1.30;
+const sq=s=>s/Math.SQRT2;
+const cone=mesh(new THREE.CylinderGeometry(sq(S),sq(S0),yCone-yOut,4,1,true),M.galv);
+cone.rotation.y=Math.PI/4;cone.position.y=(yOut+yCone)/2;scene.add(cone);
+const body=mesh(new THREE.CylinderGeometry(sq(S),sq(S),yTop-yCone,4,1,true),M.galv);
+body.rotation.y=Math.PI/4;body.position.y=(yTop+yCone)/2;scene.add(body);
+const lid=box(S+0.04,0.025,S+0.04,M.frame,0,yTop+0.013,0);
+box(0.16,0.02,0.02,M.frame,0,yTop+0.04,S/2-0.02);
+// feed inside
+const feedG=new THREE.Group();scene.add(feedG);
+const fc=mesh(new THREE.CylinderGeometry(sq(S-0.01),sq(S0-0.005),yCone-yOut-0.01,4,1),M.feed,false);
+fc.rotation.y=Math.PI/4;fc.position.y=(yOut+yCone)/2;feedG.add(fc);
+const fb=mesh(new THREE.BoxGeometry(S-0.012,1,S-0.012),M.feed,false);feedG.add(fb);
+function setFeed(f){const h=Math.max(0.001,(yTop-yCone-0.04)*f);fb.scale.y=h;fb.position.y=yCone+h/2;}
+setFeed(0.75);feedG.visible=false;
+// frame + legs
+const L=S/2;
+[[-L,-L],[L,-L],[L,L],[-L,L]].forEach(([x,z])=>{
+  box(0.04,yCone-0.06,0.04,M.frame,x,0.06+(yCone-0.06)/2,z);
+  box(0.12,0.006,0.12,M.frame,x,0.003,z);
+  box(0.09,0.03,0.04,M.cell,x,0.03+0.006,z); // load cell
+});
+box(S+0.04,0.04,0.04,M.frame,0,yCone,-L);box(S+0.04,0.04,0.04,M.frame,0,yCone,L);
+box(0.04,0.04,S+0.04,M.frame,-L,yCone,0);box(0.04,0.04,S+0.04,M.frame,L,yCone,0);
+box(S,0.03,0.03,M.frame,0,0.3,-L);box(S,0.03,0.03,M.frame,0,0.3,L);
+// boot under outlet
+box(0.22,0.12,0.18,M.galv,0,yOut-0.06,0);
+
+// ---- auger ----
+const ANG=Math.PI/6, AL=1.75, R=0.045, X0=-0.15, Y0=0.39;
+const aug=new THREE.Group();aug.position.set(X0,Y0,0);aug.rotation.z=ANG;scene.add(aug);
+const tubeM=mesh(new THREE.CylinderGeometry(R,R,AL,40,1,true),M.tube);tubeM.rotation.z=Math.PI/2;tubeM.position.x=AL/2;aug.add(tubeM);
+class Helix extends THREE.Curve{getPoint(t,v=new THREE.Vector3()){const a=t*Math.PI*2*(AL/0.075);return v.set(t*AL,0.0365*Math.cos(a),0.0365*Math.sin(a));}}
+const spiral=mesh(new THREE.TubeGeometry(new Helix(),Math.round(AL/0.075*28),0.0055,6,false),M.spiral);aug.add(spiral);
+// discharge head + motor
+const head=mesh(new THREE.BoxGeometry(0.14,0.12,0.12),M.galv);head.position.x=AL;aug.add(head);
+const gear=mesh(new THREE.BoxGeometry(0.09,0.11,0.11),M.motor);gear.position.x=AL+0.115;aug.add(gear);
+const mot=mesh(new THREE.CylinderGeometry(0.05,0.05,0.2,32),M.motor);mot.rotation.z=Math.PI/2;mot.position.x=AL+0.26;aug.add(mot);
+const cap=mesh(new THREE.CylinderGeometry(0.052,0.052,0.02,32),M.frame);cap.rotation.z=Math.PI/2;cap.position.x=AL+0.37;aug.add(cap);
+// world end
+const end=new THREE.Vector3(AL,0,0).applyMatrix4((aug.updateMatrixWorld(),aug.matrixWorld));
+// drop tube
+const yTr=0.32, dropH=end.y-0.06-yTr-0.05;
+const drop=mesh(new THREE.CylinderGeometry(0.04,0.04,dropH,24,1,true),M.tube);drop.position.set(end.x,yTr+0.05+dropH/2,0);scene.add(drop);
+// support post for auger near fence
+const supX=0.62, supY=Y0+(supX-X0)*Math.tan(ANG)-R;
+box(0.04,supY,0.04,M.frame,supX,supY/2,-0.08);box(0.04,supY,0.04,M.frame,supX,supY/2,0.08);
+box(0.04,0.03,0.2,M.frame,supX,supY,0);
+
+// ---- fence ----
+const FX=0.92;
+for(let z=-1.4;z<=1.41;z+=0.7){box(0.08,1.0,0.08,M.wood,FX,0.5,z);}
+[0.3,0.6,0.88].forEach(y=>box(0.03,0.1,2.9,M.wood,FX+0.05,y,0));
+
+// ---- trough ----
+const TX=end.x, TW=0.32, TLn=1.0, TH=0.22;
+box(TW,0.04,TLn,M.concrete,TX,0.02,0);
+box(0.04,TH,TLn,M.concrete,TX-TW/2,TH/2,0);box(0.04,TH,TLn,M.concrete,TX+TW/2,TH/2,0);
+box(TW,TH,0.04,M.concrete,TX,TH/2,-TLn/2);box(TW,TH,0.04,M.concrete,TX,TH/2,TLn/2);
+const pile=mesh(new THREE.SphereGeometry(0.12,24,12,0,Math.PI*2,0,Math.PI/2),M.feed);pile.scale.set(1,0.45,1.6);pile.position.set(TX,0.04,0);scene.add(pile);
+
+// ---- control box + cable ----
+const cb=box(0.2,0.26,0.09,M.box,-0.12,1.02,L+0.06);
+box(0.03,0.03,0.01,M.motor,-0.12,1.08,L+0.11);
+const mw=new THREE.Vector3(AL+0.26,-0.05,0).applyMatrix4(aug.matrixWorld);
+const cablePath=new THREE.CatmullRomCurve3([new THREE.Vector3(-0.12,0.89,L+0.08),new THREE.Vector3(0.1,0.7,L+0.1),new THREE.Vector3(0.6,0.95,0.22),new THREE.Vector3(1.1,1.2,0.12),mw]);
+scene.add(mesh(new THREE.TubeGeometry(cablePath,60,0.007,6),M.cable));
+
+// ---- falling pellets ----
+const pel=[];const pg=new THREE.SphereGeometry(0.01,6,4);
+for(let i=0;i<36;i++){const p=new THREE.Mesh(pg,M.feed);p.userData.t=Math.random();p.position.set(end.x,0,0);scene.add(p);pel.push(p);}
+
+// ---- labels ----
+const labels=[];
+function label(html,pos,cls){const d=document.createElement('div');d.className='lbl'+(cls?' '+cls:'');d.innerHTML=html;stage.appendChild(d);labels.push({d,pos,dim:cls==='dim'});return d}
+label('<b>Tratt</b> ca 200 L',new THREE.Vector3(-0.3,yTop+0.12,0));
+label('<b>Inmatning</b>',new THREE.Vector3(-0.15,0.3,0.15));
+label('<b>Spiralskruv</b> Ø75 i rör Ø90',new THREE.Vector3(0.35,0.78,0.1));
+label('<b>Motor</b> 24 V · 150 W',new THREE.Vector3(end.x+0.15,end.y+0.25,0));
+label('<b>Fallrör</b>',new THREE.Vector3(end.x+0.12,0.7,0.05));
+label('<b>Tråg</b>',new THREE.Vector3(TX,0.32,0.48));
+label('<b>Shelly</b> i IP65-låda',new THREE.Vector3(-0.12,1.2,L+0.1));
+label('<b>Lastceller</b>',new THREE.Vector3(L,0.1,L+0.05));
+label('<b>Stängsel</b>',new THREE.Vector3(FX,1.08,-1.25));
+label('600 × 600',new THREE.Vector3(0,yTop+0.03,L+0.05),'dim');
+label('H 1 330',new THREE.Vector3(-L-0.08,0.67,-L),'dim');
+label('1 750 · 30°',new THREE.Vector3(0.6,1.1,-0.05),'dim');
+label('utlopp 150 × 150',new THREE.Vector3(0.22,0.42,-0.1),'dim');
+
+// ---- state + UI ----
+let running=!reduce, cut=false, dims=true;
+const bRun=document.getElementById('bRun'),bCut=document.getElementById('bCut'),bDim=document.getElementById('bDim');
+bRun.setAttribute('aria-pressed',running);
+bRun.onclick=()=>{running=!running;bRun.setAttribute('aria-pressed',running)};
+bCut.onclick=()=>{cut=!cut;bCut.setAttribute('aria-pressed',cut);M.galv.opacity=cut?0.22:1;M.tube.opacity=cut?0.25:1;M.galv.depthWrite=!cut;M.tube.depthWrite=!cut;feedG.visible=cut};
+bDim.onclick=()=>{dims=!dims;bDim.setAttribute('aria-pressed',dims)};
+document.getElementById('bReset').onclick=()=>{camera.position.copy(HOME);controls.target.copy(TARGET)};
+
+const $=id=>document.getElementById(id);
+const fmt=(n,d=1)=>n.toLocaleString('sv-SE',{minimumFractionDigits:d,maximumFractionDigits:d});
+let rpm=60;
+function calc(){
+  const n=+$('pigs').value,k=+$('kgpd').value,m=+$('meals').value;rpm=+$('rpm').value;
+  $('oPigs').textContent=n;$('oKg').textContent=fmt(k,2)+' kg';$('oMeals').textContent=m;$('oRpm').textContent=rpm+' rpm';
+  const Lrev=Math.PI/4*0.075*0.075*0.075*1000*0.35; // L/rev
+  const kgmin=Lrev*0.65*rpm;
+  const day=n*k, meal=day/m, run=meal/kgmin*60;
+  const cap=200*0.65; // kg
+  $('rCap').textContent=fmt(kgmin)+' kg/min';
+  $('rMeal').textContent=fmt(meal)+' kg';
+  $('rRun').textContent=run>=60?Math.floor(run/60)+' min '+String(Math.round(run%60)).padStart(2,'0')+' s':Math.round(run)+' s';
+  $('rFill').textContent=fmt(cap/day)+' dygn';
+}
+['pigs','kgpd','meals','rpm'].forEach(id=>$(id).addEventListener('input',calc));calc();
+
+// theme
+function theme(){scene.background=new THREE.Color(css('--scene'));const f=new THREE.Color(css('--feed'));M.feed.color.copy(f);}
+theme();matchMedia('(prefers-color-scheme: dark)').addEventListener('change',theme);
+new MutationObserver(theme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+new ResizeObserver(resize).observe(stage);resize();
+
+const v=new THREE.Vector3();let last=performance.now();
+function loop(now){
+  const dt=Math.min(0.05,(now-last)/1000);last=now;
+  if(running){spiral.rotation.x-=dt*rpm/60*Math.PI*2;}
+  const fallTop=yTr+0.05, fallLen=fallTop-0.06;
+  pel.forEach((p,i)=>{p.visible=running;if(!running)return;p.userData.t+=dt*1.6;if(p.userData.t>1)p.userData.t-=1;const t=p.userData.t;
+    p.position.set(end.x+Math.sin(i*7.1)*0.022,fallTop-t*t*fallLen,Math.cos(i*3.3)*0.022);});
+  controls.update();renderer.render(scene,camera);
+  const w=stage.clientWidth,h=stage.clientHeight;
+  labels.forEach(l=>{v.copy(l.pos).project(camera);const vis=v.z<1&&(!l.dim||dims);l.d.hidden=!vis;
+    if(vis){l.d.style.left=((v.x+1)/2*w)+'px';l.d.style.top=((1-v.y)/2*h)+'px';}});
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+})();
+</script>
+
+</body></html>
