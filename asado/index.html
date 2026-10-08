@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Asado fire table – parametrisk grill</title>
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Buttercup">
+<meta property="og:title" content="Asado fire table – Buttercup.nu">
+<meta property="og:description" content="Asado fire table: parametrisk eldgrill som växer med antalet stekbord – vedkorg och svänggaller i varje ände, flernivågaller, plancha, takrack med S-krokar.">
+<meta property="og:url" content="https://www.buttercup.nu/asado/">
+<meta property="og:image" content="https://www.buttercup.nu/asado/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.buttercup.nu/asado/og.jpg">
+<meta name="description" content="Asado fire table: parametrisk eldgrill som växer med antalet stekbord – vedkorg och svänggaller i varje ände, flernivågaller, plancha, takrack med S-krokar.">
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#FCC222;font-family:"Barlow",-apple-system,Helvetica,Arial,sans-serif;color:#2A1206}
+  #info{position:absolute;left:12px;top:50px;background:#FFF6DC;padding:12px 16px;border:3px solid #C8340A;border-radius:20px;
+        font-size:12.5px;line-height:1.45;max-width:330px;box-shadow:5px 5px 0 #C8340A;z-index:2000000;max-height:calc(100vh - 80px);overflow:auto}
+  #info h1{font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;color:#C8340A;font-size:22px;line-height:1;margin:0 0 6px}
+  #info table{border-collapse:collapse;width:100%}
+  #info td{padding:1px 0;vertical-align:top}
+  #info td:last-child{text-align:right;font-variant-numeric:tabular-nums;padding-left:8px}
+  #info .sub{color:#8F1A00;font-size:11px;margin-top:6px;line-height:1.35}
+  #info .warn{color:#C8340A;font-size:11.5px;font-weight:500}
+  .lbl{background:rgba(255,255,255,.9);border:1px solid #c9bda9;border-radius:4px;padding:1px 5px;font-size:11px;color:#333;white-space:nowrap}
+  .lbl.red{border-color:#C8340A;color:#C8340A}
+  .lil-gui{--background-color:#FFF6DC;--text-color:#2A1206;--title-background-color:#C8340A;--title-text-color:#FFF6DC;
+    --widget-color:#f3e3b4;--hover-color:#ecd59a;--focus-color:#e6cc87;--number-color:#8F1A00;--string-color:#8F1A00;
+    --font-family:"Barlow",system-ui,sans-serif;--font-size:12px;--width:300px}
+  .lil-gui.root{border:3px solid #C8340A;border-radius:14px;overflow:hidden;margin-top:44px;max-height:calc(100vh - 56px);overflow-y:auto}
+  .lil-gui.root>.title{font-family:"Barlow Condensed",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+  .bc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:#C8340A;color:#FFF6DC;font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px;position:fixed;top:0;left:0;right:0;z-index:2000001}
+  .bc-bar a{color:#FFF6DC;text-decoration:none}
+  .bc-bar a:hover{text-decoration:underline}
+  .bc-bar b{font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.04em;font-size:18px;color:#FCC222}
+  #info .tgl{display:none}
+  @media (max-width:700px){
+    .bc-bar{padding:6px 12px;font-size:12px;gap:8px}
+    .bc-bar span{display:none}
+    .bc-bar b{font-size:15px}
+    #info{position:fixed;top:auto;left:8px;right:auto;bottom:calc(8px + env(safe-area-inset-bottom));max-width:min(270px,calc(100vw - 16px));
+          padding:8px 12px;font-size:11.5px;line-height:1.35;border-radius:14px;box-shadow:3px 3px 0 #C8340A;cursor:pointer;max-height:45vh}
+    #info h1{font-size:15px;margin:0 0 3px;padding-right:18px}
+    #info .tgl{display:block;position:absolute;top:6px;right:9px;color:#C8340A;font-weight:700;font-size:13px}
+    #info:not(.open) table,#info:not(.open) .sub,#info:not(.open) .warn{display:none}
+    #info.open .tgl{transform:rotate(180deg)}
+    .lil-gui.root{margin-top:38px;--width:min(280px,calc(100vw - 30px));max-height:calc(100vh - 48px);border-width:2px;border-radius:12px}
+    .lil-gui{--font-size:11px;--widget-height:22px}
+    .lbl{font-size:10px;padding:1px 4px}
+  }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@700&family=Barlow:wght@400;500&display=swap">
+</head>
+<body>
+<div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Asado fire table</span><b>Plan B(lommeröd)</b></div>
+<div id="info"></div>
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/",
+  "lil-gui":"https://cdn.jsdelivr.net/npm/lil-gui@0.19.2/+esm"
+}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+import GUI from 'lil-gui';
+
+// ===== Parametrar (samma namn och standardvärden som Fusion-modellen bygg_asado_v4.py) =====
+const P = {
+  AntalStekbord: 2, StekB: 690, Kant: 30, BasinB: 914, BasinDjup: 170, Plat: 5, Sten: 20, Ramhojd: 720,
+  Ror: 50, HjulD: 100, Stolpe: 40, OverHojd: 1710, RackDelning: 100, BakvaggDelning: 90, BakvaggAntal: 8,
+  StangD: 16, KrokD: 6, KrokL: 170, KrokDelning: 110, KrokRader: 2,
+  VedkorgB: 420, VedkorgD: 330, VedkorgH: 420, VedkorgBen: 80, StangDelning: 70, RostDelning: 35, VedkorgRingar: 3,
+  GallerNiva1: 120, GallerNiva2: 320, GallerDelning: 25, GallerStang: 8, PlanchaT: 6, PlanchaH: 100,
+  FlytZ: 1190, FlytD: 230, HyllaZ: 960, HyllaB: 220, HyllaD: 300, Spel: 20,
+  SwingD: 406, SwingZ: 260, SwingArm: 60, SwingStang: 25,
+  // visning
+  svang: 0, stil: 'Solid + kanter', tak: true, krokar: true, matt: true, eld: true,
+};
+const DEF = {...P};
+
+// ===== Scen =====
+const renderer = new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+document.body.appendChild(renderer.domElement);
+const labelR = new CSS2DRenderer(); labelR.setSize(innerWidth, innerHeight);
+labelR.domElement.style.cssText = 'position:absolute;top:0;left:0;pointer-events:none';
+document.body.appendChild(labelR.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#FCC222');
+const camera = new THREE.PerspectiveCamera(35, innerWidth / innerHeight, 10, 40000);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+scene.add(new THREE.HemisphereLight('#fff8ee', '#8a7a66', 1.6));
+const sun = new THREE.DirectionalLight('#ffffff', 2.2);
+sun.position.set(-2500, 4000, 3000); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, {left:-3000, right:3000, top:3000, bottom:-3000, near:100, far:12000});
+scene.add(sun);
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(30000, 30000), new THREE.MeshStandardMaterial({color:'#e9cf86', roughness:.95}));
+floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+
+const MAT = {
+  svart:  new THREE.MeshStandardMaterial({color:'#2b2b2d', roughness:.55, metalness:.3}),
+  stal:   new THREE.MeshStandardMaterial({color:'#4a4a4e', roughness:.5, metalness:.35}),
+  plancha:new THREE.MeshStandardMaterial({color:'#3c3e42', roughness:.3, metalness:.45}),
+  sten:   new THREE.MeshStandardMaterial({color:'#c4a47a', roughness:.92}),
+  hjul:   new THREE.MeshStandardMaterial({color:'#aaacb0', roughness:.3, metalness:.5}),
+  krok:   new THREE.MeshStandardMaterial({color:'#cdd0d4', roughness:.15, metalness:.6}),
+  ved:    new THREE.MeshStandardMaterial({color:'#7a5232', roughness:.9}),
+  glod:   new THREE.MeshStandardMaterial({color:'#ff5a1a', emissive:'#ff3a00', emissiveIntensity:1.4, roughness:.8}),
+};
+const EDGE = new THREE.LineBasicMaterial({color:'#111111', transparent:true, opacity:.55});
+const EDGE_WIRE = new THREE.LineBasicMaterial({color:'#1a1a1a'});
+
+let root = new THREE.Group(); scene.add(root);
+let GEO = {};      // material -> [geometries] per grupp
+let groupName = 'stomme';
+const groups = {};
+
+// Fusion (X längd, Y djup +fram, Z upp) -> three (-X, Z, Y)
+function add(mat, g) { (GEO[groupName] ||= {})[mat] ||= []; GEO[groupName][mat].push(g); }
+function box(mat, x0, y0, z0, dx, dy, dz) {
+  if (dx <= 0 || dy <= 0 || dz <= 0) return;
+  const g = new THREE.BoxGeometry(dx, dz, dy);
+  g.translate(-(x0 + dx / 2), z0 + dz / 2, y0 + dy / 2);
+  add(mat, g);
+}
+function cylZ(mat, cx, cy, d, z0, h, seg = 12) {
+  const g = new THREE.CylinderGeometry(d / 2, d / 2, h, seg);
+  g.translate(-cx, z0 + h / 2, cy); add(mat, g);
+}
+function cylY(mat, cx, cz, d, y0, l, seg = 20) {
+  const g = new THREE.CylinderGeometry(d / 2, d / 2, l, seg);
+  g.rotateX(Math.PI / 2); g.translate(-cx, cz, y0 + l / 2); add(mat, g);
+}
+function torusZ(mat, cx, cy, z, R, r) {
+  const g = new THREE.TorusGeometry(R, r, 8, 48); g.rotateX(Math.PI / 2); g.translate(-cx, z, cy); add(mat, g);
+}
+
+function D() {
+  const d = {};
+  d.N = P.AntalStekbord;
+  d.NV = Math.min(2, d.N);
+  d.BasinL = 2 * (P.Plat + P.Sten) + P.Spel + d.NV * (P.VedkorgB + P.Spel) + d.N * (P.StekB + P.Spel);
+  d.TotalL = d.BasinL + 2 * P.Kant;
+  d.HjulH = 1.46 * P.HjulD;
+  d.FT = P.Ramhojd - P.BasinDjup; d.BF = d.FT + P.Plat; d.SF = d.BF + P.Sten;
+  d.LX = d.BasinL / 2; d.LY = P.BasinB / 2;
+  d.IX = d.LX - P.Plat; d.IY = d.LY - P.Plat;
+  d.SX = d.IX - P.Sten; d.SY = d.IY - P.Sten;
+  d.RL = d.BasinL + 2 * P.Kant - 2 * P.Stolpe;
+  d.RB = P.BasinB + 2 * P.Kant - 2 * P.Stolpe;
+  d.NT = Math.max(1, Math.floor(d.RB / P.RackDelning));
+  d.NK = Math.max(1, Math.floor((d.RL - 2 * P.KrokDelning) / P.KrokDelning) + 1);
+  d.KR = Math.min(P.KrokRader, d.NT);
+  d.VK_SPACING = 2 * d.SX - 2 * P.Spel - P.VedkorgB;
+  return d;
+}
+
+function build() {
+  scene.remove(root);
+  root.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.isCSS2DObject) o.element.remove(); });
+  root = new THREE.Group(); scene.add(root);
+  GEO = {};
+  const d = D(); window.__D = d;
+  const {LX, LY, IX, IY, SX, SY, FT, BF, SF, RL, RB, NT, HjulH} = d;
+  const S = P.StangD;
+
+  // ---------- STATIV ----------
+  groupName = 'stomme';
+  for (const sx of [-1, 1]) for (const sy of [-1, 1]) {
+    box('svart', sx < 0 ? -LX : LX - P.Ror, sy < 0 ? -LY : LY - P.Ror, HjulH, P.Ror, P.Ror, FT - HjulH);
+  }
+  for (const sy of [-1, 1]) {
+    const y0 = sy < 0 ? -LY : LY - P.Ror;
+    box('svart', -(LX - P.Ror), y0, FT - P.Ror, d.BasinL - 2 * P.Ror, P.Ror, P.Ror);
+    box('svart', -(LX - P.Ror), y0, HjulH + 40, d.BasinL - 2 * P.Ror, P.Ror, P.Ror);
+  }
+  for (const sx of [-1, 1]) {
+    const x0 = sx < 0 ? -LX : LX - P.Ror;
+    box('svart', x0, -(LY - P.Ror), FT - P.Ror, P.Ror, P.BasinB - 2 * P.Ror, P.Ror);
+    box('svart', x0, -(LY - P.Ror), HjulH + 40, P.Ror, P.BasinB - 2 * P.Ror, P.Ror);
+  }
+  box('stal', -(LX - P.Ror), -(LY - P.Ror), HjulH + 40 + P.Ror - 3, d.BasinL - 2 * P.Ror, P.BasinB - 2 * P.Ror, 3);
+  // ved på vedhyllan
+  if (P.eld) {
+    groupName = 'ved';
+    const z = HjulH + 40 + P.Ror;
+    for (let i = 0; i < 5; i++) for (let j = 0; j < 3 - (i % 2); j++)
+      cylY('ved', -LX + 120 + i * 0 + j * 95 + (i % 2) * 47, z + 40 + i * 70, 80, -LY + 120, P.BasinB - 240, 7);
+    groupName = 'stomme';
+  }
+
+  // ---------- HJUL ----------
+  const H = P.HjulD, W = 0.32 * H;
+  for (const sx of [-1, 1]) for (const sy of [-1, 1]) {
+    const cx = sx < 0 ? -LX + P.Ror / 2 : LX - P.Ror / 2;
+    const cy = sy < 0 ? -LY + P.Ror / 2 : LY - P.Ror / 2;
+    const ox = cx + 0.4 * H;
+    box('hjul', cx - 0.5 * H, cy - 0.5 * H, HjulH - 0.06 * H, H, H, 0.06 * H);
+    cylZ('hjul', cx, cy, 0.76 * H, HjulH - 0.22 * H, 0.16 * H, 20);
+    for (const s2 of [-1, 1]) {
+      const fy = s2 < 0 ? cy - W / 2 - 0.06 * H : cy + W / 2 + 0.02 * H;
+      box('hjul', cx - 0.18 * H, fy, 0.4 * H, 0.76 * H, 0.04 * H, HjulH - 0.62 * H);
+    }
+    cylY('hjul', ox, 0.5 * H, H, cy - W / 2, W, 28);
+    cylY('svart', ox, 0.5 * H, 0.24 * H, cy - W / 2 - 0.08 * H, W + 0.16 * H, 12);
+    box('svart', cx + 0.45 * H, cy - W / 2 - 0.04 * H, 0.92 * H, 0.45 * H, W + 0.08 * H, 0.08 * H);
+  }
+
+  // ---------- BASSÄNG + STEN ----------
+  box('stal', -LX, -LY, FT, d.BasinL, P.BasinB, P.Plat);
+  for (const sy of [-1, 1]) {
+    box('stal', -LX, sy < 0 ? -LY : LY - P.Plat, BF, d.BasinL, P.Plat, P.BasinDjup - P.Plat);
+    box('stal', -(LX + P.Kant), sy < 0 ? -(LY + P.Kant) : LY, P.Ramhojd - P.Plat, d.BasinL + 2 * P.Kant, P.Kant, P.Plat);
+  }
+  for (const sx of [-1, 1]) {
+    box('stal', sx < 0 ? -LX : LX - P.Plat, -IY, BF, P.Plat, P.BasinB - 2 * P.Plat, P.BasinDjup - P.Plat);
+    box('stal', sx < 0 ? -(LX + P.Kant) : LX, -LY, P.Ramhojd - P.Plat, P.Kant, P.BasinB, P.Plat);
+  }
+  box('sten', -IX, -IY, BF, d.BasinL - 2 * P.Plat, P.BasinB - 2 * P.Plat, P.Sten);
+  const sh = P.BasinDjup - P.Plat - P.Sten - 5;
+  for (const sy of [-1, 1]) box('sten', -IX, sy < 0 ? -IY : IY - P.Sten, SF, d.BasinL - 2 * P.Plat, P.Sten, sh);
+  for (const sx of [-1, 1]) box('sten', sx < 0 ? -IX : IX - P.Sten, -SY, SF, P.Sten, P.BasinB - 2 * P.Plat - 2 * P.Sten, sh);
+
+  // ---------- ÖVERRACK ----------
+  groupName = 'tak';
+  for (const sx of [-1, 1]) for (const sy of [-1, 1]) {
+    box('svart', sx < 0 ? -(LX + P.Kant) : LX + P.Kant - P.Stolpe, sy < 0 ? -(LY + P.Kant) : LY + P.Kant - P.Stolpe,
+        P.Ramhojd, P.Stolpe, P.Stolpe, P.OverHojd - P.Ramhojd);
+  }
+  for (const sy of [-1, 1]) box('svart', -(LX + P.Kant - P.Stolpe), sy < 0 ? -(LY + P.Kant) : LY + P.Kant - P.Stolpe, P.OverHojd - P.Stolpe, RL, P.Stolpe, P.Stolpe);
+  for (const sx of [-1, 1]) box('svart', sx < 0 ? -(LX + P.Kant) : LX + P.Kant - P.Stolpe, -(LY + P.Kant - P.Stolpe), P.OverHojd - P.Stolpe, P.Stolpe, RB, P.Stolpe);
+  const ty0 = -(LY + P.Kant - P.Stolpe) + (RB - (NT - 1) * P.RackDelning) / 2;
+  for (let i = 0; i < NT; i++) box('stal', -(LX + P.Kant - P.Stolpe), ty0 + i * P.RackDelning - S / 2, P.OverHojd - P.Stolpe / 2 - S / 2, RL, S, S);
+  // bakvägg
+  const BY = -(LY + P.Kant) + P.Stolpe / 2 - S / 2;
+  for (let i = 0; i < P.BakvaggAntal; i++) box('stal', -(LX + P.Kant - P.Stolpe), BY, P.Ramhojd + 80 + i * P.BakvaggDelning, RL, S, S);
+  // flytande galler
+  const FX0 = -(LX + P.Kant - P.Stolpe) + 20, FB = RL - 40, FY0 = BY + S;
+  for (const y of [FY0, FY0 + P.FlytD - S]) box('stal', FX0, y, P.FlytZ, FB, S, S);
+  for (const x of [FX0, FX0 + FB - S]) box('stal', x, FY0 + S, P.FlytZ, S, P.FlytD - 2 * S, S);
+  const nf = Math.floor((FB - 2 * S - P.GallerDelning / 2) / P.GallerDelning);
+  for (let i = 0; i < nf; i++) box('stal', FX0 + S + P.GallerDelning / 2 + i * P.GallerDelning, FY0 + S, P.FlytZ + S - P.GallerStang, P.GallerStang, P.FlytD - 2 * S, P.GallerStang);
+  for (const x of [FX0, FX0 + FB - S]) box('stal', x, BY, P.FlytZ, S, S * 2, S * 3);
+
+  // ---------- S-KROKAR ----------
+  groupName = 'krokar';
+  const kz = P.OverHojd - P.Stolpe / 2;
+  const kdy = d.KR > 1 ? (NT - 1) * P.RackDelning / (d.KR - 1) : 0;
+  for (let r = 0; r < d.KR; r++) for (let i = 0; i < d.NK; i++) {
+    const kx = -(LX + P.Kant - P.Stolpe) + P.KrokDelning + i * P.KrokDelning;
+    const KY = ty0 + r * kdy;
+    const t = P.KrokD;
+    box('krok', kx, KY + S / 2, kz - S / 2 - t, t, t, S + 2 * t);
+    box('krok', kx, KY - S / 2 - t, kz - S / 2 - t, t, t, S + 2 * t);
+    box('krok', kx, KY - S / 2 - t, kz + S / 2, t, S + 2 * t, t);
+    box('krok', kx, KY - S / 2 - t, kz - P.KrokL, t, t, P.KrokL - S / 2 - t);
+    box('krok', kx, KY - S / 2 - t, kz - P.KrokL - t, t, 40, t);
+    box('krok', kx, KY - S / 2 - t + 40 - t, kz - P.KrokL - t, t, t, 35);
+  }
+
+  // ---------- VEDKORGAR + SVÄNGGALLER ----------
+  const swings = [];
+  for (let v = 0; v < d.NV; v++) {
+    groupName = 'eld';
+    const off = v * d.VK_SPACING;
+    const VX0 = -SX + P.Spel + off, VY0 = -SY + P.Spel;
+    const QX = Math.floor((P.VedkorgB - S) / P.StangDelning) + 1;
+    const QY = Math.floor((P.VedkorgD - S) / P.StangDelning) + 1;
+    for (let i = 0; i < QX; i++) for (const y of [VY0, VY0 + P.VedkorgD - S])
+      cylZ('stal', VX0 + S / 2 + i * (P.VedkorgB - S) / (QX - 1), y + S / 2, S, SF, P.VedkorgH, 8);
+    for (let j = 1; j < QY - 1; j++) for (const x of [VX0, VX0 + P.VedkorgB - S])
+      cylZ('stal', x + S / 2, VY0 + S / 2 + j * (P.VedkorgD - S) / (QY - 1), S, SF, P.VedkorgH, 8);
+    for (let k = 0; k < P.VedkorgRingar; k++) {
+      const zr = SF + P.VedkorgBen + S + k * (P.VedkorgH - P.VedkorgBen - 2 * S) / Math.max(1, P.VedkorgRingar - 1);
+      for (const y of [VY0, VY0 + P.VedkorgD - S]) box('stal', VX0, y, zr, P.VedkorgB, S, S);
+      for (const x of [VX0, VX0 + P.VedkorgB - S]) box('stal', x, VY0 + S, zr, S, P.VedkorgD - 2 * S, S);
+    }
+    const nr = Math.floor((P.VedkorgB - 3 * S) / P.RostDelning) + 1;
+    for (let i = 0; i < nr; i++) box('stal', VX0 + S + i * P.RostDelning, VY0 + S, SF + P.VedkorgBen, S, P.VedkorgD - 2 * S, S);
+    if (P.eld) {
+      for (let i = 0; i < 6; i++) cylY('ved', VX0 + 60 + (i % 3) * 110, SF + P.VedkorgBen + S + 45 + Math.floor(i / 3) * 80, 75, VY0 + 30, P.VedkorgD - 60, 7);
+      for (let i = 0; i < 9; i++) box('glod', VX0 + 20 + (i * 53) % (P.VedkorgB - 60), VY0 + P.VedkorgD + 15 + (i * 37) % 120, SF, 45, 40, 18);
+    }
+    // svänggaller: stång + roterbar arm
+    const PX = VX0 + P.VedkorgB / 2, PYp = VY0 + P.VedkorgD + P.Spel + P.SwingStang / 2;
+    groupName = 'eld';
+    cylZ('svart', PX, PYp, P.SwingStang, SF, P.SwingZ + 220, 16);
+    cylZ('svart', PX, PYp, P.SwingStang + 12, SF + P.SwingZ - 40, 60, 16);
+    swings.push({PX, PYp, v});
+  }
+
+  // ---------- STEKBORD ----------
+  groupName = 'stekbord';
+  const GB = P.StekB, GD = SY - 1.5 * P.Spel, GY0 = -SY + P.Spel, PD = SY - 1.5 * P.Spel, PY0 = P.Spel / 2;
+  for (let n = 0; n < d.N; n++) {
+    const GX0 = -SX + P.Spel + d.NV * 0 + (P.Spel + P.VedkorgB) + n * (P.StekB + P.Spel);
+    for (const lvl of [P.GallerNiva1, P.GallerNiva2]) {
+      const z1 = SF + lvl;
+      for (const y of [GY0, GY0 + GD - S]) box('stal', GX0, y, z1, GB, S, S);
+      for (const x of [GX0, GX0 + GB - S]) box('stal', x, GY0 + S, z1, S, GD - 2 * S, S);
+      const ng = Math.floor((GB - 2 * S - P.GallerDelning / 2) / P.GallerDelning);
+      for (let i = 0; i < ng; i++) box('stal', GX0 + S + P.GallerDelning / 2 + i * P.GallerDelning, GY0 + S, z1 + S - P.GallerStang, P.GallerStang, GD - 2 * S, P.GallerStang);
+    }
+    for (const x of [GX0, GX0 + GB - S]) for (const y of [GY0, GY0 + GD - S]) cylZ('stal', x + S / 2, y + S / 2, S, SF, P.GallerNiva2 + S, 8);
+    box('plancha', GX0, PY0, SF + P.PlanchaH, GB, PD, P.PlanchaT);
+    for (const fx of [GX0 + 30, GX0 + GB - 30]) for (const fy of [PY0 + 30, PY0 + PD - 30]) cylZ('stal', fx, fy, S, SF, P.PlanchaH, 8);
+    if (P.eld) for (let i = 0; i < 7; i++) box('glod', GX0 + 40 + (i * 97) % (GB - 100), GY0 + 40 + (i * 61) % (GD - 90), SF, 60, 50, 22);
+  }
+
+  // ---------- SIDOHYLLA ----------
+  groupName = 'stomme';
+  const HX0 = LX + P.Kant;
+  box('stal', HX0, -P.HyllaD / 2, P.HyllaZ, P.HyllaB, P.HyllaD, 3);
+  for (const y of [-P.HyllaD / 2, P.HyllaD / 2 - S]) box('stal', HX0, y, P.HyllaZ - S, P.HyllaB, S, S);
+  box('stal', HX0 + P.HyllaB - S, -P.HyllaD / 2, P.HyllaZ, S, P.HyllaD, 40);
+
+  // ---------- merge + kanter ----------
+  const wire = P.stil === 'Wireframe';
+  const edges = P.stil !== 'Solid';
+  for (const [gname, mats] of Object.entries(GEO)) {
+    const g = new THREE.Group(); g.name = gname; root.add(g); groups[gname] = g;
+    for (const [m, list] of Object.entries(mats)) {
+      const geo = mergeGeometries(list.map(x => x.index ? x.toNonIndexed() : x));
+      list.forEach(x => x.dispose());
+      if (!wire) {
+        const mesh = new THREE.Mesh(geo, MAT[m]); mesh.castShadow = mesh.receiveShadow = true; g.add(mesh);
+      }
+      if (edges && m !== 'glod') g.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo, 25), wire ? EDGE_WIRE : EDGE));
+    }
+  }
+  // svänggaller som egna roterbara grupper
+  for (const s of swings) {
+    const piv = new THREE.Group(); piv.position.set(-s.PX, 0, s.PYp);
+    const R = P.SwingD / 2, gz = d.SF + P.SwingZ;
+    const parts = [];
+    const tor = new THREE.TorusGeometry(R - S / 2, S / 2, 8, 56); tor.rotateX(Math.PI / 2); tor.translate(0, gz + S / 2, P.SwingArm + R); parts.push(['svart', tor]);
+    const disc = new THREE.CylinderGeometry(R - S, R - S, 6, 48); disc.translate(0, gz + S - 3, P.SwingArm + R); parts.push(['plancha', disc]);
+    const arm = new THREE.BoxGeometry(24, 10, P.SwingArm + 30); arm.translate(0, gz - 5, (P.SwingArm + 30) / 2); parts.push(['svart', arm]);
+    const hdl = new THREE.BoxGeometry(16, S, 120); hdl.translate(0, gz + S / 2, P.SwingArm + 2 * R + 60); parts.push(['svart', hdl]);
+    for (const [m, geo] of parts) {
+      if (!wire) { const me = new THREE.Mesh(geo, MAT[m]); me.castShadow = true; piv.add(me); }
+      if (edges) piv.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo, 25), wire ? EDGE_WIRE : EDGE));
+    }
+    // vänster korg svänger medurs, höger moturs (in mot mitten = positivt)
+    piv.rotation.y = (s.v === 0 ? -1 : 1) * THREE.MathUtils.degToRad(P.svang);
+    groups.eld.add(piv);
+  }
+  floor.visible = !wire;
+  scene.background.set(wire ? '#FFF6DC' : '#FCC222');
+  if (groups.tak) groups.tak.visible = P.tak;
+  if (groups.krokar) groups.krokar.visible = P.krokar && P.tak;
+
+  // ---------- mått ----------
+  if (P.matt) {
+    const lab = (txt, x, y, z, red) => { const e = document.createElement('div'); e.className = 'lbl' + (red ? ' red' : ''); e.textContent = txt; const o = new CSS2DObject(e); o.position.set(x, y, z); root.add(o); };
+    lab(`Längd ${Math.round(d.TotalL)} mm`, 0, P.OverHojd + 90, LY + P.Kant, true);
+    lab(`Djup ${Math.round(P.BasinB + 2 * P.Kant)} mm`, -(LX + P.Kant) - 140, P.Ramhojd + 20, 0, true);
+    lab(`Tak ${P.OverHojd} mm`, LX + P.Kant + 90, P.OverHojd, LY + P.Kant);
+    lab(`Kant ${P.Ramhojd} mm`, LX + P.Kant + 90, P.Ramhojd, LY + P.Kant);
+    for (let n = 0; n < d.N; n++) {
+      const cx = -SX + 2 * P.Spel + P.VedkorgB + n * (P.StekB + P.Spel) + P.StekB / 2;
+      lab(`Stekbord ${n + 1}`, -cx, d.SF + P.GallerNiva2 + 80, 0);
+    }
+  }
+  info(d);
+}
+
+function info(d) {
+  const ng = Math.floor((P.StekB - 2 * P.StangD - P.GallerDelning / 2) / P.GallerDelning);
+  const GD = d.SY - 1.5 * P.Spel;
+  const galler = d.N * 2 * P.StekB * GD / 1e6;
+  const plancha = d.N * P.StekB * (d.SY - 1.5 * P.Spel) / 1e6;
+  const swing = d.NV * Math.PI * (P.SwingD / 2) ** 2 / 1e6;
+  const rows = [
+    ['Stekbord', d.N], ['Vedkorgar + svänggaller', d.NV],
+    ['Bassäng (L × B)', `${Math.round(d.BasinL)} × ${P.BasinB} mm`],
+    ['Total längd (med kant)', `${Math.round(d.TotalL)} mm`],
+    ['Med sidohylla', `${Math.round(d.TotalL + P.HyllaB - P.Kant)} mm`],
+    ['Höjd tak / kant', `${P.OverHojd} / ${P.Ramhojd} mm`],
+    ['Grillgaller (2 nivåer)', `${galler.toFixed(2)} m²`],
+    ['Plancha', `${plancha.toFixed(2)} m²`],
+    ['Svänggaller Ø' + P.SwingD, `${swing.toFixed(2)} m²`],
+    ['S-krokar', `${d.NK * d.KR} st`],
+  ];
+  document.getElementById('info').innerHTML = `<span class="tgl">▴</span><h1>Asado fire table</h1><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table>
+  <div class="sub">En grill som växer med antalet stekbord. Två stekbord eller fler ger en vedkorg med svänggaller i varje ände (som Mill Scale 8 ft). Måtten är kalibrerade mot skanningen och 4 ft-originalet. Preliminärt, inget tillverkningsunderlag.</div>`;
+}
+
+// ===== GUI =====
+const gui = new GUI({title: 'Asado'});
+let needs = true; const rb = () => needs = true;
+const fM = gui.addFolder('Storlek');
+fM.add(P, 'AntalStekbord', 1, 5, 1).name('Antal stekbord').onChange(rb);
+fM.add(P, 'StekB', 450, 900, 10).name('Stekbordsbredd').onChange(rb);
+fM.add(P, 'BasinB', 700, 1200, 2).name('Bassäng djup (B)').onChange(rb);
+fM.add(P, 'BasinDjup', 120, 260, 5).name('Bassäng djup (H)').onChange(rb);
+fM.add(P, 'Ramhojd', 600, 900, 10).name('Kanthöjd').onChange(rb);
+fM.add(P, 'OverHojd', 1400, 2200, 10).name('Takhöjd').onChange(rb);
+const fG = gui.addFolder('Galler & eld');
+fG.add(P, 'GallerNiva1', 60, 250, 5).name('Undre galler').onChange(rb);
+fG.add(P, 'GallerNiva2', 200, 450, 5).name('Övre galler').onChange(rb);
+fG.add(P, 'PlanchaH', 40, 250, 5).name('Plancha höjd').onChange(rb);
+fG.add(P, 'VedkorgB', 300, 600, 10).name('Vedkorg bredd').onChange(rb);
+fG.add(P, 'SwingD', 300, 500, 2).name('Svänggaller Ø').onChange(rb);
+fG.add(P, 'svang', -90, 90, 1).name('Sväng in (°)').onChange(rb);
+const fK = gui.addFolder('Tak & krokar');
+fK.add(P, 'KrokDelning', 60, 250, 5).name('Krokdelning').onChange(rb);
+fK.add(P, 'KrokRader', 1, 6, 1).name('Krokrader').onChange(rb);
+fK.add(P, 'BakvaggAntal', 3, 10, 1).name('Bakväggsstänger').onChange(rb);
+const fV = gui.addFolder('Visa');
+fV.add(P, 'stil', ['Solid + kanter', 'Solid', 'Wireframe']).name('Stil').onChange(rb);
+fV.add(P, 'tak').name('Tak + bakvägg').onChange(rb);
+fV.add(P, 'krokar').name('S-krokar').onChange(rb);
+fV.add(P, 'eld').name('Ved & glöd').onChange(rb);
+fV.add(P, 'matt').name('Mått').onChange(rb);
+const views = {
+  'Snett framifrån': () => view([-1, .55, 1.25]),
+  'Framifrån': () => view([0, .25, 1.6]),
+  'Ovanifrån': () => view([0, 1.9, 0.001]),
+  'Gavel': () => view([1.5, .3, 0]),
+  'Bakifrån': () => view([.6, .55, -1.3]),
+};
+const fC = gui.addFolder('Kameravyer');
+for (const k in views) fC.add(views, k);
+const ex = {
+  'PNG-bild': () => { renderer.render(scene, camera); const a = document.createElement('a'); a.href = renderer.domElement.toDataURL('image/png'); a.download = `asado_${P.AntalStekbord}stekbord.png`; a.click(); },
+  'GLB (3D)': () => new GLTFExporter().parse(root, g => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([g], {type: 'model/gltf-binary'})); a.download = `asado_${P.AntalStekbord}stekbord.glb`; a.click(); }, e => console.error(e), {binary: true}),
+  'Återställ': () => { Object.assign(P, DEF); gui.controllersRecursive().forEach(c => c.updateDisplay()); needs = true; views['Snett framifrån'](); },
+};
+const fE = gui.addFolder('Export'); for (const k in ex) fE.add(ex, k);
+fG.close(); fK.close(); fE.close();
+
+function view(dir) {
+  const d = D();
+  const r = Math.max(d.TotalL + 600, 2200) * 1.9;
+  const t = new THREE.Vector3(0, 900, 0);
+  const v = new THREE.Vector3(...dir).normalize().multiplyScalar(r);
+  camera.position.copy(t).add(v); controls.target.copy(t); controls.update();
+}
+views['Snett framifrån']();
+let lastN = P.AntalStekbord;
+
+addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); labelR.setSize(innerWidth, innerHeight); });
+renderer.setAnimationLoop(() => {
+  if (needs) { needs = false; build(); if (P.AntalStekbord !== lastN) { lastN = P.AntalStekbord; } }
+  controls.update(); renderer.render(scene, camera); labelR.render(scene, camera);
+});
+if(matchMedia('(max-width:700px)').matches) gui.close();
+document.getElementById('info').addEventListener('click',e=>e.currentTarget.classList.toggle('open'));
+window.__P = P; window.__rebuild = () => { needs = false; build(); }; window.__views = views;
+</script>
+</body>
+</html>
