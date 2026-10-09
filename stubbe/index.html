@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>DÄCKTRICKET · Stubbdragning med Hilux · Buttercup</title>
+<meta name="description" content="Interaktiv: så drar en Hilux upp en stubbe med ett reservdäck som hävstång. Ändra hjulets storlek och kedjan och se hur många kg lyft det blir.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Buttercup">
+<meta property="og:title" content="DÄCKTRICKET · Stubbdragning med Hilux">
+<meta property="og:description" content="Ändra hjulets storlek och kedjan och se hur många kg lyft det blir på stubben.">
+<meta property="og:url" content="https://www.buttercup.nu/stubbe/">
+<meta property="og:image" content="https://www.buttercup.nu/stubbe/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.buttercup.nu/stubbe/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+:root{
+  --buttercup:#FCC222; --chili:#C8340A; --oxblood:#8F1A00; --cream:#FFF6DC; --ink:#2A1206;
+  --display:"Anton","Impact",sans-serif; --label:"Barlow Condensed","Arial Narrow",sans-serif; --body:"Barlow",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--buttercup);color:var(--oxblood);font-family:var(--body);font-size:17px;line-height:1.5;overflow-x:hidden;
+  background-image:radial-gradient(rgba(200,52,10,.13) 1.6px,transparent 1.8px);background-size:18px 18px}
+.bc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:var(--chili);color:var(--cream);
+  font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px;position:fixed;top:0;left:0;right:0;z-index:50}
+.bc-bar a{color:var(--cream);text-decoration:none}
+.bc-bar b{font-family:var(--display);font-weight:400;letter-spacing:.04em;font-size:18px;color:var(--buttercup)}
+header{padding:88px 16px 10px;text-align:center}
+.eyebrow{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:15px;margin:0 0 8px}
+h1{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--chili);margin:0;line-height:1;
+  font-size:clamp(56px,13vw,150px);text-shadow:4px 4px 0 var(--oxblood),8px 8px 0 rgba(143,26,0,.25)}
+.sub{font-family:var(--display);text-transform:uppercase;font-size:clamp(17px,3vw,24px);letter-spacing:.04em;margin:16px 0 0}
+main{max-width:1180px;margin:0 auto;padding:16px 16px 40px}
+.panel{background:var(--cream);border:3px solid var(--chili);border-radius:22px;box-shadow:6px 6px 0 var(--chili);padding:20px;position:relative}
+.panel+.panel,.grid2{margin-top:24px}
+.panel h3{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--chili);font-size:clamp(28px,4.5vw,40px);margin:0 0 10px;line-height:1}
+.scene{width:100%;height:auto;display:block;border-radius:14px;background:linear-gradient(#FFF6DC 0%,#FFF6DC 62%,#fde9b8 100%)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.stat{background:#fff;border:2px solid var(--chili);border-radius:14px;padding:10px 12px;text-align:center}
+.stat small{display:block;font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:13px}
+.stat b{display:block;font-family:var(--display);font-weight:400;font-size:clamp(26px,3.6vw,38px);color:var(--chili);line-height:1.1}
+.stat.hero{background:var(--chili);border-color:var(--oxblood);box-shadow:3px 3px 0 var(--oxblood)}
+.stat.hero small,.stat.hero b{color:var(--cream)}
+.stat.hero b{color:var(--buttercup)}
+.stat em{display:block;font-style:normal;font-size:13px;opacity:.85}
+.controls{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 28px;margin-top:18px}
+.ctl label{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:15px}
+.ctl label output{font-family:var(--display);font-weight:400;font-size:22px;color:var(--chili);letter-spacing:.02em}
+.ctl .hint{font-size:13px;opacity:.8;margin-top:2px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:10px;background:#f3d77e;border:2px solid var(--chili);margin:8px 0 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:var(--chili);border:3px solid var(--cream);box-shadow:0 0 0 2px var(--chili);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--chili);border:3px solid var(--cream);box-shadow:0 0 0 2px var(--chili);cursor:pointer}
+.pullrow{display:flex;gap:14px;align-items:center;margin-top:16px}
+.pullrow .ctl{flex:1}
+button.go{font-family:var(--display);font-size:26px;letter-spacing:.04em;background:var(--chili);color:var(--cream);border:3px solid var(--oxblood);border-radius:14px;
+  padding:8px 22px 10px;box-shadow:4px 4px 0 var(--oxblood);cursor:pointer;text-transform:uppercase}
+button.go:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--oxblood)}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.presets button{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:14px;background:#fff;color:var(--chili);
+  border:2px solid var(--chili);border-radius:999px;padding:4px 12px;cursor:pointer}
+.presets button.on{background:var(--chili);color:var(--cream)}
+.forces{display:grid;gap:7px;margin-top:16px}
+.frow{display:grid;grid-template-columns:230px 1fr 92px;gap:10px;align-items:center;font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:15px}
+.frow .bar{height:22px;border-radius:6px;border:2px solid var(--ink);background:#fff;position:relative;overflow:hidden}
+.frow .bar i{position:absolute;left:0;top:0;bottom:0;border-right:2px solid var(--ink)}
+.frow b{font-family:var(--display);font-weight:400;font-size:22px;text-align:right;color:var(--chili)}
+.frow small{display:block;font-family:var(--body);text-transform:none;letter-spacing:0;font-weight:400;font-size:12px;opacity:.85}
+@media (max-width:760px){.frow{grid-template-columns:1fr 70px}.frow .bar{grid-column:1/-1;grid-row:2}}
+.warn{margin-top:12px;font-family:var(--label);font-weight:700;letter-spacing:.04em;font-size:16px;color:var(--oxblood)}
+.warn span{display:inline-block;background:#fff;border:2px dashed var(--chili);border-radius:10px;padding:4px 10px;margin:4px 6px 0 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid2 .panel{margin:0}
+ol.steps{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:10px}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:start}
+ol.steps li::before{content:counter(s);font-family:var(--display);font-size:20px;background:var(--chili);color:var(--cream);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center}
+.note{font-size:14px;opacity:.9}
+.formula{font-family:var(--label);font-weight:700;font-size:20px;letter-spacing:.03em;background:#fff;border:2px solid var(--chili);border-radius:12px;padding:8px 12px;display:inline-block;margin:6px 0}
+footer{background:var(--chili);color:var(--cream);text-align:center;padding:28px 16px calc(28px + env(safe-area-inset-bottom));font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-top:40px}
+footer a{color:var(--buttercup)}
+@media (max-width:760px){
+  .bc-bar{padding:6px 12px;font-size:12px}.bc-bar span{display:none}.bc-bar b{font-size:15px}
+  header{padding-top:74px}
+  .stats{grid-template-columns:1fr 1fr}
+  .controls,.grid2{grid-template-columns:1fr}
+  .panel{padding:14px}
+}
+</style>
+</head>
+<body>
+<div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Gården · verktyg</span><b>Plan B(lommeröd)</b></div>
+
+<header>
+  <p class="eyebrow">Stubbdragning med reservdäck</p>
+  <h1>DÄCKTRICKET</h1>
+  <p class="sub">Hilux + kedja + ett hjul = dubbelt så mycket lyft</p>
+</header>
+
+<main>
+  <section class="panel">
+    <svg class="scene" id="scene" role="img" aria-label="Hilux drar en stubbe med kedja över ett däck"></svg>
+
+    <div class="forces" id="forces"></div>
+    <div class="stats">
+      <div class="stat"><small>Maskinen drar</small><b id="sT">–</b><em>i kedjan vid kulan</em></div>
+      <div class="stat"><small>Utväxling</small><b id="sG">–</b><em>däcket som hävstång</em></div>
+      <div class="stat hero"><small>Lyft på stubben</small><b id="sL">–</b><em id="sK">kedjan vid stubben: –</em></div>
+      <div class="stat"><small>Rakt drag utan däck</small><b id="sD">–</b><em>lyft, resten drar åt sidan</em></div>
+    </div>
+
+    <div class="controls">
+      <div class="ctl"><label for="d">Hjulets diameter <output id="od"></output></label>
+        <input id="d" type="range" min="60" max="170" step="5" value="110">
+        <div class="hint">Hilux-hjul ≈ 80 cm · traktorhjul 120–170 cm</div></div>
+      <div class="ctl"><label for="L">Kedja: stubbe → dragkula <output id="oL"></output></label>
+        <input id="L" type="range" min="2" max="8" step="0.25" value="4">
+        <div class="hint">Avståndet längs marken från stubben till kulan</div></div>
+      <div class="ctl"><label for="T">Dragkraft <output id="oT"></output></label>
+        <input id="T" type="range" min="200" max="2500" step="50" value="1000">
+        <div class="presets"><button type="button" data-t="1000">Hilux · 1 000</button><button type="button" data-t="2000">Lastare / grävare · 2 000</button></div>
+        <div class="hint">Hilux slirar på gräs runt 1 000–1 200 kg. Lastare eller grävare klarar 2 000 kg.</div></div>
+      <div class="ctl"><label for="h">Kedjans höjd på stubben <output id="oh"></output></label>
+        <input id="h" type="range" min="5" max="45" step="5" value="15">
+        <div class="hint">Lågt, nära rothalsen, ger mest lyft</div></div>
+    </div>
+
+    <div class="pullrow">
+      <button class="go" id="go">Dra!</button>
+      <div class="ctl"><label for="p">Dragläge <output id="op"></output></label>
+        <input id="p" type="range" min="0" max="100" step="1" value="0"></div>
+    </div>
+    <div class="warn" id="warn"></div>
+  </section>
+
+  <div class="grid2">
+    <section class="panel">
+      <h3>Så funkar det</h3>
+      <p>Däcket står på högkant mot stubben. Kedjan går från dragkulan, <b>över toppen</b> på däcket och ner till stubbens rothals.</p>
+      <p>När bilen drar vill däcket rulla mot bilen. Då blir <b>marken under däcket vridpunkten</b>, precis som en lös trissa:</p>
+      <ul>
+        <li>Bilen drar i toppen, med en <b>lång hävarm</b>: nästan hela diametern.</li>
+        <li>Stubben hänger i däckets sida, med en <b>kort hävarm</b> nära vridpunkten.</li>
+      </ul>
+      <div class="formula">Kraft vid stubben = bilens drag × lång arm ÷ kort arm</div>
+      <p>Står däcket tätt mot stubben och kedjan sitter lågt går kedjan nästan rakt upp, och då blir det runt <b>×2</b>. Dessutom pekar kraften <b>uppåt</b>, så den lyfter ur rotkakan i stället för att dra stubben åt sidan.</p>
+      <p class="note">De streckade linjerna i bilden är de två hävarmarna. Dra i Dragläge och se hur utväxlingen sjunker när däcket rullar iväg: själva knycket i början gör jobbet.</p>
+    </section>
+    <section class="panel">
+      <h3>Gör så här</h3>
+      <ol class="steps">
+        <li><div>Gräv fram rothalsen lite och lägg kedjan runt stubben, så lågt det går.</div></li>
+        <li><div>Ställ hjulet på högkant tätt mot stubben, i linje mot bilen.</div></li>
+        <li><div>Lägg kedjan över toppen på däcket och fäst i dragkulan med en krok eller schackel.</div></li>
+        <li><div>Låg växel (4L), <b>kör sakta</b>. Ryck aldrig.</div></li>
+        <li><div>När däcket har rullat iväg: flytta tillbaka det mot stubben och ta ett nytt tag.</div></li>
+      </ol>
+      <p class="warn"><span>Stå aldrig i linje med kedjan</span><span>Kedja G80, inte rep</span></p>
+      <p class="note">Dragkroken på en Hilux är byggd för 3,5 t släp, men inte för ryck. Har du en draglöga på ramen är den bättre.</p>
+    </section>
+  </div>
+
+  <section class="panel">
+    <h3>Kätting och snärt</h3>
+    <p>Kätting töjer sig nästan inte alls. Det är bra, för den lagrar ingen energi som kan slå tillbaka om något går av, som ett spänt rep eller en spännrem gör. Men det betyder också att <b>varje ryck går rakt in i kättingen, dragkroken och stubben</b>. Snärten kommer nästan alltid från slack: maskinen hinner få fart innan kättingen sträcks.</p>
+    <ol class="steps">
+      <li><div><b>Sträck kättingen först.</b> Kör fram tills den precis blir spänd och stanna. Inget slack kvar.</div></li>
+      <li><div><b>Öka kraften sakta.</b> Lastare och grävare: dra med armen eller skopan i krypfart, inte genom att köra i den.</div></li>
+      <li><div><b>Lägg en dämpare på kättingen,</b> till exempel en tung filt, en jacka eller en sandsäck på mitten. Brister något faller kättingen ner i stället för att piska.</div></li>
+      <li><div><b>Rätt kätting till rätt del.</b> Biten mellan däcket och stubben bär nästan dubbelt så mycket som biten till maskinen. Se staplarna ovan.</div></li>
+      <li><div><b>Stå utanför.</b> Ingen i linje med kättingen och minst 1,5 kättinglängder åt sidan.</div></li>
+    </ol>
+    <p class="note">Med 2 000 kg drag blir det runt 4 000 kg i kättingen vid stubben. Med 25 % marginal kräver det 13 mm G80 (5,3 t) och en schackel som klarar minst 4,75 t, helst 6,5 t. Fäst i lastarens eller grävarens dragpunkt, aldrig i ett tänder- eller skopskär.</p>
+  </section>
+
+  <section class="panel">
+    <h3>Räknat så här</h3>
+    <p class="note">Statiskt ögonblick, i kilo-kraft (1 kg ≈ 9,8 N). Kedjan antas inte glida på däcket: den greppar i gummit och däcket rullar runt sin markkontakt. Glider kedjan blir utväxlingen lägre, ner mot ×1. Däckets deformation, friktion och rotkakans motstånd är inte med. Dragkulan sitter 58 cm upp, som på en Hilux med dragkrok. Siffrorna visar alltså vad mekaniken ger, inte en garanti för att just din stubbe släpper.</p>
+    <p class="note">Idé från videon “Spare tire stump pulling” av Harold Brakhage (2017), där en Ford Bronco gör samma sak med vinsch. Hiluxen är tecknad med gpt-image.</p>
+  </section>
+</main>
+
+<footer>Däcktricket · <a href="/">buttercup.nu</a></footer>
+
+<script>
+(() => {
+const $=id=>document.getElementById(id), svg=$('scene'), NS='http://www.w3.org/2000/svg';
+// car image: 1761x653 px, 0.3026 cm/px. ball centre 5.265 m from image left, 0.587 m above ground. faces LEFT.
+const CAR={w:5.329,h:1.976,ballX:5.265,ballY:0.587};
+const RS=0.25, HS=0.48;                 // stump radius / height above ground (m)
+const K=100;                            // px per metre
+const fmt=n=>Math.round(n/10)*10, kg=n=>Math.abs(fmt(n)).toLocaleString('sv-SE')+' kg';
+const el=(t,a={},p=svg)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e;};
+const X=x=>x*K, Y=y=>-y*K;
+const rot=(P,C,a)=>{const c=Math.cos(a),s=Math.sin(a);return{x:C.x+(P.x-C.x)*c-(P.y-C.y)*s,y:C.y+(P.x-C.x)*s+(P.y-C.y)*c};};
+function tangent(P,O,R){ // upper tangent point (angle) from external point P to circle
+  const dx=P.x-O.x, dy=P.y-O.y, d=Math.hypot(dx,dy); if(d<=R+1e-6) return null;
+  const g=Math.atan2(dy,dx), b=Math.acos(R/d), a1=g+b, a2=g-b;
+  return Math.sin(a1)>=Math.sin(a2)?a1:a2;
+}
+function solve(D,L,T,ha,p){
+  const R=D/2;
+  // pull progress: stump tips toward the car (left) about its car-side root edge, tyre rolls left, car creeps forward
+  const tilt=p*0.75, hinge={x:-RS-0.12,y:0};
+  const A0={x:-RS,y:ha}, A=rot(A0,hinge,tilt);
+  const roll=p*0.9*R;                               // tyre centre moves left
+  const O={x:-RS-R-roll,y:R}, G={x:O.x,y:0};
+  const B={x:-RS-L-p*0.9,y:CAR.ballY};
+  const aA=tangent(A,O,R), aB=tangent(B,O,R);
+  if(aA==null||aB==null) return null;
+  const nA={x:Math.cos(aA),y:Math.sin(aA)}, nB={x:Math.cos(aB),y:Math.sin(aB)};
+  const PA={x:O.x+R*nA.x,y:O.y+R*nA.y}, PB={x:O.x+R*nB.x,y:O.y+R*nB.y};
+  const armB=R*(1+nB.y), armA=R*(1+nA.y);          // distance from ground contact G to each tangent line
+  const gain=armB/Math.max(armA,1e-3), T2=T*gain;
+  const u={x:PA.x-A.x,y:PA.y-A.y}, ul=Math.hypot(u.x,u.y); u.x/=ul; u.y/=ul;
+  const lift=T2*u.y;
+  const v={x:B.x-A.x,y:B.y-A.y}, vl=Math.hypot(v.x,v.y);
+  const direct=T*Math.max(0,v.y/vl);
+  return {R,O,G,A,B,PA,PB,aA,aB,nA,nB,armA,armB,gain,T2,lift,direct,tilt,hinge,roll,u};
+}
+function chainPath(s){
+  // B -> PB, arc over the top (clockwise in screen = decreasing angle) -> PA -> A
+  const {B,PB,PA,A,R}=s;
+  return `M${X(B.x)} ${Y(B.y)} L${X(PB.x)} ${Y(PB.y)} A${X(R)} ${X(R)} 0 0 1 ${X(PA.x)} ${Y(PA.y)} L${X(A.x)} ${Y(A.y)}`;
+}
+function arrow(x1,y1,x2,y2,col,w){
+  const g=el('g'); el('line',{x1,y1,x2,y2,stroke:col,'stroke-width':w,'stroke-linecap':'round'},g);
+  const a=Math.atan2(y2-y1,x2-x1), h=w*3.2;
+  el('path',{d:`M${x2} ${y2} L${x2-h*Math.cos(a-0.45)} ${y2-h*Math.sin(a-0.45)} L${x2-h*Math.cos(a+0.45)} ${y2-h*Math.sin(a+0.45)}Z`,fill:col},g);
+  return g;
+}
+function draw(){
+  const D=+$('d').value/100, L=+$('L').value, T=+$('T').value, ha=+$('h').value/100, p=+$('p').value/100;
+  $('od').textContent=Math.round(D*100)+' cm'; $('oL').textContent=L.toLocaleString('sv-SE')+' m';
+  $('oT').textContent=kg(T); $('oh').textContent=Math.round(ha*100)+' cm'; $('op').textContent=Math.round(p*100)+' %';
+  const s=solve(D,L,T,ha,p); if(!s) return;
+  // view box: from car front to the right of the stump
+  const xmin=s.B.x-CAR.ballX-0.35, xmax=RS+2.1, ymax=Math.max(2.25,D+0.5), ymin=-1.05;
+  svg.setAttribute('viewBox',`${X(xmin)} ${Y(ymax)} ${X(xmax-xmin)} ${X(ymax-ymin)}`);
+  svg.innerHTML='';
+  // ground + soil cut-away
+  el('rect',{x:X(xmin),y:0,width:X(xmax-xmin),height:X(-ymin),fill:'#9a5a2c'});
+  for(let i=0;i<3;i++) el('rect',{x:X(xmin),y:X(0.28+i*0.26),width:X(xmax-xmin),height:3,fill:'rgba(42,18,6,.12)'});
+  el('rect',{x:X(xmin),y:-6,width:X(xmax-xmin),height:12,fill:'#7fae3a'});
+  el('line',{x1:X(xmin),y1:-6,x2:X(xmax),y2:-6,stroke:'#4f7a1f','stroke-width':3});
+  // car
+  const cx=s.B.x-CAR.ballX;
+  el('image',{href:'img/hilux.webp',x:X(cx),y:Y(CAR.h),width:X(CAR.w),height:X(CAR.h)});
+  // stump + root plate, rotated about hinge
+  const g=el('g',{transform:`rotate(${-s.tilt*180/Math.PI} ${X(s.hinge.x)} ${Y(s.hinge.y)})`});
+  const hole=el('path',{d:`M${X(-RS-0.5)} 0 Q${X(0)} ${X(0.95)} ${X(RS+0.55)} 0Z`,fill:'#5c2f12',opacity:s.tilt>0.02?0.9:0});
+  svg.insertBefore(hole,g);
+  el('path',{d:`M${X(-RS-0.45)} 0 Q${X(-RS-0.3)} ${X(0.55)} ${X(0)} ${X(0.62)} Q${X(RS+0.35)} ${X(0.55)} ${X(RS+0.5)} 0Z`,fill:'#6b3a17',stroke:'#2A1206','stroke-width':3},g);
+  [[-0.2,0.75,-0.55,0.95],[0.05,0.85,-0.05,1.0],[0.2,0.7,0.6,0.9],[-0.05,0.5,-0.5,0.4],[0.15,0.45,0.75,0.35]].forEach(([x1,y1,x2,y2])=>
+    el('path',{d:`M${X(x1)} ${X(y1-0.25)} Q${X((x1+x2)/2)} ${X(y2-0.2)} ${X(x2)} ${X(y2)}`,stroke:'#2A1206','stroke-width':5,fill:'none','stroke-linecap':'round'},g));
+  el('rect',{x:X(-RS),y:Y(HS),width:X(2*RS),height:X(HS)+2,fill:'#8a5a33',stroke:'#2A1206','stroke-width':4,rx:6},g);
+  for(let i=-2;i<=2;i++) el('line',{x1:X(i*0.09),y1:Y(HS-0.04),x2:X(i*0.09+0.02),y2:-4,stroke:'#5b3518','stroke-width':3},g);
+  el('ellipse',{cx:0,cy:Y(HS),rx:X(RS),ry:9,fill:'#e2b77a',stroke:'#2A1206','stroke-width':3},g);
+  // tyre
+  const tg=el('g');
+  el('circle',{cx:X(s.O.x),cy:Y(s.O.y),r:X(s.R),fill:'#1f1a17',stroke:'#2A1206','stroke-width':4},tg);
+  el('circle',{cx:X(s.O.x),cy:Y(s.O.y),r:X(s.R)-7,fill:'none',stroke:'#3b3330','stroke-width':12,'stroke-dasharray':'10 9',
+     transform:`rotate(${s.roll/s.R*180/Math.PI*-1} ${X(s.O.x)} ${Y(s.O.y)})`},tg);
+  el('circle',{cx:X(s.O.x),cy:Y(s.O.y),r:X(s.R*0.55),fill:'#FCC222',stroke:'#C8340A','stroke-width':5},tg);
+  for(let i=0;i<6;i++){const a=i*Math.PI/3 - s.roll/s.R;
+    el('line',{x1:X(s.O.x),y1:Y(s.O.y),x2:X(s.O.x+Math.cos(a)*s.R*0.5),y2:Y(s.O.y+Math.sin(a)*s.R*0.5),stroke:'#C8340A','stroke-width':5},tg);}
+  el('circle',{cx:X(s.O.x),cy:Y(s.O.y),r:X(s.R*0.12),fill:'#C8340A'},tg);
+  // lever arms (from ground contact G, perpendicular to the two chain lines)
+  const foot=(P,n)=>({x:s.G.x+(P.x-s.G.x)*0+ (n.x)*s.R*(1+n.y)*0, y:0});
+  const armLine=(n,col,lbl)=>{ // perpendicular from G to tangent line: foot = G + n*arm
+    const arm=s.R*(1+n.y), F={x:s.G.x+n.x*arm,y:s.G.y+n.y*arm};
+    el('line',{x1:X(s.G.x),y1:Y(s.G.y),x2:X(F.x),y2:Y(F.y),stroke:col,'stroke-width':4,'stroke-dasharray':'8 7'});
+    el('circle',{cx:X(F.x),cy:Y(F.y),r:6,fill:col});
+  };
+  armLine(s.nB,'#2A1206'); armLine(s.nA,'#C8340A');
+  el('circle',{cx:X(s.G.x),cy:Y(s.G.y),r:9,fill:'#FCC222',stroke:'#2A1206','stroke-width':3});
+  // chain: dark base + link pattern
+  const d=chainPath(s);
+  el('path',{d,fill:'none',stroke:'#2A1206','stroke-width':11,'stroke-linejoin':'round','stroke-linecap':'round'});
+  el('path',{d,fill:'none',stroke:'#b9b2a8','stroke-width':6,'stroke-dasharray':'12 6','stroke-linejoin':'round'});
+  el('circle',{cx:X(s.B.x),cy:Y(s.B.y),r:8,fill:'#d9d4cc',stroke:'#2A1206','stroke-width':3});
+  // force arrows
+  // arrows scaled by force: length and width grow with kg
+  const W=f=>4+12*Math.min(1,f/5000), Lr=f=>0.25+0.85*Math.min(1,f/5000);
+  const side=Math.max(0,s.T2*(-s.u.x))+0;                         // horizontal pull on stump toward the car
+  // stump: lift (up) and side pull (left) components + resulting chain force
+  const ax=s.A.x+0.18, ay=s.A.y;
+  svg.appendChild(arrow(X(ax),Y(ay),X(ax),Y(ay+Lr(s.lift)),'#C8340A',W(s.lift)));
+  if(side>30) svg.appendChild(arrow(X(s.A.x),Y(ay-0.08),X(s.A.x-Lr(side)),Y(ay-0.08),'#8F1A00',W(side)*0.8));
+  const tL=el('text',{x:X(ax+0.12),y:Y(ay+Lr(s.lift)-0.05),'font-family':'Anton','font-size':38,fill:'#C8340A',stroke:'#FFF6DC','stroke-width':7,'paint-order':'stroke'}); tL.textContent=kg(s.lift)+' lyft';
+  // machine pull at the ball
+  const bx=s.B.x, by=s.B.y+0.42;
+  svg.appendChild(arrow(X(bx+0.1),Y(by),X(bx+0.1-Lr(T)),Y(by),'#2A1206',W(T)));
+  const tT=el('text',{x:X(bx+0.2),y:Y(by-0.03),'font-family':'Anton','font-size':32,fill:'#2A1206',stroke:'#FFF6DC','stroke-width':6,'paint-order':'stroke'}); tT.textContent=kg(T)+' drag';
+  // ground reaction under the tyre: sum of the two chain pulls on the tyre, pushed into the ground
+  const toB={x:s.B.x-s.PB.x,y:s.B.y-s.PB.y}, lb=Math.hypot(toB.x,toB.y), toA={x:s.A.x-s.PA.x,y:s.A.y-s.PA.y}, la=Math.hypot(toA.x,toA.y);
+  const Fx=T*toB.x/lb+s.T2*toA.x/la, Fy=T*toB.y/lb+s.T2*toA.y/la;   // net chain force on tyre
+  const down=Math.max(0,-Fy);
+  svg.appendChild(arrow(X(s.G.x),Y(0.05+Lr(down)*0.55),X(s.G.x),Y(0.02),'#2A1206',W(down)*0.8));
+  const tG=el('text',{x:X(s.G.x-0.08),y:X(0.32),'text-anchor':'end','font-family':'Anton','font-size':26,fill:'#FFF6DC'}); tG.textContent=kg(down)+' ner i marken';
+  s.side=side; s.down=down;
+  // stats
+  // force bars
+  const rows=[['Maskinen drar','i kättingen till kulan',T,'#2A1206'],
+              ['Kättingen vid stubben','nästan dubbelt: välj grövre kätting här',s.T2,'#8F1A00'],
+              ['Lyft på stubben','den del som drar rakt upp',s.lift,'#C8340A'],
+              ['Sidodrag på stubben','den del som drar mot maskinen',s.side,'#e07b39'],
+              ['Däcket trycker ner','i marken under däcket',s.down,'#6b3a17']];
+  const mx=Math.max(5000,...rows.map(r=>r[2]));
+  $('forces').innerHTML=rows.map(([a,b,v,c])=>`<div class="frow"><div>${a}<small>${b}</small></div><div class="bar"><i style="width:${(v/mx*100).toFixed(1)}%;background:${c}"></i></div><b>${kg(v)}</b></div>`).join('');
+  document.querySelectorAll('.presets button').forEach(b=>b.classList.toggle('on',+b.dataset.t===T));
+  $('sT').textContent=kg(T); $('sG').textContent='×'+s.gain.toFixed(2).replace('.',',');
+  $('sL').textContent=kg(s.lift); $('sK').textContent='kedjan vid stubben: '+kg(s.T2); $('sD').textContent=kg(s.direct);
+  // G80 working load limits; 25 % margin for uneven pulls
+  const chains=[[6,1120],[7,1500],[8,2000],[10,3150],[13,5300],[16,8000]];
+  const pick=f=>chains.find(c=>c[1]>=f*1.25);
+  const cS=pick(s.T2), cM=pick(T);
+  const w=[];
+  w.push(cS?`Kätting däck → stubbe: minst ${cS[0]} mm G80 (${cS[1].toLocaleString('sv-SE')} kg)`:'Över 6 t vid stubben: tänk om');
+  w.push(cM?`Kätting maskin → däck: minst ${cM[0]} mm G80`:'');
+  if(T>1150) w.push('Över ca 1 200 kg slirar en Hilux på gräs: ta lastaren eller grävaren');
+  if(s.gain<1.3&&p<0.05) w.push('Låg utväxling: sänk kedjan på stubben eller ta större hjul');
+  $('warn').innerHTML=w.filter(Boolean).map(x=>`<span>${x}</span>`).join('');
+}
+['d','L','T','h','p'].forEach(id=>$(id).addEventListener('input',draw));
+document.querySelectorAll('.presets button').forEach(b=>b.addEventListener('click',()=>{$('T').value=b.dataset.t;draw();}));
+let anim=null;
+$('go').addEventListener('click',()=>{
+  if(anim) cancelAnimationFrame(anim);
+  const t0=performance.now(), from=0;
+  const step=now=>{const t=Math.min(1,(now-t0)/2600); const e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+    $('p').value=Math.round(from+e*100); draw(); if(t<1) anim=requestAnimationFrame(step); else setTimeout(()=>{$('p').value=0;draw();},1400);};
+  anim=requestAnimationFrame(step);
+});
+const img=new Image(); img.onload=draw; img.src='img/hilux.webp'; draw();
+})();
+</script>
+</body>
+</html>
