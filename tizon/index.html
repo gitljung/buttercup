@@ -67,6 +67,7 @@
   <button id="play">▶ Spräng</button>
   <span>Ihop</span><input id="ex" type="range" min="0" max="1" step="0.001" value="0"><span>Isär</span>
   <label class="cb"><input type="checkbox" id="sk" checked>Skruv</label>
+  <label class="cb"><input type="checkbox" id="wf">Wireframe</label>
   <label class="cb" id="grl"><input type="checkbox" id="gr">Galler</label>
 </div>
 <div id="tip"></div>
@@ -222,6 +223,28 @@ document.getElementById('sk').onchange = e => screws.forEach(s => s.visible = e.
 document.getElementById('gr').onchange = e => parts.forEach(p => {
   if(p.userData.c.startsWith('Grillgaller')) p.visible = e.target.checked;
   else if(p.userData.c==='Spishall') p.visible = !e.target.checked; });
+
+// wireframe: kantlinjer som barn till varje del (följer med i sprängningen)
+const WIRE = new THREE.LineBasicMaterial({color:0xC8340A});
+const WIRE_S = new THREE.LineBasicMaterial({color:0x8F1A00, transparent:true, opacity:.55});
+const GHOST = new THREE.MeshBasicMaterial({color:0xFFF6DC, transparent:true, opacity:0, depthWrite:false});
+let wired = false;
+function setWire(on){
+  wired = on;
+  for(const m of all){
+    if(!m.userData.edges){
+      const l = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry, 25), screws.includes(m) ? WIRE_S : WIRE);
+      l.raycast = () => {}; l.visible = false; m.add(l); m.userData.edges = l;
+      m.userData.solid = m.userData.base;
+    }
+    m.userData.edges.visible = on;
+    m.userData.base = on ? GHOST : m.userData.solid;
+    if(m !== hov) m.material = m.userData.base;
+    m.castShadow = !on;
+  }
+  ground.visible = !on;
+}
+document.getElementById('wf').onchange = e => setWire(e.target.checked);
 
 // hover-namn
 const rc = new THREE.Raycaster(), mp = new THREE.Vector2(), tip = document.getElementById('tip'); let hov = null;
