@@ -34,11 +34,15 @@
   #ctl label.cb{display:flex;align-items:center;gap:4px;cursor:pointer}
   #tip{position:absolute;pointer-events:none;z-index:11;background:#2a2620;color:#FFF6DC;padding:4px 9px;border-radius:8px;font-size:13px;display:none;white-space:nowrap}
   #tip i{color:#FCC222;font-style:normal;font-size:11px;display:block;letter-spacing:.06em;text-transform:uppercase}
+  #ver{position:absolute;top:52px;right:12px;z-index:10;display:flex;background:#FFF6DC;border:3px solid #2a2620;border-radius:999px;box-shadow:5px 5px 0 #C8340A;overflow:hidden;font-family:"Barlow Condensed";font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:15px}
+  #ver a{padding:6px 16px;color:#2a2620;text-decoration:none}
+  #ver a.on{background:#2a2620;color:#FCC222}
   #load{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:Anton;font-size:28px;color:#C8340A;z-index:5}
   @media (max-width:700px){
     .bc-bar{padding:6px 12px;font-size:12px}.bc-bar span{display:none}.bc-bar b{font-size:15px}
     #info{top:44px;left:8px;right:8px;max-width:none;padding:8px 12px;font-size:12px;border-radius:14px}
     #info h1{font-size:20px}#info .more{display:none}
+    #info{right:118px}#ver{top:44px;right:8px;font-size:13px}#ver a{padding:5px 11px}
     #ctl{gap:7px;padding:5px 10px;font-size:12px;bottom:calc(10px + env(safe-area-inset-bottom));max-width:calc(100vw - 24px);box-sizing:border-box}
     #ctl > span{display:none}
     #ctl button{padding:5px 10px}
@@ -49,12 +53,13 @@
 </head>
 <body>
 <div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Yamay · Tizón</span><b>Plan B(lommeröd)</b></div>
+<div id="ver"><a href="?v=1" id="v1">v1</a><a href="?v=2" id="v2">v2 bänk</a></div>
 <div id="info">
-  <div class="eb">Yamay · vedspis · utkast</div>
-  <h1>Tizón</h1>
-  <div>Eldstad i <b>3 mm varmvalsad plåt</b>, bockad och skruvad med M6 ISO 7380, som grillen.</div>
+  <div class="eb" id="eb">Yamay · vedspis · utkast</div>
+  <h1 id="h1">Tizón</h1>
+  <div id="lead">Eldstad i <b>3 mm varmvalsad plåt</b>, bockad och skruvad med M6 ISO 7380, som grillen.</div>
   <div class="more">
-    <div style="margin-top:6px">Häll 10 mm med två spisringar · rost 8 mm · utdragbar asklåda · vermikulit 25 mm · rökstos Ø150 · stativ i 40×40-vinkel.</div>
+    <div style="margin-top:6px" id="spec">Häll 10 mm med två spisringar · rost 8 mm · utdragbar asklåda · vermikulit 25 mm · rökstos Ø150 · stativ i 40×40-vinkel.</div>
     <div class="small">Håll muspekaren över en del för namnet. Dra för att snurra, scrolla för att zooma. Modellen är ett utkast ur Fusion och inget tillverkningsunderlag.</div>
   </div>
 </div>
@@ -62,7 +67,7 @@
   <button id="play">▶ Spräng</button>
   <span>Ihop</span><input id="ex" type="range" min="0" max="1" step="0.001" value="0"><span>Isär</span>
   <label class="cb"><input type="checkbox" id="sk" checked>Skruv</label>
-  <label class="cb"><input type="checkbox" id="gr">Galler</label>
+  <label class="cb" id="grl"><input type="checkbox" id="gr">Galler</label>
 </div>
 <div id="tip"></div>
 <div id="load">Laddar…</div>
@@ -81,10 +86,10 @@ const pm = new THREE.PMREMGenerator(R); scene.environment = pm.fromScene(new Roo
 const cam = new THREE.PerspectiveCamera(32, innerWidth/innerHeight, 10, 20000);
 const ctr = new OrbitControls(cam, R.domElement); ctr.enableDamping = true;
 const sun = new THREE.DirectionalLight(0xfff1d6, 1.6); sun.position.set(-900,-700,1800); sun.castShadow = true;
-sun.shadow.mapSize.set(2048,2048); Object.assign(sun.shadow.camera,{left:-1200,right:1200,top:1200,bottom:-1200,near:100,far:5000});
+sun.shadow.mapSize.set(2048,2048); Object.assign(sun.shadow.camera,{left:-1800,right:1800,top:1800,bottom:-1800,near:100,far:6000});
 scene.add(sun, new THREE.HemisphereLight(0xffffff,0xd9c9a0,.5));
 THREE.Object3D.DEFAULT_UP.set(0,0,1); cam.up.set(0,0,1);
-const ground = new THREE.Mesh(new THREE.CircleGeometry(1400,64), new THREE.ShadowMaterial({opacity:.18}));
+const ground = new THREE.Mesh(new THREE.CircleGeometry(2200,64), new THREE.ShadowMaterial({opacity:.18}));
 ground.receiveShadow = true; scene.add(ground);
 
 const MAT = {
@@ -93,11 +98,40 @@ const MAT = {
   'Vermikulit':          new THREE.MeshStandardMaterial({color:0xd6c4a0, metalness:0, roughness:.95}),
   'Rostfritt A4':        new THREE.MeshStandardMaterial({color:0xc9ccd0, metalness:.9, roughness:.3}),
   'Fjaderstal':          new THREE.MeshStandardMaterial({color:0xdadde0, metalness:1, roughness:.2}),
+  'Rostfritt borstat':   new THREE.MeshStandardMaterial({color:0xbfc3c8, metalness:.85, roughness:.38}),
 };
 const HL = new THREE.MeshStandardMaterial({color:0xFCC222, metalness:.2, roughness:.5, emissive:0x553300});
 
 // sprängriktning per del (mm) + fönster i animationen [start, slut]
+function off2(c, n){
+  let x=0,y=0,z=0,w=[0,1];
+  if(c==='Eldstad'){ z=260; w=[.15,.55];
+    if(n.startsWith('Gavel fram')){ y=-280; w=[.45,.85]; }
+    else if(n.startsWith('Gavel bak')){ y=260; w=[.45,.85]; }
+    else if(n.startsWith('Skena')){ z+=200; w=[.4,.8]; }
+    else if(n.startsWith('Rost ')){ z+=330; w=[.4,.85]; }
+    else if(n.startsWith('Vermikulit sida vanster')){ z+=420; x=-40; w=[.45,.95]; }
+    else if(n.startsWith('Vermikulit sida hoger')){ z+=420; x=40; w=[.45,.95]; }
+    else if(n.startsWith('Vermikulit bak')){ z+=420; y=40; w=[.45,.95]; }
+  } else if(c==='Spishall'){ z=900; w=[0,.45];
+    if(n.startsWith('Styrtapp')){ z-=100; }
+    else if(n.startsWith('Spisring')){ z+=100; w=[.05,.55]; if(n.includes('lock')) { z+=90; w=[.1,.6]; } }
+    else if(n.startsWith('Rokrors')){ z+=260; w=[.1,.6]; }
+  } else if(c==='Dorr'){ z=260; y=-600; w=[.3,.8];
+    if(n.startsWith('Luftspjall')||n.startsWith('Namnskylt')){ y-=70; w=[.5,1]; }
+    if(n.startsWith('Dorrregel')||n.startsWith('Spiralfjader')){ y-=110; w=[.5,1]; }
+    if(n.startsWith('Gangjarnstapp')){ z+=90; w=[.55,1]; }
+  } else if(c==='Asklador'){ z=260; y=-820; w=[.2,.7];
+    if(n.includes('ovre')){ z+=120; }
+    if(n.includes('handtag')){ y-=90; w=[.5,1]; }
+  } else if(c==='Grill och plancha'){ z=340; w=[.1,.55];
+    if(n.startsWith('Plancha')){ z=420; }
+    if(n.includes('handtag')||n.includes('dragstang')||n.includes('spiralfjader')){ z+=70; w=[.4,.9]; }
+  } else if(c==='Bank'){ if(n.startsWith('Vedhylla')){ z=-80; w=[.5,.9]; } }
+  return {v:new THREE.Vector3(x,y,z), w};
+}
 function off(c, n){
+  if(V2) return off2(c, n);
   let x=0,y=0,z=0,w=[0,1];
   if(c==='Eldstad'){ z=220; w=[.15,.55];
     if(n.startsWith('Gavel fram')){ y=-260; w=[.45,.85]; }
@@ -122,14 +156,24 @@ function off(c, n){
   return {v:new THREE.Vector3(x,y,z), w};
 }
 const ease = t => t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
-const NICE = {'Dorr':'Dörr','Spishall':'Spishäll','Asklada':'Asklåda','Stativ':'Stativ','Eldstad':'Eldstad','Skruvar och muttrar':'Skruv','Grillgaller (alternativ)':'Grillgaller (alternativ)'};
+const NICE = {'Asklador':'Asklådor','Bank':'Bänk','Grill och plancha':'Grill och plancha','Dorr':'Dörr','Spishall':'Spishäll','Asklada':'Asklåda','Stativ':'Stativ','Eldstad':'Eldstad','Skruvar och muttrar':'Skruv','Grillgaller (alternativ)':'Grillgaller (alternativ)'};
 const nice = s => s.replace(/Dorr/g,'Dörr').replace(/dorr/g,'dörr').replace(/Gangjarn/g,'Gångjärn').replace(/Rokrors/g,'Rökrörs').replace(/hoger/g,'höger').replace(/vanster/g,'vänster')
-  .replace(/Spishall/g,'Spishäll').replace(/Asklada/g,'Asklåda').replace(/Askladans/g,'Asklådans').replace(/Luftspjall/g,'Luftspjäll').replace(/Overliggare/g,'Överliggare').replace(/rundstal/g,'rundstål').replace(/Fjader/g,'Fjäder').replace(/ \(\d+\)$/,'');
+  .replace(/Spishall/g,'Spishäll').replace(/Asklada/g,'Asklåda').replace(/Askladans/g,'Asklådans').replace(/Luftspjall/g,'Luftspjäll').replace(/Overliggare/g,'Överliggare').replace(/rundstal/g,'rundstål').replace(/Fjader/g,'Fjäder').replace(/fjader/g,'fjäder').replace(/Langbalk/g,'Långbalk').replace(/Gavelplat/g,'Gavelplåt').replace(/ovre/g,'övre').replace(/Hog dorr/g,'Hög dörr').replace(/hog dorr/g,'hög dörr').replace(/dragstang/g,'dragstång').replace(/flatjarn/g,'flatjärn').replace(/hallen/g,'hällen').replace(/Namnskylt/g,'Namnskylt').replace(/rostfri/g,'rostfri').replace(/ \(\d+\)$/,'');
 
+const V2 = new URLSearchParams(location.search).get('v') !== '1';
+document.getElementById(V2?'v2':'v1').classList.add('on');
+if(V2){
+  document.getElementById('eb').textContent = 'Yamay · vedspis · v2 som La Lumbre';
+  document.getElementById('h1').textContent = 'Tizón v2';
+  document.getElementById('lead').innerHTML = 'Spisen i ena änden av en <b>1,3 m lång bänk</b> med grillgaller och rostfri plancha bredvid.';
+  document.getElementById('spec').innerHTML = 'Hög dörr över hela fronten · rost i flatjärn 8×25 · två rostfria asklådor · rökrör Ø150 upp genom hällen · ringar Ø240 + Ø200 · 1 350 × 712 × 1 240 mm, ca 143 kg.';
+  document.getElementById('grl').style.display = 'none';
+  document.title = 'Yamay Tizón v2 – bänk med grill och plancha · Buttercup.nu';
+}
 const parts = []; const screws = []; const pick = [];
-const data = await (await fetch('mesh.json')).json();
+const data = await (await fetch(V2 ? 'mesh_v2.json' : 'mesh.json')).json();
 for(const b of data){
-  if(b.n.startsWith('Spiralfjader')) continue;              // ligger i origo i källan
+  if(!V2 && b.n.startsWith('Spiralfjader')) continue;        // v1: ligger i origo i källan
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(b.v,3)); g.setIndex(b.i);
   g.computeVertexNormals(); g.computeBoundingBox();
