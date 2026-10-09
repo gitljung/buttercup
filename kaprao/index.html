@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>WOK DA FOK SÅS · Buttercup</title>
-<meta name="description" content="Chef Mo's all-purpose stir-fry sauce. Sju flaskor, en kastrull, fem portioner.">
+<title>KRA FAKKIN PAO · KAP RAO SÅS · Buttercup</title>
+<meta name="description" content="Chef Mo's pad kra pao-sås. Wok da fok-såsen, vitlök, chili och en STOR näve holy basil. Fryses platt, håller ett år.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Buttercup">
-<meta property="og:title" content="WOK DA FOK SÅS">
-<meta property="og:description" content="Chef Mo's all-purpose stir-fry sauce. Sju flaskor, en kastrull, fem portioner.">
-<meta property="og:url" content="https://www.buttercup.nu/wokdafok/">
-<meta property="og:image" content="https://www.buttercup.nu/wokdafok/og.jpg">
+<meta property="og:title" content="KRA FAKKIN PAO · KAP RAO SÅS">
+<meta property="og:description" content="Chef Mo's pad kra pao-sås. Wok da fok-såsen, vitlök, chili och en STOR näve holy basil. Fryses platt, håller ett år.">
+<meta property="og:url" content="https://www.buttercup.nu/kaprao/">
+<meta property="og:image" content="https://www.buttercup.nu/kaprao/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://www.buttercup.nu/wokdafok/og.jpg">
+<meta name="twitter:image" content="https://www.buttercup.nu/kaprao/og.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@700&family=Barlow:wght@400;500&family=Kanit:wght@500&display=swap">
@@ -42,6 +42,7 @@ h1{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var
   font-size:clamp(64px,17vw,190px);letter-spacing:.01em;
   text-shadow:4px 4px 0 var(--oxblood),8px 8px 0 rgba(143,26,0,.25)}
 h1 .row{display:block;white-space:nowrap}
+.recipe{display:inline-block;margin:22px 0 0;font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;font-size:clamp(26px,4.4vw,40px);line-height:1;color:var(--cream);background:var(--chili);padding:10px 22px 12px;border-radius:14px;box-shadow:4px 4px 0 var(--oxblood);transform:rotate(-2deg)}
 .sub{font-family:var(--display);text-transform:uppercase;color:var(--oxblood);font-size:clamp(18px,3.2vw,26px);letter-spacing:.04em;margin:22px 0 0}
 .badge{display:inline-block;margin-top:16px;background:var(--chili);color:var(--cream);font-family:var(--label);font-weight:700;letter-spacing:.1em;
   text-transform:uppercase;font-size:14px;padding:6px 14px;border-radius:999px;transform:rotate(-3deg)}
@@ -49,6 +50,8 @@ h1 .row{display:block;white-space:nowrap}
 /* ---------- INGREDIENT CARDS ---------- */
 main{max-width:1120px;margin:0 auto;padding:12px 16px 40px}
 .grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px}
+@media (min-width:1000px){.grid{grid-template-columns:repeat(5,1fr);gap:18px}.stage{height:240px}}
+.steps a{color:var(--chili);font-weight:500}
 .card{position:relative;background:var(--cream);border:3px solid var(--chili);border-radius:22px;padding:18px 16px 18px;
   box-shadow:6px 6px 0 var(--chili);text-align:center;overflow:hidden}
 .card::before{content:"";position:absolute;inset:7px;border:2px dashed rgba(200,52,10,.45);border-radius:16px;pointer-events:none}
@@ -84,6 +87,7 @@ footer a{color:var(--buttercup)}
   header{padding-top:78px}
   .stage{height:190px;margin-top:30px}
   .grid{grid-template-columns:1fr 1fr;gap:14px}
+  .card:last-child{grid-column:1/-1}
   .card{padding:12px 8px 14px;border-radius:18px;box-shadow:4px 4px 0 var(--chili)}
   .num{font-size:20px;top:12px;left:12px}.amt{font-size:16px;padding:6px 8px 7px;top:9px;right:9px}
   .card h2{font-size:20px}.card p{font-size:11px}.card p.th{font-size:15px}
@@ -94,10 +98,11 @@ footer a{color:var(--buttercup)}
 <div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Kök · sås</span><b>Plan B(lommeröd)</b></div>
 
 <header>
-  <p class="eyebrow">Chef Mo's “million dollar” all-purpose stir-fry sauce</p>
-  <h1><span class="row">WOK DA</span><span class="row">FOK SÅS</span></h1>
-  <p class="sub">7 flaskor · 1 kastrull · 5 portioner</p>
-  <span class="badge">Håller 3 mån i kyl · 1 år i frys</span>
+  <p class="eyebrow">Chef Mo's pad kra pao-sås · steg 2 efter <a href="/wokdafok/" style="color:inherit">wok da fok</a></p>
+  <h1><span class="row">KRA FAKKIN</span><span class="row">PAO</span></h1>
+  <p class="recipe">KAP RAO SÅS</p>
+  <p class="sub">1 wok · 5 ingredienser · 5 portioner</p>
+  <span class="badge">Fryses platt · håller 1 år</span>
 </header>
 
 <main>
@@ -107,33 +112,32 @@ footer a{color:var(--buttercup)}
     <section class="panel">
       <h3>Så gör du</h3>
       <ol class="steps">
-        <li><div>Häll allt i en kastrull: de fem såserna, sockret och vattnet.</div></li>
-        <li><div>Rör om och låt sjuda tills sockret har löst sig och såsen tjocknat lite. <span class="note">(Chef Mo visar inte tid eller värme, så det här är en bedömning.)</span></div></li>
-        <li><div>Låt svalna och häll på flaska eller burk.</div></li>
-        <li><div>Wokbasen är klar. Till pad kra pao: fräs vitlök och chili, häll i såsen och vänd ner en <b>stor</b> näve thaibasilika. “Don't be stingy!”</div></li>
+        <li><div>Fräs den hackade vitlöken i woken tills den börjar dofta. “We wanna bring out the aroma of the garlic.”</div></li>
+        <li><div>Lägg i grön och röd chili och låt dem rosta långsamt på lägre värme.</div></li>
+        <li><div>Häll i en sats <a href="/wokdafok/">wok da fok-sås</a>.</div></li>
+        <li><div>Vänd ner en <b>stor</b> näve holy basil (กะเพรา). “Don't be stingy with the holy basil!”</div></li>
+        <li><div>Låt det bara koka upp, tills bladen har sjunkit ihop. Sedan är såsen klar.</div></li>
       </ol>
     </section>
     <section class="panel">
       <h3>Förvaring</h3>
-      <div class="store"><span>Kyl · 3 mån</span><span>Frys · 1 år</span></div>
-      <p>Tips från Chef Mo: frys pad kra pao-såsen platt i en påse och bryt av en bit när suget kommer.</p>
-      <p class="note">Källa: Chef Mo (More Thai, Toronto), “My Million Dollar Stir Fry Sauce Recipe Reveal!” och del 2, aug 2026.
-        <b>Fisksåsen</b> visar hon men mäter aldrig. 2 msk är vår uppskattning. Illustrationerna är tecknade med gpt-image efter originalflaskorna.</p>
+      <div class="store"><span>Frys · 1 år</span></div>
+      <p>Häll upp i påse eller burk och frys <b>platt</b>. När suget kommer bryter du av en bit och slänger i woken med kyckling eller fläsk. Chef Mo: “But I'm sure you're not gonna last it for a year.”</p>
+      <p class="note">Källa: Chef Mo (More Thai, Toronto), “How To Make Our Pad Kra Pao From Scratch! Part 1”, 25 aug 2026.
+        Bara vitlöken (ca 10 klyftor) och den röda chilin (2 msk) får mängder. Grön chili och holy basil har streckade lappar: där anger hon ingen mängd, så de är våra uppskattningar. Hon nämner ingen olja. Illustrationerna är tecknade med gpt-image efter bilder ur videon.</p>
     </section>
   </div>
 </main>
 
-<footer>Wok da fok · <a href="/">buttercup.nu</a></footer>
+<footer>Kap rao · <a href="/wokdafok/">wok da fok-såsen</a> · <a href="/">buttercup.nu</a></footer>
 
 <script>
 const ING=[
-  ["goldenmountain","Golden Mountain","Seasoning sauce","3 msk",false,"ซอสปรุงรสภูเขาทอง"],
-  ["oyster","Ostronsås","Oyster sauce","3 msk",false,"น้ำมันหอย"],
-  ["thinsoy","Ljus soja","Thin soy sauce","3 msk",false,"ซีอิ๊วขาว"],
-  ["fish","Fisksås","Megachef","~2 msk",true,"น้ำปลา"],
-  ["darksweet","Mörk söt soja","Black sweet soy","2 msk",false,"ซีอิ๊วดำหวาน"],
-  ["sugar","Vitt socker","Strösocker","100 g",false,"น้ำตาลทราย"],
-  ["water","Vatten","Kranvatten duger","100 ml",false,"น้ำ"],
+  ["wokdafok","Wok da fok sås","1 sats · 5 portioner","1 sats",false,"ซอสผัดอเนกประสงค์"],
+  ["garlic","Vitlök","Finhackad","~10 klyftor",false,"กระเทียม"],
+  ["greenchili","Grön chili","Bird's eye, finhackad","efter smak",true,"พริกขี้หนูเขียว"],
+  ["redchili","Röd chili","Bird's eye · starkast","2 msk",false,"พริกขี้หนูแดง"],
+  ["basil","Holy basil","Bai kra pao · massor","STOR näve",true,"กะเพรา"],
 ];
 const g=document.getElementById('grid');
 ING.forEach(([k,name,sub,amt,est,th],i)=>{
