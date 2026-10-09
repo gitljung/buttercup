@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WOK DA CASH · Buttercup</title>
+<meta name="description" content="WOK DA CASH: Hugos pad met mamuang. Såsen (nam prik pao, ostronsås, ljus soja, Golden Mountain, palmsocker, 2 msk av varje) och hela rätten med friterad kyckling, chili och cashew.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Buttercup">
+<meta property="og:title" content="WOK DA CASH">
+<meta property="og:description" content="WOK DA CASH: Hugos pad met mamuang. Såsen (nam prik pao, ostronsås, ljus soja, Golden Mountain, palmsocker, 2 msk av varje) och hela rätten med friterad kyckling, chili och cashew.">
+<meta property="og:url" content="https://www.buttercup.nu/wokdacash/">
+<meta property="og:image" content="https://www.buttercup.nu/wokdacash/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.buttercup.nu/wokdacash/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@700&family=Barlow:wght@400;500&family=Kanit:wght@500&display=swap">
+<style>
+:root{
+  --buttercup:#FCC222; --chili:#C8340A; --oxblood:#8F1A00; --cream:#FFF6DC; --ink:#2A1206;
+  --display:"Anton","Impact","Haettenschweiler",sans-serif;
+  --label:"Barlow Condensed","Arial Narrow",sans-serif;
+  --body:"Barlow",system-ui,sans-serif;
+  --ease:cubic-bezier(.45,0,.2,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--buttercup);color:var(--oxblood);font-family:var(--body);font-size:17px;line-height:1.5;overflow-x:hidden;
+  background-image:radial-gradient(rgba(200,52,10,.13) 1.6px,transparent 1.8px);background-size:18px 18px}
+.bc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:var(--chili);color:var(--cream);
+  font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px;position:fixed;top:0;left:0;right:0;z-index:50}
+.bc-bar a{color:var(--cream);text-decoration:none}.bc-bar a:hover{text-decoration:underline}
+.bc-bar b{font-family:var(--display);font-weight:400;letter-spacing:.04em;font-size:18px;color:var(--buttercup)}
+
+/* ---------- HERO ---------- */
+header{padding:96px 16px 24px;text-align:center;position:relative}
+.eyebrow{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:15px;color:var(--oxblood);margin:0 0 10px}
+h1{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--chili);margin:0;line-height:1.02;
+  font-size:clamp(64px,17vw,190px);letter-spacing:.01em;
+  text-shadow:4px 4px 0 var(--oxblood),8px 8px 0 rgba(143,26,0,.25)}
+h1 .row{display:block;white-space:nowrap}
+.recipe{display:inline-block;margin:22px 0 0;font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;font-size:clamp(26px,4.4vw,40px);line-height:1;color:var(--cream);background:var(--chili);padding:10px 22px 12px;border-radius:14px;box-shadow:4px 4px 0 var(--oxblood);transform:rotate(-2deg)}
+.sub{font-family:var(--display);text-transform:uppercase;color:var(--oxblood);font-size:clamp(18px,3.2vw,26px);letter-spacing:.04em;margin:22px 0 0}
+.badge{display:inline-block;margin-top:16px;background:var(--chili);color:var(--cream);font-family:var(--label);font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;font-size:14px;padding:6px 14px;border-radius:999px;transform:rotate(-3deg)}
+
+/* ---------- INGREDIENT CARDS ---------- */
+main{max-width:1120px;margin:0 auto;padding:12px 16px 40px}
+.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px}
+@media (min-width:1000px){.grid{grid-template-columns:repeat(5,1fr);gap:18px}.stage{height:240px}}
+.steps a{color:var(--chili);font-weight:500}
+.card{position:relative;background:var(--cream);border:3px solid var(--chili);border-radius:22px;padding:18px 16px 18px;
+  box-shadow:6px 6px 0 var(--chili);text-align:center;overflow:hidden}
+.card::before{content:"";position:absolute;inset:7px;border:2px dashed rgba(200,52,10,.45);border-radius:16px;pointer-events:none}
+.num{position:absolute;top:14px;left:16px;font-family:var(--display);color:var(--chili);font-size:28px;line-height:1;z-index:2}
+.amt{position:absolute;top:12px;right:12px;z-index:3;background:var(--chili);color:var(--cream);font-family:var(--display);
+  font-size:22px;line-height:1;padding:8px 12px 9px;border-radius:12px;transform:rotate(4deg);box-shadow:3px 3px 0 var(--oxblood)}
+.amt.est{background:var(--buttercup);color:var(--chili);border:2px dashed var(--chili);box-shadow:3px 3px 0 var(--chili)}
+.stage{position:relative;height:290px;display:flex;align-items:flex-end;justify-content:center;margin:18px 0 6px}
+.stage img{height:100%;width:auto;max-width:80%;object-fit:contain;filter:drop-shadow(4px 5px 0 rgba(143,26,0,.18))}
+
+.card h2{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--chili);font-size:28px;line-height:1;margin:6px 0 4px;letter-spacing:.02em}
+.card p{margin:0;font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:14px;color:var(--oxblood)}
+.card p.th{font-family:"Kanit",var(--label);font-weight:500;text-transform:none;letter-spacing:0;font-size:19px;color:var(--chili);margin-top:6px;line-height:1.25}
+
+/* ---------- METHOD ---------- */
+.panel{background:var(--cream);border:3px solid var(--chili);border-radius:22px;box-shadow:6px 6px 0 var(--chili);padding:26px 24px;margin:34px 0 0;position:relative}
+.panel h3{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--chili);font-size:clamp(30px,5vw,44px);margin:0 0 12px;line-height:1}
+.dish{margin-top:22px}
+.phase+.phase{margin-top:18px}
+.phase h4{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:17px;color:var(--oxblood);margin:0 0 10px;border-bottom:2px dashed rgba(200,52,10,.45);padding-bottom:6px}
+.steps{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:12px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start}
+.steps li::before{content:counter(s);font-family:var(--display);font-size:22px;background:var(--chili);color:var(--cream);border-radius:50%;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+.store{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+.store span{font-family:var(--display);text-transform:uppercase;font-size:20px;background:var(--buttercup);color:var(--chili);border:3px solid var(--chili);
+  border-radius:14px;padding:8px 14px;letter-spacing:.03em}
+.note{font-size:15px;color:var(--oxblood);opacity:.9}
+.note a{color:var(--chili)}
+footer{background:var(--chili);color:var(--cream);text-align:center;padding:28px 16px calc(28px + env(safe-area-inset-bottom));font-family:var(--label);
+  font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-top:40px}
+footer a{color:var(--buttercup)}
+@media (max-width:700px){
+  .bc-bar{padding:6px 12px;font-size:12px}.bc-bar span{display:none}.bc-bar b{font-size:15px}
+  header{padding-top:78px}
+  .stage{height:190px;margin-top:30px}
+  .grid{grid-template-columns:1fr 1fr;gap:14px}
+  .card:last-child{grid-column:1/-1}
+  .card{padding:12px 8px 14px;border-radius:18px;box-shadow:4px 4px 0 var(--chili)}
+  .num{font-size:20px;top:12px;left:12px}.amt{font-size:16px;padding:6px 8px 7px;top:9px;right:9px}
+  .card h2{font-size:20px}.card p{font-size:11px}.card p.th{font-size:15px}
+}
+</style>
+</head>
+<body>
+<div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Kök · sås</span><b>Plan B(lommeröd)</b></div>
+
+<header>
+  <p class="eyebrow">Chicken cashew · <span lang="th" style="font-family:Kanit,sans-serif;letter-spacing:0;font-weight:500">ไก่ผัดเม็ดมะม่วงหิมพานต์</span></p>
+  <h1><span class="row">WOK DA</span><span class="row">CASH</span></h1>
+  <p class="recipe">PAD MET MAMUANG</p>
+  <p class="sub">Såsen: 5 ingredienser · 2 msk av varje</p>
+  <span class="badge">Nam prik pao: Chua Hah Seng</span>
+</header>
+
+<main>
+  <ul class="grid" id="grid"></ul>
+
+  <div class="two">
+    <section class="panel">
+      <h3>Såsen</h3>
+      <ol class="steps">
+        <li><div>Rör ihop nam prik pao, ostronsås, ljus soja och Golden Mountain i en skål.</div></li>
+        <li><div>Hacka eller riv palmsockret fint och rör tills det har löst sig. Går det trögt kan du värma försiktigt.</div></li>
+      </ol>
+    </section>
+    <section class="panel">
+      <h3>Om såsen</h3>
+      <div class="store"><span>≈ 150 ml</span><span>2+2+2+2+2</span></div>
+      <p>Nam prik pao ger rostad sötma och färg, Golden Mountain och soja ger sälta, palmsocker rundar av. Hugos favorit är Chua Hah Seng (ฉั่วฮะเส็ง) i den blå burken.</p>
+      <p class="note">Recept: Hugo. Mängden räcker ungefär till en wok med kyckling. Illustrationerna är tecknade med gpt-image efter originalförpackningarna.</p>
+    </section>
+  </div>
+
+  <section class="panel dish">
+    <h3>Så gör du rätten</h3>
+    <div class="phase"><h4>1 · Förbered</h4>
+      <ol class="steps">
+        <li><div>Skär röd, grön och gul paprika, silverlök och vårlök i ganska stora bitar.</div></li>
+        <li><div>Skär kycklingen i munsbitar. Blanda med en matsked eller två ljus soja och lika mycket Maizena.</div></li>
+        <li><div>Skär upp torkad chili.</div></li>
+      </ol></div>
+    <div class="phase"><h4>2 · Fritera, i tur och ordning</h4>
+      <ol class="steps">
+        <li><div><b>Kycklingen</b> tills den är gyllene. Lyft upp.</div></li>
+        <li><div><b>Den torkade chilin</b> i samma olja tills den får färg. Bränn den inte!</div></li>
+        <li><div><b>En näve cashewnötter</b> tills de är gyllene. Bränn inte dem heller.</div></li>
+      </ol></div>
+    <div class="phase"><h4>3 · Woka</h4>
+      <ol class="steps">
+        <li><div>Woka grönsakerna på högsta värme, gärna med flammor, så de får fin <b>wok hei</b> (rökig wokdoft).</div></li>
+        <li><div>Slå i den friterade kycklingen, den rostade chilin och såsen. Woka några kast.</div></li>
+        <li><div>Sist cashewnötterna. Några kast till, sedan servera direkt.</div></li>
+      </ol></div>
+  </section>
+</main>
+
+<footer>Wok da cash · <a href="/kaprao/">kra fakkin pao</a> · <a href="/wokdafok/">wok da fok</a> · <a href="/">buttercup.nu</a></footer>
+
+<script>
+const ING=[
+  ["namprikpao","Nam prik pao","Chua Hah Seng","2 msk",false,"น้ำพริกเผา"],
+  ["oyster","Ostronsås","Oyster sauce","2 msk",false,"น้ำมันหอย"],
+  ["thinsoy","Ljus soja","Light soy","2 msk",false,"ซีอิ๊วขาว"],
+  ["goldenmountain","Golden Mountain","Seasoning sauce","2 msk",false,"ซอสปรุงรสภูเขาทอง"],
+  ["palmsugar","Palmsocker","Palm sugar","2 msk",false,"น้ำตาลปี๊บ"],
+];
+const g=document.getElementById('grid');
+ING.forEach(([k,name,sub,amt,est,th],i)=>{
+  g.insertAdjacentHTML('beforeend',
+   `<li class="card" data-k="${k}">
+      <span class="num">${String(i+1).padStart(2,'0')}</span>
+      <span class="amt${est?' est':''}" title="${est?'Uppskattning, Chef Mo anger ingen mängd':''}">${amt}</span>
+      <div class="stage">
+        <img src="img/${k}.webp" alt="${name}" width="520" height="780" loading="${i<4?'eager':'lazy'}">
+      </div>
+      <h2>${name}</h2><p>${sub}</p><p class="th" lang="th">${th}</p>
+    </li>`);
+});
+
+</script>
+</body>
+</html>
