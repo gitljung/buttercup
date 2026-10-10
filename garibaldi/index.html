@@ -33,6 +33,8 @@
   .bc-bar{position:fixed;top:0;left:0;right:0;z-index:2000001;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:#C8340A;color:#FFF6DC;font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px}
   .bc-bar a{color:#FFF6DC;text-decoration:none}
   .bc-bar a:hover{text-decoration:underline}
+  .bc-bar a.firepit{background:#FCC222;color:#3a1408;font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.06em;font-size:15px;padding:3px 12px;border-radius:14px;box-shadow:2px 2px 0 #3a1408;white-space:nowrap}
+  .bc-bar a.firepit:hover{text-decoration:none;background:#FFF6DC}
   .bc-bar b{font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.04em;font-size:18px;color:#FCC222}
   #info .tgl{display:none}
   #load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font:700 16px "Barlow Condensed",sans-serif;letter-spacing:.1em;color:#C8340A;pointer-events:none}
@@ -40,6 +42,7 @@
     .bc-bar{padding:6px 12px;font-size:12px;gap:8px}
     .bc-bar span{display:none}
     .bc-bar b{font-size:15px}
+    .bc-bar a.firepit{font-size:13px;padding:2px 9px}
     #info{position:fixed;top:auto;left:8px;bottom:calc(8px + env(safe-area-inset-bottom));max-width:min(260px,calc(100vw - 16px));
           padding:8px 12px;font-size:12px;line-height:1.4;border-radius:14px;box-shadow:3px 3px 0 #C8340A;cursor:pointer;max-height:45vh;overflow:auto}
     #info h1{font-size:15px;margin:0 0 3px;padding-right:18px}
@@ -61,7 +64,7 @@
 </script>
 </head>
 <body>
-<div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Projekt · Garibaldi</span><b>Plan B(lommeröd)</b></div>
+<div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Projekt · Garibaldi</span><a class="firepit" href="/garibaldi/eldstad/">🔥 THE FIRE PIT →</a><b>Plan B(lommeröd)</b></div>
 <div id="info">
   <span class="tgl">▴</span>
   <h1>Garibaldi · stallet</h1>
