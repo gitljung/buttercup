@@ -32,6 +32,31 @@ canvas{display:block}
 .dim{font:600 12px 'Barlow Condensed',sans-serif;color:#fff;background:rgba(200,50,26,.92);padding:1px 5px;border-radius:3px;white-space:nowrap;pointer-events:none}
 .lil-gui{--background-color:#FFF6DC;--text-color:#3a1408;--title-background-color:#C8321A;--title-text-color:#FFF6DC;--widget-color:#efe0b4;--hover-color:#e7d39a;--focus-color:#e0c983;--number-color:#C8321A;--string-color:#7a2a12;--font-family:Barlow,system-ui,sans-serif;--font-size:12px;--width:270px}
 #chips{display:none}
+#hist{position:fixed;inset:0;z-index:3000001;background:rgba(20,10,5,.55);display:none;align-items:center;justify-content:center;font-family:Barlow,system-ui,sans-serif}
+#hist.on{display:flex}
+#hist .card{background:#FFF6DC;border:2px solid #C8321A;border-radius:10px;width:min(460px,94vw);max-height:84vh;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,.5);color:#3a1408}
+#hist .hd{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#C8321A;color:#FFF6DC;border-radius:7px 7px 0 0}
+#hist .hd b{font:400 20px Anton,Impact,sans-serif;letter-spacing:.05em}
+#hist .hd button{background:none;border:0;color:#FFF6DC;font-size:24px;line-height:1;cursor:pointer}
+#hist .act{display:flex;gap:8px;padding:10px 14px;flex-wrap:wrap;border-bottom:1px dashed #C8321A}
+#hist .act button,#hist .row button{border:1.5px solid #C8321A;background:#FCC222;color:#3a1408;font:700 14px 'Barlow Condensed',sans-serif;border-radius:16px;padding:6px 12px;cursor:pointer}
+#hist .act button.main{background:#C8321A;color:#FFF6DC}
+#hist .list{overflow-y:auto;padding:6px 14px 12px;-webkit-overflow-scrolling:touch}
+#hist .row{border-bottom:1px solid #ecd9a8;padding:9px 0;display:grid;grid-template-columns:1fr auto;gap:4px 8px;align-items:center}
+#hist .row.cur{background:#fbe9b0;margin:0 -14px;padding:9px 14px}
+#hist .nm{font-weight:600;font-size:15px}
+#hist .meta{font-size:12px;color:#7a5a45;grid-column:1}
+#hist .diff{font-size:12px;color:#7a2a12;grid-column:1/3}
+#hist .btns{grid-row:1/3;grid-column:2;display:flex;gap:5px}
+#hist .row button{padding:4px 9px;font-size:13px;background:#FFF6DC}
+#hist .row button.ld{background:#C8321A;color:#FFF6DC}
+#hist .empty{padding:18px 0;text-align:center;color:#7a5a45}
+#hist .foot{font-size:11px;color:#7a5a45;padding:8px 14px;border-top:1px dashed #C8321A}
+#saveFab{position:fixed;left:12px;bottom:14px;z-index:25;display:flex;gap:6px}
+#saveFab button{border:2px solid #C8321A;background:#C8321A;color:#FFF6DC;font:700 15px 'Barlow Condensed',sans-serif;letter-spacing:.04em;border-radius:20px;padding:8px 15px;box-shadow:0 3px 12px rgba(0,0,0,.4);cursor:pointer}
+#saveFab button.alt{background:#FFF6DC;color:#3a1408}
+#dirty{display:inline-block;width:8px;height:8px;border-radius:50%;background:#FCC222;margin-left:6px;vertical-align:middle;visibility:hidden}
+@media (max-width:700px){#saveFab{display:none}}
 @media (max-width:700px){
  /* info: liten flik upptill, fälls ut på tryck */
  #info{left:8px;right:8px;width:auto;top:calc(var(--top,0px) + 8px);bottom:auto;max-height:50vh;overflow:auto;font-size:13px;padding:7px 10px}
@@ -76,6 +101,11 @@ canvas{display:block}
 <div id="info"><button id="tgl">info</button><h1>GARIBALDI · ELDSTADEN</h1><div class="sub">Spisvägg som scenfond · skiss i 3D</div><div id="stats"></div>
 <div class="note">Skissmått – ingen bygghandling. Rummet: förslagshandling 2024 + Hugos mått (takfot 2,99 m). Loft, tak och detaljer uppskattade. Dra för att snurra, scrolla för att zooma.</div></div>
 <div id="chips"></div>
+<div id="saveFab"><button id="fabSave">💾 Spara version<span id="dirty"></span></button><button id="fabHist" class="alt">Historik</button></div>
+<div id="hist"><div class="card"><div class="hd"><b>VERSIONER</b><button id="histX" aria-label="Stäng">×</button></div>
+<div class="act"><button class="main" id="hSave">💾 Spara nuvarande</button><button id="hLink">🔗 Kopiera länk</button><button id="hReset">↺ Standard</button></div>
+<div class="list" id="hList"></div>
+<div class="foot">Versionerna sparas i den här webbläsaren (telefon och dator har var sin lista). Använd 🔗 länk eller .md-export för att flytta en version mellan enheter.</div></div></div>
 <script type="module">
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
@@ -566,7 +596,7 @@ function build(){
 
 // ---------- GUI ----------
 const gui=new GUI({title:'Eldstadsväggen'});
-let needsBuild=true;const nb=()=>{needsBuild=true;};
+let needsBuild=true;const nb=()=>{needsBuild=true;if(typeof autosave==='function')autosave();};
 gui.add(P,'preset',Object.keys(PRESETS)).name('Förinställning').onChange(v=>{const keep=v;Object.assign(P,JSON.parse(JSON.stringify(DEFAULTS)),PRESETS[v]);P.preset=keep;gui.controllersRecursive().forEach(c=>c.updateDisplay());nb();});
 const fW=gui.addFolder('Spisvägg');
 fW.add(P,'wallMat',WALL_MATS).name('Material').onChange(nb);
@@ -746,6 +776,76 @@ const io={
 };
 for(const k in io)fE.add(io,k);
 fE.close();
+
+// ---------- versioner / autospar / länk ----------
+const VKEY='garibaldi-eldstad-versioner-v1',CKEY='garibaldi-eldstad-aktuell-v1';
+const SKIP=new Set(['preset']);
+const NICE={};gui.controllersRecursive().forEach(c=>{if(c.object===P)NICE[c.property]=c._name.replace(/ \((m|°)\)/,'');});
+function diffFromDefaults(o=P){const d={};for(const k in o){if(SKIP.has(k)||!(k in DEFAULTS))continue;if(JSON.stringify(o[k])!==JSON.stringify(DEFAULTS[k]))d[k]=o[k];}return d;}
+function applyCfg(cfg){const base=JSON.parse(JSON.stringify(DEFAULTS));for(const k in cfg)if(k in base&&typeof cfg[k]===typeof base[k])base[k]=cfg[k];
+  const keepPreset=P.preset;Object.assign(P,base);P.preset=cfg.preset&&cfg.preset in PRESETS?cfg.preset:keepPreset;
+  gui.controllersRecursive().forEach(c=>c.updateDisplay());nb();}
+const loadV=()=>{try{return JSON.parse(localStorage.getItem(VKEY))||[];}catch(e){return [];}};
+const storeV=v=>{try{localStorage.setItem(VKEY,JSON.stringify(v));return true;}catch(e){toast('Kunde inte spara (lagringen full?)');return false;}};
+let currentId=null,lastSavedJSON=null;
+function fmtVal(k,v){if(typeof v==='boolean')return v?'på':'av';if(typeof v==='number'){if(k==='pitch'||k==='doorAng')return v+'°';if(['doors','shelves','hookN','glassPct'].includes(k))return String(v);return String(+v.toFixed(2)).replace('.',',')+' m';}return v;}
+function describe(a,b){const out=[];const keys=new Set([...Object.keys(a),...Object.keys(b)]);
+  for(const k of keys){if(SKIP.has(k))continue;const va=k in a?a[k]:DEFAULTS[k],vb=k in b?b[k]:DEFAULTS[k];if(JSON.stringify(va)!==JSON.stringify(vb))out.push(`${NICE[k]||k}: ${fmtVal(k,va)} → ${fmtVal(k,vb)}`);}
+  return out;}
+function saveVersion(askName=true){
+  const v=loadV(),cfg=diffFromDefaults(),n=v.length+1;
+  const def=`Version ${n}`;let name=def;
+  if(askName){const r=prompt('Namn på versionen (t.ex. "högre rökplåt"):',def);if(r===null)return;name=r.trim()||def;}
+  const d=derived||{};
+  const entry={id:Date.now().toString(36),name,ts:new Date().toISOString(),preset:P.preset,cfg,
+    sum:`Spis ${fmt(d.fpW||P.fpW)} · öppning ${fmt(d.openH||P.openH)} · ${P.wallMat.toLowerCase()} · ${P.floor.toLowerCase()}`};
+  v.push(entry);if(storeV(v)){currentId=entry.id;lastSavedJSON=JSON.stringify(cfg);markDirty();toast(`Sparad: ${name}`);renderHist();}
+}
+function renderHist(){
+  const v=loadV(),L=document.getElementById('hList');
+  if(!v.length){L.innerHTML='<div class="empty">Inga sparade versioner än.<br>Tryck 💾 för att spara den du tittar på.</div>';return;}
+  L.innerHTML='';
+  for(let i=v.length-1;i>=0;i--){const e=v[i],prev=i>0?v[i-1].cfg:{};const ch=describe(prev,e.cfg);
+    const r=document.createElement('div');r.className='row'+(e.id===currentId?' cur':'');
+    const dt=new Date(e.ts);
+    r.innerHTML=`<div class="nm"></div><div class="btns"><button class="ld">Visa</button><button class="nmb" title="Byt namn">✎</button><button class="dl" title="Ladda ner .md">⬇</button><button class="rm" title="Ta bort">🗑</button></div>
+      <div class="meta"></div><div class="diff"></div>`;
+    r.querySelector('.nm').textContent=e.name+(e.id===currentId?' · visas nu':'');
+    r.querySelector('.meta').textContent=`${dt.toLocaleDateString('sv-SE')} ${dt.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'})} · ${e.sum}`;
+    r.querySelector('.diff').textContent=i===0?(Object.keys(e.cfg).length?`Ändrat från standard: ${describe({},e.cfg).slice(0,4).join(' · ')}${describe({},e.cfg).length>4?' …':''}`:'Standardinställningar'):(ch.length?`Ändrat sedan förra: ${ch.slice(0,4).join(' · ')}${ch.length>4?` (+${ch.length-4})`:''}`:'Inga ändringar mot förra');
+    r.querySelector('.ld').onclick=()=>{applyCfg({...e.cfg,preset:e.preset});currentId=e.id;lastSavedJSON=JSON.stringify(e.cfg);markDirty();renderHist();toast(`Visar: ${e.name}`);if(mq.matches)document.getElementById('hist').classList.remove('on');};
+    r.querySelector('.nmb').onclick=()=>{const n=prompt('Nytt namn:',e.name);if(n&&n.trim()){const all=loadV();all[i].name=n.trim();storeV(all);renderHist();}};
+    r.querySelector('.dl').onclick=()=>{const keep=JSON.stringify(P);applyCfg({...e.cfg,preset:e.preset});build();const md=settingsMD().replace('# Garibaldi – eldstadsväggen: inställningar',`# Garibaldi – eldstadsväggen: ${e.name}`);applyCfg(JSON.parse(keep));
+      download(`garibaldi_eldstad_${e.name.replace(/[^\wåäöÅÄÖ-]+/g,'_')}.md`,md,'text/markdown');};
+    r.querySelector('.rm').onclick=()=>{if(!confirm(`Ta bort "${e.name}"?`))return;const all=loadV();all.splice(i,1);storeV(all);if(currentId===e.id)currentId=null;markDirty();renderHist();};
+    L.appendChild(r);}
+}
+function openHist(){renderHist();document.getElementById('hist').classList.add('on');}
+function markDirty(){const dirty=JSON.stringify(diffFromDefaults())!==lastSavedJSON;document.getElementById('dirty').style.visibility=dirty&&lastSavedJSON!==null?'visible':'hidden';
+  const cb=document.getElementById('chipSave');if(cb)cb.textContent=dirty&&lastSavedJSON!==null?'💾 Spara •':'💾 Spara';}
+function shareLink(){const cfg=diffFromDefaults();cfg.preset=P.preset;const enc=btoa(unescape(encodeURIComponent(JSON.stringify(cfg)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  return location.href.split('#')[0].split('?')[0]+'#c='+enc;}
+async function copyLink(){const u=shareLink();try{await navigator.clipboard.writeText(u);toast('Länk kopierad – öppnar exakt den här versionen');}catch(e){prompt('Kopiera länken:',u);}}
+document.getElementById('fabSave').onclick=()=>saveVersion();
+document.getElementById('fabHist').onclick=openHist;
+document.getElementById('hSave').onclick=()=>saveVersion();
+document.getElementById('hLink').onclick=copyLink;
+document.getElementById('hReset').onclick=()=>{if(confirm('Återställ till standardinställningarna? (sparade versioner finns kvar)')){applyCfg({preset:Object.keys(PRESETS)[0]});currentId=null;markDirty();renderHist();}};
+document.getElementById('histX').onclick=()=>document.getElementById('hist').classList.remove('on');
+document.getElementById('hist').onclick=e=>{if(e.target.id==='hist')e.target.classList.remove('on');};
+addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='s'){e.preventDefault();saveVersion();}if(e.key==='Escape')document.getElementById('hist').classList.remove('on');});
+const fH=gui.addFolder('Versioner');
+const vh={'💾 Spara version':()=>saveVersion(),'Visa historik':openHist,'🔗 Kopiera länk':copyLink};
+for(const k in vh)fH.add(vh,k);
+// start: länk > senaste autospar > standard
+{let start=null;const m=location.hash.match(/#c=([\w-]+)/);
+  if(m){try{start=JSON.parse(decodeURIComponent(escape(atob(m[1].replace(/-/g,'+').replace(/_/g,'/')))));toast('Version från länk');}catch(e){}}
+  if(!start){try{start=JSON.parse(localStorage.getItem(CKEY));}catch(e){}}
+  if(start)applyCfg(start);
+  const v=loadV();if(v.length){const last=v[v.length-1];if(JSON.stringify(last.cfg)===JSON.stringify(diffFromDefaults())){currentId=last.id;}lastSavedJSON=JSON.stringify(last.cfg);}
+}
+let autoT=null;var autosave=function(){clearTimeout(autoT);autoT=setTimeout(()=>{try{const c=diffFromDefaults();c.preset=P.preset;localStorage.setItem(CKEY,JSON.stringify(c));}catch(e){}markDirty();},400);};
+window.__versions={saveVersion,loadV,openHist,shareLink,applyCfg,diffFromDefaults};
 document.getElementById('tgl').onclick=()=>{const i=document.getElementById('info');i.classList.toggle('min');document.getElementById('tgl').textContent=i.classList.contains('min')?'Mått ▾':'Stäng ▴';};
 
 // ---------- mobil ----------
@@ -786,7 +886,10 @@ if(mq.matches){
   tog('Mått',()=>{P.dims=!P.dims;},()=>P.dims);
   tog('Person',()=>{P.person=!P.person;},()=>P.person);
   {const opts=['Vildsvin på spett','Vildsvin hängande','Inget'],lab={'Vildsvin på spett':'Vildsvin: spett','Vildsvin hängande':'Vildsvin: krok','Inget':'Vildsvin: av'};const b=document.createElement('button');const up=()=>{b.textContent=lab[P.meat];b.classList.toggle('on',P.meat!=='Inget');};up();b.onclick=()=>{P.meat=opts[(opts.indexOf(P.meat)+1)%3];up();gui.controllersRecursive().forEach(c=>c.updateDisplay());nb();};chips.appendChild(b);}
-  {const b=document.createElement('button');b.textContent='Spara inställningar ⬇';b.onclick=()=>io['Spara inställningar (.md)']();chips.appendChild(b);}
+  {const b=document.createElement('button');b.id='chipSave';b.className='on';b.textContent='💾 Spara';b.onclick=()=>saveVersion();chips.insertBefore(b,chips.firstChild);
+   const h=document.createElement('button');h.textContent='Historik';h.onclick=openHist;chips.insertBefore(h,b.nextSibling);
+   const sp=document.createElement('span');sp.className='sep';chips.insertBefore(sp,h.nextSibling);
+   const x=document.createElement('button');x.textContent='Export .md ⬇';x.onclick=()=>io['Spara inställningar (.md)']();chips.appendChild(x);}
   new ResizeObserver(layout).observe(gui.domElement);
   labelR.domElement.style.zIndex='1';
 }
@@ -797,7 +900,7 @@ setView([1.5,1.8,10.5],[0,1.5,0]);
 buildTextures();buildMaterials();
 const clock=new THREE.Clock();
 function loop(){requestAnimationFrame(loop);
-  if(needsBuild){needsBuild=false;build();window.__ok=true;}
+  if(needsBuild){needsBuild=false;build();window.__ok=true;autosave();}
   const t=clock.getElapsedTime();
   for(const sp of flames){const f=sp.userData.f;const s=1+0.16*Math.sin(t*7.3+f.ph)+0.09*Math.sin(t*13.1+f.ph*2.1);
     sp.scale.set(f.w*(0.9+0.12*Math.sin(t*5+f.ph)),f.h*s,1);sp.position.set(f.x+0.02*Math.sin(t*3+f.ph),f.y+f.h*s/2,f.z);}
@@ -805,7 +908,7 @@ function loop(){requestAnimationFrame(loop);
   controls.update();renderer.render(scene,camera);labelR.render(scene,camera);}
 loop();
 addEventListener('resize',layout);
-window.__settingsMD=settingsMD;window.__P=P;window.__rebuild=()=>build();window.__views=views;window.__three={THREE,scene,renderer,camera,controls,root};window.__derived=()=>derived;
+window.__settingsMD=settingsMD;window.__P=P;window.__rebuild=()=>{nb();};window.__views=views;window.__three={THREE,scene,renderer,camera,controls,root};window.__derived=()=>derived;
 </script>
 </body>
 </html>
