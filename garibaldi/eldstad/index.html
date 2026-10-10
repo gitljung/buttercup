@@ -143,6 +143,9 @@ const P = {
   // visa
   person: true, dims: true, evening: true,
 };
+const OLD_DEFAULTS = JSON.parse(JSON.stringify(P)); // bas för versioner sparade före 2026-10-10 kväll
+// Standard = Hugos "Version 3" (2026-10-10)
+Object.assign(P,{"preset": "v11 – puts, plåt, betong", "HW": 15, "eave": 2.99, "flat": 6.4, "pitch": 33, "hallLen": 21, "showRoom": true, "floor": "Slipad betong med patina", "loft": true, "loftH": 3.25, "loftOver": -0.05, "wallMat": "Kalkputs varmgrå", "W": 6.55, "H": 3, "wallToTop": false, "T": 1.2, "PD": 3, "G": 1.7, "gapFull": true, "gapH": 2.3, "wings": true, "backMat": "Mörk korrugerad plåt", "backToTop": true, "backH": 3, "fpW": 2.15, "openH": 1.8, "sill": 0.35, "border": 0.12, "protrude": 0.08, "FD": 1.05, "fpX": 0, "doors": 2, "doorAng": 39, "glass": true, "glassPct": 62, "rivets": true, "fire": true, "chimney": "Murad stock", "pipeD": 0.6, "stackW": 1.8, "woodSide": "Båda", "woodW": 1.4, "woodH": 1.9, "woodBot": 0.3, "woodGap": 0.4, "shelves": 2, "logD": 0.28, "woodFrame": true, "nicheUse": "Ved + verktyg", "toolD": 0.25, "toolGap": 0.21, "toolSpit": true, "toolPlate": "Svartstål med nitar", "toolLight": true, "stage": false, "stageH": 0.4, "stageD": 2.5, "stageMat": "Svart stål", "smokeP": true, "smokeH": 0.3, "smokeIn": 0.1, "smokeLip": true, "meat": "Vildsvin på spett", "spit": true, "spitH": 0.85, "spitZ": 0.5, "crank": true, "hooks": true, "hookN": 5, "railDrop": 0.24, "chainL": 0.25, "boarL": 1.3, "tray": true, "person": true, "dims": true, "evening": true});
 const DEFAULTS = JSON.parse(JSON.stringify(P));
 const PRESETS = {
   'v11 – puts, plåt, betong': {},
@@ -865,16 +868,17 @@ fE.close();
 const VKEY='garibaldi-eldstad-versioner-v1',CKEY='garibaldi-eldstad-aktuell-v1';
 const SKIP=new Set(['preset']);
 const NICE={};gui.controllersRecursive().forEach(c=>{if(c.object===P)NICE[c.property]=c._name.replace(/ \((m|°)\)/,'');});
-function diffFromDefaults(o=P){const d={};for(const k in o){if(SKIP.has(k)||!(k in DEFAULTS))continue;if(JSON.stringify(o[k])!==JSON.stringify(DEFAULTS[k]))d[k]=o[k];}return d;}
-function applyCfg(cfg){const base=JSON.parse(JSON.stringify(DEFAULTS));for(const k in cfg)if(k in base&&typeof cfg[k]===typeof base[k])base[k]=cfg[k];
+function diffFromDefaults(o=P){const d={b:2};for(const k in o){if(SKIP.has(k)||k==='b'||!(k in DEFAULTS))continue;if(JSON.stringify(o[k])!==JSON.stringify(DEFAULTS[k]))d[k]=o[k];}return d;}
+function applyCfg(cfg){const base=JSON.parse(JSON.stringify(cfg&&cfg.b===2?DEFAULTS:OLD_DEFAULTS));for(const k in cfg)if(k!=='b'&&k in base&&typeof cfg[k]===typeof base[k])base[k]=cfg[k];
   const keepPreset=P.preset;Object.assign(P,base);P.preset=cfg.preset&&cfg.preset in PRESETS?cfg.preset:keepPreset;
   gui.controllersRecursive().forEach(c=>c.updateDisplay());nb();}
 const loadV=()=>{try{return JSON.parse(localStorage.getItem(VKEY))||[];}catch(e){return [];}};
 const storeV=v=>{try{localStorage.setItem(VKEY,JSON.stringify(v));return true;}catch(e){toast('Kunde inte spara (lagringen full?)');return false;}};
 let currentId=null,lastSavedJSON=null;
 function fmtVal(k,v){if(typeof v==='boolean')return v?'på':'av';if(typeof v==='number'){if(k==='pitch'||k==='doorAng')return v+'°';if(['doors','shelves','hookN','glassPct'].includes(k))return String(v);return String(+v.toFixed(2)).replace('.',',')+' m';}return v;}
-function describe(a,b){const out=[];const keys=new Set([...Object.keys(a),...Object.keys(b)]);
-  for(const k of keys){if(SKIP.has(k))continue;const va=k in a?a[k]:DEFAULTS[k],vb=k in b?b[k]:DEFAULTS[k];if(JSON.stringify(va)!==JSON.stringify(vb))out.push(`${NICE[k]||k}: ${fmtVal(k,va)} → ${fmtVal(k,vb)}`);}
+function fullCfg(c){const base=JSON.parse(JSON.stringify(c&&c.b===2?DEFAULTS:OLD_DEFAULTS));for(const k in (c||{}))if(k!=='b'&&k in base)base[k]=c[k];return base;}
+function describe(a,b){const out=[];const A=a===null?JSON.parse(JSON.stringify(DEFAULTS)):fullCfg(a),B=fullCfg(b);
+  for(const k in B){if(SKIP.has(k))continue;if(JSON.stringify(A[k])!==JSON.stringify(B[k]))out.push(`${NICE[k]||k}: ${fmtVal(k,A[k])} → ${fmtVal(k,B[k])}`);}
   return out;}
 function saveVersion(askName=true){
   const v=loadV(),cfg=diffFromDefaults(),n=v.length+1;
@@ -889,14 +893,14 @@ function renderHist(){
   const v=loadV(),L=document.getElementById('hList');
   if(!v.length){L.innerHTML='<div class="empty">Inga sparade versioner än.<br>Tryck 💾 för att spara den du tittar på.</div>';return;}
   L.innerHTML='';
-  for(let i=v.length-1;i>=0;i--){const e=v[i],prev=i>0?v[i-1].cfg:{};const ch=describe(prev,e.cfg);
+  for(let i=v.length-1;i>=0;i--){const e=v[i],prev=i>0?v[i-1].cfg:null;const ch=describe(prev,e.cfg);
     const r=document.createElement('div');r.className='row'+(e.id===currentId?' cur':'');
     const dt=new Date(e.ts);
     r.innerHTML=`<div class="nm"></div><div class="btns"><button class="ld">Visa</button><button class="nmb" title="Byt namn">✎</button><button class="dl" title="Ladda ner .md">⬇</button><button class="rm" title="Ta bort">🗑</button></div>
       <div class="meta"></div><div class="diff"></div>`;
     r.querySelector('.nm').textContent=e.name+(e.id===currentId?' · visas nu':'');
     r.querySelector('.meta').textContent=`${dt.toLocaleDateString('sv-SE')} ${dt.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'})} · ${e.sum}`;
-    r.querySelector('.diff').textContent=i===0?(Object.keys(e.cfg).length?`Ändrat från standard: ${describe({},e.cfg).slice(0,4).join(' · ')}${describe({},e.cfg).length>4?' …':''}`:'Standardinställningar'):(ch.length?`Ändrat sedan förra: ${ch.slice(0,4).join(' · ')}${ch.length>4?` (+${ch.length-4})`:''}`:'Inga ändringar mot förra');
+    const d0=describe(null,e.cfg);r.querySelector('.diff').textContent=i===0?(d0.length?`Ändrat från standard: ${d0.slice(0,4).join(' · ')}${d0.length>4?' …':''}`:'Standardinställningar'):(ch.length?`Ändrat sedan förra: ${ch.slice(0,4).join(' · ')}${ch.length>4?` (+${ch.length-4})`:''}`:'Inga ändringar mot förra');
     r.querySelector('.ld').onclick=()=>{applyCfg({...e.cfg,preset:e.preset});currentId=e.id;lastSavedJSON=JSON.stringify(e.cfg);markDirty();renderHist();toast(`Visar: ${e.name}`);if(mq.matches)document.getElementById('hist').classList.remove('on');};
     r.querySelector('.nmb').onclick=()=>{const n=prompt('Nytt namn:',e.name);if(n&&n.trim()){const all=loadV();all[i].name=n.trim();storeV(all);renderHist();}};
     r.querySelector('.dl').onclick=()=>{const keep=JSON.stringify(P);applyCfg({...e.cfg,preset:e.preset});build();const md=settingsMD().replace('# Garibaldi – eldstadsväggen: inställningar',`# Garibaldi – eldstadsväggen: ${e.name}`);applyCfg(JSON.parse(keep));
