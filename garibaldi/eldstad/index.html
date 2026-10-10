@@ -133,7 +133,7 @@ const P = {
   chimney: 'Synligt stålrör', pipeD: 0.36, stackW: 0.9,
   // ved
   woodSide: 'Vänster', woodW: 1.5, woodH: 2.0, woodBot: 0.3, woodGap: 0.35, shelves: 2, logD: 0.17, woodFrame: true,
-  nicheUse: 'Vedförråd', toolGap: 0.24, toolSpit: true, toolPlate: 'Svartstål med nitar', toolLight: true,
+  nicheUse: 'Vedförråd', toolD: 0.67, toolGap: 0.24, toolSpit: true, toolPlate: 'Svartstål med nitar', toolLight: true,
   // scen
   stage: false, stageH: 0.4, stageD: 2.5, stageMat: 'Ek',
   // spett & krokar
@@ -572,16 +572,24 @@ function build(){
     for(let y=yb+0.9;y<cy-0.3;y+=1.5){const b=new THREE.Mesh(new THREE.CylinderGeometry(r+0.012,r+0.012,0.05,28),M.black);b.position.set(fpX,y,zc2);fp.add(b);}
   }else if(P.chimney==='Murad stock'&&!P.wallToTop){const y0=P.H,y1=ceilY(fpX)+0.4;box(P.stackW,y1-y0,P.T,wm,fpX,(y0+y1)/2,-P.T/2);}
   // --- ved ---
-  let logCount=0,woodVol=0;const nicheKinds=[],toolList=[];
+  let logCount=0,woodVol=0;const nicheKinds=[],toolList=[],nicheDepths=[];
   const ND=P.T-0.03;
+  const NDw=ND;
   for(const [x0,y0,x1,y1] of niches){const w=x1-x0,h=y1-y0;
-    const bk=plane(w,h,M.steelDS);bk.position.set((x0+x1)/2,(y0+y1)/2,-ND);
-    for(const xx of [x0,x1]){const p=plane(ND,h,M.steelDS);p.rotation.y=Math.PI/2;p.position.set(xx,(y0+y1)/2,-ND/2);}
-    for(const yy of [y0,y1]){const p=plane(w,ND,M.steelDS);p.rotation.x=-Math.PI/2;p.position.set((x0+x1)/2,yy,-ND/2);}
-    if(P.woodFrame){const fb=0.05;box(w+2*fb,fb,0.02,M.black,(x0+x1)/2,y1+fb/2,0.01);box(w+2*fb,fb,0.02,M.black,(x0+x1)/2,y0-fb/2,0.01);box(fb,h,0.02,M.black,x0-fb/2,(y0+y1)/2,0.01);box(fb,h,0.02,M.black,x1+fb/2,(y0+y1)/2,0.01);}
     const ni=niches.findIndex(n=>n[0]===x0&&n[1]===y0);
-    const isTools=P.nicheUse==='Verktygsvägg'||(P.nicheUse==='Ved + verktyg'&&ni===niches.length-1&&niches.length>1)||(P.nicheUse==='Ved + verktyg'&&niches.length===1);
-    nicheKinds.push(isTools?'verktyg':'ved');
+    const isTools=P.nicheUse==='Verktygsvägg'||(P.nicheUse==='Ved + verktyg'&&(ni===niches.length-1||niches.length===1));
+    const ND=isTools?Math.max(0.1,Math.min(P.toolD,P.T+P.PD-0.6)):NDw;
+    if(isTools&&P.toolD>P.T+P.PD-0.6)warn.push('Verktygsfacket begränsat så att passagen bakom är minst 0,6 m.');
+    if(isTools&&ND>P.T){const ext=ND-P.T;
+      // stållåda som sticker ut bakåt i passagen
+      for(const xx of [x0+0.003,x1-0.003]){const q=plane(ext,h,M.steelDS);q.rotation.y=Math.PI/2;q.position.set(xx,(y0+y1)/2,-P.T-ext/2);}
+      box(w+0.02,0.01,ext,M.steel,(x0+x1)/2,y1+0.005,-P.T-ext/2);box(w+0.02,0.01,ext,M.steel,(x0+x1)/2,y0-0.005,-P.T-ext/2);}
+    if(isTools&&ND<P.T-0.03){const fill=P.T-ND;box(w,h,fill-0.005,wm,(x0+x1)/2,(y0+y1)/2,-ND-fill/2-0.002);}
+    if(!isTools){const bk=plane(w,h,M.steelDS);bk.position.set((x0+x1)/2,(y0+y1)/2,-ND);}
+    for(const xx of [x0+0.003,x1-0.003]){const p=plane(ND,h,M.steelDS);p.rotation.y=Math.PI/2;p.position.set(xx,(y0+y1)/2,-ND/2);}
+    for(const yy of [y0+0.003,y1-0.003]){const p=plane(w,ND,M.steelDS);p.rotation.x=-Math.PI/2;p.position.set((x0+x1)/2,yy,-ND/2);}
+    if(P.woodFrame){const fb=0.05;box(w+2*fb,fb,0.02,M.black,(x0+x1)/2,y1+fb/2,0.01);box(w+2*fb,fb,0.02,M.black,(x0+x1)/2,y0-fb/2,0.01);box(fb,h,0.02,M.black,x0-fb/2,(y0+y1)/2,0.01);box(fb,h,0.02,M.black,x1+fb/2,(y0+y1)/2,0.01);}
+    nicheKinds.push(isTools?'verktyg':'ved');nicheDepths.push(ND);
     if(isTools){
       const zb2=-ND+0.004;
       {const bp=plane(w,h,M.toolPlate);bp.position.set((x0+x1)/2,(y0+y1)/2,-ND+0.002);}
@@ -600,9 +608,10 @@ function build(){
         const t=makeTool(types[i],L);t.position.set(x,ry+0.03,zb2+0.06);root.add(t);used.push(types[i]);}
       if(P.toolSpit){const sl=Math.min(w-0.22,2.0),sy=y1-0.12;
         for(const x of [x0+0.08,x1-0.08]){box(0.02,0.02,0.1,M.iron,x,sy-0.02,zb2+0.05);box(0.02,0.05,0.02,M.iron,x,sy+0.01,zb2+0.09);}
-        const sp=makeSpit(sl);sp.position.set((x0+x1)/2,sy,zb2+0.07);root.add(sp);used.unshift('spett');}
+        const sp=makeSpit(sl);sp.position.set((x0+x1)/2,sy,zb2+Math.min(0.07,ND*0.5));root.add(sp);used.unshift('spett');}
       if(P.toolLight){const lb=new THREE.Mesh(new THREE.BoxGeometry(w-0.1,0.012,0.02),new THREE.MeshStandardMaterial({color:0xfff0d0,emissive:0xffd8a0,emissiveIntensity:2.5}));lb.material.userData=lb.userData={own:true};lb.position.set((x0+x1)/2,y1-0.012,-0.06);root.add(lb);
-        const pl=new THREE.PointLight(0xffd6a0,P.evening?4.5:3,3.2,1.4);pl.position.set((x0+x1)/2,y1-0.15,0.15);root.add(pl);}
+        const k=1+Math.max(0,ND-0.6)*1.6,pl=new THREE.PointLight(0xffd6a0,(P.evening?4.5:3)*k,3.2+ND,1.4);pl.position.set((x0+x1)/2,y1-0.15,ND>0.6?-ND+0.45:0.15);root.add(pl);
+        if(ND>0.6){const lb2=lb.clone();lb2.position.z=-ND+0.12;root.add(lb2);}}
       toolList.push(...used);
       continue;
     }
@@ -631,7 +640,8 @@ function build(){
     if(!P.wallToTop)dim([-P.W/2+0.06,0,0.05],[-P.W/2+0.06,P.H,0.05],fmt(P.H));
     dim([fx0,fy1+0.12,P.protrude+0.05],[fx1,fy1+0.12,P.protrude+0.05],'Spis '+fmt(fpW));
     dim([fx1+0.1,oy0,P.protrude+0.05],[fx1+0.1,oy1,P.protrude+0.05],'Öppning '+fmt(openH));
-    niches.forEach(([x0,y0,x1],i)=>dim([x0,y0-0.1,0.05],[x1,y0-0.1,0.05],(nicheKinds[i]==='verktyg'?'Verktyg ':'Ved ')+fmt(x1-x0)));
+    niches.forEach(([x0,y0,x1],i)=>{dim([x0,y0-0.1,0.05],[x1,y0-0.1,0.05],(nicheKinds[i]==='verktyg'?'Verktyg ':'Ved ')+fmt(x1-x0));
+      if(nicheKinds[i]==='verktyg')dim([x1-0.05,y0+0.04,0],[x1-0.05,y0+0.04,-nicheDepths[i]],'Djup '+fmt(nicheDepths[i]));});
     dim([P.W/2,2.1,0.02],[P.W/2+P.G,2.1,0.02],'Öppning '+fmt(P.G));
     dim([P.W/2+P.G/2,0.03,-P.T],[P.W/2+P.G/2,0.03,zBack],'Passage '+fmt(P.PD));}
   // ljus
@@ -640,7 +650,7 @@ function build(){
   M.winGlass.emissive.set(P.evening?0x1a2433:0x6f8aa0);M.winGlass.color.set(P.evening?0x223040:0x9fb6c8);
   // stats
   const vol=openW*openH*P.FD;
-  derived={openW,openH,fpW,fpX,logCount,vol,woodVol,wallTop,fx0,fx1,fy0,fy1,oy0,oy1,zBack,niches:niches.map(n=>n.slice()),nicheKinds:nicheKinds.slice(),toolList:toolList.slice(),effH,effA,flueA,boar:boarSize,gapH:Math.min(gapH,wallTop),W:P.W,G:P.G,warn:warn.slice()};
+  derived={openW,openH,fpW,fpX,logCount,vol,woodVol,wallTop,fx0,fx1,fy0,fy1,oy0,oy1,zBack,niches:niches.map(n=>n.slice()),nicheKinds:nicheKinds.slice(),nicheDepths:nicheDepths.slice(),toolList:toolList.slice(),effH,effA,flueA,boar:boarSize,gapH:Math.min(gapH,wallTop),W:P.W,G:P.G,warn:warn.slice()};
   const rows=[
     ['Spisvägg',`${fmt(P.W).replace(' m','')} × ${P.wallToTop?'till tak':fmt(P.H)}`],
     ['Väggtjocklek',fmt(P.T)],
@@ -649,7 +659,7 @@ function build(){
     ['Under rökplåt',P.smokeP?`${fmt(effH)} fri höjd · ${(openW*effH).toFixed(2).replace('.',',')} m²`:'ingen rökplåt'],
     ['Eldstad',`≈ ${Math.round(vol*1000).toLocaleString('sv-SE')} l <span style="font-weight:400">(Veda 300: 2 260 l)</span>`],
     ['Luckor',nd?`${nd} × ${fmt(nd===2?openW/2:openW).replace(' m','')} × ${fmt(openH)}`:'inga'],
-    ['Verktygsvägg',toolList.length?`${niches.filter((n,i)=>nicheKinds[i]==='verktyg').map(n=>fmt(n[2]-n[0])).join(' + ')} · ${toolList.map(t=>({spett:'grisspett',spade:'askspade',raka:'eldraka',hake:'spjällhake',tang:'eldtång',gaffel:'eldgaffel',borste:'sotborste'})[t]).join(', ')}`:'–'],
+    ['Verktygsvägg',toolList.length?`${niches.filter((n,i)=>nicheKinds[i]==='verktyg').map((n,j)=>fmt(n[2]-n[0]).replace(' m','')+' × '+fmt(nicheDepths[nicheKinds.indexOf('verktyg')+j]).replace(' m','')+' djup').join(' + ')} m · ${toolList.map(t=>({spett:'grisspett',spade:'askspade',raka:'eldraka',hake:'spjällhake',tang:'eldtång',gaffel:'eldgaffel',borste:'sotborste'})[t]).join(', ')}`:'–'],
     ['Vedförråd',logCount?`${niches.map(n=>fmt(n[2]-n[0]).replace(' m','')).join(' + ')} m · ≈ ${woodVol.toFixed(1).replace('.',',')} m³s · ${logCount} klabbar`:'inget'],
     ['Sidoöppningar',`2 × ${fmt(P.G)} · ${P.gapFull?'full höjd':fmt(gapH)}`],
     ['Passage bakom',fmt(P.PD)],
@@ -714,6 +724,7 @@ fM.add(P,'tray').name('Droppbricka').onChange(nb);
 const fV=gui.addFolder('Vedförråd & verktyg');
 fV.add(P,'woodSide',['Vänster','Höger','Båda','Inget']).name('Sida').onChange(nb);
 fV.add(P,'nicheUse',['Vedförråd','Verktygsvägg','Ved + verktyg']).name('Innehåll').onChange(nb);
+fV.add(P,'toolD',0.1,1.6,0.01).name('Verktygsfack djup (m)').onChange(nb);
 fV.add(P,'toolGap',0.15,0.4,0.01).name('Verktyg c/c (m)').onChange(nb);
 fV.add(P,'toolSpit').name('Grisspett på väggen').onChange(nb);
 fV.add(P,'toolPlate',['Svartstål med nitar','Slät svartstål']).name('Verktygsvägg plåt').onChange(nb);
@@ -771,7 +782,7 @@ const FN={HW:'sal_bredd',eave:'takfot',flat:'plant_tak',pitch:'taklutning',hallL
   W:'vagg_bredd',H:'vagg_hojd',T:'vagg_tjocklek',PD:'passage_djup',G:'sidooppning_bredd',gapH:'sidooppning_hojd',backH:'bakvagg_hojd',
   fpW:'spis_bredd',openH:'oppning_hojd',sill:'oppning_over_golv',border:'stalram',protrude:'spis_utstick',FD:'eldstad_djup',fpX:'spis_x',
   doors:'luckor_antal',doorAng:'lucka_vinkel',glassPct:'glas_procent',pipeD:'ror_diameter',stackW:'stock_bredd',
-  woodW:'ved_bredd',woodH:'ved_hojd',woodBot:'ved_nederkant',woodGap:'ved_avstand',shelves:'ved_hyllor',logD:'klabb_diameter',toolGap:'verktyg_cc',
+  woodW:'ved_bredd',woodH:'ved_hojd',woodBot:'ved_nederkant',woodGap:'ved_avstand',shelves:'ved_hyllor',logD:'klabb_diameter',toolGap:'verktyg_cc',toolD:'verktyg_djup',
   stageH:'scen_hojd',stageD:'scen_djup',
   smokeH:'rokplat_hojd',smokeIn:'rokplat_inset',spitH:'spett_hojd',spitZ:'spett_fran_front',hookN:'krokar_antal',railDrop:'krokbom_under_tak',chainL:'kedja_langd',boarL:'vildsvin_langd'};
 const DEG=new Set(['pitch','doorAng']),COUNT=new Set(['doors','shelves','glassPct','hookN']);
@@ -809,7 +820,7 @@ function settingsMD(){
   row('Eldstadsöppning, b × h × djup',`${mm(d.openW)} × ${mm(d.openH)} × ${mm(P.FD)}`);
   row('Eldstadsvolym',`≈ ${Math.round(d.vol*1000)} l`);
   if(P.doors)row('Lucka (var)',`${mm(P.doors===2?d.openW/2:d.openW)} × ${mm(d.openH+0.03)}, glas ${P.glass?P.glassPct+' %':'nej'}, öppen ${P.doorAng}°`);
-  d.niches.forEach((n,i)=>row(`${d.nicheKinds[i]==='verktyg'?'Verktygsvägg':'Vedfack'} ${i+1}, x / y`,`${mm(n[0])} … ${mm(n[2])} / ${mm(n[1])} … ${mm(n[3])} (b ${mm(n[2]-n[0])}, h ${mm(n[3]-n[1])}, djup ${mm(P.T-0.03)})`));
+  d.niches.forEach((n,i)=>row(`${d.nicheKinds[i]==='verktyg'?'Verktygsvägg':'Vedfack'} ${i+1}, x / y`,`${mm(n[0])} … ${mm(n[2])} / ${mm(n[1])} … ${mm(n[3])} (b ${mm(n[2]-n[0])}, h ${mm(n[3]-n[1])}, djup ${mm(d.nicheDepths[i])})`));
   if(d.toolList.length)row('Verktyg',d.toolList.map(t=>({spett:'grisspett',spade:'askspade',raka:'eldraka',hake:'spjällhake',tang:'eldtång',gaffel:'eldgaffel',borste:'sotborste'})[t]).join(', ')+`, c/c ${mm(P.toolGap)}, plåt: ${P.toolPlate.toLowerCase()}`);
   if(d.nicheKinds.includes('ved'))row('Ved',`≈ ${d.woodVol.toFixed(2).replace('.',',')} m³s, ${d.logCount} klabbar Ø ${mm(P.logD)}`);
   row('Sidoöppningar',`x ±${mm(d.W/2)} … ±${mm(d.W/2+d.G)}, höjd ${P.gapFull?'full':mm(d.gapH)}`);
