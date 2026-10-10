@@ -105,6 +105,9 @@ const P = {
   woodSide: 'Vänster', woodW: 1.5, woodH: 2.0, woodBot: 0.3, woodGap: 0.35, shelves: 2, logD: 0.17, woodFrame: true,
   // scen
   stage: false, stageH: 0.4, stageD: 2.5, stageMat: 'Ek',
+  // spett & krokar
+  meat: 'Vildsvin på spett', spit: true, spitH: 0.6, spitZ: 0.3, crank: true,
+  hooks: true, hookN: 5, railDrop: 0.12, chainL: 0.35, boarL: 1.3, tray: true,
   // visa
   person: true, dims: true, evening: true,
 };
@@ -227,6 +230,9 @@ function buildMaterials(){
   M.bark=std({map:TX.bark,roughness:1});
   M.endGrain=std({map:TX.endGrain,roughness:.95});
   M.person=std({color:0x77726c,roughness:.8});
+  M.roast=std({color:0x5e2c12,roughness:.55,metalness:.0,emissive:0x1a0600,emissiveIntensity:.2});
+  M.roastDark=std({color:0x3d1d0c,roughness:.5});
+  M.iron=std({color:0x1c1c1c,roughness:.45,metalness:.6});
 }
 
 // ---------- scen ----------
@@ -270,6 +276,25 @@ function ceilY(x){const hw=P.HW/2,t=Math.tan(P.pitch*Math.PI/180),{dx,top}=gable
 let flames=[],fireBase=0,derived={};
 function clearRoot(){root.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.userData.own&&o.material)o.material.dispose();if(o.isCSS2DObject)o.element.remove();});while(root.children.length)root.remove(root.children[0]);flames=[];}
 
+// ---------- vildsvin (1,3 m kropp, huvud mot +x) ----------
+function makeBoar(){
+  const g=new THREE.Group();
+  const add=(geo,mat,pos,rot=[0,0,0],sc=[1,1,1])=>{const m=new THREE.Mesh(geo,mat);m.position.set(...pos);m.rotation.set(...rot);m.scale.set(...sc);m.castShadow=m.receiveShadow=true;g.add(m);return m;};
+  const sph=new THREE.SphereGeometry(1,28,18);
+  add(sph,M.roast,[0,0,0],[0,0,0],[0.56,0.24,0.2]);
+  add(sph,M.roast,[0.22,0.05,0],[0,0,-0.12],[0.32,0.25,0.205]);
+  add(sph,M.roast,[-0.3,0.02,0],[0,0,0.08],[0.3,0.22,0.2]);
+  add(new THREE.ConeGeometry(0.15,0.44,20),M.roast,[0.7,-0.03,0],[0,0,-Math.PI/2-0.12],[1,1,0.82]);
+  add(new THREE.CylinderGeometry(0.048,0.05,0.035,16),M.roastDark,[0.92,-0.06,0],[0,0,Math.PI/2-0.12]);
+  for(const z of [-0.07,0.07]){add(new THREE.ConeGeometry(0.045,0.12,8),M.roastDark,[0.56,0.15,z],[z>0?0.35:-0.35,0,-0.35]);
+    add(new THREE.SphereGeometry(0.015,8,6),M.roastDark,[0.74,0.03,z*1.05]);
+    add(new THREE.ConeGeometry(0.008,0.05,6),M.roastDark,[0.85,-0.04,z*0.7],[0,0,-0.6]);}
+  const leg=new THREE.CylinderGeometry(0.032,0.045,0.42,10);
+  for(const z of [-0.065,0.065]){add(leg,M.roast,[0.5,-0.14,z],[0,0,Math.PI/2+0.15]);add(leg,M.roast,[-0.6,-0.12,z],[0,0,Math.PI/2-0.15]);
+    add(new THREE.SphereGeometry(0.03,8,6),M.roastDark,[0.71,-0.17,z]);add(new THREE.SphereGeometry(0.03,8,6),M.roastDark,[-0.81,-0.15,z]);}
+  add(new THREE.CylinderGeometry(0.012,0.006,0.14,6),M.roastDark,[-0.6,0.08,0],[0,0,1.1]);
+  return g;
+}
 // ---------- bygg ----------
 function build(){
   clearRoot();
@@ -364,7 +389,7 @@ function build(){
     const lg=new THREE.CylinderGeometry(0.075,0.085,openW*0.6,10);lg.rotateZ(Math.PI/2);
     [[0,0.07,-0.08,0.15],[0.08,0.07,0.1,-0.1],[-0.02,0.19,0.0,0.06]].forEach(([dx2,y,dz2,rot])=>{const m=new THREE.Mesh(lg.clone(),M.charLog);m.position.set(fpX+dx2,oy0+y,fz+dz2);m.rotation.y=rot;fp.add(m);});
     lg.dispose();
-    const fh2=Math.min(openH*0.55,1.0),n=Math.max(5,Math.round(openW*4));
+    const fh2=Math.min(openH*0.55,1.0)*(P.meat==='Inget'?1:0.6),n=Math.max(5,Math.round(openW*4));
     for(let i=0;i<n;i++){const sm=new THREE.SpriteMaterial({map:TX.flame,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true,opacity:.9});
       const sp=new THREE.Sprite(sm);sp.userData.own=true;const u=(i+.5)/n-.5;const hgt=fh2*(0.55+0.45*Math.cos(u*Math.PI));
       sp.userData.f={x:fpX+u*openW*0.7,y:oy0+0.1,z:fz+(Math.random()-.5)*0.12,w:0.26+Math.random()*0.12,h:hgt,ph:Math.random()*10};fp.add(sp);flames.push(sp);}
@@ -372,6 +397,64 @@ function build(){
   }
   fireLight.visible=fillLight.visible=P.fire;
   fireBase=P.fire?(P.evening?26:12)*Math.min(1.4,openW*openH/3.5+0.4):0;
+  // spett, krokbom och vildsvin
+  const meatOn=P.meat!=='Inget',onSpit=P.meat==='Vildsvin på spett',hang=P.meat==='Vildsvin hängande';
+  const showSpit=P.spit||onSpit,showHooks=P.hooks||hang;
+  const sz=THREE.MathUtils.clamp(zf-P.spitZ,zb+0.18,zf-0.12);
+  const ix0=fpX-openW/2,ix1=fpX+openW/2;
+  let boarS=P.boarL/1.3,spitY=oy0+P.spitH,railY=oy1-P.railDrop;
+  if(meatOn&&P.FD<0.65)warn.push('Eldstaden är grund för ett helt vildsvin (djup < 0,65 m).');
+  if(meatOn&&P.boarL>openW-0.3){boarS=(openW-0.3)/1.3;warn.push('Vildsvinet krympt för att få plats i öppningen.');}
+  if(showSpit){
+    const ay=spitY+0.05;
+    for(const s2 of [-1,1]){const x=s2<0?ix0+0.07:ix1-0.07;
+      box(0.025,ay-oy0,0.025,M.iron,x,oy0+(ay-oy0)/2,sz,fp);
+      box(0.03,0.025,0.34,M.iron,x,oy0+0.012,sz,fp);
+      for(const k of [0.06,0.12,0.18])box(0.04,0.03,0.012,M.iron,x,spitY-0.15+k*1.0+0.09,sz-0.02,fp);
+      box(0.04,0.06,0.012,M.iron,x,spitY+0.02,sz+0.022,fp);box(0.04,0.06,0.012,M.iron,x,spitY+0.02,sz-0.022,fp);}
+    const rodL=openW-0.08;const rod=new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.012,rodL,10),M.iron);rod.rotation.z=Math.PI/2;rod.position.set(fpX,spitY,sz);rod.castShadow=true;fp.add(rod);
+    if(P.crank){const cx=ix1-0.03;box(0.015,0.2,0.02,M.iron,cx,spitY-0.09,sz,fp);
+      const h=new THREE.Mesh(new THREE.CylinderGeometry(0.014,0.014,0.11,10),M.roastDark);h.rotation.z=Math.PI/2;h.position.set(cx-0.06,spitY-0.18,sz);fp.add(h);}
+    if(onSpit)for(const s2 of [-1,1]){const hub=new THREE.Mesh(new THREE.CylinderGeometry(0.045,0.045,0.02,14),M.iron);hub.rotation.z=Math.PI/2;hub.position.set(fpX+s2*0.62*boarS,spitY,sz);fp.add(hub);
+      for(const a of [0.6,-0.6]){const pr=new THREE.Mesh(new THREE.CylinderGeometry(0.004,0.004,0.16,6),M.iron);pr.rotation.z=Math.PI/2;pr.position.set(fpX+s2*(0.62*boarS-0.08),spitY+a*0.05,sz);fp.add(pr);}}
+  }
+  let hookXs=[],hangTopY=null,hangXg=null;
+  if(showHooks){
+    const n=Math.max(1,P.hookN),span=openW-0.3;
+    for(let i=0;i<n;i++)hookXs.push(n===1?fpX:fpX-span/2+i*span/(n-1));
+    const rod=new THREE.Mesh(new THREE.CylinderGeometry(0.016,0.016,openW-0.04,12),M.iron);rod.rotation.z=Math.PI/2;rod.position.set(fpX,railY,sz);rod.castShadow=true;fp.add(rod);
+    for(const x of [ix0+0.05,ix1-0.05]){const L=sz-zb;box(0.03,0.03,L,M.iron,x,railY,zb+L/2,fp);box(0.03,0.12,0.03,M.iron,x,railY-0.05,sz,fp);}
+    const tg=new THREE.TorusGeometry(0.03,0.005,6,14,Math.PI*1.45);
+    const lg=new THREE.TorusGeometry(0.011,0.003,5,10);
+    const links=[];const q1=new THREE.Quaternion().setFromEuler(new THREE.Euler(0,Math.PI/2,0)),q0=new THREE.Quaternion();
+    const hangX=hang?hookXs.reduce((a,b)=>Math.abs(b-fpX)<Math.abs(a-fpX)?b:a):null;
+    for(const x of hookXs){
+      const t1=new THREE.Mesh(tg,M.iron);t1.rotation.set(0,Math.PI/2,Math.PI*0.3);t1.position.set(x,railY,sz);fp.add(t1);
+      const t2=new THREE.Mesh(tg,M.iron);t2.rotation.set(0,Math.PI/2,-Math.PI*0.7);t2.position.set(x,railY-0.075,sz);fp.add(t2);
+      const cl=(hang&&x===hangX)?Math.max(0.1,P.chainL*0.5):P.chainL;
+      const y0=railY-0.105;const nl=Math.max(1,Math.round(cl/0.018));
+      for(let k=0;k<nl;k++)links.push(new THREE.Matrix4().compose(new THREE.Vector3(x,y0-k*0.018,sz),k%2?q1:q0,new THREE.Vector3(1,1,1)));
+      const yb=y0-nl*0.018;
+      box(0.008,0.07,0.008,M.iron,x,yb-0.035,sz,fp);
+      const j=new THREE.Mesh(tg,M.iron);j.scale.setScalar(1.15);j.rotation.set(0,Math.PI/2,-Math.PI*0.75);j.position.set(x,yb-0.095,sz);fp.add(j);
+    }
+    const im=new THREE.InstancedMesh(lg,M.iron,links.length);links.forEach((m,i)=>im.setMatrixAt(i,m));fp.add(im);
+    hangTopY=hang?(railY-0.105-Math.max(1,Math.round(Math.max(0.1,P.chainL*0.5)/0.018))*0.018-0.13):null;hangXg=hangX;
+  }
+  let boarSize=null;
+  if(meatOn){
+    const B=makeBoar();
+    if(onSpit){B.scale.setScalar(boarS);B.position.set(fpX,spitY,sz);fp.add(B);boarSize=[1.79*boarS,0.62*boarS];}
+    else{
+      const topY=hangTopY,botLim=oy0+(P.tray?0.12:0.06),natural=1.79;
+      let s2=boarS;if(topY-natural*s2<botLim){s2=Math.max(0.3,(topY-botLim)/natural);warn.push('Vildsvinet krympt för att hänga fritt över golvet.');}
+      const wrap=new THREE.Group();wrap.rotation.y=Math.PI/2;wrap.position.set(hangXg,topY,sz);fp.add(wrap);
+      B.rotation.z=-Math.PI/2;B.scale.setScalar(s2);B.position.set(0,-0.84*s2,0);wrap.add(B);
+      const gb=new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.012,0.36*s2+0.1,8),M.iron);gb.rotation.x=Math.PI/2;gb.position.set(0,0.02,0);wrap.add(gb);
+      boarSize=[0.62*s2,natural*s2];}
+    if(P.tray){const tw=Math.min(openW-0.2,(onSpit?1.5:0.7)*Math.max(boarS,0.6)),td=Math.min(0.42,P.FD-0.1),th=0.06,ty=oy0+0.004,tz=onSpit?sz:sz;
+      box(tw,0.006,td,M.iron,fpX,ty+0.003,tz,fp);for(const s2 of [-1,1]){box(tw,th,0.008,M.iron,fpX,ty+th/2,tz+s2*td/2,fp);box(0.008,th,td,M.iron,fpX+s2*tw/2,ty+th/2,tz,fp);}}
+  }
   // nitar på ramen
   if(P.rivets){const rg=new THREE.CylinderGeometry(0.012,0.012,0.012,8);rg.rotateX(Math.PI/2);const pts=[];
     for(let x=fx0+0.08;x<=fx1-0.06;x+=0.15){pts.push([x,fy1-bd/2]);if(P.sill-bd>=0)pts.push([x,fy0+bd/2]);}
@@ -443,7 +526,7 @@ function build(){
   M.winGlass.emissive.set(P.evening?0x1a2433:0x6f8aa0);M.winGlass.color.set(P.evening?0x223040:0x9fb6c8);
   // stats
   const vol=openW*openH*P.FD;
-  derived={openW,openH,fpW,fpX,logCount,vol,woodVol,wallTop,fx0,fx1,fy0,fy1,oy0,oy1,zBack,niches:niches.map(n=>n.slice()),gapH:Math.min(gapH,wallTop),W:P.W,G:P.G,warn:warn.slice()};
+  derived={openW,openH,fpW,fpX,logCount,vol,woodVol,wallTop,fx0,fx1,fy0,fy1,oy0,oy1,zBack,niches:niches.map(n=>n.slice()),boar:boarSize,gapH:Math.min(gapH,wallTop),W:P.W,G:P.G,warn:warn.slice()};
   const rows=[
     ['Spisvägg',`${fmt(P.W).replace(' m','')} × ${P.wallToTop?'till tak':fmt(P.H)}`],
     ['Väggtjocklek',fmt(P.T)],
@@ -455,6 +538,7 @@ function build(){
     ['Sidoöppningar',`2 × ${fmt(P.G)} · ${P.gapFull?'full höjd':fmt(gapH)}`],
     ['Passage bakom',fmt(P.PD)],
     ['Skorsten',P.chimney],
+    ['Spett & krokar',[P.meat!=='Inget'?P.meat:null,(P.spit||P.meat==='Vildsvin på spett')?`spett ${fmt(P.spitH)} över botten`:null,(P.hooks||P.meat==='Vildsvin hängande')?`${P.hookN} krokar`:null].filter(Boolean).join(' · ')||'inget'],
     ['Golv',P.floor],
     ['Bakvägg',P.backMat+(P.backToTop?' (till nock)':'')],
   ];
@@ -495,6 +579,18 @@ const fC=gui.addFolder('Skorsten');
 fC.add(P,'chimney',['Synligt stålrör','Murad stock','Dold i väggen']).name('Typ').onChange(nb);
 fC.add(P,'pipeD',0.2,0.6,0.01).name('Rör Ø (m)').onChange(nb);
 fC.add(P,'stackW',0.5,1.8,0.05).name('Stockens bredd (m)').onChange(nb);
+const fM=gui.addFolder('Spett & krokar');
+fM.add(P,'meat',['Vildsvin på spett','Vildsvin hängande','Inget']).name('I spisen').onChange(nb);
+fM.add(P,'boarL',0.6,1.8,0.05).name('Vildsvin längd (m)').onChange(nb);
+fM.add(P,'spit').name('Spett med stöd').onChange(nb);
+fM.add(P,'spitH',0.25,1.2,0.05).name('Spett över botten (m)').onChange(nb);
+fM.add(P,'spitZ',0.15,1.0,0.05).name('Spett från front (m)').onChange(nb);
+fM.add(P,'crank').name('Vev').onChange(nb);
+fM.add(P,'hooks').name('Krokbom med krokar').onChange(nb);
+fM.add(P,'hookN',1,9,1).name('Antal krokar').onChange(nb);
+fM.add(P,'railDrop',0.05,0.5,0.01).name('Krokbom under tak (m)').onChange(nb);
+fM.add(P,'chainL',0.05,1.0,0.05).name('Kedjelängd (m)').onChange(nb);
+fM.add(P,'tray').name('Droppbricka').onChange(nb);
 const fV=gui.addFolder('Vedförråd');
 fV.add(P,'woodSide',['Vänster','Höger','Båda','Inget']).name('Sida').onChange(nb);
 fV.add(P,'woodW',0.4,3,0.05).name('Bredd (m)').onChange(nb);
@@ -536,6 +632,7 @@ const views={
   'Vedförrådet':()=>setView([P.fpX-2.2,1.3,2.6],[P.fpX-2.2,1.1,0]),
   'Passagen bakom':()=>setView([P.W/2+P.G/2,1.6,2.2],[P.W/2+P.G/2-0.6,1.3,-P.T-P.PD]),
   'Ovanifrån':()=>setView([0,13,5],[0,0,-0.5]),
+  'Spettet':()=>setView([P.fpX+0.9,P.sill+1.0,1.9],[P.fpX,P.sill+0.75,-0.2]),
 };
 function viewScale(){return innerWidth<=700?THREE.MathUtils.clamp(0.95/(innerWidth/innerHeight),1,1.7):1;}
 let lastView='Från salen';
@@ -550,8 +647,9 @@ const FN={HW:'sal_bredd',eave:'takfot',flat:'plant_tak',pitch:'taklutning',hallL
   fpW:'spis_bredd',openH:'oppning_hojd',sill:'oppning_over_golv',border:'stalram',protrude:'spis_utstick',FD:'eldstad_djup',fpX:'spis_x',
   doors:'luckor_antal',doorAng:'lucka_vinkel',glassPct:'glas_procent',pipeD:'ror_diameter',stackW:'stock_bredd',
   woodW:'ved_bredd',woodH:'ved_hojd',woodBot:'ved_nederkant',woodGap:'ved_avstand',shelves:'ved_hyllor',logD:'klabb_diameter',
-  stageH:'scen_hojd',stageD:'scen_djup'};
-const DEG=new Set(['pitch','doorAng']),COUNT=new Set(['doors','shelves','glassPct']);
+  stageH:'scen_hojd',stageD:'scen_djup',
+  spitH:'spett_hojd',spitZ:'spett_fran_front',hookN:'krokar_antal',railDrop:'krokbom_under_tak',chainL:'kedja_langd',boarL:'vildsvin_langd'};
+const DEG=new Set(['pitch','doorAng']),COUNT=new Set(['doors','shelves','glassPct','hookN']);
 const isLen=k=>k in FN&&!DEG.has(k)&&!COUNT.has(k);
 const mm=v=>Math.round(v*1000);
 const sv=v=>typeof v==='number'?String(+v.toFixed(3)).replace('.',','):v;
@@ -592,6 +690,9 @@ function settingsMD(){
   row('Bakvägg',`z = ${mm(d.zBack)} (passage ${mm(P.PD)})${P.backToTop?', till nock':', höjd '+mm(P.backH)}`);
   row('Skorsten',P.chimney==='Synligt stålrör'?`Stålrör Ø ${mm(P.pipeD)}, x ${mm(d.fpX)}`:P.chimney==='Murad stock'?`Murad stock b ${mm(P.stackW)}`:'Dold i väggen');
   row('Material',`Vägg: ${P.wallMat} · Bakvägg: ${P.backMat} · Golv: ${P.floor}`);
+  if(P.meat!=='Inget'&&d.boar)row('Vildsvin',`${P.meat}, ca ${mm(d.boar[0])} × ${mm(d.boar[1])}`);
+  if(P.spit||P.meat==='Vildsvin på spett')row('Spett',`y = ${mm(d.oy0+P.spitH)}, ${mm(P.spitZ)} innanför fronten, längd ${mm(d.openW-0.08)}`);
+  if(P.hooks||P.meat==='Vildsvin hängande')row('Krokbom',`y = ${mm(d.oy1-P.railDrop)}, ${P.hookN} krokar, kedja ${mm(P.chainL)}`);
   if(P.stage)row('Scen',`${mm(d.W+2*d.G)} × ${mm(P.stageD)} × ${mm(P.stageH)}, ${P.stageMat}`);
   L.push('');
   if(d.warn.length){L.push('**Varningar:** '+d.warn.join(' '),'');}
@@ -648,7 +749,7 @@ if(mq.matches){
   const info=document.getElementById('info');info.classList.add('min');document.getElementById('tgl').textContent='Mått ▾';
   // snabbval
   const chips=document.getElementById('chips');
-  const vshort={'Från salen':'Salen','Rakt framifrån':'Framifrån','Snett':'Snett','Spisen nära':'Spisen','Vedförrådet':'Veden','Passagen bakom':'Bakom','Ovanifrån':'Ovan'};
+  const vshort={'Från salen':'Salen','Rakt framifrån':'Framifrån','Snett':'Snett','Spisen nära':'Spisen','Vedförrådet':'Veden','Passagen bakom':'Bakom','Ovanifrån':'Ovan','Spettet':'Spettet'};
   const vb=[];
   for(const k in vshort){const b=document.createElement('button');b.textContent=vshort[k];b.onclick=()=>{lastView=k;views[k]();vb.forEach(x=>x.classList.toggle('on',x===b));};chips.appendChild(b);vb.push(b);if(k===lastView)b.classList.add('on');}
   const sep=document.createElement('span');sep.className='sep';chips.appendChild(sep);
@@ -658,6 +759,7 @@ if(mq.matches){
   tog('Kväll',()=>{P.evening=!P.evening;},()=>P.evening);
   tog('Mått',()=>{P.dims=!P.dims;},()=>P.dims);
   tog('Person',()=>{P.person=!P.person;},()=>P.person);
+  {const opts=['Vildsvin på spett','Vildsvin hängande','Inget'],lab={'Vildsvin på spett':'Vildsvin: spett','Vildsvin hängande':'Vildsvin: krok','Inget':'Vildsvin: av'};const b=document.createElement('button');const up=()=>{b.textContent=lab[P.meat];b.classList.toggle('on',P.meat!=='Inget');};up();b.onclick=()=>{P.meat=opts[(opts.indexOf(P.meat)+1)%3];up();gui.controllersRecursive().forEach(c=>c.updateDisplay());nb();};chips.appendChild(b);}
   {const b=document.createElement('button');b.textContent='Spara inställningar ⬇';b.onclick=()=>io['Spara inställningar (.md)']();chips.appendChild(b);}
   new ResizeObserver(layout).observe(gui.domElement);
   labelR.domElement.style.zIndex='1';
