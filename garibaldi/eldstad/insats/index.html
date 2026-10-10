@@ -50,7 +50,7 @@
 <div id="info">
   <div class="eb">Garibaldi · konstruktionsunderlag v3</div>
   <h1>Eldstadsinsatsen</h1>
-  <div>Svetsad låda i <b>svartstål</b> med <b>vattenmantlad bakvägg</b> och två vattenkylda <b>takvingar</b>, okylt tak över grillen, spett med <b>grillmotor</b> genom ramen.</div>
+  <div>Svetsad låda i <b>svartstål</b> med <b>vattenmantlad bakvägg</b> och två vattenkylda <b>takvingar</b>, okylt tak över grillen, låsta med <b>vred och spanjolett</b>, spett med <b>grillmotor</b> bakom väggen.</div>
   <div class="more">
     <div style="margin-top:6px" id="spec">Öppning 1 910 × 1 800 · djup 1 050 · vatten ca 290 l · ca 1,8 t stål.</div>
     <div class="small">Håll över en del för namnet. Dra för att snurra, scrolla för att zooma. Ur den parametriska Fusion-modellen – preliminär, ingen bygghandling. <a href="snitt.pdf">Snitt (PDF)</a></div>
@@ -95,7 +95,7 @@ const MAT = {
   'Svartstal S355': MS(0x26272a,.55,.55), 'Mantel P265GH': MS(0x5d6773,.6,.42), 'Rostfritt': MS(0xc4c9ce,.85,.32),
   'Eldfast tegel': MS(0xc58a5c,0,.9), 'Vermiculit': MS(0xd8c49e,0,.95), 'Keramisk fiber': MS(0xf1ede2,0,.95),
   'Keramglas': MS(0x9fd4e6,.1,.05,{transparent:true, opacity:.28, depthWrite:false}), 'Brons': MS(0xb08d57,.85,.35),
-  'Konvektionsmantel': MS(0x9a9a95,.5,.5), 'Motor': MS(0x4b5a4b,.3,.5),
+  'Konvektionsmantel': MS(0x9a9a95,.5,.5), 'Motor': MS(0x4b5a4b,.3,.5), 'Ek': MS(0x96693e,0,.7),
   'Isolering (ref)': MS(0xf2e2a0,0,.9,{transparent:true, opacity:.35, depthWrite:false}),
   'Spisvagg (ref)': MS(0xe9e1cf,0,.95,{transparent:true, opacity:.22, depthWrite:false}),
   'Frigang (ref)': MS(0xe07a2f,0,.8,{transparent:true, opacity:.25, depthWrite:false}),
@@ -111,6 +111,7 @@ const LAYERS = [
   ['Konvektionsmantel','Konvektionsmantel','#9a9a95',true, [0,0,0],[0,.35]],
   ['Rokror','Rökrör + spjäll','#26272a',true, [0,0,1700],[.05,.4]],
   ['Front och luckor','Front, luckor, glas','#26272a',true, [0,-1500,0],[.25,.6]],
+  ['Las och handtag','Vred + spanjolett','#C8340A',true, [0,-1900,0],[.25,.6]],
   ['Spett och drivning','Spett + grillmotor','#c4c9ce',true, [0,-2300,250],[.45,.8]],
   ['Infodring','Infodring','#c58a5c',true, [0,0,0],[.5,.95]],
   ['Eldstadslada','Eldstadslåda','#26272a',true, [0,0,0],[0,1]],
@@ -140,11 +141,17 @@ function off(c, n){
     else if(n.startsWith('Golv')){ v.set(0,-650,-120); } else if(n.startsWith('Tak')){ v.set(0,-300,600); }
     else if(n.startsWith('Tackzon V')){ v.set(-250,-900,0); } else if(n.startsWith('Tackzon H')){ v.set(250,-900,0); }
     else v.set(0,-500,500); }
+  if(c==='Las och handtag'){
+    if(/ V /.test(n+' ')||n.includes(' V ')) v.set(-400,-1950,0); else v.set(400,-1950,0);
+    if(n.startsWith('Lasbleck')) { v.set(0,-1500,0); }
+    if(n.startsWith('Lasstang') && n.includes('ovre')) v.z += 350;
+    if(n.startsWith('Lasstang') && n.includes('nedre')) v.z -= 350; }
   if(c==='Front och luckor'){
     if(n.startsWith('Lucka V')||n.startsWith('Keramglas V')||n.startsWith('Gangjarn V')) v.set(-400,-1900,0);
     if(n.startsWith('Lucka H')||n.startsWith('Keramglas H')||n.startsWith('Gangjarn H')) v.set(400,-1900,0); }
   if(c==='Spett och drivning'){
-    if(n.startsWith('Grillmotor')||n.startsWith('Motorkonsol')) { v.set(-500,-2700,250); w=[.55,.9]; } }
+    if(n.startsWith('Grillmotor')||n.startsWith('Motorkonsol')||n.startsWith('Lager bak')||n.startsWith('Bakaxel')||n.startsWith('Skyddsror')) { v.set(-300,1700,250); w=[.35,.75]; }
+    else if(n.startsWith('Packbox')||n.startsWith('Kardanknut bak')) { v.set(-200,1100,250); w=[.4,.8]; } }
   return {v, w};
 }
 const ease = t => t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
@@ -152,6 +159,9 @@ const nice = s => s.replace(/Rokror/g,'Rökrör').replace(/Rokplat/g,'Rökplåt'
   .replace(/Forstarkningsring/g,'Förstärkningsring').replace(/Takforstyvning/g,'Takförstyvning').replace(/Sidovagg/g,'Sidovägg').replace(/Gangjarn/g,'Gångjärn')
   .replace(/Droppranna/g,'Droppränna').replace(/Spettstod/g,'Spettstöd').replace(/Konisk vaxel/g,'Konisk växel').replace(/Primarluftlada/g,'Primärluftlåda')
   .replace(/Lastspridningsplat/g,'Lastspridningsplåt').replace(/Spjall/g,'Spjäll').replace(/ovre/g,'övre').replace(/nedre/g,'nedre').replace(/Bakom rokplat/g,'Bakom rökplåt')
+.replace(/Lasstang/g,'Låsstång').replace(/Lasbleck/g,'Låsbleck').replace(/Stangstyrning/g,'Stångstyrning').replace(/Spanjolettlada/g,'Spanjolettlåda').replace(/kuggstang/g,'kuggstång')
+  .replace(/Forregling/g,'Förregling').replace(/nodvred/g,'nödvred').replace(/Genomforingsror/g,'Genomföringsrör').replace(/Skyddsror/g,'Skyddsrör').replace(/tatar/g,'tätar').replace(/rokgas/g,'rökgas')
+  .replace(/genom isolering/g,'genom isolering').replace(/pa spisvaggens/g,'på spisväggens').replace(/spar for/g,'spår för').replace(/Bakaxel/g,'Bakaxel')
   .replace(/Spisvagg/g,'Spisvägg').replace(/Frigang/g,'Frigång').replace(/Verktygsvagg/g,'Verktygsvägg').replace(/tatas runt/g,'tätas runt').replace(/ \(\d+\)$/,'');
 const NICE = Object.fromEntries(LAYERS.map(l=>[l[0],l[1]]));
 
@@ -243,6 +253,7 @@ addEventListener('pointermove', e => {
 addEventListener('resize', () => { cam.aspect = innerWidth/innerHeight; cam.updateProjectionMatrix(); R.setSize(innerWidth,innerHeight); });
 window.__setE = v => { anim=null; E=v; ex.value=v; apply(); };
 window.__wire = setWire; window.__clip = setClip;
+window.__look = (e,t) => { cam.position.set(...e); ctr.target.set(...t); ctr.update(); };
 
 R.setAnimationLoop(now => {
   if(anim){ const k = Math.min(1,(now-anim.t0)/3200); E = anim.from + (anim.to-anim.from)*k; ex.value = E; apply(); if(k>=1) anim=null; }
