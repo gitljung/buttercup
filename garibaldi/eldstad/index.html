@@ -85,6 +85,9 @@ canvas{display:block}
 .bc-bar a{color:#FFF6DC;text-decoration:none}
 .bc-bar a:hover{text-decoration:underline}
 .bc-bar b{font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.04em;font-size:16px}
+.bc-bar a.insats{background:#FCC222;color:#3a1408;font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.06em;font-size:14px;padding:3px 12px;border-radius:14px;box-shadow:2px 2px 0 #3a1408;white-space:nowrap}
+.bc-bar a.insats:hover{text-decoration:none;background:#FFF6DC}
+@media (max-width:700px){.bc-bar a.insats{font-size:12px;padding:2px 8px}}
 @media (min-width:701px){#info{top:48px}.lil-gui.root{top:40px !important}}
 @media (max-width:700px){.bc-bar span{display:none}.bc-bar{font-size:12px;padding:7px 10px}.bc-bar b{font-size:14px}}
 </style>
@@ -97,7 +100,7 @@ canvas{display:block}
 </script>
 </head>
 <body>
-<div class="bc-bar"><a href="/garibaldi/">← Garibaldi</a><span>Projekt · Eldstadsväggen</span><b>Plan B(lommeröd)</b></div>
+<div class="bc-bar"><a href="/garibaldi/">← Garibaldi</a><span>Projekt · Eldstadsväggen</span><a class="insats" href="/garibaldi/eldstad/insats/">🔧 INSATSEN →</a><b>Plan B(lommeröd)</b></div>
 <div id="info"><button id="tgl">info</button><h1>GARIBALDI · ELDSTADEN</h1><div class="sub">Spisvägg som scenfond · skiss i 3D</div><div id="stats"></div>
 <div class="note">Skissmått – ingen bygghandling. Rummet: förslagshandling 2024 + Hugos mått (takfot 2,99 m). Loft, tak och detaljer uppskattade. Dra för att snurra, scrolla för att zooma.</div></div>
 <div id="chips"></div>

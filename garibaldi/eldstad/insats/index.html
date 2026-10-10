@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Garibaldi – eldstadsinsatsen, sprängskiss · Buttercup.nu</title>
+<meta name="description" content="Eldstadsinsatsen för Garibaldi: vattenmantlad bakvägg, takvingar, spett med grillmotor. Dra isär den lager för lager.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;700&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#FFF6DC;font-family:Barlow,system-ui,sans-serif;color:#2a2620}
+  canvas{display:block}
+  .bc-bar{position:fixed;top:0;left:0;right:0;z-index:2000001;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:#C8340A;color:#FFF6DC;font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px}
+  .bc-bar a{color:#FFF6DC;text-decoration:none}
+  .bc-bar a:hover{text-decoration:underline}
+  .bc-bar b{font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.04em;font-size:18px;color:#FCC222}
+  #info{position:absolute;top:52px;left:12px;max-width:310px;background:#FFF6DC;border:3px solid #2a2620;border-radius:18px;padding:12px 16px;box-shadow:5px 5px 0 #C8340A;z-index:10;font-size:14px;line-height:1.45}
+  #info h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:26px;margin:0 0 2px;letter-spacing:.02em;text-transform:uppercase}
+  #info .eb{font-family:"Barlow Condensed";font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#C8340A;font-size:13px}
+  #info .small{font-size:12px;color:#6b6356;margin-top:6px}
+  #info a{color:#C8340A;font-weight:600}
+  #ctl{position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:10;display:flex;align-items:center;gap:12px;background:#FFF6DC;border:3px solid #2a2620;border-radius:999px;padding:8px 16px;box-shadow:5px 5px 0 #C8340A;font-family:"Barlow Condensed";font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:14px;white-space:nowrap}
+  #ctl input[type=range]{width:min(320px,40vw);accent-color:#C8340A}
+  #ctl button{font:inherit;background:#2a2620;color:#FCC222;border:0;border-radius:999px;padding:6px 14px;cursor:pointer}
+  #ctl label.cb{display:flex;align-items:center;gap:4px;cursor:pointer}
+  #lay{position:absolute;top:52px;right:12px;z-index:10;background:#FFF6DC;border:3px solid #2a2620;border-radius:16px;box-shadow:5px 5px 0 #C8340A;padding:8px 12px;font-family:"Barlow Condensed";font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:13px}
+  #lay label{display:flex;align-items:center;gap:6px;cursor:pointer;padding:2px 0}
+  #lay i{display:inline-block;width:11px;height:11px;border-radius:3px;border:1px solid #2a2620}
+  #lay .h{color:#C8340A;margin-bottom:3px}
+  #tip{position:absolute;pointer-events:none;z-index:11;background:#2a2620;color:#FFF6DC;padding:4px 9px;border-radius:8px;font-size:13px;display:none;white-space:nowrap}
+  #tip i{color:#FCC222;font-style:normal;font-size:11px;display:block;letter-spacing:.06em;text-transform:uppercase}
+  #load{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:Anton;font-size:28px;color:#C8340A;z-index:5}
+  @media (max-width:700px){
+    .bc-bar{padding:6px 12px;font-size:12px}.bc-bar span{display:none}.bc-bar b{font-size:15px}
+    #info{top:44px;left:8px;right:8px;max-width:none;padding:8px 12px;font-size:12px;border-radius:14px}
+    #info h1{font-size:20px}#info .more{display:none}
+    #lay{top:auto;bottom:calc(70px + env(safe-area-inset-bottom));right:8px;font-size:11px;padding:6px 9px}
+    #lay.closed label{display:none}
+    #ctl{gap:7px;padding:5px 10px;font-size:12px;bottom:calc(10px + env(safe-area-inset-bottom));max-width:calc(100vw - 24px);box-sizing:border-box}
+    #ctl > span{display:none}
+    #ctl button{padding:5px 10px}
+    #ctl input[type=range]{width:28vw}
+  }
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+</head>
+<body>
+<div class="bc-bar"><a href="/garibaldi/eldstad/">← The Fire Pit</a><span>Garibaldi · eldstadsinsatsen</span><b>Plan B(lommeröd)</b></div>
+<div id="info">
+  <div class="eb">Garibaldi · konstruktionsunderlag v3</div>
+  <h1>Eldstadsinsatsen</h1>
+  <div>Svetsad låda i <b>svartstål</b> med <b>vattenmantlad bakvägg</b> och två vattenkylda <b>takvingar</b>, okylt tak över grillen, spett med <b>grillmotor</b> genom ramen.</div>
+  <div class="more">
+    <div style="margin-top:6px" id="spec">Öppning 1 910 × 1 800 · djup 1 050 · vatten ca 290 l · ca 1,8 t stål.</div>
+    <div class="small">Håll över en del för namnet. Dra för att snurra, scrolla för att zooma. Ur den parametriska Fusion-modellen – preliminär, ingen bygghandling. <a href="snitt.pdf">Snitt (PDF)</a></div>
+  </div>
+</div>
+<div id="lay"><div class="h" id="layh">Lager ▾</div></div>
+<div id="ctl">
+  <button id="play">▶ Spräng</button>
+  <span>Ihop</span><input id="ex" type="range" min="0" max="1" step="0.001" value="0"><span>Isär</span>
+  <label class="cb"><input type="checkbox" id="wf">Wireframe</label>
+  <label class="cb"><input type="checkbox" id="xr">Snitt</label>
+</div>
+<div id="tip"></div>
+<div id="load">Laddar…</div>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+
+const R = new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2)); R.setSize(innerWidth,innerHeight);
+R.toneMapping = THREE.ACESFilmicToneMapping; R.toneMappingExposure = 1.05;
+R.shadowMap.enabled = true; R.shadowMap.type = THREE.PCFSoftShadowMap;
+R.localClippingEnabled = true;
+document.body.appendChild(R.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0xFFF6DC);
+const pm = new THREE.PMREMGenerator(R); scene.environment = pm.fromScene(new RoomEnvironment(),.04).texture;
+THREE.Object3D.DEFAULT_UP.set(0,0,1);
+const cam = new THREE.PerspectiveCamera(30, innerWidth/innerHeight, 10, 40000); cam.up.set(0,0,1);
+const ctr = new OrbitControls(cam, R.domElement); ctr.enableDamping = true;
+const sun = new THREE.DirectionalLight(0xfff1d6, 1.5); sun.position.set(-2500,-3000,5000); sun.castShadow = true;
+sun.shadow.mapSize.set(2048,2048); Object.assign(sun.shadow.camera,{left:-4000,right:4000,top:4000,bottom:-4000,near:100,far:14000});
+scene.add(sun, new THREE.HemisphereLight(0xffffff,0xd9c9a0,.55));
+const ground = new THREE.Mesh(new THREE.CircleGeometry(6000,64), new THREE.ShadowMaterial({opacity:.16}));
+ground.receiveShadow = true; scene.add(ground);
+
+// Fusion: x bredd, y in i väggen (+), z upp. three-scen med Z upp: x → x, y → -y? Nej – vi behåller Fusions system
+// och tittar från salen (−y), så x ligger rätt åt höger. Ingen spegling.
+const clip = new THREE.Plane(new THREE.Vector3(-1,0,0), 0);   // snitt: visa x ≤ 0 (vänstra halvan)
+const MS = (c,m,r,o={}) => new THREE.MeshStandardMaterial({color:c, metalness:m, roughness:r, side:THREE.DoubleSide, ...o});
+const MAT = {
+  'Svartstal S355': MS(0x26272a,.55,.55), 'Mantel P265GH': MS(0x5d6773,.6,.42), 'Rostfritt': MS(0xc4c9ce,.85,.32),
+  'Eldfast tegel': MS(0xc58a5c,0,.9), 'Vermiculit': MS(0xd8c49e,0,.95), 'Keramisk fiber': MS(0xf1ede2,0,.95),
+  'Keramglas': MS(0x9fd4e6,.1,.05,{transparent:true, opacity:.28, depthWrite:false}), 'Brons': MS(0xb08d57,.85,.35),
+  'Konvektionsmantel': MS(0x9a9a95,.5,.5), 'Motor': MS(0x4b5a4b,.3,.5),
+  'Isolering (ref)': MS(0xf2e2a0,0,.9,{transparent:true, opacity:.35, depthWrite:false}),
+  'Spisvagg (ref)': MS(0xe9e1cf,0,.95,{transparent:true, opacity:.22, depthWrite:false}),
+  'Frigang (ref)': MS(0xe07a2f,0,.8,{transparent:true, opacity:.25, depthWrite:false}),
+};
+for(const m of Object.values(MAT)) m.clippingPlanes = [];
+const HL = new THREE.MeshStandardMaterial({color:0xFCC222, metalness:.2, roughness:.5, emissive:0x553300, side:THREE.DoubleSide});
+
+// lager (komponenter) – namn, färg i listan, start-synlig, sprängning (mm) och tidsfönster
+const LAYERS = [
+  ['Spisvagg ref','Spisvägg (ref)','#e9e1cf',false, [0,0,0],[0,1]],
+  ['Isolering ref','Isolering 280 (ref)','#f2e2a0',false, [0,700,900],[0,.3]],
+  ['Fack','Fackens isolering','#d8c49e',false, [0,0,0],[0,1]],
+  ['Konvektionsmantel','Konvektionsmantel','#9a9a95',true, [0,0,0],[0,.35]],
+  ['Rokror','Rökrör + spjäll','#26272a',true, [0,0,1700],[.05,.4]],
+  ['Front och luckor','Front, luckor, glas','#26272a',true, [0,-1500,0],[.25,.6]],
+  ['Spett och drivning','Spett + grillmotor','#c4c9ce',true, [0,-2300,250],[.45,.8]],
+  ['Infodring','Infodring','#c58a5c',true, [0,0,0],[.5,.95]],
+  ['Eldstadslada','Eldstadslåda','#26272a',true, [0,0,0],[0,1]],
+  ['Vattenmantel','Vattenmantel + stag','#5d6773',true, [0,1300,500],[.3,.75]],
+  ['Ben och golv','Ben + lastplåtar','#26272a',true, [0,0,-450],[.35,.7]],
+  ['Frigang ref','Frigång vildsvin','#e07a2f',false, [0,-2300,250],[.45,.8]],
+];
+const LI = Object.fromEntries(LAYERS.map((l,i)=>[l[0],i]));
+function off(c, n){
+  const L = LAYERS[LI[c]] || LAYERS[8];
+  let v = new THREE.Vector3(...L[4]), w = L[5];
+  if(c==='Konvektionsmantel'){
+    if(n.startsWith('Sida V')) v.set(-900,0,0); else if(n.startsWith('Sida H')) v.set(900,0,0);
+    else if(n.startsWith('Bak')) v.set(0,900,0); else v.set(0,0,1200); }
+  if(c==='Eldstadslada'){
+    if(n.startsWith('Tak')||n.startsWith('Forstarkningsring')||n.startsWith('Takforstyvning')){ v.set(0,0,1100); w=[.2,.6]; }
+    else if(n.startsWith('Rokplat')){ v.set(0,-500,700); w=[.4,.85]; }
+    else if(n.startsWith('Sidovagg V')){ v.set(-800,0,0); w=[.55,1]; }
+    else if(n.startsWith('Sidovagg H')){ v.set(800,0,0); w=[.55,1]; }
+    else if(n.startsWith('Tackplat')){ v.set(0,-700,0); w=[.4,.8]; } }
+  if(c==='Vattenmantel'){
+    if(n.startsWith('Takvinge')||n.includes('topp mitt')||n.startsWith('Droppranna')){ v.set(0,700,1600); w=[.25,.7]; }
+    else if(n.startsWith('Tillopp')){ v.set(0,700,1900); }
+    if(n.startsWith('Droppranna')){ v.z -= 150; } }
+  if(c==='Infodring'){
+    if(n.includes('Sida V')){ v.set(-450,-300,0); } else if(n.includes('Sida H')){ v.set(450,-300,0); }
+    else if(n.startsWith('Golv')){ v.set(0,-650,-120); } else if(n.startsWith('Tak')){ v.set(0,-300,600); }
+    else if(n.startsWith('Tackzon V')){ v.set(-250,-900,0); } else if(n.startsWith('Tackzon H')){ v.set(250,-900,0); }
+    else v.set(0,-500,500); }
+  if(c==='Front och luckor'){
+    if(n.startsWith('Lucka V')||n.startsWith('Keramglas V')||n.startsWith('Gangjarn V')) v.set(-400,-1900,0);
+    if(n.startsWith('Lucka H')||n.startsWith('Keramglas H')||n.startsWith('Gangjarn H')) v.set(400,-1900,0); }
+  if(c==='Spett och drivning'){
+    if(n.startsWith('Grillmotor')||n.startsWith('Motorkonsol')) { v.set(-500,-2700,250); w=[.55,.9]; } }
+  return {v, w};
+}
+const ease = t => t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
+const nice = s => s.replace(/Rokror/g,'Rökrör').replace(/Rokplat/g,'Rökplåt').replace(/rokplat/g,'rökplåt').replace(/Tackplat/g,'Täckplåt').replace(/Tackzon/g,'Täckzon')
+  .replace(/Forstarkningsring/g,'Förstärkningsring').replace(/Takforstyvning/g,'Takförstyvning').replace(/Sidovagg/g,'Sidovägg').replace(/Gangjarn/g,'Gångjärn')
+  .replace(/Droppranna/g,'Droppränna').replace(/Spettstod/g,'Spettstöd').replace(/Konisk vaxel/g,'Konisk växel').replace(/Primarluftlada/g,'Primärluftlåda')
+  .replace(/Lastspridningsplat/g,'Lastspridningsplåt').replace(/Spjall/g,'Spjäll').replace(/ovre/g,'övre').replace(/nedre/g,'nedre').replace(/Bakom rokplat/g,'Bakom rökplåt')
+  .replace(/Spisvagg/g,'Spisvägg').replace(/Frigang/g,'Frigång').replace(/Verktygsvagg/g,'Verktygsvägg').replace(/tatas runt/g,'tätas runt').replace(/ \(\d+\)$/,'');
+const NICE = Object.fromEntries(LAYERS.map(l=>[l[0],l[1]]));
+
+const all = [], pick = [], byLayer = {};
+const data = await (await fetch('mesh.json')).json();
+for(const b of data){
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(b.v,3)); g.setIndex(b.i);
+  g.computeVertexNormals(); g.computeBoundingBox();
+  const mat = MAT[b.a] || MAT['Svartstal S355'];
+  const m = new THREE.Mesh(g, mat); m.castShadow = !mat.transparent; m.receiveShadow = true;
+  const o = off(b.c, b.n);
+  m.userData = {c:b.c, n:b.n, base:mat, solid:mat, o:o.v, w:o.w};
+  scene.add(m); all.push(m); (byLayer[b.c] ||= []).push(m);
+  if(!/ref$/.test(b.c)) pick.push(m);
+}
+document.getElementById('load').remove();
+
+// lagerlista
+const lay = document.getElementById('lay');
+for(const [c, name, col, on] of LAYERS){
+  if(!byLayer[c]) continue;
+  const lab = document.createElement('label');
+  lab.innerHTML = `<input type="checkbox" ${on?'checked':''}><i style="background:${col}"></i>${name}`;
+  const cb = lab.querySelector('input');
+  const set = () => byLayer[c].forEach(m => m.visible = cb.checked);
+  cb.onchange = () => { set(); }; set(); lay.appendChild(lab);
+}
+document.getElementById('layh').onclick = () => lay.classList.toggle('closed');
+if(innerWidth < 700) lay.classList.add('closed');
+
+function fit(){
+  const bb = new THREE.Box3();
+  for(const m of all){ if(!m.visible) continue; const b = m.geometry.boundingBox.clone(); b.translate(m.userData.o); bb.union(b); }
+  const c = bb.getCenter(new THREE.Vector3()), r = bb.getSize(new THREE.Vector3()).length()/2;
+  const fov = THREE.MathUtils.degToRad(cam.fov), a = Math.min(1, cam.aspect);
+  const d = r / Math.sin(fov/2) / a * (innerWidth < 700 ? 0.9 : 0.78);
+  const dir = new THREE.Vector3(.55,-.75,.38).normalize();     // från salen, snett höger, ovanifrån
+  ctr.target.copy(c); cam.position.copy(c).addScaledVector(dir, d); ctr.update();
+}
+fit(); window.__fit = fit;
+
+let E = 0;
+function apply(){
+  for(const m of all){ const [a,b] = m.userData.w; const t = ease(Math.min(1,Math.max(0,(E-a)/(b-a))));
+    m.position.copy(m.userData.o).multiplyScalar(t); }
+}
+const ex = document.getElementById('ex');
+ex.oninput = () => { anim=null; E = +ex.value; apply(); };
+let anim = null;
+const play = document.getElementById('play');
+play.onclick = () => { const to = E>.5 ? 0 : 1; anim = {from:E, to, t0:performance.now()}; play.textContent = to ? '◀ Ihop' : '▶ Spräng'; };
+
+// wireframe
+const WIRE = new THREE.LineBasicMaterial({color:0xC8340A});
+const WIRE_REF = new THREE.LineBasicMaterial({color:0xC8340A, transparent:true, opacity:.25});
+const GHOST = new THREE.MeshBasicMaterial({color:0xFFF6DC, transparent:true, opacity:0, depthWrite:false});
+function setWire(on){
+  for(const m of all){
+    if(!m.userData.edges){
+      const l = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry, 25), /ref$/.test(m.userData.c) ? WIRE_REF : WIRE);
+      l.raycast = () => {}; l.visible = false; m.add(l); m.userData.edges = l;
+    }
+    m.userData.edges.visible = on;
+    m.userData.base = on ? GHOST : m.userData.solid;
+    if(m !== hov) m.material = m.userData.base;
+    m.castShadow = !on && !m.userData.solid.transparent;
+  }
+  ground.visible = !on;
+}
+document.getElementById('wf').onchange = e => setWire(e.target.checked);
+// snitt (klipp bort högra halvan)
+function setClip(on){
+  for(const m of [...Object.values(MAT), HL, WIRE, WIRE_REF]) { m.clippingPlanes = on ? [clip] : []; m.needsUpdate = true; }
+}
+document.getElementById('xr').onchange = e => setClip(e.target.checked);
+
+const rc = new THREE.Raycaster(), mp = new THREE.Vector2(), tip = document.getElementById('tip'); let hov = null;
+addEventListener('pointermove', e => {
+  mp.set(e.clientX/innerWidth*2-1, -e.clientY/innerHeight*2+1); rc.setFromCamera(mp,cam);
+  const hits = rc.intersectObjects(pick.filter(p=>p.visible));
+  const h = document.getElementById('xr').checked ? hits.find(x => x.point.x <= 0) : hits[0];
+  if(hov && (!h || h.object!==hov)){ hov.material = hov.userData.base; hov = null; }
+  if(h){ hov = h.object; hov.material = HL; tip.style.display='block';
+    tip.innerHTML = '<i>'+(NICE[hov.userData.c]||hov.userData.c)+'</i>'+nice(hov.userData.n);
+    tip.style.left = (e.clientX+14)+'px'; tip.style.top = (e.clientY+12)+'px'; }
+  else tip.style.display='none';
+});
+addEventListener('resize', () => { cam.aspect = innerWidth/innerHeight; cam.updateProjectionMatrix(); R.setSize(innerWidth,innerHeight); });
+window.__setE = v => { anim=null; E=v; ex.value=v; apply(); };
+window.__wire = setWire; window.__clip = setClip;
+
+R.setAnimationLoop(now => {
+  if(anim){ const k = Math.min(1,(now-anim.t0)/3200); E = anim.from + (anim.to-anim.from)*k; ex.value = E; apply(); if(k>=1) anim=null; }
+  ctr.update(); R.render(scene,cam);
+});
+setTimeout(() => play.click(), 900);
+</script>
+</body>
+</html>
