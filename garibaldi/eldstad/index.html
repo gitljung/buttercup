@@ -106,6 +106,7 @@ const P = {
   // scen
   stage: false, stageH: 0.4, stageD: 2.5, stageMat: 'Ek',
   // spett & krokar
+  smokeP: true, smokeH: 0.35, smokeIn: 0.06, smokeLip: true,
   meat: 'Vildsvin på spett', spit: true, spitH: 0.6, spitZ: 0.3, crank: true,
   hooks: true, hookN: 5, railDrop: 0.12, chainL: 0.35, boarL: 1.3, tray: true,
   // visa
@@ -397,6 +398,23 @@ function build(){
   }
   fireLight.visible=fillLight.visible=P.fire;
   fireBase=P.fire?(P.evening?26:12)*Math.min(1.4,openW*openH/3.5+0.4):0;
+  // rökplåt
+  let effH=openH;
+  if(P.smokeP){
+    const sh=Math.min(P.smokeH,openH-0.3),pz=zf-Math.min(P.smokeIn,P.FD-0.1),t=0.008;
+    effH=openH-sh;
+    box(openW,sh,t,M.steel,fpX,oy1-sh/2,pz-t/2,fp);
+    if(P.smokeLip)box(openW,t,0.05,M.steel,fpX,oy1-sh+t/2,pz-t-0.025,fp);
+    // fästvinkel mot taket + bultar
+    box(openW,t,0.05,M.steel,fpX,oy1-t/2,pz-t-0.025,fp);
+    const bg=new THREE.CylinderGeometry(0.009,0.009,0.01,8);bg.rotateX(Math.PI/2);
+    const bn=Math.max(3,Math.round(openW/0.3)),bm=new THREE.InstancedMesh(bg,M.black,bn*2),m4=new THREE.Matrix4();
+    for(let i=0;i<bn;i++){const x=fpX-openW/2+0.1+i*(openW-0.2)/(bn-1);
+      m4.makeTranslation(x,oy1-0.035,pz+0.004);bm.setMatrixAt(i*2,m4);m4.makeTranslation(x,oy1-sh+0.035,pz+0.004);bm.setMatrixAt(i*2+1,m4);}
+    fp.add(bm);
+  }
+  const flueA=P.chimney==='Synligt stålrör'?Math.PI*(P.pipeD/2)**2:null,effA=openW*effH;
+  if(flueA&&P.fire&&effA/flueA>12)warn.push(`Risk att det ryker in: effektiv öppning ${effA.toFixed(2).replace('.',',')} m² är ${Math.round(effA/flueA)} × rökrörets area (tumregel ≤ 10 ×). Större rör eller lägre öppning.`);
   // spett, krokbom och vildsvin
   const meatOn=P.meat!=='Inget',onSpit=P.meat==='Vildsvin på spett',hang=P.meat==='Vildsvin hängande';
   const showSpit=P.spit||onSpit,showHooks=P.hooks||hang;
@@ -526,12 +544,13 @@ function build(){
   M.winGlass.emissive.set(P.evening?0x1a2433:0x6f8aa0);M.winGlass.color.set(P.evening?0x223040:0x9fb6c8);
   // stats
   const vol=openW*openH*P.FD;
-  derived={openW,openH,fpW,fpX,logCount,vol,woodVol,wallTop,fx0,fx1,fy0,fy1,oy0,oy1,zBack,niches:niches.map(n=>n.slice()),boar:boarSize,gapH:Math.min(gapH,wallTop),W:P.W,G:P.G,warn:warn.slice()};
+  derived={openW,openH,fpW,fpX,logCount,vol,woodVol,wallTop,fx0,fx1,fy0,fy1,oy0,oy1,zBack,niches:niches.map(n=>n.slice()),effH,effA,flueA,boar:boarSize,gapH:Math.min(gapH,wallTop),W:P.W,G:P.G,warn:warn.slice()};
   const rows=[
     ['Spisvägg',`${fmt(P.W).replace(' m','')} × ${P.wallToTop?'till tak':fmt(P.H)}`],
     ['Väggtjocklek',fmt(P.T)],
     ['Spis, ram',`${fmt(fpW).replace(' m','')} × ${fmt(fy1-fy0)}`],
     ['Öppning',`${fmt(openW).replace(' m','')} × ${fmt(openH)}`],
+    ['Under rökplåt',P.smokeP?`${fmt(effH)} fri höjd · ${(openW*effH).toFixed(2).replace('.',',')} m²`:'ingen rökplåt'],
     ['Eldstad',`≈ ${Math.round(vol*1000).toLocaleString('sv-SE')} l <span style="font-weight:400">(Veda 300: 2 260 l)</span>`],
     ['Luckor',nd?`${nd} × ${fmt(nd===2?openW/2:openW).replace(' m','')} × ${fmt(openH)}`:'inga'],
     ['Vedförråd',niches.length?`${niches.map(n=>fmt(n[2]-n[0]).replace(' m','')).join(' + ')} m · ≈ ${woodVol.toFixed(1).replace('.',',')} m³s · ${logCount} klabbar`:'inget'],
@@ -575,6 +594,10 @@ fF.add(P,'glass').name('Glas i luckorna').onChange(nb);
 fF.add(P,'glassPct',30,90,1).name('Glasets storlek (%)').onChange(nb);
 fF.add(P,'rivets').name('Nitar').onChange(nb);
 fF.add(P,'fire').name('Eld').onChange(nb);
+fF.add(P,'smokeP').name('Rökplåt').onChange(nb);
+fF.add(P,'smokeH',0.1,0.8,0.01).name('Rökplåt höjd (m)').onChange(nb);
+fF.add(P,'smokeIn',0.02,0.4,0.01).name('Rökplåt innanför front (m)').onChange(nb);
+fF.add(P,'smokeLip').name('Rökplåt bockad kant').onChange(nb);
 const fC=gui.addFolder('Skorsten');
 fC.add(P,'chimney',['Synligt stålrör','Murad stock','Dold i väggen']).name('Typ').onChange(nb);
 fC.add(P,'pipeD',0.2,0.6,0.01).name('Rör Ø (m)').onChange(nb);
@@ -648,7 +671,7 @@ const FN={HW:'sal_bredd',eave:'takfot',flat:'plant_tak',pitch:'taklutning',hallL
   doors:'luckor_antal',doorAng:'lucka_vinkel',glassPct:'glas_procent',pipeD:'ror_diameter',stackW:'stock_bredd',
   woodW:'ved_bredd',woodH:'ved_hojd',woodBot:'ved_nederkant',woodGap:'ved_avstand',shelves:'ved_hyllor',logD:'klabb_diameter',
   stageH:'scen_hojd',stageD:'scen_djup',
-  spitH:'spett_hojd',spitZ:'spett_fran_front',hookN:'krokar_antal',railDrop:'krokbom_under_tak',chainL:'kedja_langd',boarL:'vildsvin_langd'};
+  smokeH:'rokplat_hojd',smokeIn:'rokplat_inset',spitH:'spett_hojd',spitZ:'spett_fran_front',hookN:'krokar_antal',railDrop:'krokbom_under_tak',chainL:'kedja_langd',boarL:'vildsvin_langd'};
 const DEG=new Set(['pitch','doorAng']),COUNT=new Set(['doors','shelves','glassPct','hookN']);
 const isLen=k=>k in FN&&!DEG.has(k)&&!COUNT.has(k);
 const mm=v=>Math.round(v*1000);
@@ -690,6 +713,8 @@ function settingsMD(){
   row('Bakvägg',`z = ${mm(d.zBack)} (passage ${mm(P.PD)})${P.backToTop?', till nock':', höjd '+mm(P.backH)}`);
   row('Skorsten',P.chimney==='Synligt stålrör'?`Stålrör Ø ${mm(P.pipeD)}, x ${mm(d.fpX)}`:P.chimney==='Murad stock'?`Murad stock b ${mm(P.stackW)}`:'Dold i väggen');
   row('Material',`Vägg: ${P.wallMat} · Bakvägg: ${P.backMat} · Golv: ${P.floor}`);
+  if(P.smokeP)row('Rökplåt',`${mm(d.openW)} × ${mm(Math.min(P.smokeH,d.openH-0.3))} × 8, ${mm(Math.min(P.smokeIn,P.FD-0.1))} innanför fronten, nederkant y = ${mm(d.oy0+d.effH)}${P.smokeLip?', bockad kant 50':''}`);
+  row('Fri öppning under rökplåt',`${mm(d.openW)} × ${mm(d.effH)} = ${d.effA.toFixed(2).replace('.',',')} m²${d.flueA?` · rökrör ${d.flueA.toFixed(3).replace('.',',')} m² (1:${Math.round(d.effA/d.flueA)})`:''}`);
   if(P.meat!=='Inget'&&d.boar)row('Vildsvin',`${P.meat}, ca ${mm(d.boar[0])} × ${mm(d.boar[1])}`);
   if(P.spit||P.meat==='Vildsvin på spett')row('Spett',`y = ${mm(d.oy0+P.spitH)}, ${mm(P.spitZ)} innanför fronten, längd ${mm(d.openW-0.08)}`);
   if(P.hooks||P.meat==='Vildsvin hängande')row('Krokbom',`y = ${mm(d.oy1-P.railDrop)}, ${P.hookN} krokar, kedja ${mm(P.chainL)}`);
@@ -756,6 +781,7 @@ if(mq.matches){
   const tog=(label,fn,on)=>{const b=document.createElement('button');b.textContent=label;b.classList.toggle('on',on());b.onclick=()=>{fn();b.classList.toggle('on',on());gui.controllersRecursive().forEach(c=>c.updateDisplay());nb();};chips.appendChild(b);};
   tog('Luckor öppna',()=>{P.doorAng=P.doorAng>5?0:100;},()=>P.doorAng>5);
   tog('Eld',()=>{P.fire=!P.fire;},()=>P.fire);
+  tog('Rökplåt',()=>{P.smokeP=!P.smokeP;},()=>P.smokeP);
   tog('Kväll',()=>{P.evening=!P.evening;},()=>P.evening);
   tog('Mått',()=>{P.dims=!P.dims;},()=>P.dims);
   tog('Person',()=>{P.person=!P.person;},()=>P.person);
