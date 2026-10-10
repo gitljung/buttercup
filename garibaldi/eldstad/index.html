@@ -443,7 +443,7 @@ function build(){
   M.winGlass.emissive.set(P.evening?0x1a2433:0x6f8aa0);M.winGlass.color.set(P.evening?0x223040:0x9fb6c8);
   // stats
   const vol=openW*openH*P.FD;
-  derived={openW,openH,fpW,logCount,vol,woodVol};
+  derived={openW,openH,fpW,fpX,logCount,vol,woodVol,wallTop,fx0,fx1,fy0,fy1,oy0,oy1,zBack,niches:niches.map(n=>n.slice()),gapH:Math.min(gapH,wallTop),W:P.W,G:P.G,warn:warn.slice()};
   const rows=[
     ['Spisvägg',`${fmt(P.W).replace(' m','')} × ${P.wallToTop?'till tak':fmt(P.H)}`],
     ['Väggtjocklek',fmt(P.T)],
@@ -543,7 +543,83 @@ function setView(p,t){const k=viewScale();camera.position.set(t[0]+(p[0]-t[0])*k
 const fK=gui.addFolder('Kameravyer');for(const k in views)fK.add(views,k);
 const exp={'Spara bild (PNG)':()=>{renderer.render(scene,camera);const a=document.createElement('a');a.href=renderer.domElement.toDataURL('image/png');a.download='garibaldi_eldstad.png';a.click();},
   'Exportera GLB':()=>{new GLTFExporter().parse(root,g=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([g],{type:'model/gltf-binary'}));a.download='garibaldi_eldstad.glb';a.click();},e=>alert(e),{binary:true});}};
-const fE=gui.addFolder('Export');for(const k in exp)fE.add(exp,k);fE.close();
+const fE=gui.addFolder('Export');for(const k in exp)fE.add(exp,k);
+// ---------- inställningar → md (för render/Fusion) ----------
+const FN={HW:'sal_bredd',eave:'takfot',flat:'plant_tak',pitch:'taklutning',hallLen:'sal_langd',loftH:'loft_hojd',loftOver:'loft_utstick',
+  W:'vagg_bredd',H:'vagg_hojd',T:'vagg_tjocklek',PD:'passage_djup',G:'sidooppning_bredd',gapH:'sidooppning_hojd',backH:'bakvagg_hojd',
+  fpW:'spis_bredd',openH:'oppning_hojd',sill:'oppning_over_golv',border:'stalram',protrude:'spis_utstick',FD:'eldstad_djup',fpX:'spis_x',
+  doors:'luckor_antal',doorAng:'lucka_vinkel',glassPct:'glas_procent',pipeD:'ror_diameter',stackW:'stock_bredd',
+  woodW:'ved_bredd',woodH:'ved_hojd',woodBot:'ved_nederkant',woodGap:'ved_avstand',shelves:'ved_hyllor',logD:'klabb_diameter',
+  stageH:'scen_hojd',stageD:'scen_djup'};
+const DEG=new Set(['pitch','doorAng']),COUNT=new Set(['doors','shelves','glassPct']);
+const isLen=k=>k in FN&&!DEG.has(k)&&!COUNT.has(k);
+const mm=v=>Math.round(v*1000);
+const sv=v=>typeof v==='number'?String(+v.toFixed(3)).replace('.',','):v;
+function settingsMD(){
+  build();const d=derived,now=new Date();
+  const L=[];
+  L.push('# Garibaldi – eldstadsväggen: inställningar','');
+  L.push(`Exporterad ${now.toLocaleString('sv-SE')} från ${location.href.split('?')[0]}`,'');
+  L.push('Koordinater: origo = mitt på spisväggens framsida vid golv. **x** åt höger (sett från salen), **y** uppåt, **z** ut mot salen. Väggens baksida z = −tjocklek. Mått i mm om inget annat anges. Skissmått, ingen bygghandling.','');
+  // parametrar per GUI-mapp
+  const groups=new Map();
+  for(const c of gui.controllersRecursive()){if(typeof c.object!=='object'||c.object!==P)continue;const g=c.parent===gui?'Allmänt':c.parent._title;if(!groups.has(g))groups.set(g,[]);groups.get(g).push(c);}
+  L.push('## Parametrar','');
+  for(const [g,cs] of groups){L.push(`### ${g}`,'','| Parameter | Värde | Fusion-namn |','|---|---|---|');
+    for(const c of cs){const k=c.property,v=P[k];let val;
+      if(typeof v==='boolean')val=v?'Ja':'Nej';
+      else if(k==='doors')val={2:'Två luckor',1:'En lucka',0:'Inga'}[v];
+      else if(isLen(k))val=`${mm(v)} mm`;
+      else if(DEG.has(k))val=`${sv(v)}°`;
+      else if(k==='glassPct')val=`${v} %`;
+      else val=sv(v);
+      L.push(`| ${c._name.replace(/ \((m|°)\)/,'')} | ${val} | ${FN[k]?'`'+FN[k]+'`':''} |`);}
+    L.push('');}
+  // härledd geometri
+  L.push('## Härledd geometri (faktiska värden efter begränsningar)','','| Del | Mått |','|---|---|');
+  const row=(a,b)=>L.push(`| ${a} | ${b} |`);
+  row('Spisvägg, bredd × höjd',`${mm(d.W)} × ${P.wallToTop?'till tak (gavel)':mm(P.H)}`);
+  row('Spisvägg, x',`${mm(-d.W/2)} … ${mm(d.W/2)}`);
+  row('Spisram (stål), x / y',`${mm(d.fx0)} … ${mm(d.fx1)} / ${mm(d.fy0)} … ${mm(d.fy1)}`);
+  row('Spisram, bredd × höjd',`${mm(d.fx1-d.fx0)} × ${mm(d.fy1-d.fy0)}`);
+  row('Eldstadsöppning, x / y',`${mm(d.fpX-d.openW/2)} … ${mm(d.fpX+d.openW/2)} / ${mm(d.oy0)} … ${mm(d.oy1)}`);
+  row('Eldstadsöppning, b × h × djup',`${mm(d.openW)} × ${mm(d.openH)} × ${mm(P.FD)}`);
+  row('Eldstadsvolym',`≈ ${Math.round(d.vol*1000)} l`);
+  if(P.doors)row('Lucka (var)',`${mm(P.doors===2?d.openW/2:d.openW)} × ${mm(d.openH+0.03)}, glas ${P.glass?P.glassPct+' %':'nej'}, öppen ${P.doorAng}°`);
+  d.niches.forEach((n,i)=>row(`Vedfack ${i+1}, x / y`,`${mm(n[0])} … ${mm(n[2])} / ${mm(n[1])} … ${mm(n[3])} (b ${mm(n[2]-n[0])}, h ${mm(n[3]-n[1])}, djup ${mm(P.T-0.03)})`));
+  if(d.niches.length)row('Ved',`≈ ${d.woodVol.toFixed(2).replace('.',',')} m³s, ${d.logCount} klabbar Ø ${mm(P.logD)}`);
+  row('Sidoöppningar',`x ±${mm(d.W/2)} … ±${mm(d.W/2+d.G)}, höjd ${P.gapFull?'full':mm(d.gapH)}`);
+  row('Bakvägg',`z = ${mm(d.zBack)} (passage ${mm(P.PD)})${P.backToTop?', till nock':', höjd '+mm(P.backH)}`);
+  row('Skorsten',P.chimney==='Synligt stålrör'?`Stålrör Ø ${mm(P.pipeD)}, x ${mm(d.fpX)}`:P.chimney==='Murad stock'?`Murad stock b ${mm(P.stackW)}`:'Dold i väggen');
+  row('Material',`Vägg: ${P.wallMat} · Bakvägg: ${P.backMat} · Golv: ${P.floor}`);
+  if(P.stage)row('Scen',`${mm(d.W+2*d.G)} × ${mm(P.stageD)} × ${mm(P.stageH)}, ${P.stageMat}`);
+  L.push('');
+  if(d.warn.length){L.push('**Varningar:** '+d.warn.join(' '),'');}
+  // Fusion
+  L.push('## Fusion – användarparametrar (CSV)','','Kan klistras in eller läsas med ett skript/add-in. Längder i mm, vinklar i deg.','','```csv','Name,Unit,Expression,Comment');
+  for(const k in FN){if(!(k in P))continue;const v=P[k];const unit=isLen(k)?'mm':DEG.has(k)?'deg':'';const expr=isLen(k)?mm(v):+(+v).toFixed(3);
+    const c=gui.controllersRecursive().find(c=>c.property===k);L.push(`${FN[k]},${unit},${expr},${c?c._name.replace(/ \((m|°)\)/,''):k}`);}
+  L.push('```','');
+  // maskinläsbart
+  const pm={};for(const k in P)pm[k]=P[k];
+  const dm={oppning_b:mm(d.openW),oppning_h:mm(d.openH),spis_b:mm(d.fx1-d.fx0),spis_h:mm(d.fy1-d.fy0),spis_x:mm(d.fpX),oppning_y0:mm(d.oy0),oppning_y1:mm(d.oy1),vagg_topp:P.wallToTop?null:mm(P.H),bakvagg_z:mm(d.zBack),vedfack:d.niches.map(n=>n.map(mm)),klabbar:d.logCount,eldstad_l:Math.round(d.vol*1000)};
+  L.push('## JSON (för import tillbaka eller skript)','','Parametrar i meter (som i modellen), härledda värden i mm.','','```json',JSON.stringify({version:1,modell:'garibaldi-eldstad',params:pm,harlett_mm:dm},null,2),'```','');
+  return L.join('\n');
+}
+function download(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);}
+function stamp(){const t=new Date(),p=n=>String(n).padStart(2,'0');return `${t.getFullYear()}${p(t.getMonth()+1)}${p(t.getDate())}_${p(t.getHours())}${p(t.getMinutes())}`;}
+function toast(msg){let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';Object.assign(t.style,{position:'fixed',left:'50%',top:'64px',transform:'translateX(-50%)',background:'#C8321A',color:'#FFF6DC',font:"700 15px 'Barlow Condensed',sans-serif",padding:'8px 14px',borderRadius:'18px',zIndex:3000000,boxShadow:'0 3px 12px rgba(0,0,0,.4)',transition:'opacity .4s'});document.body.appendChild(t);}t.textContent=msg;t.style.opacity=1;clearTimeout(t._h);t._h=setTimeout(()=>t.style.opacity=0,2200);}
+const io={
+  'Spara inställningar (.md)':()=>{download(`garibaldi_eldstad_${stamp()}.md`,settingsMD(),'text/markdown');toast('Inställningar sparade (.md)');},
+  'Spara inställningar (.txt)':()=>{download(`garibaldi_eldstad_${stamp()}.txt`,settingsMD(),'text/plain');toast('Inställningar sparade (.txt)');},
+  'Kopiera inställningar':async()=>{const t=settingsMD();try{await navigator.clipboard.writeText(t);toast('Kopierat – klistra in i chatten');}catch(e){download(`garibaldi_eldstad_${stamp()}.md`,t,'text/markdown');toast('Kunde inte kopiera – sparade fil i stället');}},
+  'Läs in inställningar…':()=>{const inp=document.createElement('input');inp.type='file';inp.accept='.md,.txt,.json,text/plain,text/markdown,application/json';
+    inp.onchange=async()=>{const f=inp.files[0];if(!f)return;const s=await f.text();let m=s.match(/```json\s*([\s\S]*?)```/);try{const o=JSON.parse(m?m[1]:s);const src=o.params||o;let n=0;
+      for(const k in src)if(k in P&&typeof src[k]===typeof P[k]){P[k]=src[k];n++;}
+      gui.controllersRecursive().forEach(c=>c.updateDisplay());nb();toast(`Läste in ${n} inställningar`);}catch(e){toast('Hittade inga inställningar i filen');}};inp.click();},
+};
+for(const k in io)fE.add(io,k);
+fE.close();
 document.getElementById('tgl').onclick=()=>{const i=document.getElementById('info');i.classList.toggle('min');document.getElementById('tgl').textContent=i.classList.contains('min')?'Mått ▾':'Stäng ▴';};
 
 // ---------- mobil ----------
@@ -582,6 +658,7 @@ if(mq.matches){
   tog('Kväll',()=>{P.evening=!P.evening;},()=>P.evening);
   tog('Mått',()=>{P.dims=!P.dims;},()=>P.dims);
   tog('Person',()=>{P.person=!P.person;},()=>P.person);
+  {const b=document.createElement('button');b.textContent='Spara inställningar ⬇';b.onclick=()=>io['Spara inställningar (.md)']();chips.appendChild(b);}
   new ResizeObserver(layout).observe(gui.domElement);
   labelR.domElement.style.zIndex='1';
 }
@@ -600,7 +677,7 @@ function loop(){requestAnimationFrame(loop);
   controls.update();renderer.render(scene,camera);labelR.render(scene,camera);}
 loop();
 addEventListener('resize',layout);
-window.__P=P;window.__rebuild=()=>build();window.__views=views;window.__three={THREE,scene,renderer,camera,controls,root};window.__derived=()=>derived;
+window.__settingsMD=settingsMD;window.__P=P;window.__rebuild=()=>build();window.__views=views;window.__three={THREE,scene,renderer,camera,controls,root};window.__derived=()=>derived;
 </script>
 </body>
 </html>
