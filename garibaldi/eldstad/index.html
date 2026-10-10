@@ -31,19 +31,37 @@ canvas{display:block}
 #tgl{display:none;float:right;border:1px solid #C8321A;background:#FCC222;color:#3a1408;font:600 12px 'Barlow Condensed';border-radius:3px;padding:1px 7px;cursor:pointer}
 .dim{font:600 12px 'Barlow Condensed',sans-serif;color:#fff;background:rgba(200,50,26,.92);padding:1px 5px;border-radius:3px;white-space:nowrap;pointer-events:none}
 .lil-gui{--background-color:#FFF6DC;--text-color:#3a1408;--title-background-color:#C8321A;--title-text-color:#FFF6DC;--widget-color:#efe0b4;--hover-color:#e7d39a;--focus-color:#e0c983;--number-color:#C8321A;--string-color:#7a2a12;--font-family:Barlow,system-ui,sans-serif;--font-size:12px;--width:270px}
+#chips{display:none}
 @media (max-width:700px){
- #info{left:8px;right:8px;width:auto;top:auto;bottom:8px;max-height:40vh;overflow:auto;font-size:12px}
+ /* info: liten flik upptill, fälls ut på tryck */
+ #info{left:8px;right:8px;width:auto;top:calc(var(--top,0px) + 8px);bottom:auto;max-height:50vh;overflow:auto;font-size:13px;padding:7px 10px}
+ #info h1{font-size:16px;display:inline}
+ #info .sub{display:none}
+ #info.min{right:auto;padding:5px 9px}
  #info.min table,#info.min .note,#info.min .warn{display:none}
- #tgl{display:inline-block}
+ #tgl{display:inline-block;margin-left:8px;font-size:13px;padding:2px 9px}
+ .dim{font-size:10px;padding:0 3px}
+ /* reglagen: bottenpanel */
+ .lil-gui.root{position:fixed !important;left:0 !important;right:0 !important;top:auto !important;bottom:0 !important;width:100% !important;max-height:min(46vh,46dvh);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;border-radius:14px 14px 0 0;box-shadow:0 -6px 24px rgba(0,0,0,.45);z-index:20;
+   --font-size:15px;--input-font-size:16px;--widget-height:36px;--padding:7px;--spacing:8px;--name-width:44%;--slider-knob-width:6px;--title-background-color:#C8321A}
+ .lil-gui.root > .title{position:sticky;top:0;z-index:2;font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.06em;font-size:17px;padding:10px 14px;text-align:center}
+ .lil-gui .lil-gui > .title{font-size:15px;padding:9px 10px;background:#efe0b4;color:#3a1408;font-weight:700}
+ .lil-gui.root.closed{max-height:none}
+ .lil-gui select{font-size:16px}
+ /* snabbval */
+ #chips{display:flex;position:fixed;left:0;right:0;bottom:var(--sheet,46vh);gap:6px;overflow-x:auto;padding:8px 8px;z-index:19;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+ #chips::-webkit-scrollbar{display:none}
+ #chips button{flex:0 0 auto;border:1.5px solid #C8321A;background:#FFF6DC;color:#3a1408;font:700 14px 'Barlow Condensed',sans-serif;letter-spacing:.03em;border-radius:18px;padding:7px 13px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+ #chips button.on{background:#C8321A;color:#FFF6DC}
+ #chips .sep{flex:0 0 1px;background:rgba(255,246,220,.4);margin:4px 2px}
 }
 
 .bc-bar{position:fixed;top:0;left:0;right:0;z-index:2000001;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:#C8340A;color:#FFF6DC;font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px}
 .bc-bar a{color:#FFF6DC;text-decoration:none}
 .bc-bar a:hover{text-decoration:underline}
 .bc-bar b{font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.04em;font-size:16px}
-#info{top:48px}
-.lil-gui.root{top:40px !important}
-@media (max-width:700px){.bc-bar span{display:none}.bc-bar{font-size:12px;padding:7px 10px}}
+@media (min-width:701px){#info{top:48px}.lil-gui.root{top:40px !important}}
+@media (max-width:700px){.bc-bar span{display:none}.bc-bar{font-size:12px;padding:7px 10px}.bc-bar b{font-size:14px}}
 </style>
 <script type="importmap">
 {"imports":{
@@ -57,6 +75,7 @@ canvas{display:block}
 <div class="bc-bar"><a href="/garibaldi/">← Garibaldi</a><span>Projekt · Eldstadsväggen</span><b>Plan B(lommeröd)</b></div>
 <div id="info"><button id="tgl">info</button><h1>GARIBALDI · ELDSTADEN</h1><div class="sub">Spisvägg som scenfond · skiss i 3D</div><div id="stats"></div>
 <div class="note">Skissmått – ingen bygghandling. Rummet: förslagshandling 2024 + Hugos mått (takfot 2,99 m). Loft, tak och detaljer uppskattade. Dra för att snurra, scrolla för att zooma.</div></div>
+<div id="chips"></div>
 <script type="module">
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
@@ -68,7 +87,7 @@ import GUI from 'lil-gui';
 const P = {
   preset: 'v11 – puts, plåt, betong',
   // rum
-  HW: 15.0, eave: 2.99, flat: 6.4, pitch: 33, hallLen: 14, showRoom: true,
+  HW: 15.0, eave: 2.99, flat: 6.4, pitch: 33, hallLen: 21, showRoom: true,
   floor: 'Slipad betong med patina',
   loft: true, loftH: 3.0, loftOver: 0.3,
   // spisvägg
@@ -416,7 +435,7 @@ function build(){
     dim([fx0,fy1+0.12,P.protrude+0.05],[fx1,fy1+0.12,P.protrude+0.05],'Spis '+fmt(fpW));
     dim([fx1+0.1,oy0,P.protrude+0.05],[fx1+0.1,oy1,P.protrude+0.05],'Öppning '+fmt(openH));
     for(const [x0,y0,x1] of niches)dim([x0,y0-0.1,0.05],[x1,y0-0.1,0.05],'Ved '+fmt(x1-x0));
-    dim([P.W/2,0.03,-P.T/2],[P.W/2+P.G,0.03,-P.T/2],fmt(P.G));
+    dim([P.W/2,2.1,0.02],[P.W/2+P.G,2.1,0.02],'Öppning '+fmt(P.G));
     dim([P.W/2+P.G/2,0.03,-P.T],[P.W/2+P.G/2,0.03,zBack],'Passage '+fmt(P.PD));}
   // ljus
   hemi.intensity=P.evening?0.28:1.0;dir.intensity=P.evening?0.25:1.4;fillLight.intensity=P.fire?(P.evening?8:0):0;
@@ -518,14 +537,56 @@ const views={
   'Passagen bakom':()=>setView([P.W/2+P.G/2,1.6,2.2],[P.W/2+P.G/2-0.6,1.3,-P.T-P.PD]),
   'Ovanifrån':()=>setView([0,13,5],[0,0,-0.5]),
 };
-function setView(p,t){camera.position.set(...p);controls.target.set(...t);controls.update();}
+function viewScale(){return innerWidth<=700?THREE.MathUtils.clamp(0.95/(innerWidth/innerHeight),1,1.7):1;}
+let lastView='Från salen';
+function setView(p,t){const k=viewScale();camera.position.set(t[0]+(p[0]-t[0])*k,t[1]+(p[1]-t[1])*k,t[2]+(p[2]-t[2])*k);controls.target.set(...t);controls.update();}
 const fK=gui.addFolder('Kameravyer');for(const k in views)fK.add(views,k);
 const exp={'Spara bild (PNG)':()=>{renderer.render(scene,camera);const a=document.createElement('a');a.href=renderer.domElement.toDataURL('image/png');a.download='garibaldi_eldstad.png';a.click();},
   'Exportera GLB':()=>{new GLTFExporter().parse(root,g=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([g],{type:'model/gltf-binary'}));a.download='garibaldi_eldstad.glb';a.click();},e=>alert(e),{binary:true});}};
 const fE=gui.addFolder('Export');for(const k in exp)fE.add(exp,k);fE.close();
-if(innerWidth<700)gui.close();
-document.getElementById('tgl').onclick=()=>document.getElementById('info').classList.toggle('min');
-if(innerWidth<700)document.getElementById('info').classList.add('min');
+document.getElementById('tgl').onclick=()=>{const i=document.getElementById('info');i.classList.toggle('min');document.getElementById('tgl').textContent=i.classList.contains('min')?'Mått ▾':'Stäng ▴';};
+
+// ---------- mobil ----------
+const mq=matchMedia('(max-width:700px)');
+const folders=gui.folders;
+function topH(){const b=document.querySelector('.bc-bar');return b&&getComputedStyle(b).display!=='none'?b.getBoundingClientRect().height:0;}
+function layout(){
+  const W=innerWidth,H=innerHeight;
+  camera.aspect=W/H;
+  camera.fov=mq.matches?68:50;
+  if(mq.matches){
+    const sheet=gui.domElement.getBoundingClientRect().height,tp=topH();
+    document.documentElement.style.setProperty('--sheet',sheet+'px');
+    document.documentElement.style.setProperty('--top',tp+'px');
+    const chips=document.getElementById('chips').getBoundingClientRect().height||0;
+    const shift=Math.round((sheet+chips-tp)/2);
+    camera.setViewOffset(W,H,0,Math.max(0,shift),W,H);
+  }else camera.clearViewOffset();
+  camera.updateProjectionMatrix();renderer.setSize(W,H);labelR.setSize(W,H);
+}
+if(mq.matches){
+  gui.title('Reglage');
+  folders.forEach(f=>f.close());
+  // dragspel: bara en mapp öppen åt gången
+  folders.forEach(f=>f.onOpenClose(ff=>{if(ff===f&&!f._closed){folders.forEach(o=>{if(o!==f)o.close();});setTimeout(()=>{gui.domElement.scrollTop=f.domElement.offsetTop-gui.$title.offsetHeight;},30);}}));
+  const info=document.getElementById('info');info.classList.add('min');document.getElementById('tgl').textContent='Mått ▾';
+  // snabbval
+  const chips=document.getElementById('chips');
+  const vshort={'Från salen':'Salen','Rakt framifrån':'Framifrån','Snett':'Snett','Spisen nära':'Spisen','Vedförrådet':'Veden','Passagen bakom':'Bakom','Ovanifrån':'Ovan'};
+  const vb=[];
+  for(const k in vshort){const b=document.createElement('button');b.textContent=vshort[k];b.onclick=()=>{lastView=k;views[k]();vb.forEach(x=>x.classList.toggle('on',x===b));};chips.appendChild(b);vb.push(b);if(k===lastView)b.classList.add('on');}
+  const sep=document.createElement('span');sep.className='sep';chips.appendChild(sep);
+  const tog=(label,fn,on)=>{const b=document.createElement('button');b.textContent=label;b.classList.toggle('on',on());b.onclick=()=>{fn();b.classList.toggle('on',on());gui.controllersRecursive().forEach(c=>c.updateDisplay());nb();};chips.appendChild(b);};
+  tog('Luckor öppna',()=>{P.doorAng=P.doorAng>5?0:100;},()=>P.doorAng>5);
+  tog('Eld',()=>{P.fire=!P.fire;},()=>P.fire);
+  tog('Kväll',()=>{P.evening=!P.evening;},()=>P.evening);
+  tog('Mått',()=>{P.dims=!P.dims;},()=>P.dims);
+  tog('Person',()=>{P.person=!P.person;},()=>P.person);
+  new ResizeObserver(layout).observe(gui.domElement);
+  labelR.domElement.style.zIndex='1';
+}
+layout();
+setView([1.5,1.8,10.5],[0,1.5,0]);
 
 // ---------- loop ----------
 buildTextures();buildMaterials();
@@ -538,7 +599,7 @@ function loop(){requestAnimationFrame(loop);
   fireLight.intensity=fireBase*(0.86+0.1*Math.sin(t*9.7)+0.06*Math.sin(t*23.3));
   controls.update();renderer.render(scene,camera);labelR.render(scene,camera);}
 loop();
-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);labelR.setSize(innerWidth,innerHeight);});
+addEventListener('resize',layout);
 window.__P=P;window.__rebuild=()=>build();window.__views=views;window.__three={THREE,scene,renderer,camera,controls,root};window.__derived=()=>derived;
 </script>
 </body>
