@@ -162,6 +162,40 @@ const BACK_MATS = ['Mörk korrugerad plåt','Kalkputs varmgrå','Vit puts','Gult
 const FLOORS = ['Slipad betong med patina','Breda ekplankor'];
 
 // ---------- seedad slump ----------
+// ---------- kluven ved: tvärsnitt -> prisma (ändträ / bark / klyvyta) ----------
+let _logVar=null;
+function logVariants(){if(_logVar)return _logVar;const R=rng(4711),out=[];
+  function wav(a,b,n,amp){const o=[];for(let i=1;i<n;i++){const t=i/n,nx=-(b[1]-a[1]),ny=b[0]-a[0],l=Math.hypot(nx,ny)||1,k=(R()-.5)*amp;o.push([a[0]+(b[0]-a[0])*t+nx/l*k,a[1]+(b[1]-a[1])*t+ny/l*k]);}return o;}
+  function arc(a0,a1,n,pts,fl){const ph=R()*6,f=2+Math.floor(R()*3);for(let i=0;i<=n;i++){const a=a0+(a1-a0)*i/n,r=1+0.035*Math.sin(a*f+ph)+(R()-.5)*0.03;pts.push([r*Math.cos(a),r*Math.sin(a)]);if(i<n)fl.push(1);}}
+  function make(kind){const pts=[],fl=[];
+    if(kind==='round'){arc(0,6.2832*(1-1/22),21,pts,fl);fl.push(1);}
+    else if(kind==='half'){const t0=(R()-.5)*0.3;arc(t0,t0+Math.PI,12,pts,fl);const A=pts[pts.length-1],B=pts[0];const w=wav(A,B,4,0.08);pts.push(...w);for(let i=0;i<=w.length;i++)fl.push(2);}
+    else if(kind==='wedge'){const span=1.2+R()*1.0,t0=R()*6.28,tip=R()<.5?0.06+R()*0.14:0;
+      const c0=[tip*Math.cos(t0+span/2),tip*Math.sin(t0+span/2)];const s0=pts.length;arc(t0,t0+span,10,pts,fl);
+      const A=pts[pts.length-1],B=pts[s0];const w1=wav(A,c0,3,0.07),w2=wav(c0,B,3,0.07);pts.push(...w1,c0,...w2);for(let i=0;i<w1.length+w2.length+2;i++)fl.push(2);}
+    else{const span=1.3+R()*0.6,t0=R()*6.28,ri=0.4+R()*0.2;arc(t0,t0+span,9,pts,fl);
+      const A=pts[pts.length-1],B=pts[0];const C=[ri*Math.cos(t0+span),ri*Math.sin(t0+span)],D=[ri*Math.cos(t0),ri*Math.sin(t0)];
+      const w1=wav(A,C,2,0.05),w2=wav(C,D,3,0.06),w3=wav(D,B,2,0.05);pts.push(...w1,C,...w2,D,...w3);for(let i=0;i<w1.length+w2.length+w3.length+3;i++)fl.push(2);}
+    // tyngdpunkt -> origo (ändträets årsringar behåller originalcentrum via uv)
+    let cx=0,cy=0;pts.forEach(p=>{cx+=p[0];cy+=p[1];});cx/=pts.length;cy/=pts.length;
+    const P2=pts.map(p=>[p[0]-cx,p[1]-cy]);
+    const G=[[],[],[]],N=[[],[],[]],U=[[],[],[]];
+    const tri=THREE.ShapeUtils.triangulateShape(pts.map(p=>new THREE.Vector2(p[0],p[1])),[]);
+    for(const z of [0.5,-0.5])for(const t of tri){let [i,j,k]=t;
+      const cr=(P2[j][0]-P2[i][0])*(P2[k][1]-P2[i][1])-(P2[j][1]-P2[i][1])*(P2[k][0]-P2[i][0]);
+      if((cr>0)!==(z>0)){const tmp=j;j=k;k=tmp;}
+      for(const q of [i,j,k]){G[0].push(P2[q][0],P2[q][1],z);N[0].push(0,0,z>0?1:-1);U[0].push(0.5+pts[q][0]*0.445,0.5+pts[q][1]*0.445);}}
+    let per=0;const n=pts.length;let ar=0;for(let i=0;i<n;i++){const a=P2[i],b=P2[(i+1)%n];ar+=a[0]*b[1]-b[0]*a[1];}const ccw=ar>0;
+    for(let i=0;i<n;i++){const a=P2[i],b=P2[(i+1)%n],g=fl[i]===1?1:2,l=Math.hypot(b[0]-a[0],b[1]-a[1]);const sg=ccw?1:-1,nx=sg*(b[1]-a[1])/l,ny=-sg*(b[0]-a[0])/l;
+      const u0=per*0.6,u1=(per+l)*0.6;per+=l;
+      const quad=ccw?[[a,0.5,u0,1],[a,-0.5,u0,0],[b,-0.5,u1,0],[a,0.5,u0,1],[b,-0.5,u1,0],[b,0.5,u1,1]]:[[a,0.5,u0,1],[b,0.5,u1,1],[b,-0.5,u1,0],[a,0.5,u0,1],[b,-0.5,u1,0],[a,-0.5,u0,0]];
+      for(const [p,z,u,v] of quad){G[g].push(p[0],p[1],z);N[g].push(nx,ny,0);U[g].push(u,v*1.6);}}
+    const geo=new THREE.BufferGeometry();const pos=[],nor=[],uv=[];let st=0;
+    for(let k=0;k<3;k++){pos.push(...G[k]);nor.push(...N[k]);uv.push(...U[k]);geo.addGroup(st,G[k].length/3,k);st+=G[k].length/3;}
+    geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('normal',new THREE.Float32BufferAttribute(nor,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
+    return {geo,pts:P2,round:kind==='round'};}
+  ['round','round','half','half','half','half','wedge','wedge','wedge','wedge','wedge','wedge','wedge','slab','slab','slab'].forEach(k=>out.push(make(k)));
+  return _logVar=out;}
 function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 
 // ---------- texturer ----------
@@ -237,6 +271,10 @@ function buildTextures(){
   }));t.colorSpace=THREE.SRGBColorSpace;return t;})();
   r=rng(21);
   TX.bark = (()=>{const t=new THREE.CanvasTexture(mk(256,256,(x,w,h)=>{x.fillStyle='#4a3828';x.fillRect(0,0,w,h);for(let i=0;i<140;i++){x.fillStyle=`rgba(${r()<.5?'28,20,14':'110,90,70'},${.3+r()*.4})`;x.fillRect(r()*w,r()*h,2+r()*4,20+r()*60);}}));t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;return t;})();
+  r=rng(23);
+  TX.split = (()=>{const t=new THREE.CanvasTexture(mk(256,256,(x,w,h)=>{x.fillStyle='#b8946a';x.fillRect(0,0,w,h);
+    for(let i=0;i<260;i++){const c=r()<.55?'120,86,52':(r()<.5?'214,184,140':'150,110,70');x.fillStyle=`rgba(${c},${.18+r()*.35})`;x.fillRect(r()*w,r()*h,1+r()*3,30+r()*120);}
+    for(let i=0;i<14;i++){x.fillStyle=`rgba(70,48,28,${.25+r()*.3})`;x.fillRect(r()*w,r()*h,1,60+r()*150);}}));t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;return t;})();
   TX.flame = (()=>{const t=new THREE.CanvasTexture(mk(128,256,(x,w,h)=>{x.save();x.translate(64,182);x.scale(1,2.3);const g=x.createRadialGradient(0,0,0,0,0,56);
     g.addColorStop(0,'rgba(255,246,210,1)');g.addColorStop(.25,'rgba(255,200,95,.95)');g.addColorStop(.6,'rgba(255,115,30,.5)');g.addColorStop(1,'rgba(255,60,0,0)');x.fillStyle=g;x.beginPath();x.arc(0,0,56,0,7);x.fill();x.restore();}));t.colorSpace=THREE.SRGBColorSpace;return t;})();
   r=rng(22);
@@ -267,6 +305,7 @@ function buildMaterials(){
   M.charLog=std({map:TX.bark,color:0x3a2a20,emissive:0x5a1a00,emissiveIntensity:.6,roughness:1});
   M.bark=std({map:TX.bark,roughness:1});
   M.endGrain=std({map:TX.endGrain,roughness:.95});
+  M.splitWood=std({map:TX.split,roughness:.9});
   M.person=std({color:0x77726c,roughness:.8});
   M.roast=std({color:0x5e2c12,roughness:.55,metalness:.0,emissive:0x1a0600,emissiveIntensity:.2});
   M.roastDark=std({color:0x3d1d0c,roughness:.5});
@@ -623,14 +662,40 @@ function build(){
     }
     const ns=P.shelves,st=0.015,hc=(h-ns*st)/(ns+1);
     for(let i=1;i<=ns;i++)box(w,st,ND,M.steel,(x0+x1)/2,y0+i*hc+(i-0.5)*st,-ND/2);
-    const d=P.logD,rr=rng(Math.round(w*100+h*10+d*1000));const mats=[];
-    for(let c=0;c<=ns;c++){const by=y0+c*(hc+st);const rows=Math.max(1,Math.floor((hc-0.01)/(d*0.87)));
-      for(let ro=0;ro<rows;ro++){const off=(ro%2)*d/2,cols=Math.floor((w-off)/d);const y=by+d/2+ro*d*0.87;
-        for(let k=0;k<cols;k++){const x=x0+off+d/2+k*d,rad=d*(0.43+rr()*0.08),len=ND-0.03-rr()*0.06;
-          const m4=new THREE.Matrix4().compose(new THREE.Vector3(x+(rr()-.5)*0.01,y,-len/2-0.01-rr()*0.03),new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),rr()*6.28),new THREE.Vector3(rad,rad,len));mats.push(m4);}}}
-    const lgG=new THREE.CylinderGeometry(1,1,1,7);lgG.rotateX(Math.PI/2);
-    const im=new THREE.InstancedMesh(lgG,[M.bark,M.endGrain,M.endGrain],mats.length);mats.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=im.receiveShadow=true;root.add(im);
-    logCount+=mats.length;woodVol+=w*h*ND;}
+    // Kluven ved: halvor, kilar, skivor och några runda klabbar, staplade oregelbundet (skyline-packning)
+    const d=P.logD,rr=rng(Math.round(w*100+h*10+d*1000));
+    const VAR=logVariants(),mats=VAR.map(()=>[]);
+    const cell=0.008,nC=Math.max(1,Math.ceil(w/cell));
+    // profil av roterat tvärsnitt per kolumn: [lägsta, högsta] y för varje x-kolumn
+    function prof(V,sc,th){const cs=Math.cos(th),sn=Math.sin(th),Q=V.pts.map(([px,py])=>[(px*cs-py*sn)*sc,(px*sn+py*cs)*sc]);
+      let xa=1e9,xb=-1e9,ya=1e9;for(const q of Q){if(q[0]<xa)xa=q[0];if(q[0]>xb)xb=q[0];if(q[1]<ya)ya=q[1];}
+      const n=Math.max(1,Math.round((xb-xa)/cell)),lo=new Float32Array(n),hi=new Float32Array(n);
+      for(let c=0;c<n;c++){const X=xa+(c+0.5)*(xb-xa)/n;let mn=1e9,mx=-1e9;
+        for(let i=0;i<Q.length;i++){const A=Q[i],B=Q[(i+1)%Q.length];if((A[0]-X)*(B[0]-X)<=0&&A[0]!==B[0]){const Y=A[1]+(B[1]-A[1])*(X-A[0])/(B[0]-A[0]);if(Y<mn)mn=Y;if(Y>mx)mx=Y;}}
+        lo[c]=mn===1e9?0:mn-ya;hi[c]=mx===-1e9?0:mx-ya;}
+      return {xa,ya,n,lo,hi,w:xb-xa};}
+    for(let c=0;c<=ns;c++){const by=y0+c*(hc+st);const sky=new Float32Array(nC);let fails=0;
+      while(fails<40){
+        const vi=Math.floor(rr()*VAR.length),V=VAR[vi];
+        const sc=d/2*(V.round?0.6+rr()*0.25:0.85+rr()*0.45);
+        let best=null;
+        for(let tr=0;tr<5;tr++){const th=rr()*6.283,pf=prof(V,sc,th);if(pf.n>=nC)continue;
+          for(let i0=0;i0+pf.n<=nC;i0+=2){let base=0;for(let k=0;k<pf.n;k++){const v=sky[i0+k]-pf.lo[k];if(v>base)base=v;}
+            let top=0,gap=0;for(let k=0;k<pf.n;k++){const t=base+pf.hi[k];if(t>top)top=t;gap+=base+pf.lo[k]-sky[i0+k];}
+            if(top>hc-0.004)continue;
+            const cost=base+top*0.35+gap/pf.n*1.5+rr()*0.01;
+            if(!best||cost<best.cost)best={cost,th,pf,i0,base};}}
+        if(!best){fails++;continue;}
+        const {th,pf,i0,base}=best;for(let k=0;k<pf.n;k++)sky[i0+k]=Math.max(sky[i0+k],base+pf.hi[k]);
+        const len=Math.min(ND-0.01,ND*(0.8+rr()*0.18)),zc=-len/2-0.004-rr()*Math.max(0,ND-len-0.01);
+        const q=new THREE.Quaternion().setFromEuler(new THREE.Euler((rr()-.5)*0.05,(rr()-.5)*0.05,th));
+        const px=x0+i0*cell-pf.xa,py=by+base-pf.ya;
+        mats[vi].push(new THREE.Matrix4().compose(new THREE.Vector3(px,py,zc),q,new THREE.Vector3(sc,sc,len)));
+        if(mats.reduce((a,l)=>a+l.length,0)>900)break;}}
+    VAR.forEach((V,vi)=>{const L=mats[vi];if(!L.length)return;const im=new THREE.InstancedMesh(V.geo,[M.endGrain,M.bark,M.splitWood],L.length);
+      const col=new THREE.Color();L.forEach((m,i)=>{im.setMatrixAt(i,m);const v=0.62+rr()*0.42,g=rr();col.setRGB(v*(g<.2?0.92:1),v*(g<.2?0.86:0.97),v*(g<.2?0.8:0.93));im.setColorAt(i,col);});
+      im.castShadow=im.receiveShadow=true;root.add(im);logCount+=L.length;});
+    woodVol+=w*h*ND;}
   // --- scen ---
   if(P.stage){const sm=P.stageMat==='Ek'?M['Breda ekplankor']:P.stageMat==='Betong'?M['Slipad betong med patina']:M.steel;
     const sw=P.W+2*P.G;box(sw,P.stageH,P.stageD,sm,0,P.stageH/2,P.stageD/2+0.001);box(sw,0.03,0.012,M.black,0,P.stageH-0.015,P.stageD+0.006);}
