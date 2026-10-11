@@ -23,7 +23,7 @@
 </head>
 <body>
 <div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Olistat spel</span><b>Svinjakten</b></div>
-<div class="wrap"><div class="cab"><canvas id="game" width="720" height="1080"></canvas><div class="hud"><div class="pill" id="score">0</div><div class="pill" id="crew">5 skyttar</div><div class="pill" id="wave">Våg 1</div></div><div class="center" id="overlay"><div class="card"><p class="small">Blommeröd runner shooter</p><h1>SVIN<br>JAKTEN</h1><p>Dra Carl, Hugo, Peter, Jocke och Borka åt vänster/höger. Samla +1 och ×2, skjut vapenkort och stoppa megasvinet innan det når scenen.</p><div class="legend"><span>+1 skytt</span><span>×2 gäng</span><span>Garibaldi = eldkraft</span><span>Megasvin = boss</span></div><button id="start">Kör</button></div></div></div></div>
+<div class="wrap"><div class="cab"><canvas id="game" width="720" height="1080"></canvas><div class="hud"><div class="pill" id="score">0</div><div class="pill" id="crew">1 skytt</div><div class="pill" id="wave">Våg 1</div></div><div class="center" id="overlay"><div class="card"><p class="small">Blommeröd runner shooter</p><h1>SVIN<br>JAKTEN</h1><p>Börja med Peter. Skjut +1-portar så ansluter Hugo, Carl, Jocke och Borka en efter en. Dra gänget åt vänster/höger, skjut vapenkort och stoppa megasvinet innan det når scenen.</p><div class="legend"><span>+1 skytt</span><span>×2 gäng</span><span>Garibaldi = eldkraft</span><span>Megasvin = boss</span></div><button id="start">Kör</button></div></div></div></div>
 <script>
 (()=>{
 const cv=document.getElementById('game'),ctx=cv.getContext('2d');
@@ -31,13 +31,13 @@ const scoreEl=document.getElementById('score'),crewEl=document.getElementById('c
 const W=720,H=1080,assets={};
 const names=['peter','hugo','carl','jocke','borka'];
 [...names,'boar','megaboar','gate_plus','gate_x2'].forEach(k=>{const im=new Image();im.src=`img/${k}.webp`;assets[k]=im});
-let t=0,last=0,run=false,over=false,score=0,wave=1,kills=0,player={x:W/2,y:H-160,target:W/2},crew=5,bullets=[],boars=[],gates=[],cards=[],particles=[],power=1,fireTimer=0,spawnTimer=0,gateTimer=0,cardTimer=0,shake=0;
+let t=0,last=0,run=false,over=false,score=0,wave=1,kills=0,player={x:W/2,y:H-180,target:W/2},crew=5,bullets=[],boars=[],gates=[],cards=[],particles=[],power=1,fireTimer=0,spawnTimer=0,gateTimer=0,cardTimer=0,shake=0;
 function clamp(v,a,b){return Math.max(a,Math.min(b,v))}function rnd(a,b){return a+Math.random()*(b-a)}function hit(a,b){return Math.abs(a.x-b.x)<(a.w+b.w)/2&&Math.abs(a.y-b.y)<(a.h+b.h)/2}
-function reset(){t=0;last=0;run=true;over=false;score=0;wave=1;kills=0;player.x=player.target=W/2;crew=5;bullets=[];boars=[];gates=[];cards=[];particles=[];power=1;fireTimer=0;spawnTimer=.8;gateTimer=3.5;cardTimer=5.5;shake=0;for(let i=0;i<4;i++){spawnBoar(false);boars[i].y=70+i*115;boars[i].x=160+i*105}gates.push({x:150,y:360,w:95,h:95,typ:'plus',img:'gate_plus',vy:86});gates.push({x:570,y:520,w:120,h:95,typ:'x2',img:'gate_x2',vy:86});overlay.classList.add('hide');requestAnimationFrame(loop)}
+function reset(){t=0;last=0;run=true;over=false;score=0;wave=1;kills=0;player.x=player.target=W/2;crew=1;bullets=[];boars=[];gates=[];cards=[];particles=[];power=1;fireTimer=0;spawnTimer=.8;gateTimer=3.5;cardTimer=5.5;shake=0;for(let i=0;i<4;i++){spawnBoar(false);boars[i].y=70+i*115;boars[i].x=160+i*105}gates.push({x:150,y:360,w:95,h:95,typ:'plus',img:'gate_plus',vy:86});gates.push({x:570,y:520,w:120,h:95,typ:'x2',img:'gate_x2',vy:86});overlay.classList.add('hide');requestAnimationFrame(loop)}
 startBtn.onclick=reset;
 function pos(e){const r=cv.getBoundingClientRect();const x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;player.target=clamp(x/r.width*W,90,W-90)}
 cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);pos(e)});cv.addEventListener('pointermove',pos);cv.addEventListener('touchmove',e=>{pos(e);e.preventDefault()},{passive:false});
-function laneX(i,n){const spread=Math.min(260,52+crew*9),u=n===1?.5:i/(n-1);return player.x+(u-.5)*spread}
+function laneX(i,n){const spread=Math.min(300,70+crew*14),u=n===1?.5:i/(n-1);return player.x+(u-.5)*spread}
 function spawnBoar(boss=false){const hp=(boss?70+wave*25:5+wave*1.8)*power**-.08;boars.push({x:rnd(80,W-80),y:-80,w:boss?145:72,h:boss?110:58,hp,max:hp,spd:boss?32+wave*2:72+wave*5,boss,img:boss?'megaboar':'boar',phase:rnd(0,9)})}
 function spawnGate(){const typ=Math.random()<.68?'plus':'x2';gates.push({x:rnd(105,W-105),y:-60,w:typ==='x2'?120:95,h:95,typ,img:typ==='x2'?'gate_x2':'gate_plus',vy:86+wave*2})}
 function spawnCard(){cards.push({x:rnd(110,W-110),y:-80,w:120,h:90,hp:22+wave*10,max:22+wave*10,label:Math.random()<.5?'STUDSARE':'GARIBALDI',vy:70+wave*2})}
@@ -50,7 +50,7 @@ function update(dt){t+=dt;player.x+=(player.target-player.x)*Math.min(1,dt*9);wa
  for(const b of bullets){for(const o of boars){if(!b.dead&&hit({...b,w:9,h:22},o)){b.dead=true;o.hp-=b.dam;boom(b.x,b.y,'#ffd15a',3);if(o.hp<=0&&!o.dead){o.dead=true;score+=o.boss?500:35;kills++;shake=o.boss?.22:.08;boom(o.x,o.y,o.boss?'#C8340A':'#8F1A00',o.boss?30:12)}}}
    for(const c of cards){if(!b.dead&&hit({...b,w:9,h:22},c)){b.dead=true;c.hp-=b.dam;boom(b.x,b.y,'#FCC222',3);if(c.hp<=0&&!c.dead){c.dead=true;power=Math.min(4,power+.35);score+=120;boom(c.x,c.y,'#FCC222',25)}}}}
  bullets=bullets.filter(b=>!b.dead);boars=boars.filter(o=>!o.dead&&o.y<H+120);cards=cards.filter(c=>!c.dead&&c.y<H+120);gates=gates.filter(g=>g.y<H+120);
- for(const g of gates){if(!g.used&&hit({x:player.x,y:player.y,w:Math.min(360,70+crew*18),h:120},g)){g.used=true;if(g.typ==='plus')crew=Math.min(30,crew+1);else crew=Math.min(40,crew*2);score+=80;boom(g.x,g.y,'#29a7ff',22)}}gates=gates.filter(g=>!g.used);
+ for(const g of gates){if(!g.used&&hit({x:player.x,y:player.y,w:Math.min(360,70+crew*18),h:120},g)){g.used=true;if(g.typ==='plus')crew=Math.min(30,crew+1);else crew=Math.min(40,Math.max(crew+1,crew*2));score+=80;boom(g.x,g.y,'#29a7ff',22)}}gates=gates.filter(g=>!g.used);
  for(const o of boars){if(o.y>player.y-35){gameOver(false);return}}
  if(kills>=55)gameOver(true);
  particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=260*dt;p.life-=dt});particles=particles.filter(p=>p.life>0);shake=Math.max(0,shake-dt);scoreEl.textContent=score;crewEl.textContent=crew+' skyttar';waveEl.textContent='Våg '+wave;}
@@ -61,7 +61,7 @@ function draw(){ctx.save();if(shake){ctx.translate(rnd(-8,8)*shake*5,rnd(-8,8)*s
  gates.forEach(g=>drawGate(g));cards.forEach(c=>{ctx.fillStyle='#FFF6DC';ctx.strokeStyle='#C8340A';ctx.lineWidth=5;roundRect(c.x-c.w/2,c.y-c.h/2,c.w,c.h,16,true,true);ctx.fillStyle='#C8340A';ctx.font='24px Anton';ctx.textAlign='center';ctx.fillText(c.label,c.x,c.y-7);ctx.fillStyle='#8F1A00';ctx.fillRect(c.x-c.w*.38,c.y+22,c.w*.76,10);ctx.fillStyle='#FCC222';ctx.fillRect(c.x-c.w*.38,c.y+22,c.w*.76*(c.hp/c.max),10)});
  boars.forEach(o=>{drawImg(o.img,o.x,o.y,o.w,o.h,true);ctx.fillStyle='#8F1A00';ctx.fillRect(o.x-o.w/2,o.y-o.h/2-14,o.w,8);ctx.fillStyle='#FCC222';ctx.fillRect(o.x-o.w/2,o.y-o.h/2-14,o.w*(o.hp/o.max),8)});
  bullets.forEach(b=>{ctx.fillStyle='#ffe68a';ctx.beginPath();ctx.ellipse(b.x,b.y,5,14,0,0,7);ctx.fill()});
- const n=Math.min(crew,18);for(let i=0;i<n;i++){const k=names[i%names.length];const x=laneX(i,n),row=Math.floor(i/9),y=player.y+row*38;drawImg(k,x,y,58,72)}
+ const n=Math.min(crew,18);for(let i=0;i<n;i++){const k=names[i%names.length];const x=laneX(i,n),row=Math.floor(i/9),y=player.y+row*38;drawImg(k,x,y,78,96)}
  particles.forEach(p=>{ctx.globalAlpha=Math.max(0,p.life/.7);ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill();ctx.globalAlpha=1});ctx.restore();}
 
 function drawGate(g){ctx.save();ctx.translate(g.x,g.y);const isX=g.typ==='x2';ctx.fillStyle=isX?'rgba(120,50,255,.25)':'rgba(0,170,255,.22)';ctx.beginPath();ctx.ellipse(0,0,g.w*.7,g.h*.62,0,0,7);ctx.fill();ctx.strokeStyle=isX?'#9b4cff':'#29a7ff';ctx.lineWidth=7;ctx.beginPath();ctx.moveTo(-g.w*.42,g.h*.35);ctx.lineTo(-g.w*.42,-g.h*.05);ctx.quadraticCurveTo(0,-g.h*.62,g.w*.42,-g.h*.05);ctx.lineTo(g.w*.42,g.h*.35);ctx.stroke();ctx.fillStyle='#FFF6DC';ctx.strokeStyle='#C8340A';ctx.lineWidth=5;roundRect(-g.w*.36,-g.h*.28,g.w*.72,g.h*.38,12,true,true);ctx.fillStyle='#C8340A';ctx.font='34px Anton';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(isX?'×2':'+1',0,-g.h*.09);ctx.restore()}
