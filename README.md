@@ -14,6 +14,7 @@ Samlingsrepo för allt vi bygger. Statiska sidor, ingen build. Varje projekt lig
 | Hönshus i 3D | [`honshus/`](honshus/) | Parametrisk three.js-modell av ett hönshus med kompostgrop |
 | Yamay utekök | [`utekok/`](utekok/) | Parametrisk köksö: bockad cortenstomme, ek TP1 i liv med 6 mm rostfri topp, rostfria luckor, wok i mitten, kapplista. Källa: ~/code/yamay_utekok (`make_buttercup.py`) |
 | Foderautomat | [`foderautomat/`](foderautomat/) | Blommeröd foderautomat 200 L med skruvmatning (Hugos Claude-export), dosering + inköpslista. Källa: ~/code/foderautomat (`make_buttercup.py`) |
+| Pla fakkin nuea | [`planuea/`](planuea/) | Pla nuea yang efter @siya_kebsap (reel jul 2026, bara musik – alla mängder uppskattade). Illustrationer: `src/gen_batch.py` → `src/to_webp.py` |
 | Pad fakkin prik | [`padnamprikpao/`](padnamprikpao/) | Pad nam prik pao efter @mathias_ingenohl (reel okt 2026). Gula streckade lappar = uppskattade mängder. Illustrationer: `src/gen_batch.py` → `src/to_webp.py` |
 | Yamay Tizón, vedspis | [`tizon/`](tizon/) | Kort på startsidan. Sprängskiss ur Fusion (mesh.json från ~/code/yamay_tizon), varmvalsad gunmetal |
 
