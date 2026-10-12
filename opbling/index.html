@@ -194,7 +194,7 @@ controls.minPolarAngle = 0.9; controls.maxPolarAngle = 2.0;
 // studio environment: dark room with crisp softboxes -> real chrome look
 function makeEnv(){
   const W=1024,H=512,c=document.createElement("canvas");c.width=W;c.height=H;const g=c.getContext("2d");
-  const bg=g.createLinearGradient(0,0,0,H);bg.addColorStop(0,"#9c9c9c");bg.addColorStop(.5,"#6a6a6a");bg.addColorStop(1,"#3a3a3a");
+  const bg=g.createLinearGradient(0,0,0,H);bg.addColorStop(0,"#b4b4b4");bg.addColorStop(.5,"#8a8a8a");bg.addColorStop(1,"#5c5c5c");
   g.fillStyle=bg;g.fillRect(0,0,W,H);
   const box=(x,y,w,h,a)=>{const gr=g.createLinearGradient(x,0,x+w,0);gr.addColorStop(0,`rgba(255,255,255,0)`);gr.addColorStop(.15,`rgba(255,255,255,${a})`);gr.addColorStop(.85,`rgba(255,255,255,${a})`);gr.addColorStop(1,`rgba(255,255,255,0)`);g.fillStyle=gr;g.fillRect(x,y,w,h)};
   box(80,120,140,260,1);box(430,60,220,90,.95);box(760,150,90,240,.9);box(300,300,60,140,.6);box(920,90,70,200,.7);box(0,20,1024,22,.5);
@@ -215,7 +215,9 @@ function stickerTex(id){
   if(!texCache[id]){
     const m = loader.load(`stickers/${String(id).padStart(2,"0")}.webp`); m.colorSpace=THREE.SRGBColorSpace; m.anisotropy=8;
     const mt = loader.load(`stickers/${String(id).padStart(2,"0")}_m.webp`);
-    texCache[id]={m,mt};
+    const e = loader.load(`stickers/${String(id).padStart(2,"0")}_e.webp`);
+    const sh = loader.load(`stickers/${String(id).padStart(2,"0")}_s.webp`);
+    texCache[id]={m,mt,e,sh};
   }
   return texCache[id];
 }
@@ -327,11 +329,15 @@ class Pack{
     });
   }
   makeSticker(id){
-    const {m,mt}=stickerTex(id); const [w,h]=stickerSize(id);
-    const front=new THREE.MeshStandardMaterial({map:m,metalnessMap:mt,metalness:1,roughness:.13,alphaTest:.5,envMapIntensity:1.35});
-    const backM=new THREE.MeshStandardMaterial({color:0xf2f2ef,alphaMap:m,alphaTest:.5,roughness:.9});
+    const {m,mt,e,sh}=stickerTex(id); const [w,h]=stickerSize(id);
+    // white paper border stays matte; only the silver jewellery is mirror (packed map: G=roughness, B=metalness)
+    const front=new THREE.MeshStandardMaterial({map:m,metalnessMap:mt,roughnessMap:mt,metalness:1,roughness:1,emissive:0xffffff,emissiveMap:e,emissiveIntensity:.78,alphaTest:.5,envMapIntensity:1.5});
+    const backM=new THREE.MeshStandardMaterial({color:0x000000,emissive:0xf2f2ef,map:m,alphaTest:.5,roughness:1});
     const geo=new THREE.PlaneGeometry(w,h);
     const g=new THREE.Group(); const f=new THREE.Mesh(geo,front); const b=new THREE.Mesh(geo,backM); b.rotation.y=Math.PI; b.position.z=-.12; g.add(f,b);
+    const sw=w*(1+60/BY[id].w), shh=h*(1+60/BY[id].h);
+    const shm=new THREE.Mesh(new THREE.PlaneGeometry(sw,shh),new THREE.MeshBasicMaterial({map:sh,transparent:true,depthWrite:false,opacity:.9}));
+    shm.position.set(.9,-1.4,-.3); g.add(shm);
     g.position.set((Math.random()-.5)*20,this.BH+HH+90,6); g.rotation.set(0,0,(Math.random()-.5)*.8); g.scale.setScalar(.6);
     this.g.add(g); return {m:g,tp:g.position.clone(),tr:new THREE.Euler(),ts:1};
   }
