@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>STICKER BLING BY O.P — bygg ditt stickerpack</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Välj fem spegelstickers per pack och se dem glida ner i påsen.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Buttercup">
+<meta property="og:title" content="STICKER BLING BY O.P">
+<meta property="og:description" content="Bygg två stickerpacks i spegel, fem designs per pack.">
+<meta property="og:url" content="https://www.buttercup.nu/opbling/">
+<meta property="og:image" content="https://www.buttercup.nu/opbling/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.buttercup.nu/opbling/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0b0b0b;--mute:#8a8a8a;--line:#e3e3e3;--bg:#f4f4f2;--card:#fff;--narrow:"Archivo Narrow","Arial Narrow",Arial,sans-serif;--black:"Archivo Black","Arial Black",Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--narrow);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:#fff;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand img{height:16px;display:block}
+.brand span{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);white-space:nowrap}
+.top .send{font-weight:700;font-size:14px;letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:#fff;padding:11px 18px}
+.top .send:active{transform:translateY(1px)}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr) 420px;min-height:calc(100dvh - 53px)}
+.stage{position:relative;background:radial-gradient(ellipse at 50% 40%,#fff 0%,#ececea 70%,#e4e4e1 100%);overflow:hidden}
+#c{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.hint{position:absolute;left:18px;bottom:16px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);pointer-events:none}
+.views{position:absolute;right:16px;bottom:14px;display:flex;gap:6px}
+.views button,.chip{font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:8px 11px;background:#fff;border:1px solid var(--line)}
+.views button.on,.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.title{position:absolute;left:20px;top:18px;pointer-events:none}
+.title h1{font-family:var(--black);font-size:clamp(26px,3.4vw,46px);line-height:.92;letter-spacing:-.01em}
+.title p{margin-top:8px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.side{background:#fff;border-left:1px solid var(--line);display:flex;flex-direction:column;max-height:calc(100dvh - 53px);overflow:auto}
+.sec{padding:18px 20px;border-bottom:1px solid var(--line)}
+.sec h2{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);font-weight:600;margin-bottom:10px;display:flex;justify-content:space-between;align-items:baseline}
+.tabs{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--ink)}
+.tabs button{padding:12px 8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:14px}
+.tabs button.on{background:var(--ink);color:#fff}
+.pname{width:100%;margin-top:12px;border:0;border-bottom:1px solid var(--line);font:600 18px var(--narrow);letter-spacing:.1em;text-transform:uppercase;padding:6px 0;background:transparent;outline:none}
+.pname:focus{border-color:var(--ink)}
+.slots{list-style:none;margin-top:12px;display:grid;gap:6px}
+.slot{display:grid;grid-template-columns:22px 44px 1fr auto;align-items:center;gap:10px;padding:6px 6px 6px 8px;border:1px solid var(--line);min-height:58px;background:#fff}
+.slot.empty{border-style:dashed;color:var(--mute)}
+.slot .n{font-weight:700;font-size:13px;color:var(--mute)}
+.slot img{width:44px;height:44px;object-fit:contain}
+.slot .nm{font-weight:600;font-size:15px;letter-spacing:.06em;text-transform:uppercase;line-height:1.1}
+.slot .nm small{display:block;font-weight:400;font-size:11px;color:var(--mute);letter-spacing:.08em}
+.slot .act{display:flex;gap:2px}
+.slot .act button{width:30px;height:30px;font-size:15px;color:#555}
+.slot .act button:hover{background:var(--bg);color:var(--ink)}
+.slot .act button:disabled{opacity:.2;cursor:default;background:none}
+.front{font-size:10px;letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:#fff;padding:2px 5px;margin-left:6px;vertical-align:2px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{position:relative;aspect-ratio:1;background:var(--bg);border:1px solid transparent;display:flex;align-items:center;justify-content:center;padding:10px 10px 24px}
+.tile:hover{border-color:var(--line)}
+.tile img{max-width:100%;max-height:100%;object-fit:contain;transition:transform .2s}
+.tile:hover img{transform:scale(1.06) rotate(-2deg)}
+.tile .lb{position:absolute;left:0;right:0;bottom:6px;text-align:center;font-size:11px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px}
+.tile .bd{position:absolute;top:6px;right:6px;display:flex;gap:3px}
+.tile .bd i{font-style:normal;font-size:10px;font-weight:700;width:18px;height:18px;display:grid;place-items:center;border:1px solid var(--ink);background:#fff}
+.tile .bd i.cur{background:var(--ink);color:#fff}
+.tile.in{border-color:var(--ink)}
+.heads{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.heads button{border:1px solid var(--line);padding:6px;background:#fff}
+.heads button.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.heads canvas{width:100%;display:block}
+.heads span{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-top:5px}
+.note{font-size:13px;line-height:1.45;color:#555}
+.note b{color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;background:var(--ink);color:#fff;padding:12px 16px;font-size:14px;letter-spacing:.06em;transition:.25s;z-index:50;max-width:92vw}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+dialog{border:0;padding:0;max-width:min(520px,92vw);margin:auto}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+.dlg{padding:22px}
+.dlg h3{font-family:var(--black);font-size:24px;margin-bottom:10px}
+.dlg pre{white-space:pre-wrap;font:14px/1.5 var(--narrow);background:var(--bg);padding:12px;margin:12px 0;max-height:40vh;overflow:auto}
+.dlg .row{display:flex;gap:8px;flex-wrap:wrap}
+.dlg .row button{flex:1;padding:12px;border:1px solid var(--ink);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:13px}
+.dlg .row button.pri{background:var(--ink);color:#fff}
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr}
+  .stage{height:58dvh;min-height:380px}
+  .side{max-height:none;border-left:0}
+  .brand span{display:none}
+  .title h1{font-size:26px}
+  .hint{display:none}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><img src="logo_black.png" alt="O.P Jewellery"><span>× Sticker Bling · pack builder</span></div>
+  <button class="send" id="send">Skicka mitt val</button>
+</header>
+<div class="wrap">
+  <section class="stage">
+    <canvas id="c"></canvas>
+    <div class="title"><h1>STICKER<br>BLING</h1><p>Spegelstickers · 2 packs × 5 designs</p></div>
+    <div class="views">
+      <button data-v="pack" class="on">Pack</button>
+      <button data-v="fan">Titta i packet</button>
+      <button data-v="both">Båda packen</button>
+    </div>
+    <div class="hint">Dra för att vrida · rör musen för spegelglans</div>
+  </section>
+  <aside class="side">
+    <div class="sec">
+      <div class="tabs" id="tabs"><button data-p="0" class="on">Pack 1</button><button data-p="1">Pack 2</button></div>
+      <input class="pname" id="pname" maxlength="22" aria-label="Packets namn">
+      <ol class="slots" id="slots"></ol>
+    </div>
+    <div class="sec">
+      <h2><span>Välj designs</span><span id="cnt"></span></h2>
+      <div class="grid" id="grid"></div>
+    </div>
+    <div class="sec">
+      <h2><span>Headerkort</span><span>105 × 37 mm</span></h2>
+      <div class="heads" id="heads"></div>
+    </div>
+    <div class="sec note">
+      <p><b>Så funkar det:</b> tryck på en design för att lägga den i packet du har öppet, och tryck igen för att ta ur den. Nummer 1 ligger längst fram i påsen. Ändra ordningen med pilarna. Du kan ge varje pack ett eget namn, och namnet trycks på headerkortet.</p>
+      <p style="margin-top:8px">Alla stickers är <b>spegelmaterial</b> och konturskurna. Bilderna kommer från O.P:s produktfoton. Det slutliga trycket görs från rentecknade original.</p>
+    </div>
+  </aside>
+</div>
+<div class="toast" id="toast"></div>
+<dialog id="dlg"><div class="dlg">
+  <h3>Ditt val</h3>
+  <p class="note">Skicka länken till oss. Den öppnar exakt dina två pack.</p>
+  <pre id="sum"></pre>
+  <div class="row"><button class="pri" id="share">Dela</button><button id="copy">Kopiera länk</button><button id="close">Stäng</button></div>
+</div></dialog>
+
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+}}
+</script>
+<script type="module">
+import * as THREE from "three";
+import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+
+const STICKERS = [{"id": 73, "name": "Flying Stone", "title": "Flying Stone Pin", "url": "https://opjewellery.com/products/flying-stone-brooch-silver", "w": 820, "h": 910}, {"id": 29, "name": "Key Hook", "title": "Union Key Hook", "url": "https://opjewellery.com/products/union-key-hook", "w": 267, "h": 924}, {"id": 24, "name": "O.P. Anderson-flaskan", "title": "O.P. Anderson 135-Year Anniversary Bottle Pendant", "url": "https://opjewellery.com/products/o-p-anderson-135-year-anniversary-bottle", "w": 597, "h": 910}, {"id": 92, "name": "Bronco-ringen", "title": "Bronco Ring", "url": "https://opjewellery.com/products/stallion-ring", "w": 801, "h": 910}, {"id": 72, "name": "Great Meadow", "title": "Great Meadow Pin", "url": "https://opjewellery.com/products/great-meadows-brooch-silver", "w": 494, "h": 912}, {"id": 48, "name": "Lucky Man", "title": "Lucky Man Pendant", "url": "https://opjewellery.com/products/explorer-s-fortune-pendant-copy", "w": 766, "h": 910}, {"id": 67, "name": "Good Luck-knappen", "title": "Good Luck - Button", "url": "https://opjewellery.com/products/button-good-luck", "w": 912, "h": 906}, {"id": 80, "name": "Fingers Crossed", "title": "Fingers Crossed Signet Ring", "url": "https://opjewellery.com/products/copy-of-horseshoe-singet-ring", "w": 912, "h": 730}, {"id": 79, "name": "Lucky Seven", "title": "Lucky Number Seven Signet Ring", "url": "https://opjewellery.com/products/copy-of-fingers-crossed-signet-ring", "w": 910, "h": 725}, {"id": 81, "name": "Hästskon", "title": "Horseshoe Singet Ring", "url": "https://opjewellery.com/products/horseshoe-singet-ring", "w": 912, "h": 733}, {"id": 65, "name": "Skatan", "title": "Magpie Pendant", "url": "https://opjewellery.com/products/magpie-pendent", "w": 744, "h": 910}, {"id": 31, "name": "Fjädern", "title": "SKATA SKATA - Big Feather Pendant", "url": "https://opjewellery.com/products/big-feather", "w": 287, "h": 910}, {"id": 30, "name": "Skatans hand", "title": "SKATA SKATA - The Magpie Hand Pendant", "url": "https://opjewellery.com/products/magpie-hand-pendant", "w": 809, "h": 912}, {"id": 66, "name": "Beer Tab", "title": "Beer Tab Pendant", "url": "https://opjewellery.com/products/good-luck-be-safe-pendant-copy", "w": 908, "h": 912}, {"id": 55, "name": "Twig", "title": "Twig Pendant", "url": "https://opjewellery.com/products/twig-pendant", "w": 450, "h": 942}, {"id": 23, "name": "Fyrklövern", "title": "Four Clover Pin", "url": "https://opjewellery.com/products/four-clover-pin", "w": 361, "h": 910}, {"id": 51, "name": "Good Luck-myntet", "title": "The Good Luck Silver Coin", "url": "https://opjewellery.com/products/the-good-luck-silver-coin", "w": 912, "h": 869}, {"id": 28, "name": "Guardian Bell", "title": "The Guardian Bell", "url": "https://opjewellery.com/products/guardian-bell", "w": 850, "h": 912}];
+const BY = Object.fromEntries(STICKERS.map(s=>[s.id,s]));
+const HEADS = [{id:"vit",label:"Vit"},{id:"svart",label:"Svart"},{id:"silver",label:"Silver"}];
+const DEFAULT = {packs:[[73,29,24,92,72],[48,67,80,79,81]],names:["Shiny Things","Good Luck"],head:"vit"};
+
+// ---------- state ----------
+const state = loadState();
+let cur = 0, view = "pack";
+function loadState(){
+  const s = structuredClone(DEFAULT);
+  const h = new URLSearchParams(location.hash.slice(1));
+  const ids = v => (v||"").split(",").map(Number).filter(n=>BY[n]).slice(0,5);
+  if(h.has("p1")) s.packs[0] = ids(h.get("p1"));
+  if(h.has("p2")) s.packs[1] = ids(h.get("p2"));
+  if(h.get("n1")) s.names[0] = h.get("n1").slice(0,22);
+  if(h.get("n2")) s.names[1] = h.get("n2").slice(0,22);
+  if(HEADS.some(x=>x.id===h.get("h"))) s.head = h.get("h");
+  return s;
+}
+function hashOf(){
+  const h = new URLSearchParams({p1:state.packs[0].join(","),p2:state.packs[1].join(","),n1:state.names[0],n2:state.names[1],h:state.head});
+  return h.toString();
+}
+function save(){ history.replaceState(null,"","#"+hashOf()); }
+
+// ---------- 3D ----------
+const canvas = document.getElementById("c");
+const renderer = new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,preserveDrawingBuffer:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(28,1,1,5000);
+camera.position.set(0,40,330);
+const controls = new OrbitControls(camera,canvas);
+controls.enableDamping = true; controls.enablePan = false;
+controls.minDistance = 120; controls.maxDistance = 700;
+controls.minAzimuthAngle = -0.9; controls.maxAzimuthAngle = 0.9;
+controls.minPolarAngle = 0.9; controls.maxPolarAngle = 2.0;
+
+// studio environment: dark room with crisp softboxes -> real chrome look
+function makeEnv(){
+  const W=1024,H=512,c=document.createElement("canvas");c.width=W;c.height=H;const g=c.getContext("2d");
+  const bg=g.createLinearGradient(0,0,0,H);bg.addColorStop(0,"#9c9c9c");bg.addColorStop(.5,"#6a6a6a");bg.addColorStop(1,"#3a3a3a");
+  g.fillStyle=bg;g.fillRect(0,0,W,H);
+  const box=(x,y,w,h,a)=>{const gr=g.createLinearGradient(x,0,x+w,0);gr.addColorStop(0,`rgba(255,255,255,0)`);gr.addColorStop(.15,`rgba(255,255,255,${a})`);gr.addColorStop(.85,`rgba(255,255,255,${a})`);gr.addColorStop(1,`rgba(255,255,255,0)`);g.fillStyle=gr;g.fillRect(x,y,w,h)};
+  box(80,120,140,260,1);box(430,60,220,90,.95);box(760,150,90,240,.9);box(300,300,60,140,.6);box(920,90,70,200,.7);box(0,20,1024,22,.5);
+  g.fillStyle="rgba(255,236,210,.35)";g.fillRect(560,330,180,60);
+  const t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;t.colorSpace=THREE.SRGBColorSpace;
+  const pm=new THREE.PMREMGenerator(renderer);const env=pm.fromEquirectangular(t).texture;t.dispose();pm.dispose();return env;
+}
+scene.environment = makeEnv();
+scene.add(new THREE.AmbientLight(0xffffff,.35));
+const key = new THREE.DirectionalLight(0xffffff,1.3); key.position.set(-120,200,260); scene.add(key);
+
+// shadow catcher
+const shadowTex = (()=>{const c=document.createElement("canvas");c.width=c.height=256;const g=c.getContext("2d");const r=g.createRadialGradient(128,128,10,128,128,128);r.addColorStop(0,"rgba(0,0,0,.28)");r.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=r;g.fillRect(0,0,256,256);return new THREE.CanvasTexture(c)})();
+
+const loader = new THREE.TextureLoader();
+const texCache = {};
+function stickerTex(id){
+  if(!texCache[id]){
+    const m = loader.load(`stickers/${String(id).padStart(2,"0")}.webp`); m.colorSpace=THREE.SRGBColorSpace; m.anisotropy=8;
+    const mt = loader.load(`stickers/${String(id).padStart(2,"0")}_m.webp`);
+    texCache[id]={m,mt};
+  }
+  return texCache[id];
+}
+const MAXD = 47; // mm, longest side of a sticker
+function stickerSize(id){const s=BY[id];const k=MAXD/Math.max(s.w,s.h);return [s.w*k,s.h*k]}
+
+const BW = 105, HH = 37; // bag width, header height (StickerApp standard)
+function bagHeight(ids){return Math.max(63, ...ids.map(id=>stickerSize(id)[1]+22))}
+
+// header card texture
+const logoImg = new Image(); logoImg.src="logo_black.png";
+const logoW = new Image(); logoW.src="logo_white.png";
+function drawHeader(g,W,H,variant,name,packNo){
+  const s=W/1050; g.save(); g.scale(s,s); W=1050; H=370;
+  if(variant==="svart"){g.fillStyle="#0c0c0c";g.fillRect(0,0,W,H)}
+  else if(variant==="silver"){const gr=g.createLinearGradient(0,0,W,H);["#cfd2d6","#f7f8f9","#a9adb3","#eef0f2","#b9bdc2","#fbfbfb","#c3c6cb"].forEach((c,i,a)=>gr.addColorStop(i/(a.length-1),c));g.fillStyle=gr;g.fillRect(0,0,W,H);
+    g.globalAlpha=.08;for(let y=0;y<H;y+=3){g.fillStyle=y%6?"#000":"#fff";g.fillRect(0,y,W,1)}g.globalAlpha=1}
+  else {g.fillStyle="#fff";g.fillRect(0,0,W,H)}
+  const ink = variant==="svart" ? "#fff" : "#0b0b0b";
+  // title, fitted
+  g.fillStyle=ink; g.textAlign="center"; g.textBaseline="alphabetic";
+  let fs=150; g.font=`${fs}px "Archivo Black"`; const tw=g.measureText("STICKER BLING").width; fs=Math.min(150,fs*860/tw); g.font=`${fs}px "Archivo Black"`;
+  if(variant==="svart"){const gr=g.createLinearGradient(0,150,0,250);gr.addColorStop(0,"#ffffff");gr.addColorStop(.48,"#b8bcc2");gr.addColorStop(.52,"#7d828a");gr.addColorStop(1,"#f2f3f5");g.fillStyle=gr}
+  g.fillText("STICKER BLING",W/2,238);
+  // by + logo
+  g.fillStyle=ink; g.font=`600 30px "Archivo Narrow"`; g.textAlign="left";
+  const L = variant==="svart"?logoW:logoImg; const lh=34, lw=L.naturalWidth? L.naturalWidth*lh/L.naturalHeight : 290;
+  const byw=g.measureText("BY").width+14; const x0=(W-(byw+lw))/2;
+  g.fillText("BY",x0,300); if(L.naturalWidth) g.drawImage(L,x0+byw,300-lh+3,lw,lh);
+  // pack line
+  g.font=`500 22px "Archivo Narrow"`; g.textAlign="center"; g.globalAlpha=.7;
+  g.fillText(`VOL. ${packNo} — ${(name||"").toUpperCase()}  ·  5 MIRROR STICKERS`,W/2,346); g.globalAlpha=1;
+  // euro hole guide (actual hole is cut in geometry)
+  g.restore();
+}
+function headerShape(){
+  const s=new THREE.Shape(); const w=BW/2, r=1.5;
+  s.moveTo(-w+r,0);s.lineTo(w-r,0);s.quadraticCurveTo(w,0,w,r);s.lineTo(w,HH-r);s.quadraticCurveTo(w,HH,w-r,HH);s.lineTo(-w+r,HH);s.quadraticCurveTo(-w,HH,-w,HH-r);s.lineTo(-w,r);s.quadraticCurveTo(-w,0,-w+r,0);
+  const h=new THREE.Path(); const cy=HH-8, hw=10, hr=2.8; // euro slot
+  h.absarc(0,cy+1.2,3.4,0,Math.PI*2,false); s.holes.push(h);
+  const h2=new THREE.Path(); h2.moveTo(-hw,cy-hr);h2.lineTo(hw,cy-hr);h2.absarc(hw,cy,hr,-Math.PI/2,Math.PI/2,false);h2.lineTo(-hw,cy+hr);h2.absarc(-hw,cy,hr,Math.PI/2,Math.PI*1.5,false);
+  // merge slot + circle: use slot only (cleaner)
+  s.holes=[h2]; return s;
+}
+const HEADER_GEO = (()=>{const g=new THREE.ExtrudeGeometry(headerShape(),{depth:3.2,bevelEnabled:false,curveSegments:16});g.translate(0,0,-1.6);return g})();
+
+// bag texture: crinkle highlights
+const crinkle = (()=>{const c=document.createElement("canvas");c.width=256;c.height=512;const g=c.getContext("2d");g.fillStyle="#000";g.fillRect(0,0,256,512);
+  g.globalCompositeOperation="lighter";
+  const streak=(x,y,w,h,a,rot)=>{g.save();g.translate(x,y);g.rotate(rot);const gr=g.createLinearGradient(-w/2,0,w/2,0);gr.addColorStop(0,"rgba(255,255,255,0)");gr.addColorStop(.5,`rgba(255,255,255,${a})`);gr.addColorStop(1,"rgba(255,255,255,0)");g.fillStyle=gr;g.fillRect(-w/2,-h/2,w,h);g.restore()};
+  streak(40,256,30,520,.55,.02);streak(214,240,26,520,.5,-.03);streak(150,120,90,160,.25,.6);streak(90,380,120,120,.2,-.7);streak(128,30,256,40,.5,0);streak(128,490,256,30,.6,0);
+  const t=new THREE.CanvasTexture(c);return t})();
+
+class Pack{
+  constructor(i){
+    this.i=i; this.g=new THREE.Group(); scene.add(this.g); this.items=new Map();
+    const hc=document.createElement("canvas"); hc.width=1050; hc.height=370; this.hc=hc;
+    this.htex=new THREE.CanvasTexture(hc); this.htex.colorSpace=THREE.SRGBColorSpace; this.htex.anisotropy=8;
+    this.htex.repeat.set(1/BW,1/HH); this.htex.offset.set(.5,0);
+    this.hmat=new THREE.MeshStandardMaterial({map:this.htex,roughness:.55,metalness:0});
+    const edge=new THREE.MeshStandardMaterial({color:0xf3f3f3,roughness:.8});
+    this.header=new THREE.Mesh(HEADER_GEO,[this.hmat,edge]); this.g.add(this.header);
+    const sm=new THREE.MeshStandardMaterial({color:0xb9bcc0,metalness:1,roughness:.25});
+    this.staples=[-30,30].map(x=>{const m=new THREE.Mesh(new THREE.BoxGeometry(9,.9,.5),sm);m.position.set(x,4.5,1.8);this.g.add(m);return m});
+    this.bagMat=new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.14,roughness:.06,metalness:0,clearcoat:1,clearcoatRoughness:.05,envMapIntensity:1.6,side:THREE.DoubleSide,depthWrite:false});
+    this.hiMat=new THREE.MeshBasicMaterial({color:0xffffff,alphaMap:crinkle,transparent:true,opacity:.55,depthWrite:false,blending:THREE.AdditiveBlending});
+    this.sealMat=new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.42,roughness:.4,depthWrite:false,side:THREE.DoubleSide});
+    this.front=new THREE.Mesh(new THREE.PlaneGeometry(1,1),this.bagMat); this.back=new THREE.Mesh(new THREE.PlaneGeometry(1,1),this.bagMat);
+    this.hi=new THREE.Mesh(new THREE.PlaneGeometry(1,1),this.hiMat);
+    this.sealB=new THREE.Mesh(new THREE.PlaneGeometry(1,1),this.sealMat);
+    this.sealL=new THREE.Mesh(new THREE.PlaneGeometry(1,1),this.sealMat);this.sealR=new THREE.Mesh(new THREE.PlaneGeometry(1,1),this.sealMat);
+    [this.back,this.front,this.hi,this.sealB,this.sealL,this.sealR].forEach((m,k)=>{m.renderOrder=10+k;this.g.add(m)});
+    this.shadow=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:shadowTex,transparent:true,depthWrite:false}));
+    this.shadow.rotation.x=-Math.PI/2; this.g.add(this.shadow);
+    this.BH=63; this.layoutBag();
+  }
+  layoutBag(){
+    const BH=this.BH, w=BW-3;
+    this.front.scale.set(w,BH,1);this.front.position.set(0,BH/2,1.5);
+    this.back.scale.set(w,BH,1);this.back.position.set(0,BH/2,-1.5);
+    this.hi.scale.set(w,BH-8,1);this.hi.position.set(0,(BH-8)/2,1.52);
+    this.sealB.scale.set(w,5,1);this.sealB.position.set(0,2.5,1.54);
+    this.sealL.scale.set(3,BH,1);this.sealL.position.set(-w/2+1.5,BH/2,1.54);
+    this.sealR.scale.set(3,BH,1);this.sealR.position.set(w/2-1.5,BH/2,1.54);
+    this.header.position.y=BH-8;
+    this.staples.forEach(s=>s.position.y=BH-8+4.5);
+    this.shadow.scale.set(BW*1.5,40,1);this.shadow.position.set(0,-.5,0);
+  }
+  drawHeader(){
+    const g=this.hc.getContext("2d"); g.clearRect(0,0,1050,370);
+    drawHeader(g,1050,370,state.head,state.names[this.i],this.i+1); this.htex.needsUpdate=true;
+    this.hmat.roughness = state.head==="silver"?.35:.6; this.hmat.metalness = state.head==="silver"?.35:0;
+  }
+  sync(ids,fan){
+    this.BH=bagHeight(ids); this.layoutBag();
+    for(const [id,it] of this.items) if(!ids.includes(id)){ it.leaving=true; it.tp=it.m.position.clone().add(new THREE.Vector3(0,this.BH+70,8)); it.ts=0.01; }
+    ids.forEach((id,k)=>{
+      let it=this.items.get(id);
+      if(!it||it.leaving){ if(it){this.g.remove(it.m);} it=this.makeSticker(id); this.items.set(id,it); }
+      const [w,h]=stickerSize(id); const n=ids.length;
+      if(fan){
+        const span=58; const x=(k-(n-1)/2)*span; const arc=Math.abs(k-(n-1)/2);
+        it.tp=new THREE.Vector3(x, this.BH*.5 - arc*arc*1.6, 34 + k*.3); it.tr=new THREE.Euler(0,0,(k-(n-1)/2)*-.07); it.ts=Math.min(1.05,52/Math.max(w,h));
+      } else {
+        const sp=[[0,.15,0],[-11,.75,.1],[11,.9,-.09],[-6,1,.06],[8,.45,-.12]][k]||[0,0,0];
+        const free=Math.max(0,this.BH-h-15); it.tp=new THREE.Vector3(sp[0]*Math.max(0,BW-w-8)/22, 6+h/2+free*sp[1], 1.0-k*.42); it.tr=new THREE.Euler(0,0,sp[2]); it.ts=1;
+      }
+      it.m.renderOrder = 5-k;
+    });
+  }
+  makeSticker(id){
+    const {m,mt}=stickerTex(id); const [w,h]=stickerSize(id);
+    const front=new THREE.MeshStandardMaterial({map:m,metalnessMap:mt,metalness:1,roughness:.13,alphaTest:.5,envMapIntensity:1.35});
+    const backM=new THREE.MeshStandardMaterial({color:0xf2f2ef,alphaMap:m,alphaTest:.5,roughness:.9});
+    const geo=new THREE.PlaneGeometry(w,h);
+    const g=new THREE.Group(); const f=new THREE.Mesh(geo,front); const b=new THREE.Mesh(geo,backM); b.rotation.y=Math.PI; b.position.z=-.12; g.add(f,b);
+    g.position.set((Math.random()-.5)*20,this.BH+HH+90,6); g.rotation.set(0,0,(Math.random()-.5)*.8); g.scale.setScalar(.6);
+    this.g.add(g); return {m:g,tp:g.position.clone(),tr:new THREE.Euler(),ts:1};
+  }
+  step(dt){
+    const k=1-Math.exp(-dt*7);
+    for(const [id,it] of this.items){
+      it.m.position.lerp(it.tp,k);
+      it.m.rotation.z+= (it.tr.z-it.m.rotation.z)*k; it.m.rotation.x+=(it.tr.x-it.m.rotation.x)*k; it.m.rotation.y+=(it.tr.y-it.m.rotation.y)*k;
+      const s=it.m.scale.x+(it.ts-it.m.scale.x)*k; it.m.scale.setScalar(s);
+      if(it.leaving && it.m.scale.x<.05){ this.g.remove(it.m); this.items.delete(id); }
+    }
+  }
+}
+const packs=[new Pack(0),new Pack(1)];
+const camTarget=new THREE.Vector3(), camGoal=new THREE.Vector3(); let camDist=330, userMoved=false;
+function layoutScene(){
+  const both = view==="both" || innerWidth>900 && view!=="fan" && false;
+  packs.forEach((p,i)=>{ const x = view==="both" ? (i?66:-66) : (i===cur?0:(i<cur?-190:190)); p.gx=x; p.g.visible = view==="both" || i===cur; });
+  const p=packs[cur]; const topY = p.BH+HH-8;
+  const aspect = canvas.clientWidth/Math.max(1,canvas.clientHeight);
+  let w,h,cy;
+  if(view==="both"){ w=250; h=Math.max(packs[0].BH,packs[1].BH)+HH+30; cy=h/2-12; }
+  else if(view==="fan"){ w=Math.max(BW+40, state.packs[cur].length*58+30); h=topY+26; cy=topY/2; }
+  else { w=BW+40; h=topY+26; cy=topY/2; }
+  const vfov=camera.fov*Math.PI/180; const dH=(h/2)/Math.tan(vfov/2); const dW=(w/2)/Math.tan(vfov/2)/aspect;
+  camDist=Math.max(dH,dW)*1.12; camGoal.set(0,cy,0);
+}
+function syncAll(){ packs.forEach((p,i)=>{ p.sync(state.packs[i], view==="fan" && i===cur); p.drawHeader(); }); layoutScene(); }
+
+function resize(){
+  const w=canvas.clientWidth,h=canvas.clientHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); layoutScene();
+}
+new ResizeObserver(resize).observe(canvas);
+
+// pointer shimmer
+const tilt={x:0,y:0,tx:0,ty:0};
+addEventListener("pointermove",e=>{tilt.tx=(e.clientX/innerWidth-.5);tilt.ty=(e.clientY/innerHeight-.5)});
+addEventListener("deviceorientation",e=>{ if(e.gamma==null) return; tilt.tx=Math.max(-.5,Math.min(.5,e.gamma/60)); tilt.ty=Math.max(-.5,Math.min(.5,(e.beta-45)/60)); });
+controls.addEventListener("start",()=>{userMoved=true});
+
+let last=performance.now(), t0=last;
+function frame(now){
+  const dt=Math.min(.05,(now-last)/1000); last=now;
+  tilt.x+=(tilt.tx-tilt.x)*Math.min(1,dt*4); tilt.y+=(tilt.ty-tilt.y)*Math.min(1,dt*4);
+  scene.environmentRotation.set(tilt.y*.9,tilt.x*2.2+Math.sin((now-t0)/2600)*.25,0);
+  packs.forEach(p=>{ p.g.position.x+=(p.gx-p.g.position.x)*Math.min(1,dt*6); p.g.rotation.y=Math.sin((now-t0)/3000+p.i)*.06 + tilt.x*.12; p.step(dt); });
+  camTarget.lerp(camGoal,Math.min(1,dt*5)); controls.target.copy(camTarget);
+  const dir=camera.position.clone().sub(controls.target); const d=dir.length(); const nd=d+(camDist-d)*Math.min(1,dt*(userMoved?1.2:5));
+  if(!userMoved){ const goal=new THREE.Vector3(0,.12,1).normalize().multiplyScalar(nd).add(controls.target); camera.position.lerp(goal,Math.min(1,dt*5)); }
+  else camera.position.copy(controls.target).add(dir.setLength(nd));
+  controls.update(); renderer.render(scene,camera); requestAnimationFrame(frame);
+}
+
+// ---------- UI ----------
+const $=s=>document.querySelector(s);
+const tabs=$("#tabs"), slots=$("#slots"), grid=$("#grid"), pname=$("#pname"), heads=$("#heads");
+const thumb=id=>`stickers/${String(id).padStart(2,"0")}_t.webp`;
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("show"),2200)}
+function render(){
+  tabs.querySelectorAll("button").forEach(b=>b.classList.toggle("on",+b.dataset.p===cur));
+  tabs.querySelectorAll("button").forEach(b=>b.textContent=`Pack ${+b.dataset.p+1} · ${state.packs[+b.dataset.p].length}/5`);
+  if(document.activeElement!==pname) pname.value=state.names[cur];
+  const ids=state.packs[cur];
+  slots.innerHTML="";
+  for(let k=0;k<5;k++){
+    const id=ids[k]; const li=document.createElement("li");
+    if(id==null){ li.className="slot empty"; li.innerHTML=`<span class="n">${k+1}</span><span></span><span class="nm">Tom plats — välj nedan</span><span></span>`; }
+    else { const s=BY[id]; li.className="slot";
+      li.innerHTML=`<span class="n">${k+1}</span><img src="${thumb(id)}" alt=""><span class="nm">${s.name}${k===0?'<span class="front">Fram</span>':''}<small>${s.title}</small></span>
+      <span class="act"><button title="Upp" data-a="up" ${k===0?"disabled":""}>↑</button><button title="Ner" data-a="down" ${k===ids.length-1?"disabled":""}>↓</button><button title="Ta bort" data-a="rm">✕</button></span>`;
+      li.querySelectorAll("button").forEach(b=>b.onclick=()=>act(b.dataset.a,k)); }
+    slots.appendChild(li);
+  }
+  $("#cnt").textContent=`${STICKERS.length} designs`;
+  grid.querySelectorAll(".tile").forEach(t=>{const id=+t.dataset.id;const in0=state.packs[0].includes(id),in1=state.packs[1].includes(id);
+    t.classList.toggle("in",state.packs[cur].includes(id));
+    t.querySelector(".bd").innerHTML=(in0?`<i class="${cur===0?"cur":""}">1</i>`:"")+(in1?`<i class="${cur===1?"cur":""}">2</i>`:"");});
+  heads.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.h===state.head));
+  document.querySelectorAll(".views button").forEach(b=>b.classList.toggle("on",b.dataset.v===view));
+  save(); syncAll();
+}
+function act(a,k){const ids=state.packs[cur];
+  if(a==="rm") ids.splice(k,1);
+  if(a==="up"&&k>0) [ids[k-1],ids[k]]=[ids[k],ids[k-1]];
+  if(a==="down"&&k<ids.length-1) [ids[k+1],ids[k]]=[ids[k],ids[k+1]];
+  render();}
+STICKERS.forEach(s=>{const b=document.createElement("button");b.className="tile";b.dataset.id=s.id;b.title=s.title;
+  b.innerHTML=`<img src="${thumb(s.id)}" alt="${s.name}" loading="lazy"><span class="lb">${s.name}</span><span class="bd"></span>`;
+  b.onclick=()=>{const ids=state.packs[cur];const i=ids.indexOf(s.id);
+    if(i>=0) ids.splice(i,1); else if(ids.length>=5){toast(`Pack ${cur+1} är fullt. Ta bort en design först.`);return} else { ids.push(s.id); if(view==="both") view="pack"; }
+    render();};
+  grid.appendChild(b);});
+tabs.onclick=e=>{const b=e.target.closest("button");if(!b)return;cur=+b.dataset.p;if(view==="both")view="pack";userMoved=false;render();};
+pname.oninput=()=>{state.names[cur]=pname.value;save();packs[cur].drawHeader();};
+document.querySelectorAll(".views button").forEach(b=>b.onclick=()=>{view=b.dataset.v;userMoved=false;render();});
+function headPreview(cv,h){const g=cv.getContext("2d");g.clearRect(0,0,cv.width,cv.height);drawHeader(g,cv.width,cv.height,h,state.names[cur],cur+1);}
+HEADS.forEach(h=>{const b=document.createElement("button");b.dataset.h=h.id;const cv=document.createElement("canvas");cv.width=420;cv.height=148;b.append(cv);
+  const sp=document.createElement("span");sp.textContent=h.label;b.append(sp);b.onclick=()=>{state.head=h.id;render();};heads.append(b);});
+const redrawHeads=()=>heads.querySelectorAll("button").forEach(b=>headPreview(b.querySelector("canvas"),b.dataset.h));
+
+// send
+function summary(){return state.packs.map((ids,i)=>`PACK ${i+1} — ${state.names[i].toUpperCase()}\n`+(ids.length?ids.map((id,k)=>`  ${k+1}. ${BY[id].name} (${BY[id].title})`).join("\n"):"  (tomt)")).join("\n\n")+`\n\nHeaderkort: ${HEADS.find(h=>h.id===state.head).label}`}
+function link(){return location.origin+location.pathname+"#"+hashOf()}
+$("#send").onclick=()=>{const short=state.packs.map((p,i)=>p.length<5?`Pack ${i+1} har ${p.length}/5`:null).filter(Boolean);
+  $("#sum").textContent=summary()+(short.length?`\n\nObs: ${short.join(", ")}.`:"");$("#dlg").showModal();};
+$("#close").onclick=()=>$("#dlg").close();
+$("#copy").onclick=async()=>{try{await navigator.clipboard.writeText(link());toast("Länken är kopierad")}catch{prompt("Kopiera länken:",link())}};
+$("#share").onclick=async()=>{const data={title:"STICKER BLING BY O.P — mitt val",text:summary(),url:link()};
+  if(navigator.share){try{await navigator.share(data)}catch{}} else {try{await navigator.clipboard.writeText(data.text+"\n\n"+data.url);toast("Val + länk kopierat")}catch{prompt("Kopiera:",link())}}};
+
+window.__state=state; window.__packs=packs;
+Promise.all([document.fonts.load('80px "Archivo Black"'),document.fonts.load('600 30px "Archivo Narrow"'),
+  new Promise(r=>logoImg.complete?r():logoImg.onload=r),new Promise(r=>logoW.complete?r():logoW.onload=r)]).finally(()=>{render();redrawHeads();});
+pname.addEventListener("input",redrawHeads); tabs.addEventListener("click",redrawHeads);
+render(); resize(); requestAnimationFrame(frame);
+</script>
+</body>
+</html>
