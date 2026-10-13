@@ -319,7 +319,8 @@ const $=s=>document.querySelector(s);
 function renderAll(){ renderNav(); renderStage(); renderPanel(); save(); }
 function renderNav(){
   $('#products').innerHTML = Object.entries(PRODUCTS).map(([k,p])=>`<button data-k="${k}" class="${S0.kind===k?'on':''}">${p.n}</button>`).join('')+
-    `<button id="cartBtn">Beställning (${S0.cart.length})</button>`;
+    `<button id="openLink" style="margin-left:auto">Öppna länk</button><button id="cartBtn" style="margin-left:0">Beställning (${S0.cart.length})</button>`;
+  $('#openLink').onclick=openLinkDlg;
   $('#products').querySelectorAll('button[data-k]').forEach(b=>b.onclick=()=>{S0.kind=b.dataset.k; sel=null; renderAll();});
   $('#cartBtn').onclick=openCart;
   const vs=PRODUCTS[S0.kind].views;
@@ -594,19 +595,53 @@ async function unpack(str){
   const u=Uint8Array.from(bin,c=>c.charCodeAt(0)); const ds=new Blob([u]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
   return JSON.parse(await new Response(ds).text());
 }
+function qtyStr(q){ return Object.entries(q||{}).filter(([k,v])=>v>0).map(([k,v])=>k==='st'?`${v} st`:`${k}×${v}`).join(', ')||'–'; }
+function qtyTotal(q){ return Object.values(q||{}).reduce((a,b)=>a+(+b||0),0); }
+function elSpec(e){
+  const pos=`pos x ${e.x} / y ${e.y} mm`;
+  if(e.t==='text') return `Text "${e.txt.replace(/\n/g,' / ')}" – ${FONTS[e.font]?.n||e.font}, ${e.size} mm, färg ${PN[e.col]||e.col}, spärrning ${e.ls}, båge ${e.arc||0} (${pos})`;
+  if(e.t==='img') return `${IMG[e.img].n} – bredd ${e.w} mm${e.img==='logo'?`, bakgrund ${e.disc===false?'genomskinlig':PN[e.disc||'w']}`:''} (${pos})`;
+  if(e.t==='stripes') return `Ränder ${e.cols.map(c=>PN[c]).join('/')} – längd ${e.len} mm, tjocklek ${e.th} mm, mellanrum ${e.gap} mm, riktning ${e.rot??(e.vert?90:0)}° (${pos})`;
+  return '';
+}
+function orderText(o,link){
+  const L=[]; const line='─'.repeat(44);
+  L.push('BLOMMERÖD POLO CLUB – BESTÄLLNING', line);
+  L.push(`Från:     ${o.who||'–'}`, `Skapad:   ${new Date(o.ts).toLocaleString('sv-SE')}`, `Önskas:   ${o.when||'–'}`);
+  if(o.note) L.push(`Övrigt:   ${o.note}`);
+  L.push(`Artiklar: ${o.items.length} st, totalt ${o.items.reduce((a,it)=>a+qtyTotal(it.qty),0)} plagg/skyltar`, '');
+  o.items.forEach((it,i)=>{ const d=it.d;
+    L.push(line, `${i+1}. ${PRODUCTS[d.kind].n.toUpperCase()}`, line);
+    if(d.kind==='sign'){ L.push(`Storlek:   ${d.w} × ${d.h} cm`, `Bakgrund:  ${PN[d.bg]}`, `Ram:       ${d.border&&d.border!=='none'?PN[d.border]:'ingen'}`); }
+    else { L.push(`Plaggfärg: ${GN[d.garment]}`);
+      if(d.kind==='tee'){ const sl=d.sleeves; L.push(`Ärmränder: ${sl.on?`${sl.cols.map(c=>PN[c]).join('/')}, tjocklek ${sl.th} mm, mellanrum ${sl.gap} mm, ${sl.off} mm från kanten, riktning ${sl.rot||0}°`:'nej'}`); } }
+    L.push(`Antal:     ${qtyStr(it.qty)}  (totalt ${qtyTotal(it.qty)})`);
+    if(it.note) L.push(`Not:       ${it.note}`);
+    for(const [v,n] of Object.entries(PRODUCTS[d.kind].views)){ const els=d.views[v]||[]; if(!els.length) continue;
+      L.push('', `  ${n}:`); els.forEach(e=>L.push('   • '+elSpec(e))); }
+    L.push('');
+  });
+  if(link) L.push(line,'Öppna beställningen (klistra in länken på sidan → "Öppna länk"):',link);
+  return L.join('\n');
+}
+function dlText(txt,name){ const u=URL.createObjectURL(new Blob(['\ufeff'+txt],{type:'text/plain;charset=utf-8'})); dl(u,name); setTimeout(()=>URL.revokeObjectURL(u),4000); }
+function fileName(o){ const d=new Date(o.ts); const p=n=>String(n).padStart(2,'0');
+  return `blommerod_bestallning_${(o.who||'').replace(/[^\wåäöÅÄÖ-]+/g,'_')||'x'}_${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}.txt`; }
 async function sendOrder(){
   ['oName','oWhen','oNote'].forEach(k=>S0[{oName:'who',oWhen:'when',oNote:'onote'}[k]]=$('#'+k).value); save();
   const order={v:1,who:S0.who,when:S0.when,note:S0.onote,ts:new Date().toISOString(),items:S0.cart};
   const link=location.origin+location.pathname+'#o='+await pack(order);
   let txt=`Beställning Blommeröd Polo – ${S0.who||''}${S0.when?' (önskas '+S0.when+')':''}\n`;
-  S0.cart.forEach((it,i)=>{ const q=Object.entries(it.qty).filter(([k,v])=>v>0).map(([k,v])=>k==='st'?`${v} st`:`${k}×${v}`).join(', ');
-    txt+=`\n${i+1}. ${describe(it.d)}\n   Antal: ${q||'–'}${it.note?'\n   Not: '+it.note:''}`; });
+  S0.cart.forEach((it,i)=>{ txt+=`\n${i+1}. ${describe(it.d)}\n   Antal: ${qtyStr(it.qty)}${it.note?'\n   Not: '+it.note:''}`; });
   if(S0.onote) txt+=`\n\nÖvrigt: ${S0.onote}`;
   txt+=`\n\nÖppna beställningen:\n${link}`;
-  $('#cartBody').innerHTML=`<h2>SKICKA TILL HUGO</h2><p>Länken innehåller hela beställningen med alla designer.</p>
+  const full=orderText(order,link), fname=fileName(order);
+  dlText(full,fname);
+  $('#cartBody').innerHTML=`<h2>SKICKA TILL HUGO</h2><p>Länken innehåller hela beställningen med alla designer. En .txt med allt har sparats i Hämtade filer (<i>${esc(fname)}</i>).</p>
     <textarea readonly style="min-height:200px;font-size:12px">${esc(txt)}</textarea>
-    <div class="row"><button class="btn pri" id="share">Dela…</button><button class="btn" id="copy">Kopiera</button><a class="btn" href="sms:&body=${encodeURIComponent(txt)}">SMS</a><a class="btn" href="https://wa.me/?text=${encodeURIComponent(txt)}" target="_blank">WhatsApp</a><button class="btn" id="back">Tillbaka</button></div>`;
-  window.__lastOrder={txt,link,order};
+    <div class="row"><button class="btn pri" id="share">Dela…</button><button class="btn" id="copy">Kopiera</button><a class="btn" href="sms:&body=${encodeURIComponent(txt)}">SMS</a><a class="btn" href="https://wa.me/?text=${encodeURIComponent(txt)}" target="_blank">WhatsApp</a><button class="btn" id="saveTxt">Spara .txt igen</button><button class="btn" id="back">Tillbaka</button></div>`;
+  window.__lastOrder={txt,link,order,full};
+  $('#saveTxt').onclick=()=>dlText(full,fname);
   $('#copy').onclick=async()=>{ try{await navigator.clipboard.writeText(txt); toast('Kopierat ✓');}catch(e){ toast('Markera texten och kopiera'); } };
   $('#share').onclick=async()=>{ if(navigator.share){ try{ await navigator.share({title:'Beställning Blommeröd Polo',text:txt}); }catch(e){} } else $('#copy').click(); };
   $('#back').onclick=openCart;
@@ -620,14 +655,37 @@ async function showIncoming(code){
     h+=`<div class="item"><img id="ith${i}"><div class="info"><b>${i+1}. ${esc(describe(it.d))}</b><div>Antal: ${q||'–'}</div>${it.note?`<div>Not: ${esc(it.note)}</div>`:''}
       <div class="row">`+Object.entries(PRODUCTS[it.d.kind].views).filter(([v])=>(it.d.views[v]||[]).length).map(([v,n])=>`<button class="btn" data-pf="${i}:${v}">Tryckfil ${n}</button>`).join('')+
       `<button class="btn" data-open="${i}">Öppna i editorn</button></div></div></div>`; });
-  h+=`<div class="row"><button class="btn" id="close">Stäng</button></div><p class="muted">Tryckfil = transparent PNG, 300 dpi (skylt 150 dpi), exakt mått i mm.</p>`;
+  h+=`<div class="row"><button class="btn pri" id="allPf">Ladda ner alla tryckfiler</button><button class="btn" id="inTxt">Spara som .txt</button><button class="btn" id="close">Stäng</button></div><p class="muted">Tryckfil = transparent PNG, 300 dpi (skylt 150 dpi), exakt mått i mm.</p>`;
   $('#cartBody').innerHTML=h; $('#cartDlg').showModal();
   o.items.forEach(async (it,i)=>{ $('#ith'+i).src=await proofPNG(it.d,Object.keys(PRODUCTS[it.d.kind].views)[0],240); });
   $('#cartBody').querySelectorAll('[data-pf]').forEach(b=>b.onclick=async()=>{ const [i,v]=b.dataset.pf.split(':'); const it=o.items[+i]; b.textContent='Renderar…';
-    const r=await printPNG(it.d,v,it.d.kind==='sign'?150:300); dl(r.png,`blommerod_${i+1}_${it.d.kind}_${v}_${r.mm[0]}x${r.mm[1]}mm.png`); b.textContent='Klar ✓'; });
+    const r=await printPNG(it.d,v,it.d.kind==='sign'?150:300); dl(r.png,`blommerod_${+i+1}_${it.d.kind}_${v}_${r.mm[0]}x${r.mm[1]}mm.png`); b.textContent='Klar ✓'; });
   $('#cartBody').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{ const it=o.items[+b.dataset.open]; S0.kind=it.d.kind; S0.designs[it.d.kind]=JSON.parse(JSON.stringify(it.d)); $('#cartDlg').close(); renderAll(); });
   $('#close').onclick=()=>$('#cartDlg').close();
+  const link=location.origin+location.pathname+'#o='+code;
+  $('#inTxt').onclick=()=>dlText(orderText(o,link),fileName(o));
+  $('#allPf').onclick=async()=>{ const b=$('#allPf'); const btns=[...$('#cartBody').querySelectorAll('[data-pf]')];
+    for(let k=0;k<btns.length;k++){ b.textContent=`Renderar ${k+1}/${btns.length}…`; await btns[k].onclick(); await new Promise(r=>setTimeout(r,500)); }
+    dlText(orderText(o,link),fileName(o)); b.textContent='Klart ✓'; };
 }
+/* paste a link (or the whole message / txt) to open someone's order */
+function extractCode(str){ const m=String(str).match(/#o=([A-Za-z0-9_\-]+)/); return m?m[1]:null; }
+function openLinkDlg(){
+  $('#cartBody').innerHTML=`<h2>ÖPPNA BESTÄLLNING</h2><p>Klistra in länken från Niels – eller hela meddelandet/txt-filen – så visas allt han gjort, med tryckfiler.</p>
+    <textarea id="linkIn" placeholder="https://www.buttercup.nu/blommerodpolo/#o=…" style="min-height:110px;font-size:12px"></textarea>
+    <div class="row"><label class="btn" style="cursor:pointer">Välj .txt-fil…<input type="file" id="txtIn" accept=".txt,text/plain" hidden></label></div>
+    <div class="row"><button class="btn pri" id="goLink">Öppna</button><button class="btn" id="pasteBtn">Klistra in från urklipp</button><button class="btn" id="close">Stäng</button></div>
+    <p class="muted" id="linkErr"></p>`;
+  if(!$('#cartDlg').open) $('#cartDlg').showModal();
+  const go=(str)=>{ const c=extractCode(str); if(!c){ $('#linkErr').textContent='Hittar ingen beställningslänk (#o=…) i texten.'; return; }
+    history.replaceState(null,'','#o='+c); showIncoming(c); };
+  $('#goLink').onclick=()=>go($('#linkIn').value);
+  $('#linkIn').addEventListener('paste',()=>setTimeout(()=>{ if(extractCode($('#linkIn').value)) go($('#linkIn').value); },50));
+  $('#pasteBtn').onclick=async()=>{ try{ const t=await navigator.clipboard.readText(); $('#linkIn').value=t; go(t);}catch(e){ $('#linkErr').textContent='Klistra in med ⌘V i rutan.'; } };
+  $('#txtIn').onchange=async(ev)=>{ const f=ev.target.files[0]; if(f) go(await f.text()); };
+  $('#close').onclick=()=>$('#cartDlg').close();
+}
+window.__openLinkDlg=openLinkDlg; window.__orderText=orderText;
 function toast(t){ const el=$('#toast'); el.textContent=t; el.classList.add('on'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('on'),1800); }
 
 /* ---------- boot ---------- */
@@ -635,6 +693,7 @@ function toast(t){ const el=$('#toast'); el.textContent=t; el.classList.add('on'
   try{ await Promise.all([document.fonts.load('40px Club'),document.fonts.load('700 40px Club'),document.fonts.load('40px ClubNum')]); }catch(e){}
   renderAll();
   const m=location.hash.match(/#o=([^&]+)/); if(m) showIncoming(m[1]);
+  addEventListener('hashchange',()=>{ const c=extractCode(location.hash); if(c) showIncoming(c); });
   window.__ready=true;
 })();
 </script>
