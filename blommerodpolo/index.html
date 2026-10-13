@@ -167,7 +167,7 @@ const JKT = {
 let uid=1; const id=()=> 'e'+(uid++)+Math.random().toString(36).slice(2,5);
 const T = (txt,x,y,o={})=>({id:id(),t:'text',txt,x,y,size:o.size||40,font:o.font||'club',col:o.col||'w',ls:o.ls??8,arc:o.arc||0});
 const I = (img,x,y,w)=>({id:id(),t:'img',img,x,y,w});
-const S = (x,y,o={})=>({id:id(),t:'stripes',x,y,len:o.len||200,th:o.th||10,gap:o.gap||6,cols:o.cols||['b','r','g','y'],vert:!!o.vert});
+const S = (x,y,o={})=>({id:id(),t:'stripes',x,y,len:o.len||200,th:o.th||10,gap:o.gap||6,cols:o.cols||['b','r','g','y'],rot:o.rot||0});
 
 function defaultDesign(kind){
   if(kind==='tee') return {kind,garment:'navy',sleeves:{on:true,cols:['b','r','g','y'],th:7,gap:4,off:30},
@@ -223,10 +223,10 @@ function elSVG(e,hi){
   }
   if(e.t==='stripes'){
     const n=e.cols.length, tot=n*e.th+(n-1)*e.gap; let o='';
+    const rot = e.rot ?? (e.vert?90:0);
     e.cols.forEach((c,i)=>{const p=-tot/2+i*(e.th+e.gap);
-      o+= e.vert? `<rect x="${e.x+p}" y="${e.y-e.len/2}" width="${e.th}" height="${e.len}" fill="${PC[c]}"/>`
-                : `<rect x="${e.x-e.len/2}" y="${e.y+p}" width="${e.len}" height="${e.th}" fill="${PC[c]}"/>`;});
-    return `<g class="el" data-id="${e.id}">${o}</g>`;
+      o+= `<rect x="${e.x-e.len/2}" y="${e.y+p}" width="${e.len}" height="${e.th}" fill="${PC[c]}"/>`;});
+    return `<g class="el" data-id="${e.id}" data-box="1"><g transform="rotate(${rot} ${e.x} ${e.y})">${o}</g></g>`;
   }
   return '';
 }
@@ -235,13 +235,21 @@ function sleeveBands(poly,sl){
   const [sh,h1,h2,ap]=poly; const hm=[(h1[0]+h2[0])/2,(h1[1]+h2[1])/2], top=[(sh[0]+ap[0])/2,(sh[1]+ap[1])/2];
   let dx=top[0]-hm[0], dy=top[1]-hm[1]; const L=Math.hypot(dx,dy); dx/=L; dy/=L;
   let ex=h2[0]-h1[0], ey=h2[1]-h1[1]; const EL=Math.hypot(ex,ey); ex/=EL; ey/=EL;
-  const ext=60; let o='', off=sl.off;
   const cp='M'+poly.map(p=>p.join(' ')).join(' L')+'Z';
-  sl.cols.forEach(c=>{
-    const a=off, b=off+sl.th;
-    const P=(t,s)=>[(h1[0]+dx*t+ex*s).toFixed(1),(h1[1]+dy*t+ey*s).toFixed(1)].join(' ');
-    o+=`<path d="M${P(a,-ext)} L${P(a,EL+ext)} L${P(b,EL+ext)} L${P(b,-ext)}Z" fill="${PC[c]}"/>`;
-    off=b+sl.gap;
+  // local frame: u along cuff (e), v up the arm (d). Angle rotates the stripe direction; the
+  // left sleeve has a mirrored basis, so the two arms stay symmetric.
+  const n=sl.cols.length, tot=n*sl.th+(n-1)*sl.gap;
+  const t=(sl.rot||0)*Math.PI/180, ca=Math.cos(t), sa=Math.sin(t);
+  // stripe direction (along band) and normal, in local (u,v)
+  const dir=[ca,sa], nor=[-sa,ca];
+  // pivot: centre of cuff, raised so the stripe block starts sl.off from the hem
+  const pu=EL/2, pv=sl.off+tot/2;
+  const W=(u,v)=>[(h1[0]+ex*u+dx*v).toFixed(1),(h1[1]+ey*u+dy*v).toFixed(1)].join(' ');
+  const ext=400; let o='';
+  sl.cols.forEach((c,i)=>{
+    const a=-tot/2+i*(sl.th+sl.gap), b=a+sl.th;
+    const Q=(s,k)=>W(pu+dir[0]*s+nor[0]*k, pv+dir[1]*s+nor[1]*k);
+    o+=`<path d="M${Q(-ext,a)} L${Q(ext,a)} L${Q(ext,b)} L${Q(-ext,b)}Z" fill="${PC[c]}"/>`;
   });
   return {cp,o};
 }
@@ -299,12 +307,12 @@ function sceneSVG(d,view,opts={}){
 
 function artBBox(root){ // union bbox of visible artwork (ignores invisible textPath guide arcs)
   let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
-  root.querySelectorAll('#els text, #els image, #els rect, #els circle').forEach(n=>{ const b=n.getBBox(); if(!b.width&&!b.height) return;
+  root.querySelectorAll('#els .el[data-box], #els .el:not([data-box]) text, #els .el:not([data-box]) image, #els .el:not([data-box]) circle').forEach(n=>{ const b=n.getBBox(); if(!b.width&&!b.height) return;
     x0=Math.min(x0,b.x); y0=Math.min(y0,b.y); x1=Math.max(x1,b.x+b.width); y1=Math.max(y1,b.y+b.height); });
   return x1>x0?{x:x0,y:y0,width:x1-x0,height:y1-y0}:{x:0,y:0,width:0,height:0};
 }
 function elBBox(g){ const t=document.createElement('div'); let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
-  g.querySelectorAll('text,image,rect,circle').forEach(n=>{const b=n.getBBox(); x0=Math.min(x0,b.x); y0=Math.min(y0,b.y); x1=Math.max(x1,b.x+b.width); y1=Math.max(y1,b.y+b.height);});
+  (g.dataset.box?[g]:g.querySelectorAll('text,image,rect,circle')).forEach(n=>{const b=n.getBBox(); x0=Math.min(x0,b.x); y0=Math.min(y0,b.y); x1=Math.max(x1,b.x+b.width); y1=Math.max(y1,b.y+b.height);});
   return {x:x0,y:y0,width:x1-x0,height:y1-y0}; }
 /* ---------- render ---------- */
 const $=s=>document.querySelector(s);
@@ -362,7 +370,7 @@ function bindDrag(){
 
 /* ---------- panel ---------- */
 function swatches(list,cur,attr,sq){ return `<div class="sw${sq?' sq':''}">`+list.map(p=>`<button title="${p.n}" data-${attr}="${p.k}" class="${cur===p.k?'on':''}" style="background:${p.c}"></button>`).join('')+'</div>'; }
-function rng(lbl,key,min,max,step,val,unit='mm'){ return `<div class="row"><label>${lbl}</label><input type="range" data-k="${key}" min="${min}" max="${max}" step="${step}" value="${val}"><output>${val}${unit?' '+unit:''}</output></div>`; }
+function rng(lbl,key,min,max,step,val,unit='mm'){ return `<div class="row"><label>${lbl}</label><input type="range" data-k="${key}" min="${min}" max="${max}" step="${step}" value="${val}"><output>${val}${unit==='°'?'°':unit?' '+unit:''}</output></div>`; }
 function labelOf(e){ return e.t==='text'?'Text: '+e.txt.replace(/\n/g,' / '):e.t==='img'?IMG[e.img].n:'Ränder ('+e.cols.map(c=>PN[c]).join(', ')+')'; }
 function renderPanel(){
   const d=D(), v=V(), els=d.views[v]||(d.views[v]=[]);
@@ -379,7 +387,7 @@ function renderPanel(){
     if(d.kind==='tee'){ const sl=d.sleeves;
       h+=`<h3>Ränder på ärmarna</h3><label class="chk"><input type="checkbox" id="slOn" ${sl.on?'checked':''}> Ränder på båda ärmarna</label>`;
       if(sl.on){ h+=`<div class="row"><label>Färger</label>${stripeColorPicker(sl.cols,'sl')}</div>`+
-        rng('Tjocklek','sl.th',3,20,1,sl.th)+rng('Mellanrum','sl.gap',0,15,1,sl.gap)+rng('Från kanten','sl.off',0,90,1,sl.off); }
+        rng('Tjocklek','sl.th',3,20,1,sl.th)+rng('Mellanrum','sl.gap',0,15,1,sl.gap)+rng('Från kanten','sl.off',0,90,1,sl.off)+rng('Riktning','sl.rot',-90,90,1,sl.rot||0,'°')+dirBtns('sl'); }
     }
   }
   h+=`<h3>Lägg till</h3><div class="add">
@@ -399,6 +407,7 @@ function stripeColorPicker(cols,pfx){
   return `<div style="flex:1"><div class="sw sq" style="margin-bottom:6px">`+cols.map((c,i)=>`<button title="Ta bort ${PN[c]}" data-${pfx}rm="${i}" style="background:${PC[c]};position:relative"></button>`).join('')+
     `</div><div class="sw" style="transform:scale(.8);transform-origin:left">`+PAL.map(p=>`<button title="Lägg till ${p.n}" data-${pfx}add="${p.k}" style="background:${p.c}"></button>`).join('')+`</div><div class="muted">Övre raden = ordning (klicka för att ta bort), undre = lägg till</div></div>`;
 }
+function dirBtns(t){ return `<div class="row"><label></label>`+[[0,'— Vågrät'],[90,'| Lodrät'],[-45,'╱ Diagonal'],[45,'╲ Diagonal']].map(([a,n])=>`<button class="btn" style="padding:4px 8px;font-size:12px" data-dir="${t}:${a}">${n}</button>`).join('')+`</div>`; }
 function propsHTML(e){
   let h='';
   if(e.t==='text'){
@@ -416,7 +425,7 @@ function propsHTML(e){
   } else if(e.t==='stripes'){
     h+=`<div class="row"><label>Färger</label>${stripeColorPicker(e.cols,'st')}</div>`+
        rng('Längd','len',20,1800,1,e.len)+rng('Tjocklek','th',2,60,1,e.th)+rng('Mellanrum','gap',0,40,1,e.gap)+
-       `<label class="chk"><input type="checkbox" id="pvert" ${e.vert?'checked':''}> Stående</label>`;
+       rng('Riktning','rot',-90,90,1,e.rot??(e.vert?90:0),'°')+dirBtns('el');
   }
   h+=`<div class="row"><label>Position</label><span class="muted">x ${e.x} · y ${e.y} mm</span></div>`;
   return h;
@@ -435,10 +444,11 @@ function bindPanel(){
   P.querySelectorAll('[data-slrm]').forEach(b=>b.onclick=()=>{ if(d.sleeves.cols.length>1) d.sleeves.cols.splice(+b.dataset.slrm,1); renderAll();});
   P.querySelectorAll('[data-sladd]').forEach(b=>b.onclick=()=>{ if(d.sleeves.cols.length<8) d.sleeves.cols.push(b.dataset.sladd); renderAll();});
   P.querySelectorAll('input[type=range]').forEach(r=>r.oninput=()=>{
-    const k=r.dataset.k, val=+r.value; const out=r.nextElementSibling; out.textContent=val+(out.textContent.includes('mm')?' mm':'');
+    const k=r.dataset.k, val=+r.value; const out=r.nextElementSibling; const u=out.textContent.replace(/^[-\d.]+\s?/,''); out.textContent=val+(u==='°'?'°':u?' '+u:'');
     if(k.startsWith('sl.')) d.sleeves[k.slice(3)]=val; else { const e=findEl(sel); if(e) e[k]=val; }
     live();
   });
+  P.querySelectorAll('[data-dir]').forEach(b=>b.onclick=()=>{ const [t,a]=b.dataset.dir.split(':'); if(t==='sl') d.sleeves.rot=+a; else { const e=findEl(sel); if(e){ e.rot=+a; delete e.vert; } } renderAll(); });
   P.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addEl(b.dataset.add));
   P.querySelectorAll('[data-sel]').forEach(r=>r.onclick=(ev)=>{ if(ev.target.tagName==='B') return; sel=r.dataset.sel; renderPanel(); drawSel(); });
   const arr=d.views[V()];
@@ -452,7 +462,7 @@ function bindPanel(){
     P.querySelectorAll('[data-col]').forEach(b=>b.onclick=()=>{ e.col=b.dataset.col; renderAll(); });
     P.querySelectorAll('[data-disc]').forEach(b=>b.onclick=()=>{ e.disc=b.dataset.disc==='none'?false:b.dataset.disc; renderAll(); });
     const im=P.querySelector('#pimg'); if(im) im.onchange=()=>{ e.img=im.value; renderAll(); };
-    const vt=P.querySelector('#pvert'); if(vt) vt.onchange=()=>{ e.vert=vt.checked; renderAll(); };
+    if(e.t==='stripes' && e.rot===undefined){ e.rot=e.vert?90:0; delete e.vert; }
     P.querySelectorAll('[data-strm]').forEach(b=>b.onclick=()=>{ if(e.cols.length>1) e.cols.splice(+b.dataset.strm,1); renderAll();});
     P.querySelectorAll('[data-stadd]').forEach(b=>b.onclick=()=>{ if(e.cols.length<10) e.cols.push(b.dataset.stadd); renderAll();});
   }
