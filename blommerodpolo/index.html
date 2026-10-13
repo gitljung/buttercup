@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="buttercup.nu">
+<meta property="og:title" content="Blommeröd Polo Club – Design">
+<meta property="og:description" content="Designa t-shirt, jacka och skylt – och skicka beställningen.">
+<meta property="og:url" content="https://www.buttercup.nu/blommerodpolo/">
+<meta property="og:image" content="https://www.buttercup.nu/blommerodpolo/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Designa t-shirt, jacka och skylt – och skicka beställningen.">
+<title>Blommeröd Polo Club – Design & beställning</title>
+<style>
+@font-face{font-family:"Club";src:url(fonts/Tinos-Regular.woff2) format("woff2");font-weight:400}
+@font-face{font-family:"Club";src:url(fonts/Tinos-Bold.woff2) format("woff2");font-weight:700}
+@font-face{font-family:"Club";src:url(fonts/Tinos-Italic.woff2) format("woff2");font-style:italic}
+@font-face{font-family:"ClubNum";src:url(fonts/LibreBodoni.woff2) format("woff2");font-weight:400 700}
+:root{--g:#025c36;--b:#6494bd;--r:#a23338;--y:#f3e61f;--cream:#f6f1e4;--ink:#1d2a22;--line:#d9d2bf}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--cream);color:var(--ink);font:15px/1.4 "Club",Georgia,serif}
+button,input,select,textarea{font:inherit;color:inherit}
+header{display:flex;align-items:center;gap:14px;padding:10px 18px;background:var(--g);color:#fff}
+header img{width:46px;height:46px;border-radius:50%;background:#fff}
+header h1{font-size:19px;letter-spacing:.14em;margin:0;font-weight:400}
+header .stripes{margin-left:auto;display:flex;flex-direction:column;gap:3px;width:70px}
+header .stripes i{height:4px;display:block}
+nav.products{display:flex;gap:6px;padding:10px 18px 0;flex-wrap:wrap}
+nav.products button{border:1px solid var(--line);border-bottom:none;background:#ece5d3;padding:9px 16px;border-radius:10px 10px 0 0;cursor:pointer;letter-spacing:.06em}
+nav.products button.on{background:#fff;font-weight:700}
+#cartBtn{margin-left:auto;background:var(--g)!important;color:#fff;border-color:var(--g)!important}
+main{display:grid;grid-template-columns:1fr 360px;gap:0;background:#fff;border-top:1px solid var(--line);min-height:calc(100vh - 120px)}
+#stageWrap{position:relative;display:flex;flex-direction:column;border-right:1px solid var(--line);min-width:0}
+.views{display:flex;gap:6px;padding:10px 14px;align-items:center;flex-wrap:wrap}
+.views button{border:1px solid var(--line);background:#fff;border-radius:20px;padding:5px 14px;cursor:pointer}
+.views button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.views .hint{margin-left:auto;font-size:12px;opacity:.6}
+#stage{flex:1;min-height:420px;display:flex;align-items:center;justify-content:center;padding:10px;background:radial-gradient(circle at 50% 40%,#fbf8f0,#e9e2cf);touch-action:none}
+#stage svg{width:100%;height:100%;max-height:calc(100vh - 190px);user-select:none}
+.el{cursor:move}
+.sel-box{fill:none;stroke:#0a84ff;stroke-width:1.2;stroke-dasharray:5 4;vector-effect:non-scaling-stroke;pointer-events:none}
+.area-box{fill:none;stroke:#000;stroke-opacity:.25;stroke-width:1;stroke-dasharray:3 4;vector-effect:non-scaling-stroke;pointer-events:none}
+aside{padding:14px 16px 90px;overflow:auto;max-height:calc(100vh - 120px)}
+aside h3{font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin:16px 0 8px;opacity:.7;font-weight:700}
+.row{display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap}
+.row label{min-width:92px;font-size:13px}
+.row input[type=range]{flex:1}
+.row input[type=text],.row input[type=number],.row select,textarea{flex:1;border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:#fff;min-width:0}
+.row output{font-size:12px;min-width:52px;text-align:right;font-variant-numeric:tabular-nums}
+.sw{display:flex;gap:6px;flex-wrap:wrap}
+.sw button{width:30px;height:30px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #bbb;cursor:pointer;padding:0}
+.sw button.on{box-shadow:0 0 0 3px var(--ink)}
+.sw.sq button{border-radius:6px}
+.add{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 10px;cursor:pointer;text-align:center}
+.btn:hover{background:#f6f1e4}
+.btn.pri{background:var(--g);color:#fff;border-color:var(--g)}
+.btn.warn{color:var(--r)}
+.layers{display:flex;flex-direction:column;gap:4px}
+.layers div{display:flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;cursor:pointer;font-size:13px}
+.layers div.on{border-color:#0a84ff;background:#eef5ff}
+.layers div span{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.layers div b{font-weight:400;opacity:.5;cursor:pointer;padding:0 4px}
+.props{border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-top:8px;background:#fcfaf5}
+.muted{font-size:12px;opacity:.65}
+.chk{display:flex;gap:6px;align-items:center;font-size:13px}
+dialog{border:none;border-radius:14px;max-width:640px;width:calc(100% - 24px);padding:0;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+.dlg{padding:18px 20px}
+.dlg h2{margin:0 0 10px;font-weight:400;letter-spacing:.12em;font-size:18px}
+.item{display:flex;gap:10px;border-bottom:1px solid var(--line);padding:10px 0;align-items:flex-start}
+.item img{width:84px;height:84px;object-fit:contain;background:#f3eee2;border-radius:8px}
+.item .info{flex:1;font-size:13px}
+.sizes{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:6px}
+.sizes label{font-size:11px;text-align:center}
+.sizes input{width:100%;border:1px solid var(--line);border-radius:6px;padding:3px;text-align:center}
+textarea{width:100%;min-height:60px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:20px;opacity:0;transition:.25s;pointer-events:none;z-index:9}
+.toast.on{opacity:1}
+@media (max-width:860px){
+  main{grid-template-columns:1fr}
+  #stageWrap{border-right:none;border-bottom:1px solid var(--line)}
+  #stage{min-height:56vh}
+  #stage svg{max-height:60vh}
+  aside{max-height:none}
+  header h1{font-size:15px}
+}
+</style>
+</head>
+<body>
+<header>
+  <img src="assets/logo.webp" alt="">
+  <h1>BLOMMERÖD POLO CLUB · DESIGN</h1>
+  <div class="stripes"><i style="background:var(--b)"></i><i style="background:var(--r)"></i><i style="background:var(--g);outline:1px solid #fff3"></i><i style="background:var(--y)"></i></div>
+</header>
+<nav class="products" id="products"></nav>
+<main>
+  <section id="stageWrap">
+    <div class="views" id="views"></div>
+    <div id="stage"></div>
+  </section>
+  <aside id="panel"></aside>
+</main>
+
+<dialog id="cartDlg"><div class="dlg" id="cartBody"></div></dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* ============================================================
+   Blommeröd Polo Club – design & order tool (static, no backend)
+   All dimensions in millimetres. State lives in localStorage and
+   in a share link (#o=...) that IS the order.
+   ============================================================ */
+const PAL = [
+  {k:'g', n:'Grön',  c:'#025c36'},
+  {k:'b', n:'Blå',   c:'#6494bd'},
+  {k:'r', n:'Röd',   c:'#a23338'},
+  {k:'y', n:'Gul',   c:'#f3e61f'},
+  {k:'w', n:'Vit',   c:'#ffffff'},
+  {k:'k', n:'Svart', c:'#111111'},
+  {k:'c', n:'Créme', c:'#efe6cf'},
+];
+const PC = Object.fromEntries(PAL.map(p=>[p.k,p.c]));
+const PN = Object.fromEntries(PAL.map(p=>[p.k,p.n]));
+const GARMENT = [
+  {k:'navy', n:'Navy', c:'#1c2438'},{k:'g', n:'Klubbgrön', c:'#0f4a30'},{k:'w', n:'Vit', c:'#fbfbf8'},
+  {k:'c', n:'Créme', c:'#ece3cc'},{k:'k', n:'Svart', c:'#18181a'},{k:'b', n:'Ljusblå', c:'#a9c4dd'},{k:'grey',n:'Grå',c:'#9b9d9e'}
+];
+const GC = Object.fromEntries(GARMENT.map(p=>[p.k,p.c]));
+const GN = Object.fromEntries(GARMENT.map(p=>[p.k,p.n]));
+const FONTS = {club:{fam:'Club',w:400,n:'Klubb (som loggan)'},clubB:{fam:'Club',w:700,n:'Klubb fet'},clubI:{fam:'Club',w:400,st:'italic',n:'Klubb kursiv'},num:{fam:'ClubNum',w:500,n:'Bodoni (nummer)'}};
+const IMG = {
+  logo:{n:'Rund logga', src:'assets/logo.webp', hi:'assets/hi/logo.png', ar:1},
+  horses:{n:'Hästar (akvarell)', src:'assets/horses.webp', hi:'assets/hi/horses.png', ar:2228/1836},
+  horsesK:{n:'Hästar (friläggda)', src:'assets/horses_knock.webp', hi:'assets/hi/horses_knock.png', ar:2228/1836},
+};
+const SIZES = ['XS','S','M','L','XL','XXL','3XL'];
+const SIGN_SIZES = [[60,40],[80,60],[100,70],[120,80],[150,100],[200,100]];
+
+/* ---------- garment geometry (mm, size L) ---------- */
+const TEE = {
+  vb:[0,0,700,800],
+  body:{
+    front:'M250 42 Q350 118 450 42 L560 58 L695 215 L625 292 L598 246 L602 782 Q350 792 98 782 L102 246 L75 292 L5 215 L140 58 Z',
+    back: 'M250 42 Q350 64 450 42 L560 58 L695 215 L625 292 L598 246 L602 782 Q350 792 98 782 L102 246 L75 292 L5 215 L140 58 Z'},
+  neck:{front:'M250 42 Q350 118 450 42 Q350 138 250 42Z', back:'M250 42 Q350 64 450 42 Q350 80 250 42Z'},
+  seams:'M140 58 L102 246 M560 58 L598 246 M75 292 L5 215 M625 292 L695 215',
+  sleeveR:[[560,58],[695,215],[625,292],[598,246]],
+  sleeveL:[[140,58],[5,215],[75,292],[102,246]],
+  area:{front:[200,140,300,380], back:[200,110,300,420]}
+};
+const JKT = {
+  vb:[0,0,800,820],
+  body:{back:'M300 30 Q400 50 500 30 L612 62 Q700 120 742 300 L782 640 L690 652 L630 330 L622 300 L626 770 Q400 786 174 770 L178 300 L170 330 L110 652 L18 640 L58 300 Q100 120 188 62 Z',
+        front:'M300 30 Q400 50 500 30 L612 62 Q700 120 742 300 L782 640 L690 652 L630 330 L622 300 L626 770 Q400 786 174 770 L178 300 L170 330 L110 652 L18 640 L58 300 Q100 120 188 62 Z'},
+  neck:{back:'M300 30 Q400 50 500 30 L496 52 Q400 70 304 52Z', front:'M300 30 Q400 110 500 30 L496 50 Q400 128 304 50Z'},
+  seams:'M188 62 L178 300 M612 62 L622 300 M174 740 L626 740 M18 640 L110 652 M690 652 L782 640',
+  zip:'M400 98 L400 770',
+  area:{back:[210,110,380,460], front:[230,150,340,360]}
+};
+
+/* ---------- templates ---------- */
+let uid=1; const id=()=> 'e'+(uid++)+Math.random().toString(36).slice(2,5);
+const T = (txt,x,y,o={})=>({id:id(),t:'text',txt,x,y,size:o.size||40,font:o.font||'club',col:o.col||'w',ls:o.ls??8,arc:o.arc||0});
+const I = (img,x,y,w)=>({id:id(),t:'img',img,x,y,w});
+const S = (x,y,o={})=>({id:id(),t:'stripes',x,y,len:o.len||200,th:o.th||10,gap:o.gap||6,cols:o.cols||['b','r','g','y'],vert:!!o.vert});
+
+function defaultDesign(kind){
+  if(kind==='tee') return {kind,garment:'navy',sleeves:{on:true,cols:['b','r','g','y'],th:7,gap:4,off:30},
+    views:{front:[I('logo',405,210,90)],
+           back:[T('BLOMMERÖD',350,212,{size:40,arc:40,ls:5}),T('POLO CLUB',350,258,{size:26,ls:5}),T('3',350,520,{size:230,font:'num',ls:0})]}};
+  if(kind==='jacket') return {kind,garment:'navy',
+    views:{back:[T('BLOMMERÖD POLO',400,200,{size:34,arc:45,ls:4}),I('horsesK',400,420,280)],
+           front:[I('logo',515,215,85)]}};
+  if(kind==='sign') return {kind,w:120,h:80,bg:'g',border:'y',posts:true,
+    views:{sign:[I('logo',600,250,330),T('BLOMMERÖD POLO CLUB',600,525,{size:62,ls:10}),S(600,580,{len:640,th:12,gap:9}),T('VÄLKOMMEN',600,730,{size:48,ls:14,col:'y'})]}};
+}
+const PRODUCTS = {tee:{n:'T-shirt',views:{front:'Framsida',back:'Baksida'}},
+                  jacket:{n:'Jacka',views:{back:'Rygg',front:'Bröst'}},
+                  sign:{n:'Skylt',views:{sign:'Skylt'}}};
+
+/* ---------- state ---------- */
+let S0 = load() || {kind:'tee', designs:{tee:defaultDesign('tee'),jacket:defaultDesign('jacket'),sign:defaultDesign('sign')}, cart:[], view:{tee:'back',jacket:'back',sign:'sign'}};
+let sel = null;
+const D = ()=>S0.designs[S0.kind];
+const V = ()=>S0.view[S0.kind];
+function save(){ try{localStorage.setItem('bpc_state',JSON.stringify(S0));}catch(e){} }
+function load(){ try{const s=JSON.parse(localStorage.getItem('bpc_state')); if(s&&s.designs) return s;}catch(e){} return null; }
+window.__state = ()=>S0;
+
+/* ---------- SVG helpers ---------- */
+const NS='http://www.w3.org/2000/svg';
+const esc = s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function arcPath(x,y,arc,size){
+  // arc: -100..100 ; radius shrinks as |arc| grows. y = baseline at apex.
+  const a=Math.abs(arc); const R = 30000/a + size*0.5;
+  const k=Math.PI/180, s=170;
+  if(arc>0){ const cy=y+R; return `M${x-R*Math.sin(s*k)} ${cy-R*Math.cos(s*k)} A${R} ${R} 0 1 1 ${x+R*Math.sin(s*k)} ${cy-R*Math.cos(s*k)}`; }
+  const cy=y-R; return `M${x-R*Math.sin(s*k)} ${cy+R*Math.cos(s*k)} A${R} ${R} 0 1 0 ${x+R*Math.sin(s*k)} ${cy+R*Math.cos(s*k)}`;
+}
+function fontAttrs(f){const F=FONTS[f]||FONTS.club; return `font-family="${F.fam}" font-weight="${F.w}"${F.st?` font-style="${F.st}"`:''}`;}
+function elSVG(e,hi){
+  if(e.t==='text'){
+    const fill=PC[e.col]||e.col, fa=fontAttrs(e.font);
+    const lines=String(e.txt).split('\n');
+    if(e.arc && lines.length===1){
+      const pid='p_'+e.id;
+      return `<g class="el" data-id="${e.id}"><path id="${pid}" d="${arcPath(e.x,e.y,e.arc,e.size)}" fill="none"/>`+
+        `<text ${fa} font-size="${e.size}" letter-spacing="${e.ls}" fill="${fill}" text-anchor="middle"><textPath href="#${pid}" startOffset="50%">${esc(e.txt)}</textPath></text></g>`;
+    }
+    const lh=e.size*1.12;
+    return `<g class="el" data-id="${e.id}"><text ${fa} font-size="${e.size}" letter-spacing="${e.ls}" fill="${fill}" text-anchor="middle">`+
+      lines.map((l,i)=>`<tspan x="${e.x}" y="${e.y+i*lh}">${esc(l)||' '}</tspan>`).join('')+`</text></g>`;
+  }
+  if(e.t==='img'){
+    const m=IMG[e.img], h=e.w*m.ar;
+    const disc = (e.img==='logo' && e.disc!==false && e.disc!=='none') ? `<circle cx="${e.x}" cy="${e.y}" r="${e.w*0.497}" fill="${PC[e.disc||'w']||'#fff'}"/>` : '';
+    return `<g class="el" data-id="${e.id}">${disc}<image href="${hi?(hi[e.img]||m.hi):m.src}" x="${e.x-e.w/2}" y="${e.y-h/2}" width="${e.w}" height="${h}" preserveAspectRatio="xMidYMid meet"/></g>`;
+  }
+  if(e.t==='stripes'){
+    const n=e.cols.length, tot=n*e.th+(n-1)*e.gap; let o='';
+    e.cols.forEach((c,i)=>{const p=-tot/2+i*(e.th+e.gap);
+      o+= e.vert? `<rect x="${e.x+p}" y="${e.y-e.len/2}" width="${e.th}" height="${e.len}" fill="${PC[c]}"/>`
+                : `<rect x="${e.x-e.len/2}" y="${e.y+p}" width="${e.len}" height="${e.th}" fill="${PC[c]}"/>`;});
+    return `<g class="el" data-id="${e.id}">${o}</g>`;
+  }
+  return '';
+}
+function sleeveBands(poly,sl){
+  // poly: [shoulder, hemOuter, hemInner, armpit]; bands parallel to hem, inset sl.off from hem
+  const [sh,h1,h2,ap]=poly; const hm=[(h1[0]+h2[0])/2,(h1[1]+h2[1])/2], top=[(sh[0]+ap[0])/2,(sh[1]+ap[1])/2];
+  let dx=top[0]-hm[0], dy=top[1]-hm[1]; const L=Math.hypot(dx,dy); dx/=L; dy/=L;
+  let ex=h2[0]-h1[0], ey=h2[1]-h1[1]; const EL=Math.hypot(ex,ey); ex/=EL; ey/=EL;
+  const ext=60; let o='', off=sl.off;
+  const cp='M'+poly.map(p=>p.join(' ')).join(' L')+'Z';
+  sl.cols.forEach(c=>{
+    const a=off, b=off+sl.th;
+    const P=(t,s)=>[(h1[0]+dx*t+ex*s).toFixed(1),(h1[1]+dy*t+ey*s).toFixed(1)].join(' ');
+    o+=`<path d="M${P(a,-ext)} L${P(a,EL+ext)} L${P(b,EL+ext)} L${P(b,-ext)}Z" fill="${PC[c]}"/>`;
+    off=b+sl.gap;
+  });
+  return {cp,o};
+}
+function garmentSVG(d,view){
+  const G = d.kind==='tee'?TEE:JKT; const col=GC[d.garment];
+  const light = ['w','c','b','grey'].includes(d.garment);
+  const sh = light?'#00000022':'#ffffff1a';
+  let s=`<defs><linearGradient id="shade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".18"/><stop offset=".25" stop-color="#000" stop-opacity="0"/><stop offset=".75" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient>`+
+        `<clipPath id="gclip"><path d="${G.body[view]}"/></clipPath></defs>`;
+  s+=`<path d="${G.body[view]}" fill="${col}" stroke="#0004" stroke-width="1.5"/>`;
+  if(d.kind==='tee' && d.sleeves && d.sleeves.on){
+    for(const poly of [TEE.sleeveR,TEE.sleeveL]){
+      const b=sleeveBands(poly,d.sleeves); const cid='sc'+Math.random().toString(36).slice(2,7);
+      s+=`<clipPath id="${cid}"><path d="${b.cp}"/></clipPath><g clip-path="url(#${cid})">${b.o}</g>`;
+    }
+  }
+  s+=`<path d="${G.body[view]}" fill="url(#shade)"/>`;
+  s+=`<path d="${G.neck[view]}" fill="${light?'#0000001a':'#00000040'}" stroke="#0003"/>`;
+  s+=`<path d="${G.seams}" fill="none" stroke="${sh}" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+  if(d.kind==='jacket' && view==='front') s+=`<path d="${JKT.zip}" stroke="${light?'#0005':'#fff5'}" stroke-width="3"/>`;
+  return s;
+}
+function signFrame(d){
+  const W=d.w*10,H=d.h*10;
+  return {W,H};
+}
+/* full scene SVG string. opts: {print:true, hi:{...}} */
+function sceneSVG(d,view,opts={}){
+  let vb, under='', over='', area=null;
+  if(d.kind==='sign'){
+    const {W,H}=signFrame(d);
+    if(opts.print){ vb=[0,0,W,H]; }
+    else{ const m=W*0.08; vb=[-m,-m*0.6,W+2*m,H+(d.posts?H*0.75:m*0.5)+m*0.6]; }
+    if(!opts.print){
+      if(d.posts){ const pw=Math.max(60,W*0.05); for(const px of [W*0.16,W*0.84]) under+=`<rect x="${px-pw/2}" y="${H*0.2}" width="${pw}" height="${H*1.35}" fill="#7a5a3a"/><rect x="${px-pw/2}" y="${H*0.2}" width="${pw*0.3}" height="${H*1.35}" fill="#0002"/>`;
+        under+=`<rect x="${vb[0]}" y="${H*1.5}" width="${vb[2]}" height="${vb[3]}" fill="#6f8f4e"/>`; }
+      under+=`<rect x="10" y="14" width="${W}" height="${H}" fill="#0003" rx="6"/>`;
+    }
+    under+=`<rect x="0" y="0" width="${W}" height="${H}" fill="${PC[d.bg]}" ${opts.print?'':'rx="6"'}/>`;
+    if(d.border && d.border!=='none'){ const bw=Math.max(8,Math.min(W,H)*0.018), ins=Math.min(W,H)*0.035;
+      under+=`<rect x="${ins}" y="${ins}" width="${W-2*ins}" height="${H-2*ins}" fill="none" stroke="${PC[d.border]}" stroke-width="${bw}"/>`; }
+    area=[0,0,W,H];
+  } else {
+    const G=d.kind==='tee'?TEE:JKT;
+    area=G.area[view];
+    if(opts.print){ vb=opts.vb||area; }
+    else { vb=G.vb; under=garmentSVG(d,view); }
+  }
+  const els=(d.views[view]||[]).map(e=>elSVG(e,opts.hi)).join('');
+  if(!opts.print && d.kind!=='sign' && opts.showArea) over+=`<rect class="area-box" x="${area[0]}" y="${area[1]}" width="${area[2]}" height="${area[3]}"/>`;
+  const style = opts.fontCSS?`<style>${opts.fontCSS}</style>`:'';
+  const dim = opts.print? ` width="${opts.pxW}" height="${opts.pxH}"`:'';
+  return `<svg xmlns="${NS}" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="${vb.join(' ')}"${dim}>${style}${under}<g id="els">${els}</g>${over}<g id="selLayer"></g></svg>`;
+}
+
+function artBBox(root){ // union bbox of visible artwork (ignores invisible textPath guide arcs)
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+  root.querySelectorAll('#els text, #els image, #els rect, #els circle').forEach(n=>{ const b=n.getBBox(); if(!b.width&&!b.height) return;
+    x0=Math.min(x0,b.x); y0=Math.min(y0,b.y); x1=Math.max(x1,b.x+b.width); y1=Math.max(y1,b.y+b.height); });
+  return x1>x0?{x:x0,y:y0,width:x1-x0,height:y1-y0}:{x:0,y:0,width:0,height:0};
+}
+function elBBox(g){ const t=document.createElement('div'); let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+  g.querySelectorAll('text,image,rect,circle').forEach(n=>{const b=n.getBBox(); x0=Math.min(x0,b.x); y0=Math.min(y0,b.y); x1=Math.max(x1,b.x+b.width); y1=Math.max(y1,b.y+b.height);});
+  return {x:x0,y:y0,width:x1-x0,height:y1-y0}; }
+/* ---------- render ---------- */
+const $=s=>document.querySelector(s);
+function renderAll(){ renderNav(); renderStage(); renderPanel(); save(); }
+function renderNav(){
+  $('#products').innerHTML = Object.entries(PRODUCTS).map(([k,p])=>`<button data-k="${k}" class="${S0.kind===k?'on':''}">${p.n}</button>`).join('')+
+    `<button id="cartBtn">Beställning (${S0.cart.length})</button>`;
+  $('#products').querySelectorAll('button[data-k]').forEach(b=>b.onclick=()=>{S0.kind=b.dataset.k; sel=null; renderAll();});
+  $('#cartBtn').onclick=openCart;
+  const vs=PRODUCTS[S0.kind].views;
+  $('#views').innerHTML = Object.entries(vs).map(([k,n])=>`<button data-v="${k}" class="${V()===k?'on':''}">${n}</button>`).join('')+
+     `<span class="hint">Dra för att flytta · klicka för att välja</span>`;
+  $('#views').querySelectorAll('button').forEach(b=>b.onclick=()=>{S0.view[S0.kind]=b.dataset.v; sel=null; renderAll();});
+}
+let svgEl=null;
+function renderStage(){
+  $('#stage').innerHTML = sceneSVG(D(),V(),{showArea:true});
+  svgEl=$('#stage svg');
+  drawSel();
+  bindDrag();
+}
+function drawSel(){
+  if(!svgEl) return; const L=svgEl.querySelector('#selLayer'); L.innerHTML='';
+  const hint=document.querySelector('#views .hint'); if(hint){ const b=artBBox(svgEl);
+    hint.textContent = b.width? `Tryckyta ca ${Math.round(b.width/10)} × ${Math.round(b.height/10)} cm · dra för att flytta` : 'Dra för att flytta · klicka för att välja'; }
+  svgEl.querySelectorAll('.el').forEach(g=>{ if(g.dataset.id===sel){ const b=elBBox(g); const p=4;
+    L.innerHTML=`<rect class="sel-box" x="${b.x-p}" y="${b.y-p}" width="${b.width+2*p}" height="${b.height+2*p}"/>`; }});
+}
+function findEl(eid){ return (D().views[V()]||[]).find(e=>e.id===eid); }
+function bindDrag(){
+  let drag=null;
+  const pt=(ev)=>{ const p=svgEl.createSVGPoint(); p.x=ev.clientX; p.y=ev.clientY; return p.matrixTransform(svgEl.getScreenCTM().inverse()); };
+  svgEl.addEventListener('pointerdown',ev=>{
+    const g=ev.target.closest('.el');
+    if(!g){ if(sel){sel=null; drawSel(); renderPanel();} return; }
+    const e=findEl(g.dataset.id); if(!e) return;
+    if(sel!==e.id){ sel=e.id; renderPanel(); }
+    const p=pt(ev); drag={e,g,ox:p.x-e.x,oy:p.y-e.y,x0:e.x,y0:e.y};
+    svgEl.setPointerCapture(ev.pointerId); drawSel(); ev.preventDefault();
+  });
+  svgEl.addEventListener('pointermove',ev=>{
+    if(!drag) return; const p=pt(ev);
+    let nx=p.x-drag.ox, ny=p.y-drag.oy;
+    // snap to centre line of print area / sign
+    const d=D(); const area = d.kind==='sign'?[0,0,d.w*10,d.h*10]:(d.kind==='tee'?TEE:JKT).area[V()];
+    const cx=area[0]+area[2]/2; if(Math.abs(nx-cx)<6) nx=cx;
+    drag.e.x=Math.round(nx*2)/2; drag.e.y=Math.round(ny*2)/2;
+    drag.g.outerHTML; // keep reference semantics
+    const tmp=document.createElementNS(NS,'g'); tmp.innerHTML=elSVG(drag.e);
+    const ng=tmp.firstChild; drag.g.replaceWith(ng); drag.g=ng; drawSel();
+  });
+  const end=()=>{ if(drag){ drag=null; save(); renderPanel(); } };
+  svgEl.addEventListener('pointerup',end); svgEl.addEventListener('pointercancel',end);
+}
+
+/* ---------- panel ---------- */
+function swatches(list,cur,attr,sq){ return `<div class="sw${sq?' sq':''}">`+list.map(p=>`<button title="${p.n}" data-${attr}="${p.k}" class="${cur===p.k?'on':''}" style="background:${p.c}"></button>`).join('')+'</div>'; }
+function rng(lbl,key,min,max,step,val,unit='mm'){ return `<div class="row"><label>${lbl}</label><input type="range" data-k="${key}" min="${min}" max="${max}" step="${step}" value="${val}"><output>${val}${unit?' '+unit:''}</output></div>`; }
+function labelOf(e){ return e.t==='text'?'Text: '+e.txt.replace(/\n/g,' / '):e.t==='img'?IMG[e.img].n:'Ränder ('+e.cols.map(c=>PN[c]).join(', ')+')'; }
+function renderPanel(){
+  const d=D(), v=V(), els=d.views[v]||(d.views[v]=[]);
+  let h='';
+  if(d.kind==='sign'){
+    h+=`<h3>Skylt</h3><div class="row"><label>Storlek</label><select id="signSize">`+SIGN_SIZES.map(([w,hh])=>`<option value="${w}x${hh}" ${d.w===w&&d.h===hh?'selected':''}>${w} × ${hh} cm</option>`).join('')+
+       `<option value="custom" ${SIGN_SIZES.some(([w,hh])=>w===d.w&&hh===d.h)?'':'selected'}>Eget mått…</option></select></div>`+
+       `<div class="row"><label>Bredd × höjd</label><input type="number" id="sw" value="${d.w}" min="20" max="400"> <input type="number" id="sh" value="${d.h}" min="20" max="300"> cm</div>`+
+       `<div class="row"><label>Bakgrund</label>${swatches(PAL,d.bg,'bg',1)}</div>`+
+       `<div class="row"><label>Ram</label>${swatches([{k:'none',n:'Ingen',c:'repeating-linear-gradient(45deg,#fff 0 4px,#ccc 4px 8px)'},...PAL],d.border||'none','border',1)}</div>`+
+       `<label class="chk"><input type="checkbox" id="posts" ${d.posts?'checked':''}> Visa stolpar i förhandsvisningen</label>`;
+  } else {
+    h+=`<h3>Plaggfärg</h3>${swatches(GARMENT,d.garment,'garment')}`;
+    if(d.kind==='tee'){ const sl=d.sleeves;
+      h+=`<h3>Ränder på ärmarna</h3><label class="chk"><input type="checkbox" id="slOn" ${sl.on?'checked':''}> Ränder på båda ärmarna</label>`;
+      if(sl.on){ h+=`<div class="row"><label>Färger</label>${stripeColorPicker(sl.cols,'sl')}</div>`+
+        rng('Tjocklek','sl.th',3,20,1,sl.th)+rng('Mellanrum','sl.gap',0,15,1,sl.gap)+rng('Från kanten','sl.off',0,90,1,sl.off); }
+    }
+  }
+  h+=`<h3>Lägg till</h3><div class="add">
+     <button class="btn" data-add="text">+ Text</button><button class="btn" data-add="logo">+ Rund logga</button>
+     <button class="btn" data-add="horses">+ Hästar</button><button class="btn" data-add="stripes">+ Ränder</button></div>`;
+  h+=`<h3>Lager (${PRODUCTS[d.kind].views[v]})</h3><div class="layers">`+
+     (els.length? els.slice().reverse().map(e=>`<div data-sel="${e.id}" class="${sel===e.id?'on':''}"><span>${esc(labelOf(e))}</span><b data-up="${e.id}" title="Fram">▲</b><b data-dn="${e.id}" title="Bak">▼</b><b data-del="${e.id}" title="Ta bort">✕</b></div>`).join('') : '<p class="muted">Tomt – lägg till något ovan.</p>')+`</div>`;
+  const e=els.find(x=>x.id===sel);
+  if(e) h+=`<div class="props">${propsHTML(e)}</div>`;
+  h+=`<h3>Klar?</h3><div class="add"><button class="btn pri" id="addCart">Lägg i beställning</button><button class="btn" id="dlProof">Ladda ner bild</button>
+      <button class="btn warn" id="reset">Börja om (mall)</button><button class="btn" id="centerSel" ${e?'':'disabled'}>Centrera vald</button></div>
+      <p class="muted">Allt sparas automatiskt i den här webbläsaren.</p>`;
+  $('#panel').innerHTML=h; bindPanel();
+}
+function stripeColorPicker(cols,pfx){
+  // ordered list of stripe colours; click to add, × to remove
+  return `<div style="flex:1"><div class="sw sq" style="margin-bottom:6px">`+cols.map((c,i)=>`<button title="Ta bort ${PN[c]}" data-${pfx}rm="${i}" style="background:${PC[c]};position:relative"></button>`).join('')+
+    `</div><div class="sw" style="transform:scale(.8);transform-origin:left">`+PAL.map(p=>`<button title="Lägg till ${p.n}" data-${pfx}add="${p.k}" style="background:${p.c}"></button>`).join('')+`</div><div class="muted">Övre raden = ordning (klicka för att ta bort), undre = lägg till</div></div>`;
+}
+function propsHTML(e){
+  let h='';
+  if(e.t==='text'){
+    h+=`<div class="row"><label>Text</label><textarea id="ptxt" rows="2">${esc(e.txt)}</textarea></div>`+
+       `<div class="row"><label>Typsnitt</label><select id="pfont">`+Object.entries(FONTS).map(([k,f])=>`<option value="${k}" ${e.font===k?'selected':''}>${f.n}</option>`).join('')+`</select></div>`+
+       `<div class="row"><label>Färg</label>${swatches(PAL,e.col,'col')}</div>`+
+       rng('Storlek','size',8,400,1,e.size)+rng('Spärrning','ls',-5,40,0.5,e.ls)+
+       rng('Båge','arc',-100,100,1,e.arc,'')+
+       `<div class="muted">Båge: + välver uppåt (som BLOMMERÖD på ryggen), − nedåt, 0 = rak. Gäller enradig text.</div>`;
+  } else if(e.t==='img'){
+    h+=`<div class="row"><label>Motiv</label><select id="pimg">`+Object.entries(IMG).map(([k,m])=>`<option value="${k}" ${e.img===k?'selected':''}>${m.n}</option>`).join('')+`</select></div>`+
+       rng('Bredd','w',20,1500,1,e.w)+
+       (e.img==='logo'?`<div class="row"><label>Bakgrund i loggan</label>${swatches([{k:'none',n:'Genomskinlig',c:'repeating-linear-gradient(45deg,#fff 0 4px,#ccc 4px 8px)'},...PAL.filter(p=>['w','c','y','b'].includes(p.k))],e.disc===false?'none':(e.disc||'w'),'disc')}</div>`:'')+
+       (e.img!=='logo'?`<div class="muted">"Friläggda" har ingen vit bakgrund – bäst på mörka plagg. "Akvarell" behåller det vita papperet.</div>`:'');
+  } else if(e.t==='stripes'){
+    h+=`<div class="row"><label>Färger</label>${stripeColorPicker(e.cols,'st')}</div>`+
+       rng('Längd','len',20,1800,1,e.len)+rng('Tjocklek','th',2,60,1,e.th)+rng('Mellanrum','gap',0,40,1,e.gap)+
+       `<label class="chk"><input type="checkbox" id="pvert" ${e.vert?'checked':''}> Stående</label>`;
+  }
+  h+=`<div class="row"><label>Position</label><span class="muted">x ${e.x} · y ${e.y} mm</span></div>`;
+  return h;
+}
+function bindPanel(){
+  const d=D(), P=$('#panel');
+  const live=()=>{ renderStage(); save(); };
+  P.querySelectorAll('[data-garment]').forEach(b=>b.onclick=()=>{d.garment=b.dataset.garment; renderAll();});
+  P.querySelectorAll('[data-bg]').forEach(b=>b.onclick=()=>{d.bg=b.dataset.bg; renderAll();});
+  P.querySelectorAll('[data-border]').forEach(b=>b.onclick=()=>{d.border=b.dataset.border; renderAll();});
+  const ss=P.querySelector('#signSize'); if(ss) ss.onchange=()=>{ if(ss.value!=='custom'){ const [w,h]=ss.value.split('x').map(Number); scaleSign(d,w,h);} renderAll(); };
+  const sw=P.querySelector('#sw'), sh=P.querySelector('#sh');
+  if(sw) [sw,sh].forEach(i=>i.onchange=()=>{ scaleSign(d,Math.max(20,+sw.value||d.w),Math.max(20,+sh.value||d.h)); renderAll(); });
+  const po=P.querySelector('#posts'); if(po) po.onchange=()=>{d.posts=po.checked; renderAll();};
+  const so=P.querySelector('#slOn'); if(so) so.onchange=()=>{d.sleeves.on=so.checked; renderAll();};
+  P.querySelectorAll('[data-slrm]').forEach(b=>b.onclick=()=>{ if(d.sleeves.cols.length>1) d.sleeves.cols.splice(+b.dataset.slrm,1); renderAll();});
+  P.querySelectorAll('[data-sladd]').forEach(b=>b.onclick=()=>{ if(d.sleeves.cols.length<8) d.sleeves.cols.push(b.dataset.sladd); renderAll();});
+  P.querySelectorAll('input[type=range]').forEach(r=>r.oninput=()=>{
+    const k=r.dataset.k, val=+r.value; const out=r.nextElementSibling; out.textContent=val+(out.textContent.includes('mm')?' mm':'');
+    if(k.startsWith('sl.')) d.sleeves[k.slice(3)]=val; else { const e=findEl(sel); if(e) e[k]=val; }
+    live();
+  });
+  P.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addEl(b.dataset.add));
+  P.querySelectorAll('[data-sel]').forEach(r=>r.onclick=(ev)=>{ if(ev.target.tagName==='B') return; sel=r.dataset.sel; renderPanel(); drawSel(); });
+  const arr=d.views[V()];
+  P.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{ const i=arr.findIndex(e=>e.id===b.dataset.del); arr.splice(i,1); if(sel===b.dataset.del) sel=null; renderAll(); });
+  P.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>{ const i=arr.findIndex(e=>e.id===b.dataset.up); if(i<arr.length-1){[arr[i],arr[i+1]]=[arr[i+1],arr[i]];} renderAll(); });
+  P.querySelectorAll('[data-dn]').forEach(b=>b.onclick=()=>{ const i=arr.findIndex(e=>e.id===b.dataset.dn); if(i>0){[arr[i],arr[i-1]]=[arr[i-1],arr[i]];} renderAll(); });
+  const e=findEl(sel);
+  if(e){
+    const t=P.querySelector('#ptxt'); if(t) t.oninput=()=>{ e.txt=t.value; live(); const L=P.querySelector(`[data-sel="${e.id}"] span`); if(L) L.textContent=labelOf(e); };
+    const f=P.querySelector('#pfont'); if(f) f.onchange=()=>{ e.font=f.value; renderAll(); };
+    P.querySelectorAll('[data-col]').forEach(b=>b.onclick=()=>{ e.col=b.dataset.col; renderAll(); });
+    P.querySelectorAll('[data-disc]').forEach(b=>b.onclick=()=>{ e.disc=b.dataset.disc==='none'?false:b.dataset.disc; renderAll(); });
+    const im=P.querySelector('#pimg'); if(im) im.onchange=()=>{ e.img=im.value; renderAll(); };
+    const vt=P.querySelector('#pvert'); if(vt) vt.onchange=()=>{ e.vert=vt.checked; renderAll(); };
+    P.querySelectorAll('[data-strm]').forEach(b=>b.onclick=()=>{ if(e.cols.length>1) e.cols.splice(+b.dataset.strm,1); renderAll();});
+    P.querySelectorAll('[data-stadd]').forEach(b=>b.onclick=()=>{ if(e.cols.length<10) e.cols.push(b.dataset.stadd); renderAll();});
+  }
+  P.querySelector('#centerSel').onclick=()=>{ const e=findEl(sel); if(!e) return; const a=areaOf(D(),V()); e.x=a[0]+a[2]/2; renderAll(); };
+  P.querySelector('#reset').onclick=()=>{ if(confirm('Återställ den här produkten till mallen?')){ S0.designs[S0.kind]=defaultDesign(S0.kind); sel=null; renderAll(); } };
+  P.querySelector('#addCart').onclick=addToCart;
+  P.querySelector('#dlProof').onclick=async()=>{ const png=await proofPNG(D(),V(),1600); dl(png,`blommerod_${D().kind}_${V()}_korrektur.png`); };
+}
+function areaOf(d,v){ return d.kind==='sign'?[0,0,d.w*10,d.h*10]:(d.kind==='tee'?TEE:JKT).area[v]; }
+function scaleSign(d,w,h){
+  const fx=w/d.w, fy=h/d.h, f=Math.min(fx,fy);
+  for(const e of d.views.sign){ e.x=Math.round(e.x*fx); e.y=Math.round(e.y*fy);
+    if(e.t==='text') e.size=Math.round(e.size*f); if(e.t==='img') e.w=Math.round(e.w*f); if(e.t==='stripes'){ e.len=Math.round(e.len*fx); e.th=Math.max(2,Math.round(e.th*f)); e.gap=Math.round(e.gap*f);} }
+  d.w=w; d.h=h;
+}
+function addEl(kind){
+  const d=D(), a=areaOf(d,V()), cx=a[0]+a[2]/2, cy=a[1]+a[3]/2, sc=d.kind==='sign'?a[2]/300:1;
+  const darkBg = d.kind==='sign' ? ['g','k','r','b'].includes(d.bg) : !['w','c','b','grey'].includes(d.garment);
+  let e;
+  if(kind==='text') e=T('EGEN TEXT',cx,cy,{size:Math.round(36*sc),col:darkBg?'w':'g'});
+  if(kind==='logo') e=I('logo',cx,cy,Math.round(Math.min(a[2],a[3])*0.5));
+  if(kind==='horses') e=I(darkBg?'horsesK':'horses',cx,cy,Math.round(a[2]*0.6));
+  if(kind==='stripes') e=S(cx,cy,{len:Math.round(a[2]*0.7),th:Math.round(9*sc),gap:Math.round(5*sc)});
+  d.views[V()].push(e); sel=e.id; renderAll();
+}
+
+/* ---------- export / proof ---------- */
+let fontCSScache=null;
+async function fontCSS(){
+  if(fontCSScache) return fontCSScache;
+  const list=[['Club','Tinos-Regular',400,'normal'],['Club','Tinos-Bold',700,'normal'],['Club','Tinos-Italic',400,'italic'],['ClubNum','LibreBodoni','400 700','normal']];
+  let css='';
+  for(const [fam,f,w,st] of list){ const b=await (await fetch(`fonts/${f}.woff2`)).blob(); css+=`@font-face{font-family:"${fam}";src:url(${await b2d(b)}) format("woff2");font-weight:${w};font-style:${st}}`; }
+  return fontCSScache=css;
+}
+const b2d=b=>new Promise(r=>{const f=new FileReader(); f.onload=()=>r(f.result); f.readAsDataURL(b);});
+const imgCache={};
+async function imgData(url){ if(!imgCache[url]) imgCache[url]=await b2d(await (await fetch(url)).blob()); return imgCache[url]; }
+async function rasterize(svg,W,H,bg){
+  const img=new Image(); img.decoding='sync';
+  const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
+  await new Promise((ok,no)=>{img.onload=ok; img.onerror=no; img.src=url;});
+  const c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
+  if(bg){x.fillStyle=bg; x.fillRect(0,0,W,H);} x.drawImage(img,0,0,W,H); URL.revokeObjectURL(url);
+  return c.toDataURL('image/png');
+}
+async function usedImgs(d,view,hiRes){
+  const m={}; for(const e of d.views[view]||[]) if(e.t==='img') m[e.img]=await imgData(hiRes?IMG[e.img].hi:IMG[e.img].src); return m;
+}
+async function proofPNG(d,view,px){
+  const css=await fontCSS(), hi=await usedImgs(d,view,false);
+  let svg=sceneSVG(d,view,{hi,fontCSS:css});
+  const vb=svg.match(/viewBox="([^"]+)"/)[1].split(' ').map(Number); const H=Math.round(px*vb[3]/vb[2]);
+  svg=svg.replace('<svg ',`<svg width="${px}" height="${H}" `);
+  return rasterize(svg,px,H,'#f6f1e4');
+}
+/* print file: only the artwork, transparent, at dpi */
+async function printPNG(d,view,dpi){
+  const css=await fontCSS(), hi=await usedImgs(d,view,true);
+  let a=areaOf(d,view);
+  if(d.kind!=='sign'){ // garments: crop to the artwork's real bounds (+3 mm), so nothing is clipped
+    const host=document.createElement('div'); host.style.cssText='position:absolute;left:-9999px;top:0;width:800px;height:800px;visibility:hidden';
+    host.innerHTML=sceneSVG(d,view,{print:true}); document.body.appendChild(host);
+    const b=artBBox(host); host.remove();
+    if(b.width>0) a=[Math.floor(b.x-3),Math.floor(b.y-3),Math.ceil(b.width+6),Math.ceil(b.height+6)];
+  }
+  const pxW=Math.round(a[2]/25.4*dpi), pxH=Math.round(a[3]/25.4*dpi);
+  const svg=sceneSVG(d,view,{print:true,vb:a,hi,fontCSS:css,pxW,pxH});
+  return {png:await rasterize(svg,pxW,pxH,null),pxW,pxH,mm:[a[2],a[3]]};
+}
+window.__printPNG=printPNG; window.__proofPNG=proofPNG; window.__sceneSVG=sceneSVG;
+function dl(href,name){ const a=document.createElement('a'); a.href=href; a.download=name; document.body.appendChild(a); a.click(); a.remove(); }
+
+/* ---------- cart / order ---------- */
+async function addToCart(){
+  const d=JSON.parse(JSON.stringify(D()));
+  const item={d, qty: d.kind==='sign'?{st:1}:{M:1}, note:''};
+  S0.cart.push(item); save(); toast('Tillagd i beställningen ✓'); renderNav(); openCart();
+}
+function describe(d){
+  if(d.kind==='sign') return `Skylt ${d.w}×${d.h} cm, bakgrund ${PN[d.bg]}${d.border&&d.border!=='none'?', ram '+PN[d.border]:''}`;
+  let s=`${PRODUCTS[d.kind].n}, ${GN[d.garment]}`;
+  if(d.kind==='tee' && d.sleeves.on) s+=`, ärmränder ${d.sleeves.cols.map(c=>PN[c]).join('/')}`;
+  for(const [v,n] of Object.entries(PRODUCTS[d.kind].views)){ const els=d.views[v]||[]; if(els.length) s+=` · ${n}: `+els.map(e=>e.t==='text'?`"${e.txt.replace(/\n/g,' / ')}"`:e.t==='img'?IMG[e.img].n.toLowerCase():'ränder').join(', '); }
+  return s;
+}
+async function openCart(){
+  const dlg=$('#cartDlg'); const C=S0.cart;
+  let h=`<h2>BESTÄLLNING</h2>`;
+  if(!C.length) h+=`<p>Inget i beställningen ännu. Designa något och tryck <b>Lägg i beställning</b>.</p>`;
+  C.forEach((it,i)=>{
+    h+=`<div class="item"><img id="th${i}" alt=""><div class="info"><b>${i+1}. ${esc(describe(it.d))}</b>`;
+    if(it.d.kind==='sign') h+=`<div class="row"><label>Antal</label><input type="number" min="0" data-q="${i}:st" value="${it.qty.st||0}" style="max-width:80px"></div>`;
+    else h+=`<div class="sizes">`+SIZES.map(s=>`<label>${s}<input type="number" min="0" data-q="${i}:${s}" value="${it.qty[s]||0}"></label>`).join('')+`</div>`;
+    h+=`<div class="row"><input type="text" placeholder="Kommentar (valfritt)" data-n="${i}" value="${esc(it.note||'')}"></div>
+        <div class="row"><button class="btn" data-edit="${i}">Öppna i editorn</button><button class="btn warn" data-rm="${i}">Ta bort</button></div></div></div>`;
+  });
+  h+=`<h3 style="font-size:12px;letter-spacing:.14em;margin:14px 0 6px">FRÅN</h3><div class="row"><input type="text" id="oName" placeholder="Namn" value="${esc(S0.who||'Niels')}"><input type="text" id="oWhen" placeholder="Önskat datum" value="${esc(S0.when||'')}"></div>
+     <textarea id="oNote" placeholder="Övrigt till Hugo">${esc(S0.onote||'')}</textarea>
+     <div class="row" style="margin-top:12px"><button class="btn pri" id="send" ${C.length?'':'disabled'}>Skicka till Hugo</button><button class="btn" id="close">Stäng</button></div>
+     <p class="muted">Ingen server – "Skicka" skapar en länk med hela beställningen. Skicka den till Hugo (SMS/WhatsApp/mejl), så tar han fram tryckfilerna.</p>`;
+  $('#cartBody').innerHTML=h; if(!dlg.open) dlg.showModal();
+  C.forEach(async (it,i)=>{ const v=Object.keys(PRODUCTS[it.d.kind].views)[0]; const im=$('#th'+i); if(im) im.src=await proofPNG(it.d,v,240); });
+  const B=$('#cartBody');
+  B.querySelectorAll('[data-q]').forEach(inp=>inp.onchange=()=>{ const [i,k]=inp.dataset.q.split(':'); S0.cart[+i].qty[k]=Math.max(0,+inp.value||0); save(); });
+  B.querySelectorAll('[data-n]').forEach(inp=>inp.onchange=()=>{ S0.cart[+inp.dataset.n].note=inp.value; save(); });
+  B.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ S0.cart.splice(+b.dataset.rm,1); save(); renderNav(); openCart(); });
+  B.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{ const it=S0.cart[+b.dataset.edit]; S0.kind=it.d.kind; S0.designs[it.d.kind]=JSON.parse(JSON.stringify(it.d)); sel=null; dlg.close(); renderAll(); toast('Öppnad – lägg i beställningen igen när du ändrat'); });
+  ['oName','oWhen','oNote'].forEach(k=>$('#'+k).onchange=()=>{ S0[{oName:'who',oWhen:'when',oNote:'onote'}[k]]=$('#'+k).value; save(); });
+  $('#close').onclick=()=>dlg.close();
+  $('#send').onclick=sendOrder;
+}
+async function pack(obj){
+  const json=JSON.stringify(obj);
+  if(window.CompressionStream){ const cs=new Blob([json]).stream().pipeThrough(new CompressionStream('deflate-raw')); const buf=new Uint8Array(await new Response(cs).arrayBuffer());
+    let s=''; buf.forEach(b=>s+=String.fromCharCode(b)); return 'z'+btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+  return 'j'+btoa(unescape(encodeURIComponent(json))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+async function unpack(str){
+  const t=str[0], b=str.slice(1).replace(/-/g,'+').replace(/_/g,'/'); const bin=atob(b);
+  if(t==='j') return JSON.parse(decodeURIComponent(escape(bin)));
+  const u=Uint8Array.from(bin,c=>c.charCodeAt(0)); const ds=new Blob([u]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+  return JSON.parse(await new Response(ds).text());
+}
+async function sendOrder(){
+  ['oName','oWhen','oNote'].forEach(k=>S0[{oName:'who',oWhen:'when',oNote:'onote'}[k]]=$('#'+k).value); save();
+  const order={v:1,who:S0.who,when:S0.when,note:S0.onote,ts:new Date().toISOString(),items:S0.cart};
+  const link=location.origin+location.pathname+'#o='+await pack(order);
+  let txt=`Beställning Blommeröd Polo – ${S0.who||''}${S0.when?' (önskas '+S0.when+')':''}\n`;
+  S0.cart.forEach((it,i)=>{ const q=Object.entries(it.qty).filter(([k,v])=>v>0).map(([k,v])=>k==='st'?`${v} st`:`${k}×${v}`).join(', ');
+    txt+=`\n${i+1}. ${describe(it.d)}\n   Antal: ${q||'–'}${it.note?'\n   Not: '+it.note:''}`; });
+  if(S0.onote) txt+=`\n\nÖvrigt: ${S0.onote}`;
+  txt+=`\n\nÖppna beställningen:\n${link}`;
+  $('#cartBody').innerHTML=`<h2>SKICKA TILL HUGO</h2><p>Länken innehåller hela beställningen med alla designer.</p>
+    <textarea readonly style="min-height:200px;font-size:12px">${esc(txt)}</textarea>
+    <div class="row"><button class="btn pri" id="share">Dela…</button><button class="btn" id="copy">Kopiera</button><a class="btn" href="sms:&body=${encodeURIComponent(txt)}">SMS</a><a class="btn" href="https://wa.me/?text=${encodeURIComponent(txt)}" target="_blank">WhatsApp</a><button class="btn" id="back">Tillbaka</button></div>`;
+  window.__lastOrder={txt,link,order};
+  $('#copy').onclick=async()=>{ try{await navigator.clipboard.writeText(txt); toast('Kopierat ✓');}catch(e){ toast('Markera texten och kopiera'); } };
+  $('#share').onclick=async()=>{ if(navigator.share){ try{ await navigator.share({title:'Beställning Blommeröd Polo',text:txt}); }catch(e){} } else $('#copy').click(); };
+  $('#back').onclick=openCart;
+}
+/* incoming order link (for Hugo): show read-only order with production files */
+async function showIncoming(code){
+  let o; try{ o=await unpack(code);}catch(e){ alert('Kunde inte läsa beställningslänken'); return; }
+  window.__order=o;
+  let h=`<h2>INKOMMEN BESTÄLLNING</h2><p><b>${esc(o.who||'')}</b> · ${new Date(o.ts).toLocaleString('sv-SE')}${o.when?' · önskas '+esc(o.when):''}</p>${o.note?`<p>${esc(o.note)}</p>`:''}`;
+  o.items.forEach((it,i)=>{ const q=Object.entries(it.qty).filter(([k,v])=>v>0).map(([k,v])=>k==='st'?`${v} st`:`${k}×${v}`).join(', ');
+    h+=`<div class="item"><img id="ith${i}"><div class="info"><b>${i+1}. ${esc(describe(it.d))}</b><div>Antal: ${q||'–'}</div>${it.note?`<div>Not: ${esc(it.note)}</div>`:''}
+      <div class="row">`+Object.entries(PRODUCTS[it.d.kind].views).filter(([v])=>(it.d.views[v]||[]).length).map(([v,n])=>`<button class="btn" data-pf="${i}:${v}">Tryckfil ${n}</button>`).join('')+
+      `<button class="btn" data-open="${i}">Öppna i editorn</button></div></div></div>`; });
+  h+=`<div class="row"><button class="btn" id="close">Stäng</button></div><p class="muted">Tryckfil = transparent PNG, 300 dpi (skylt 150 dpi), exakt mått i mm.</p>`;
+  $('#cartBody').innerHTML=h; $('#cartDlg').showModal();
+  o.items.forEach(async (it,i)=>{ $('#ith'+i).src=await proofPNG(it.d,Object.keys(PRODUCTS[it.d.kind].views)[0],240); });
+  $('#cartBody').querySelectorAll('[data-pf]').forEach(b=>b.onclick=async()=>{ const [i,v]=b.dataset.pf.split(':'); const it=o.items[+i]; b.textContent='Renderar…';
+    const r=await printPNG(it.d,v,it.d.kind==='sign'?150:300); dl(r.png,`blommerod_${i+1}_${it.d.kind}_${v}_${r.mm[0]}x${r.mm[1]}mm.png`); b.textContent='Klar ✓'; });
+  $('#cartBody').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{ const it=o.items[+b.dataset.open]; S0.kind=it.d.kind; S0.designs[it.d.kind]=JSON.parse(JSON.stringify(it.d)); $('#cartDlg').close(); renderAll(); });
+  $('#close').onclick=()=>$('#cartDlg').close();
+}
+function toast(t){ const el=$('#toast'); el.textContent=t; el.classList.add('on'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('on'),1800); }
+
+/* ---------- boot ---------- */
+(async()=>{
+  try{ await Promise.all([document.fonts.load('40px Club'),document.fonts.load('700 40px Club'),document.fonts.load('40px ClubNum')]); }catch(e){}
+  renderAll();
+  const m=location.hash.match(/#o=([^&]+)/); if(m) showIncoming(m[1]);
+  window.__ready=true;
+})();
+</script>
+</body>
+</html>
