@@ -387,7 +387,7 @@ function renderPanel(){
     if(d.kind==='tee'){ const sl=d.sleeves;
       h+=`<h3>Ränder på ärmarna</h3><label class="chk"><input type="checkbox" id="slOn" ${sl.on?'checked':''}> Ränder på båda ärmarna</label>`;
       if(sl.on){ h+=`<div class="row"><label>Färger</label>${stripeColorPicker(sl.cols,'sl')}</div>`+
-        rng('Tjocklek','sl.th',3,20,1,sl.th)+rng('Mellanrum','sl.gap',0,15,1,sl.gap)+rng('Från kanten','sl.off',0,90,1,sl.off)+rng('Riktning','sl.rot',-90,90,1,sl.rot||0,'°')+dirBtns('sl'); }
+        rng('Tjocklek','sl.th',0.5,20,0.5,sl.th)+rng('Mellanrum','sl.gap',0,15,0.5,sl.gap)+rng('Från kanten','sl.off',0,90,1,sl.off)+rng('Riktning','sl.rot',-90,90,1,sl.rot||0,'°')+dirBtns('sl')+presetBtns('sl'); }
     }
   }
   h+=`<h3>Lägg till</h3><div class="add">
@@ -407,6 +407,12 @@ function stripeColorPicker(cols,pfx){
   return `<div style="flex:1"><div class="sw sq" style="margin-bottom:6px">`+cols.map((c,i)=>`<button title="Ta bort ${PN[c]}" data-${pfx}rm="${i}" style="background:${PC[c]};position:relative"></button>`).join('')+
     `</div><div class="sw" style="transform:scale(.8);transform-origin:left">`+PAL.map(p=>`<button title="Lägg till ${p.n}" data-${pfx}add="${p.k}" style="background:${p.c}"></button>`).join('')+`</div><div class="muted">Övre raden = ordning (klicka för att ta bort), undre = lägg till</div></div>`;
 }
+function presetBtns(t){ return `<div class="row"><label>Snabbval</label>`+[['logo','Som loggan'],['thin','Tunna'],['fine','Extra tunna']].map(([k,n])=>`<button class="btn" style="padding:4px 8px;font-size:12px" data-pre="${t}:${k}">${n}</button>`).join('')+`</div>`; }
+function applyPreset(o,k){ // o has th,gap,cols
+  if(k==='logo'){ o.cols=['b','r','g','y']; o.gap=Math.round(o.th*1.6*2)/2; }
+  if(k==='thin'){ o.th=2; o.gap=3; }
+  if(k==='fine'){ o.th=1; o.gap=1.5; }
+}
 function dirBtns(t){ return `<div class="row"><label></label>`+[[0,'— Vågrät'],[90,'| Lodrät'],[-45,'╱ Diagonal'],[45,'╲ Diagonal']].map(([a,n])=>`<button class="btn" style="padding:4px 8px;font-size:12px" data-dir="${t}:${a}">${n}</button>`).join('')+`</div>`; }
 function propsHTML(e){
   let h='';
@@ -424,8 +430,8 @@ function propsHTML(e){
        (e.img!=='logo'?`<div class="muted">"Friläggda" har ingen vit bakgrund – bäst på mörka plagg. "Akvarell" behåller det vita papperet.</div>`:'');
   } else if(e.t==='stripes'){
     h+=`<div class="row"><label>Färger</label>${stripeColorPicker(e.cols,'st')}</div>`+
-       rng('Längd','len',20,1800,1,e.len)+rng('Tjocklek','th',2,60,1,e.th)+rng('Mellanrum','gap',0,40,1,e.gap)+
-       rng('Riktning','rot',-90,90,1,e.rot??(e.vert?90:0),'°')+dirBtns('el');
+       rng('Längd','len',20,1800,1,e.len)+rng('Tjocklek','th',0.5,60,0.5,e.th)+rng('Mellanrum','gap',0,40,0.5,e.gap)+
+       rng('Riktning','rot',-90,90,1,e.rot??(e.vert?90:0),'°')+dirBtns('el')+presetBtns('el');
   }
   h+=`<div class="row"><label>Position</label><span class="muted">x ${e.x} · y ${e.y} mm</span></div>`;
   return h;
@@ -448,6 +454,7 @@ function bindPanel(){
     if(k.startsWith('sl.')) d.sleeves[k.slice(3)]=val; else { const e=findEl(sel); if(e) e[k]=val; }
     live();
   });
+  P.querySelectorAll('[data-pre]').forEach(b=>b.onclick=()=>{ const [t,k]=b.dataset.pre.split(':'); const o=t==='sl'?d.sleeves:findEl(sel); if(o) applyPreset(o,k); renderAll(); });
   P.querySelectorAll('[data-dir]').forEach(b=>b.onclick=()=>{ const [t,a]=b.dataset.dir.split(':'); if(t==='sl') d.sleeves.rot=+a; else { const e=findEl(sel); if(e){ e.rot=+a; delete e.vert; } } renderAll(); });
   P.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addEl(b.dataset.add));
   P.querySelectorAll('[data-sel]').forEach(r=>r.onclick=(ev)=>{ if(ev.target.tagName==='B') return; sel=r.dataset.sel; renderPanel(); drawSel(); });
