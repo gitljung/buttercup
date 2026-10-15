@@ -280,7 +280,7 @@ function drawAll(){
   drawSuit();
   for(const el of S.els){if(!el.on)continue;resolve(el);
     if(el.type==="logo")drawLogo(el);else if(el.type==="flag")drawFlag(el);else drawText(el)}
-  if(window.ctex)ctex.needsUpdate=true;
+  if(ctex)ctex.needsUpdate=true;
 }
 
 /* ---------- 3D ---------- */
