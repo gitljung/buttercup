@@ -420,12 +420,37 @@ function resize(){
   drawFlat();
 }
 const CAMS={front:[0,100,340,92],back:[0,100,-340,92],side:[300,104,130,92],close:[0,130,150,128]};
+let camTween=0;
 function setCam(k,instant){
-  const c=CAMS[k];const to=new THREE.Vector3(c[0],c[1],c[2]),tt=new THREE.Vector3(0,c[3],0);
-  if(instant){camera.position.copy(to);controls.target.copy(tt);return}
-  const from=camera.position.clone(),tf=controls.target.clone();let t=0;
+  const c=CAMS[k];if(!c||!camera)return;
+  let cz=c[2];
+  // "Nära" följer den sida man tittar på (fram/rygg)
+  if(k==="close"&&camera.position.z-controls.target.z<0)cz=-cz;
+  const to=new THREE.Vector3(c[0],c[1],cz),tt=new THREE.Vector3(0,c[3],0);
+  // stoppa snurr + kvarvarande dragrörelse (damping)
+  if(controls.autoRotate){controls.autoRotate=false;const sp=document.getElementById("spin");if(sp)sp.classList.remove("on")}
+  controls.enableDamping=false;controls.update();controls.enableDamping=true;
+  document.querySelectorAll("#camBtns button").forEach(b=>b.classList.toggle("on",b.dataset.cam===k));
+  const id=++camTween;
+  if(instant){camera.position.copy(to);controls.target.copy(tt);controls.update();return}
+  // sfärisk interpolation runt dockan – kameran åker runt, inte rakt igenom
+  const tf=controls.target.clone();
+  const sFrom=new THREE.Spherical().setFromVector3(camera.position.clone().sub(tf));
+  const sTo=new THREE.Spherical().setFromVector3(to.clone().sub(tt));
+  let dth=sTo.theta-sFrom.theta;dth=Math.atan2(Math.sin(dth),Math.cos(dth));
   const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
-  (function step(){t=reduce?1:Math.min(1,t+.06);const e=1-Math.pow(1-t,3);camera.position.lerpVectors(from,to,e);controls.target.lerpVectors(tf,tt,e);if(t<1)requestAnimationFrame(step)})();
+  const dur=reduce?0:650,t0=performance.now();
+  controls.enabled=false;
+  (function step(now){
+    if(id!==camTween)return;
+    const t=dur?Math.min(1,((now||performance.now())-t0)/dur):1;
+    const e=t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+    const tg=tf.clone().lerp(tt,e);
+    const s=new THREE.Spherical(sFrom.radius+(sTo.radius-sFrom.radius)*e,sFrom.phi+(sTo.phi-sFrom.phi)*e,sFrom.theta+dth*e);
+    camera.position.copy(tg).add(new THREE.Vector3().setFromSpherical(s));
+    controls.target.copy(tg);camera.lookAt(tg);
+    if(t<1)requestAnimationFrame(step);else{controls.enabled=true;controls.update()}
+  })();
 }
 function setupPick(){
   let down=null;const ray=new THREE.Raycaster(),v=new THREE.Vector2();
