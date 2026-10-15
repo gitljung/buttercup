@@ -165,15 +165,19 @@ const DEFAULT={
     {id:"logoBack",label:"Logo rygg",type:"logo",side:"back",x:0,y:16,w:24,h:10.6,lock:true,fill:"#EDF06A",stroke:"#2A2622",racing:"#FFFFFF",on:true},
     {id:"logoFront",label:"Logo fram",type:"logo",side:"front",x:0,y:8,w:24,h:10.6,lock:true,fill:"#EDF06A",stroke:"#2A2622",racing:"#FFFFFF",on:true},
     {id:"nameBack",label:"Namn rygg",type:"text",side:"back",x:0,y:10,w:31,h:4,mode:"h",text:"TÖRNQVIST",font:"exo",fill:"#EDF06A",stroke:"#2A2622",sw:1.5,on:true},
-    {id:"nameFront",label:"Namn fram",type:"text",side:"front",x:9,y:22,w:11.5,h:1.5,mode:"h",text:"B. TÖRNQVIST",font:"exo",fill:"#EDF06A",stroke:"#2A2622",sw:0,on:true},
+    {id:"nameFront",label:"Namn fram",type:"text",side:"front",x:0,y:21,w:11.5,h:1.5,mode:"h",text:"B. TÖRNQVIST",font:"exo",fill:"#EDF06A",stroke:"#2A2622",sw:0,on:true},
     {id:"number",label:"Nummer",type:"text",side:"back",x:0,y:31,w:12,h:10,mode:"h",text:"7",font:"russo",fill:"#FFFFFF",stroke:"#2A2622",sw:3,on:true},
-    {id:"flag",label:"Flagga",type:"flag",side:"front",x:9,y:25,w:4,h:2.5,on:true},
+    {id:"flag",label:"Flagga",type:"flag",side:"front",x:0,y:24,w:4,h:2.5,on:true},
   ]
 };
 const KEY="fjj-overall-v3";
 let S;
 try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S||!S.els)S=JSON.parse(JSON.stringify(DEFAULT));
+// flytta orörda gamla standardlägen (höger bröst) till mitten
+(()=>{const n=S.els.find(e=>e.id==="nameFront"),f=S.els.find(e=>e.id==="flag");
+ if(n&&n.side==="front"&&n.x===9&&n.y===22){n.x=0;n.y=21}
+ if(f&&f.side==="front"&&f.x===9&&f.y===25){f.x=0;f.y=24}})();
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const sel=()=>S.els.find(e=>e.id===S.sel)||S.els[0];
 
@@ -229,6 +233,22 @@ function drawSuit(){
         const[a,b]=prof(32);const e=halfPerim(a,b)/2;tc.fillStyle="#15181C";
         tc.fillRect(Math.min(PX(side,dir*(e+1)),PX(side,dir*(e-4.5))),PY(31),5.5*K,2.4*K);
       }
+    }
+  }
+  // svarta sparco-axelpaneler (fasta, som på riktiga overallen)
+  for(const side of["front","back"]){
+    for(const dir of[-1,1]){
+      const outer=y=>{const[a,b]=prof(y);return halfPerim(a,b)/2-wW(y)-yW+.2};
+      const inner=y=>13.2+y*.12, yT=-4;
+      tc.beginPath();
+      for(let y=yT;y<=15;y+=1)tc.lineTo(PX(side,dir*inner(y)),PY(y));
+      for(let y=17.5;y>=yT;y-=1)tc.lineTo(PX(side,dir*outer(y)),PY(y));
+      tc.closePath();tc.fillStyle="#111418";tc.fill();
+      // sparco-text längs panelen
+      const yc=6.5,xc=(inner(yc)+outer(yc))/2;
+      tc.save();tc.translate(PX(side,dir*xc),PY(yc));tc.rotate(dir*(side==="front"?1:-1)>0?Math.PI/2:-Math.PI/2);
+      tc.font=`italic 700 ${2.6*K}px "Saira"`;tc.textAlign="center";tc.textBaseline="middle";tc.fillStyle="#FFFFFF";
+      tc.fillText("sparco",0,0);tc.restore();
     }
   }
   if(S.stitch){
