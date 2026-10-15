@@ -1,0 +1,799 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>FJJ Overall – mobilförslag</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Designa FJJ Racing-overallen i 3D – logor, namn, nummer och flagga.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="buttercup.nu">
+<meta property="og:title" content="FJJ Racing – Overall Konfigurator">
+<meta property="og:description" content="Designa FJJ Racing-overallen i 3D – logor, namn, nummer och flagga.">
+<meta property="og:url" content="https://www.buttercup.nu/fjj-mobil/">
+<meta property="og:image" content="https://www.buttercup.nu/fjj-mobil/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:ital,wght@1,700&family=Exo+2:ital,wght@1,700;1,800&family=JetBrains+Mono:wght@400;500&family=Michroma&family=Orbitron:wght@800&family=Russo+One&family=Saira+Condensed:wght@600;700&family=Saira:ital,wght@1,700&family=Teko:wght@600&display=swap">
+<style>
+/* Layout: pit-garage workbench — 3D-dummy till vänster (sticky), verktygspanel till höger; staplas på mobil */
+:root{
+  --bg:#0E1217; --panel:#151B22; --panel2:#1B232C; --line:#29333F; --fg:#E7ECF1; --muted:#8A97A6;
+  --accent:#E6EB3A; --accent-ink:#14170A; --warn:#FF9F43;
+  --f-display:"Saira Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.45;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 40px}
+*{box-sizing:border-box}
+header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+h1{font-family:var(--f-display);font-weight:700;font-size:28px;letter-spacing:.02em;margin:0;text-transform:uppercase;line-height:1}
+h1 span{color:var(--accent)}
+.sub{color:var(--muted);font-size:13px}
+.app{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.app{grid-template-columns:minmax(0,1fr)}}
+.stage{position:sticky;top:calc(env(safe-area-inset-top,0px) + 8px);background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+@media (max-width:860px){.stage{position:relative;top:0}}
+.view{position:relative;height:min(72vh,680px);min-height:360px}
+@media (max-width:860px){.view{height:58vh}}
+#three,#flat{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#flat{background:var(--panel)}
+.toolbar{display:flex;gap:6px;flex-wrap:wrap;padding:8px;border-top:1px solid var(--line);background:var(--panel2)}
+.hint{position:absolute;left:10px;bottom:10px;font-size:12px;color:var(--muted);background:rgba(14,18,23,.75);padding:4px 8px;border-radius:6px;pointer-events:none;max-width:calc(100% - 20px)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.seg button{border:0;border-radius:0}
+.seg button+button{border-left:1px solid var(--line)}
+button{font:500 13px var(--f-body);color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:7px 11px;cursor:pointer}
+button:hover{border-color:var(--muted)}
+button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.sec-title{font:700 13px var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.chip.on .dot{background:var(--accent-ink)}
+.chip.off{opacity:.5}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field>label,.lbl{font-size:12px;color:var(--muted);letter-spacing:.03em}
+input[type=text],select,input[type=number]{width:100%;font:500 15px var(--f-body);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:8px 10px}
+input[type=number]{font-family:var(--f-mono);font-size:14px}
+.num{display:flex;align-items:center;gap:8px}
+.num input[type=range]{flex:1;accent-color:var(--accent);min-width:0}
+.num input[type=number]{width:82px;flex:none}
+.unit{font:12px var(--f-mono);color:var(--muted)}
+.colors{display:flex;gap:10px;flex-wrap:wrap}
+.sw{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.sw input{width:34px;height:28px;border:1px solid var(--line);border-radius:6px;background:none;padding:0;cursor:pointer}
+.check{display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer}
+.check input{accent-color:var(--accent);width:16px;height:16px}
+.readout{font:13px var(--f-mono);color:var(--fg);background:var(--bg);border:1px dashed var(--line);border-radius:7px;padding:8px 10px;font-variant-numeric:tabular-nums}
+.readout b{color:var(--accent);font-weight:500}
+.warn{color:var(--warn);font-size:13px}
+.divider{height:1px;background:var(--line)}
+pre.spec{white-space:pre-wrap;font:12px/1.5 var(--f-mono);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:10px;margin:0;max-height:260px;overflow:auto;color:var(--fg)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ===== Mobilförslag (A/B/C) – styrs av body.m + body.lay-x ===== */
+#propbar{display:flex;align-items:center;gap:10px;padding:8px 12px;margin:-14px calc(-1*max(16px,env(safe-area-inset-left,0px))) 12px;background:#0A0D11;border-bottom:1px solid var(--line);font-size:13px;flex-wrap:wrap}
+#propbar .pb-t{font:700 12px var(--f-display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+#propbar input[type=range]{width:150px;accent-color:var(--accent);height:28px}
+#layName{font:700 15px var(--f-display);letter-spacing:.04em;text-transform:uppercase;color:var(--accent)}
+#layNote{color:var(--muted);font-size:12px;flex-basis:100%}
+#grab,#tabs{display:none}
+
+/* gemensamt för alla mobil-lägen */
+body.m .app{grid-template-columns:minmax(0,1fr);gap:10px}
+body.m .toolbar{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;gap:5px;padding:6px}
+body.m .toolbar::-webkit-scrollbar{display:none}
+body.m .toolbar button{font-size:12.5px;padding:8px 9px;white-space:nowrap;min-height:36px}
+body.m input[type=text],body.m select,body.m input[type=number]{font-size:16px}
+body.m .panel button{min-height:38px}
+body.m .num input[type=range]{height:30px}
+body.m .num input[type=number]{width:74px}
+body.m header{margin-bottom:8px}
+body.m h1{font-size:22px}
+body.m .sub{display:none}
+body.m .hint{font-size:11px}
+
+/* riktig mobil (inte ram) */
+body.m:not(.frame){padding:0}
+body.m:not(.frame) #propbar{margin:0}
+body.m:not(.frame).lay-a #shell{padding:0 10px 30px}
+
+/* skrivbord: telefonram */
+body.frame #propbar{margin-bottom:16px;justify-content:center}
+body.frame #layNote{text-align:center}
+body.frame #shell{width:390px;height:min(844px,calc(100vh - 110px));margin:0 auto;overflow:auto;transform:translateZ(0);border:10px solid #000;border-radius:42px;box-shadow:0 0 0 1px #2c3440,0 30px 80px rgba(0,0,0,.6);background:var(--bg);scrollbar-width:none}
+body.frame #shell::-webkit-scrollbar{display:none}
+body.frame.lay-a #shell{padding:10px 10px 30px}
+body.frame:not(.lay-a) #shell{overflow:hidden}
+
+/* --- A: sticky docka --- */
+body.m.lay-a .stage{position:sticky;top:0;z-index:20;border-radius:0 0 12px 12px;box-shadow:0 10px 24px rgba(0,0,0,.45)}
+body.m.lay-a .view{height:calc(var(--H) * .44);min-height:0}
+
+/* --- B: dra-upp-ark --- */
+body.m.lay-b:not(.frame),body.m.lay-c:not(.frame){overflow:hidden;height:100%;overscroll-behavior:none}
+body.m.lay-b header,body.m.lay-c header{display:none}
+body.m.lay-b .stage,body.m.lay-c .stage{position:fixed;left:0;right:0;top:var(--top);z-index:5;border-radius:0;border-width:0 0 1px}
+body.m.lay-b .view{height:max(150px,calc(var(--H) - var(--top) - var(--tb) - var(--sheet)));min-height:0;transition:height .28s cubic-bezier(.2,.8,.2,1)}
+body.m.lay-b .panel{position:fixed;left:0;right:0;bottom:0;height:var(--sheet);z-index:10;border-radius:16px 16px 0 0;border-width:1px 0 0;overflow:auto;overscroll-behavior:contain;padding:36px 14px 30px;transition:height .28s cubic-bezier(.2,.8,.2,1);box-shadow:0 -12px 30px rgba(0,0,0,.5)}
+body.m.lay-b #grab{display:flex;justify-content:center;align-items:center;position:fixed;left:0;right:0;bottom:calc(var(--sheet) - 32px);height:32px;z-index:11;background:var(--panel);border-radius:16px 16px 0 0;cursor:grab;touch-action:none;transition:bottom .28s cubic-bezier(.2,.8,.2,1)}
+body.m.lay-b #grab i{display:block;width:44px;height:5px;border-radius:3px;background:var(--muted)}
+#shell.dragging .view,#shell.dragging .panel,#shell.dragging #grab{transition:none!important}
+body.m.lay-b .hint,body.m.lay-c .hint{display:none}
+
+/* --- C: flikar --- */
+body.m.lay-c .view{height:max(150px,calc(var(--H) - var(--top) - var(--tb) - var(--pane) - var(--tabs)));min-height:0}
+body.m.lay-c .panel{position:fixed;left:0;right:0;bottom:var(--tabs);height:var(--pane);z-index:10;border-radius:0;border-width:0;overflow:auto;overscroll-behavior:contain;padding:12px 14px 20px;gap:12px}
+body.m.lay-c .panel>[data-tab]:not(.act){display:none!important}
+body.m.lay-c .panel>.divider{display:none}
+body.m.lay-c .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+body.m.lay-c .chips::-webkit-scrollbar{display:none}
+body.m.lay-c .chips button{white-space:nowrap;flex:none}
+body.m.lay-c #tabs{display:flex;position:fixed;left:0;right:0;bottom:0;height:var(--tabs);z-index:12;background:#0A0D11;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+body.m.lay-c #tabs button{flex:1;border:0;border-radius:0;background:none;font:700 15px var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+body.m.lay-c #tabs button.on{color:var(--accent);box-shadow:inset 0 3px 0 var(--accent)}
+</style>
+
+<div id="propbar">
+  <span class="pb-t">Förslag</span>
+  <input type="range" id="lay" min="0" max="3" step="1" value="0" aria-label="Välj layoutförslag">
+  <span id="layName"></span>
+  <span id="layNote"></span>
+</div>
+<div id="shell">
+<header>
+  <h1>FJJ <span>Racing</span> · Overall</h1>
+  <div class="sub">Mått i cm · logo från FJJ Racing.pdf · klicka på dockan för att placera vald detalj</div>
+</header>
+
+<div class="app">
+  <section class="stage">
+    <div class="view">
+      <canvas id="three"></canvas>
+      <canvas id="flat" hidden></canvas>
+      <div class="hint" id="hint">Dra för att snurra · nyp/scrolla för zoom · klick placerar vald detalj</div>
+    </div>
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="Vy">
+        <button id="m3d" class="on">3D</button>
+        <button id="m2d">Ritning</button>
+      </div>
+      <div class="seg" role="group" aria-label="Kamera" id="camBtns">
+        <button data-cam="front">Fram</button>
+        <button data-cam="back">Rygg</button>
+        <button data-cam="side">Sida</button>
+        <button data-cam="close">Nära</button>
+      </div>
+      <button id="spin">Snurra</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div data-tab="detalj">
+      <p class="sec-title">Detaljer</p>
+      <div class="chips" id="chips"></div>
+    </div>
+
+    <div id="editor" data-tab="detalj" style="display:flex;flex-direction:column;gap:12px"></div>
+
+    <div class="divider"></div>
+
+    <div data-tab="farg">
+      <p class="sec-title" style="margin-bottom:8px">Overall</p>
+      <div class="colors">
+        <label class="sw"><input type="color" id="suitColor"> Grundfärg</label>
+        <label class="sw"><input type="color" id="stripeColor"> Rand</label>
+        <label class="sw"><input type="color" id="panelColor"> Sidopanel</label>
+        <label class="check"><input type="checkbox" id="stitch"> Söm-mönster</label>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div data-tab="spec">
+      <div class="row" style="justify-content:space-between;margin-bottom:8px">
+        <p class="sec-title">Tryckspec</p>
+        <div class="row">
+          <button id="copySpec">Kopiera</button>
+          <button id="reset">Återställ</button>
+        </div>
+      </div>
+      <pre class="spec" id="spec"></pre>
+    </div>
+  </section>
+</div>
+<div id="grab" aria-label="Dra upp/ner menyn" role="button" tabindex="0"><i></i></div>
+<nav id="tabs">
+  <button data-t="detalj" class="on">Detalj</button>
+  <button data-t="farg">Färg</button>
+  <button data-t="spec">Spec</button>
+</nav>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const LOGO_PATHS=["M 137.65625 265.53125 L 127.929688 265.53125 L 131.605469 254.160156 C 135.765625 241.277344 147.34375 232.851562 160.882812 232.851562 L 279.660156 232.851562 L 269.101562 265.53125 L 185.921875 265.53125 L 181.867188 278.167969 L 259.230469 278.167969 L 248.667969 310.851562 L 171.378906 310.851562 L 157.121094 355.289062 L 108.855469 355.289062 Z M 319.308594 266.277344 L 286.929688 266.277344 L 297.492188 233.597656 L 378.058594 233.597656 L 352.660156 312.75 C 344.539062 338.058594 322.03125 354.648438 295.453125 354.910156 L 211.292969 355.742188 L 221.863281 323.03125 L 289.226562 322.363281 C 296.628906 322.289062 302.792969 317.746094 305.054688 310.699219 Z M 435.542969 266.277344 L 387.59375 266.277344 L 398.15625 233.597656 L 494.292969 233.597656 L 468.894531 312.75 C 460.773438 338.058594 438.265625 354.648438 411.6875 354.910156 L 317.425781 355.84375 L 331.640625 346.609375 C 339.539062 341.476562 345.714844 334.242188 349.699219 325.714844 L 351.011719 322.902344 L 405.464844 322.363281 C 412.863281 322.289062 419.03125 317.746094 421.292969 310.699219 Z M 435.542969 266.277344 ", "M 175.105469 283.101562 L 252.453125 283.101562 L 245.082031 305.917969 L 167.78125 305.917969 L 153.523438 350.359375 L 115.617188 350.359375 L 142.679688 266.019531 L 180.585938 266.019531 L 176.480469 278.804688 L 157.757812 278.804688 C 156.574219 278.804688 155.609375 279.769531 155.609375 280.953125 C 155.609375 282.132812 156.574219 283.101562 157.757812 283.101562 Z M 301.082031 238.527344 L 371.296875 238.527344 L 362.726562 265.242188 L 347.964844 311.242188 C 340.492188 334.53125 319.859375 349.738281 295.402344 349.980469 L 218.09375 350.742188 L 225.464844 327.925781 L 289.277344 327.292969 C 298.804688 327.199219 306.839844 321.277344 309.75 312.207031 L 324.820312 265.242188 L 326.070312 261.347656 L 293.707031 261.347656 Z M 401.746094 238.527344 L 487.53125 238.527344 L 478.960938 265.242188 L 464.199219 311.242188 C 456.726562 334.53125 436.09375 349.738281 411.640625 349.980469 L 334.328125 350.742188 C 342.808594 345.234375 349.691406 337.386719 354.167969 327.800781 L 405.511719 327.292969 C 415.039062 327.199219 423.074219 321.277344 425.988281 312.207031 L 441.054688 265.242188 L 442.304688 261.347656 L 394.371094 261.347656 Z M 160.882812 237.78125 L 272.886719 237.78125 L 265.511719 260.597656 L 134.703125 260.597656 L 136.296875 255.675781 C 139.800781 244.828125 149.484375 237.78125 160.882812 237.78125 ", "M 120.171875 392.445312 L 115.914062 403.289062 L 108.855469 403.289062 L 120.035156 374.820312 L 136.222656 374.820312 C 140.871094 374.820312 143.921875 375.328125 145.375 376.34375 C 146.351562 377.027344 146.96875 377.921875 147.21875 379.039062 C 147.464844 380.164062 147.328125 381.394531 146.796875 382.746094 C 145.734375 385.457031 144.113281 387.539062 141.933594 388.996094 C 140.589844 389.886719 139.003906 390.5625 137.179688 391.039062 C 138.332031 391.414062 139.148438 391.820312 139.636719 392.269531 C 140.121094 392.71875 140.464844 393.371094 140.664062 394.230469 C 140.804688 394.902344 140.832031 395.546875 140.757812 396.179688 C 140.675781 396.816406 140.449219 397.753906 140.078125 398.992188 C 139.46875 401.03125 139.175781 402.46875 139.195312 403.289062 L 131.273438 403.289062 C 131.296875 402.617188 131.585938 401.265625 132.144531 399.234375 C 132.605469 397.5625 132.757812 396.289062 132.589844 395.398438 C 132.433594 394.515625 131.925781 393.828125 131.085938 393.320312 C 130.046875 392.722656 128.296875 392.433594 125.855469 392.445312 Z M 426.105469 386.386719 L 442.359375 386.386719 L 435.722656 403.289062 L 420.941406 403.289062 C 418.375 403.289062 416.402344 403.125 415.039062 402.796875 C 413.675781 402.46875 412.53125 401.902344 411.628906 401.074219 C 409.0625 398.769531 408.882812 394.800781 411.09375 389.167969 C 412.546875 385.46875 414.570312 382.402344 417.175781 379.972656 C 419.113281 378.179688 421.292969 376.871094 423.71875 376.050781 C 426.152344 375.234375 429.066406 374.820312 432.460938 374.820312 L 446.902344 374.820312 L 444.925781 379.855469 L 431.277344 379.855469 C 428.355469 379.855469 426.007812 380.414062 424.234375 381.527344 C 422.160156 382.84375 420.460938 385.191406 419.128906 388.585938 C 418.445312 390.328125 418.035156 391.898438 417.890625 393.300781 C 417.753906 394.703125 417.898438 395.746094 418.332031 396.429688 C 418.734375 397.054688 419.421875 397.519531 420.394531 397.808594 C 421.371094 398.101562 422.671875 398.25 424.296875 398.25 L 430.640625 398.25 L 433.324219 391.421875 L 424.128906 391.421875 Z M 356.792969 382.425781 L 348.601562 403.289062 L 341.890625 403.289062 L 353.070312 374.820312 L 362.089844 374.820312 L 366.957031 396.03125 L 375.289062 374.820312 L 382 374.820312 L 370.820312 403.289062 L 362.136719 403.289062 Z M 298.289062 403.289062 L 309.464844 374.820312 L 316.523438 374.820312 L 305.347656 403.289062 Z M 265.5 398.25 L 263.523438 403.289062 L 251.96875 403.289062 C 249.769531 403.289062 248.128906 403.1875 247.042969 402.996094 C 243.261719 402.3125 241.136719 400.363281 240.695312 397.132812 C 240.410156 394.980469 240.894531 392.3125 242.144531 389.125 C 243.644531 385.304688 245.730469 382.191406 248.40625 379.785156 C 250.324219 378.058594 252.492188 376.804688 254.890625 376.007812 C 257.296875 375.21875 260.164062 374.820312 263.492188 374.820312 L 274.703125 374.820312 L 272.726562 379.855469 L 262.3125 379.855469 C 259.171875 379.855469 256.582031 380.582031 254.546875 382.035156 C 252.867188 383.234375 251.40625 385.414062 250.167969 388.5625 C 248.515625 392.773438 248.371094 395.546875 249.730469 396.871094 C 250.695312 397.789062 252.570312 398.25 255.351562 398.25 Z M 170.992188 403.289062 L 195.890625 374.820312 L 204.019531 374.820312 L 206.550781 403.289062 L 198.273438 403.289062 L 197.65625 396.714844 L 185.054688 396.714844 L 179.269531 403.289062 Z M 197.273438 381.679688 L 188.617188 391.679688 L 198.050781 391.679688 Z M 122.148438 387.410156 L 132.050781 387.410156 C 133.707031 387.410156 134.96875 387.199219 135.828125 386.777344 C 137.132812 386.136719 138.09375 385.035156 138.710938 383.464844 C 139.394531 381.722656 139.042969 380.597656 137.644531 380.105469 C 137.160156 379.941406 136.285156 379.855469 135.015625 379.855469 L 125.117188 379.855469 Z M 122.148438 387.410156 "];
+const LOGO_BOX={x:108.855,y:232.852,w:385.437,h:170.437};
+const LOGO_P=LOGO_PATHS.map(d=>new Path2D(d));
+
+const FONTS=[
+  {id:"exo",name:"Exo 2 kursiv",fam:"Exo 2",w:800,s:"italic"},
+  {id:"saira",name:"Saira kursiv",fam:"Saira",w:700,s:"italic"},
+  {id:"barlowc",name:"Barlow Condensed kursiv",fam:"Barlow Condensed",w:700,s:"italic"},
+  {id:"russo",name:"Russo One",fam:"Russo One",w:400,s:"normal"},
+  {id:"michroma",name:"Michroma",fam:"Michroma",w:400,s:"normal"},
+  {id:"orbitron",name:"Orbitron",fam:"Orbitron",w:800,s:"normal"},
+  {id:"teko",name:"Teko",fam:"Teko",w:600,s:"normal"},
+];
+const fontById=id=>FONTS.find(f=>f.id===id)||FONTS[0];
+
+const DEFAULT={
+  suit:"#14428F", stripe:"#E9F23A", panel:"#F2F3F6", stitch:true,
+  sel:"nameBack",
+  els:[
+    {id:"logoBack",label:"Logo rygg",type:"logo",side:"back",x:0,y:16,w:24,h:10.6,lock:true,fill:"#EDF06A",stroke:"#2A2622",racing:"#FFFFFF",on:true},
+    {id:"logoFront",label:"Logo fram",type:"logo",side:"front",x:0,y:8,w:24,h:10.6,lock:true,fill:"#EDF06A",stroke:"#2A2622",racing:"#FFFFFF",on:true},
+    {id:"nameBack",label:"Namn rygg",type:"text",side:"back",x:0,y:10,w:31,h:4,mode:"h",text:"TÖRNQVIST",font:"exo",fill:"#EDF06A",stroke:"#2A2622",sw:1.5,on:true},
+    {id:"nameFront",label:"Namn fram",type:"text",side:"front",x:0,y:21,w:11.5,h:1.5,mode:"h",text:"B. TÖRNQVIST",font:"exo",fill:"#EDF06A",stroke:"#2A2622",sw:0,on:true},
+    {id:"number",label:"Nummer",type:"text",side:"back",x:0,y:31,w:12,h:10,mode:"h",text:"7",font:"russo",fill:"#FFFFFF",stroke:"#2A2622",sw:3,on:true},
+    {id:"flag",label:"Flagga",type:"flag",side:"front",x:0,y:24,w:4,h:2.5,on:true},
+  ]
+};
+const KEY="fjj-overall-v3";
+let S;
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S||!S.els)S=JSON.parse(JSON.stringify(DEFAULT));
+// flytta orörda gamla standardlägen (höger bröst) till mitten
+(()=>{const n=S.els.find(e=>e.id==="nameFront"),f=S.els.find(e=>e.id==="flag");
+ if(n&&n.side==="front"&&n.x===9&&n.y===22){n.x=0;n.y=21}
+ if(f&&f.side==="front"&&f.x===9&&f.y===25){f.x=0;f.y=24}})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const sel=()=>S.els.find(e=>e.id===S.sel)||S.els[0];
+
+/* ---------- Kroppsmått (cm). y=0 = axelsöm/krage, positivt nedåt ---------- */
+const PREF=140, Y0=-10, Y1=74, HT=Y1-Y0, K=16; // px per cm
+const W=PREF*K, H=HT*K;
+const PROFILE=[[-9,7.6,7.2],[-7.5,11,8.6],[-5.5,15.5,10],[-3,19,11.2],[0,20.5,12],[5,20,12.8],[14,19.2,13.2],[26,17.4,12.2],[36,16.4,11.4],[48,17.4,12],[58,18.2,12.6],[66,17.6,12],[72,15.5,10.8]];
+function prof(y){
+  const P=PROFILE;if(y<=P[0][0])return[P[0][1],P[0][2]];
+  for(let i=0;i<P.length-1;i++){const a=P[i],b=P[i+1];if(y<=b[0]){
+    const t=(y-a[0])/(b[0]-a[0]),s=t*t*(3-2*t);
+    // hermite-ish: blend linear and smoothstep for soft curve
+    const m=.5*t+.5*s;return[a[1]+(b[1]-a[1])*m,a[2]+(b[2]-a[2])*m];}}
+  const L=P[P.length-1];return[L[1],L[2]];
+}
+function halfPerim(a,b){const h=((a-b)/(a+b))**2;return Math.PI*(a+b)*(1+3*h/(10+Math.sqrt(4-3*h)))/2}
+
+/* ---------- Textur ---------- */
+const tex=document.createElement("canvas");tex.width=W;tex.height=H;
+const tc=tex.getContext("2d");
+const PX=(side,x)=>(side==="front"?.25:.75)*W+x*K;
+const PY=y=>(y-Y0)*K;
+
+function measureText(el){
+  const f=fontById(el.font);
+  tc.font=`${f.s} ${f.w} 100px "${f.fam}"`;
+  const m=tc.measureText(el.text||" ");
+  const cap=tc.measureText("H").actualBoundingBoxAscent||70;
+  const wid=(m.actualBoundingBoxLeft+m.actualBoundingBoxRight)||m.width;
+  return{f,m,capU:cap/100,wU:wid/100,left:m.actualBoundingBoxLeft};
+}
+// räknar ut faktisk bredd/höjd för textdetaljer
+function resolve(el){
+  if(el.type==="logo"){if(el.lock)el.h=+(el.w*LOGO_BOX.h/LOGO_BOX.w).toFixed(2);return}
+  if(el.type==="flag"){el.h=+(el.w*10/16).toFixed(2);return}
+  const mt=measureText(el);
+  if(el.mode==="w"){const fs=el.w/mt.wU;el.h=+(fs*mt.capU).toFixed(2)}
+  else if(el.mode==="h"){const fs=el.h/mt.capU;el.w=+(fs*mt.wU).toFixed(2)}
+}
+
+function drawSuit(){
+  tc.fillStyle=S.suit;tc.fillRect(0,0,W,H);
+  // sidopanel (vit) + rand (gul) längs sidorna, breddas mot höften – som Sparco Kerb
+  const wW=y=>3.5+4.5*Math.max(0,y-3)/69, yW=2.4;
+  for(const side of["front","back"]){
+    for(const dir of[-1,1]){
+      const band=(f0,f1,col)=>{tc.beginPath();
+        for(let y=3;y<=Y1;y+=1){const[a,b]=prof(y);const e=halfPerim(a,b)/2;tc.lineTo(PX(side,dir*(e-f0(y))),PY(y))}
+        for(let y=Y1;y>=3;y-=1){const[a,b]=prof(y);const e=halfPerim(a,b)/2;tc.lineTo(PX(side,dir*(e-f1(y))),PY(y))}
+        tc.closePath();tc.fillStyle=col;tc.fill()};
+      band(()=>-1,wW,S.panel);band(wW,y=>wW(y)+yW,S.stripe);
+      if(side==="front"){ // midjeflik
+        const[a,b]=prof(32);const e=halfPerim(a,b)/2;tc.fillStyle="#15181C";
+        tc.fillRect(Math.min(PX(side,dir*(e+1)),PX(side,dir*(e-4.5))),PY(31),5.5*K,2.4*K);
+      }
+    }
+  }
+  // svarta sparco-axelpaneler (fasta, som på riktiga overallen)
+  for(const side of["front","back"]){
+    for(const dir of[-1,1]){
+      const outer=y=>{const[a,b]=prof(y);return halfPerim(a,b)/2-wW(y)-yW+.2};
+      const inner=y=>13.2+y*.12, yT=-4;
+      tc.beginPath();
+      for(let y=yT;y<=15;y+=1)tc.lineTo(PX(side,dir*inner(y)),PY(y));
+      for(let y=17.5;y>=yT;y-=1)tc.lineTo(PX(side,dir*outer(y)),PY(y));
+      tc.closePath();tc.fillStyle="#111418";tc.fill();
+      // sparco-text längs panelen
+      const yc=6.5,xc=(inner(yc)+outer(yc))/2;
+      tc.save();tc.translate(PX(side,dir*xc),PY(yc));tc.rotate(dir*(side==="front"?1:-1)>0?Math.PI/2:-Math.PI/2);
+      tc.font=`italic 700 ${2.6*K}px "Saira"`;tc.textAlign="center";tc.textBaseline="middle";tc.fillStyle="#FFFFFF";
+      tc.fillText("sparco",0,0);tc.restore();
+    }
+  }
+  if(S.stitch){
+    tc.save();tc.strokeStyle="#C8D27C";tc.globalAlpha=.8;tc.lineWidth=.1*K;tc.setLineDash([.4*K,.25*K]);
+    const chev=(side,yy,span,depth)=>{tc.beginPath();tc.moveTo(PX(side,-span),PY(yy));tc.lineTo(PX(side,0),PY(yy+depth));tc.lineTo(PX(side,span),PY(yy));tc.stroke()};
+    [6,13,20].forEach(y=>chev("front",y,17,3.6));
+    [5,13,21,29].forEach(y=>chev("back",y,19,4.5));
+    tc.restore();
+  }
+  // dragkedjeslå fram
+  tc.save();tc.strokeStyle="rgba(0,0,0,.45)";tc.lineWidth=.22*K;
+  tc.beginPath();tc.moveTo(PX("front",0),PY(-9));tc.lineTo(PX("front",0),PY(74));tc.stroke();
+  tc.strokeStyle="rgba(0,0,0,.22)";tc.lineWidth=.12*K;
+  tc.beginPath();tc.moveTo(PX("front",1.8),PY(-9));tc.lineTo(PX("front",1.8),PY(60));tc.stroke();
+  tc.restore();
+}
+function drawLogo(el){
+  const x0=PX(el.side,el.x-el.w/2),y0=PY(el.y);
+  const sx=el.w*K/LOGO_BOX.w, sy=el.h*K/LOGO_BOX.h;
+  tc.save();tc.translate(x0,y0);tc.scale(sx,sy);tc.translate(-LOGO_BOX.x,-LOGO_BOX.y);
+  tc.fillStyle=el.stroke;tc.fill(LOGO_P[0],"evenodd");
+  tc.fillStyle=el.fill;tc.fill(LOGO_P[1],"evenodd");
+  tc.fillStyle=el.racing;tc.fill(LOGO_P[2],"evenodd");
+  tc.restore();
+}
+function drawText(el){
+  if(!el.text)return;
+  const mt=measureText(el);
+  const fs=el.h/mt.capU; // cm
+  const natW=fs*mt.wU, scx=el.w/natW;
+  const fpx=fs*K;
+  tc.save();
+  tc.translate(PX(el.side,el.x),PY(el.y)+el.h*K);
+  tc.scale(scx,1);
+  tc.font=`${mt.f.s} ${mt.f.w} ${fpx}px "${mt.f.fam}"`;
+  tc.textBaseline="alphabetic";tc.textAlign="left";
+  const tx=-natW*K/2+mt.left*fs/100*100/100*1; // left bearing already in cm units*K below
+  const lx=-natW*K/2+mt.left/100*fpx;
+  if(el.sw>0){tc.lineJoin="round";tc.strokeStyle=el.stroke;tc.lineWidth=el.sw/10*K*2;tc.strokeText(el.text,lx,0)}
+  tc.fillStyle=el.fill;tc.fillText(el.text,lx,0);
+  tc.restore();
+}
+function drawFlag(el){
+  const x0=PX(el.side,el.x-el.w/2),y0=PY(el.y),w=el.w*K,h=el.h*K;
+  tc.fillStyle="#006AA7";tc.fillRect(x0,y0,w,h);
+  tc.fillStyle="#FECC02";tc.fillRect(x0+w*5/16,y0,w*2/16,h);tc.fillRect(x0,y0+h*4/10,w,h*2/10);
+}
+function drawAll(){
+  drawSuit();
+  for(const el of S.els){if(!el.on)continue;resolve(el);
+    if(el.type==="logo")drawLogo(el);else if(el.type==="flag")drawFlag(el);else drawText(el)}
+  if(ctex)ctex.needsUpdate=true;
+}
+
+/* ---------- 3D ---------- */
+const cv=document.getElementById("three");
+let renderer,scene,camera,controls,torso,ctex,suitMats=[],stripeMats=[];
+const lin=h=>new THREE.Color(h).convertSRGBToLinear();
+function init3D(){
+  renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.outputEncoding=THREE.sRGBEncoding;
+  scene=new THREE.Scene();
+  camera=new THREE.PerspectiveCamera(32,1,1,2000);
+  controls=new THREE.OrbitControls(camera,cv);
+  controls.enableDamping=true;controls.target.set(0,92,0);controls.minDistance=60;controls.maxDistance=520;
+  scene.add(new THREE.HemisphereLight(0xdfe8ff,0x1a1f26,.75));
+  const d1=new THREE.DirectionalLight(0xffffff,.85);d1.position.set(120,220,240);scene.add(d1);
+  const d2=new THREE.DirectionalLight(0xffffff,.55);d2.position.set(-160,160,-220);scene.add(d2);
+  const d3=new THREE.DirectionalLight(0xbcd2ff,.25);d3.position.set(-200,60,120);scene.add(d3);
+
+  // golvskiva
+  const floor=new THREE.Mesh(new THREE.CircleGeometry(70,64),new THREE.MeshStandardMaterial({color:lin("#1B232C"),roughness:1}));
+  floor.rotation.x=-Math.PI/2;scene.add(floor);
+
+  ctex=new THREE.CanvasTexture(tex);ctex.encoding=THREE.sRGBEncoding;ctex.anisotropy=8;
+  torso=new THREE.Mesh(buildTorso(),new THREE.MeshStandardMaterial({map:ctex,roughness:.82,side:THREE.DoubleSide}));
+  scene.add(torso);
+
+  const suitMat=()=>{const m=new THREE.MeshStandardMaterial({color:lin(S.suit),roughness:.85});suitMats.push(m);return m};
+  const stripeMat=()=>{const m=new THREE.MeshStandardMaterial({color:lin(S.stripe),roughness:.7});stripeMats.push(m);return m};
+  const dark=new THREE.MeshStandardMaterial({color:lin("#15181C"),roughness:.6});
+  const skin=new THREE.MeshStandardMaterial({color:lin("#9AA3AD"),roughness:.5});
+
+  // botten
+  const cap=new THREE.Mesh(new THREE.CircleGeometry(1,40),suitMat());
+  const[ba,bb]=prof(72);cap.scale.set(ba,bb,1);cap.rotation.x=Math.PI/2;cap.position.y=150-72;scene.add(cap);
+  // låg krage: blå utsida, neongul insida
+  const cg=new THREE.CylinderGeometry(7.3,8.1,5.6,48,1,true);
+  const colOut=new THREE.Mesh(cg,suitMat());colOut.position.y=161.6;scene.add(colOut);
+  const colIn=new THREE.Mesh(cg,new THREE.MeshStandardMaterial({color:lin("#EEF53C"),roughness:.8,side:THREE.BackSide}));colIn.position.y=161.6;scene.add(colIn);
+  stripeMats.push(colIn.material);
+  const inner=new THREE.Mesh(new THREE.CircleGeometry(7.9,40),new THREE.MeshStandardMaterial({color:lin("#0B0F16"),roughness:1}));
+  inner.rotation.x=-Math.PI/2;inner.position.y=159.2;scene.add(inner);
+  // armar + ben med målade paneler
+  for(const s of[-1,1]){
+    const arm=limb(s,[[20,145.5,-1,7.2,6.6],[24.6,129,-.6,6.3,5.9],[28.4,113,.4,5.1,4.9],[31,98,1.8,4.6,4.3],[32.6,86,3,3.9,3.7]],paintArm);scene.add(arm);
+    const sh=new THREE.Mesh(new THREE.SphereGeometry(7.1,32,24),suitMat());sh.position.set(s*19.3,145,-.8);sh.scale.set(1,.9,.95);scene.add(sh);
+    // axelepålett: svart med gul kant
+    const ep=new THREE.Group();ep.position.set(s*13.8,155.2,-.4);ep.rotation.z=s*-.58;scene.add(ep);
+    const e1=new THREE.Mesh(new THREE.BoxGeometry(12,1.1,4.6),dark);ep.add(e1);
+    const e2=new THREE.Mesh(new THREE.BoxGeometry(12,1.1,.9),stripeMat());e2.position.z=2.7;ep.add(e2);
+    const leg=limb(s,[[9,90,0,10.6,10.4],[9.6,72,.5,9,8.8],[10,62,.6,8.2,8.1],[10.5,48,1,6.8,6.9],[11,29,0,6.1,6.3],[11.3,11,-.5,4.9,4.9],[11.4,4,-.5,4.7,4.7]],paintLeg);scene.add(leg);
+  }
+  setCam("front",true);
+  const ro=new ResizeObserver(resize);ro.observe(cv.parentElement);resize();
+  (function loop(){requestAnimationFrame(loop);controls.update();renderer.render(scene,camera)})();
+  setupPick();
+}
+/* Lem: loftad ellips-tub längs en kurva. u: 0=insida, .25=fram, .5=utsida, .75=bak. v i cm uppifrån */
+const LPX=10; // px per cm längs lemmen
+const limbTex=[];
+function limb(side,keys,paint){
+  const curve=new THREE.CatmullRomCurve3(keys.map(k=>new THREE.Vector3(side*k[0],k[1],k[2])));
+  const L=curve.getLength(),R=keys.length-1,NR=90,NA=48,pos=[],uv=[],idx=[];
+  const rad=t=>{const f=t*R,i=Math.min(R-1,Math.floor(f)),g=f-i,s=g*g*(3-2*g);return[keys[i][3]+(keys[i+1][3]-keys[i][3])*s,keys[i][4]+(keys[i+1][4]-keys[i][4])*s]};
+  const Z=new THREE.Vector3(0,0,1);
+  for(let r=0;r<=NR;r++){
+    const t=r/NR,C=curve.getPointAt(t),T=curve.getTangentAt(t);
+    const F=Z.clone().sub(T.clone().multiplyScalar(T.dot(Z))).normalize();
+    const O=new THREE.Vector3().crossVectors(F,T).normalize().multiplyScalar(side);
+    const[ra,rb]=rad(t);
+    for(let a=0;a<=NA;a++){const th=a/NA*Math.PI*2;
+      const p=C.clone().addScaledVector(O,-Math.cos(th)*ra).addScaledVector(F,Math.sin(th)*rb);
+      pos.push(p.x,p.y,p.z);uv.push(a/NA,1-t);}
+  }
+  for(let r=0;r<NR;r++)for(let a=0;a<NA;a++){const i=r*(NA+1)+a;idx.push(i,i+NA+1,i+1,i+1,i+NA+1,i+NA+2)}
+  const g=new THREE.BufferGeometry();
+  g.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));g.setAttribute("uv",new THREE.Float32BufferAttribute(uv,2));
+  g.setIndex(idx);g.computeVertexNormals();
+  const c=document.createElement("canvas");c.width=512;c.height=Math.round(L*LPX);
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;
+  const item={c,t,L,paint};limbTex.push(item);paintLimb(item);
+  return new THREE.Mesh(g,new THREE.MeshStandardMaterial({map:t,roughness:.84,side:THREE.DoubleSide}));
+}
+function paintLimb(it){
+  const x=it.c.getContext("2d"),Wl=it.c.width;
+  const P=(pts,col)=>{x.beginPath();pts.forEach(([u,v])=>x.lineTo(u*Wl,v*LPX));x.closePath();x.fillStyle=col;x.fill()};
+  x.fillStyle=S.suit;x.fillRect(0,0,Wl,it.c.height);it.paint(P,it.L,x,Wl);it.t.needsUpdate=true;
+}
+function paintArm(P,L,x,Wl){
+  P([[.42,0],[.52,0],[.56,25],[.46,26]],S.stripe);                 // gul rand överarm
+  P([[.2,26],[.8,22],[.8,32],[.2,36.5]],S.panel);                  // vit armbågspanel
+  P([[.2,36.5],[.8,32],[.8,34.2],[.2,38.7]],S.stripe);
+  P([[.46,38],[.53,37],[.53,L-6],[.46,L-6]],S.panel);              // underarm
+  P([[.53,37],[.57,36.6],[.57,L-6],[.53,L-6]],S.stripe);
+  x.fillStyle="#15181C";x.fillRect(0,(L-5.5)*LPX,Wl,6*LPX);      // mudd
+}
+function paintLeg(P,L,x,Wl){
+  P([[.43,0],[.58,0],[.58,22],[.43,25]],S.panel);                  // sidopanel fortsätter
+  P([[.385,0],[.43,0],[.43,25],[.385,26]],S.stripe);
+  P([[.58,20],[.58,33],[.02,54],[.02,40]],S.panel);                // diagonal kil över låret
+  P([[.58,16.5],[.58,20],[.02,40],[.02,36.5]],S.stripe);
+  P([[.31,55],[.35,54],[.35,L-6],[.31,L-6]],S.stripe);             // underben
+  P([[.35,54],[.41,53],[.41,L-6],[.35,L-6]],S.panel);
+  x.fillStyle="#15181C";x.fillRect(0,(L-5)*LPX,Wl,6*LPX);
+}
+function buildTorso(){
+  const M=72,pos=[],nor=[],uv=[],idx=[];const rows=[];
+  for(let y=-9;y<=72;y+=1)rows.push(y);
+  for(const half of[0,1]){
+    const base=pos.length/3;
+    for(const y of rows){
+      const[a,b]=prof(y);
+      const t0=half?Math.PI/2:-Math.PI/2,N=600;let cum=[0],pts=[[a*Math.sin(t0),b*Math.cos(t0),t0]];
+      for(let i=1;i<=N;i++){const t=t0+Math.PI*i/N,p=[a*Math.sin(t),b*Math.cos(t),t],q=pts[i-1];cum.push(cum[i-1]+Math.hypot(p[0]-q[0],p[1]-q[1]));pts.push(p)}
+      const L=cum[N];let j=0;
+      for(let c=0;c<=M;c++){
+        const s=L*c/M;while(j<N-1&&cum[j+1]<s)j++;
+        const f=(s-cum[j])/((cum[j+1]-cum[j])||1),x=pts[j][0]+(pts[j+1][0]-pts[j][0])*f,z=pts[j][1]+(pts[j+1][1]-pts[j][1])*f;
+        pos.push(x,150-y,z);
+        const nx=x/(a*a),nz=z/(b*b),nl=Math.hypot(nx,nz)||1;nor.push(nx/nl,0,nz/nl);
+        uv.push((half?.75:.25)+(s-L/2)/PREF,1-(y-Y0)/HT);
+      }
+    }
+    for(let r=0;r<rows.length-1;r++)for(let c=0;c<M;c++){
+      const i=base+r*(M+1)+c;idx.push(i,i+M+1,i+1,i+1,i+M+1,i+M+2);
+    }
+  }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));
+  g.setAttribute("normal",new THREE.Float32BufferAttribute(nor,3));
+  g.setAttribute("uv",new THREE.Float32BufferAttribute(uv,2));
+  g.setIndex(idx);return g;
+}
+function resize(){
+  const r=cv.parentElement.getBoundingClientRect();
+  if(renderer){renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix()}
+  drawFlat();
+}
+const CAMS={front:[0,100,340,92],back:[0,100,-340,92],side:[300,104,130,92],close:[0,130,150,128]};
+let camTween=0;
+function setCam(k,instant){
+  const c=CAMS[k];if(!c||!camera)return;
+  let cz=c[2];
+  // "Nära" följer den sida man tittar på (fram/rygg)
+  if(k==="close"&&camera.position.z-controls.target.z<0)cz=-cz;
+  const to=new THREE.Vector3(c[0],c[1],cz),tt=new THREE.Vector3(0,c[3],0);
+  // stoppa snurr + kvarvarande dragrörelse (damping)
+  if(controls.autoRotate){controls.autoRotate=false;const sp=document.getElementById("spin");if(sp)sp.classList.remove("on")}
+  controls.enableDamping=false;controls.update();controls.enableDamping=true;
+  document.querySelectorAll("#camBtns button").forEach(b=>b.classList.toggle("on",b.dataset.cam===k));
+  const id=++camTween;
+  if(instant){camera.position.copy(to);controls.target.copy(tt);controls.update();return}
+  // sfärisk interpolation runt dockan – kameran åker runt, inte rakt igenom
+  const tf=controls.target.clone();
+  const sFrom=new THREE.Spherical().setFromVector3(camera.position.clone().sub(tf));
+  const sTo=new THREE.Spherical().setFromVector3(to.clone().sub(tt));
+  let dth=sTo.theta-sFrom.theta;dth=Math.atan2(Math.sin(dth),Math.cos(dth));
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const dur=reduce?0:650,t0=performance.now();
+  controls.enabled=false;
+  (function step(now){
+    if(id!==camTween)return;
+    const t=dur?Math.min(1,((now||performance.now())-t0)/dur):1;
+    const e=t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+    const tg=tf.clone().lerp(tt,e);
+    const s=new THREE.Spherical(sFrom.radius+(sTo.radius-sFrom.radius)*e,sFrom.phi+(sTo.phi-sFrom.phi)*e,sFrom.theta+dth*e);
+    camera.position.copy(tg).add(new THREE.Vector3().setFromSpherical(s));
+    controls.target.copy(tg);camera.lookAt(tg);
+    if(t<1)requestAnimationFrame(step);else{controls.enabled=true;controls.update()}
+  })();
+}
+function setupPick(){
+  let down=null;const ray=new THREE.Raycaster(),v=new THREE.Vector2();
+  cv.addEventListener("pointerdown",e=>{down=[e.clientX,e.clientY]});
+  cv.addEventListener("pointerup",e=>{
+    if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>5)return;
+    const r=cv.getBoundingClientRect();v.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);
+    ray.setFromCamera(v,camera);const hit=ray.intersectObject(torso)[0];if(!hit)return;
+    const u=hit.uv.x,vv=hit.uv.y,el=sel();
+    el.side=u<.5?"front":"back";el.x=+(((u-(u<.5?.25:.75))*PREF)).toFixed(1);
+    el.y=+((Y0+(1-vv)*HT)-el.h/2).toFixed(1);
+    update();
+  });
+}
+
+/* ---------- Ritning (2D) ---------- */
+const flat=document.getElementById("flat"),fc=flat.getContext("2d");
+const FX=[-30,30],FY=[-8,72];
+let flatMap=null;
+function drawFlat(){
+  if(flat.hidden)return;
+  const r=flat.getBoundingClientRect(),dpr=Math.min(devicePixelRatio,2);
+  flat.width=r.width*dpr;flat.height=r.height*dpr;fc.setTransform(dpr,0,0,dpr,0,0);
+  const css=getComputedStyle(document.documentElement);
+  const C={bg:css.getPropertyValue("--panel").trim(),line:css.getPropertyValue("--line").trim(),mut:css.getPropertyValue("--muted").trim(),fg:css.getPropertyValue("--fg").trim(),acc:css.getPropertyValue("--accent").trim()};
+  fc.fillStyle=C.bg;fc.fillRect(0,0,r.width,r.height);
+  const pad=28,gap=24,cw=FX[1]-FX[0],ch=FY[1]-FY[0];
+  const sc=Math.min((r.width-pad*2-gap)/(cw*2),(r.height-pad*2-20)/ch);
+  const ox=(r.width-(cw*2*sc+gap))/2,oy=pad+14;
+  flatMap={sc,ox,oy,gap,cw};
+  ["front","back"].forEach((side,i)=>{
+    const px=ox+i*(cw*sc+gap);
+    fc.drawImage(tex,PX(side,FX[0]),PY(FY[0]),cw*K,ch*K,px,oy,cw*sc,ch*sc);
+    fc.font="600 12px Barlow, system-ui";fc.fillStyle=C.mut;fc.textAlign="left";
+    fc.fillText(side==="front"?"FRAMSIDA":"RYGG",px,oy-8);
+    // rutnät 5 cm
+    fc.strokeStyle="rgba(255,255,255,.10)";fc.lineWidth=1;
+    for(let x=FX[0];x<=FX[1];x+=5){fc.beginPath();fc.moveTo(px+(x-FX[0])*sc,oy);fc.lineTo(px+(x-FX[0])*sc,oy+ch*sc);fc.stroke()}
+    for(let y=FY[0]+3;y<=FY[1];y+=5){const yy=oy+(y-FY[0])*sc;fc.beginPath();fc.moveTo(px,yy);fc.lineTo(px+cw*sc,yy);fc.stroke()}
+    // krage-linje
+    fc.strokeStyle=C.acc;fc.setLineDash([4,4]);fc.beginPath();fc.moveTo(px,oy+(0-FY[0])*sc);fc.lineTo(px+cw*sc,oy+(0-FY[0])*sc);fc.stroke();fc.setLineDash([]);
+    fc.font="11px 'JetBrains Mono', monospace";fc.fillStyle=C.mut;fc.textAlign="right";
+    for(let y=0;y<=FY[1];y+=10)fc.fillText(y,px-4,oy+(y-FY[0])*sc+4);
+    const el=sel();
+    if(el.on&&el.side===side){
+      const x0=px+(el.x-el.w/2-FX[0])*sc,y0=oy+(el.y-FY[0])*sc,w=el.w*sc,h=el.h*sc;
+      fc.strokeStyle=C.acc;fc.lineWidth=1.5;fc.strokeRect(x0-2,y0-2,w+4,h+4);
+      fc.fillStyle=C.acc;fc.textAlign="center";fc.font="500 12px 'JetBrains Mono', monospace";
+      fc.fillText(`${fmt(el.w)} × ${fmt(el.h)} cm`,x0+w/2,y0+h+16);
+      // mått krage -> överkant
+      const cx=x0+w+10,yk=oy+(0-FY[0])*sc;
+      fc.beginPath();fc.moveTo(cx,yk);fc.lineTo(cx,y0);fc.stroke();
+      fc.save();fc.translate(cx+12,(yk+y0)/2);fc.rotate(-Math.PI/2);fc.fillText(`${fmt(el.y)} cm`,0,0);fc.restore();
+    }
+  });
+}
+let drag=null;
+flat.addEventListener("pointerdown",e=>{
+  if(!flatMap)return;const r=flat.getBoundingClientRect(),m=flatMap;
+  const lx=e.clientX-r.left,ly=e.clientY-r.top;
+  const i=lx>m.ox+m.cw*m.sc+m.gap/2?1:0,side=i?"back":"front";
+  const cx=(lx-(m.ox+i*(m.cw*m.sc+m.gap)))/m.sc+FX[0],cy=(ly-m.oy)/m.sc+FY[0];
+  // träff på detalj? annars flytta vald
+  const hit=[...S.els].reverse().find(el=>el.on&&el.side===side&&cx>=el.x-el.w/2&&cx<=el.x+el.w/2&&cy>=el.y&&cy<=el.y+el.h);
+  if(hit){S.sel=hit.id;renderPanel()}
+  const el=sel();if(!hit){el.side=side;el.x=+cx.toFixed(1);el.y=+(cy-el.h/2).toFixed(1);update()}
+  drag={side,dx:cx-el.x,dy:cy-el.y};flat.setPointerCapture(e.pointerId);
+});
+flat.addEventListener("pointermove",e=>{
+  if(!drag)return;const r=flat.getBoundingClientRect(),m=flatMap,i=drag.side==="back"?1:0;
+  const cx=(e.clientX-r.left-(m.ox+i*(m.cw*m.sc+m.gap)))/m.sc+FX[0],cy=(e.clientY-r.top-m.oy)/m.sc+FY[0];
+  const el=sel();el.x=Math.round((cx-drag.dx)*2)/2;el.y=Math.round((cy-drag.dy)*2)/2;update(true);
+});
+flat.addEventListener("pointerup",()=>{drag=null;renderPanel()});
+
+/* ---------- Panel ---------- */
+const fmt=n=>(+n).toFixed(1).replace(".",",");
+const $=id=>document.getElementById(id);
+function numField(key,label,min,max,step,val,disabled){
+  return `<div class="field"><label for="f_${key}">${label}</label><div class="num">
+    <input type="range" id="r_${key}" min="${min}" max="${max}" step="${step}" value="${val}" ${disabled?"disabled":""}>
+    <input type="number" id="f_${key}" min="${min}" max="${max}" step="${step}" value="${(+val).toFixed(1)}" ${disabled?"disabled":""}></div></div>`;
+}
+function renderChips(){
+  $("chips").innerHTML=S.els.map(el=>`<button class="chip ${el.id===S.sel?"on":""} ${el.on?"":"off"}" data-id="${el.id}"><span class="dot"></span>${el.label}</button>`).join("");
+  $("chips").querySelectorAll("button").forEach(b=>b.onclick=()=>{S.sel=b.dataset.id;const el=sel();renderPanel();if(!flat.hidden)drawFlat();else setCam(el.side,false);});
+}
+function renderPanel(){
+  renderChips();const el=sel();resolve(el);
+  let h=`<div class="row" style="justify-content:space-between">
+    <label class="check"><input type="checkbox" id="e_on" ${el.on?"checked":""}> Visa på overallen</label>
+    <div class="seg"><button data-side="front" class="${el.side==="front"?"on":""}">Fram</button><button data-side="back" class="${el.side==="back"?"on":""}">Rygg</button></div></div>`;
+  if(el.type==="text"){
+    h+=`<div class="grid2"><div class="field"><label for="e_text">Text</label><input type="text" id="e_text" value="${el.text.replace(/"/g,"&quot;")}"></div>
+      <div class="field"><label for="e_font">Typsnitt</label><select id="e_font">${FONTS.map(f=>`<option value="${f.id}" ${f.id===el.font?"selected":""}>${f.name}</option>`).join("")}</select></div></div>
+      <div class="field"><span class="lbl">Storlek styrs av</span><div class="seg"><button data-mode="w" class="${el.mode==="w"?"on":""}">Bredd</button><button data-mode="h" class="${el.mode==="h"?"on":""}">Höjd</button><button data-mode="b" class="${el.mode==="b"?"on":""}">Båda (sträck)</button></div></div>`;
+    h+=numField("w","Bredd (cm)",1,60,.5,el.w,el.mode==="h")+numField("h","Höjd, versal (cm)",.5,30,.1,el.h,el.mode==="w");
+  }else if(el.type==="logo"){
+    h+=numField("w","Bredd (cm)",4,45,.5,el.w)+numField("h","Höjd (cm)",2,30,.1,el.h,el.lock)+
+      `<label class="check"><input type="checkbox" id="e_lock" ${el.lock?"checked":""}> Lås proportioner (original ${fmt(LOGO_BOX.w/LOGO_BOX.h*10/10)} : 1)</label>`;
+  }else{
+    h+=numField("w","Bredd (cm)",2,15,.5,el.w);
+  }
+  h+=`<div class="grid2">${numField("x","Sidled från mitt (cm)",-26,26,.5,el.x)}${numField("y","Krage → överkant (cm)",-6,66,.5,el.y)}</div>`;
+  if(el.type!=="flag"){
+    h+=`<div class="colors"><label class="sw"><input type="color" id="c_fill" value="${el.fill}"> Fyllning</label>
+      <label class="sw"><input type="color" id="c_stroke" value="${el.stroke}"> Kontur</label>
+      ${el.type==="logo"?`<label class="sw"><input type="color" id="c_racing" value="${el.racing}"> RACING</label>`:""}</div>`;
+    if(el.type==="text")h+=numField("sw","Kontur (mm)",0,6,.5,el.sw);
+  }
+  h+=`<div class="readout" id="readout"></div>`;
+  $("editor").innerHTML=h;
+  // händelser
+  $("e_on").onchange=e=>{el.on=e.target.checked;update();renderChips()};
+  $("editor").querySelectorAll("[data-side]").forEach(b=>b.onclick=()=>{el.side=b.dataset.side;setCam(el.side,false);update();renderPanel()});
+  $("editor").querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{el.mode=b.dataset.mode;update();renderPanel()});
+  if($("e_text"))$("e_text").oninput=e=>{el.text=e.target.value.toUpperCase()===e.target.value?e.target.value:e.target.value;update(true)};
+  if($("e_font"))$("e_font").onchange=e=>{el.font=e.target.value;loadFont(el.font).then(()=>{update();renderPanel()})};
+  if($("e_lock"))$("e_lock").onchange=e=>{el.lock=e.target.checked;update();renderPanel()};
+  ["fill","stroke","racing"].forEach(k=>{if($("c_"+k))$("c_"+k).oninput=e=>{el[k]=e.target.value;update(true)}});
+  ["w","h","x","y","sw"].forEach(k=>{
+    const r=$("r_"+k),n=$("f_"+k);if(!r)return;
+    const set=v=>{el[k]=+v;update(true);syncFields()};
+    r.oninput=e=>{n.value=(+e.target.value).toFixed(1);set(e.target.value)};
+    n.onchange=e=>{r.value=e.target.value;set(e.target.value)};
+  });
+  syncFields();
+}
+function syncFields(){
+  const el=sel();resolve(el);
+  ["w","h","x","y"].forEach(k=>{const r=$("r_"+k),n=$("f_"+k);if(!r||document.activeElement===r||document.activeElement===n)return;r.value=el[k];n.value=(+el[k]).toFixed(1)});
+  const ro=$("readout");if(!ro)return;
+  let t=`<b>${fmt(el.w)} × ${fmt(el.h)} cm</b> · ${el.side==="front"?"framsida":"rygg"} · överkant ${fmt(el.y)} cm under krage · ${el.x===0?"centrerad":fmt(Math.abs(el.x))+" cm "+(el.x>0?"åt höger":"åt vänster")+" (sett bakifrån/framifrån)"}`;
+  if(el.type==="text"&&el.mode==="w"){const mt=measureText(el);t+=`<br>Med ${fmt(4)} cm höjd skulle texten bli ${fmt(4/mt.capU*mt.wU)} cm bred.`}
+  const [a,b]=prof(Math.max(0,el.y+el.h/2));const half=halfPerim(a,b)/2;
+  if(Math.abs(el.x)+el.w/2>half-7.5)t+=`<br><span class="warn">Går ut i sidopanel/rand – bredd tillgänglig ≈ ${fmt((half-7.5)*2)} cm.</span>`;
+  ro.innerHTML=t;
+}
+function spec(){
+  const L=[`FJJ Racing – overall, tryckspec`,`Grundfärg ${S.suit.toUpperCase()} · rand ${S.stripe.toUpperCase()}`,``];
+  for(const side of["back","front"]){
+    L.push(side==="back"?"RYGG":"FRAMSIDA");
+    S.els.filter(e=>e.on&&e.side===side).sort((a,b)=>a.y-b.y).forEach(el=>{
+      resolve(el);
+      let what=el.type==="logo"?"FJJ Racing-logo":el.type==="flag"?"Svensk flagga":`"${el.text}" (${fontById(el.font).name})`;
+      L.push(`– ${el.label}: ${what}`);
+      L.push(`  ${fmt(el.w)} × ${fmt(el.h)} cm · överkant ${fmt(el.y)} cm under krage · ${el.x===0?"centrerad":fmt(el.x)+" cm från mitt"}`);
+      if(el.type!=="flag")L.push(`  färg ${el.fill.toUpperCase()}${el.type==="text"&&el.sw>0?`, kontur ${el.sw} mm ${el.stroke.toUpperCase()}`:el.type==="logo"?`, kontur ${el.stroke.toUpperCase()}, RACING ${el.racing.toUpperCase()}`:""}`);
+    });
+    L.push("");
+  }
+  L.push("Höjd för text = versalhöjd. Sidled positivt = höger sett mot respektive sida.");
+  return L.join("\n");
+}
+let raf=0;
+function update(light){
+  save();
+  cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{drawAll();drawFlat();$("spec").textContent=spec();if(light)syncFields()});
+  if(suitMats.length){suitMats.forEach(m=>m.color.copy(lin(S.suit)));stripeMats.forEach(m=>m.color.copy(lin(S.stripe)));limbTex.forEach(paintLimb)}
+}
+
+/* globala kontroller */
+$("suitColor").value=S.suit;$("stripeColor").value=S.stripe;$("panelColor").value=S.panel;$("stitch").checked=S.stitch;
+$("suitColor").oninput=e=>{S.suit=e.target.value;update()};
+$("stripeColor").oninput=e=>{S.stripe=e.target.value;update()};
+$("panelColor").oninput=e=>{S.panel=e.target.value;update()};
+$("stitch").onchange=e=>{S.stitch=e.target.checked;update()};
+$("camBtns").querySelectorAll("button").forEach(b=>b.onclick=()=>{show3D();setCam(b.dataset.cam,false)});
+$("spin").onclick=()=>{controls.autoRotate=!controls.autoRotate;controls.autoRotateSpeed=2.2;$("spin").classList.toggle("on",controls.autoRotate)};
+function show3D(){flat.hidden=true;$("m3d").classList.add("on");$("m2d").classList.remove("on");$("hint").textContent="Dra för att snurra · nyp/scrolla för zoom · klick placerar vald detalj"}
+$("m3d").onclick=show3D;
+$("m2d").onclick=()=>{flat.hidden=false;$("m2d").classList.add("on");$("m3d").classList.remove("on");$("hint").textContent="Dra en detalj för att flytta · rutnät 5 cm · streckad linje = krage";drawFlat()};
+$("copySpec").onclick=async()=>{const t=spec();try{await navigator.clipboard.writeText(t);$("copySpec").textContent="Kopierat";setTimeout(()=>$("copySpec").textContent="Kopiera",1500)}catch(e){const r=document.createRange();r.selectNodeContents($("spec"));const s=getSelection();s.removeAllRanges();s.addRange(r)}};
+let armed=false;
+$("reset").onclick=()=>{if(!armed){armed=true;$("reset").textContent="Klicka igen";setTimeout(()=>{armed=false;$("reset").textContent="Återställ"},2500);return}
+  S=JSON.parse(JSON.stringify(DEFAULT));armed=false;$("reset").textContent="Återställ";
+  $("suitColor").value=S.suit;$("stripeColor").value=S.stripe;$("panelColor").value=S.panel;$("stitch").checked=S.stitch;update();renderPanel()};
+
+function loadFont(id){const f=fontById(id);return document.fonts.load(`${f.s} ${f.w} 40px "${f.fam}"`,"ÅÄÖ BENJAMIN").catch(()=>{})}
+drawAll();renderPanel();$("spec").textContent=spec();
+Promise.all(FONTS.map(f=>loadFont(f.id))).then(()=>{update();renderPanel()});
+document.fonts.ready.then(()=>update());
+if(window.THREE&&THREE.OrbitControls)init3D();else{$("hint").textContent="3D kunde inte laddas – använd Ritning";$("m2d").click()}
+</script>
+<script>
+/* ===== Mobilförslag – slider A/B/C ===== */
+(()=>{
+const NAMES=["Original","A · Sticky docka","B · Dra-upp-ark","C · Flikar"];
+const NOTES=[
+ "Nuvarande sidan som den är.",
+ "Dockan står kvar överst medan du scrollar menyn under.",
+ "Dockan i helskärm – dra upp menyn underifrån (tryck på handtaget för att växla).",
+ "Dockan i helskärm – en flik i taget: Detalj, Färg, Spec."];
+const LKEY="fjj-mobil-layout";
+const body=document.body,shell=document.getElementById("shell"),bar=document.getElementById("propbar");
+const rng=document.getElementById("lay"),nm=document.getElementById("layName"),note=document.getElementById("layNote");
+const grab=document.getElementById("grab"),panel=document.querySelector(".panel"),tb=document.querySelector(".toolbar");
+const q=new URLSearchParams(location.search).get("lay");
+let lay=q!==null&&"0123".includes(q)?+q:(()=>{try{const v=localStorage.getItem(LKEY);if(v!==null)return +v}catch(e){}return innerWidth<=860?1:0})();
+let sheet="peek",tab="detalj",dragH=null;
+function snaps(){const H=parseFloat(shell.style.getPropertyValue("--H"))||innerHeight,top=parseFloat(shell.style.getPropertyValue("--top"))||0,av=H-top;
+  return{peek:170,half:Math.round(av*.52),full:Math.round(av*.86)}}
+function measure(){
+  const fr=body.classList.contains("frame"),m=body.classList.contains("m");
+  const H=fr?shell.clientHeight:(window.visualViewport?visualViewport.height:innerHeight);
+  const top=fr||!m?0:bar.offsetHeight;
+  const st=shell.style;
+  st.setProperty("--H",H+"px");st.setProperty("--top",top+"px");st.setProperty("--tb",tb.offsetHeight+"px");
+  st.setProperty("--tabs","58px");st.setProperty("--pane",Math.round((H-top)*.42)+"px");
+  if(dragH===null)st.setProperty("--sheet",snaps()[sheet]+"px");
+}
+function apply(){
+  const narrow=innerWidth<=860;
+  body.classList.toggle("m",lay>0);body.classList.toggle("frame",lay>0&&!narrow);
+  ["a","b","c"].forEach((k,i)=>body.classList.toggle("lay-"+k,lay===i+1));
+  rng.value=lay;nm.textContent=NAMES[lay];
+  note.textContent=NOTES[lay]+(lay>0&&!narrow?" (Visas i telefonram på datorn.)":"");
+  setTab(tab);measure();requestAnimationFrame(measure);
+  try{localStorage.setItem(LKEY,lay)}catch(e){}
+  window.__lay=lay;
+}
+function setTab(t){tab=t;
+  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
+  panel.querySelectorAll(":scope>[data-tab]").forEach(d=>d.classList.toggle("act",d.dataset.tab===t));
+  panel.scrollTop=0}
+function setSheet(s){sheet=s;dragH=null;measure()}
+window.__setSheet=setSheet;window.__setTab=setTab;
+rng.addEventListener("input",()=>{lay=+rng.value;apply()});
+document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>setTab(b.dataset.t));
+// handtag: dra eller tryck
+let d=null;
+grab.addEventListener("pointerdown",e=>{d={y:e.clientY,h:parseFloat(shell.style.getPropertyValue("--sheet")),moved:false};grab.setPointerCapture(e.pointerId);shell.classList.add("dragging")});
+grab.addEventListener("pointermove",e=>{if(!d)return;const dy=d.y-e.clientY;if(Math.abs(dy)>4)d.moved=true;if(!d.moved)return;
+  const sn=snaps();dragH=Math.max(120,Math.min(sn.full,d.h+dy));shell.style.setProperty("--sheet",dragH+"px")});
+const end=()=>{if(!d)return;shell.classList.remove("dragging");const sn=snaps();
+  if(!d.moved){setSheet(sheet==="peek"?"half":sheet==="half"?"full":"peek")}
+  else{let best="peek",bd=1e9;for(const k in sn){const v=Math.abs(sn[k]-dragH);if(v<bd){bd=v;best=k}}setSheet(best)}
+  d=null};
+grab.addEventListener("pointerup",end);grab.addEventListener("pointercancel",end);
+grab.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setSheet(sheet==="peek"?"half":sheet==="half"?"full":"peek")}});
+// välj detalj i "peek" → öppna arket halvvägs
+document.getElementById("chips").addEventListener("click",()=>{if(lay===2&&sheet==="peek")setSheet("half")});
+addEventListener("resize",()=>apply());
+if(window.visualViewport)visualViewport.addEventListener("resize",measure);
+apply();
+})();
+</script>
+
+
+</body></html>
