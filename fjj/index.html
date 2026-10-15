@@ -166,7 +166,6 @@ const DEFAULT={
     {id:"logoFront",label:"Logo fram",type:"logo",side:"front",x:0,y:8,w:24,h:10.6,lock:true,fill:"#EDF06A",stroke:"#2A2622",racing:"#FFFFFF",on:true},
     {id:"nameBack",label:"Namn rygg",type:"text",side:"back",x:0,y:10,w:31,h:4,mode:"h",text:"TÖRNQVIST",font:"exo",fill:"#EDF06A",stroke:"#2A2622",sw:1.5,on:true},
     {id:"nameFront",label:"Namn fram",type:"text",side:"front",x:0,y:21,w:11.5,h:1.5,mode:"h",text:"B. TÖRNQVIST",font:"exo",fill:"#EDF06A",stroke:"#2A2622",sw:0,on:true},
-    {id:"number",label:"Nummer",type:"text",side:"back",x:0,y:31,w:12,h:10,mode:"h",text:"7",font:"russo",fill:"#FFFFFF",stroke:"#2A2622",sw:3,on:true},
     {id:"flag",label:"Flagga",type:"flag",side:"front",x:0,y:24,w:4,h:2.5,on:true},
   ]
 };
@@ -174,6 +173,8 @@ const KEY="fjj-overall-v3";
 let S;
 try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S||!S.els)S=JSON.parse(JSON.stringify(DEFAULT));
+// numret borttaget
+S.els=S.els.filter(e=>e.id!=="number");if(S.sel==="number")S.sel="nameBack";
 // flytta orörda gamla standardlägen (höger bröst) till mitten
 (()=>{const n=S.els.find(e=>e.id==="nameFront"),f=S.els.find(e=>e.id==="flag");
  if(n&&n.side==="front"&&n.x===9&&n.y===22){n.x=0;n.y=21}

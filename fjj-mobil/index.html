@@ -1,4 +1,5 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}.fontR{width:100%;accent-color:var(--accent);height:30px}
+</style></head><body>
 <title>FJJ Overall – mobilförslag</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Designa FJJ Racing-overallen i 3D – logor, namn, nummer och flagga.">
@@ -242,7 +243,6 @@ const DEFAULT={
     {id:"logoFront",label:"Logo fram",type:"logo",side:"front",x:0,y:8,w:24,h:10.6,lock:true,fill:"#EDF06A",stroke:"#2A2622",racing:"#FFFFFF",on:true},
     {id:"nameBack",label:"Namn rygg",type:"text",side:"back",x:0,y:10,w:31,h:4,mode:"h",text:"TÖRNQVIST",font:"exo",fill:"#EDF06A",stroke:"#2A2622",sw:1.5,on:true},
     {id:"nameFront",label:"Namn fram",type:"text",side:"front",x:0,y:21,w:11.5,h:1.5,mode:"h",text:"B. TÖRNQVIST",font:"exo",fill:"#EDF06A",stroke:"#2A2622",sw:0,on:true},
-    {id:"number",label:"Nummer",type:"text",side:"back",x:0,y:31,w:12,h:10,mode:"h",text:"7",font:"russo",fill:"#FFFFFF",stroke:"#2A2622",sw:3,on:true},
     {id:"flag",label:"Flagga",type:"flag",side:"front",x:0,y:24,w:4,h:2.5,on:true},
   ]
 };
@@ -250,6 +250,8 @@ const KEY="fjj-overall-v3";
 let S;
 try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S||!S.els)S=JSON.parse(JSON.stringify(DEFAULT));
+// numret borttaget
+S.els=S.els.filter(e=>e.id!=="number");if(S.sel==="number")S.sel="nameBack";
 // flytta orörda gamla standardlägen (höger bröst) till mitten
 (()=>{const n=S.els.find(e=>e.id==="nameFront"),f=S.els.find(e=>e.id==="flag");
  if(n&&n.side==="front"&&n.x===9&&n.y===22){n.x=0;n.y=21}
@@ -641,7 +643,7 @@ function renderPanel(){
     <div class="seg"><button data-side="front" class="${el.side==="front"?"on":""}">Fram</button><button data-side="back" class="${el.side==="back"?"on":""}">Rygg</button></div></div>`;
   if(el.type==="text"){
     h+=`<div class="grid2"><div class="field"><label for="e_text">Text</label><input type="text" id="e_text" value="${el.text.replace(/"/g,"&quot;")}"></div>
-      <div class="field"><label for="e_font">Typsnitt</label><select id="e_font">${FONTS.map(f=>`<option value="${f.id}" ${f.id===el.font?"selected":""}>${f.name}</option>`).join("")}</select></div></div>
+      <div class="field"><label for="e_fontR">Typsnitt · <b id="fontName" style="color:var(--accent);font-weight:600">${fontById(el.font).name}</b></label><input type="range" id="e_fontR" class="fontR" min="0" max="${FONTS.length-1}" step="1" value="${Math.max(0,FONTS.findIndex(f=>f.id===el.font))}" aria-label="Typsnitt"></div></div>
       <div class="field"><span class="lbl">Storlek styrs av</span><div class="seg"><button data-mode="w" class="${el.mode==="w"?"on":""}">Bredd</button><button data-mode="h" class="${el.mode==="h"?"on":""}">Höjd</button><button data-mode="b" class="${el.mode==="b"?"on":""}">Båda (sträck)</button></div></div>`;
     h+=numField("w","Bredd (cm)",1,60,.5,el.w,el.mode==="h")+numField("h","Höjd, versal (cm)",.5,30,.1,el.h,el.mode==="w");
   }else if(el.type==="logo"){
@@ -664,7 +666,8 @@ function renderPanel(){
   $("editor").querySelectorAll("[data-side]").forEach(b=>b.onclick=()=>{el.side=b.dataset.side;setCam(el.side,false);update();renderPanel()});
   $("editor").querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{el.mode=b.dataset.mode;update();renderPanel()});
   if($("e_text"))$("e_text").oninput=e=>{el.text=e.target.value.toUpperCase()===e.target.value?e.target.value:e.target.value;update(true)};
-  if($("e_font"))$("e_font").onchange=e=>{el.font=e.target.value;loadFont(el.font).then(()=>{update();renderPanel()})};
+  if($("e_fontR"))$("e_fontR").oninput=e=>{const f=FONTS[+e.target.value];el.font=f.id;const n=$("fontName");n.textContent=f.name;n.style.font=`${f.s} ${f.w} 15px "${f.fam}"`;loadFont(el.font).then(()=>{update(true)})};
+  if($("fontName")){const f=fontById(el.font);$("fontName").style.font=`${f.s} ${f.w} 15px "${f.fam}"`}
   if($("e_lock"))$("e_lock").onchange=e=>{el.lock=e.target.checked;update();renderPanel()};
   ["fill","stroke","racing"].forEach(k=>{if($("c_"+k))$("c_"+k).oninput=e=>{el[k]=e.target.value;update(true)}});
   ["w","h","x","y","sw"].forEach(k=>{
