@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kolkata Fire Table – eldbord med kokplattor · Buttercup.nu</title>
+<meta name="description" content="Eldbord i Yamay-teknik: lösa rundstänger längs en eldfast vägg, kokplattor och galler som glider dit värmen är rätt. Dra plattorna, spräng isär.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Buttercup">
+<meta property="og:title" content="Kolkata Fire Table">
+<meta property="og:description" content="Eldbord i Yamay-teknik: lösa rundstänger längs en eldfast vägg, kokplattor och galler som glider dit värmen är rätt. Dra plattorna, spräng isär.">
+<meta property="og:url" content="https://www.buttercup.nu/firetable/">
+<meta property="og:image" content="https://www.buttercup.nu/firetable/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.buttercup.nu/firetable/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;700&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#FFF6DC;font-family:Barlow,system-ui,sans-serif;color:#2a2620}
+  canvas{display:block;touch-action:none}
+  body.drag canvas{cursor:grabbing}
+  body.can canvas{cursor:grab}
+  .bc-bar{position:fixed;top:0;left:0;right:0;z-index:2000001;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:#C8340A;color:#FFF6DC;font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px}
+  .bc-bar a{color:#FFF6DC;text-decoration:none}
+  .bc-bar a:hover{text-decoration:underline}
+  .bc-bar b{font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.04em;font-size:18px;color:#FCC222}
+  #info{position:absolute;top:52px;left:12px;max-width:300px;background:#FFF6DC;border:3px solid #2a2620;border-radius:18px;padding:12px 16px;box-shadow:5px 5px 0 #C8340A;z-index:10;font-size:14px;line-height:1.45}
+  #info h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:26px;margin:0 0 2px;letter-spacing:.02em;text-transform:uppercase}
+  #info .eb{font-family:"Barlow Condensed";font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#C8340A;font-size:13px}
+  #info .small{font-size:12px;color:#6b6356;margin-top:6px}
+  #ctl{position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:10;display:flex;align-items:center;gap:12px;background:#FFF6DC;border:3px solid #2a2620;border-radius:999px;padding:8px 16px;box-shadow:5px 5px 0 #C8340A;font-family:"Barlow Condensed";font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:14px;white-space:nowrap}
+  #ctl input[type=range]{width:min(320px,42vw);accent-color:#C8340A}
+  #ctl button{font:inherit;background:#2a2620;color:#FCC222;border:0;border-radius:999px;padding:6px 14px;cursor:pointer}
+  #ctl label.cb{display:flex;align-items:center;gap:4px;cursor:pointer}
+  #tip{position:absolute;pointer-events:none;z-index:11;background:#2a2620;color:#FFF6DC;padding:4px 9px;border-radius:8px;font-size:13px;display:none;white-space:nowrap}
+  #tip i{color:#FCC222;font-style:normal;font-size:11px;display:block;letter-spacing:.06em;text-transform:uppercase}
+  #ver{position:absolute;top:52px;right:12px;z-index:10;display:flex;background:#FFF6DC;border:3px solid #2a2620;border-radius:999px;box-shadow:5px 5px 0 #C8340A;overflow:hidden;font-family:"Barlow Condensed";font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:15px}
+  #ver a{padding:6px 16px;color:#2a2620;text-decoration:none}
+  #ver a.on{background:#2a2620;color:#FCC222}
+  #load{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:Anton;font-size:28px;color:#C8340A;z-index:5}
+  @media (max-width:700px){
+    .bc-bar{padding:6px 12px;font-size:12px}.bc-bar span{display:none}.bc-bar b{font-size:15px}
+    #info{top:44px;left:8px;right:8px;max-width:none;padding:8px 12px;font-size:12px;border-radius:14px}
+    #info h1{font-size:20px}#info .more{display:none}
+    
+    #ctl{gap:7px;padding:5px 10px;font-size:12px;bottom:calc(10px + env(safe-area-inset-bottom));max-width:calc(100vw - 24px);box-sizing:border-box}
+    #ctl > span{display:none}
+    #ctl button{padding:5px 10px}
+    #ctl input[type=range]{width:20vw}
+    #ctl label.cb{font-size:11px;gap:2px}
+    #ctl{gap:6px;padding:5px 8px}
+    .bc-bar b{font-size:13px}
+  }
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+</head>
+<body>
+<div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Yamay · Kolkata Fire Table</span><b>Plan B(lommeröd)</b></div>
+<div id="info">
+  <div class="eb">Yamay · eldbord · utkast v6b</div>
+  <h1>Kolkata Fire Table</h1>
+  <div>Eldbord som Mill Scale, men med <b>lösa rundstänger längs en eldfast vägg</b>. Kokplattor och galler grenslar stängerna och <b>glider dit värmen är rätt</b>: nära vedkorgen för hett, längre bort för sjud.</div>
+  <div class="more">
+    <div style="margin-top:6px">Bassäng 1 830 × 620 · 4 rundstänger Ø25, c/c 150 · 2 kokplattor 300×200×10 med skruvad kjol (M6) · 2 grillgaller · bakvägg av 30 mm chamotte, 657 mm över kanten · vedkorg · hjul Ø125 · ca 390 kg.</div>
+    <div class="small"><b>Dra en kokplatta eller ett galler</b> för att skjuta den längs stängerna. Håll muspekaren över en del för namnet. Dra i bakgrunden för att snurra, scrolla för att zooma. Modellen är ett utkast ur Fusion och inget tillverkningsunderlag.</div>
+  </div>
+</div>
+<div id="ctl">
+  <button id="play">▶ Spräng</button>
+  <span>Ihop</span><input id="ex" type="range" min="0" max="1" step="0.001" value="0"><span>Isär</span>
+  <label class="cb"><input type="checkbox" id="sk" checked>Skruv</label>
+  <label class="cb"><input type="checkbox" id="wf">Wireframe</label>
+  <label class="cb"><input type="checkbox" id="fl" checked>Eld</label>
+</div>
+<div id="tip"></div>
+<div id="load">Laddar…</div>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+
+const R = new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2)); R.setSize(innerWidth,innerHeight);
+R.toneMapping = THREE.ACESFilmicToneMapping; R.toneMappingExposure = 1.05;
+R.shadowMap.enabled = true; R.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(R.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0xFFF6DC);
+const pm = new THREE.PMREMGenerator(R); scene.environment = pm.fromScene(new RoomEnvironment(),.04).texture;
+THREE.Object3D.DEFAULT_UP.set(0,0,1);
+const cam = new THREE.PerspectiveCamera(32, innerWidth/innerHeight, 10, 30000); cam.up.set(0,0,1);
+const ctr = new OrbitControls(cam, R.domElement); ctr.enableDamping = true;
+const sun = new THREE.DirectionalLight(0xfff1d6, 1.6); sun.position.set(-1200,-1500,2600); sun.castShadow = true;
+sun.shadow.mapSize.set(2048,2048);
+Object.assign(sun.shadow.camera,{left:-2000,right:2000,top:2000,bottom:-2000,near:100,far:8000});
+scene.add(sun, new THREE.HemisphereLight(0xffffff,0xd9c9a0,.5));
+const ground = new THREE.Mesh(new THREE.CircleGeometry(2600,64), new THREE.ShadowMaterial({opacity:.18}));
+ground.receiveShadow = true; scene.add(ground);
+
+const MAT = {
+  'Varmvalsad gunmetal': new THREE.MeshStandardMaterial({color:0x4a5361, metalness:.55, roughness:.48}),
+  'Svart pulverlack':    new THREE.MeshStandardMaterial({color:0x1d1f22, metalness:.45, roughness:.62}),
+  'Eldfast sten':        new THREE.MeshStandardMaterial({color:0xd9b98f, metalness:0, roughness:.95}),
+  'Hjul':                new THREE.MeshStandardMaterial({color:0xaab0b8, metalness:.6, roughness:.35}),
+  'Rundstal':            new THREE.MeshStandardMaterial({color:0x5b5048, metalness:.6, roughness:.5}),
+  'Plancha kolstal':     new THREE.MeshStandardMaterial({color:0x34383e, metalness:.7, roughness:.38}),
+  'Rostfritt A4':        new THREE.MeshStandardMaterial({color:0xc9ccd0, metalness:.9, roughness:.3}),
+};
+const HL = new THREE.MeshStandardMaterial({color:0xFCC222, metalness:.2, roughness:.5, emissive:0x553300});
+
+// sprängriktning per del (mm) + tidsfönster [start, slut]
+function off(c, n){
+  let x=0, y=0, z=0, w=[0,1];
+  if(c==='Kokplattor A skruvad kjol' || c==='Grillgaller C'){
+    z=520; w=[0,.45];
+    if(n.startsWith('Kjol') || n.startsWith('Gallerkjol')){ z=380; w=[.1,.55]; }
+  } else if(c==='Rundstanger'){
+    z=280; w=[.2,.65];
+    if(n.startsWith('Stodbock')){ z=140; w=[.3,.75]; }
+    if(n.startsWith('Stodben')){ z=60; w=[.35,.8]; }
+  } else if(c==='Bakvagg'){
+    y=360; w=[.35,.85];
+    if(n.startsWith('Chamotte')){ y=220; z=80; w=[.4,.9]; }
+    if(n.startsWith('Rygg')){ y=480; }
+  } else if(c==='Vedkorg'){ x=-480; z=120; w=[.25,.7]; }
+  else if(c==='Hjul'){ z=-120; w=[.5,1]; }
+  return {v:new THREE.Vector3(x,y,z), w};
+}
+const ease = t => t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
+const NICE = {'Bassang och stativ':'Bassäng och stativ','Hjul':'Hjul','Rundstanger':'Rundstänger','Vedkorg':'Vedkorg',
+  'Kokplattor A skruvad kjol':'Kokplatta','Grillgaller C':'Grillgaller','Bakvagg':'Bakvägg','Skruvar':'Skruv'};
+const nice = s => s.replace(/ \(\d+\)$/,'')
+  .replace(/Rundstang O25/,'Rundstång Ø25').replace(/Stodbock/,'Stödbock').replace(/Stodben O20/,'Stödben Ø20')
+  .replace(/stanger/g,'stänger').replace(/vanster/g,'vänster').replace(/plattstal/g,'plattstål').replace(/rundstal/g,'rundstål')
+  .replace(/Bassang/g,'Bassäng').replace(/tackplat/g,'täckplåt').replace(/Vaggavel/g,'Väggavel')
+  .replace(/Kokplatta A(\d)/,'Kokplatta $1').replace(/Kjol A\d/,'Kjol').replace(/Grillgaller C(\d)/,'Grillgaller $1')
+  .replace(/Gallerkjol C\d/,'Gallerkjol').replace(/ O(\d)/g,' Ø$1');
+
+const parts = [], screws = [], pick = [];
+const data = await (await fetch('mesh.json')).json();
+for(const b of data){
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(b.v,3)); g.setIndex(b.i);
+  g.computeVertexNormals(); g.computeBoundingBox();
+  const m = new THREE.Mesh(g, MAT[b.a] || MAT['Svart pulverlack']); m.castShadow = m.receiveShadow = true;
+  m.userData = {c:b.c, n:b.n, base:m.material};
+  scene.add(m);
+  if(b.c==='Skruvar'){ screws.push(m); continue; }
+  const o = off(b.c, b.n); m.userData.o = o.v; m.userData.w = o.w; parts.push(m); pick.push(m);
+}
+
+// moduler = topp (kokplatta/galler) + kjolar och skruvar inom samma x/y-ruta
+const mods = [];
+for(const m of parts){
+  if(/^(Kokplatta A|Grillgaller C)\d/.test(m.userData.n)){
+    mods.push({top:m, bb:m.geometry.boundingBox.clone(), members:[m], x:0});
+  }
+}
+const MODC = ['Kokplattor A skruvad kjol', 'Grillgaller C', 'Skruvar'];
+for(const m of parts.concat(screws)){
+  if(!MODC.includes(m.userData.c)) continue;           // stänger m.m. ska aldrig följa med
+  if(mods.some(md => md.members.includes(m))) continue;
+  const c = m.geometry.boundingBox.getCenter(new THREE.Vector3());
+  for(const md of mods){
+    const bb = md.bb;
+    if(c.x>bb.min.x-1 && c.x<bb.max.x+1 && c.y>bb.min.y-1 && c.y<bb.max.y+1 && c.z>bb.min.z-40 && c.z<bb.max.z+5){
+      md.members.push(m); break;
+    }
+  }
+}
+for(const md of mods) md.members.forEach(m => m.userData.mod = md);
+
+// skruvar följer närmaste del vid sprängning
+for(const s of screws){
+  const c = s.geometry.boundingBox.getCenter(new THREE.Vector3());
+  let best = null, bd = 1e9;
+  for(const p of parts){ const d = p.geometry.boundingBox.distanceToPoint(c); if(d<bd){ bd=d; best=p; } }
+  s.userData.o = best.userData.o.clone().multiplyScalar(1.06); s.userData.w = best.userData.w;
+}
+const all = parts.concat(screws);
+
+// glidområde längs stängerna; moduler i samma rad får inte gå in i varandra (6 mm luft)
+const XMIN = -440, XMAX = 905;
+function clampSlide(md, want){
+  let lo = XMIN - md.bb.min.x, hi = XMAX - md.bb.max.x;
+  for(const o of mods){
+    if(o===md || Math.abs(o.bb.min.y - md.bb.min.y) > 1) continue;
+    const ox0 = o.bb.min.x + o.x, ox1 = o.bb.max.x + o.x;
+    if(ox0 >= md.bb.max.x + md.x - 1) hi = Math.min(hi, ox0 - 6 - md.bb.max.x);
+    else lo = Math.max(lo, ox1 + 6 - md.bb.min.x);
+  }
+  return Math.min(hi, Math.max(lo, want));
+}
+
+// eld: glödbädd + flammor, tätast vid vedkorgen (vänster)
+const fire = new THREE.Group(); scene.add(fire);
+const cv = document.createElement('canvas'); cv.width = 512; cv.height = 128;
+const g2 = cv.getContext('2d');
+const grad = g2.createLinearGradient(0,0,512,0);
+grad.addColorStop(0,'rgba(255,190,60,1)'); grad.addColorStop(.35,'rgba(255,90,20,.85)'); grad.addColorStop(1,'rgba(160,30,0,.15)');
+g2.fillStyle = grad; g2.fillRect(0,0,512,128);
+const bed = new THREE.Mesh(new THREE.PlaneGeometry(1640, 520),
+  new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cv), transparent:true, opacity:.9, depthWrite:false}));
+bed.position.set(10, 0, 588); fire.add(bed);
+const FL = [];
+const flameMat = new THREE.MeshBasicMaterial({color:0xffa030, transparent:true, opacity:.55, depthWrite:false, blending:THREE.AdditiveBlending});
+for(let i=0; i<60; i++){
+  const u = Math.pow(Math.random(), 1.8);
+  const f = new THREE.Mesh(new THREE.ConeGeometry(22+Math.random()*16, 1, 7, 1, true), flameMat);
+  f.rotation.x = Math.PI/2; f.position.set(-800 + u*1600, -240 + Math.random()*480, 590);
+  f.userData = {h:(1-u)*90 + 30, ph:Math.random()*6.28, sp:4 + Math.random()*4};
+  f.raycast = () => {};
+  fire.add(f); FL.push(f);
+}
+bed.raycast = () => {};
+const glow = new THREE.PointLight(0xff7a2a, 2.2, 1600, 1.2); glow.position.set(-450, 0, 660); fire.add(glow);
+const flCb = document.getElementById('fl');
+
+document.getElementById('load').remove();
+function fit(exploded=true){
+  const bb = new THREE.Box3();
+  for(const m of parts){ if(!m.visible) continue; const b = m.geometry.boundingBox.clone(); if(exploded) b.translate(m.userData.o); bb.union(b); }
+  const c = bb.getCenter(new THREE.Vector3()), r = bb.getSize(new THREE.Vector3()).length()/2;
+  const fov = THREE.MathUtils.degToRad(cam.fov), a = Math.min(1, cam.aspect);
+  const d = r / Math.sin(fov/2) / a * (cam.aspect < 1 ? 0.78 : 0.98);
+  const dir = new THREE.Vector3(-.5,-.85,.62).normalize();
+  ctr.target.copy(c); cam.position.copy(c).addScaledVector(dir, d); ctr.update();
+}
+fit(innerWidth/innerHeight >= 1); window.__fit = fit;
+
+let E = 0;
+function apply(){
+  for(const m of all){
+    const [a,b] = m.userData.w; const t = ease(Math.min(1, Math.max(0, (E-a)/(b-a))));
+    m.position.copy(m.userData.o).multiplyScalar(t);
+    if(m.userData.mod) m.position.x += m.userData.mod.x;
+  }
+  fire.visible = flCb.checked && E < .05;
+}
+flCb.onchange = apply;
+const ex = document.getElementById('ex');
+let anim = null;
+ex.oninput = () => { anim = null; E = +ex.value; apply(); };
+const play = document.getElementById('play');
+play.onclick = () => { const to = E > .5 ? 0 : 1; anim = {from:E, to, t0:performance.now()}; play.textContent = to ? '◀ Ihop' : '▶ Spräng'; };
+document.getElementById('sk').onchange = e => screws.forEach(s => s.visible = e.target.checked);
+
+// wireframe
+const WIRE = new THREE.LineBasicMaterial({color:0xC8340A});
+const WIRE_S = new THREE.LineBasicMaterial({color:0x8F1A00, transparent:true, opacity:.55});
+const GHOST = new THREE.MeshBasicMaterial({color:0xFFF6DC, transparent:true, opacity:0, depthWrite:false});
+let hov = null, hovMod = null, drag = null;
+function setWire(on){
+  for(const m of all){
+    if(!m.userData.edges){
+      const l = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry, 25), screws.includes(m) ? WIRE_S : WIRE);
+      l.raycast = () => {}; l.visible = false; m.add(l); m.userData.edges = l; m.userData.solid = m.userData.base;
+    }
+    m.userData.edges.visible = on; m.userData.base = on ? GHOST : m.userData.solid;
+    m.material = m.userData.base; m.castShadow = !on;
+  }
+  ground.visible = !on; hov = null; hovMod = null;
+}
+document.getElementById('wf').onchange = e => setWire(e.target.checked);
+
+// hover + dra moduler längs stängerna (x)
+const rc = new THREE.Raycaster(), mp = new THREE.Vector2(), tip = document.getElementById('tip');
+const plane = new THREE.Plane(new THREE.Vector3(0,0,1), -735), hit = new THREE.Vector3();
+function setHover(m){
+  const md = m ? (m.userData.mod || null) : null;
+  if(hov){ (hovMod ? hovMod.members : [hov]).forEach(p => p.material = p.userData.base); }
+  hov = m; hovMod = md;
+  if(m) (md ? md.members : [m]).forEach(p => { if(!screws.includes(p)) p.material = HL; });
+  document.body.classList.toggle('can', !!md && E < .05);
+}
+function ray(e){ mp.set(e.clientX/innerWidth*2-1, -e.clientY/innerHeight*2+1); rc.setFromCamera(mp, cam); }
+function heatTip(md){
+  const cxm = (md.bb.min.x + md.bb.max.x)/2 + md.x;
+  const d = cxm + 475;                                  // vedkorgens högra kant
+  const z = d < 450 ? 'HETT · stek och wok' : d < 900 ? 'MEDEL · grill och sauté' : 'SVAGT · sjud och håll varmt';
+  tip.style.display = 'block';
+  tip.innerHTML = '<i>' + NICE[md.top.userData.c] + ' · ' + Math.round(d/10) + ' cm från elden</i>' + nice(md.top.userData.n) + ' — ' + z;
+}
+R.domElement.addEventListener('pointerdown', e => {
+  ray(e); const h = rc.intersectObjects(pick.filter(p => p.visible))[0];
+  if(h && h.object.userData.mod && E < .05 && rc.ray.intersectPlane(plane, hit)){
+    const md = h.object.userData.mod;
+    drag = {md, x0:hit.x, s0:md.x}; ctr.enabled = false;
+    document.body.classList.add('drag'); R.domElement.setPointerCapture(e.pointerId);
+    setHover(h.object); heatTip(md);
+  }
+});
+addEventListener('pointerup', () => { if(drag){ drag = null; ctr.enabled = true; document.body.classList.remove('drag'); } });
+addEventListener('pointermove', e => {
+  ray(e);
+  if(drag){
+    if(rc.ray.intersectPlane(plane, hit)){ drag.md.x = clampSlide(drag.md, drag.s0 + hit.x - drag.x0); apply(); }
+    tip.style.left = (e.clientX+14)+'px'; tip.style.top = (e.clientY+12)+'px'; heatTip(drag.md); return;
+  }
+  const h = rc.intersectObjects(pick.filter(p => p.visible))[0];
+  const obj = h ? h.object : null;
+  if(obj !== hov) setHover(obj);
+  if(h){
+    if(obj.userData.mod && E < .05) heatTip(obj.userData.mod);
+    else { tip.style.display = 'block'; tip.innerHTML = '<i>' + (NICE[obj.userData.c] || obj.userData.c) + '</i>' + nice(obj.userData.n); }
+    tip.style.left = (e.clientX+14)+'px'; tip.style.top = (e.clientY+12)+'px';
+  } else tip.style.display = 'none';
+});
+addEventListener('resize', () => { cam.aspect = innerWidth/innerHeight; cam.updateProjectionMatrix(); R.setSize(innerWidth, innerHeight); });
+
+// testkrokar
+window.__setE = v => { anim = null; E = v; ex.value = v; apply(); };
+window.__mods = mods;
+window.__proj = (x, y, z) => { const v = new THREE.Vector3(x, y, z).project(cam); return [(v.x+1)/2*innerWidth, (1-v.y)/2*innerHeight]; };
+window.__slide = (i, x) => { mods[i].x = clampSlide(mods[i], x); apply(); return mods[i].x; };
+window.__thumb = () => {
+  const lm = new THREE.LineBasicMaterial({color:0xC8340A, transparent:true, opacity:.85});
+  for(const m of all){ if(!m.visible) continue;
+    const l = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry, 25), lm); l.position.copy(m.position); scene.add(l); m.visible = false; }
+  ground.visible = false; fire.visible = false; flCb.checked = false; scene.environment = null;
+};
+window.__errs = window.__errs || [];
+addEventListener('error', e => window.__errs.push(String(e.message)));
+
+apply();
+R.setAnimationLoop(now => {
+  if(anim){ const k = Math.min(1, (now-anim.t0)/2600); E = anim.from + (anim.to-anim.from)*k; ex.value = E; apply(); if(k>=1) anim = null; }
+  if(fire.visible){
+    const t = now/1000;
+    for(const f of FL){ const s = f.userData; const h = s.h*(.75 + .35*Math.sin(t*s.sp + s.ph)); f.scale.set(1, h, 1); f.position.z = 590 + h/2; }
+    glow.intensity = 2 + .5*Math.sin(t*7.3) + .3*Math.sin(t*13.1);
+  }
+  ctr.update(); R.render(scene, cam);
+});
+window.__ok = {mods:mods.length, members:mods.map(m => m.members.length), parts:parts.length, screws:screws.length};
+
+</script>
+</body>
+</html>
