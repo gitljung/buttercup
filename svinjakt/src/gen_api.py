@@ -20,6 +20,10 @@ JOBS = {
     'hund': ('foton/foto8_hund_s.jpg', '1536x1024',
              'No person. THIS dog: a small black dog (as in the photo) as a loyal sidekick, side view facing right, running happily, '
              'tongue out, ears flapping, glossy black coat with soft highlights. Name: Lego. Cute and brave.'),
+    'bisse': ('foton/foto9_bisse_s.jpg', '1024x1536',
+              'A woman: long wavy honey-blonde balayage hair, warm tan skin, long lashes, soft glossy pink lips, fluffy cream-white '
+              'teddy coat collar, thin gold chain necklace. Upper body and waist only (she is stuck waist-deep, so NO legs), both arms '
+              'raised waving for help, comic dramatic "save me!" expression but glamorous and friendly. Name: Bisse.'),
     'peacock': ('foton/foto7_pafagel_s.jpg', '1536x1024',
                 'No person. THIS bird: a proud male Indian PEACOCK in side view facing right, iridescent royal-blue neck and '
                 'breast, fan-shaped crest, white eye stripes, green scaled back, long green train with many blue/bronze '
