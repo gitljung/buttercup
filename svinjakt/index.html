@@ -23,43 +23,83 @@
 </head>
 <body>
 <div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Olistat spel</span><b>Svinjakten</b></div>
-<div class="wrap"><div class="cab"><canvas id="game" width="720" height="1080"></canvas><div class="hud"><div class="pill" id="score">0</div><div class="pill" id="crew">1 skytt</div><div class="pill" id="wave">Våg 1</div></div><div class="center" id="overlay"><div class="card"><p class="small">Blommeröd runner shooter</p><h1>SVIN<br>JAKTEN</h1><p>Börja med Peter. Ta +1-portar så ansluter Hugo, Carl, Jocke, Borka och Wille en efter en. Skjut påfågeln för +3 skyttar och den snabba kungsfasanen för dubbel eldkraft. Dra gänget åt vänster/höger, skjut vapenkort och stoppa megasvinet innan det når scenen.</p><div class="legend"><span>+1 skytt</span><span>×2 gäng</span><span>Garibaldi = eldkraft</span><span>Påfågel = +3</span><span>Kungsfasan = ×2 eld</span><span>Megasvin = boss</span></div><button id="start">Kör</button></div></div></div></div>
+<div class="wrap"><div class="cab"><canvas id="game" width="720" height="1080"></canvas><div class="hud"><button class="pill" id="snd" aria-label="Ljud av/på" style="pointer-events:auto;cursor:pointer;font-size:18px;padding:5px 9px">🔊</button><div class="pill" id="score">0</div><div class="pill" id="crew">1 skytt</div><div class="pill" id="wave">Våg 1</div></div><div class="center" id="overlay"><div class="card"><p class="small">Blommeröd runner shooter</p><h1>SVIN<br>JAKTEN</h1><p>Börja med Peter. Ta +1-portar så ansluter Hugo, Carl, Jocke, Borka och Wille en efter en. Skjut påfågeln för +3 skyttar och den snabba kungsfasanen för dubbel eldkraft. Dra gänget åt vänster/höger, skjut vapenkort och stoppa megasvinet innan det når scenen.</p><div class="legend"><span>+1 skytt</span><span>×2 gäng</span><span>Garibaldi = eldkraft</span><span>Påfågel = +3</span><span>Kungsfasan = ×2 eld</span><span>Megasvin = boss</span></div><button id="start">Kör</button></div></div></div></div>
 <script>
 (()=>{
 const cv=document.getElementById('game'),ctx=cv.getContext('2d');
 const scoreEl=document.getElementById('score'),crewEl=document.getElementById('crew'),waveEl=document.getElementById('wave'),overlay=document.getElementById('overlay'),startBtn=document.getElementById('start');
 const W=720,H=1080,assets={};
+const SFX=(()=>{let A=null,M=null,NB=null,on=localStorage.getItem('sj_mute')!=='1',lastPang=-1,lastGrunt=-1;
+function init(){if(A){if(A.state==='suspended')A.resume();return}const C=window.AudioContext||window.webkitAudioContext;if(!C)return;A=new C();
+ M=A.createGain();M.gain.value=on?.55:0;const cp=A.createDynamicsCompressor();cp.threshold.value=-14;cp.ratio.value=6;M.connect(cp);cp.connect(A.destination);
+ NB=A.createBuffer(1,A.sampleRate,A.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}
+const now=()=>A.currentTime;
+function env(g,t,a,peak,dec){g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+a);g.gain.exponentialRampToValueAtTime(0.0001,t+a+dec)}
+function noise(t,dur,f,q,peak,type='bandpass',a=.002){const n=A.createBufferSource();n.buffer=NB;n.playbackRate.value=.7+Math.random()*.6;
+ const fl=A.createBiquadFilter();fl.type=type;fl.frequency.setValueAtTime(f,t);fl.Q.value=q;const g=A.createGain();env(g,t,a,peak,dur);
+ n.connect(fl);fl.connect(g);g.connect(M);n.start(t,Math.random()*.5);n.stop(t+a+dur+.05);return fl}
+function tone(t,type,f0,f1,dur,peak,a=.01,flt=0){const o=A.createOscillator();o.type=type;o.frequency.setValueAtTime(f0,t);
+ if(f1!==f0)o.frequency.exponentialRampToValueAtTime(f1,t+dur);const g=A.createGain();env(g,t,a,peak,dur);let last=o;
+ if(flt){const fl=A.createBiquadFilter();fl.type='lowpass';fl.frequency.value=flt;o.connect(fl);last=fl}last.connect(g);g.connect(M);o.start(t);o.stop(t+a+dur+.05);return o}
+const P={
+ pang(n){if(!A||!on)return;const t=now();if(t-lastPang<.085)return;lastPang=t;const k=Math.min(1,.35+n*.05);
+  const u=t+.004;noise(u,.11,1500+Math.random()*900,.9,.5*k,'bandpass',.003);tone(u,'square',200,60,.09,.22*k,.002,1600)},
+ grunt(boss){if(!A||!on)return;const t=now();if(!boss&&t-lastGrunt<.12)return;lastGrunt=t;const f=boss?62:95+Math.random()*40,d=boss?.7:.26;
+  const o=tone(t,'sawtooth',f*1.25,f*.7,d,boss?.5:.32,.012,boss?500:850);const l=A.createOscillator(),lg=A.createGain();l.frequency.value=boss?18:28;lg.gain.value=f*.35;l.connect(lg);lg.connect(o.frequency);l.start(t);l.stop(t+d+.1);
+  noise(t,d*.8,boss?260:420,2,boss?.35:.18,'bandpass',.02);if(boss)P.boom()},
+ boom(){if(!A||!on)return;const t=now();tone(t,'sine',120,32,.9,.8,.004);noise(t,.6,600,.6,.45,'lowpass',.004)},
+ bossWarn(){if(!A||!on)return;const t=now();for(let i=0;i<3;i++){tone(t+i*.42,'sawtooth',55,48,.36,.42,.02,320);tone(t+i*.42,'sine',41,38,.38,.5,.02)}},
+ peacock(){if(!A||!on)return;const t=now();for(const s of [0,.42]){const o=A.createOscillator();o.type='sawtooth';
+  o.frequency.setValueAtTime(620,t+s);o.frequency.exponentialRampToValueAtTime(1500,t+s+.12);o.frequency.exponentialRampToValueAtTime(820,t+s+.34);
+  const v=A.createOscillator(),vg=A.createGain();v.frequency.value=38;vg.gain.value=55;v.connect(vg);vg.connect(o.frequency);
+  const f1=A.createBiquadFilter();f1.type='bandpass';f1.frequency.value=1200;f1.Q.value=1.2;const g=A.createGain();env(g,t+s,.02,.9,.34);
+  o.connect(f1);f1.connect(g);g.connect(M);o.start(t+s);v.start(t+s);o.stop(t+s+.42);v.stop(t+s+.42)}},
+ flutter(dur=.5){if(!A||!on)return;const t=now();const fl=noise(t,dur,900,.8,.3,'bandpass',.01);const g=A.createGain();g.gain.value=0;
+  const am=A.createOscillator(),ag=A.createGain();am.frequency.value=22;ag.gain.value=1;am.connect(ag);fl.disconnect();const out=A.createGain();out.gain.value=.5;
+  fl.connect(out);ag.connect(out.gain);out.connect(M);am.start(t);am.stop(t+dur+.05)},
+ fasan(){if(!A||!on)return;const t=now();P.flutter(.55);for(let i=0;i<4;i++)tone(t+.05+i*.09,'square',1900-i*120,1300-i*90,.06,.16,.004,3200)},
+ birdIn(kind){if(!A||!on)return;if(kind==='peacock'){const t=now();tone(t,'triangle',900,1300,.18,.12,.02)}else P.flutter(.35)},
+ gate(n=1){if(!A||!on)return;const t=now(),notes=[523,659,784,1046];for(let i=0;i<Math.min(4,1+n);i++)tone(t+i*.065,'triangle',notes[i],notes[i],.16,.34,.005)},
+ power(){if(!A||!on)return;const t=now();tone(t,'square',300,1200,.35,.34,.01,2400);tone(t+.08,'triangle',600,2000,.3,.3,.01)},
+ lose(){if(!A||!on)return;const t=now();[392,370,349,262].forEach((f,i)=>{const o=tone(t+i*.32,'sawtooth',f,f*(i===3?.9:1),i===3?.9:.28,.28,.02,900)})},
+ win(){if(!A||!on)return;const t=now();[523,659,784,1046,784,1046].forEach((f,i)=>tone(t+i*.12,'square',f,f,i===5?.6:.11,.2,.005,3000));
+  noise(t+.3,1.6,2400,.5,.12,'bandpass',.4)}
+};
+Object.defineProperty(P,'on',{get:()=>on});return Object.assign(P,{_reset:()=>{A=null},_ctx:()=>A,_tap:()=>{if(!A)return null;const an=A.createAnalyser();an.fftSize=2048;M.connect(an);return an},init,toggle(){on=!on;localStorage.setItem('sj_mute',on?'0':'1');if(M)M.gain.setTargetAtTime(on?.55:0,A.currentTime,.02);if(on)init();return on}});
+})();
+
 const names=['peter','hugo','carl','jocke','borka','wille'];
 const JOIN={hugo:'HUGO ANSLUTER!',carl:'CARL TAR POSITION!',jocke:'JOCKE LADDAR OM!',borka:'BORKA KOMMER MED STJÄRNKEPSEN!',wille:'WILLE ÄR HÄR – FEST!'};
 [...names,'boar','megaboar','gate_plus','gate_x2','peacock','kungsfasan'].forEach(k=>{const im=new Image();im.src=`img/${k}.webp`;assets[k]=im});
 let t=0,last=0,run=false,over=false,score=0,wave=1,kills=0,player={x:W/2,y:H-180,target:W/2},crew=5,bullets=[],boars=[],gates=[],cards=[],particles=[],power=1,fireTimer=0,spawnTimer=0,gateTimer=0,cardTimer=0,shake=0,birds=[],popups=[],birdTimer=0,fasanTimer=0;
 function clamp(v,a,b){return Math.max(a,Math.min(b,v))}function rnd(a,b){return a+Math.random()*(b-a)}function hit(a,b){return Math.abs(a.x-b.x)<(a.w+b.w)/2&&Math.abs(a.y-b.y)<(a.h+b.h)/2}
 function reset(){t=0;last=0;run=true;over=false;score=0;wave=1;kills=0;player.x=player.target=W/2;crew=1;bullets=[];boars=[];gates=[];cards=[];particles=[];power=1;fireTimer=0;spawnTimer=.8;gateTimer=3.5;cardTimer=5.5;shake=0;birds=[];popups=[];birdTimer=8;fasanTimer=rnd(16,24);for(let i=0;i<4;i++){spawnBoar(false);boars[i].y=70+i*115;boars[i].x=160+i*105}gates.push({x:150,y:360,w:95,h:95,typ:'plus',img:'gate_plus',vy:86});gates.push({x:570,y:520,w:120,h:95,typ:'x2',img:'gate_x2',vy:86});overlay.classList.add('hide');requestAnimationFrame(loop)}
-startBtn.onclick=reset;
+startBtn.onclick=()=>{SFX.init();reset()};
+const sndBtn=document.getElementById('snd');const sndLbl=()=>sndBtn.textContent=SFX.on?'🔊':'🔇';sndLbl();sndBtn.onclick=e=>{e.stopPropagation();SFX.toggle();sndLbl()};
 function pos(e){const r=cv.getBoundingClientRect();const x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;player.target=clamp(x/r.width*W,90,W-90)}
 cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);pos(e)});cv.addEventListener('pointermove',pos);cv.addEventListener('touchmove',e=>{pos(e);e.preventDefault()},{passive:false});
 function laneX(i,n){const spread=Math.min(300,70+crew*14),u=n===1?.5:i/(n-1);return player.x+(u-.5)*spread}
-function spawnBoar(boss=false){const hp=(boss?70+wave*25:5+wave*1.8)*power**-.08;if(boss)pop('MEGASVIN!','#8F1A00',64);boars.push({x:rnd(80,W-80),y:-80,w:boss?145:72,h:boss?110:58,hp,max:hp,spd:boss?32+wave*2:72+wave*5,boss,img:boss?'megaboar':'boar',phase:rnd(0,9)})}
+function spawnBoar(boss=false){const hp=(boss?70+wave*25:5+wave*1.8)*power**-.08;if(boss){pop('MEGASVIN!','#8F1A00',64);SFX.bossWarn()}boars.push({x:rnd(80,W-80),y:-80,w:boss?145:72,h:boss?110:58,hp,max:hp,spd:boss?32+wave*2:72+wave*5,boss,img:boss?'megaboar':'boar',phase:rnd(0,9)})}
 function pop(txt,col='#C8340A',size=40){popups.push({txt,col,size,life:1.7,max:1.7})}
 function addCrew(to){const b=crew;crew=Math.min(40,to);for(let i=b;i<crew&&i<names.length;i++){const k=names[i];if(JOIN[k])pop(JOIN[k])}}
-function spawnBird(kind){const left=Math.random()<.5,fas=kind==='kungsfasan';const hp=fas?6+wave*2:10+wave*3;birds.push({kind,x:left?-110:W+110,y:rnd(200,520),vx:(left?1:-1)*(fas?250+wave*8:120+wave*6),w:fas?190:160,h:fas?110:134,hp,max:hp,phase:rnd(0,9)});pop(fas?'KUNGSFASAN! SKJUT DEN':'PÅFÅGEL! SKJUT DEN',fas?'#b8860b':'#1f5fd1',38)}
+function spawnBird(kind){const left=Math.random()<.5,fas=kind==='kungsfasan';const hp=fas?6+wave*2:10+wave*3;birds.push({kind,x:left?-110:W+110,y:rnd(200,520),vx:(left?1:-1)*(fas?250+wave*8:120+wave*6),w:fas?190:160,h:fas?110:134,hp,max:hp,phase:rnd(0,9)});SFX.birdIn(kind);pop(fas?'KUNGSFASAN! SKJUT DEN':'PÅFÅGEL! SKJUT DEN',fas?'#b8860b':'#1f5fd1',38)}
 function spawnGate(){const typ=Math.random()<.68?'plus':'x2';gates.push({x:rnd(105,W-105),y:-60,w:typ==='x2'?120:95,h:95,typ,img:typ==='x2'?'gate_x2':'gate_plus',vy:86+wave*2})}
 function spawnCard(){cards.push({x:rnd(110,W-110),y:-80,w:120,h:90,hp:22+wave*10,max:22+wave*10,label:Math.random()<.5?'STUDSARE':'GARIBALDI',vy:70+wave*2})}
 function boom(x,y,c,n=12){for(let i=0;i<n;i++)particles.push({x,y,vx:rnd(-90,90),vy:rnd(-160,40),life:rnd(.25,.7),c,r:rnd(3,9)})}
 function update(dt){t+=dt;player.x+=(player.target-player.x)*Math.min(1,dt*9);wave=1+Math.floor(kills/16);spawnTimer-=dt;gateTimer-=dt;cardTimer-=dt;fireTimer-=dt;
  if(spawnTimer<=0){spawnBoar(kills>0&&kills%18===0);spawnTimer=Math.max(.22,1.0-wave*.045)} if(gateTimer<=0){spawnGate();gateTimer=rnd(5.5,8.0)} if(cardTimer<=0){spawnCard();cardTimer=rnd(7.0,11.0)} birdTimer-=dt;fasanTimer-=dt;if(birdTimer<=0){spawnBird('peacock');birdTimer=rnd(10,15)} if(fasanTimer<=0){spawnBird('kungsfasan');fasanTimer=rnd(20,30)}
- const fireRate=.23/Math.min(3.4,Math.sqrt(crew)*0.72*power); if(fireTimer<=0){const n=Math.min(crew,18);for(let i=0;i<n;i++){bullets.push({x:laneX(i,n),y:player.y-52,vx:(i-(n-1)/2)*4,vy:-720,dam:1.0*power})}fireTimer=fireRate}
+ const fireRate=.23/Math.min(3.4,Math.sqrt(crew)*0.72*power); if(fireTimer<=0){const n=Math.min(crew,18);for(let i=0;i<n;i++){bullets.push({x:laneX(i,n),y:player.y-52,vx:(i-(n-1)/2)*4,vy:-720,dam:1.0*power})}fireTimer=fireRate;SFX.pang(n)}
  bullets.forEach(b=>{b.x+=b.vx*dt;b.y+=b.vy*dt});bullets=bullets.filter(b=>b.y>-40&&b.x>-40&&b.x<W+40);
  boars.forEach(o=>{o.y+=o.spd*dt;o.x+=Math.sin(t*3+o.phase)*18*dt});gates.forEach(g=>g.y+=g.vy*dt);cards.forEach(c=>c.y+=c.vy*dt);birds.forEach(f=>{f.x+=f.vx*dt;f.y+=Math.sin(t*(f.kind==='kungsfasan'?7:4)+f.phase)*40*dt});
- for(const b of bullets){for(const o of boars){if(!b.dead&&hit({...b,w:9,h:22},o)){b.dead=true;o.hp-=b.dam;boom(b.x,b.y,'#ffd15a',3);if(o.hp<=0&&!o.dead){o.dead=true;score+=o.boss?500:35;kills++;shake=o.boss?.22:.08;boom(o.x,o.y,o.boss?'#C8340A':'#8F1A00',o.boss?30:12)}}}
-   for(const f of birds){if(!b.dead&&f.x>f.w*.4&&f.x<W-f.w*.4&&hit({...b,w:9,h:22},f)){b.dead=true;f.hp-=b.dam;boom(b.x,b.y,'#7fe0ff',3);if(f.hp<=0&&!f.dead){f.dead=true;boom(f.x,f.y,f.kind==='kungsfasan'?'#e8b630':'#1f9e7a',30);if(f.kind==='kungsfasan'){power=Math.min(4,power*2);score+=300;pop('ELDKRAFT ×2!','#b8860b',50)}else{pop('+3 SKYTTAR!','#1f5fd1',50);addCrew(crew+3);score+=200}}}}
-   for(const c of cards){if(!b.dead&&hit({...b,w:9,h:22},c)){b.dead=true;c.hp-=b.dam;boom(b.x,b.y,'#FCC222',3);if(c.hp<=0&&!c.dead){c.dead=true;power=Math.min(4,power+.35);score+=120;boom(c.x,c.y,'#FCC222',25)}}}}
+ for(const b of bullets){for(const o of boars){if(!b.dead&&hit({...b,w:9,h:22},o)){b.dead=true;o.hp-=b.dam;boom(b.x,b.y,'#ffd15a',3);if(o.hp<=0&&!o.dead){o.dead=true;SFX.grunt(o.boss);score+=o.boss?500:35;kills++;shake=o.boss?.22:.08;boom(o.x,o.y,o.boss?'#C8340A':'#8F1A00',o.boss?30:12)}}}
+   for(const f of birds){if(!b.dead&&f.x>f.w*.4&&f.x<W-f.w*.4&&hit({...b,w:9,h:22},f)){b.dead=true;f.hp-=b.dam;boom(b.x,b.y,'#7fe0ff',3);if(f.hp<=0&&!f.dead){f.dead=true;boom(f.x,f.y,f.kind==='kungsfasan'?'#e8b630':'#1f9e7a',30);if(f.kind==='kungsfasan'){SFX.fasan();power=Math.min(4,power*2);score+=300;pop('ELDKRAFT ×2!','#b8860b',50)}else{SFX.peacock();pop('+3 SKYTTAR!','#1f5fd1',50);addCrew(crew+3);score+=200}}}}
+   for(const c of cards){if(!b.dead&&hit({...b,w:9,h:22},c)){b.dead=true;c.hp-=b.dam;boom(b.x,b.y,'#FCC222',3);if(c.hp<=0&&!c.dead){c.dead=true;SFX.power();power=Math.min(4,power+.35);score+=120;boom(c.x,c.y,'#FCC222',25)}}}}
  bullets=bullets.filter(b=>!b.dead);boars=boars.filter(o=>!o.dead&&o.y<H+120);cards=cards.filter(c=>!c.dead&&c.y<H+120);birds=birds.filter(f=>!f.dead&&f.x>-160&&f.x<W+160);popups.forEach(p=>p.life-=dt);popups=popups.filter(p=>p.life>0);gates=gates.filter(g=>g.y<H+120);
- for(const g of gates){if(!g.used&&hit({x:player.x,y:player.y,w:Math.min(360,70+crew*18),h:120},g)){g.used=true;if(g.typ==='plus')addCrew(Math.min(30,crew+1));else addCrew(Math.max(crew+1,crew*2));score+=80;boom(g.x,g.y,'#29a7ff',22)}}gates=gates.filter(g=>!g.used);
+ for(const g of gates){if(!g.used&&hit({x:player.x,y:player.y,w:Math.min(360,70+crew*18),h:120},g)){g.used=true;SFX.gate(g.typ==='x2'?3:1);if(g.typ==='plus')addCrew(Math.min(30,crew+1));else addCrew(Math.max(crew+1,crew*2));score+=80;boom(g.x,g.y,'#29a7ff',22)}}gates=gates.filter(g=>!g.used);
  for(const o of boars){if(o.y>player.y-35){gameOver(false);return}}
  if(kills>=55)gameOver(true);
  particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=260*dt;p.life-=dt});particles=particles.filter(p=>p.life>0);shake=Math.max(0,shake-dt);scoreEl.textContent=score;crewEl.textContent=crew===1?'1 skytt':crew+' skyttar';waveEl.textContent='Våg '+wave;}
-let gameOver=function(win){run=false;over=true;overlay.classList.remove('hide');overlay.querySelector('h1').innerHTML=win?'MEGA<br>FÄLLT':'SVINEN<br>VANN';overlay.querySelector('p:nth-of-type(2)').innerHTML=win?`Blommeröd räddat! Poäng: <b>${score}</b>. Kör igen och se om du kan få större gäng.`:`Megasvinet nådde scenen. Poäng: <b>${score}</b>. Försök få fler +1 och ×2 innan bossen.`;startBtn.textContent='Kör igen'}
+let gameOver=function(win){run=false;over=true;win?SFX.win():SFX.lose();overlay.classList.remove('hide');overlay.querySelector('h1').innerHTML=win?'MEGA<br>FÄLLT':'SVINEN<br>VANN';overlay.querySelector('p:nth-of-type(2)').innerHTML=win?`Blommeröd räddat! Poäng: <b>${score}</b>. Kör igen och se om du kan få större gäng.`:`Megasvinet nådde scenen. Poäng: <b>${score}</b>. Försök få fler +1 och ×2 innan bossen.`;startBtn.textContent='Kör igen'}
 function drawImg(k,x,y,w,h,flip=false){const im=assets[k];ctx.save();ctx.translate(x,y);if(flip)ctx.scale(-1,1);if(im&&im.complete&&im.naturalWidth)ctx.drawImage(im,-w/2,-h/2,w,h);else{ctx.fillStyle=k.includes('boar')?'#5b3420':'#C8340A';ctx.beginPath();ctx.ellipse(0,0,w/2,h/2,0,0,7);ctx.fill()}ctx.restore()}
 function bg(){const grd=ctx.createLinearGradient(0,0,0,H);grd.addColorStop(0,'#73583e');grd.addColorStop(.55,'#5a432d');grd.addColorStop(1,'#2e1d12');ctx.fillStyle=grd;ctx.fillRect(0,0,W,H);ctx.fillStyle='rgba(255,246,220,.08)';for(let y=-80;y<H;y+=120){ctx.fillRect(W/2-210,y,420,80)}ctx.fillStyle='#2b1a11';ctx.fillRect(0,0,80,H);ctx.fillRect(W-80,0,80,H);ctx.fillStyle='#FFF6DC';ctx.globalAlpha=.12;for(let i=0;i<18;i++){ctx.fillRect(80+i*34,0,2,H)}ctx.globalAlpha=1;ctx.fillStyle='#17130f';ctx.fillRect(0,H-92,W,92);ctx.fillStyle='#FCC222';ctx.font='52px Anton';ctx.textAlign='center';ctx.fillText('BLOMMERÖD',W/2,H-25)}
 function draw(){ctx.save();if(shake){ctx.translate(rnd(-8,8)*shake*5,rnd(-8,8)*shake*5)}bg();
@@ -76,7 +116,7 @@ function drawGate(g){ctx.save();ctx.translate(g.x,g.y);const isX=g.typ==='x2';ct
 function roundRect(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);if(fill)ctx.fill();if(stroke)ctx.stroke()}
 function loop(ts){if(!last)last=ts;const dt=Math.min(.033,(ts-last)/1000);last=ts;if(run)update(dt);draw();if(run)requestAnimationFrame(loop)}
 draw();
-if(location.search.includes('debug'))window.__sj={st:()=>({crew,power,score,birds:birds.map(f=>f.kind+':'+Math.round(f.x)+','+Math.round(f.y)),popups:popups.map(p=>p.txt),boars:boars.length}),spawnBird,addCrew,player,god:()=>{gameOver=()=>{}}};
+if(location.search.includes('debug'))window.__sfx=SFX;window.__sj={st:()=>({crew,power,score,birds:birds.map(f=>f.kind+':'+Math.round(f.x)+','+Math.round(f.y)),popups:popups.map(p=>p.txt),boars:boars.length}),spawnBird,addCrew,player,god:()=>{gameOver=()=>{}}};
 })();
 </script>
 </body>
