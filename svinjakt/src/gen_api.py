@@ -17,6 +17,9 @@ JOBS = {
               'A young man: tousled wavy light-brown shoulder-length hair, big wide-eyed excited open-mouth grin, light grey '
               'fuzzy crew-neck sweater, black wristband, euphoric party energy. Full body, standing 3/4 front, holding a '
               'comically oversized hunting rifle pointed upward at 30 degrees (safe cartoon pose). Name: Wille.'),
+    'hund': ('foton/foto8_hund_s.jpg', '1536x1024',
+             'No person. THIS dog: a small black dog (as in the photo) as a loyal sidekick, side view facing right, running happily, '
+             'tongue out, ears flapping, glossy black coat with soft highlights. Name: Lego. Cute and brave.'),
     'peacock': ('foton/foto7_pafagel_s.jpg', '1536x1024',
                 'No person. THIS bird: a proud male Indian PEACOCK in side view facing right, iridescent royal-blue neck and '
                 'breast, fan-shaped crest, white eye stripes, green scaled back, long green train with many blue/bronze '
