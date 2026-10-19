@@ -310,7 +310,7 @@ function build() {
 
   // hylla under (+ konsoler, förenklat)
   if (P.Hylla) {
-    const sh = new THREE.Shape(rrect(-L/2, 0, L/2, D, 2));
+    const sh = new THREE.Shape(filletPts([V2(-L/2, 0), V2(L/2, 0), V2(L/2, D), V2(-L/2, D)], [P.R_vf, P.R_hf, P.R_bak, P.R_bak]));  // samma hörnradier som vasken
     const yH = -P.Skort - P.HyllaAvst - P.HyllaT;
     const m = new THREE.Mesh(extrude(sh, yH, P.HyllaT, Math.min(rk, 5)), stoneMat);
     m.castShadow = m.receiveShadow = true; ground.add(m);
