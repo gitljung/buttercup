@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<title>Stentvättställ – parametrisk 3D-modell</title>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Buttercup">
+<meta property="og:title" content="Stentvättställ – Buttercup.nu">
+<meta property="og:description" content="Justera mått, radier, skål, urtag, blandare och kitkat-kakel bakom. Calacatta, Calacatta Gold eller travertin.">
+<meta property="og:url" content="https://www.buttercup.nu/tvattstall/">
+<meta property="og:image" content="https://www.buttercup.nu/tvattstall/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.buttercup.nu/tvattstall/og.jpg">
+<meta name="description" content="Justera mått, radier, skål, urtag, blandare och kitkat-kakel bakom.">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#FCC222;font-family:"Barlow",-apple-system,Helvetica,Arial,sans-serif;color:#2A1206}
+  canvas{display:block}
+  #info{position:absolute;left:12px;top:50px;background:#FFF6DC;padding:12px 16px;border:3px solid #C8340A;border-radius:20px;
+        font-size:13px;line-height:1.45;max-width:300px;box-shadow:5px 5px 0 #C8340A;z-index:2000000}
+  #info h1{font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;color:#C8340A;font-size:22px;line-height:1;margin:0 0 6px}
+  #info table{border-collapse:collapse;margin-top:4px}
+  #info td{padding:1px 8px 1px 0;vertical-align:top}
+  #info td:first-child{color:#8F1A00}
+  #info .sub{color:#8F1A00;font-size:11px;margin-top:6px;line-height:1.35}
+  #info .warn{color:#C8340A;font-weight:600;font-size:12px;margin-top:4px}
+  .lil-gui{--background-color:#FFF6DC;--text-color:#2A1206;--title-background-color:#C8340A;--title-text-color:#FFF6DC;
+    --widget-color:#f3e3b4;--hover-color:#ecd59a;--focus-color:#e6cc87;--number-color:#8F1A00;--string-color:#8F1A00;
+    --font-family:"Barlow",system-ui,sans-serif;--font-size:12px;--width:300px}
+  .lil-gui.root{border:3px solid #C8340A;border-radius:14px;overflow:hidden;margin-top:44px;max-height:calc(100vh - 56px);overflow-y:auto}
+  .lil-gui.root>.title{font-family:"Barlow Condensed",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+  .dim{background:rgba(255,255,255,.92);padding:2px 6px;border-radius:4px;font-size:12px;font-weight:600;color:#1d1d1d;white-space:nowrap;border:1px solid #c33}
+  .bc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:#C8340A;color:#FFF6DC;font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px;position:fixed;top:0;left:0;right:0;z-index:2000001}
+  .bc-bar a{color:#FFF6DC;text-decoration:none}
+  .bc-bar b{font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.04em;font-size:18px;color:#FCC222}
+  #info .tgl{display:none}
+  @media (max-width:700px){
+    .bc-bar{padding:6px 12px;font-size:12px;gap:8px}
+    .bc-bar span{display:none}
+    .bc-bar b{font-size:15px}
+    #info{position:fixed;top:auto;left:8px;bottom:calc(8px + env(safe-area-inset-bottom));max-width:min(270px,calc(100vw - 16px));
+          padding:8px 12px;font-size:11.5px;line-height:1.35;border-radius:14px;box-shadow:3px 3px 0 #C8340A;cursor:pointer;max-height:45vh;overflow:auto}
+    #info h1{font-size:15px;margin:0 0 3px;padding-right:18px}
+    #info .tgl{display:block;position:absolute;top:6px;right:9px;color:#C8340A;font-weight:700;font-size:13px}
+    #info:not(.open) table,#info:not(.open) .sub,#info:not(.open) .warn{display:none}
+    #info.open .tgl{transform:rotate(180deg)}
+    .lil-gui.root{margin-top:38px;--width:min(280px,calc(100vw - 30px));max-height:calc(100vh - 48px);border-width:2px;border-radius:12px}
+    .lil-gui{--font-size:11px;--widget-height:24px}
+    .dim{font-size:10px;padding:1px 4px}
+  }
+</style>
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/",
+  "lil-gui":"https://cdn.jsdelivr.net/npm/lil-gui@0.19.2/+esm"
+}}
+</script>
+</head>
+<body>
+<div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Pågående projekt · Stentvättställ</span><b>Plan B(lommeröd)</b></div>
+<div id="info"><span class="tgl">▴</span><h1>Stentvättställ</h1><div id="infobody"></div></div>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {CSS2DRenderer, CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
+import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
+import GUI from 'lil-gui';
+
+// ---------- parametrar (mm) ----------
+const DEFAULTS = {
+  preset:'Solna 900',
+  L:900, D:420, H:330, Montage:850,
+  Kant:40, SkalAuto:true, SkalL:820, SkalB:265, SkalDjup:116, Botten:34, BakList:34,
+  SkalCentrerad:true, SkalX:0, SkalDjupCentrerad:false,
+  AvloppD:73, LockD:67,
+  R_vf:80, R_hf:80, R_skal:40, R_kant:5, R_bak:1,
+  Skort:0, SkortT:40, SkortFram:true, SkortV:false, SkortH:false,
+  UrtagV:false, UrtagH:false, UrtagB:60, UrtagD:60, R_urtag:5,
+  BlandareAuto:true, BlandareAntal:1, BlandareBak:85, BlandareKant:320, Pip:150, Finish:'Borstat stål',
+  Hylla:true, HyllaAvst:300, HyllaT:40,
+  Sten:'Calacatta (Hugos foto)', TexSkala:600,
+  Vaggar:'Bak', KakelPa:true, KakelL:145, KakelB:20, Fog:3, Monster:'Stående rak', KakelFarg:'Vit blank', Glasyr:'Blank',
+  FogFarg:'#e8e4da', VaggBredd:1600, VaggHojd:1500, SidLangd:700,
+  Spegel:false, SpegelH:700, RaffladList:false, ListH:120,
+  Matt:true, Golv:true,
+};
+const PRESETS = {
+  'Solna 540':  {L:540, D:420, H:330, Kant:40, SkalAuto:true, SkalB:265, SkalDjup:116, Botten:34, SkalCentrerad:true, R_vf:80, R_hf:80, Skort:0, BlandareAuto:true, BlandareBak:85, Sten:'Calacatta (Hugos foto)', Vaggar:'Bak', UrtagV:false, UrtagH:false, SkalDjupCentrerad:false},
+  'Solna 900':  {L:900, D:420, H:330, Kant:40, SkalAuto:true, SkalB:265, SkalDjup:116, Botten:34, SkalCentrerad:true, R_vf:80, R_hf:80, Skort:0, BlandareAuto:true, BlandareBak:85, Sten:'Calacatta (Hugos foto)', Vaggar:'Bak', UrtagV:false, UrtagH:false, SkalDjupCentrerad:false},
+  'Solna 1260': {L:1260, D:420, H:330, Kant:40, SkalAuto:true, SkalB:265, SkalDjup:116, Botten:34, SkalCentrerad:true, R_vf:80, R_hf:80, Skort:0, BlandareAuto:true, BlandareBak:85, BlandareKant:320, Sten:'Calacatta (Hugos foto)', Vaggar:'Bak', UrtagV:false, UrtagH:false, SkalDjupCentrerad:false},
+  'Gästhuset 550 hörn': {L:550, D:425, H:150, Kant:40, SkalAuto:false, SkalL:400, SkalB:265, SkalDjup:120, Botten:30, SkalCentrerad:false, SkalX:-35, R_vf:80, R_hf:0, Skort:145, SkortT:40, SkortFram:true, SkortV:true, SkortH:false, BlandareAuto:false, BlandareAntal:1, BlandareBak:55, Sten:'Calacatta (Hugos foto)', Vaggar:'Bak + höger', UrtagV:false, UrtagH:false, SkalDjupCentrerad:false, HyllaAvst:260},
+  'SN24-B kommod': {L:1260, D:450, H:130, Kant:40, SkalAuto:false, SkalL:960, SkalB:370, SkalDjup:95, Botten:35, SkalCentrerad:true, SkalDjupCentrerad:true, R_vf:80, R_hf:80, Skort:0, BlandareAuto:false, BlandareAntal:0, Sten:'Travertin ljus', Vaggar:'Bak', UrtagV:false, UrtagH:false, Hylla:false},
+  'SN25-C kommod': {L:518, D:399, H:130, Kant:40, SkalAuto:true, SkalB:250, SkalDjup:95, Botten:35, SkalCentrerad:true, SkalDjupCentrerad:false, R_vf:80, R_hf:80, Skort:0, BlandareAuto:false, BlandareAntal:1, BlandareBak:55, Sten:'Travertin ljus', Vaggar:'Bak', UrtagV:false, UrtagH:false, Hylla:false},
+};
+const STONES = {
+  'Calacatta (Hugos foto)': {tex:'calacatta_verklig.jpg', rho:2.7, rough:0.32},
+  'Calacatta Gold':         {tex:'calacatta_gold_v2.jpg', rho:2.7, rough:0.32},
+  'Travertin ljus':         {tex:'travertin_ljus.jpg', rho:2.5, rough:0.55},
+};
+const TILE_COL = {'Vit blank':'#f3f1ea','Benvit':'#e8dfcb','Salvia':'#a7b49a','Flaskgrön':'#2e5a45','Rosa':'#e6b7aa','Terrakotta':'#bf6648','Koboltblå':'#143c7d','Svart':'#1e1e1e','Grå':'#9b9c98','Gul (Buttercup)':'#fbc021'};
+const FINISH = {'Borstat stål':['#c9cacc',0.38],'Krom':['#e8e9eb',0.08],'Mässing':['#c9a35c',0.3],'Svart matt':['#232323',0.55]};
+
+const P = Object.assign({}, DEFAULTS);
+// share-länk
+try { const m = location.hash.match(/c=([^&]+)/); if (m) Object.assign(P, JSON.parse(decodeURIComponent(escape(atob(m[1].replace(/-/g,'+').replace(/_/g,'/')))))); } catch(e) {}
+
+// ---------- scen ----------
+const renderer = new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+const labels = new CSS2DRenderer();
+labels.setSize(innerWidth, innerHeight);
+Object.assign(labels.domElement.style, {position:'absolute', top:'0', pointerEvents:'none'});
+document.body.appendChild(labels.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#efe9dc');
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.75;
+
+const camera = new THREE.PerspectiveCamera(38, innerWidth/innerHeight, 5, 30000);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+const sun = new THREE.DirectionalLight('#fff4e6', 1.6);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, {left:-1500, right:1500, top:1500, bottom:-1500, near:100, far:8000});
+sun.shadow.bias = -0.0004; sun.shadow.normalBias = 1.5;
+scene.add(sun, sun.target);
+scene.add(new THREE.HemisphereLight('#ffffff', '#d9cdb8', 0.35));
+
+const texLoader = new THREE.TextureLoader();
+const texCache = {};
+function stoneTex(name) {
+  if (!texCache[name]) {
+    const t = texLoader.load(STONES[name].tex, () => { needsBuild = true; });
+    t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace;
+    t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    texCache[name] = t;
+  }
+  const t = texCache[name]; t.repeat.set(1/P.TexSkala, 1/P.TexSkala); return t;
+}
+
+
+// Triplanar-projicering i världskoordinater: ådrorna löper obrutet över rundningar och mellan delar (ingen UV-söm)
+function triplanar(mat) {
+  mat.onBeforeCompile = sh => {
+    sh.uniforms.triScale = {value: 1 / P.TexSkala};
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vTriPos; varying vec3 vTriN;')
+      .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvTriPos = (modelMatrix * vec4(transformed,1.0)).xyz; vTriN = normalize(mat3(modelMatrix) * objectNormal);');
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vTriPos; varying vec3 vTriN; uniform float triScale;')
+      .replace('#include <map_fragment>', `
+        vec3 bw = pow(abs(normalize(vTriN)), vec3(6.0)); bw /= (bw.x + bw.y + bw.z);
+        vec3 q = vTriPos * triScale;
+        vec4 tx = texture2D(map, q.zy + vec2(0.37, 0.11));
+        vec4 ty = texture2D(map, q.xz + vec2(0.71, 0.53));
+        vec4 tz = texture2D(map, q.xy);
+        diffuseColor *= tx * bw.x + ty * bw.y + tz * bw.z;`);
+  };
+  mat.customProgramCacheKey = () => 'tri' + P.TexSkala;
+  return mat;
+}
+
+let root = new THREE.Group(); scene.add(root);
+let needsBuild = true;
+const nb = () => { needsBuild = true; saveHash(); };
+
+// ---------- geometrihjälp ----------
+const V2 = (x, y) => new THREE.Vector2(x, y);
+function filletPts(V, R, seg = 32) {
+  const out = [], n = V.length;
+  for (let i = 0; i < n; i++) {
+    const p = V[i], a = V[(i-1+n)%n], b = V[(i+1)%n];
+    let r = R[i] || 0;
+    const la = a.distanceTo(p), lb = b.distanceTo(p);
+    const da = a.clone().sub(p).normalize(), db = b.clone().sub(p).normalize();
+    const ang = Math.acos(THREE.MathUtils.clamp(da.dot(db), -1, 1));
+    if (r > 0.05) r = Math.min(r, Math.tan(ang/2) * Math.min(la, lb) * 0.499);
+    if (r <= 0.05 || ang > Math.PI - 1e-3) { out.push(p.clone()); continue; }
+    const t = r / Math.tan(ang/2);
+    const p1 = p.clone().addScaledVector(da, t), p2 = p.clone().addScaledVector(db, t);
+    const c = p.clone().addScaledVector(da.clone().add(db).normalize(), r / Math.sin(ang/2));
+    const a1 = Math.atan2(p1.y-c.y, p1.x-c.x); let d = Math.atan2(p2.y-c.y, p2.x-c.x) - a1;
+    while (d > Math.PI) d -= 2*Math.PI; while (d < -Math.PI) d += 2*Math.PI;
+    for (let k = 0; k <= seg; k++) { const an = a1 + d*k/seg; out.push(V2(c.x + r*Math.cos(an), c.y + r*Math.sin(an))); }
+  }
+  return out;
+}
+const rrect = (x0, y0, x1, y1, r) => filletPts([V2(x0,y0), V2(x1,y0), V2(x1,y1), V2(x0,y1)], [r,r,r,r]);
+// extrudera planform (x, y=djup från front) mellan z0..z0+h, uppåt = +Y i three, vägg mot -Z
+function extrude(shape, z0, h, r) {
+  const rr = Math.max(0, Math.min(r, h/2 - 0.5));
+  const g = new THREE.ExtrudeGeometry(shape, {depth: Math.max(h - 2*rr, 0.2), bevelEnabled: rr > 0.05,
+    bevelThickness: rr, bevelSize: rr, bevelOffset: -rr, bevelSegments: 4, curveSegments: 24});
+  g.translate(0, 0, z0 + rr);
+  g.rotateX(-Math.PI/2);
+  return g;
+}
+const polyArea = pts => Math.abs(THREE.ShapeUtils.area(pts));
+
+// ---------- härledda värden ----------
+function derive() {
+  const L = P.L, D = P.D;
+  const bw = P.SkalAuto ? Math.max(60, L - 2*P.Kant) : Math.min(P.SkalL, L - 2*20);
+  const bd = Math.min(P.SkalB, D - P.Kant - 30);
+  let cx = P.SkalCentrerad ? 0 : THREE.MathUtils.clamp(P.SkalX, -L/2 + 20 + bw/2, L/2 - 20 - bw/2);
+  const y0 = P.SkalDjupCentrerad ? (D - bd)/2 : P.Kant;
+  const sd = Math.min(P.SkalDjup, P.H - 15);
+  const bot = P.H - sd;
+  let n = P.BlandareAuto ? (bw >= 1000 ? 2 : 1) : P.BlandareAntal;
+  const deck = D - (y0 + bd);
+  const mx = n === 2 ? [-(L/2 - P.BlandareKant), L/2 - P.BlandareKant] : n === 1 ? [cx] : [];
+  const my = Math.max(D - P.BlandareBak, y0 + bd + 22);
+  return {L, D, bw, bd, cx, y0, y1: y0 + bd, sd, bot, n, mx, my, deck};
+}
+
+// ---------- bygg ----------
+function disposeTree(o) { o.traverse(c => { if (c.geometry) c.geometry.dispose(); if (c.material && !c.material._keep) (Array.isArray(c.material) ? c.material : [c.material]).forEach(m => m.dispose()); }); }
+let lastD;
+function build() {
+  needsBuild = false;
+  disposeTree(root); scene.remove(root);
+  root.traverse(c => { if (c.isCSS2DObject) c.element.remove(); });
+  root = new THREE.Group(); scene.add(root);
+  const d = lastD = derive();
+  const {L, D} = d;
+  const warn = [];
+
+  const st = STONES[P.Sten];
+  const stoneMat = triplanar(new THREE.MeshPhysicalMaterial({map: stoneTex(P.Sten), roughness: st.rough, clearcoat: 0.15, clearcoatRoughness: 0.4, sheen: 0, envMapIntensity: 0.9}));
+
+  // planform med radier och sidourtag i bakhörnen
+  const nb_ = P.UrtagB, nd = Math.min(P.UrtagD, D - 60);
+  const V = [], R = [];
+  V.push(V2(-L/2, 0)); R.push(P.R_vf);
+  V.push(V2(L/2, 0));  R.push(P.R_hf);
+  if (P.UrtagH) { V.push(V2(L/2, D - nd), V2(L/2 - nb_, D - nd), V2(L/2 - nb_, D)); R.push(P.R_kant, P.R_urtag, P.R_bak); }
+  else { V.push(V2(L/2, D)); R.push(P.R_bak); }
+  if (P.UrtagV) { V.push(V2(-L/2 + nb_, D), V2(-L/2 + nb_, D - nd), V2(-L/2, D - nd)); R.push(P.R_bak, P.R_urtag, P.R_kant); }
+  else { V.push(V2(-L/2, D)); R.push(P.R_bak); }
+  const outer = filletPts(V, R);
+  const bowl = rrect(d.cx - d.bw/2, d.y0, d.cx + d.bw/2, d.y1, Math.min(P.R_skal, d.bw/2 - 1, d.bd/2 - 1));
+  if (P.UrtagH && d.cx + d.bw/2 > L/2 - nb_ - 20 && d.y1 > D - nd - 20) warn.push('Sidourtaget skär in i skålen');
+  if (P.UrtagV && d.cx - d.bw/2 < -L/2 + nb_ + 20 && d.y1 > D - nd - 20) warn.push('Sidourtaget skär in i skålen');
+
+  const rk = P.R_kant;
+  const ground = new THREE.Group(); ground.position.y = P.Montage - P.H; root.add(ground);
+  // ihålig undersida: sarg (Kant fram/sidor, BakList bak) + bottenplatta under skålen + kant runt skålen
+  const slab0 = Math.max(0, d.bot - P.Botten);
+  const parts = [];
+  let ringArea = 0;
+  if (slab0 > 2*rk + 2) {
+    const t = P.Kant, tb = P.BakList;
+    const inner = filletPts([V2(-L/2 + t, t), V2(L/2 - t, t), V2(L/2 - t, D - tb), V2(-L/2 + t, D - tb)],
+      [Math.max(P.R_vf - t, 2), Math.max(P.R_hf - t, 2), 1, 1]);
+    const s = new THREE.Shape(outer); s.holes.push(new THREE.Path(inner));
+    parts.push(extrude(s, 0, slab0 + 2*rk + 0.5, rk));
+    ringArea = polyArea(outer) - polyArea(inner);
+  }
+  parts.push(extrude(new THREE.Shape(outer), slab0 > 2*rk + 2 ? slab0 : 0, slab0 > 2*rk + 2 ? d.bot - slab0 : d.bot, rk));
+  const sRim = new THREE.Shape(outer); sRim.holes.push(new THREE.Path(bowl));
+  parts.push(extrude(sRim, d.bot - 2*rk - 0.5, P.H - d.bot + 2*rk + 0.5, rk));
+  parts.forEach(g => { const m = new THREE.Mesh(g, stoneMat); m.castShadow = m.receiveShadow = true; ground.add(m); });
+
+  // skort (sarg) nedåt
+  let skortVol = 0;
+  if (P.Skort > 0) {
+    const t = P.SkortT, back = 3*rk + 2;
+    const ix0 = -L/2 + (P.SkortV ? t : back), ix1 = L/2 - (P.SkortH ? t : back), iy0 = P.SkortFram ? t : back, iy1 = D - back;
+    const inner = filletPts([V2(ix0, iy0), V2(ix1, iy0), V2(ix1, iy1), V2(ix0, iy1)],
+      [Math.max(P.R_vf - t, 2), Math.max(P.R_hf - t, 2), 1, 1]);
+    const s = new THREE.Shape(outer); s.holes.push(new THREE.Path(inner));
+    const m = new THREE.Mesh(extrude(s, -P.Skort, P.Skort + 2*rk + 1, rk), stoneMat);
+    m.castShadow = m.receiveShadow = true; ground.add(m);
+    skortVol = (polyArea(outer) - polyArea(inner)) * P.Skort;
+  }
+
+  // avlopp + stenlock
+  const dark = new THREE.MeshStandardMaterial({color: '#2a2622', roughness: 0.8});
+  const hole = new THREE.Mesh(new THREE.CylinderGeometry(P.AvloppD/2, P.AvloppD/2, 1, 40), dark);
+  hole.position.set(d.cx, d.bot + 0.3, -(d.y0 + d.bd/2)); ground.add(hole);
+  const lid = new THREE.Mesh(new THREE.CylinderGeometry(P.LockD/2 - 1.5, P.LockD/2, 10, 48), stoneMat);
+  lid.position.set(d.cx, d.bot + 5 + 3, -(d.y0 + d.bd/2)); lid.castShadow = true; ground.add(lid);
+
+  // blandare (förenklad VOLA-pip)
+  const [fc, fr] = FINISH[P.Finish];
+  const metal = new THREE.MeshPhysicalMaterial({color: fc, metalness: 1, roughness: fr});
+  for (const x of d.mx) {
+    const g = new THREE.Group();
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(22, 22, 70, 40), metal); body.position.y = 35;
+    const capR = new THREE.Mesh(new THREE.SphereGeometry(22, 32, 12, 0, Math.PI*2, 0, Math.PI/2), metal); capR.position.y = 70; capR.scale.y = 0.2;
+    const sp = new THREE.Mesh(new THREE.CylinderGeometry(8, 8, P.Pip, 24), metal); sp.rotation.x = Math.PI/2; sp.position.set(0, 52, P.Pip/2);
+    const lev = new THREE.Mesh(new THREE.CylinderGeometry(4.5, 4.5, 60, 16), metal); lev.position.set(18, 74, -10); lev.rotation.z = -1.1;
+    [body, capR, sp, lev].forEach(m => { m.castShadow = true; g.add(m); });
+    g.position.set(x, P.H, -d.my); ground.add(g);
+    if (P.Pip + (D - d.my) < (D - d.y1) + 25) warn.push('Pipen når inte ut över skålen');
+  }
+
+  // hylla under (+ konsoler, förenklat)
+  if (P.Hylla) {
+    const sh = new THREE.Shape(rrect(-L/2, 0, L/2, D, 2));
+    const yH = -P.Skort - P.HyllaAvst - P.HyllaT;
+    const m = new THREE.Mesh(extrude(sh, yH, P.HyllaT, Math.min(rk, 5)), stoneMat);
+    m.castShadow = m.receiveShadow = true; ground.add(m);
+    for (const sx of [-1, 1]) {
+      const k = new THREE.Mesh(new THREE.BoxGeometry(12, 40, D - 40), new THREE.MeshStandardMaterial({color: '#555', metalness: .7, roughness: .4}));
+      k.position.set(sx*(L/2 - 100), yH - 20, -D/2 - 20); ground.add(k);
+    }
+  }
+
+  // väggar + kitkat
+  buildWalls(d);
+
+  // golv
+  if (P.Golv) {
+    const fl = new THREE.Mesh(new THREE.PlaneGeometry(6000, 6000), new THREE.MeshStandardMaterial({color: '#cbbfa8', roughness: .85}));
+    fl.rotation.x = -Math.PI/2; fl.receiveShadow = true; root.add(fl);
+  }
+
+  // måttsättning
+  if (P.Matt) {
+    const top = P.Montage, botY = P.Montage - P.H - P.Skort;
+    lab(`${L} mm`, 0, top + 25, 10);
+    lab(`${D} mm`, L/2 + 30, top + 25, -D/2);
+    lab(`${P.H + P.Skort} mm`, -L/2 - 40, (top + botY)/2, 0);
+    lab(`skål ${Math.round(d.bw)}×${Math.round(d.bd)}×${Math.round(d.sd)}`, d.cx, top - d.sd/2, -(d.y0 + d.bd/2));
+  }
+
+  // info
+  const vol = (slab0 > 2*rk + 2 ? ringArea * slab0 + polyArea(outer) * (d.bot - slab0) : polyArea(outer) * d.bot) + (polyArea(outer) - polyArea(bowl)) * (P.H - d.bot) + skortVol;
+  const kg = vol * 1e-6 * st.rho;
+  const hyllaKg = P.Hylla ? L*D*P.HyllaT*1e-6*st.rho : 0;
+  const tiles = tileStats;
+  document.getElementById('infobody').innerHTML = `
+    <table>
+      <tr><td>Mått</td><td><b>${L} × ${D} × ${P.H + P.Skort}</b> mm</td></tr>
+      <tr><td>Skål</td><td>${Math.round(d.bw)} × ${Math.round(d.bd)}, djup ${Math.round(d.sd)}, ${P.SkalCentrerad ? 'centrerad' : 'förskjuten ' + Math.round(d.cx) + ' mm'}</td></tr>
+      <tr><td>Kant runt</td><td>fram ${Math.round(d.y0)} · bak/däck ${Math.round(d.deck)} · sidor ${Math.round(L/2 - d.bw/2 + d.cx)} / ${Math.round(L/2 - d.bw/2 - d.cx)}</td></tr>
+      <tr><td>Radier</td><td>hörn ${P.R_vf}/${P.R_hf} · skål ${P.R_skal} · kant ${P.R_kant}</td></tr>
+      <tr><td>Blandare</td><td>${d.n} st${P.BlandareAuto ? ' (auto)' : ''}</td></tr>
+      <tr><td>Vikt sten</td><td>≈ ${Math.round(kg)} kg${P.Hylla ? ` + hylla ${Math.round(hyllaKg)} kg` : ''}</td></tr>
+      <tr><td>Kakel</td><td>${P.KakelPa ? `${tiles.n} plattor ${P.KakelB}×${P.KakelL} · ${tiles.m2.toFixed(2)} m²` : 'av'}</td></tr>
+    </table>
+    ${warn.map(w => `<div class="warn">⚠ ${w}</div>`).join('')}
+    <div class="sub">Sten: ${P.Sten}. Mått från arkitektritningarna, skålens bottenradie, konsoler och blandare är förenklade. Inget bygghandlingsunderlag.</div>`;
+}
+let tileStats = {n: 0, m2: 0};
+function lab(t, x, y, z) { const e = document.createElement('div'); e.className = 'dim'; e.textContent = t; const o = new CSS2DObject(e); o.position.set(x, y, z); root.add(o); }
+
+function tileWall(w, h) {
+  const g = new THREE.Group();
+  const ver = P.Monster.startsWith('Stående');
+  const tw = ver ? P.KakelB : P.KakelL, th = ver ? P.KakelL : P.KakelB;
+  const px = tw + P.Fog, py = th + P.Fog;
+  const pos = [];
+  const cols = Math.ceil(w / px) + 1, rows = Math.ceil(h / py) + 1;
+  for (let c = 0; c < cols; c++) for (let r = -1; r < rows; r++) {
+    let x = c*px + tw/2, y = r*py + th/2;
+    if (P.Monster === 'Stående förskjuten' && c % 2) y += py/2;
+    if (P.Monster === 'Liggande halvförband' && ((r % 2) + 2) % 2) x -= px/2;
+    // klipp plattor i kanterna (kapade bitar som på riktigt)
+    const xa = Math.max(0, x - tw/2), xb = Math.min(w, x + tw/2), ya = Math.max(0, y - th/2), yb = Math.min(h, y + th/2);
+    if (xb - xa < 4 || yb - ya < 4) continue;
+    pos.push([(xa + xb)/2, (ya + yb)/2, (xb - xa)/tw, (yb - ya)/th]);
+  }
+  const geo = new RoundedBoxGeometry(tw, th, 7, 2, Math.min(1.6, tw/5));
+  const col = new THREE.Color(TILE_COL[P.KakelFarg]);
+  const blank = P.Glasyr === 'Blank';
+  const mat = new THREE.MeshPhysicalMaterial({color: '#ffffff', roughness: blank ? 0.12 : 0.6, clearcoat: blank ? 1 : 0, clearcoatRoughness: 0.08});
+  const im = new THREE.InstancedMesh(geo, mat, pos.length);
+  const m4 = new THREE.Matrix4(), cc = new THREE.Color();
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  pos.forEach(([x, y, sx, sy], i) => {
+    m4.makeScale(sx, sy, 1).setPosition(x, y, 3.5); im.setMatrixAt(i, m4);
+    const j = 0.94 + rnd()*0.1; cc.copy(col).multiplyScalar(j); im.setColorAt(i, cc);
+  });
+  im.receiveShadow = true; g.add(im);
+  const grout = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshStandardMaterial({color: P.FogFarg, roughness: .95}));
+  grout.position.set(w/2, h/2, 1); grout.receiveShadow = true; g.add(grout);
+  tileStats.n += pos.length; tileStats.m2 += w*h*1e-6;
+  return g;
+}
+function plainWall(w, h) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshStandardMaterial({color: '#f1ece2', roughness: .9}));
+  m.position.set(w/2, h/2, 0); m.receiveShadow = true; const g = new THREE.Group(); g.add(m); return g;
+}
+function buildWalls(d) {
+  tileStats = {n: 0, m2: 0};
+  if (P.Vaggar === 'Ingen') return;
+  const {L, D} = d;
+  const right = P.Vaggar.includes('höger'), left = P.Vaggar.includes('vänster');
+  const make = (w, h) => P.KakelPa ? tileWall(w, h) : plainWall(w, h);
+  // bakvägg
+  const x0 = left ? -L/2 : -P.VaggBredd/2, x1 = right ? L/2 : P.VaggBredd/2;
+  const back = make(x1 - x0, P.VaggHojd); back.position.set(x0, 0, -D - 8); root.add(back);
+  if (right) { const s = make(P.SidLangd, P.VaggHojd); s.rotation.y = -Math.PI/2; s.position.set(L/2 + 8, 0, -D - 8); root.add(s); }
+  if (left)  { const s = make(P.SidLangd, P.VaggHojd); s.rotation.y = Math.PI/2; s.position.set(-L/2 - 8, 0, -D - 8 + P.SidLangd); root.add(s); }
+  if (P.RaffladList) {
+    const n = Math.floor((x1 - x0) / 30), g = new THREE.Group();
+    const m = triplanar(new THREE.MeshPhysicalMaterial({map: stoneTex(P.Sten), roughness: .35}));
+    for (let i = 0; i < n; i++) {
+      const c = new THREE.Mesh(new THREE.CylinderGeometry(14, 14, P.ListH, 20, 1, false, -Math.PI/2, Math.PI), m);
+      c.position.set(x0 + 15 + i*30, P.Montage + P.ListH/2, -D - 8 + 1); c.castShadow = true; g.add(c);
+    }
+    root.add(g);
+  }
+  if (P.Spegel) {
+    const yb = P.Montage + (P.RaffladList ? P.ListH : 150);
+    const mir = new THREE.Mesh(new THREE.BoxGeometry(Math.max(L, 400), P.SpegelH, 6), new THREE.MeshPhysicalMaterial({color: '#dfe6e6', metalness: 1, roughness: 0.02}));
+    mir.position.set(0, yb + P.SpegelH/2, -D - 8 + 10); root.add(mir);
+  }
+}
+
+// ---------- vyer ----------
+function tgt() { return new THREE.Vector3(0, P.Montage - P.H/2, -P.D/2); }
+const views = {
+  'Iso':   () => setCam([P.L*0.55 + 450, P.Montage + 1100, 1150 + P.L*0.45], tgt()),
+  'Front': () => setCam([0, P.Montage + 200, 1700 + P.L*0.6], tgt()),
+  'Ovanifrån': () => setCam([0, P.Montage + 1500 + P.L*0.6, -P.D/2 + 30], new THREE.Vector3(0, P.Montage, -P.D/2)),
+  'Hörn vänster': () => setCam([-P.L/2 - 350, P.Montage + 260, 420], new THREE.Vector3(-P.L/2 + 60, P.Montage - P.H/2, -P.D/3)),
+  'Underifrån': () => setCam([P.L*0.5 + 300, P.Montage - P.H - 700, 900], tgt()),
+};
+function setCam(p, t) {
+  const k = Math.max(1, 1.25 / Math.min(camera.aspect, 1.25)) * (innerWidth <= 700 ? 1.05 : 1);  // dra ut på stående skärm
+  const v = new THREE.Vector3(...p).sub(t).multiplyScalar(k).add(t);
+  camera.position.copy(v); controls.target.copy(t); controls.update();
+}
+
+// ---------- GUI ----------
+const gui = new GUI({title: 'Reglage'});
+const add = (f, k, ...a) => f.add(P, k, ...a).onChange(nb);
+const fSnab = gui.addFolder('Snabbval');
+fSnab.add(P, 'preset', Object.keys(PRESETS)).name('Vask').onChange(v => { Object.assign(P, PRESETS[v]); gui.controllersRecursive().forEach(c => c.updateDisplay()); nb(); views.Iso(); });
+const fM = gui.addFolder('Mått');
+add(fM, 'L', 300, 2000, 1).name('Bredd');
+add(fM, 'D', 250, 650, 1).name('Djup');
+add(fM, 'H', 60, 450, 1).name('Höjd sten');
+add(fM, 'Kant', 15, 150, 1).name('Kant fram/sidor');
+add(fM, 'Montage', 600, 1000, 5).name('Överkant från golv');
+const fS = gui.addFolder('Skål & avlopp');
+add(fS, 'SkalAuto').name('Bredd = bredd − 2·kant');
+add(fS, 'SkalL', 100, 1900, 1).name('Skål bredd');
+add(fS, 'SkalB', 100, 550, 1).name('Skål djup (fram–bak)');
+add(fS, 'SkalDjup', 30, 300, 1).name('Skål djup (ned)');
+add(fS, 'SkalCentrerad').name('Centrera i bredd');
+add(fS, 'SkalX', -800, 800, 1).name('Förskjutning X');
+add(fS, 'SkalDjupCentrerad').name('Centrera fram–bak');
+add(fS, 'Botten', 20, 80, 1).name('Bottentjocklek');
+add(fS, 'BakList', 20, 120, 1).name('Bakre list (undersida)');
+add(fS, 'AvloppD', 40, 120, 1).name('Avloppsurtag Ø');
+add(fS, 'LockD', 30, 120, 1).name('Stenlock Ø');
+const fR = gui.addFolder('Radier');
+add(fR, 'R_vf', 0, 250, 1).name('Hörn vänster fram');
+add(fR, 'R_hf', 0, 250, 1).name('Hörn höger fram');
+add(fR, 'R_skal', 0, 150, 1).name('Skålens hörn');
+add(fR, 'R_kant', 0, 15, 0.5).name('Synliga kanter');
+add(fR, 'R_bak', 0, 10, 0.5).name('Mot vägg');
+const fU = gui.addFolder('Sidourtag & skort');
+add(fU, 'UrtagV').name('Urtag bak vänster');
+add(fU, 'UrtagH').name('Urtag bak höger');
+add(fU, 'UrtagB', 10, 400, 1).name('Urtag bredd');
+add(fU, 'UrtagD', 10, 400, 1).name('Urtag djup');
+add(fU, 'R_urtag', 0, 60, 1).name('Urtag innerradie');
+add(fU, 'Skort', 0, 300, 1).name('Skort nedåt (0 = av)');
+add(fU, 'SkortT', 15, 80, 1).name('Skort tjocklek');
+add(fU, 'SkortFram').name('Skort fram');
+add(fU, 'SkortV').name('Skort vänster');
+add(fU, 'SkortH').name('Skort höger');
+const fB = gui.addFolder('Blandare');
+add(fB, 'BlandareAuto').name('Antal auto (2 om skål ≥ 1000)');
+add(fB, 'BlandareAntal', [0, 1, 2]).name('Antal (manuellt)');
+add(fB, 'BlandareBak', 30, 200, 1).name('Från bakkant');
+add(fB, 'BlandareKant', 100, 600, 1).name('Från kortsida (2 st)');
+add(fB, 'Pip', 80, 250, 1).name('Piplängd');
+add(fB, 'Finish', Object.keys(FINISH)).name('Finish');
+const fK = gui.addFolder('Kakel & vägg');
+add(fK, 'Vaggar', ['Bak', 'Bak + höger', 'Bak + vänster', 'Bak + vänster + höger', 'Ingen']).name('Väggar');
+add(fK, 'KakelPa').name('Kitkat-kakel');
+add(fK, 'Monster', ['Stående rak', 'Stående förskjuten', 'Liggande rak', 'Liggande halvförband']).name('Mönster');
+add(fK, 'KakelFarg', Object.keys(TILE_COL)).name('Färg');
+add(fK, 'Glasyr', ['Blank', 'Matt']).name('Glasyr');
+add(fK, 'KakelL', 60, 300, 1).name('Platta längd');
+add(fK, 'KakelB', 10, 75, 1).name('Platta bredd');
+add(fK, 'Fog', 1, 8, 0.5).name('Fog');
+fK.addColor(P, 'FogFarg').name('Fogfärg').onChange(nb);
+add(fK, 'VaggBredd', 600, 3000, 10).name('Väggbredd');
+add(fK, 'VaggHojd', 1000, 2400, 10).name('Kakelhöjd från golv');
+add(fK, 'SidLangd', 300, 1500, 10).name('Sidovägg längd');
+add(fK, 'RaffladList').name('Räfflad stenlist');
+add(fK, 'ListH', 40, 300, 1).name('List höjd');
+add(fK, 'Spegel').name('Spegel');
+add(fK, 'SpegelH', 300, 1200, 10).name('Spegel höjd');
+const fMat = gui.addFolder('Sten & hylla');
+add(fMat, 'Sten', Object.keys(STONES)).name('Sten');
+add(fMat, 'TexSkala', 200, 1500, 10).name('Ådringens skala (mm)');
+add(fMat, 'Hylla').name('Hylla under');
+add(fMat, 'HyllaAvst', 100, 500, 1).name('Fritt till hylla');
+add(fMat, 'HyllaT', 20, 60, 1).name('Hylla tjocklek');
+const fV = gui.addFolder('Visa & vyer');
+add(fV, 'Matt').name('Måttsättning');
+add(fV, 'Golv').name('Golv');
+const vv = {}; Object.keys(views).forEach(k => { vv[k] = views[k]; fV.add(vv, k); });
+const fE = gui.addFolder('Export');
+fE.add({png() { renderer.render(scene, camera); const a = document.createElement('a'); a.download = `tvattstall_${P.L}x${P.D}.png`; a.href = renderer.domElement.toDataURL('image/png'); a.click(); }}, 'png').name('Spara bild (PNG)');
+fE.add({json() { const a = document.createElement('a'); a.download = `tvattstall_${P.L}x${P.D}.json`; a.href = URL.createObjectURL(new Blob([JSON.stringify(P, null, 2)], {type: 'application/json'})); a.click(); }}, 'json').name('Spara inställningar (JSON)');
+fE.add({link() { saveHash(); navigator.clipboard?.writeText(location.href); alert('Länk kopierad:\n' + location.href); }}, 'link').name('Kopiera delningslänk');
+gui.folders.forEach(f => f.close()); fSnab.open(); fM.open();
+gui.onOpenClose(c => { if (c !== gui && !c._closed && innerWidth <= 700) gui.folders.forEach(f => { if (f !== c) f.close(); }); });
+if (innerWidth <= 700) gui.close();
+document.getElementById('info').addEventListener('click', e => e.currentTarget.classList.toggle('open'));
+
+function saveHash() {
+  const diff = {}; for (const k in DEFAULTS) if (P[k] !== DEFAULTS[k]) diff[k] = P[k];
+  const s = Object.keys(diff).length ? '#c=' + btoa(unescape(encodeURIComponent(JSON.stringify(diff)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'') : ' ';
+  history.replaceState(null, '', s === ' ' ? location.pathname : s);
+}
+
+addEventListener('resize', () => { camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); labels.setSize(innerWidth, innerHeight); });
+views.Iso();
+sun.position.set(1200, P.Montage + 2200, 1800); sun.target.position.set(0, P.Montage - 300, -300);
+window.__P = P; window.__rebuild = nb; window.__views = views; window.__three = {THREE, scene, renderer, camera, controls, get root() { return root; }};
+(function loop() {
+  requestAnimationFrame(loop);
+  if (needsBuild) build();
+  controls.update(); renderer.render(scene, camera); labels.render(scene, camera);
+})();
+</script>
+</body>
+</html>

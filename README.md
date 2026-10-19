@@ -11,6 +11,7 @@ Samlingsrepo för allt vi bygger. Statiska sidor, ingen build. Varje projekt lig
 | The Fire Pit (eldstaden) | [`garibaldi/eldstad/`](garibaldi/eldstad/) | Spisväggen som scenfond: vägg/golv/luckor/rökplåt/skorsten, spett + vildsvin, ved eller verktygsvägg, versioner, .md-export för Fusion. Kort på startsidan + knapp från stallet, noindex. Källa `~/code/garibaldi/eldstad/eldstad_3d.html` → `make_buttercup.py` |
 | Shtickercat profil | [`stickercat/`](stickercat/) | StickerApp-maskotens grafiska profil, alla katter (PNG/SVG) och ChatGPT-promptar. **Olänkad**, noindex |
 | Bågväxthus 4 × 10 m | [`vaxthus/`](vaxthus/) | Bågväxthus med byggsteg, gavelsektion och inköpslista |
+| Stentvättställ | [`tvattstall/`](tvattstall/) | Parametrisk three.js-modell av marmor-/travertinvaskar med kitkat-kakel |
 | Hönshus i 3D | [`honshus/`](honshus/) | Parametrisk three.js-modell av ett hönshus med kompostgrop |
 | Yamay utekök | [`utekok/`](utekok/) | Parametrisk köksö: bockad cortenstomme, ek TP1 i liv med 6 mm rostfri topp, rostfria luckor, wok i mitten, kapplista. Källa: ~/code/yamay_utekok (`make_buttercup.py`) |
 | Foderautomat | [`foderautomat/`](foderautomat/) | Blommeröd foderautomat 200 L med skruvmatning (Hugos Claude-export), dosering + inköpslista. Källa: ~/code/foderautomat (`make_buttercup.py`) |
