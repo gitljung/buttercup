@@ -22,7 +22,7 @@
 html,body{margin:0;height:100%;font-family:-apple-system,"Helvetica Neue",Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);overflow:hidden}
 #app{display:flex;height:100%}
 #stage{flex:1;position:relative;touch-action:none}
-svg#plan{width:100%;height:100%;display:block;user-select:none;-webkit-user-select:none}
+svg#plan{width:100%;height:100%;display:block;touch-action:none;user-select:none;-webkit-user-select:none}
 #side{width:310px;background:var(--panel);border-left:1px solid #ddd6c8;display:flex;flex-direction:column;overflow:auto}
 #side h1{font-size:17px;margin:14px 14px 2px;letter-spacing:.02em}
 #side .sub{font-size:12px;color:var(--mut);margin:0 14px 10px}
@@ -46,7 +46,19 @@ input[type=number]{width:78px}
 #rumlista span.n:hover{text-decoration:underline}
 #rumlista .r{text-align:right;font-variant-numeric:tabular-nums;color:var(--mut)}
 #zoom{position:absolute;left:10px;bottom:10px;display:flex;gap:6px}
-#toast{position:absolute;left:50%;top:12px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:7px 12px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90%}
+#zoom button{font-size:20px;min-width:46px;height:44px;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+#bar{position:absolute;left:50%;top:10px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;background:rgba(255,253,248,.95);border:1px solid #ddd6c8;border-radius:12px;padding:5px 6px;box-shadow:0 2px 8px rgba(0,0,0,.10);max-width:calc(100% - 20px)}
+#bar button{font-size:18px;font-weight:700;width:40px;height:38px;padding:0}
+#bar .nm{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:46vw;padding:0 4px;text-align:center}
+#bar .nm small{display:block;font-weight:400;color:var(--mut);font-size:11px}
+#bar .dirty{color:var(--sel)}
+#thumbs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.th{flex:0 0 auto;width:92px;border:2px solid #e4dccb;border-radius:8px;background:#fff;cursor:pointer;padding:4px;font-size:11px;line-height:1.2}
+.th.cur{border-color:var(--sel)}
+.th svg{width:100%;height:56px;display:block}
+.th span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.th i{color:var(--mut);font-style:normal}
+#toast{position:absolute;left:50%;bottom:66px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:7px 12px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90%}
 #toast.show{opacity:.92}
 .rlabel{pointer-events:none;font-family:-apple-system,Helvetica,Arial,sans-serif}
 @media (max-width:760px){
@@ -60,12 +72,26 @@ input[type=number]{width:78px}
 <div id="app">
   <div id="stage">
     <svg id="plan" xmlns="http://www.w3.org/2000/svg"></svg>
-    <div id="zoom"><button id="zin">＋</button><button id="zout">－</button><button id="zfit">Hela</button></div>
+    <div id="bar"><button id="fPrev" title="Föregående förslag">‹</button><div class="nm" id="fName"></div><button id="fNext" title="Nästa förslag">›</button><button id="fSave" title="Spara" style="width:auto;padding:0 10px;font-size:14px">Spara</button></div>
+    <div id="zoom"><button id="zin" title="Zooma in">＋</button><button id="zout" title="Zooma ut">－</button><button id="zfit" style="font-size:14px">Hela</button></div>
     <div id="toast"></div>
   </div>
   <div id="side">
     <h1>A101 · planlösning</h1>
     <div class="sub">Utgår från alternativ L2. Allt i mm, rutnät 10 cm.</div>
+
+    <div class="box">
+      <h2>Förslag</h2>
+      <div id="thumbs"></div>
+      <div class="row">
+        <button id="fSave2">💾 Spara</button>
+        <button id="fSaveAs">Spara som nytt</button>
+        <button id="fRename">Byt namn</button>
+        <button id="fDel">Ta bort</button>
+      </div>
+      <div class="row"><button id="fPreset">↺ Tillbaka till preset (L2)</button></div>
+      <div class="hint">Förslagen sparas i den här webbläsaren. Vill du flytta dem mellan mobil och dator: ”Spara fil” / ”Öppna fil” längst ner.</div>
+    </div>
 
     <div class="box">
       <h2>Huset</h2>
@@ -84,6 +110,8 @@ input[type=number]{width:78px}
     <div class="box">
       <h2>Lägg till</h2>
       <div class="pal" id="pal"></div>
+      <div class="hint" style="margin:10px 0 4px">Dörrar &amp; fönster (dra längs väggarna)</div>
+      <div class="pal" id="palOp"></div>
       <div class="row" style="margin-top:8px"><button id="nyttrum">＋ Nytt rum</button></div>
     </div>
 
@@ -102,12 +130,11 @@ input[type=number]{width:78px}
       <div class="row">
         <button id="undo">↶ Ångra</button>
         <button id="redo">↷ Gör om</button>
-        <button id="reset">Återställ L2</button>
       </div>
       <div class="row">
         <button id="expSvg">SVG</button>
         <button id="expPng">PNG</button>
-        <button id="expJson">Spara fil</button>
+        <button id="expJson">Spara fil (alla förslag)</button>
         <button id="impJson">Öppna fil</button>
         <input type="file" id="fil" accept=".json" hidden>
       </div>
@@ -180,6 +207,40 @@ const START_FURN = [
   ['sang90',7520,20630,900,2000,0],['garderob',9240,17910,1500,600,270],['skrivbord',9240,20630,1200,600,270],
 ];
 
+// L2-öppningar i världskoordinater: namn, typ, x0,y0,x1,y1  (D=ytterdörr/glas, F=fönster, I=innerdörr, O=öppning)
+const L2_OPS = [
+ ['Entrédörr','D',16700,5180,17700,5590],['Entré sidoljus','F',16380,6000,16790,7600],['Kök väster','F',16380,8400,16790,9900],
+ ['Wc','F',20000,4180,20700,4590],['Tvätt','F',23000,6800,23410,7700],['Grovkök','F',23000,8600,23410,9700],
+ ['Kök över bänk','F',23420,11000,23830,12600],['Kök bakom soffa','F',23420,13300,23830,15200],
+ ['Glasparti kök 1','D',15180,10950,15590,13000],['Glasparti kök 2','D',15180,13100,15590,15100],
+ ['Glasparti vardagsrum','D',20610,16400,21020,19100],['Vardagsrum öster','F',20610,19200,21020,21400],['Vardagsrum norr','F',15600,21610,16150,22020],
+ ['Glasparti galleri 1','D',5000,15280,9900,15690],['Glasparti galleri 2','D',10000,15280,14900,15690],
+ ['Barnrum 1','F',13350,21610,14550,22020],['Barnrum 2','F',10450,21610,11650,22020],['Barnrum 3','F',7550,21610,8750,22020],
+ ['Bad 2','F',5300,21010,6100,21420],['Master-bad','F',800,21610,1600,22020],['Glasdörr master','D',1200,15260,3800,15670],['Master väster','F',0,16200,390,17400],
+ ['Dörr wc','I',19300,5400,19500,6200],['Dörr tvätt','I',19300,6900,19500,7800],['Dörr KLK','I',21900,6300,22800,6500],
+ ['Dörr tvätt-grovkök','I',20000,7900,20900,8100],['Dörr grovkök-kök','I',19300,8700,19500,9600],
+ ['Dörr barnrum 1','I',12900,16600,13800,16800],['Dörr barnrum 2','I',10000,16600,10900,16800],['Dörr barnrum 3','I',7100,16600,8000,16800],
+ ['Dörr bad 2','I',5200,16600,6000,16800],['Dörr master','I',4600,15700,4800,16500],['Dörr klädrum','I',3000,18200,3900,18400],['Dörr master-bad','I',2300,18600,2500,19400],
+];
+const OPT = {dorr:{n:'Innerdörr',len:900}, ytterdorr:{n:'Ytterdörr',len:1000}, skjut:{n:'Skjutdörr',len:1200}, fonster:{n:'Fönster',len:1200}, glas:{n:'Glasparti',len:3000}, oppning:{n:'Öppning',len:1500}};
+const PALOP = ['dorr','ytterdorr','skjut','fonster','glas','oppning'];
+function opsFromWorld(rooms){
+  const out=[]; let i=0;
+  for(const [nm,ty,x0,y0,x1,y1] of L2_OPS){
+    const vert=(x1-x0)<(y1-y0); const c=vert?(x0+x1)/2:(y0+y1)/2; const a0=vert?y0:x0, a1=vert?y1:x1;
+    const cand=[];
+    for(const r of rooms){
+      const sides = vert ? [['W',r.x0,r.y0,r.y1],['E',r.x1,r.y0,r.y1]] : [['S',r.y0,r.x0,r.x1],['N',r.y1,r.x0,r.x1]];
+      for(const [sd,e,b0,b1] of sides) if(Math.abs(e-c)<300 && ov(a0,a1,b0,b1)>=(a1-a0)*0.6) cand.push({r,sd,b0});
+    }
+    if(!cand.length) continue;
+    cand.sort((p,q)=>(p.r.c==='kom')-(q.r.c==='kom'));
+    const k=cand[0]; const len=a1-a0;
+    const t = ty==='F'?'fonster' : ty==='I'?'dorr' : ty==='O'?'oppning' : (len>1500?'glas':'ytterdorr');
+    out.push({id:'o'+(i++),t,room:k.r.id,side:k.sd,off:Math.round(a0-k.b0),len,flip:false,out:false});
+  }
+  return out;
+}
 function startState(){
   return {
     rooms: START_ROOMS.map((r,i)=>({id:'r'+i,name:r[0],c:r[1],x0:r[2],y0:r[3],x1:r[4],y1:r[5]})),
@@ -187,11 +248,16 @@ function startState(){
     seq: 100
   };
 }
-const KEY='a101_interaktiv_v1';
-let S = (()=>{ try{ const s=JSON.parse(localStorage.getItem(KEY)); if(s&&s.rooms) return s; }catch(e){} return startState(); })();
+function startStateFull(){ const s=startState(); s.ops=opsFromWorld(s.rooms); return s; }
+const KEY='a101_arbete_v2', PKEY='a101_forslag_v1';
+let FL = (()=>{ try{ const x=JSON.parse(localStorage.getItem(PKEY)); if(x&&Array.isArray(x.list)) return x; }catch(e){} return {list:[], n:1}; })();
+let W0 = (()=>{ try{ const x=JSON.parse(localStorage.getItem(KEY)); if(x&&x.S&&x.S.rooms) return x; }catch(e){} return null; })();
+let S = W0 ? W0.S : null;
+let CUR = W0 ? W0.cur : 'preset', DIRTY = W0 ? !!W0.dirty : false;
+if(S&&!S.ops) S.ops=[];
 let undoS=[], redoS=[];
-function snap(){ undoS.push(JSON.stringify(S)); if(undoS.length>200) undoS.shift(); redoS=[]; }
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function snap(){ undoS.push(JSON.stringify(S)); if(undoS.length>200) undoS.shift(); redoS=[]; DIRTY=true; }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify({S,cur:CUR,dirty:DIRTY})); localStorage.setItem(PKEY, JSON.stringify(FL)); }catch(e){} }
 
 let sel = null;          // {k:'room'|'furn', id}
 let axis = 'x';           // för +/-
@@ -294,6 +360,71 @@ function drawFurn(g, f){
   }
 }
 
+// ------------------------------------------------------------------ öppningar
+function edgeOf(r,side){ // origin längs, längd
+  return (side==='W'||side==='E') ? {a0:r.y0, L:r.y1-r.y0} : {a0:r.x0, L:r.x1-r.x0};
+}
+function W2(r,side,a,n){ // längs a, normal n (positiv = in i rummet) -> världspunkt
+  if(side==='W') return [r.x0+n, a]; if(side==='E') return [r.x1-n, a];
+  if(side==='S') return [a, r.y0+n]; return [a, r.y1-n];
+}
+function opGeom(o,r){
+  const e=edgeOf(r,o.side); const len=Math.min(o.len, e.L-100); const off=Math.max(50,Math.min(o.off, e.L-len-50));
+  const ext=sideExterior(r,o.side); const n0=ext?-15:-75, n1=ext?385:75;
+  return {a:e.a0+off, b:e.a0+off+len, len, n0, n1, ext};
+}
+function drawOp(parent,o,r){
+  const G=opGeom(o,r); const P=(a,n)=>{ const w=W2(r,o.side,a,n); return w[0]+','+(-w[1]); };
+  const poly=(pts,attr)=>el('polygon',Object.assign({points:pts.join(' ')},attr),g);
+  const isSel = sel&&sel.k==='op'&&sel.id===o.id;
+  const g=el('g',{'data-op':o.id,style:'cursor:grab'},parent);
+  // träffyta
+  poly([P(G.a-150,G.n0-250),P(G.b+150,G.n0-250),P(G.b+150,G.n1+250),P(G.a-150,G.n1+250)],{fill:'transparent'});
+  const band=[P(G.a,G.n0),P(G.b,G.n0),P(G.b,G.n1),P(G.a,G.n1)];
+  const BLUE='#2a7fb8';
+  if(o.t==='fonster'||o.t==='glas'){
+    poly(band,{fill:o.t==='glas'?'#d3ebf8':'#fff',stroke:BLUE,'stroke-width':18});
+    const mids = o.t==='glas' ? [0.5] : [0.38,0.62];
+    for(const m of mids){ const n=G.n0+(G.n1-G.n0)*m; el('line',{x1:P(G.a,n).split(',')[0],y1:P(G.a,n).split(',')[1],x2:P(G.b,n).split(',')[0],y2:P(G.b,n).split(',')[1],stroke:BLUE,'stroke-width':o.t==='glas'?30:16},g); }
+    if(o.t==='glas'){ const k=Math.max(1,Math.round(G.len/1500)); for(let i=1;i<k;i++){ const a=G.a+G.len*i/k; el('line',{x1:P(a,G.n0).split(',')[0],y1:P(a,G.n0).split(',')[1],x2:P(a,G.n1).split(',')[0],y2:P(a,G.n1).split(',')[1],stroke:BLUE,'stroke-width':30},g);} }
+  } else {
+    poly(band,{fill:'#fbf8f1',stroke:'none'});
+    const jam=(a)=>el('line',{x1:P(a,G.n0).split(',')[0],y1:P(a,G.n0).split(',')[1],x2:P(a,G.n1).split(',')[0],y2:P(a,G.n1).split(',')[1],stroke:'#2b2b2b','stroke-width':40},g);
+    jam(G.a); jam(G.b);
+    if(o.t==='dorr'||o.t==='ytterdorr'){
+      const dir = o.out?-1:1; const nf = o.out?G.n0:G.n1; const hinge = o.flip?G.b:G.a, free=o.flip?G.a:G.b;
+      const L=G.len; const pts=[];
+      for(let i=0;i<=16;i++){ const t=i/16*Math.PI/2; const a=hinge+(free-hinge)*Math.cos(t); const n=nf+dir*L*Math.sin(t); pts.push(P(a,n)); }
+      el('polyline',{points:pts.join(' '),fill:'none',stroke:'#777','stroke-width':14,'stroke-dasharray':'60 40'},g);
+      const h=P(hinge,nf).split(','), e=P(hinge,nf+dir*L).split(',');
+      el('line',{x1:h[0],y1:h[1],x2:e[0],y2:e[1],stroke:'#2b2b2b','stroke-width':o.t==='ytterdorr'?55:35},g);
+    } else if(o.t==='skjut'){
+      const nm=(G.n0+G.n1)/2; const s1=P(G.a,nm).split(','), s2=P(G.a+G.len*0.55,nm).split(','), t1=P(G.b-G.len*0.55,nm+(G.n1-G.n0)*0.25).split(','), t2=P(G.b,nm+(G.n1-G.n0)*0.25).split(',');
+      el('line',{x1:s1[0],y1:s1[1],x2:s2[0],y2:s2[1],stroke:'#2b2b2b','stroke-width':40},g);
+      el('line',{x1:t1[0],y1:t1[1],x2:t2[0],y2:t2[1],stroke:'#2b2b2b','stroke-width':40},g);
+    } else { // öppning
+      const a1=P(G.a,G.n0).split(','), b1=P(G.b,G.n0).split(','), a2=P(G.a,G.n1).split(','), b2=P(G.b,G.n1).split(',');
+      el('line',{x1:a1[0],y1:a1[1],x2:b1[0],y2:b1[1],stroke:'#999','stroke-width':14,'stroke-dasharray':'80 60'},g);
+      el('line',{x1:a2[0],y1:a2[1],x2:b2[0],y2:b2[1],stroke:'#999','stroke-width':14,'stroke-dasharray':'80 60'},g);
+    }
+  }
+  if(isSel) poly([P(G.a-80,G.n0-120),P(G.b+80,G.n0-120),P(G.b+80,G.n1+120),P(G.a-80,G.n1+120)],{fill:'none',stroke:'#c8321a','stroke-width':40,'stroke-dasharray':'110 70'});
+}
+function nearestEdge(x,y,len){
+  let best=null;
+  for(const r of S.rooms) for(const side of ['W','E','S','N']){
+    const e=edgeOf(r,side); if(e.L < len+200) continue;
+    const along = (side==='W'||side==='E') ? y : x; const c = side==='W'?r.x0: side==='E'?r.x1: side==='S'?r.y0: r.y1;
+    const perp = (side==='W'||side==='E') ? x : y;
+    const a=Math.max(e.a0,Math.min(e.a0+e.L,along)); const d=Math.hypot(perp-c, along-a);
+    // föredra rummet man står i (inåt-sidan)
+    const inward = (side==='W'&&x>=c)||(side==='E'&&x<=c)||(side==='S'&&y>=c)||(side==='N'&&y<=c);
+    const score=d+(inward?0:150);
+    if(!best||score<best.score) best={r,side,score,along,e};
+  }
+  return best;
+}
+
 // ------------------------------------------------------------------ render
 function render(){
   svg.innerHTML='';
@@ -319,6 +450,9 @@ function render(){
     if(bad.has(r.id)) el('rect',{x:r.x0,y:-r.y1,width:r.x1-r.x0,height:r.y1-r.y0,fill:'rgba(200,50,26,.18)',stroke:'#c8321a','stroke-width':40,'stroke-dasharray':'160 100'},g);
     if(band && band.list.includes(r) && r.id!==sel.id) el('rect',{x:r.x0+40,y:-r.y1+40,width:r.x1-r.x0-80,height:r.y1-r.y0-80,fill:'none',stroke:'#fbc021','stroke-width':60,'stroke-dasharray':'120 90'},g);
   }
+  // dörrar & fönster
+  const ol=el('g',{},root);
+  for(const o of S.ops){ const r=S.rooms.find(q=>q.id===o.room); if(r) drawOp(ol,o,r); }
   // möbler
   if(view.show.mob){
     const fl=el('g',{},root);
@@ -362,6 +496,7 @@ function render(){
   for(let i=0;i<5;i++) el('rect',{x:sx+i*1000,y:sy,width:1000,height:120,fill:i%2?'#fff':'#1d1d1b',stroke:'#1d1d1b','stroke-width':20},root);
   const st=el('text',{x:sx+5200,y:sy+120,'font-size':300,class:'rlabel'},root); st.textContent='5 m';
   updateSide(ovs);
+  updateForslag();
   save();
 }
 const fmt=(v,d)=>v.toFixed(d).replace('.',',');
@@ -418,8 +553,23 @@ function updateSide(ovs){
     document.getElementById('minus').onclick=()=>resize(r,-STEP);
     document.getElementById('axX').onclick=()=>{axis='x'; render();};
     document.getElementById('axY').onclick=()=>{axis='y'; render();};
-    document.getElementById('rdel').onclick=()=>{snap(); S.rooms=S.rooms.filter(q=>q!==r); sel=null; render();};
+    document.getElementById('rdel').onclick=()=>{snap(); S.rooms=S.rooms.filter(q=>q!==r); S.ops=S.ops.filter(o=>o.room!==r.id); sel=null; render();};
     document.getElementById('rdup').onclick=()=>{snap(); const n=Object.assign({},r,{id:'r'+(S.seq++),name:r.name+' (kopia)',x0:r.x0+600,x1:r.x1+600,y0:r.y0-600,y1:r.y1-600}); S.rooms.push(n); sel={k:'room',id:n.id}; render();};
+  } else if(sel.k==='op'){
+    const o=S.ops.find(q=>q.id===sel.id); if(!o){sel=null; return updateSide(ovs);}
+    const r=S.rooms.find(q=>q.id===o.room);
+    si.innerHTML=`<b>${OPT[o.t].n}</b> <span class="hint">i ${r?r.name:'?'} (${({W:'västra',E:'östra',S:'södra',N:'norra'})[o.side]} väggen${r&&sideExterior(r,o.side)?', fasad':''})</span>
+      <div class="row"><select id="otyp" style="font:inherit;font-size:13px;padding:5px;border-radius:6px;border:1px solid #cfc6b4">${PALOP.map(k=>`<option value="${k}" ${o.t===k?'selected':''}>${OPT[k].n}</option>`).join('')}</select>
+      Bredd <input type="number" id="olen" step="100" value="${o.len}"></div>
+      <div class="row">${(o.t==='dorr'||o.t==='ytterdorr')?'<button id="oflip">⇆ Byt gångjärn</button><button id="oout">⇅ Slå åt andra hållet</button>':''}
+      <button id="odup">Kopiera</button><button id="odel">Ta bort</button></div>
+      <div class="hint">Dra dörren/fönstret längs väggen eller över till en annan vägg. Mått i mm.</div>`;
+    document.getElementById('otyp').onchange=e=>{snap(); o.t=e.target.value; render();};
+    document.getElementById('olen').onchange=e=>{snap(); o.len=Math.max(400,+e.target.value||o.len); render();};
+    if(document.getElementById('oflip')){ document.getElementById('oflip').onclick=()=>{snap(); o.flip=!o.flip; render();};
+      document.getElementById('oout').onclick=()=>{snap(); o.out=!o.out; render();}; }
+    document.getElementById('odel').onclick=()=>{snap(); S.ops=S.ops.filter(q=>q!==o); sel=null; render();};
+    document.getElementById('odup').onclick=()=>{snap(); const n=Object.assign({},o,{id:'o'+(S.seq++),off:o.off+o.len+300}); S.ops.push(n); sel={k:'op',id:n.id}; render();};
   } else {
     const f=S.furn.find(q=>q.id===sel.id); if(!f){sel=null; return updateSide(ovs);}
     si.innerHTML=`<b>${TYPES[f.t]?.n||f.t}</b>
@@ -464,7 +614,11 @@ function resize(r, d){
   if(list.length===1){
     // ingen rad: väx åt båda håll (halva per sida, utåt)
     const w=r[a1]-r[a0]; if(w+d<MIN) return toast('Rummet kan inte bli mindre');
-    const h=d/2; r[a0]=g10(r[a0]-h); r[a1]=r[a0]+g10(w+d);
+    // väx/krymp åt fasadsidan så att inget krockar
+    const sA = axis==='x' ? 'W':'S', sB = axis==='x' ? 'E':'N';
+    const eA=sideExterior(r,sA), eB=sideExterior(r,sB);
+    if(eB && !eA) r[a1]=g10(r[a1]+d); else if(eA && !eB) r[a0]=g10(r[a0]-d);
+    else { const h=g10(d/2); r[a0]=r[a0]-h; r[a1]=r[a0]+g10(w+d); }
     moveFurnWithRoom(r, JSON.parse(before).find(q=>q.id===r.id));
     render(); return toast(d>0?'Rummet växte utåt – fasaden flyttades':'Rummet krympte – fasaden flyttades');
   }
@@ -503,11 +657,12 @@ function moveFurnWithRoom(r, old){
 // ------------------------------------------------------------------ interaktion
 let drag=null;
 svg.addEventListener('pointerdown', e=>{
-  if(pointers.size>=1){ pointers.set(e.pointerId,{x:e.clientX,y:e.clientY}); drag=null; return; }
+  if(pointers.size>=1){ pointers.set(e.pointerId,{x:e.clientX,y:e.clientY}); if(drag&&drag.snap&&drag.moved){ S=JSON.parse(drag.snap); } drag=null; showTip(null); render(); return; }
   pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
   const p=pt(e); const t=e.target;
   const edge=t.getAttribute && t.getAttribute('data-edge');
   const fg=t.closest && t.closest('[data-furn]');
+  const og=t.closest && t.closest('[data-op]');
   const rg=t.closest && t.closest('[data-room]');
   svg.setPointerCapture(e.pointerId);
   if(edge){
@@ -517,6 +672,10 @@ svg.addEventListener('pointerdown', e=>{
     const [b0,b1] = isX?['y0','y1']:['x0','x1'];
     const linked = S.rooms.filter(q=>q!==r && Math.abs(q[opp]-c)<1 && ov(q[b0],q[b1],r[b0],r[b1])>0);
     drag={k:'edge',r,key,opp,isX,c,linked,p0:p,snap:JSON.stringify(S),old:JSON.parse(JSON.stringify(S.rooms))};
+  } else if(og){
+    const o=S.ops.find(q=>q.id===og.getAttribute('data-op'));
+    sel={k:'op',id:o.id}; drag={k:'op',o,p0:p,snap:JSON.stringify(S),moved:false};
+    render();
   } else if(fg && view.show.mob){
     const f=S.furn.find(q=>q.id===fg.getAttribute('data-furn'));
     sel={k:'furn',id:f.id}; drag={k:'furn',f,p0:p,o:{cx:f.cx,cy:f.cy},snap:JSON.stringify(S),moved:false};
@@ -549,6 +708,10 @@ svg.addEventListener('pointermove', e=>{
     render();
     if(drag.target){ const t=drag.target; el('rect',{x:t.x0,y:-t.y1,width:t.x1-t.x0,height:t.y1-t.y0,fill:'rgba(251,192,33,.35)',stroke:'#fbc021','stroke-width':80,'pointer-events':'none'},svg); showTip(`Släpp = byt plats med ${t.name}`); }
     else showTip(null);
+  } else if(drag.k==='op'){
+    const o=drag.o; const ne=nearestEdge(p.x,p.y,Math.min(o.len,1500));
+    if(ne){ o.room=ne.r.id; o.side=ne.side; o.off=Math.round((ne.along-ne.e.a0-o.len/2)/50)*50; o.off=Math.max(50,Math.min(o.off,ne.e.L-o.len-50)); }
+    render(); if(ne) showTip(`${OPT[o.t].n} · ${ne.r.name}, ${({W:'västra',E:'östra',S:'södra',N:'norra'})[ne.side]} väggen`);
   } else if(drag.k==='furn'){
     drag.f.cx=Math.round((drag.o.cx+dx)/50)*50; drag.f.cy=Math.round((drag.o.cy+dy)/50)*50; render();
   } else if(drag.k==='edge'){
@@ -572,7 +735,7 @@ function endDrag(e){
   const d=drag; drag=null; showTip(null);
   if(d.k==='pan') return;
   if(!d.moved) return;
-  undoS.push(d.snap); redoS=[];
+  undoS.push(d.snap); redoS=[]; DIRTY=true;
   if(d.k==='room' && d.target){
     // byt plats: rummen byter rektanglar, möblerna följer med
     const a=d.r, t=d.target;
@@ -588,6 +751,7 @@ function endDrag(e){
     for(const m of d.furn) remap(m.f,m.cx,m.cy,A,T);
     for(const f of tf) remap(f,f.cx,f.cy,T,A);
     Object.assign(a,T); Object.assign(t,A);
+    for(const o of S.ops){ if(o.room===a.id) o.room=t.id; else if(o.room===t.id) o.room=a.id; } // dörrar/fönster stannar i väggen
     toast(`${a.name} och ${t.name} bytte plats`);
   }
   if(d.k==='edge'){ /* klart */ }
@@ -595,6 +759,7 @@ function endDrag(e){
 }
 svg.addEventListener('pointerup', endDrag); svg.addEventListener('pointercancel', endDrag);
 // zoom
+svg.addEventListener('dblclick', e=>{ const t=e.target; if(t.closest&&(t.closest('[data-room]')||t.closest('[data-furn]')||t.closest('[data-op]'))) return; const p=pt(e); zoomAt(p.x,-p.y,0.6); });
 svg.addEventListener('wheel', e=>{ e.preventDefault(); const p=pt(e); const k=Math.exp(e.deltaY*0.0015); zoomAt(p.x,-p.y,k); },{passive:false});
 function zoomAt(x,y,k){ vb.x=x-(x-vb.x)*k; vb.y=y-(y-vb.y)*k; vb.w*=k; vb.h*=k; setVB(); render(); }
 const pointers=new Map(); let pinch0=null;
@@ -615,16 +780,16 @@ document.addEventListener('keydown', e=>{
   if(sel.k==='furn'){ const f=S.furn.find(q=>q.id===sel.id);
     if(e.key==='r'||e.key==='R'){ snap(); f.rot=(f.rot+90)%360; render(); }
     if(e.key==='Delete'||e.key==='Backspace'){ snap(); S.furn=S.furn.filter(q=>q!==f); sel=null; render(); } }
+  if(sel.k==='op' && (e.key==='Delete'||e.key==='Backspace')){ snap(); S.ops=S.ops.filter(q=>q.id!==sel.id); sel=null; render(); return; }
   if(sel.k==='room'){ const r=S.rooms.find(q=>q.id===sel.id);
     if(e.key==='+'||e.key==='=') resize(r,STEP); if(e.key==='-') resize(r,-STEP); }
   if(e.key==='Escape'){ sel=null; render(); }
 });
 
 // ------------------------------------------------------------------ verktyg
-function undo(){ if(!undoS.length) return toast('Inget att ångra'); redoS.push(JSON.stringify(S)); S=JSON.parse(undoS.pop()); sel=null; render(); }
+function undo(){ if(!undoS.length) return toast('Inget att ångra'); redoS.push(JSON.stringify(S)); S=JSON.parse(undoS.pop()); DIRTY=true; sel=null; render(); }
 function redo(){ if(!redoS.length) return; undoS.push(JSON.stringify(S)); S=JSON.parse(redoS.pop()); sel=null; render(); }
 document.getElementById('undo').onclick=undo; document.getElementById('redo').onclick=redo;
-document.getElementById('reset').onclick=()=>{ if(!confirm('Återställa till L2? (Du kan ångra.)')) return; snap(); S=startState(); sel=null; fit(); render(); };
 const tg=(id,k)=>{ const b=document.getElementById(id); b.onclick=()=>{ view.show[k]=!view.show[k]; b.classList.toggle('on',view.show[k]); render(); }; };
 tg('tgMob','mob'); tg('tgMat','mat'); tg('tgRef','ref');
 // palett
@@ -634,6 +799,78 @@ for(const t of PAL){ const b=document.createElement('button'); b.textContent='�
   const at = r? {x:(r.x0+r.x1)/2,y:(r.y0+r.y1)/2} : c;
   const f={id:'f'+(S.seq++),t,cx:Math.round(at.x/50)*50,cy:Math.round(at.y/50)*50,w:TYPES[t].w,d:TYPES[t].d,rot:0};
   S.furn.push(f); sel={k:'furn',id:f.id}; view.show.mob=true; document.getElementById('tgMob').classList.add('on'); render(); toast(TYPES[t].n+' tillagd – dra den på plats'); }; pal.appendChild(b); }
+const palOp=document.getElementById('palOp');
+for(const t of PALOP){ const b=document.createElement('button'); b.textContent='＋ '+OPT[t].n; b.onclick=()=>{
+  const r = sel&&sel.k==='room' ? S.rooms.find(q=>q.id===sel.id) : roomAt(vb.x+vb.w/2, -(vb.y+vb.h/2)) || S.rooms[0];
+  if(!r) return;
+  snap();
+  // välj fasadvägg för fönster/glas, annars längsta innervägg
+  const sides=['N','S','W','E'].map(sd=>({sd,L:edgeOf(r,sd).L,ext:sideExterior(r,sd)}));
+  const want = (t==='fonster'||t==='glas'||t==='ytterdorr');
+  sides.sort((p,q)=> (want?(q.ext-p.ext):(p.ext-q.ext)) || q.L-p.L);
+  const sd=sides[0]; const len=Math.min(OPT[t].len, sd.L-200);
+  const o={id:'o'+(S.seq++),t,room:r.id,side:sd.sd,off:Math.round((sd.L-len)/2/50)*50,len,flip:false,out:false};
+  S.ops.push(o); sel={k:'op',id:o.id}; render(); toast(OPT[t].n+' i '+r.name+' – dra den längs väggen'); }; palOp.appendChild(b); }
+
+// ------------------------------------------------------------------ förslag
+const PRESET_NAME='L2 – preset';
+function allPlans(){ return [{id:'preset',name:PRESET_NAME,locked:true}, ...FL.list]; }
+function curPlan(){ return allPlans().find(p=>p.id===CUR) || allPlans()[0]; }
+function planOf(p){ return p.id==='preset' ? startStateFull() : JSON.parse(JSON.stringify(p.plan)); }
+function askSaveFirst(){
+  if(!DIRTY) return true;
+  const c=curPlan();
+  const ok = confirm(`Du har osparade ändringar i ”${c.name}”.\n\nOK = spara dem först\nAvbryt = släng ändringarna`);
+  if(ok){ if(!saveCur(true)) return false; }
+  return true;
+}
+function loadPlan(id){
+  if(id===CUR && !DIRTY) return;
+  if(!askSaveFirst()) return;
+  const p=allPlans().find(q=>q.id===id); if(!p) return;
+  S=planOf(p); if(!S.ops) S.ops=[]; CUR=p.id; DIRTY=false; undoS=[]; redoS=[]; sel=null; fit(); render();
+  toast('Visar '+p.name);
+}
+function saveCur(quiet){
+  if(CUR==='preset') return saveAs();
+  const p=FL.list.find(q=>q.id===CUR); if(!p) return saveAs();
+  p.plan=JSON.parse(JSON.stringify(S)); p.ts=Date.now(); DIRTY=false; render(); if(!quiet) toast('Sparat: '+p.name); return true;
+}
+function saveAs(){
+  const nm=prompt('Namn på förslaget', 'Förslag '+(FL.n||1)); if(nm===null) return false;
+  const p={id:'p'+Date.now().toString(36), name:nm.trim()||('Förslag '+(FL.n||1)), ts:Date.now(), plan:JSON.parse(JSON.stringify(S))};
+  FL.list.push(p); FL.n=(FL.n||1)+1; CUR=p.id; DIRTY=false; render(); toast('Sparat som ”'+p.name+'”'); return true;
+}
+function step(d){ const L=allPlans(); const i=L.findIndex(p=>p.id===CUR); loadPlan(L[(i+d+L.length)%L.length].id); }
+document.getElementById('fPrev').onclick=()=>step(-1);
+document.getElementById('fNext').onclick=()=>step(1);
+document.getElementById('fSave').onclick=()=>saveCur();
+document.getElementById('fSave2').onclick=()=>saveCur();
+document.getElementById('fSaveAs').onclick=()=>saveAs();
+document.getElementById('fPreset').onclick=()=>{ if(CUR==='preset' && DIRTY){ if(!confirm('Släng ändringarna och gå tillbaka till L2?')) return; DIRTY=false; } loadPlan('preset'); };
+document.getElementById('fRename').onclick=()=>{ const p=FL.list.find(q=>q.id===CUR); if(!p) return toast('Preseten kan inte byta namn – spara som nytt först'); const nm=prompt('Nytt namn',p.name); if(nm){ p.name=nm.trim(); render(); } };
+document.getElementById('fDel').onclick=()=>{ const p=FL.list.find(q=>q.id===CUR); if(!p) return toast('Preseten kan inte tas bort'); if(!confirm(`Ta bort ”${p.name}”?`)) return; FL.list=FL.list.filter(q=>q!==p); DIRTY=false; CUR='preset'; S=startStateFull(); sel=null; fit(); render(); toast('Borttaget'); };
+function miniSVG(plan){
+  const R=plan.rooms; if(!R||!R.length) return '';
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9; for(const r of R){x0=Math.min(x0,r.x0);y0=Math.min(y0,r.y0);x1=Math.max(x1,r.x1);y1=Math.max(y1,r.y1);}
+  const pad=600; let h=`<svg viewBox="${x0-pad} ${-y1-pad} ${x1-x0+2*pad} ${y1-y0+2*pad}" preserveAspectRatio="xMidYMid meet">`;
+  for(const r of R) h+=`<rect x="${r.x0}" y="${-r.y1}" width="${r.x1-r.x0}" height="${r.y1-r.y0}" fill="${COLORS[r.c]||'#eee'}" stroke="#2b2b2b" stroke-width="160"/>`;
+  return h+'</svg>';
+}
+let PRESET_MINI=null;
+function updateForslag(){
+  const L=allPlans(); const i=L.findIndex(p=>p.id===CUR); const c=L[Math.max(0,i)];
+  document.getElementById('fName').innerHTML = `${c.name}${DIRTY?' <span class="dirty">•</span>':''}<small>${i+1} av ${L.length}${DIRTY?' · ej sparat':''}</small>`;
+  const th=document.getElementById('thumbs'); th.innerHTML='';
+  for(const p of L){
+    const d=document.createElement('div'); d.className='th'+(p.id===CUR?' cur':'');
+    const plan = p.id===CUR ? S : (p.id==='preset' ? (PRESET_MINI||(PRESET_MINI=startState())) : p.plan);
+    const when = p.ts ? new Date(p.ts).toLocaleDateString('sv-SE',{day:'numeric',month:'short'}) : 'låst';
+    d.innerHTML = miniSVG(plan) + `<span>${p.name}${p.id===CUR&&DIRTY?' •':''}</span><i>${when}</i>`;
+    d.onclick=()=>loadPlan(p.id); th.appendChild(d);
+  }
+}
+
 document.getElementById('nyttrum').onclick=()=>{
   snap(); const b=bounds(); const r={id:'r'+(S.seq++),name:'Nytt rum',c:'ny',x0:g10(b.x1+1000),y0:g10(b.y0),x1:g10(b.x1+1000)+3000,y1:g10(b.y0)+3000};
   S.rooms.push(r); sel={k:'room',id:r.id}; fit(); render(); toast('Nytt rum 3×3 m till höger om huset – dra in det');
@@ -655,17 +892,20 @@ document.getElementById('expPng').onclick=()=>{
   const img=new Image(); img.onload=()=>{ const cv=document.createElement('canvas'); cv.width=W; cv.height=H; const x=cv.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,W,H); x.drawImage(img,0,0); cv.toBlob(b=>dl('A101_plan.png',b)); };
   img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(c));
 };
-document.getElementById('expJson').onclick=()=>dl('A101_plan.json', new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));
+document.getElementById('expJson').onclick=()=>dl('A101_forslag.json', new Blob([JSON.stringify({forslag:FL.list, aktuellt:S},null,1)],{type:'application/json'}));
 document.getElementById('impJson').onclick=()=>document.getElementById('fil').click();
-document.getElementById('fil').onchange=e=>{ const f=e.target.files[0]; if(!f) return; f.text().then(t=>{ try{ const s=JSON.parse(t); if(!s.rooms) throw 0; snap(); S=s; sel=null; fit(); render(); toast('Plan inläst'); }catch(_){ toast('Kunde inte läsa filen'); } }); };
+document.getElementById('fil').onchange=e=>{ const f=e.target.files[0]; if(!f) return; f.text().then(t=>{ try{ const s=JSON.parse(t);
+      if(Array.isArray(s.forslag)){ let n=0; for(const p of s.forslag){ if(p&&p.plan&&!FL.list.some(q=>q.id===p.id)){ FL.list.push(p); n++; } } render(); toast(n+' förslag inlästa'); return; }
+      if(!s.rooms) throw 0; snap(); S=s; if(!S.ops) S.ops=[]; sel=null; fit(); render(); toast('Plan inläst'); }catch(_){ toast('Kunde inte läsa filen'); } e.target.value=''; }); };
 
 let tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2200); }
 function showTip(m){ const t=document.getElementById('toast'); if(!m){ t.classList.remove('show'); return; } t.textContent=m; t.classList.add('show'); clearTimeout(tt); }
 
 document.getElementById('selinfo').dataset.def=document.getElementById('selinfo').innerHTML;
 window.addEventListener('resize',()=>{fit(); render();});
+if(!S) S=startStateFull();
 fit(); render();
-window.__S=()=>S; window.__api={resize:(name,d,ax)=>{axis=ax||'x'; resize(S.rooms.find(r=>r.name===name),d);}, union:unionStats, overlaps, holes, sel:(n)=>{sel={k:'room',id:S.rooms.find(r=>r.name===n).id}; render();}};
+window.__S=()=>S; window.__FL=()=>FL; window.__cur=()=>({CUR,DIRTY}); window.__f={saveAs,saveCur,loadPlan,step}; window.__api={resize:(name,d,ax)=>{axis=ax||'x'; resize(S.rooms.find(r=>r.name===name),d);}, union:unionStats, overlaps, holes, sel:(n)=>{sel={k:'room',id:S.rooms.find(r=>r.name===n).id}; render();}};
 </script>
 </body>
 </html>
