@@ -92,7 +92,7 @@ input[type=number]{width:78px}
   </div>
   <div id="side">
     <h1>A101 · planlösning</h1>
-    <div class="sub">Utgår från alternativ L2. Allt i mm, rutnät 10 cm.</div>
+    <div class="sub">Två original: L2 och Ronanders A101 (25/10). Allt i mm, rutnät 10 cm.</div>
 
     <div class="box">
       <h2>Förslag</h2>
@@ -103,7 +103,7 @@ input[type=number]{width:78px}
         <button id="fRename">Byt namn</button>
         <button id="fDel">Ta bort</button>
       </div>
-      <div class="row"><button id="fPreset">↺ Tillbaka till preset (L2)</button></div>
+      <div class="row"><button id="fPreset">↺ L2 (preset)</button><button id="fPresetA">↺ A101 Ronander</button></div>
       <div class="hint">Förslagen sparas i den här webbläsaren. Vill du flytta dem mellan mobil och dator: ”Spara fil” / ”Öppna fil” längst ner.</div>
     </div>
 
@@ -142,6 +142,7 @@ input[type=number]{width:78px}
         <button id="tgUnl">🔓 Lås upp alla</button>
         <button id="tgMat" class="on">Mått</button>
         <button id="tgRef">L2-kontur</button>
+        <button id="tgRit">Ritning A101</button>
       </div>
       <div class="row">
         <button id="undo">↶ Ångra</button>
@@ -240,9 +241,9 @@ const L2_OPS = [
 ];
 const OPT = {dorr:{n:'Innerdörr',len:900}, ytterdorr:{n:'Ytterdörr',len:1000}, skjut:{n:'Skjutdörr',len:1200}, fonster:{n:'Fönster',len:1200}, glas:{n:'Glasparti',len:3000}, oppning:{n:'Öppning',len:1500}};
 const PALOP = ['dorr','ytterdorr','skjut','fonster','glas','oppning'];
-function opsFromWorld(rooms){
+function opsFromWorld(rooms, LIST){
   const out=[]; let i=0;
-  for(const [nm,ty,x0,y0,x1,y1] of L2_OPS){
+  for(const [nm,ty,x0,y0,x1,y1] of (LIST||L2_OPS)){
     const vert=(x1-x0)<(y1-y0); const c=vert?(x0+x1)/2:(y0+y1)/2; const a0=vert?y0:x0, a1=vert?y1:x1;
     const cand=[];
     for(const r of rooms){
@@ -264,7 +265,67 @@ function startState(){
     seq: 100
   };
 }
-function startStateFull(){ const s=startState(); s.ops=opsFromWorld(s.rooms); return s; }
+// ---- Ronander A101 (ritning 2026-10-25), förenklad till rektanglar, mm, y = norr
+const A101_ROOMS = [
+  ['Allrum','dag',0,13430,3960,18010],
+  ['Passage','kom',3960,16440,13250,18010],
+  ['Rwc/dusch 2','vat',0,18010,2995,20430],
+  ['Sovrum 4','sov',2995,18010,6550,22400],
+  ['Sovrum 3','sov',6550,18010,10170,22400],
+  ['Sovrum 2','sov',10170,18010,13250,22400],
+  ['Vardagsrum','dag',13250,14640,18150,21630],
+  ['Rwc/dusch 1','vat',18150,14640,20440,19810],
+  ['Sovrum 1','sov',20440,14640,23810,19810],
+  ['Matplats','kok',16450,11090,22790,14640],
+  ['Kök','kok',16450,8290,23390,11090],
+  ['Passage 2','kom',16450,6250,18220,8290],
+  ['Tvätt/teknik','ser',18220,6250,22790,8290],
+  ['Hall','kom',16450,4450,22790,6250],
+  ['Entré','kom',16450,3880,19320,4450],
+  ['Wc','vat',19320,2760,22790,4450],
+  ['Förråd (fristående)','ser',11080,0,14455,4450],
+];
+const A101_FURN = [
+  ['soffa',1030,15300,2500,900,90],['soffbord',2280,15840,800,800,0],['bokhylla',1620,17790,2700,380,0],
+  ['wc',1770,19780,400,650,0],['handfat',2620,19140,1200,450,270],['dusch',850,19500,900,900,0],
+  ['sang90',5890,21010,1140,1910,0],['skrivbord',5520,18400,1550,600,180],['garderob',3350,19130,1850,600,90],
+  ['sang90',7210,21010,1140,1910,0],['skrivbord',7660,18400,1400,600,180],['garderob',9810,21100,1850,600,270],
+  ['sang90',12530,21010,1140,1910,0],['skrivbord',12080,18400,1400,600,180],['garderob',10530,19130,1850,600,90],
+  ['soffa',15040,20800,3570,900,0],['soffa',13760,19300,2400,900,90],['soffbord',15540,19120,1200,1200,0],
+  ['fatolj',16700,18000,850,850,0],['fatolj',14600,15600,850,850,180],['spis',16100,14980,1200,550,180],
+  ['wc',18500,17920,400,650,90],['handfat',20120,17530,1200,450,270],['dusch',19300,15600,1000,1000,0],['bank',18520,18990,1000,450,90],
+  ['sang180',22440,17940,1800,2000,270],['garderob',21600,14970,2200,600,180],['fatolj',23000,16100,850,850,0],
+  ['matbord',19720,12950,4400,1000,0],
+  ['koksö',19720,10690,3000,1200,0],['bank',20320,8620,3800,600,180],['bank',22690,9990,2200,600,270],
+  ['bank',20320,7340,4100,600,0],['garderob',21820,6580,1200,600,180],
+  ['garderob',19640,5920,3000,600,0],
+  ['wc',19940,3690,400,650,90],['handfat',21990,3690,1100,450,270],
+];
+// fönster/dörrar i världskoordinater (glas ur PDF:en + dörrar avlästa på ritningen)
+const A101_OPS = [
+  ['Entré glasdörr','D',17870,3820,19270,3950],
+  ['Allrum söder','F',2440,13380,3540,13550],['Allrum väster 1','F',0,16860,120,17960],['Rwc2 väster','F',0,18260,120,19060],
+  ['Passage söder','F',4160,16380,4930,16560],
+  ['Sovrum 4 norr','F',3640,22280,4740,22400],['Sovrum 3 norr','F',8360,22280,9460,22400],['Sovrum 2 norr','F',10280,22280,11380,22400],
+  ['Vardagsrum norr','F',16870,21510,17970,21630],['Vardagsrum söder','F',14460,14600,14980,14700],
+  ['Sovrum 1 norr','F',20990,19690,22390,19810],['Sovrum 1 öster','F',23690,15290,23810,16390],
+  ['Matplats öster','F',22670,13840,22790,14390],['Kök öster','F',23270,8940,23390,10440],
+  ['Tvätt öster','F',22670,6420,22790,7320],['Hall öster','F',22670,4500,22790,5600],
+  ['Matplats glasparti väster','D',16400,11300,16500,13600],
+  ['Dörr Rwc2','I',860,17960,2000,18060],['Dörr sovrum 4','I',4640,17960,5540,18060],['Dörr sovrum 3','I',8070,17960,8970,18060],['Dörr sovrum 2','I',11160,17960,12060,18060],
+  ['Öppning allrum','O',3910,16600,4010,17850],['Öppning vardagsrum','O',13200,16550,13300,17900],
+  ['Öppning matplats','O',16600,14590,18000,14690],['Dörr Rwc1','I',18800,14590,19700,14690],['Dörr sovrum 1','I',22500,14590,23300,14690],
+  ['Öppning kök','O',16600,8240,18000,8340],['Öppning hall','O',16600,6200,18000,6300],['Dörr tvätt','I',21000,6200,21900,6300],
+  ['Dörr wc','I',20400,4400,21300,4500],['Öppning entré','O',16700,4400,19100,4500],
+  ['Förråd dörr','D',11400,4400,12400,4500],
+];
+function ronanderState(){
+  const st={ rooms:A101_ROOMS.map((r,i)=>({id:'a'+i,name:r[0],c:r[1],x0:r[2],y0:r[3],x1:r[4],y1:r[5]})),
+    furn:A101_FURN.map((f,i)=>({id:'af'+i,t:f[0],cx:f[1],cy:f[2],w:f[3],d:f[4],rot:f[5]})), seq:100, base:'ronander' };
+  st.ops=opsFromWorld(st.rooms, A101_OPS).map((o,i)=>Object.assign(o,{id:'ao'+i}));
+  return st;
+}
+function startStateFull(){ const s=startState(); s.ops=opsFromWorld(s.rooms); s.base='l2'; return s; }
 const KEY='a101_arbete_v2', PKEY='a101_forslag_v1';
 let FL = (()=>{ try{ const x=JSON.parse(localStorage.getItem(PKEY)); if(x&&Array.isArray(x.list)) return x; }catch(e){} return {list:[], n:1}; })();
 let W0 = (()=>{ try{ const x=JSON.parse(localStorage.getItem(KEY)); if(x&&x.S&&x.S.rooms) return x; }catch(e){} return null; })();
@@ -450,6 +511,8 @@ function render(){
   const grid = el('g',{stroke:'#e3ddd0','stroke-width':Math.max(8,pxmm()*0.6)},root);
   for(let x=gx0;x<=gx1;x+=1000) el('line',{x1:x,y1:-gy0,x2:x,y2:-gy1},grid);
   for(let y=gy0;y<=gy1;y+=1000) el('line',{x1:gx0,y1:-y,x2:gx1,y2:-y},grid);
+  // Ronanders ritning som underlägg
+  if(view.show.rit) el('image',{href:'ritning.png',x:-1511,y:-24510,width:27000,height:27508,opacity:.55,preserveAspectRatio:'none',style:'mix-blend-mode:multiply','pointer-events':'none'},root);
   // L2-referens
   if(view.show.ref) el('polygon',{points:L2_OUTLINE.map(p=>p[0]+','+(-p[1])).join(' '),fill:'none',stroke:'#2a7fb8','stroke-width':40,'stroke-dasharray':'200 140',opacity:.7},root);
   // väggar: mörk underyta per rum, ljus insida med olika indrag (ytter 370 / inner 60)
@@ -466,6 +529,7 @@ function render(){
     if(bad.has(r.id)) el('rect',{x:r.x0,y:-r.y1,width:r.x1-r.x0,height:r.y1-r.y0,fill:'rgba(200,50,26,.18)',stroke:'#c8321a','stroke-width':40,'stroke-dasharray':'160 100'},g);
     if(band && band.list.includes(r) && r.id!==sel.id) el('rect',{x:r.x0+40,y:-r.y1+40,width:r.x1-r.x0-80,height:r.y1-r.y0-80,fill:'none',stroke:'#fbc021','stroke-width':60,'stroke-dasharray':'120 90'},g);
   }
+  if(view.show.rit) el('image',{href:'ritning.png',x:-1511,y:-24510,width:27000,height:27508,opacity:.45,preserveAspectRatio:'none',style:'mix-blend-mode:multiply','pointer-events':'none'},root);
   // dörrar & fönster
   const ol=el('g',{},root);
   for(const o of S.ops){ const r=S.rooms.find(q=>q.id===o.room); if(r) drawOp(ol,o,r); }
@@ -868,7 +932,7 @@ function undo(){ if(!undoS.length) return toast('Inget att ångra'); redoS.push(
 function redo(){ if(!redoS.length) return; undoS.push(JSON.stringify(S)); S=JSON.parse(redoS.pop()); sel=null; render(); }
 document.getElementById('undo').onclick=undo; document.getElementById('redo').onclick=redo;
 const tg=(id,k)=>{ const b=document.getElementById(id); b.onclick=()=>{ view.show[k]=!view.show[k]; b.classList.toggle('on',view.show[k]); render(); }; };
-tg('tgMob','mob'); tg('tgMat','mat'); tg('tgRef','ref');
+tg('tgMob','mob'); tg('tgMat','mat'); tg('tgRef','ref'); tg('tgRit','rit');
 document.getElementById('tgUnl').onclick=()=>{ view.unlockAll=!view.unlockAll; const b=document.getElementById('tgUnl'); b.classList.toggle('on',view.unlockAll); b.textContent=view.unlockAll?'🔒 Lås alla':'🔓 Lås upp alla'; render(); toast(view.unlockAll?'Alla möbler upplåsta':'Alla möbler låsta'); };
 // palett
 const pal=document.getElementById('pal');
@@ -892,9 +956,11 @@ for(const t of PALOP){ const b=document.createElement('button'); b.textContent='
 
 // ------------------------------------------------------------------ förslag
 const PRESET_NAME='L2 – preset';
-function allPlans(){ return [{id:'preset',name:PRESET_NAME,locked:true}, ...FL.list]; }
+const PRESETS=[{id:'preset',name:PRESET_NAME,locked:true},{id:'ronander',name:'A101 Ronander 25/10',locked:true}];
+function allPlans(){ return [...PRESETS, ...FL.list]; }
+const isPreset = id => PRESETS.some(p=>p.id===id);
 function curPlan(){ return allPlans().find(p=>p.id===CUR) || allPlans()[0]; }
-function planOf(p){ return p.id==='preset' ? startStateFull() : JSON.parse(JSON.stringify(p.plan)); }
+function planOf(p){ return p.id==='preset' ? startStateFull() : p.id==='ronander' ? ronanderState() : JSON.parse(JSON.stringify(p.plan)); }
 function askSaveFirst(){
   if(!DIRTY) return true;
   const c=curPlan();
@@ -910,7 +976,7 @@ function loadPlan(id){
   toast('Visar '+p.name);
 }
 function saveCur(quiet){
-  if(CUR==='preset') return saveAs();
+  if(isPreset(CUR)) return saveAs();
   const p=FL.list.find(q=>q.id===CUR); if(!p) return saveAs();
   p.plan=JSON.parse(JSON.stringify(S)); p.ts=Date.now(); DIRTY=false; render(); if(!quiet) toast('Sparat: '+p.name); return true;
 }
@@ -925,7 +991,9 @@ document.getElementById('fNext').onclick=()=>step(1);
 document.getElementById('fSave').onclick=()=>saveCur();
 document.getElementById('fSave2').onclick=()=>saveCur();
 document.getElementById('fSaveAs').onclick=()=>saveAs();
-document.getElementById('fPreset').onclick=()=>{ if(CUR==='preset' && DIRTY){ if(!confirm('Släng ändringarna och gå tillbaka till L2?')) return; DIRTY=false; } loadPlan('preset'); };
+function backTo(id){ if(CUR===id && DIRTY){ if(!confirm('Släng ändringarna och gå tillbaka till originalet?')) return; DIRTY=false; } loadPlan(id); }
+document.getElementById('fPreset').onclick=()=>backTo('preset');
+document.getElementById('fPresetA').onclick=()=>backTo('ronander');
 document.getElementById('fRename').onclick=()=>{ const p=FL.list.find(q=>q.id===CUR); if(!p) return toast('Preseten kan inte byta namn – spara som nytt först'); const nm=prompt('Nytt namn',p.name); if(nm){ p.name=nm.trim(); render(); } };
 document.getElementById('fDel').onclick=()=>{ const p=FL.list.find(q=>q.id===CUR); if(!p) return toast('Preseten kan inte tas bort'); if(!confirm(`Ta bort ”${p.name}”?`)) return; FL.list=FL.list.filter(q=>q!==p); DIRTY=false; CUR='preset'; S=startStateFull(); sel=null; fit(); render(); toast('Borttaget'); };
 function miniSVG(plan){
@@ -935,14 +1003,14 @@ function miniSVG(plan){
   for(const r of R) h+=`<rect x="${r.x0}" y="${-r.y1}" width="${r.x1-r.x0}" height="${r.y1-r.y0}" fill="${COLORS[r.c]||'#eee'}" stroke="#2b2b2b" stroke-width="160"/>`;
   return h+'</svg>';
 }
-let PRESET_MINI=null;
+let PRESET_MINI=null, RON_MINI=null;
 function updateForslag(){
   const L=allPlans(); const i=L.findIndex(p=>p.id===CUR); const c=L[Math.max(0,i)];
   document.getElementById('fName').innerHTML = `${c.name}${DIRTY?' <span class="dirty">•</span>':''}<small>${i+1} av ${L.length}${DIRTY?' · ej sparat':''}</small>`;
   const th=document.getElementById('thumbs'); th.innerHTML='';
   for(const p of L){
     const d=document.createElement('div'); d.className='th'+(p.id===CUR?' cur':'');
-    const plan = p.id===CUR ? S : (p.id==='preset' ? (PRESET_MINI||(PRESET_MINI=startState())) : p.plan);
+    const plan = p.id===CUR ? S : (p.id==='preset' ? (PRESET_MINI||(PRESET_MINI=startState())) : p.id==='ronander' ? (RON_MINI||(RON_MINI=ronanderState())) : p.plan);
     const when = p.ts ? new Date(p.ts).toLocaleDateString('sv-SE',{day:'numeric',month:'short'}) : 'låst';
     d.innerHTML = miniSVG(plan) + `<span>${p.name}${p.id===CUR&&DIRTY?' •':''}</span><i>${when}</i>`;
     d.onclick=()=>loadPlan(p.id); th.appendChild(d);
@@ -1084,7 +1152,7 @@ window.addEventListener('resize',()=>{fit(); render();});
 if(!S) S=startStateFull();
 fit(); render();
 LIVE.start();
-window.__lock={anchorsFor,applyAnchors,isLocked}; window.__S=()=>S; window.__FL=()=>FL; window.__cur=()=>({CUR,DIRTY}); window.__f={saveAs,saveCur,loadPlan,step}; window.__api={resize:(name,d,ax)=>{axis=ax||'x'; resize(S.rooms.find(r=>r.name===name),d);}, union:unionStats, overlaps, holes, sel:(n)=>{sel={k:'room',id:S.rooms.find(r=>r.name===n).id}; render();}};
+window.__lock={anchorsFor,applyAnchors,isLocked}; window.__ron=ronanderState; window.__S=()=>S; window.__FL=()=>FL; window.__cur=()=>({CUR,DIRTY}); window.__f={saveAs,saveCur,loadPlan,step}; window.__api={resize:(name,d,ax)=>{axis=ax||'x'; resize(S.rooms.find(r=>r.name===name),d);}, union:unionStats, overlaps, holes, sel:(n)=>{sel={k:'room',id:S.rooms.find(r=>r.name===n).id}; render();}};
 </script>
 </body>
 </html>
