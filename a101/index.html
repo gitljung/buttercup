@@ -104,7 +104,8 @@ input[type=number]{width:78px}
       <div id="selinfo" class="hint">Klicka på ett rum eller en möbel.<br>
       • Dra ett rum för att flytta det (släpp på ett annat rum = byt plats).<br>
       • Dra i ett valt rums kant för att ändra formen – grannväggen följer med.<br>
-      • Dra rummet utanför fasaden = förskjutning.</div>
+      • Dra rummet utanför fasaden = förskjutning.<br>
+      • Möblerna är låsta till rummet. Klicka på en möbel och ”Lås upp” för att flytta den.</div>
     </div>
 
     <div class="box">
@@ -124,6 +125,7 @@ input[type=number]{width:78px}
       <h2>Visning &amp; fil</h2>
       <div class="row">
         <button id="tgMob" class="on">Möbler</button>
+        <button id="tgUnl">🔓 Lås upp alla</button>
         <button id="tgMat" class="on">Mått</button>
         <button id="tgRef">L2-kontur</button>
       </div>
@@ -457,12 +459,16 @@ function render(){
   if(view.show.mob){
     const fl=el('g',{},root);
     for(const f of S.furn){
-      const g=el('g',{'data-furn':f.id,transform:`translate(${f.cx},${-f.cy}) scale(1,-1) rotate(${f.rot})`,style:'cursor:grab'},fl);
+      const g=el('g',{'data-furn':f.id,transform:`translate(${f.cx},${-f.cy}) scale(1,-1) rotate(${f.rot})`,style:isLocked(f)?'cursor:pointer':'cursor:grab'},fl);
       el('rect',{x:-f.w/2-150,y:-f.d/2-150,width:f.w+300,height:f.d+300,fill:'transparent'},g); // större träffyta
       drawFurn(g,f);
+      if(!isLocked(f)) el('rect',{x:-f.w/2-30,y:-f.d/2-30,width:f.w+60,height:f.d+60,fill:'rgba(251,192,33,.18)',stroke:'#e09a00','stroke-width':30,'stroke-dasharray':'90 60'},g);
       if(sel&&sel.k==='furn'&&sel.id===f.id) el('rect',{x:-f.w/2-60,y:-f.d/2-60,width:f.w+120,height:f.d+120,fill:'none',stroke:'#c8321a','stroke-width':40,'stroke-dasharray':'120 80'},g);
     }
   }
+  // låsikon vid vald möbel
+  if(view.show.mob && sel && sel.k==='furn'){ const f=S.furn.find(q=>q.id===sel.id); if(f){ const [hw,hh]=halfExt(f); const fs=Math.max(300,pxmm()*20);
+    const t=el('text',{x:f.cx+hw+fs*0.2,y:-(f.cy+hh)+fs*0.3,'font-size':fs,class:'rlabel'},root); t.textContent=isLocked(f)?'🔒':'🔓'; } }
   // etiketter
   const lb=el('g',{class:'rlabel'},root);
   const fs = Math.max(240, Math.min(420, pxmm()*13));
@@ -572,15 +578,19 @@ function updateSide(ovs){
     document.getElementById('odup').onclick=()=>{snap(); const n=Object.assign({},o,{id:'o'+(S.seq++),off:o.off+o.len+300}); S.ops.push(n); sel={k:'op',id:n.id}; render();};
   } else {
     const f=S.furn.find(q=>q.id===sel.id); if(!f){sel=null; return updateSide(ovs);}
+    const lk=isLocked(f);
     si.innerHTML=`<b>${TYPES[f.t]?.n||f.t}</b>
+      <div class="row"><button id="flock" style="font-size:15px;padding:8px 12px;${lk?'':'background:#fbc021;border-color:#e09a00'}">${lk?'🔓 Lås upp för att flytta':'🔒 Lås fast'}</button></div>
+      <div class="hint" style="margin-bottom:4px">${lk?'Låst till rummet och väggarna – följer med när rummet flyttas eller ändras. Drar du i den flyttas hela rummet.':'Upplåst: dra den dit du vill. Släpper du den nära en vägg ställs den mot väggen. Den låses igen när du väljer något annat.'}</div>
       <div class="row">Längd <input type="number" id="fw" step="50" value="${f.w}"> Djup <input type="number" id="fd" step="50" value="${f.d}"></div>
       <div class="row"><button id="frot">⟳ Vrid 90°</button><button id="fdup">Kopiera</button><button id="fdel">Ta bort</button></div>
-      <div class="hint">Mått i mm. Tangent R vrider, Delete tar bort.</div>`;
+      <div class="hint">Mått i mm. Tangent L låser/låser upp, R vrider, Delete tar bort.</div>`;
+    document.getElementById('flock').onclick=()=>{ if(view.unlockAll){ return toast('Alla möbler är upplåsta – slå av ”Lås upp alla” först'); } f.lock = lk ? false : true; render(); };
     document.getElementById('fw').onchange=e=>{snap(); f.w=Math.max(100,+e.target.value||f.w); render();};
     document.getElementById('fd').onchange=e=>{snap(); f.d=Math.max(100,+e.target.value||f.d); render();};
     document.getElementById('frot').onclick=()=>{snap(); f.rot=(f.rot+90)%360; render();};
     document.getElementById('fdel').onclick=()=>{snap(); S.furn=S.furn.filter(q=>q!==f); sel=null; render();};
-    document.getElementById('fdup').onclick=()=>{snap(); const n=Object.assign({},f,{id:'f'+(S.seq++),cx:f.cx+400,cy:f.cy-400}); S.furn.push(n); sel={k:'furn',id:n.id}; render();};
+    document.getElementById('fdup').onclick=()=>{snap(); const n=Object.assign({},f,{id:'f'+(S.seq++),cx:f.cx+400,cy:f.cy-400,lock:false}); S.furn.push(n); sel={k:'furn',id:n.id}; render();};
   }
 }
 function holes(){
@@ -611,6 +621,7 @@ function resize(r, d){
   const {list,a0,a1} = bandOf(r, axis);
   snap();
   const before = JSON.stringify(S.rooms);
+  const ANC = anchorsFor(list);
   if(list.length===1){
     // ingen rad: väx åt båda håll (halva per sida, utåt)
     const w=r[a1]-r[a0]; if(w+d<MIN) return toast('Rummet kan inte bli mindre');
@@ -619,7 +630,7 @@ function resize(r, d){
     const eA=sideExterior(r,sA), eB=sideExterior(r,sB);
     if(eB && !eA) r[a1]=g10(r[a1]+d); else if(eA && !eB) r[a0]=g10(r[a0]-d);
     else { const h=g10(d/2); r[a0]=r[a0]-h; r[a1]=r[a0]+g10(w+d); }
-    moveFurnWithRoom(r, JSON.parse(before).find(q=>q.id===r.id));
+    applyAnchors(ANC);
     render(); return toast(d>0?'Rummet växte utåt – fasaden flyttades':'Rummet krympte – fasaden flyttades');
   }
   const others=list.filter(q=>q!==r);
@@ -639,9 +650,44 @@ function resize(r, d){
     q[a0]=pos; q[a1]=pos+newW.get(q); pos=q[a1];
   }
   const prev = JSON.parse(before);
-  for(const q of list) moveFurnWithRoom(q, prev.find(p=>p.id===q.id));
+  applyAnchors(ANC);
   render();
 }
+// ---- låsning: möbler förankras i närmaste väggar i sitt rum
+const isLocked = f => !view.unlockAll && f.lock!==false;
+function halfExt(f){ const v=(f.rot%180)!==0; return [ (v?f.d:f.w)/2, (v?f.w:f.d)/2 ]; }
+function insets(r){ return {W:sideExterior(r,'W')?370:60,E:sideExterior(r,'E')?370:60,S:sideExterior(r,'S')?370:60,N:sideExterior(r,'N')?370:60}; }
+function anchorsFor(rooms){
+  const A=[];
+  for(const f of S.furn){
+    const r=rooms.find(q=>inside(q,f.cx,f.cy)); if(!r) continue;
+    const ax = (f.cx-r.x0) <= (r.x1-f.cx) ? 'x0':'x1', ay = (f.cy-r.y0) <= (r.y1-f.cy) ? 'y0':'y1';
+    // står den mitt i rummet (t.ex. matbord) behåll relativ position
+    const relx=(f.cx-r.x0)/(r.x1-r.x0), rely=(f.cy-r.y0)/(r.y1-r.y0);
+    const [hw,hh]=halfExt(f); const ins=insets(r);
+    const nearX = Math.min(f.cx-hw-(r.x0+ins.W), (r.x1-ins.E)-(f.cx+hw)) < 700;
+    const nearY = Math.min(f.cy-hh-(r.y0+ins.S), (r.y1-ins.N)-(f.cy+hh)) < 700;
+    A.push({f,r,ax,dx:f.cx-r[ax],ay,dy:f.cy-r[ay],relx,rely,nearX,nearY});
+  }
+  return A;
+}
+function applyAnchors(A){
+  for(const a of A){ const {f,r}=a; const [hw,hh]=halfExt(f); const ins=insets(r);
+    let x = a.nearX ? r[a.ax]+a.dx : r.x0+a.relx*(r.x1-r.x0);
+    let y = a.nearY ? r[a.ay]+a.dy : r.y0+a.rely*(r.y1-r.y0);
+    const lx=r.x0+ins.W+hw, hx=r.x1-ins.E-hw, ly=r.y0+ins.S+hh, hy=r.y1-ins.N-hh;
+    x = lx<=hx ? Math.min(Math.max(x,lx),hx) : (r.x0+r.x1)/2;
+    y = ly<=hy ? Math.min(Math.max(y,ly),hy) : (r.y0+r.y1)/2;
+    f.cx=Math.round(x/10)*10; f.cy=Math.round(y/10)*10; }
+}
+function snapToWall(f){
+  const r=roomAt(f.cx,f.cy); if(!r) return false; const [hw,hh]=halfExt(f); const ins=insets(r); const T=300; let hit=false;
+  const W=r.x0+ins.W, E=r.x1-ins.E, Sd=r.y0+ins.S, N=r.y1-ins.N;
+  if(Math.abs(f.cx-hw-W)<T){ f.cx=W+hw; hit=true; } else if(Math.abs(E-(f.cx+hw))<T){ f.cx=E-hw; hit=true; }
+  if(Math.abs(f.cy-hh-Sd)<T){ f.cy=Sd+hh; hit=true; } else if(Math.abs(N-(f.cy+hh))<T){ f.cy=N-hh; hit=true; }
+  return hit;
+}
+function relockOthers(){ for(const f of S.furn) if(f.lock===false && !(sel&&sel.k==='furn'&&sel.id===f.id)) f.lock=true; }
 // möbler i ett rum följer med när rummet ändras (skalar position relativt rummet)
 function moveFurnWithRoom(r, old){
   if(!old) return;
@@ -671,23 +717,28 @@ svg.addEventListener('pointerdown', e=>{
     const isX = key[0]==='x'; const c=r[key];
     const [b0,b1] = isX?['y0','y1']:['x0','x1'];
     const linked = S.rooms.filter(q=>q!==r && Math.abs(q[opp]-c)<1 && ov(q[b0],q[b1],r[b0],r[b1])>0);
-    drag={k:'edge',r,key,opp,isX,c,linked,p0:p,snap:JSON.stringify(S),old:JSON.parse(JSON.stringify(S.rooms))};
+    drag={k:'edge',r,key,opp,isX,c,linked,p0:p,snap:JSON.stringify(S),anc:anchorsFor([r,...linked])};
   } else if(og){
     const o=S.ops.find(q=>q.id===og.getAttribute('data-op'));
-    sel={k:'op',id:o.id}; drag={k:'op',o,p0:p,snap:JSON.stringify(S),moved:false};
+    sel={k:'op',id:o.id}; relockOthers(); drag={k:'op',o,p0:p,snap:JSON.stringify(S),moved:false};
     render();
   } else if(fg && view.show.mob){
     const f=S.furn.find(q=>q.id===fg.getAttribute('data-furn'));
-    sel={k:'furn',id:f.id}; drag={k:'furn',f,p0:p,o:{cx:f.cx,cy:f.cy},snap:JSON.stringify(S),moved:false};
+    sel={k:'furn',id:f.id}; relockOthers();
+    if(isLocked(f)){
+      const r=roomAt(f.cx,f.cy);
+      if(r){ const furn=S.furn.filter(q=>inside(r,q.cx,q.cy)).map(q=>({f:q,cx:q.cx,cy:q.cy}));
+        drag={k:'room',r,p0:p,o:{x0:r.x0,y0:r.y0,x1:r.x1,y1:r.y1},furn,snap:JSON.stringify(S),moved:false,fromFurn:true}; }
+    } else drag={k:'furn',f,p0:p,o:{cx:f.cx,cy:f.cy},snap:JSON.stringify(S),moved:false};
     render();
   } else if(rg){
     const r=S.rooms.find(q=>q.id===rg.getAttribute('data-room'));
     const furn=S.furn.filter(f=>inside(r,f.cx,f.cy)).map(f=>({f,cx:f.cx,cy:f.cy}));
-    sel={k:'room',id:r.id};
+    sel={k:'room',id:r.id}; relockOthers();
     drag={k:'room',r,p0:p,o:{x0:r.x0,y0:r.y0,x1:r.x1,y1:r.y1},furn,snap:JSON.stringify(S),moved:false};
     render();
   } else {
-    if(sel){ sel=null; render(); }
+    if(sel){ sel=null; relockOthers(); render(); }
     drag={k:'pan',s0:{x:e.clientX,y:e.clientY},vb0:Object.assign({},vb)};
   }
 });
@@ -700,6 +751,7 @@ svg.addEventListener('pointermove', e=>{
   if(!drag.moved && Math.hypot(dx,dy) < pxmm()*6) return;
   drag.moved=true;
   if(drag.k==='room'){
+    if(drag.fromFurn && sel && sel.k==='furn'){ sel={k:'room',id:drag.r.id}; }
     const r=drag.r, sx=g10(dx), sy=g10(dy);
     r.x0=drag.o.x0+sx; r.x1=drag.o.x1+sx; r.y0=drag.o.y0+sy; r.y1=drag.o.y1+sy;
     for(const m of drag.furn){ m.f.cx=m.cx+sx; m.f.cy=m.cy+sy; }
@@ -723,8 +775,7 @@ svg.addEventListener('pointermove', e=>{
     for(const q of drag.linked){ if(drag.opp.endsWith('0')) H=Math.min(H, q[drag.isX?'x1':'y1']-MIN); else L=Math.max(L, q[drag.isX?'x0':'y0']+MIN); }
     nc=Math.max(L,Math.min(H,nc));
     r[drag.key]=nc; for(const q of drag.linked) q[drag.opp]=nc;
-    for(const q of [r,...drag.linked]) moveFurnWithRoom(q, drag.old.find(o=>o.id===q.id));
-    // återställ möbler till ursprung och flytta igen från original varje gång
+    applyAnchors(drag.anc);
     render();
     showTip(`${drag.linked.length? 'Väggen mot '+drag.linked.map(q=>q.name).join(', ')+' följer med' : 'Fasaden flyttas'} · ${fmt(area(r),1)} m²`);
   }
@@ -754,7 +805,7 @@ function endDrag(e){
     for(const o of S.ops){ if(o.room===a.id) o.room=t.id; else if(o.room===t.id) o.room=a.id; } // dörrar/fönster stannar i väggen
     toast(`${a.name} och ${t.name} bytte plats`);
   }
-  if(d.k==='edge'){ /* klart */ }
+  if(d.k==='furn'){ if(snapToWall(d.f)) toast('Ställd mot väggen'); }
   render();
 }
 svg.addEventListener('pointerup', endDrag); svg.addEventListener('pointercancel', endDrag);
@@ -779,6 +830,7 @@ document.addEventListener('keydown', e=>{
   if(!sel) return;
   if(sel.k==='furn'){ const f=S.furn.find(q=>q.id===sel.id);
     if(e.key==='r'||e.key==='R'){ snap(); f.rot=(f.rot+90)%360; render(); }
+    if(e.key==='l'||e.key==='L'){ f.lock = isLocked(f) ? false : true; render(); }
     if(e.key==='Delete'||e.key==='Backspace'){ snap(); S.furn=S.furn.filter(q=>q!==f); sel=null; render(); } }
   if(sel.k==='op' && (e.key==='Delete'||e.key==='Backspace')){ snap(); S.ops=S.ops.filter(q=>q.id!==sel.id); sel=null; render(); return; }
   if(sel.k==='room'){ const r=S.rooms.find(q=>q.id===sel.id);
@@ -792,13 +844,14 @@ function redo(){ if(!redoS.length) return; undoS.push(JSON.stringify(S)); S=JSON
 document.getElementById('undo').onclick=undo; document.getElementById('redo').onclick=redo;
 const tg=(id,k)=>{ const b=document.getElementById(id); b.onclick=()=>{ view.show[k]=!view.show[k]; b.classList.toggle('on',view.show[k]); render(); }; };
 tg('tgMob','mob'); tg('tgMat','mat'); tg('tgRef','ref');
+document.getElementById('tgUnl').onclick=()=>{ view.unlockAll=!view.unlockAll; const b=document.getElementById('tgUnl'); b.classList.toggle('on',view.unlockAll); b.textContent=view.unlockAll?'🔒 Lås alla':'🔓 Lås upp alla'; render(); toast(view.unlockAll?'Alla möbler upplåsta':'Alla möbler låsta'); };
 // palett
 const pal=document.getElementById('pal');
 for(const t of PAL){ const b=document.createElement('button'); b.textContent='＋ '+TYPES[t].n; b.onclick=()=>{
   snap(); const c={x:vb.x+vb.w/2, y:-(vb.y+vb.h/2)}; const r=sel&&sel.k==='room'?S.rooms.find(q=>q.id===sel.id):roomAt(c.x,c.y);
   const at = r? {x:(r.x0+r.x1)/2,y:(r.y0+r.y1)/2} : c;
-  const f={id:'f'+(S.seq++),t,cx:Math.round(at.x/50)*50,cy:Math.round(at.y/50)*50,w:TYPES[t].w,d:TYPES[t].d,rot:0};
-  S.furn.push(f); sel={k:'furn',id:f.id}; view.show.mob=true; document.getElementById('tgMob').classList.add('on'); render(); toast(TYPES[t].n+' tillagd – dra den på plats'); }; pal.appendChild(b); }
+  const f={id:'f'+(S.seq++),t,cx:Math.round(at.x/50)*50,cy:Math.round(at.y/50)*50,w:TYPES[t].w,d:TYPES[t].d,rot:0,lock:false};
+  S.furn.push(f); sel={k:'furn',id:f.id}; view.show.mob=true; document.getElementById('tgMob').classList.add('on'); render(); toast(TYPES[t].n+' tillagd (upplåst) – dra den på plats'); }; pal.appendChild(b); }
 const palOp=document.getElementById('palOp');
 for(const t of PALOP){ const b=document.createElement('button'); b.textContent='＋ '+OPT[t].n; b.onclick=()=>{
   const r = sel&&sel.k==='room' ? S.rooms.find(q=>q.id===sel.id) : roomAt(vb.x+vb.w/2, -(vb.y+vb.h/2)) || S.rooms[0];
@@ -905,7 +958,7 @@ document.getElementById('selinfo').dataset.def=document.getElementById('selinfo'
 window.addEventListener('resize',()=>{fit(); render();});
 if(!S) S=startStateFull();
 fit(); render();
-window.__S=()=>S; window.__FL=()=>FL; window.__cur=()=>({CUR,DIRTY}); window.__f={saveAs,saveCur,loadPlan,step}; window.__api={resize:(name,d,ax)=>{axis=ax||'x'; resize(S.rooms.find(r=>r.name===name),d);}, union:unionStats, overlaps, holes, sel:(n)=>{sel={k:'room',id:S.rooms.find(r=>r.name===n).id}; render();}};
+window.__lock={anchorsFor,applyAnchors,isLocked}; window.__S=()=>S; window.__FL=()=>FL; window.__cur=()=>({CUR,DIRTY}); window.__f={saveAs,saveCur,loadPlan,step}; window.__api={resize:(name,d,ax)=>{axis=ax||'x'; resize(S.rooms.find(r=>r.name===name),d);}, union:unionStats, overlaps, holes, sel:(n)=>{sel={k:'room',id:S.rooms.find(r=>r.name===n).id}; render();}};
 </script>
 </body>
 </html>
