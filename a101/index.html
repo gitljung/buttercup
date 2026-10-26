@@ -52,6 +52,18 @@ input[type=number]{width:78px}
 #bar .nm{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:46vw;padding:0 4px;text-align:center}
 #bar .nm small{display:block;font-weight:400;color:var(--mut);font-size:11px}
 #bar .dirty{color:var(--sel)}
+#liveBtn{width:auto!important;padding:0 10px!important;font-size:14px!important}
+#liveBtn.on{background:#c8321a;color:#fff;border-color:#c8321a}
+#livePanel{position:absolute;left:50%;top:62px;transform:translateX(-50%);background:#fffdf8;border:1px solid #ddd6c8;border-radius:12px;padding:12px 14px;box-shadow:0 4px 16px rgba(0,0,0,.15);width:min(360px,calc(100% - 20px));font-size:13px;display:none;z-index:5}
+#livePanel.show{display:block}
+#livePanel input{width:100%;font:inherit;font-size:13px;padding:7px;border:1px solid #cfc6b4;border-radius:6px;margin:6px 0}
+#livePanel .pp{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+#livePanel .pp span{border-radius:20px;padding:3px 10px;color:#fff;font-size:12px;font-weight:600}
+#cursors{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.cur{position:absolute;transform:translate(-3px,-3px);transition:left .08s linear,top .08s linear;white-space:nowrap}
+.cur svg{width:20px;height:20px;display:block}
+.cur b{display:inline-block;margin:-4px 0 0 14px;padding:2px 7px;border-radius:9px;color:#fff;font-size:12px;font-weight:600}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#2c7a3b;margin-right:4px;vertical-align:middle}
 #thumbs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
 .th{flex:0 0 auto;width:92px;border:2px solid #e4dccb;border-radius:8px;background:#fff;cursor:pointer;padding:4px;font-size:11px;line-height:1.2}
 .th.cur{border-color:var(--sel)}
@@ -72,7 +84,9 @@ input[type=number]{width:78px}
 <div id="app">
   <div id="stage">
     <svg id="plan" xmlns="http://www.w3.org/2000/svg"></svg>
-    <div id="bar"><button id="fPrev" title="Föregående förslag">‹</button><div class="nm" id="fName"></div><button id="fNext" title="Nästa förslag">›</button><button id="fSave" title="Spara" style="width:auto;padding:0 10px;font-size:14px">Spara</button></div>
+    <div id="bar"><button id="fPrev" title="Föregående förslag">‹</button><div class="nm" id="fName"></div><button id="fNext" title="Nästa förslag">›</button><button id="fSave" title="Spara" style="width:auto;padding:0 10px;font-size:14px">Spara</button><button id="liveBtn" title="Live med andra">● Live</button></div>
+    <div id="livePanel"></div>
+    <div id="cursors"></div>
     <div id="zoom"><button id="zin" title="Zooma in">＋</button><button id="zout" title="Zooma ut">－</button><button id="zfit" style="font-size:14px">Hela</button></div>
     <div id="toast"></div>
   </div>
@@ -504,6 +518,7 @@ function render(){
   updateSide(ovs);
   updateForslag();
   save();
+  if(window.LIVE) LIVE.afterRender();
 }
 const fmt=(v,d)=>v.toFixed(d).replace('.',',');
 
@@ -780,12 +795,22 @@ svg.addEventListener('pointermove', e=>{
     showTip(`${drag.linked.length? 'Väggen mot '+drag.linked.map(q=>q.name).join(', ')+' följer med' : 'Fasaden flyttas'} · ${fmt(area(r),1)} m²`);
   }
 });
+function dragLabel(){
+  if(!drag||!drag.moved) return '';
+  if(drag.k==='room') return 'flyttar '+drag.r.name;
+  if(drag.k==='edge') return 'ändrar '+drag.r.name;
+  if(drag.k==='furn') return 'flyttar '+(TYPES[drag.f.t]?.n||'möbel').toLowerCase();
+  if(drag.k==='op') return 'flyttar '+(OPT[drag.o.t]?.n||'öppning').toLowerCase();
+  return '';
+}
+svg.addEventListener('pointermove', e=>{ if(window.LIVE) LIVE.cursor(pt(e)); });
 function endDrag(e){
   pointers.delete(e.pointerId); if(pointers.size<2) pinch0=null;
   if(!drag) return;
   const d=drag; drag=null; showTip(null);
   if(d.k==='pan') return;
   if(!d.moved) return;
+  if(window.LIVE) LIVE.cursor(null, '');
   undoS.push(d.snap); redoS=[]; DIRTY=true;
   if(d.k==='room' && d.target){
     // byt plats: rummen byter rektanglar, möblerna följer med
@@ -954,10 +979,111 @@ document.getElementById('fil').onchange=e=>{ const f=e.target.files[0]; if(!f) r
 let tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2200); }
 function showTip(m){ const t=document.getElementById('toast'); if(!m){ t.classList.remove('show'); return; } t.textContent=m; t.classList.add('show'); clearTimeout(tt); }
 
+// ================================================================== LIVE (PeerJS / WebRTC)
+window.LIVE = (()=>{
+  const COLS=['#c8321a','#2a7fb8','#2c7a3b','#8e44ad','#e67e22','#16a085'];
+  const KINDS=['rooms','furn','ops'];
+  let peer=null, conns=[], role=null, code=null, me={id:null,name:'',col:COLS[0]}, people={}, last=null, tSync=null, tCur=null, lastCur=null, pend=null, tPend=null;
+  const panel=document.getElementById('livePanel'), btn=document.getElementById('liveBtn'), curs=document.getElementById('cursors');
+  const snapMap=()=>{ const m={}; for(const k of KINDS){ m[k]={}; for(const it of (S[k]||[])) m[k][it.id]=JSON.stringify(it); } return m; };
+  function loadLib(){ return window.Peer ? Promise.resolve() : new Promise((ok,bad)=>{ const sc=document.createElement('script'); sc.src='https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js'; sc.onload=ok; sc.onerror=()=>bad(new Error('Kunde inte ladda PeerJS')); document.head.appendChild(sc); }); }
+  function askName(def){ let n=localStorage.getItem('a101_namn')||def; const a=prompt('Ditt namn (visas för de andra)', n); if(a===null) return null; n=(a.trim()||def).slice(0,20); localStorage.setItem('a101_namn',n); return n; }
+  function send(msg, except){ const s=JSON.stringify(msg); for(const c of conns) if(c.open && c!==except) try{ c.send(s); }catch(e){} }
+  // ---- diff/patch
+  function makePatch(){ if(!last) return null; const cur=snapMap(); let any=false; const p={};
+    for(const k of KINDS){ const up=[], del=[]; for(const id in cur[k]) if(cur[k][id]!==last[k][id]) up.push(JSON.parse(cur[k][id])); for(const id in last[k]) if(!(id in cur[k])) del.push(id);
+      if(up.length||del.length){ p[k]={up,del}; any=true; } }
+    last=cur; if(any) p.seq=S.seq; return any?p:null; }
+  function applyPatch(p){
+    for(const k of KINDS){ const q=p[k]; if(!q) continue; S[k]=S[k]||[];
+      for(const it of q.up){ const ex=S[k].find(x=>x.id===it.id); if(ex){ for(const key in ex) if(!(key in it)) delete ex[key]; Object.assign(ex,it); } else S[k].push(JSON.parse(JSON.stringify(it))); last[k][it.id]=JSON.stringify(it); }
+      if(q.del.length){ S[k]=S[k].filter(x=>!q.del.includes(x.id)); for(const id of q.del) delete last[k][id]; } }
+    if(p.seq) S.seq=Math.max(S.seq||0,p.seq);
+    // låt egen ångra bara ångra egna ändringar: lägg in andras ändringar i historiken (samlat)
+    pend=pend||{}; for(const k of KINDS){ const q=p[k]; if(!q) continue; pend[k]=pend[k]||{}; for(const it of q.up) pend[k][it.id]=it; for(const id of q.del) pend[k][id]=null; }
+    clearTimeout(tPend); tPend=setTimeout(flushHist,400);
+    DIRTY=true; render();
+  }
+  function flushHist(){ if(!pend) return; const P=pend; pend=null;
+    const fix=arr=>arr.map(str=>{ const st=JSON.parse(str); for(const k in P){ st[k]=st[k]||[]; for(const id in P[k]){ const it=P[k][id]; const i=st[k].findIndex(x=>x.id===id); if(it===null){ if(i>=0) st[k].splice(i,1); } else if(i>=0) st[k][i]=JSON.parse(JSON.stringify(it)); else st[k].push(JSON.parse(JSON.stringify(it))); } } return JSON.stringify(st); });
+    undoS=fix(undoS.slice(-60)); redoS=fix(redoS); }
+  // ---- meddelanden
+  function onMsg(c, raw){ let m; try{ m=JSON.parse(raw); }catch(e){ return; }
+    if(m.t==='hello' && role==='host'){ const used=new Set([me.col,...Object.values(people).map(x=>x.col)]); const col=COLS.find(c=>!used.has(c))||COLS[(Object.keys(people).length+1)%COLS.length]; people[m.id]={name:m.name,col,conn:c}; c._pid=m.id;
+      c.send(JSON.stringify({t:'welcome', S, col, people:peopleList()})); send({t:'people',people:peopleList()}); toast(m.name+' anslöt'); drawPanel(); return; }
+    if(m.t==='welcome'){ S=m.S; if(!S.ops) S.ops=[]; last=snapMap(); me.col=m.col; undoS=[]; redoS=[]; sel=null; DIRTY=true; setPeople(m.people); fit(); render(); toast('Ansluten – ni ser samma plan'); drawPanel(); return; }
+    if(m.t==='people'){ setPeople(m.people); drawPanel(); return; }
+    if(m.t==='patch'){ applyPatch(m.p); if(role==='host') send(m,c); return; }
+    if(m.t==='cur'){ if(role==='host') send(m,c); showCur(m); return; }
+  }
+  function peopleList(){ const L=[{id:me.id,name:me.name,col:me.col,host:true}]; for(const id in people) L.push({id,name:people[id].name,col:people[id].col}); return L; }
+  function setPeople(L){ const keep={}; for(const x of L) if(x.id!==me.id) keep[x.id]={name:x.name,col:x.col,host:x.host}; people=keep; for(const el_ of [...curs.children]) if(!(el_.dataset.id in people)) el_.remove(); }
+  // ---- markörer
+  const curEls={};
+  function showCur(m){ let e=curs.querySelector(`[data-id="${m.id}"]`);
+    if(!m.x && m.x!==0){ if(e) e.remove(); return; }
+    if(!e){ e=document.createElement('div'); e.className='cur'; e.dataset.id=m.id; curs.appendChild(e); }
+    e._w={x:m.x,y:m.y}; e.innerHTML=`<svg viewBox="0 0 20 20"><path d="M2 2 L2 17 L6.5 12.5 L10 19 L12.5 18 L9 11.5 L15 11.5 Z" fill="${m.col}" stroke="#fff" stroke-width="1.3"/></svg><b style="background:${m.col}">${m.name}${m.act?' · '+m.act:''}</b>`;
+    placeCur(e); }
+  function placeCur(e){ const P=svg.createSVGPoint(); P.x=e._w.x; P.y=-e._w.y; const q=P.matrixTransform(svg.getScreenCTM()); const r=svg.getBoundingClientRect(); e.style.left=(q.x-r.left)+'px'; e.style.top=(q.y-r.top)+'px'; }
+  function cursor(p, act){ if(!role) return; if(p) lastCur=p; if(!lastCur) return;
+    if(tCur) return; tCur=setTimeout(()=>{ tCur=null; send({t:'cur',id:me.id,name:me.name,col:me.col,x:lastCur.x,y:lastCur.y,act:act!==undefined?act:dragLabel()}); },50); }
+  // ---- efter varje render: skicka ändringar (strypt)
+  function afterRender(){ for(const e of curs.children) if(e._w) placeCur(e); if(!role||!last) return;
+    if(tSync) return; tSync=setTimeout(()=>{ tSync=null; const p=makePatch(); if(p) send({t:'patch',p}); },40); }
+  // ---- panel
+  function link(){ return location.origin+location.pathname+'?live='+code; }
+  function drawPanel(){
+    if(!role){ panel.innerHTML=`<b>Live – rita tillsammans</b><div class="hint" style="margin:6px 0">Du blir värd: planen som visas nu delas, och alla med länken kan dra i den samtidigt. Din flik måste vara öppen under tiden.</div><div class="row"><button id="lvStart" style="background:#c8321a;color:#fff;border-color:#c8321a">● Starta live</button><button id="lvClose">Stäng</button></div>`;
+      panel.querySelector('#lvStart').onclick=host; panel.querySelector('#lvClose').onclick=()=>panel.classList.remove('show'); return; }
+    const pl=peopleList().length>1||role==='guest' ? (role==='host'?peopleList():[{name:me.name+' (du)',col:me.col},...Object.values(people)]) : [{name:me.name+' (du)',col:me.col}];
+    panel.innerHTML=`<b><span class="dot"></span>${role==='host'?'Du är värd':'Live'} · kod ${code}</b>
+      ${role==='host'?`<input readonly id="lvLink" value="${link()}"><div class="row"><button id="lvCopy">Kopiera länk</button>${navigator.share?'<button id="lvShare">Dela…</button>':''}</div>`:''}
+      <div class="pp">${pl.map(x=>`<span style="background:${x.col}">${x.name}${x.host?' (värd)':''}</span>`).join('')}</div>
+      <div class="hint" style="margin-top:8px">${role==='host'?'Skicka länken till Natalie. Ångra ångrar bara dina egna ändringar.':'Värden håller planen. Spara som eget förslag om du vill behålla den.'}</div>
+      <div class="row"><button id="lvStop">Avsluta live</button><button id="lvClose">Stäng rutan</button></div>`;
+    const cp=panel.querySelector('#lvCopy'); if(cp) cp.onclick=()=>{ navigator.clipboard.writeText(link()).then(()=>toast('Länken kopierad')).catch(()=>{ panel.querySelector('#lvLink').select(); document.execCommand('copy'); toast('Länken kopierad'); }); };
+    const sh=panel.querySelector('#lvShare'); if(sh) sh.onclick=()=>navigator.share({title:'A101 live',text:'Kom och dra i planen med mig',url:link()}).catch(()=>{});
+    panel.querySelector('#lvStop').onclick=stop; panel.querySelector('#lvClose').onclick=()=>panel.classList.remove('show');
+  }
+  function setBtn(){ btn.classList.toggle('on',!!role); btn.textContent = role ? `● Live ${1+Object.keys(people).length}` : '● Live'; }
+  const _dp=drawPanel; drawPanel=function(){ _dp(); setBtn(); };
+  // ---- värd / gäst
+  async function host(){
+    const n=askName('Hugo'); if(!n) return; me.name=n;
+    try{ await loadLib(); }catch(e){ return toast(e.message); }
+    code=Math.random().toString(36).slice(2,8).toUpperCase().replace(/[O0IL1]/g,'X');
+    peer=new Peer('a101-'+code.toLowerCase()); toast('Startar live…');
+    peer.on('open',id=>{ role='host'; me.id=id; last=snapMap(); drawPanel(); toast('Live! Kopiera länken och skicka den'); });
+    peer.on('connection',c=>{ conns.push(c); c.on('data',d=>onMsg(c,d)); c.on('close',()=>{ conns=conns.filter(x=>x!==c); if(c._pid&&people[c._pid]){ toast(people[c._pid].name+' lämnade'); delete people[c._pid]; showCur({id:c._pid}); send({t:'people',people:peopleList()}); drawPanel(); } }); });
+    peer.on('error',e=>{ toast('Live-fel: '+(e.type||e.message)); });
+    peer.on('disconnected',()=>{ try{ peer.reconnect(); }catch(e){} });
+  }
+  async function join(c0){
+    code=c0.toUpperCase(); const n=askName('Natalie')||'Gäst'; me.name=n;
+    try{ await loadLib(); }catch(e){ return toast(e.message); }
+    peer=new Peer(); toast('Ansluter…');
+    peer.on('open',id=>{ me.id=id; const c=peer.connect('a101-'+code.toLowerCase(),{reliable:true}); conns=[c];
+      c.on('open',()=>{ role='guest'; c.send(JSON.stringify({t:'hello',id,name:me.name})); });
+      c.on('data',d=>onMsg(c,d));
+      c.on('close',()=>{ if(role==='guest'){ toast('Värden avslutade live – du har kvar en kopia'); role=null; conns=[]; people={}; curs.innerHTML=''; drawPanel(); panel.classList.add('show'); } }); });
+    peer.on('error',e=>{ toast(e.type==='peer-unavailable'?'Hittar inte sessionen – är värdens flik öppen?':'Live-fel: '+(e.type||e.message)); drawPanel(); panel.classList.add('show'); });
+    panel.classList.add('show'); drawPanel();
+  }
+  function stop(){ try{ for(const c of conns) c.close(); peer&&peer.destroy(); }catch(e){} role=null; conns=[]; people={}; peer=null; curs.innerHTML=''; last=null;
+    if(new URLSearchParams(location.search).has('live')) history.replaceState(null,'',location.pathname);
+    drawPanel(); toast('Live avslutat'); }
+  btn.onclick=()=>{ panel.classList.toggle('show'); drawPanel(); };
+  window.addEventListener('beforeunload',()=>{ try{ peer&&peer.destroy(); }catch(e){} });
+  const q=new URLSearchParams(location.search).get('live');
+  return {afterRender, cursor, join, start:()=>q&&setTimeout(()=>join(q),300), state:()=>({role,code,people,me})};
+})();
+
 document.getElementById('selinfo').dataset.def=document.getElementById('selinfo').innerHTML;
 window.addEventListener('resize',()=>{fit(); render();});
 if(!S) S=startStateFull();
 fit(); render();
+LIVE.start();
 window.__lock={anchorsFor,applyAnchors,isLocked}; window.__S=()=>S; window.__FL=()=>FL; window.__cur=()=>({CUR,DIRTY}); window.__f={saveAs,saveCur,loadPlan,step}; window.__api={resize:(name,d,ax)=>{axis=ax||'x'; resize(S.rooms.find(r=>r.name===name),d);}, union:unionStats, overlaps, holes, sel:(n)=>{sel={k:'room',id:S.rooms.find(r=>r.name===n).id}; render();}};
 </script>
 </body>
