@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="A101 – dra, byt plats och ändra storlek på rummen. Möbler, BYA och fasad live.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="buttercup.nu">
+<meta property="og:title" content="A101 – interaktiv planlösning">
+<meta property="og:description" content="Dra, byt plats och ändra storlek på rummen. Möbler, BYA och fasad räknas live.">
+<meta property="og:url" content="https://www.buttercup.nu/a101/">
+<meta property="og:image" content="https://www.buttercup.nu/a101/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.buttercup.nu/a101/og.jpg">
+<title>A101 – interaktiv planlösning</title>
+<style>
+:root{--ink:#1d1d1b;--wall:#2b2b2b;--sel:#c8321a;--acc:#fbc021;--bg:#f4f1ea;--panel:#fffdf8;--mut:#7a776f}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:-apple-system,"Helvetica Neue",Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);overflow:hidden}
+#app{display:flex;height:100%}
+#stage{flex:1;position:relative;touch-action:none}
+svg#plan{width:100%;height:100%;display:block;user-select:none;-webkit-user-select:none}
+#side{width:310px;background:var(--panel);border-left:1px solid #ddd6c8;display:flex;flex-direction:column;overflow:auto}
+#side h1{font-size:17px;margin:14px 14px 2px;letter-spacing:.02em}
+#side .sub{font-size:12px;color:var(--mut);margin:0 14px 10px}
+.box{border-top:1px solid #eee6d6;padding:10px 14px}
+.box h2{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin:0 0 8px}
+.stats{display:grid;grid-template-columns:1fr auto;gap:3px 10px;font-size:13px}
+.stats b{text-align:right;font-variant-numeric:tabular-nums}
+button{font:inherit;font-size:13px;border:1px solid #cfc6b4;background:#fff;border-radius:7px;padding:6px 9px;cursor:pointer;color:var(--ink)}
+button:hover{background:#fbf3df}
+button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+button.big{font-size:20px;font-weight:700;width:46px;padding:4px 0}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:6px 0}
+input[type=text],input[type=number]{font:inherit;font-size:13px;border:1px solid #cfc6b4;border-radius:6px;padding:5px 7px;width:100%}
+input[type=number]{width:78px}
+.pal{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.pal button{text-align:left;font-size:12px;padding:6px 7px}
+.hint{font-size:12px;color:var(--mut);line-height:1.45}
+.warn{font-size:12px;color:var(--sel);line-height:1.45}
+#rumlista{font-size:12px;display:grid;grid-template-columns:1fr auto auto;gap:2px 8px}
+#rumlista span.n{cursor:pointer}
+#rumlista span.n:hover{text-decoration:underline}
+#rumlista .r{text-align:right;font-variant-numeric:tabular-nums;color:var(--mut)}
+#zoom{position:absolute;left:10px;bottom:10px;display:flex;gap:6px}
+#toast{position:absolute;left:50%;top:12px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:7px 12px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90%}
+#toast.show{opacity:.92}
+.rlabel{pointer-events:none;font-family:-apple-system,Helvetica,Arial,sans-serif}
+@media (max-width:760px){
+  #app{flex-direction:column}
+  #stage{flex:1 1 58%}
+  #side{width:100%;flex:1 1 42%;border-left:0;border-top:1px solid #ddd6c8}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+    <svg id="plan" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div id="zoom"><button id="zin">＋</button><button id="zout">－</button><button id="zfit">Hela</button></div>
+    <div id="toast"></div>
+  </div>
+  <div id="side">
+    <h1>A101 · planlösning</h1>
+    <div class="sub">Utgår från alternativ L2. Allt i mm, rutnät 10 cm.</div>
+
+    <div class="box">
+      <h2>Huset</h2>
+      <div class="stats" id="stats"></div>
+      <div id="varningar"></div>
+    </div>
+
+    <div class="box" id="selbox">
+      <h2>Valt</h2>
+      <div id="selinfo" class="hint">Klicka på ett rum eller en möbel.<br>
+      • Dra ett rum för att flytta det (släpp på ett annat rum = byt plats).<br>
+      • Dra i ett valt rums kant för att ändra formen – grannväggen följer med.<br>
+      • Dra rummet utanför fasaden = förskjutning.</div>
+    </div>
+
+    <div class="box">
+      <h2>Lägg till</h2>
+      <div class="pal" id="pal"></div>
+      <div class="row" style="margin-top:8px"><button id="nyttrum">＋ Nytt rum</button></div>
+    </div>
+
+    <div class="box">
+      <h2>Rum</h2>
+      <div id="rumlista"></div>
+    </div>
+
+    <div class="box">
+      <h2>Visning &amp; fil</h2>
+      <div class="row">
+        <button id="tgMob" class="on">Möbler</button>
+        <button id="tgMat" class="on">Mått</button>
+        <button id="tgRef">L2-kontur</button>
+      </div>
+      <div class="row">
+        <button id="undo">↶ Ångra</button>
+        <button id="redo">↷ Gör om</button>
+        <button id="reset">Återställ L2</button>
+      </div>
+      <div class="row">
+        <button id="expSvg">SVG</button>
+        <button id="expPng">PNG</button>
+        <button id="expJson">Spara fil</button>
+        <button id="impJson">Öppna fil</button>
+        <input type="file" id="fil" accept=".json" hidden>
+      </div>
+      <div class="hint">Sparas automatiskt i webbläsaren. SVG:n är i skala 1:100 i mm och kan öppnas direkt i Illustrator.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ------------------------------------------------------------------ data (mm, y = norr)
+const L2_OUTLINE = [[16400,10650],[16400,5200],[17900,5200],[17900,4200],[23390,4200],[23390,10200],[23810,10200],[23810,15900],[21000,15900],[21000,22000],[6700,22000],[6700,21400],[4700,21400],[4700,22000],[0,22000],[0,15280],[4700,15280],[4700,15300],[15200,15300],[15200,10650]];
+const COLORS = {sov:'#dfe7f4', vat:'#d8eeee', dag:'#f3e6c9', kok:'#f1dcc3', ser:'#e6e1d6', kom:'#ebe7df', ny:'#e9e2f3'};
+const START_ROOMS = [
+  ['Entré',            'kom', 16400, 5200, 19400,10650],
+  ['Wc/dusch',         'vat', 19400, 4200, 21400, 6400],
+  ['KLK',              'ser', 21400, 4200, 23390, 6400],
+  ['Tvätt/teknik',     'ser', 19400, 6400, 23390, 8000],
+  ['Grovkök/skafferi', 'ser', 19400, 8000, 23390,10200],
+  ['Kök',              'kok', 19400,10200, 23810,15900],
+  ['Matsal',           'kok', 15400,10650, 19400,15900],
+  ['Vardagsrum',       'dag', 15400,15900, 21000,22000],
+  ['Galleri',          'kom',  4700,15300, 15400,16700],
+  ['Barnrum 1',        'sov', 12500,16700, 15400,22000],
+  ['Barnrum 2',        'sov',  9600,16700, 12500,22000],
+  ['Barnrum 3',        'sov',  6700,16700,  9600,22000],
+  ['Bad 2',            'vat',  4700,16700,  6700,21400],
+  ['Master-bad',       'vat',     0,18300,  2400,22000],
+  ['Klädrum',          'ser',  2400,18300,  4700,22000],
+  ['Mastersovrum',     'sov',     0,15280,  4700,18300],
+];
+// möbeltyper: w = längd (lokal x), d = djup (lokal y). Rot 0 = ryggen/väggen mot norr (+y).
+const TYPES = {
+  bokhylla:{n:'Bokhylla',w:2400,d:350},
+  spis:{n:'Öppen spis',w:1200,d:550},
+  matbord:{n:'Matbord 8 pers',w:2600,d:1000},
+  soffa:{n:'Soffa',w:2400,d:900},
+  hornsoffa:{n:'Hörnsoffa',w:2700,d:2200},
+  fatolj:{n:'Fåtölj',w:850,d:850},
+  soffbord:{n:'Soffbord',w:1200,d:700},
+  sang180:{n:'Säng 180',w:1800,d:2000},
+  sang90:{n:'Säng 90',w:900,d:2000},
+  garderob:{n:'Garderob',w:1200,d:600},
+  skrivbord:{n:'Skrivbord',w:1200,d:600},
+  koksö:{n:'Köksö',w:2200,d:1000},
+  bank:{n:'Köksbänk',w:2400,d:600},
+  piano:{n:'Piano',w:1500,d:600},
+  wc:{n:'WC',w:400,d:650},
+  handfat:{n:'Tvättställ',w:600,d:450},
+  dusch:{n:'Dusch',w:1000,d:1000},
+  badkar:{n:'Badkar',w:1700,d:750},
+};
+const PAL = ['bokhylla','spis','matbord','soffa','hornsoffa','fatolj','soffbord','sang180','sang90','garderob','skrivbord','koksö','bank','piano','badkar','dusch','wc','handfat'];
+// [typ, cx, cy, w, d, rot]
+const START_FURN = [
+  ['bank',21400,10560,3980,600,180],['bank',23140,11780,1840,600,270],
+  ['hornsoffa',22270,14315,2340,2430,0],['soffbord',21850,13875,700,750,0],
+  ['matbord',17275,13000,3200,1150,90],['koksö',20800,12400,2200,1000,0],
+  ['spis',18200,15900,1200,500,180],
+  ['soffa',16150,18900,2600,900,90],['soffa',20180,18900,2600,900,270],['soffbord',18250,18900,1500,1200,0],
+  ['bokhylla',18630,21455,4000,350,0],
+  ['sang180',1370,16850,1800,2000,90],
+  ['garderob',4340,19965,2130,600,270],['garderob',3395,21330,1870,600,0],['garderob',2760,20365,1330,600,90],
+  ['wc',695,18800,400,650,90],['handfat',620,20000,1200,500,90],['dusch',970,21130,1200,1000,0],
+  ['wc',5085,18400,400,650,90],['handfat',4985,17600,600,450,90],['dusch',6140,20530,1000,1000,0],
+  ['wc',20000,4895,400,650,180],['handfat',20600,6115,600,450,0],['dusch',20890,5020,900,900,0],
+  ['garderob',22720,5185,1230,600,270],['garderob',21940,4870,960,600,180],
+  ['bank',21000,6760,1600,600,180],['bank',21460,9840,3120,600,0],['garderob',21700,8360,1400,600,180],
+  ['sang90',13160,20630,900,2000,0],['garderob',15040,17910,1500,600,270],['skrivbord',15040,20630,1200,600,270],
+  ['sang90',10260,20630,900,2000,0],['garderob',12140,17910,1500,600,270],['skrivbord',12140,20630,1200,600,270],
+  ['sang90',7520,20630,900,2000,0],['garderob',9240,17910,1500,600,270],['skrivbord',9240,20630,1200,600,270],
+];
+
+function startState(){
+  return {
+    rooms: START_ROOMS.map((r,i)=>({id:'r'+i,name:r[0],c:r[1],x0:r[2],y0:r[3],x1:r[4],y1:r[5]})),
+    furn: START_FURN.map((f,i)=>({id:'f'+i,t:f[0],cx:f[1],cy:f[2],w:f[3],d:f[4],rot:f[5]})),
+    seq: 100
+  };
+}
+const KEY='a101_interaktiv_v1';
+let S = (()=>{ try{ const s=JSON.parse(localStorage.getItem(KEY)); if(s&&s.rooms) return s; }catch(e){} return startState(); })();
+let undoS=[], redoS=[];
+function snap(){ undoS.push(JSON.stringify(S)); if(undoS.length>200) undoS.shift(); redoS=[]; }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+
+let sel = null;          // {k:'room'|'furn', id}
+let axis = 'x';           // för +/-
+let view = {show:{mob:true,mat:true,ref:false}};
+const GRID = 100, MIN = 800, STEP = 100;
+const g10 = v => Math.round(v/GRID)*GRID;
+
+// ------------------------------------------------------------------ svg helpers
+const svg = document.getElementById('plan');
+const NS='http://www.w3.org/2000/svg';
+function el(tag, attrs, parent){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
+let vb = {x:-1500, y:-23500, w:27000, h:21000};
+function setVB(){ svg.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`); }
+function fit(){
+  const b = bounds(); const pad=1500;
+  const r = svg.getBoundingClientRect(); const ar = r.width/Math.max(r.height,1);
+  let w=(b.x1-b.x0)+2*pad, h=(b.y1-b.y0)+2*pad;
+  if(w/h < ar) w = h*ar; else h = w/ar;
+  vb = {x:(b.x0+b.x1)/2 - w/2, y:-(b.y0+b.y1)/2 - h/2, w, h}; setVB();
+}
+function bounds(){ let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9; for(const r of S.rooms){x0=Math.min(x0,r.x0);y0=Math.min(y0,r.y0);x1=Math.max(x1,r.x1);y1=Math.max(y1,r.y1);} return {x0,y0,x1,y1}; }
+function pt(evt){ const p=svg.createSVGPoint(); p.x=evt.clientX; p.y=evt.clientY; const q=p.matrixTransform(svg.getScreenCTM().inverse()); return {x:q.x, y:-q.y}; }
+const pxmm = () => vb.w / svg.getBoundingClientRect().width;  // mm per skärmpixel
+
+// ------------------------------------------------------------------ geometri
+const area = r => (r.x1-r.x0)*(r.y1-r.y0)/1e6;
+const inside = (r,x,y) => x>r.x0 && x<r.x1 && y>r.y0 && y<r.y1;
+const ov = (a0,a1,b0,b1) => Math.max(0, Math.min(a1,b1)-Math.max(a0,b0));
+function covered(x,y,skip){ return S.rooms.some(r=>r!==skip && x>=r.x0 && x<=r.x1 && y>=r.y0 && y<=r.y1); }
+function roomAt(x,y,skip){ for(let i=S.rooms.length-1;i>=0;i--){ const r=S.rooms[i]; if(r!==skip && inside(r,x,y)) return r; } return null; }
+// exakt union via koordinatkomprimering
+function unionStats(){
+  const xs=[...new Set(S.rooms.flatMap(r=>[r.x0,r.x1]))].sort((a,b)=>a-b);
+  const ys=[...new Set(S.rooms.flatMap(r=>[r.y0,r.y1]))].sort((a,b)=>a-b);
+  const nx=xs.length-1, ny=ys.length-1; const C=[];
+  let A=0;
+  for(let i=0;i<nx;i++){ C[i]=[]; for(let j=0;j<ny;j++){ const cx=(xs[i]+xs[i+1])/2, cy=(ys[j]+ys[j+1])/2; const c=S.rooms.some(r=>inside(r,cx,cy)); C[i][j]=c; if(c) A+=(xs[i+1]-xs[i])*(ys[j+1]-ys[j]); } }
+  const on=(i,j)=> i>=0&&j>=0&&i<nx&&j<ny&&C[i][j];
+  let P=0;
+  for(let i=0;i<nx;i++) for(let j=0;j<ny;j++) if(C[i][j]){
+    if(!on(i-1,j)) P+=ys[j+1]-ys[j]; if(!on(i+1,j)) P+=ys[j+1]-ys[j];
+    if(!on(i,j-1)) P+=xs[i+1]-xs[i]; if(!on(i,j+1)) P+=xs[i+1]-xs[i];
+  }
+  // hörn: räkna gitterpunkter där 1 eller 3 av 4 celler är fyllda (eller diagonalt 2)
+  let corners=0;
+  for(let i=0;i<=nx;i++) for(let j=0;j<=ny;j++){
+    const a=on(i-1,j-1),b=on(i,j-1),c=on(i-1,j),d=on(i,j); const n=a+b+c+d;
+    if(n===1||n===3) corners++; else if(n===2 && a===d) corners+=2;
+  }
+  // ytterväggssidor per rum (för väggtjocklek)
+  return {A:A/1e6, P:P/1000, corners};
+}
+function overlaps(){
+  const out=[]; for(let i=0;i<S.rooms.length;i++) for(let j=i+1;j<S.rooms.length;j++){ const a=S.rooms[i],b=S.rooms[j];
+    const o=ov(a.x0,a.x1,b.x0,b.x1)*ov(a.y0,a.y1,b.y0,b.y1); if(o>1e4) out.push([a,b,o/1e6]); } return out;
+}
+function sideExterior(r, side){
+  // tre provpunkter strax utanför sidan
+  const e=60, out=[];
+  for(const t of [0.2,0.5,0.8]){
+    let x,y;
+    if(side==='W'){x=r.x0-e;y=r.y0+(r.y1-r.y0)*t;} if(side==='E'){x=r.x1+e;y=r.y0+(r.y1-r.y0)*t;}
+    if(side==='S'){y=r.y0-e;x=r.x0+(r.x1-r.x0)*t;} if(side==='N'){y=r.y1+e;x=r.x0+(r.x1-r.x0)*t;}
+    out.push(!covered(x,y,r));
+  }
+  return out.filter(Boolean).length>=2;
+}
+
+// ------------------------------------------------------------------ möbelritning (lokala koord, y upp, centrerat)
+function drawFurn(g, f){
+  const w=f.w, d=f.d, L=-w/2, R=w/2, B=-d/2, T=d/2;
+  const st={fill:'#fff',stroke:'#3a3a3a','stroke-width':22};
+  const thin={fill:'none',stroke:'#3a3a3a','stroke-width':14};
+  const rect=(x0,y0,x1,y1,a=st)=>el('rect',Object.assign({x:Math.min(x0,x1),y:Math.min(y0,y1),width:Math.abs(x1-x0),height:Math.abs(y1-y0)},a),g);
+  const line=(x0,y0,x1,y1,a=thin)=>el('line',Object.assign({x1:x0,y1:y0,x2:x1,y2:y1},a),g);
+  switch(f.t){
+    case 'bokhylla': rect(L,B,R,T,{fill:'#c9a77c',stroke:'#3a3a3a','stroke-width':22}); for(let x=L+400;x<R-100;x+=400) line(x,B,x,T); break;
+    case 'spis': rect(L,B,R,T,{fill:'#8d8a84',stroke:'#2a2a2a','stroke-width':22}); rect(-w*0.3,B,w*0.3,B+d*0.55,{fill:'#2a2a2a'}); el('path',{d:`M${-w*0.15},${B+40} Q0,${B+d*0.5} ${w*0.15},${B+40}`,fill:'#e8742c'},g); rect(-w*0.45,B-350,w*0.45,B,{fill:'#d9d4ca',stroke:'#8d8a84','stroke-width':14}); break;
+    case 'matbord': {
+      rect(L,B,R,T,{fill:'#a77b52',stroke:'#3a3a3a','stroke-width':22});
+      const n=Math.max(1,Math.floor(w/620)), sp=w/n;
+      for(let i=0;i<n;i++){ const cx=L+sp*(i+0.5); rect(cx-200,T+60,cx+200,T+460); rect(cx-200,B-460,cx+200,B-60); }
+      break; }
+    case 'soffa': rect(L,B,R,T); rect(L,T-220,R,T,{fill:'#cfc8bb',stroke:'#3a3a3a','stroke-width':18}); rect(L,B,L+200,T-220,{fill:'#cfc8bb',stroke:'#3a3a3a','stroke-width':18}); rect(R-200,B,R,T-220,{fill:'#cfc8bb',stroke:'#3a3a3a','stroke-width':18}); for(let x=L+200+(w-400)/3;x<R-250;x+=(w-400)/3) line(x,B,x,T-220); break;
+    case 'hornsoffa': { const a=Math.min(900,d,w); el('path',Object.assign({d:`M${L},${T} L${R},${T} L${R},${B} L${R-a},${B} L${R-a},${T-a} L${L},${T-a} Z`},st),g);
+      el('path',{d:`M${L},${T-220} L${R-220},${T-220} L${R-220},${B}`,fill:'none',stroke:'#3a3a3a','stroke-width':14},g); break; }
+    case 'fatolj': rect(L,B,R,T); rect(L,T-200,R,T,{fill:'#cfc8bb',stroke:'#3a3a3a','stroke-width':16}); break;
+    case 'soffbord': rect(L,B,R,T,{fill:'#e7dccb',stroke:'#3a3a3a','stroke-width':20}); break;
+    case 'sang180': case 'sang90': rect(L,B,R,T); rect(L,T-120,R,T,{fill:'#7f6a55'}); if(w>1200){ rect(L+120,T-560,-60,T-180,{fill:'#f1ede4',stroke:'#3a3a3a','stroke-width':12}); rect(60,T-560,R-120,T-180,{fill:'#f1ede4',stroke:'#3a3a3a','stroke-width':12}); } else rect(L+120,T-560,R-120,T-180,{fill:'#f1ede4',stroke:'#3a3a3a','stroke-width':12}); line(L,T-900,R,T-900); break;
+    case 'garderob': rect(L,B,R,T,{fill:'#eee3cf',stroke:'#3a3a3a','stroke-width':22}); line(L,B+40,R,B+40,{stroke:'#c8321a','stroke-width':40}); line(L,T,R,B,{stroke:'#999','stroke-width':10}); break;
+    case 'skrivbord': rect(L,B,R,T,{fill:'#e7dccb',stroke:'#3a3a3a','stroke-width':20}); el('circle',{cx:0,cy:B-300,r:230,fill:'#fff',stroke:'#3a3a3a','stroke-width':16},g); break;
+    case 'koksö': rect(L,B,R,T,{fill:'#bdb8ae',stroke:'#3a3a3a','stroke-width':22}); break;
+    case 'bank': rect(L,B,R,T,{fill:'#bdb8ae',stroke:'#3a3a3a','stroke-width':22}); line(L,B+50,R,B+50); break;
+    case 'piano': rect(L,B,R,T,{fill:'#2b2b2b'}); rect(L+60,B,R-60,B+180,{fill:'#fff',stroke:'#2b2b2b','stroke-width':10}); break;
+    case 'wc': rect(L+20,T-180,R-20,T); el('ellipse',Object.assign({cx:0,cy:(B+T-180)/2,rx:w/2-30,ry:(d-180)/2},st),g); break;
+    case 'handfat': rect(L,B,R,T); el('ellipse',{cx:0,cy:0,rx:w*0.35,ry:d*0.3,fill:'#eef6f8',stroke:'#3a3a3a','stroke-width':12},g); break;
+    case 'dusch': rect(L,B,R,T,{fill:'#e3f2f7',stroke:'#2a7fb8','stroke-width':22}); line(L,B,R,T,{stroke:'#2a7fb8','stroke-width':10}); line(L,T,R,B,{stroke:'#2a7fb8','stroke-width':10}); el('circle',{cx:0,cy:0,r:60,fill:'#2a7fb8'},g); break;
+    case 'badkar': rect(L,B,R,T); el('rect',{x:L+80,y:B+80,width:w-160,height:d-160,rx:250,fill:'#eef6f8',stroke:'#3a3a3a','stroke-width':12},g); break;
+    default: rect(L,B,R,T);
+  }
+}
+
+// ------------------------------------------------------------------ render
+function render(){
+  svg.innerHTML='';
+  const root = el('g',{},svg);
+  // rutnät 1 m
+  const b=bounds(); const gx0=Math.floor((b.x0-6000)/1000)*1000, gx1=Math.ceil((b.x1+6000)/1000)*1000, gy0=Math.floor((b.y0-6000)/1000)*1000, gy1=Math.ceil((b.y1+6000)/1000)*1000;
+  const grid = el('g',{stroke:'#e3ddd0','stroke-width':Math.max(8,pxmm()*0.6)},root);
+  for(let x=gx0;x<=gx1;x+=1000) el('line',{x1:x,y1:-gy0,x2:x,y2:-gy1},grid);
+  for(let y=gy0;y<=gy1;y+=1000) el('line',{x1:gx0,y1:-y,x2:gx1,y2:-y},grid);
+  // L2-referens
+  if(view.show.ref) el('polygon',{points:L2_OUTLINE.map(p=>p[0]+','+(-p[1])).join(' '),fill:'none',stroke:'#2a7fb8','stroke-width':40,'stroke-dasharray':'200 140',opacity:.7},root);
+  // väggar: mörk underyta per rum, ljus insida med olika indrag (ytter 370 / inner 60)
+  const wl=el('g',{},root);
+  for(const r of S.rooms) el('rect',{x:r.x0,y:-r.y1,width:r.x1-r.x0,height:r.y1-r.y0,fill:'#2b2b2b'},wl);
+  const ovs = overlaps(); const bad=new Set(ovs.flatMap(o=>[o[0].id,o[1].id]));
+  const rl=el('g',{},root);
+  const band = sel&&sel.k==='room' ? bandOf(S.rooms.find(r=>r.id===sel.id), axis) : null;
+  for(const r of S.rooms){
+    const ins={W:sideExterior(r,'W')?370:60,E:sideExterior(r,'E')?370:60,S:sideExterior(r,'S')?370:60,N:sideExterior(r,'N')?370:60};
+    const x=r.x0+ins.W, y=r.y0+ins.S, w=(r.x1-ins.E)-x, h=(r.y1-ins.N)-y;
+    const g=el('g',{'data-room':r.id,style:'cursor:move'},rl);
+    el('rect',{x, y:-(y+h), width:Math.max(w,10), height:Math.max(h,10), fill:COLORS[r.c]||'#eee'},g);
+    if(bad.has(r.id)) el('rect',{x:r.x0,y:-r.y1,width:r.x1-r.x0,height:r.y1-r.y0,fill:'rgba(200,50,26,.18)',stroke:'#c8321a','stroke-width':40,'stroke-dasharray':'160 100'},g);
+    if(band && band.list.includes(r) && r.id!==sel.id) el('rect',{x:r.x0+40,y:-r.y1+40,width:r.x1-r.x0-80,height:r.y1-r.y0-80,fill:'none',stroke:'#fbc021','stroke-width':60,'stroke-dasharray':'120 90'},g);
+  }
+  // möbler
+  if(view.show.mob){
+    const fl=el('g',{},root);
+    for(const f of S.furn){
+      const g=el('g',{'data-furn':f.id,transform:`translate(${f.cx},${-f.cy}) scale(1,-1) rotate(${f.rot})`,style:'cursor:grab'},fl);
+      el('rect',{x:-f.w/2-150,y:-f.d/2-150,width:f.w+300,height:f.d+300,fill:'transparent'},g); // större träffyta
+      drawFurn(g,f);
+      if(sel&&sel.k==='furn'&&sel.id===f.id) el('rect',{x:-f.w/2-60,y:-f.d/2-60,width:f.w+120,height:f.d+120,fill:'none',stroke:'#c8321a','stroke-width':40,'stroke-dasharray':'120 80'},g);
+    }
+  }
+  // etiketter
+  const lb=el('g',{class:'rlabel'},root);
+  const fs = Math.max(240, Math.min(420, pxmm()*13));
+  for(const r of S.rooms){
+    const cx=(r.x0+r.x1)/2, cy=(r.y0+r.y1)/2;
+    const small = (r.x1-r.x0)<2600;
+    const f1 = small? fs*0.8 : fs;
+    const t=el('text',{x:cx,y:-cy-f1*0.2,'text-anchor':'middle','font-size':f1,'font-weight':700,fill:'#1d1d1b',stroke:'rgba(255,253,248,.85)','stroke-width':f1*0.22,'paint-order':'stroke'},lb); t.textContent=r.name;
+    const t2=el('text',{x:cx,y:-cy+f1*0.95,'text-anchor':'middle','font-size':f1*0.78,fill:'#555',stroke:'rgba(255,253,248,.85)','stroke-width':f1*0.2,'paint-order':'stroke'},lb);
+    t2.textContent = view.show.mat ? `${fmt(area(r),1)} m² · ${fmt((r.x1-r.x0)/1000,1)}×${fmt((r.y1-r.y0)/1000,1)}` : `${fmt(area(r),1)} m²`;
+  }
+  // valt rum: kant-handtag
+  if(sel && sel.k==='room'){
+    const r=S.rooms.find(q=>q.id===sel.id);
+    if(r){
+      el('rect',{x:r.x0,y:-r.y1,width:r.x1-r.x0,height:r.y1-r.y0,fill:'none',stroke:'#c8321a','stroke-width':Math.max(50,pxmm()*3),'pointer-events':'none'},root);
+      const hw = Math.max(220, pxmm()*16), hl=Math.min(1600,(Math.min(r.x1-r.x0,r.y1-r.y0))*0.5);
+      const H=el('g',{},root);
+      const mk=(side,x,y,w,h,cur)=>{ el('rect',{x,y,width:w,height:h,rx:Math.min(w,h)/2,fill:'#c8321a',stroke:'#fff','stroke-width':30,'data-edge':side,style:'cursor:'+cur},H); };
+      const cx=(r.x0+r.x1)/2, cy=(r.y0+r.y1)/2;
+      mk('W', r.x0-hw/2, -cy-hl/2, hw, hl, 'ew-resize'); mk('E', r.x1-hw/2, -cy-hl/2, hw, hl, 'ew-resize');
+      mk('S', cx-hl/2, -r.y0-hw/2, hl, hw, 'ns-resize'); mk('N', cx-hl/2, -r.y1-hw/2, hl, hw, 'ns-resize');
+    }
+  }
+  // norrpil
+  const nb=b; const ax=nb.x1+900, ay=-(nb.y1);
+  el('path',{d:`M${ax},${ay-500} L${ax-200},${ay+50} L${ax+200},${ay+50} Z`,fill:'#1d1d1b'},root);
+  const nt=el('text',{x:ax,y:ay+450,'text-anchor':'middle','font-size':360,'font-weight':700,class:'rlabel'},root); nt.textContent='N';
+  // skalstock 5 m
+  const sx=nb.x0, sy=-(nb.y0)+900;
+  for(let i=0;i<5;i++) el('rect',{x:sx+i*1000,y:sy,width:1000,height:120,fill:i%2?'#fff':'#1d1d1b',stroke:'#1d1d1b','stroke-width':20},root);
+  const st=el('text',{x:sx+5200,y:sy+120,'font-size':300,class:'rlabel'},root); st.textContent='5 m';
+  updateSide(ovs);
+  save();
+}
+const fmt=(v,d)=>v.toFixed(d).replace('.',',');
+
+// ------------------------------------------------------------------ sidopanel
+function updateSide(ovs){
+  const u=unionStats(); const sum=S.rooms.reduce((a,r)=>a+area(r),0);
+  document.getElementById('stats').innerHTML =
+    `<span>BYA (fasadens utsida)</span><b>${fmt(u.A,1)} m²</b>`+
+    `<span>Mål enl. Ronander</span><b>≈225 m²</b>`+
+    `<span>Skillnad</span><b style="color:${Math.abs(u.A-225)>5?'#c8321a':'#2c7a3b'}">${u.A-225>=0?'+':''}${fmt(u.A-225,1)} m²</b>`+
+    `<span>Fasadlängd</span><b>${fmt(u.P,1)} m</b>`+
+    `<span>Fasadhörn (förskjutningar)</span><b>${u.corners}</b>`+
+    `<span>Antal rum</span><b>${S.rooms.length}</b>`;
+  const w=[];
+  for(const o of ovs) w.push(`⚠ ${o[0].name} och ${o[1].name} överlappar (${fmt(o[2],1)} m²)`);
+  for(const r of S.rooms){ if(r.c==='sov' && Math.min(r.x1-r.x0,r.y1-r.y0)<2400) w.push(`⚠ ${r.name} är smalare än 2,4 m`); }
+  const hol = holes(); if(hol>0.3) w.push(`⚠ Det finns en glipa/innergård på ${fmt(hol,1)} m² mellan rummen`);
+  document.getElementById('varningar').innerHTML = w.length? `<div class="warn" style="margin-top:8px">${w.join('<br>')}</div>` : `<div class="hint" style="margin-top:8px;color:#2c7a3b">✓ Inga krockar</div>`;
+  // rumslista
+  const rl=document.getElementById('rumlista'); rl.innerHTML='';
+  for(const r of [...S.rooms].sort((a,b)=>a.name.localeCompare(b.name,'sv'))){
+    const n=document.createElement('span'); n.className='n'; n.textContent=r.name; n.onclick=()=>{sel={k:'room',id:r.id}; render();};
+    const a=document.createElement('span'); a.className='r'; a.textContent=fmt(area(r),1)+' m²';
+    const d=document.createElement('span'); d.className='r'; d.textContent=fmt((r.x1-r.x0)/1000,1)+'×'+fmt((r.y1-r.y0)/1000,1);
+    rl.append(n,a,d);
+  }
+  // valt
+  const si=document.getElementById('selinfo');
+  if(!sel){ si.className='hint'; si.innerHTML=document.getElementById('selinfo').dataset.def; return; }
+  si.className='';
+  if(sel.k==='room'){
+    const r=S.rooms.find(q=>q.id===sel.id); if(!r){sel=null; return updateSide(ovs);}
+    const bnd=bandOf(r,axis);
+    si.innerHTML=`
+      <input type="text" id="rname" value="${r.name.replace(/"/g,'&quot;')}">
+      <div class="row" style="justify-content:space-between;margin-top:8px">
+        <button class="big" id="minus">−</button>
+        <div style="text-align:center;font-size:13px"><b style="font-size:18px">${fmt(area(r),1)} m²</b><br>${fmt((r.x1-r.x0)/1000,2)} × ${fmt((r.y1-r.y0)/1000,2)} m</div>
+        <button class="big" id="plus">+</button>
+      </div>
+      <div class="row"><span class="hint">Ändra</span>
+        <button id="axX" class="${axis==='x'?'on':''}">↔ bredd</button>
+        <button id="axY" class="${axis==='y'?'on':''}">↕ djup</button></div>
+      <div class="hint">${bnd.list.length>1 ? `Gula rum (${bnd.list.filter(q=>q!==r).map(q=>q.name).join(', ')}) krymper/växer lika mycket så att ytterväggen ligger kvar.` : 'Inga rum i samma rad åt det hållet – rummet växer utåt och fasaden flyttas.'}</div>
+      <div class="row">
+        <select id="rtyp" style="font:inherit;font-size:13px;padding:5px;border-radius:6px;border:1px solid #cfc6b4">
+          ${[['sov','Sovrum'],['vat','Våtrum'],['dag','Vardag'],['kok','Kök/mat'],['kom','Hall/galleri'],['ser','Förråd/tvätt'],['ny','Övrigt']].map(([k,n])=>`<option value="${k}" ${r.c===k?'selected':''}>${n}</option>`).join('')}
+        </select>
+        <button id="rdup">Kopiera</button><button id="rdel">Ta bort</button></div>`;
+    document.getElementById('rname').onchange=e=>{snap(); r.name=e.target.value; render();};
+    document.getElementById('rtyp').onchange=e=>{snap(); r.c=e.target.value; render();};
+    document.getElementById('plus').onclick=()=>resize(r,+STEP);
+    document.getElementById('minus').onclick=()=>resize(r,-STEP);
+    document.getElementById('axX').onclick=()=>{axis='x'; render();};
+    document.getElementById('axY').onclick=()=>{axis='y'; render();};
+    document.getElementById('rdel').onclick=()=>{snap(); S.rooms=S.rooms.filter(q=>q!==r); sel=null; render();};
+    document.getElementById('rdup').onclick=()=>{snap(); const n=Object.assign({},r,{id:'r'+(S.seq++),name:r.name+' (kopia)',x0:r.x0+600,x1:r.x1+600,y0:r.y0-600,y1:r.y1-600}); S.rooms.push(n); sel={k:'room',id:n.id}; render();};
+  } else {
+    const f=S.furn.find(q=>q.id===sel.id); if(!f){sel=null; return updateSide(ovs);}
+    si.innerHTML=`<b>${TYPES[f.t]?.n||f.t}</b>
+      <div class="row">Längd <input type="number" id="fw" step="50" value="${f.w}"> Djup <input type="number" id="fd" step="50" value="${f.d}"></div>
+      <div class="row"><button id="frot">⟳ Vrid 90°</button><button id="fdup">Kopiera</button><button id="fdel">Ta bort</button></div>
+      <div class="hint">Mått i mm. Tangent R vrider, Delete tar bort.</div>`;
+    document.getElementById('fw').onchange=e=>{snap(); f.w=Math.max(100,+e.target.value||f.w); render();};
+    document.getElementById('fd').onchange=e=>{snap(); f.d=Math.max(100,+e.target.value||f.d); render();};
+    document.getElementById('frot').onclick=()=>{snap(); f.rot=(f.rot+90)%360; render();};
+    document.getElementById('fdel').onclick=()=>{snap(); S.furn=S.furn.filter(q=>q!==f); sel=null; render();};
+    document.getElementById('fdup').onclick=()=>{snap(); const n=Object.assign({},f,{id:'f'+(S.seq++),cx:f.cx+400,cy:f.cy-400}); S.furn.push(n); sel={k:'furn',id:n.id}; render();};
+  }
+}
+function holes(){
+  // inneslutna ytor som inte täcks av rum (flood fill på komprimerat rutnät)
+  const xs=[...new Set(S.rooms.flatMap(r=>[r.x0,r.x1]))].sort((a,b)=>a-b), ys=[...new Set(S.rooms.flatMap(r=>[r.y0,r.y1]))].sort((a,b)=>a-b);
+  const nx=xs.length+1, ny=ys.length+1; const X=[-1e7,...xs,1e7+1], Y=[-1e7,...ys,1e7+1];
+  const C=[]; for(let i=0;i<nx;i++){C[i]=[]; for(let j=0;j<ny;j++){ const cx=(X[i]+X[i+1])/2, cy=(Y[j]+Y[j+1])/2; C[i][j]=S.rooms.some(r=>inside(r,cx,cy))?1:0; }}
+  const st=[[0,0]]; C[0][0]=2;
+  while(st.length){ const [i,j]=st.pop(); for(const [a,b] of [[i+1,j],[i-1,j],[i,j+1],[i,j-1]]) if(a>=0&&b>=0&&a<nx&&b<ny&&C[a][b]===0){C[a][b]=2; st.push([a,b]);} }
+  let A=0; for(let i=0;i<nx;i++) for(let j=0;j<ny;j++) if(C[i][j]===0) A+=(X[i+1]-X[i])*(Y[j+1]-Y[j]);
+  return A/1e6;
+}
+
+// ------------------------------------------------------------------ +/- : rummet växer, rummen i samma rad krymper
+function bandOf(r, ax){
+  if(!r) return {list:[]};
+  const [a0,a1,b0,b1] = ax==='x' ? ['x0','x1','y0','y1'] : ['y0','y1','x0','x1'];
+  const tol = 700;
+  const same = q => Math.abs(q[b0]-r[b0])<=tol && Math.abs(q[b1]-r[b1])<=tol;
+  const list=[r]; let changed=true;
+  while(changed){ changed=false;
+    for(const q of S.rooms){ if(list.includes(q) || !same(q)) continue;
+      if(list.some(p => (Math.abs(p[a1]-q[a0])<1 || Math.abs(p[a0]-q[a1])<1) && ov(p[b0],p[b1],q[b0],q[b1])>0)){ list.push(q); changed=true; } } }
+  list.sort((p,q)=>p[a0]-q[a0]);
+  return {list,a0,a1};
+}
+function resize(r, d){
+  const {list,a0,a1} = bandOf(r, axis);
+  snap();
+  const before = JSON.stringify(S.rooms);
+  if(list.length===1){
+    // ingen rad: väx åt båda håll (halva per sida, utåt)
+    const w=r[a1]-r[a0]; if(w+d<MIN) return toast('Rummet kan inte bli mindre');
+    const h=d/2; r[a0]=g10(r[a0]-h); r[a1]=r[a0]+g10(w+d);
+    moveFurnWithRoom(r, JSON.parse(before).find(q=>q.id===r.id));
+    render(); return toast(d>0?'Rummet växte utåt – fasaden flyttades':'Rummet krympte – fasaden flyttades');
+  }
+  const others=list.filter(q=>q!==r);
+  const slack = others.reduce((s,q)=>s+(q[a1]-q[a0]-MIN),0);
+  if(d>0 && slack<d) { undoS.pop(); return toast('Grannarna kan inte krympa mer'); }
+  if(r[a1]-r[a0]+d<MIN) { undoS.pop(); return toast('Rummet kan inte bli mindre'); }
+  // fördela -d på övriga, proportionellt mot deras "överskott" (vid krympning: mot deras bredd)
+  const weights = others.map(q=> d>0 ? (q[a1]-q[a0]-MIN) : (q[a1]-q[a0]));
+  const W=weights.reduce((a,b)=>a+b,0);
+  const newW=new Map(); newW.set(r, r[a1]-r[a0]+d);
+  let rest=-d; others.forEach((q,i)=>{ const dd = i===others.length-1 ? rest : Math.round((-d*weights[i]/W)/10)*10; rest-=dd; newW.set(q, q[a1]-q[a0]+dd); });
+  // flöda om från vänster, behåll mellanrum
+  const old = list.map(q=>({q,o0:q[a0],o1:q[a1]}));
+  let pos = list[0][a0];
+  for(let i=0;i<list.length;i++){
+    const q=list[i]; if(i>0) pos += (old[i].o0 - old[i-1].o1);
+    q[a0]=pos; q[a1]=pos+newW.get(q); pos=q[a1];
+  }
+  const prev = JSON.parse(before);
+  for(const q of list) moveFurnWithRoom(q, prev.find(p=>p.id===q.id));
+  render();
+}
+// möbler i ett rum följer med när rummet ändras (skalar position relativt rummet)
+function moveFurnWithRoom(r, old){
+  if(!old) return;
+  for(const f of S.furn){
+    if(!(f.cx>old.x0 && f.cx<old.x1 && f.cy>old.y0 && f.cy<old.y1)) continue;
+    // håll avstånd till närmaste vägg
+    const nx = (f.cx-old.x0) < (old.x1-f.cx) ? r.x0+(f.cx-old.x0) : r.x1-(old.x1-f.cx);
+    const ny = (f.cy-old.y0) < (old.y1-f.cy) ? r.y0+(f.cy-old.y0) : r.y1-(old.y1-f.cy);
+    f.cx=nx; f.cy=ny;
+  }
+}
+
+// ------------------------------------------------------------------ interaktion
+let drag=null;
+svg.addEventListener('pointerdown', e=>{
+  if(pointers.size>=1){ pointers.set(e.pointerId,{x:e.clientX,y:e.clientY}); drag=null; return; }
+  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  const p=pt(e); const t=e.target;
+  const edge=t.getAttribute && t.getAttribute('data-edge');
+  const fg=t.closest && t.closest('[data-furn]');
+  const rg=t.closest && t.closest('[data-room]');
+  svg.setPointerCapture(e.pointerId);
+  if(edge){
+    const r=S.rooms.find(q=>q.id===sel.id);
+    const key={W:'x0',E:'x1',S:'y0',N:'y1'}[edge]; const opp={x0:'x1',x1:'x0',y0:'y1',y1:'y0'}[key];
+    const isX = key[0]==='x'; const c=r[key];
+    const [b0,b1] = isX?['y0','y1']:['x0','x1'];
+    const linked = S.rooms.filter(q=>q!==r && Math.abs(q[opp]-c)<1 && ov(q[b0],q[b1],r[b0],r[b1])>0);
+    drag={k:'edge',r,key,opp,isX,c,linked,p0:p,snap:JSON.stringify(S),old:JSON.parse(JSON.stringify(S.rooms))};
+  } else if(fg && view.show.mob){
+    const f=S.furn.find(q=>q.id===fg.getAttribute('data-furn'));
+    sel={k:'furn',id:f.id}; drag={k:'furn',f,p0:p,o:{cx:f.cx,cy:f.cy},snap:JSON.stringify(S),moved:false};
+    render();
+  } else if(rg){
+    const r=S.rooms.find(q=>q.id===rg.getAttribute('data-room'));
+    const furn=S.furn.filter(f=>inside(r,f.cx,f.cy)).map(f=>({f,cx:f.cx,cy:f.cy}));
+    sel={k:'room',id:r.id};
+    drag={k:'room',r,p0:p,o:{x0:r.x0,y0:r.y0,x1:r.x1,y1:r.y1},furn,snap:JSON.stringify(S),moved:false};
+    render();
+  } else {
+    if(sel){ sel=null; render(); }
+    drag={k:'pan',s0:{x:e.clientX,y:e.clientY},vb0:Object.assign({},vb)};
+  }
+});
+svg.addEventListener('pointermove', e=>{
+  if(pointers.has(e.pointerId)) pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pointers.size===2) return pinch();
+  if(!drag) return;
+  if(drag.k==='pan'){ const k=pxmm(); vb.x=drag.vb0.x-(e.clientX-drag.s0.x)*k; vb.y=drag.vb0.y-(e.clientY-drag.s0.y)*k; setVB(); return; }
+  const p=pt(e); const dx=p.x-drag.p0.x, dy=p.y-drag.p0.y;
+  if(!drag.moved && Math.hypot(dx,dy) < pxmm()*6) return;
+  drag.moved=true;
+  if(drag.k==='room'){
+    const r=drag.r, sx=g10(dx), sy=g10(dy);
+    r.x0=drag.o.x0+sx; r.x1=drag.o.x1+sx; r.y0=drag.o.y0+sy; r.y1=drag.o.y1+sy;
+    for(const m of drag.furn){ m.f.cx=m.cx+sx; m.f.cy=m.cy+sy; }
+    // målrum för byte
+    drag.target = roomAt(p.x,p.y,r);
+    render();
+    if(drag.target){ const t=drag.target; el('rect',{x:t.x0,y:-t.y1,width:t.x1-t.x0,height:t.y1-t.y0,fill:'rgba(251,192,33,.35)',stroke:'#fbc021','stroke-width':80,'pointer-events':'none'},svg); showTip(`Släpp = byt plats med ${t.name}`); }
+    else showTip(null);
+  } else if(drag.k==='furn'){
+    drag.f.cx=Math.round((drag.o.cx+dx)/50)*50; drag.f.cy=Math.round((drag.o.cy+dy)/50)*50; render();
+  } else if(drag.k==='edge'){
+    const r=drag.r; let nc=g10(drag.c + (drag.isX?dx:dy));
+    // gränser: r själv och länkade grannar minst MIN
+    const lo = drag.key.endsWith('0') ? -1e9 : r[drag.isX?'x0':'y0']+MIN;
+    const hi = drag.key.endsWith('0') ? r[drag.isX?'x1':'y1']-MIN : 1e9;
+    let L=lo, H=hi;
+    for(const q of drag.linked){ if(drag.opp.endsWith('0')) H=Math.min(H, q[drag.isX?'x1':'y1']-MIN); else L=Math.max(L, q[drag.isX?'x0':'y0']+MIN); }
+    nc=Math.max(L,Math.min(H,nc));
+    r[drag.key]=nc; for(const q of drag.linked) q[drag.opp]=nc;
+    for(const q of [r,...drag.linked]) moveFurnWithRoom(q, drag.old.find(o=>o.id===q.id));
+    // återställ möbler till ursprung och flytta igen från original varje gång
+    render();
+    showTip(`${drag.linked.length? 'Väggen mot '+drag.linked.map(q=>q.name).join(', ')+' följer med' : 'Fasaden flyttas'} · ${fmt(area(r),1)} m²`);
+  }
+});
+function endDrag(e){
+  pointers.delete(e.pointerId); if(pointers.size<2) pinch0=null;
+  if(!drag) return;
+  const d=drag; drag=null; showTip(null);
+  if(d.k==='pan') return;
+  if(!d.moved) return;
+  undoS.push(d.snap); redoS=[];
+  if(d.k==='room' && d.target){
+    // byt plats: rummen byter rektanglar, möblerna följer med
+    const a=d.r, t=d.target;
+    const A={x0:d.o.x0,y0:d.o.y0,x1:d.o.x1,y1:d.o.y1}, T={x0:t.x0,y0:t.y0,x1:t.x1,y1:t.y1};
+    const tf=S.furn.filter(f=>inside(t,f.cx,f.cy) && !d.furn.some(m=>m.f===f));
+    // möblerna placeras relativt i nya rummet och hålls innanför väggarna
+    const remap=(f,fx,fy,F,Tn)=>{ const u=(fx-F.x0)/(F.x1-F.x0), v=(fy-F.y0)/(F.y1-F.y0);
+      const vert=(f.rot%180)!==0; const hw=(vert?f.d:f.w)/2+60, hh=(vert?f.w:f.d)/2+60;
+      let x=Tn.x0+u*(Tn.x1-Tn.x0), y=Tn.y0+v*(Tn.y1-Tn.y0);
+      x=Math.min(Math.max(x,Tn.x0+hw),Tn.x1-hw); y=Math.min(Math.max(y,Tn.y0+hh),Tn.y1-hh);
+      if(Tn.x1-Tn.x0<2*hw) x=(Tn.x0+Tn.x1)/2; if(Tn.y1-Tn.y0<2*hh) y=(Tn.y0+Tn.y1)/2;
+      f.cx=Math.round(x/50)*50; f.cy=Math.round(y/50)*50; };
+    for(const m of d.furn) remap(m.f,m.cx,m.cy,A,T);
+    for(const f of tf) remap(f,f.cx,f.cy,T,A);
+    Object.assign(a,T); Object.assign(t,A);
+    toast(`${a.name} och ${t.name} bytte plats`);
+  }
+  if(d.k==='edge'){ /* klart */ }
+  render();
+}
+svg.addEventListener('pointerup', endDrag); svg.addEventListener('pointercancel', endDrag);
+// zoom
+svg.addEventListener('wheel', e=>{ e.preventDefault(); const p=pt(e); const k=Math.exp(e.deltaY*0.0015); zoomAt(p.x,-p.y,k); },{passive:false});
+function zoomAt(x,y,k){ vb.x=x-(x-vb.x)*k; vb.y=y-(y-vb.y)*k; vb.w*=k; vb.h*=k; setVB(); render(); }
+const pointers=new Map(); let pinch0=null;
+function pinch(){
+  const [a,b]=[...pointers.values()]; const d=Math.hypot(a.x-b.x,a.y-b.y); const m={clientX:(a.x+b.x)/2,clientY:(a.y+b.y)/2};
+  if(!pinch0){ pinch0={d}; return; }
+  const k=pinch0.d/d; pinch0.d=d; const p=pt(m); zoomAt(p.x,-p.y,k);
+}
+document.getElementById('zin').onclick=()=>zoomAt(vb.x+vb.w/2,vb.y+vb.h/2,0.8);
+document.getElementById('zout').onclick=()=>zoomAt(vb.x+vb.w/2,vb.y+vb.h/2,1.25);
+document.getElementById('zfit').onclick=()=>{fit(); render();};
+
+// tangentbord
+document.addEventListener('keydown', e=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT') return;
+  if((e.metaKey||e.ctrlKey) && e.key.toLowerCase()==='z'){ e.preventDefault(); e.shiftKey?redo():undo(); return; }
+  if(!sel) return;
+  if(sel.k==='furn'){ const f=S.furn.find(q=>q.id===sel.id);
+    if(e.key==='r'||e.key==='R'){ snap(); f.rot=(f.rot+90)%360; render(); }
+    if(e.key==='Delete'||e.key==='Backspace'){ snap(); S.furn=S.furn.filter(q=>q!==f); sel=null; render(); } }
+  if(sel.k==='room'){ const r=S.rooms.find(q=>q.id===sel.id);
+    if(e.key==='+'||e.key==='=') resize(r,STEP); if(e.key==='-') resize(r,-STEP); }
+  if(e.key==='Escape'){ sel=null; render(); }
+});
+
+// ------------------------------------------------------------------ verktyg
+function undo(){ if(!undoS.length) return toast('Inget att ångra'); redoS.push(JSON.stringify(S)); S=JSON.parse(undoS.pop()); sel=null; render(); }
+function redo(){ if(!redoS.length) return; undoS.push(JSON.stringify(S)); S=JSON.parse(redoS.pop()); sel=null; render(); }
+document.getElementById('undo').onclick=undo; document.getElementById('redo').onclick=redo;
+document.getElementById('reset').onclick=()=>{ if(!confirm('Återställa till L2? (Du kan ångra.)')) return; snap(); S=startState(); sel=null; fit(); render(); };
+const tg=(id,k)=>{ const b=document.getElementById(id); b.onclick=()=>{ view.show[k]=!view.show[k]; b.classList.toggle('on',view.show[k]); render(); }; };
+tg('tgMob','mob'); tg('tgMat','mat'); tg('tgRef','ref');
+// palett
+const pal=document.getElementById('pal');
+for(const t of PAL){ const b=document.createElement('button'); b.textContent='＋ '+TYPES[t].n; b.onclick=()=>{
+  snap(); const c={x:vb.x+vb.w/2, y:-(vb.y+vb.h/2)}; const r=sel&&sel.k==='room'?S.rooms.find(q=>q.id===sel.id):roomAt(c.x,c.y);
+  const at = r? {x:(r.x0+r.x1)/2,y:(r.y0+r.y1)/2} : c;
+  const f={id:'f'+(S.seq++),t,cx:Math.round(at.x/50)*50,cy:Math.round(at.y/50)*50,w:TYPES[t].w,d:TYPES[t].d,rot:0};
+  S.furn.push(f); sel={k:'furn',id:f.id}; view.show.mob=true; document.getElementById('tgMob').classList.add('on'); render(); toast(TYPES[t].n+' tillagd – dra den på plats'); }; pal.appendChild(b); }
+document.getElementById('nyttrum').onclick=()=>{
+  snap(); const b=bounds(); const r={id:'r'+(S.seq++),name:'Nytt rum',c:'ny',x0:g10(b.x1+1000),y0:g10(b.y0),x1:g10(b.x1+1000)+3000,y1:g10(b.y0)+3000};
+  S.rooms.push(r); sel={k:'room',id:r.id}; fit(); render(); toast('Nytt rum 3×3 m till höger om huset – dra in det');
+};
+// export
+function cleanSVG(){
+  const c=svg.cloneNode(true); c.querySelectorAll('[data-edge]').forEach(n=>n.remove());
+  const b=bounds(); const pad=1500; c.setAttribute('viewBox',`${b.x0-pad} ${-b.y1-pad} ${b.x1-b.x0+2*pad} ${b.y1-b.y0+2*pad+1200}`);
+  // 1:100 i mm
+  c.setAttribute('width',((b.x1-b.x0+2*pad)/100)+'mm'); c.setAttribute('height',((b.y1-b.y0+2*pad+1200)/100)+'mm');
+  return c;
+}
+function dl(name, blob){ const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},500); }
+document.getElementById('expSvg').onclick=()=>{ const s=sel; sel=null; render(); const c=cleanSVG(); sel=s; render(); dl('A101_plan_1-100.svg', new Blob([new XMLSerializer().serializeToString(c)],{type:'image/svg+xml'})); };
+document.getElementById('expPng').onclick=()=>{
+  const s=sel; sel=null; render(); const c=cleanSVG(); sel=s; render();
+  const vbx=c.getAttribute('viewBox').split(' ').map(Number); const W=3000, H=Math.round(W*vbx[3]/vbx[2]);
+  c.setAttribute('width',W); c.setAttribute('height',H);
+  const img=new Image(); img.onload=()=>{ const cv=document.createElement('canvas'); cv.width=W; cv.height=H; const x=cv.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,W,H); x.drawImage(img,0,0); cv.toBlob(b=>dl('A101_plan.png',b)); };
+  img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(c));
+};
+document.getElementById('expJson').onclick=()=>dl('A101_plan.json', new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));
+document.getElementById('impJson').onclick=()=>document.getElementById('fil').click();
+document.getElementById('fil').onchange=e=>{ const f=e.target.files[0]; if(!f) return; f.text().then(t=>{ try{ const s=JSON.parse(t); if(!s.rooms) throw 0; snap(); S=s; sel=null; fit(); render(); toast('Plan inläst'); }catch(_){ toast('Kunde inte läsa filen'); } }); };
+
+let tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2200); }
+function showTip(m){ const t=document.getElementById('toast'); if(!m){ t.classList.remove('show'); return; } t.textContent=m; t.classList.add('show'); clearTimeout(tt); }
+
+document.getElementById('selinfo').dataset.def=document.getElementById('selinfo').innerHTML;
+window.addEventListener('resize',()=>{fit(); render();});
+fit(); render();
+window.__S=()=>S; window.__api={resize:(name,d,ax)=>{axis=ax||'x'; resize(S.rooms.find(r=>r.name===name),d);}, union:unionStats, overlaps, holes, sel:(n)=>{sel={k:'room',id:S.rooms.find(r=>r.name===n).id}; render();}};
+</script>
+</body>
+</html>
