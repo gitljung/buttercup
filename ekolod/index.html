@@ -9,7 +9,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="buttercup.nu">
 <meta property="og:title" content="EKOLOD – Torekov & Väderö i 3D">
-<meta property="og:description" content="Tio ekolodsturer, 181 km spår, djupkurvor, sidescan-mosaik och 34 fynd på botten.">
+<meta property="og:description" content="Tio ekolodsturer, 181 km spår, högupplöst djupkarta med djupkurvor, sidescan-mosaik och 34 fynd på botten.">
 <meta property="og:url" content="https://www.buttercup.nu/ekolod/">
 <meta property="og:image" content="https://www.buttercup.nu/ekolod/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -91,19 +91,20 @@ input[type=range]{width:100%;accent-color:var(--chili)}
   <div class="row" id="kinds"></div>
   <h2>Lager</h2>
   <div class="row">
-    <span class="chip on" data-l="ss">Sidescan</span>
+    <span class="chip" data-l="ss">Sidescan</span>
     <span class="chip on" data-l="aer">Flygbild</span>
     <span class="chip on" data-l="water">Vattenyta</span>
-    <span class="chip on" data-l="own">Visa egen data</span>
+    <span class="chip" data-l="own">Markera egen data</span>
+    <span class="chip on" data-l="hs">Relief</span>
     <span class="chip on" data-l="iso">Djupkurvor</span>
   </div>
   <h2>Djup</h2>
-  <div class="row" id="isoStep" style="margin-bottom:6px"><span class="chip" data-s="1">1 m</span><span class="chip on" data-s="2">2 m</span><span class="chip" data-s="5">5 m</span></div>
-  <div class="legend"></div><div class="lg"><span>0 m</span><span>10</span><span>20</span><span>26 m</span></div>
+  <div class="row" id="isoStep" style="margin-bottom:6px"><span class="chip" data-s="0.5">½ m</span><span class="chip on" data-s="1">1 m</span><span class="chip" data-s="2">2 m</span><span class="chip" data-s="5">5 m</span></div>
+  <div class="legend"></div><div class="lg"><span>0 m</span><span>5</span><span>10</span><span>15</span><span>20</span><span>26 m</span></div>
   <div style="margin-top:6px">Höjdförstärkning <b id="exv">4×</b></div>
   <input type="range" id="ex" min="1" max="12" step="0.5" value="4">
-  <p class="note">Klicka på ett spår eller en nål för att se ekolodsbilden från just där.
-  Skarp botten = dina egna lodningar. Suddigare områden = EMODnet (öppet sjökort, ~100 m upplösning).
+  <p class="note">Klicka på ett spår eller en nål för att se ekolodsbilden från just där. Dubbelklicka (dubbeltryck på mobilen) för att centrera kartan där.
+  Botten är byggd i ca 2 m upplösning där du har kört (427 000 lodningar), annars EMODnet (~100 m). "Markera egen data" gråar ut det som inte är uppmätt av dig.
   Fynd är automatiskt hittade och handgranskade – men det är en tolkning, inte en dykning.</p>
   </div>
 </div>
@@ -121,9 +122,9 @@ const [meta, trips, pois, hImg] = await Promise.all([J('meta.json'), J('trips.js
 
 // ---------- heights: decode 16-bit PNG. Browsers give 8-bit RGBA from canvas, so we use a WebGL-free trick:
 // height.png is 16-bit grey -> canvas loses precision; therefore we also ship nothing else and accept 8-bit? No: decode via UPNG-lite below.
-const hbuf = await fetch(D + 'height.png').then(r => r.arrayBuffer());
-const heights = await decode16(hbuf);
-async function decode16(buf) {
+const rawH = await decodeRaw(await fetch(D + 'height.png').then(r => r.arrayBuffer()));
+const heights = { W: rawH.W, H: rawH.H, data: Float32Array.from(rawH.raw, v => v / meta.hscale - meta.hoff) };
+async function decodeRaw(buf) {
   const dv = new DataView(buf); let p = 8, W = 0, H = 0, bd = 0, ct = 0; const idat = [];
   while (p < buf.byteLength) {
     const len = dv.getUint32(p); const typ = String.fromCharCode(...new Uint8Array(buf, p + 4, 4));
@@ -135,7 +136,7 @@ async function decode16(buf) {
   const tot = idat.reduce((a, b) => a + b.length, 0); const z = new Uint8Array(tot); let o = 0; for (const c of idat) { z.set(c, o); o += c.length; }
   const ds = new DecompressionStream('deflate');
   const raw = new Uint8Array(await new Response(new Blob([z]).stream().pipeThrough(ds)).arrayBuffer());
-  const bpp = 2, stride = W * bpp; const out = new Float32Array(W * H); const prev = new Uint8Array(stride), cur = new Uint8Array(stride);
+  const bpp = 2, stride = W * bpp; const out = new Uint16Array(W * H); const prev = new Uint8Array(stride), cur = new Uint8Array(stride);
   let q = 0;
   for (let y = 0; y < H; y++) {
     const f = raw[q++]; cur.set(raw.subarray(q, q + stride)); q += stride;
@@ -145,10 +146,10 @@ async function decode16(buf) {
       else if (f === 4) { const pp = a + b - c, pa = Math.abs(pp - a), pb = Math.abs(pp - b), pc = Math.abs(pp - c); x += (pa <= pb && pa <= pc) ? a : (pb <= pc ? b : c); }
       cur[i] = x & 255;
     }
-    for (let x = 0; x < W; x++) out[y * W + x] = ((cur[2 * x] << 8) | cur[2 * x + 1]) / meta.hscale - meta.hoff;
+    for (let x = 0; x < W; x++) out[y * W + x] = (cur[2 * x] << 8) | cur[2 * x + 1];
     prev.set(cur);
   }
-  return { W, H, data: out };
+  return { W, H, raw: out };
 }
 
 // ---------- scene
@@ -193,26 +194,69 @@ const tl = new THREE.TextureLoader();
 const loadTex = u => new Promise(r => tl.load(D + u, t => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; r(t); }));
 const [ssTex, aerTex, ownTex, landTex] = await Promise.all([loadTex('sidescan.png'), loadTex('aerial.jpg'), loadTex('ownmask.png'), loadTex('landmask.png')]);
 ownTex.colorSpace = THREE.NoColorSpace; landTex.colorSpace = THREE.NoColorSpace;
+const HT = new Uint16Array(65536); for (let i = 0; i < 65536; i++) HT[i] = THREE.DataUtils.toHalfFloat(i / meta.dtScale);
+const gl = renderer.getContext(); const F32 = !!gl.getExtension('OES_texture_float_linear');
+function depthTex(r) { let t;
+  if (F32) { const f = new Float32Array(r.raw.length); for (let i = 0; i < f.length; i++) f[i] = r.raw[i] / meta.dtScale; t = new THREE.DataTexture(f, r.W, r.H, THREE.RedFormat, THREE.FloatType); }
+  else { const h = new Uint16Array(r.raw.length); for (let i = 0; i < h.length; i++) h[i] = HT[r.raw[i]]; t = new THREE.DataTexture(h, r.W, r.H, THREE.RedFormat, THREE.HalfFloatType); } t.magFilter = t.minFilter = THREE.LinearFilter; t.generateMipmaps = false; t.needsUpdate = true; return t; }
+const [rawG, rawD] = await Promise.all(['depth16.png', 'depth_detail.png'].map(async u => decodeRaw(await fetch(D + u).then(r => r.arrayBuffer()))));
+const dGlobTex = depthTex(rawG), dDetTex = depthTex(rawD);
+const det = meta.det;
 // sidescan texture covers same extent but at its own pixel grid: extent ssW_m x ssH_m starting at x0,y1
 const U = { ss: { value: ssTex }, aer: { value: aerTex }, own: { value: ownTex }, landm: { value: landTex },
-  ssOn: { value: 1 }, aerOn: { value: 1 }, ownOn: { value: 1 }, ssScale: { value: new THREE.Vector2(sizeX / (meta.ssW_m * S), sizeY / (meta.ssH_m * S)) } };
+  dGlob: { value: dGlobTex }, dDet: { value: dDetTex },
+  globBox: { value: new THREE.Vector4(meta.x0, meta.y1, (meta.nx - 1) * meta.G, (meta.ny - 1) * meta.G) },
+  detBox: { value: new THREE.Vector4(det.x0, det.y1, det.w_m, det.h_m) },
+  isoIv: { value: 1 }, isoOn: { value: 1 }, hsOn: { value: 1 },
+  ssOn: { value: 0 }, aerOn: { value: 1 }, ownOn: { value: 0 }, ssScale: { value: new THREE.Vector2(sizeX / (meta.ssW_m * S), sizeY / (meta.ssH_m * S)) } };
 const mat = new THREE.MeshStandardMaterial({ roughness: 0.95, metalness: 0 });
 mat.onBeforeCompile = sh => {
   Object.assign(sh.uniforms, U);
   sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float zr; varying float vZ; varying vec2 vUv2;')
     .replace('#include <begin_vertex>', '#include <begin_vertex>\nvZ = zr; vUv2 = uv;');
   sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>
-    uniform sampler2D ss, aer, own, landm; uniform float ssOn, aerOn, ownOn; uniform vec2 ssScale; varying float vZ; varying vec2 vUv2;
-    vec3 depthCol(float d){ d = clamp(d/26.0,0.,1.);
-      vec3 a=vec3(.85,.95,.90), b=vec3(.42,.78,.79), c=vec3(.16,.50,.70), e=vec3(.10,.25,.48), f=vec3(.05,.10,.24);
-      return d<.25?mix(a,b,d/.25):d<.5?mix(b,c,(d-.25)/.25):d<.75?mix(c,e,(d-.5)/.25):mix(e,f,(d-.75)/.25);}`)
+    uniform sampler2D ss, aer, own, landm, dGlob, dDet; uniform float ssOn, aerOn, ownOn, isoIv, isoOn, hsOn; uniform vec2 ssScale;
+    uniform vec4 globBox, detBox; varying float vZ; varying vec2 vUv2;
+    vec3 turbo(float x){ x = clamp(x,0.,1.);
+      const vec4 kR=vec4(0.13572138,4.61539260,-42.66032258,132.13108234); const vec4 kG=vec4(0.09140261,2.19418839,4.84296658,-14.18503333);
+      const vec4 kB=vec4(0.10667330,12.64194608,-60.58204836,110.36276771); const vec2 kR2=vec2(-152.94239396,59.28637943);
+      const vec2 kG2=vec2(4.27729857,2.82956604); const vec2 kB2=vec2(-89.90310912,27.34824973);
+      vec4 v4=vec4(1.0,x,x*x,x*x*x); vec2 v2=v4.zw*v4.z;
+      return vec3(dot(v4,kR)+dot(v2,kR2), dot(v4,kG)+dot(v2,kG2), dot(v4,kB)+dot(v2,kB2)); }
+    vec3 depthCol(float d){ vec3 c = turbo(0.96 - 0.90*pow(clamp(d/26.0,0.,1.),0.85)); return pow(clamp(c,0.,1.), vec3(2.2)); }
+    float depthAt(vec2 en){
+      vec2 gt = vec2((en.x-globBox.x)/globBox.z, (globBox.y-en.y)/globBox.w);
+      vec2 dt = vec2((en.x-detBox.x)/detBox.z, (detBox.y-en.y)/detBox.w);
+      float g = texture2D(dGlob, gt).r;
+      float e = smoothstep(0.0, 0.008, min(min(dt.x,1.0-dt.x), min(dt.y,1.0-dt.y)));
+      float dd = texture2D(dDet, clamp(dt,0.0,1.0)).r;
+      return mix(g, dd, e);
+    }`)
     .replace('#include <map_fragment>', `
       vec2 uvi = vec2(vUv2.x, 1.0 - vUv2.y);
       float lm = texture2D(landm, vec2(vUv2.x, vUv2.y)).r;
-      vec3 col = depthCol(-vZ);
-      
+      vec2 en = vec2(globBox.x + vUv2.x*globBox.z, globBox.y - (1.0-vUv2.y)*globBox.w);
+      float dep = depthAt(en);
+      vec3 col = depthCol(dep);
+      // hillshade from hi-res depth
+      float r = 2.5;
+      float dL = depthAt(en - vec2(r,0.)), dR = depthAt(en + vec2(r,0.)), dS = depthAt(en - vec2(0.,r)), dN = depthAt(en + vec2(0.,r));
+      vec3 nrm = normalize(vec3((dR-dL)/(2.0*r)*4.0, (dN-dS)/(2.0*r)*4.0, 1.0));
+      vec3 Ld = normalize(vec3(-1.0, 1.0, 1.3));
+      float shade = dot(nrm, Ld) / Ld.z;
+      col *= mix(1.0, clamp(shade, 0.45, 1.5), hsOn);
+      // contours (anti-aliased, every isoIv m, major every 5 m)
+      float f = dep / isoIv, fw = fwidth(f);
+      float ln = 1.0 - smoothstep(0.35*fw, 1.25*fw, abs(fract(f+0.5)-0.5));
+      ln *= 1.0 - smoothstep(0.18, 0.4, fw);
+      float f5 = dep / 5.0, fw5 = fwidth(f5);
+      float ln5 = 1.0 - smoothstep(0.6*fw5, 1.9*fw5, abs(fract(f5+0.5)-0.5));
+      float wet = smoothstep(0.15, 0.4, dep);
+      col = mix(col, col*0.25, ln*0.75*isoOn*wet);
+      col = mix(col, vec3(1.0,0.93,0.75), ln5*0.9*isoOn*wet);
       float ow = texture2D(own, vec2(vUv2.x, vUv2.y)).r;
-      col = mix(col, col*0.82 + vec3(0.02,0.03,0.05), (1.0-ow)*0.55*ownOn);
+      float lum = dot(col, vec3(0.3,0.59,0.11));
+      col = mix(col, vec3(lum)*0.7, (1.0-smoothstep(0.2,0.7,ow))*0.75*ownOn);
       vec4 s = texture2D(ss, vec2(vUv2.x*ssScale.x, 1.0 - (1.0 - vUv2.y)*ssScale.y));
       col = mix(col, s.rgb*1.15, s.a*ssOn*0.92*step(vZ,0.0));
       vec3 rock = vec3(.50,.52,.42);
@@ -374,7 +418,8 @@ const mouse = new THREE.Vector2(); let down = null;
 canvas.addEventListener('pointerdown', e => down = [e.clientX, e.clientY]);
 canvas.addEventListener('pointerup', e => {
   if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6) return;
-  const hit = pick(e); if (hit) showTrackPoint(hit.trip, hit.idx);
+  const hit = pick(e); if (!hit) return;
+  clearTimeout(window.__clickT); window.__clickT = setTimeout(() => showTrackPoint(hit.trip, hit.idx), 280);
 });
 function pick(e) {
   mouse.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(mouse, camera);
@@ -383,6 +428,33 @@ function pick(e) {
   const h = ray.intersectObjects(objs, false)[0];
   if (!h) return null; const g = h.object.parent; return { trip: g.userData.t.name, idx: h.object.userData.idxMap[h.index] ?? 0, k: g.userData.k };
 }
+// ---------- double-click / double-tap: recenter where clicked (keeps zoom + angle)
+function recenterAt(cx_, cy_) {
+  mouse.set(cx_ / innerWidth * 2 - 1, -cy_ / innerHeight * 2 + 1); ray.setFromCamera(mouse, camera);
+  let p = null;
+  const h = ray.intersectObject(terrain, false)[0];
+  if (h) p = h.point;
+  else { const pl = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0); p = new THREE.Vector3(); if (!ray.ray.intersectPlane(pl, p)) return; }
+  const off = camera.position.clone().sub(controls.target);
+  const from = controls.target.clone(), fromC = camera.position.clone(), to = p.clone(), toC = p.clone().add(off);
+  const t0 = performance.now(), T = 700;
+  const step = () => { const u = Math.min(1, (performance.now() - t0) / T), k = 1 - Math.pow(1 - u, 3);
+    controls.target.lerpVectors(from, to, k); camera.position.lerpVectors(fromC, toC, k); if (u < 1) requestAnimationFrame(step); };
+  step();
+  ripple(cx_, cy_);
+}
+function ripple(x, y) { const r = document.createElement('div'); r.style.cssText = `position:fixed;left:${x - 18}px;top:${y - 18}px;width:36px;height:36px;border:3px solid #FCC222;border-radius:50%;pointer-events:none;z-index:40;transition:all .5s ease-out;opacity:1`; document.body.appendChild(r);
+  requestAnimationFrame(() => { r.style.transform = 'scale(2.2)'; r.style.opacity = 0; }); setTimeout(() => r.remove(), 550); }
+canvas.addEventListener('dblclick', e => { e.preventDefault(); clearTimeout(window.__clickT); recenterAt(e.clientX, e.clientY); });
+// iOS: dblclick isn't reliable on touch-action:none canvas -> own double-tap detector
+let lastTap = 0, lastXY = [0, 0];
+canvas.addEventListener('touchend', e => {
+  if (e.touches.length || e.changedTouches.length !== 1) return;
+  const t = e.changedTouches[0], now = performance.now();
+  if (now - lastTap < 320 && Math.hypot(t.clientX - lastXY[0], t.clientY - lastXY[1]) < 30) { e.preventDefault(); clearTimeout(window.__clickT); recenterAt(t.clientX, t.clientY); lastTap = 0; }
+  else { lastTap = now; lastXY = [t.clientX, t.clientY]; }
+}, { passive: false });
+
 const tip = document.getElementById('tip');
 canvas.addEventListener('pointermove', e => {
   if (e.buttons) { tip.style.display = 'none'; return; }
@@ -394,7 +466,7 @@ canvas.addEventListener('pointermove', e => {
 // ---------- layer toggles
 document.querySelectorAll('[data-l]').forEach(c => c.onclick = () => {
   c.classList.toggle('on'); const on = c.classList.contains('on') ? 1 : 0; const l = c.dataset.l;
-  if (l === 'ss') U.ssOn.value = on; if (l === 'aer') U.aerOn.value = on; if (l === 'own') U.ownOn.value = on; if (l === 'water') water.visible = !!on; if (l === 'iso') isoGroup.visible = !!on;
+  if (l === 'ss') U.ssOn.value = on; if (l === 'aer') U.aerOn.value = on; if (l === 'own') U.ownOn.value = on; if (l === 'water') water.visible = !!on; if (l === 'iso') { isoGroup.visible = !!on; U.isoOn.value = on; } if (l === 'hs') U.hsOn.value = on;
 });
 const ex = document.getElementById('ex');
 ex.oninput = () => { EX = +ex.value; document.getElementById('exv').textContent = EX + '×'; applyHeights(); base.position.y = -30 * S * EX;
@@ -404,7 +476,7 @@ ex.oninput = () => { EX = +ex.value; document.getElementById('exv').textContent 
 // ---------- depth contours
 const CT = await J('contours.json');
 const isoGroup = new THREE.Group(); scene.add(isoGroup);
-let isoStep = 2;
+let isoStep = 1;
 const lblTex = {};
 function labelSprite(d) {
   if (!lblTex[d]) { const c = document.createElement('canvas'); c.width = 128; c.height = 64; const g = c.getContext('2d');
@@ -415,23 +487,30 @@ function labelSprite(d) {
   sp.scale.set(0.036, 0.018, 1); sp.renderOrder = 5; return sp;
 }
 function buildIso() {
-  isoGroup.children.slice().forEach(o => { isoGroup.remove(o); o.geometry && o.geometry.dispose(); });
-  const minor = [], major = [];
-  for (const L of CT.levels) {
-    if (L.d % isoStep) continue;
-    const y = ys(-L.d) + 0.006;
-    const arr = L.major ? major : minor;
-    for (const f of L.lines) for (let i = 2; i < f.length; i += 2) {
-      const [ax, az] = toW(f[i - 2], f[i - 1]), [bx, bz] = toW(f[i], f[i + 1]);
-      arr.push(ax, y, az, bx, y, bz);
-    }
-  }
-  const mk = (a, col, op) => { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(a, 3)); return new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: op })); };
-  isoGroup.add(mk(minor, 0xdff4ff, 0.55), mk(major, 0xFCC222, 0.95));
-  for (const [e, n, d] of CT.labels) { if (d % isoStep) continue; const sp = labelSprite(d); const [x, z] = toW(e, n); sp.position.set(x, ys(-d) + 0.12, z); isoGroup.add(sp); }
+  isoGroup.children.slice().forEach(o => { isoGroup.remove(o); o.material && o.material.dispose(); });
+  U.isoIv.value = isoStep;
+  const ls = isoStep >= 5 ? 5 : (isoStep >= 2 ? 4 : 5);
+  const placed = [];
+  for (const [e, n, d] of CT.labels) { if (d % ls && d !== 3) continue; if (placed.some(([a, b]) => (a - e) ** 2 + (b - n) ** 2 < 700 ** 2)) continue; placed.push([e, n]); const sp = labelSprite(d); const [x, z] = toW(e, n); sp.position.set(x, ys(-d) + 0.12, z); isoGroup.add(sp); }
 }
 buildIso();
-document.querySelectorAll('#isoStep .chip').forEach(c => c.onclick = () => { document.querySelectorAll('#isoStep .chip').forEach(x => x.classList.remove('on')); c.classList.add('on'); isoStep = +c.dataset.s; buildIso(); });
+(() => { const tb = x => { x = Math.min(1, Math.max(0, x)); const v = [1, x, x * x, x * x * x], v2 = [x * x * x * x, x * x * x * x * x];
+  const d = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
+  const c = [d(v, [0.13572138, 4.6153926, -42.66032258, 132.13108234]) + v2[0] * -152.94239396 + v2[1] * 59.28637943,
+    d(v, [0.09140261, 2.19418839, 4.84296658, -14.18503333]) + v2[0] * 4.27729857 + v2[1] * 2.82956604,
+    d(v, [0.1066733, 12.64194608, -60.58204836, 110.36276771]) + v2[0] * -89.90310912 + v2[1] * 27.34824973];
+  return `rgb(${c.map(q => Math.round(Math.min(1, Math.max(0, q)) * 255)).join(',')})`; };
+  const st = []; for (let i = 0; i <= 12; i++) { const t = i / 12; st.push(`${tb(0.96 - 0.9 * Math.pow(t, 0.85))} ${(t * 100).toFixed(0)}%`); }
+  document.querySelector('.legend').style.background = `linear-gradient(90deg,${st.join(',')})`; })();
+document.querySelectorAll('#isoStep .chip').forEach(c => c.onclick = () => { (() => { const tb = x => { x = Math.min(1, Math.max(0, x)); const v = [1, x, x * x, x * x * x], v2 = [x * x * x * x, x * x * x * x * x];
+  const d = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
+  const c = [d(v, [0.13572138, 4.6153926, -42.66032258, 132.13108234]) + v2[0] * -152.94239396 + v2[1] * 59.28637943,
+    d(v, [0.09140261, 2.19418839, 4.84296658, -14.18503333]) + v2[0] * 4.27729857 + v2[1] * 2.82956604,
+    d(v, [0.1066733, 12.64194608, -60.58204836, 110.36276771]) + v2[0] * -89.90310912 + v2[1] * 27.34824973];
+  return `rgb(${c.map(q => Math.round(Math.min(1, Math.max(0, q)) * 255)).join(',')})`; };
+  const st = []; for (let i = 0; i <= 12; i++) { const t = i / 12; st.push(`${tb(0.96 - 0.9 * Math.pow(t, 0.85))} ${(t * 100).toFixed(0)}%`); }
+  document.querySelector('.legend').style.background = `linear-gradient(90deg,${st.join(',')})`; })();
+document.querySelectorAll('#isoStep .chip').forEach(x => x.classList.remove('on')); c.classList.add('on'); isoStep = +c.dataset.s; buildIso(); });
 
 // ---------- render loop + labels
 const v = new THREE.Vector3();
