@@ -9,7 +9,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="buttercup.nu">
 <meta property="og:title" content="EKOLOD – Torekov & Väderö i 3D">
-<meta property="og:description" content="Tio ekolodsturer, 190 km spår, sidescan-mosaik och 34 fynd på botten.">
+<meta property="og:description" content="Tio ekolodsturer, 181 km spår, djupkurvor, sidescan-mosaik och 34 fynd på botten.">
 <meta property="og:url" content="https://www.buttercup.nu/ekolod/">
 <meta property="og:image" content="https://www.buttercup.nu/ekolod/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -95,8 +95,10 @@ input[type=range]{width:100%;accent-color:var(--chili)}
     <span class="chip on" data-l="aer">Flygbild</span>
     <span class="chip on" data-l="water">Vattenyta</span>
     <span class="chip on" data-l="own">Visa egen data</span>
+    <span class="chip on" data-l="iso">Djupkurvor</span>
   </div>
   <h2>Djup</h2>
+  <div class="row" id="isoStep" style="margin-bottom:6px"><span class="chip" data-s="1">1 m</span><span class="chip on" data-s="2">2 m</span><span class="chip" data-s="5">5 m</span></div>
   <div class="legend"></div><div class="lg"><span>0 m</span><span>10</span><span>20</span><span>26 m</span></div>
   <div style="margin-top:6px">Höjdförstärkning <b id="exv">4×</b></div>
   <input type="range" id="ex" min="1" max="12" step="0.5" value="4">
@@ -208,7 +210,7 @@ mat.onBeforeCompile = sh => {
       vec2 uvi = vec2(vUv2.x, 1.0 - vUv2.y);
       float lm = texture2D(landm, vec2(vUv2.x, vUv2.y)).r;
       vec3 col = depthCol(-vZ);
-      float contour = abs(fract(-vZ/2.0 + .5) - .5); col *= 1.0 - 0.18*smoothstep(0.04,0.0,contour)*step(0.,-vZ);
+      
       float ow = texture2D(own, vec2(vUv2.x, vUv2.y)).r;
       col = mix(col, col*0.82 + vec3(0.02,0.03,0.05), (1.0-ow)*0.55*ownOn);
       vec4 s = texture2D(ss, vec2(vUv2.x*ssScale.x, 1.0 - (1.0 - vUv2.y)*ssScale.y));
@@ -392,12 +394,44 @@ canvas.addEventListener('pointermove', e => {
 // ---------- layer toggles
 document.querySelectorAll('[data-l]').forEach(c => c.onclick = () => {
   c.classList.toggle('on'); const on = c.classList.contains('on') ? 1 : 0; const l = c.dataset.l;
-  if (l === 'ss') U.ssOn.value = on; if (l === 'aer') U.aerOn.value = on; if (l === 'own') U.ownOn.value = on; if (l === 'water') water.visible = !!on;
+  if (l === 'ss') U.ssOn.value = on; if (l === 'aer') U.aerOn.value = on; if (l === 'own') U.ownOn.value = on; if (l === 'water') water.visible = !!on; if (l === 'iso') isoGroup.visible = !!on;
 });
 const ex = document.getElementById('ex');
 ex.oninput = () => { EX = +ex.value; document.getElementById('exv').textContent = EX + '×'; applyHeights(); base.position.y = -30 * S * EX;
   for (const p of pois) { const [x, z] = toW(p.e, p.n); p.stem.geometry.setFromPoints([new THREE.Vector3(x, ys(-p.depth), z), new THREE.Vector3(x, 0.25, z)]); }
-  clearTimeout(ex._t); ex._t = setTimeout(rebuildLines, 120); };
+  clearTimeout(ex._t); ex._t = setTimeout(() => { rebuildLines(); buildIso(); }, 120); };
+
+// ---------- depth contours
+const CT = await J('contours.json');
+const isoGroup = new THREE.Group(); scene.add(isoGroup);
+let isoStep = 2;
+const lblTex = {};
+function labelSprite(d) {
+  if (!lblTex[d]) { const c = document.createElement('canvas'); c.width = 128; c.height = 64; const g = c.getContext('2d');
+    g.font = '700 40px "Barlow Condensed", sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.lineWidth = 8; g.strokeStyle = 'rgba(11,26,36,.85)'; g.strokeText(d + ' m', 64, 34); g.fillStyle = d % 5 ? '#e8f6ff' : '#FCC222'; g.fillText(d + ' m', 64, 34);
+    lblTex[d] = new THREE.CanvasTexture(c); lblTex[d].colorSpace = THREE.SRGBColorSpace; }
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: lblTex[d], depthTest: false, transparent: true, sizeAttenuation: false }));
+  sp.scale.set(0.036, 0.018, 1); sp.renderOrder = 5; return sp;
+}
+function buildIso() {
+  isoGroup.children.slice().forEach(o => { isoGroup.remove(o); o.geometry && o.geometry.dispose(); });
+  const minor = [], major = [];
+  for (const L of CT.levels) {
+    if (L.d % isoStep) continue;
+    const y = ys(-L.d) + 0.006;
+    const arr = L.major ? major : minor;
+    for (const f of L.lines) for (let i = 2; i < f.length; i += 2) {
+      const [ax, az] = toW(f[i - 2], f[i - 1]), [bx, bz] = toW(f[i], f[i + 1]);
+      arr.push(ax, y, az, bx, y, bz);
+    }
+  }
+  const mk = (a, col, op) => { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(a, 3)); return new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: op })); };
+  isoGroup.add(mk(minor, 0xdff4ff, 0.55), mk(major, 0xFCC222, 0.95));
+  for (const [e, n, d] of CT.labels) { if (d % isoStep) continue; const sp = labelSprite(d); const [x, z] = toW(e, n); sp.position.set(x, ys(-d) + 0.12, z); isoGroup.add(sp); }
+}
+buildIso();
+document.querySelectorAll('#isoStep .chip').forEach(c => c.onclick = () => { document.querySelectorAll('#isoStep .chip').forEach(x => x.classList.remove('on')); c.classList.add('on'); isoStep = +c.dataset.s; buildIso(); });
 
 // ---------- render loop + labels
 const v = new THREE.Vector3();
