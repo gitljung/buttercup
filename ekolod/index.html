@@ -93,7 +93,7 @@ input[type=range]{width:100%;accent-color:var(--chili)}
   <div class="row">
     <span class="chip" data-l="ss">Sidescan</span>
     <span class="chip on" data-l="aer">Flygbild</span>
-    <span class="chip on" data-l="water">Vattenyta</span>
+    <span class="chip" data-l="water">Vattenyta</span>
     <span class="chip" data-l="own">Markera egen data</span>
     <span class="chip on" data-l="hs">Relief</span>
     <span class="chip on" data-l="iso">Djupkurvor</span>
@@ -271,7 +271,7 @@ scene.add(terrain);
 // water surface
 const wmat = new THREE.MeshPhysicalMaterial({ color: 0x2c6f8f, transparent: true, opacity: 0.28, roughness: 0.15, metalness: 0, depthWrite: false });
 const water = new THREE.Mesh(new THREE.PlaneGeometry(sizeX * 3, sizeY * 3), wmat);
-water.rotation.x = -Math.PI / 2; water.position.y = 0.002; scene.add(water);
+water.rotation.x = -Math.PI / 2; water.position.y = 0.002; scene.add(water); water.visible = false;
 // sea floor skirt
 const base = new THREE.Mesh(new THREE.PlaneGeometry(sizeX * 3, sizeY * 3), new THREE.MeshBasicMaterial({ color: 0x0d2233 }));
 base.rotation.x = -Math.PI / 2; base.position.y = -30 * S * EX; scene.add(base);
