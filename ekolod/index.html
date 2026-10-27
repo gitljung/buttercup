@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>EKOLOD – Torekov & Hallands Väderö i 3D</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Tio ekolodsturer 2016–2020 runt Torekov och Hallands Väderö: djup, sidescan och fynd på botten i 3D.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="buttercup.nu">
+<meta property="og:title" content="EKOLOD – Torekov & Väderö i 3D">
+<meta property="og:description" content="Tio ekolodsturer, 190 km spår, sidescan-mosaik och 34 fynd på botten.">
+<meta property="og:url" content="https://www.buttercup.nu/ekolod/">
+<meta property="og:image" content="https://www.buttercup.nu/ekolod/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<script>window.__errs=[];addEventListener('error',e=>__errs.push(String(e.message||e)));addEventListener('unhandledrejection',e=>__errs.push('rej:'+String(e.reason&&e.reason.message||e.reason)));</script>
+<style>
+:root{--y:#FCC222;--chili:#C8340A;--ox:#5a1a12;--cream:#FFF6DC;--ink:#1b120c}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0b1a24;overflow:hidden;font-family:Barlow,system-ui,sans-serif;color:var(--ink)}
+canvas#c{display:block;width:100vw;height:100vh;touch-action:none}
+.bc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:var(--chili);color:var(--cream);font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px;position:fixed;top:0;left:0;right:0;z-index:50}
+.bc-bar a{color:var(--cream);text-decoration:none}
+.bc-bar b{font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.04em;font-size:18px;color:var(--y)}
+#panel{position:fixed;top:48px;left:12px;width:300px;max-height:calc(100vh - 60px);overflow:auto;background:var(--cream);border:2.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--chili);padding:12px 14px;z-index:20;font-size:13px}
+#panel h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:26px;margin:0;letter-spacing:.02em;line-height:1}
+#panel h1 span{color:var(--chili)}
+#panel .sub{font-size:12px;color:#5b4a3a;margin:3px 0 8px}
+#panel h2{font-family:"Barlow Condensed";font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:13px;margin:10px 0 4px;border-top:2px dashed #d9c69a;padding-top:8px}
+.trip{display:flex;align-items:center;gap:7px;padding:3px 4px;border-radius:7px;cursor:pointer;user-select:none}
+.trip:hover{background:#f6e7bd}
+.trip i{width:14px;height:14px;border-radius:4px;border:2px solid var(--ink);flex:none}
+.trip.off{opacity:.38}
+.trip .d{font-weight:600;min-width:86px}
+.trip .m{font-size:11.5px;color:#6b5844}
+.row{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:"Barlow Condensed";font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:12px;padding:4px 9px;border:2px solid var(--ink);border-radius:999px;background:#fff;cursor:pointer;user-select:none}
+.chip.on{background:var(--y)}
+.legend{height:10px;border-radius:5px;border:1.5px solid var(--ink);background:linear-gradient(90deg,#d9f2e6,#6cc7c9,#2a7fb3,#1b3f7a,#0d1b3d)}
+.lg{display:flex;justify-content:space-between;font-size:11px;color:#6b5844}
+.note{font-size:11.5px;color:#6b5844;line-height:1.35}
+input[type=range]{width:100%;accent-color:var(--chili)}
+#card{position:fixed;right:12px;top:48px;width:min(440px,calc(100vw - 24px));background:var(--cream);border:2.5px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--chili);padding:12px 14px;z-index:21;display:none;font-size:13px;max-height:calc(100vh - 60px);overflow:auto}
+#card h3{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:20px;margin:0 22px 2px 0;letter-spacing:.02em}
+#card .x{position:absolute;top:6px;right:11px;font-weight:700;font-size:20px;cursor:pointer;color:var(--chili)}
+#card img{width:100%;border-radius:8px;border:2px solid var(--ink);display:block;margin-top:8px;background:#140e0a;image-rendering:auto}
+#card .wf{position:relative}
+#card .wf .lbl{position:absolute;top:12px;font-family:"Barlow Condensed";font-weight:700;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--y);text-shadow:0 1px 2px #000}
+#card .kv{display:grid;grid-template-columns:auto 1fr;gap:1px 10px;font-size:12.5px;margin-top:6px}
+#card .kv b{font-weight:600}
+#card .nav{display:flex;gap:6px;margin-top:8px}
+#card .nav .chip{flex:1;text-align:center}
+#card a{color:var(--chili);font-weight:600}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--cream);font-family:"Barlow Condensed";font-weight:600;font-size:13px;padding:3px 8px;border-radius:6px;z-index:30;display:none;white-space:nowrap}
+#load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0b1a24;color:var(--y);font-family:Anton;font-size:28px;letter-spacing:.05em;z-index:100;transition:opacity .6s}
+.pl{position:absolute;transform:translate(-50%,-100%);pointer-events:auto;cursor:pointer;font-size:0}
+#labels{position:fixed;inset:0;pointer-events:none;z-index:10;overflow:hidden}
+.pin{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;font-family:Anton;font-size:12px;cursor:pointer;pointer-events:auto;box-shadow:2px 2px 0 rgba(0,0,0,.45);transition:transform .15s}
+.pin:hover{transform:scale(1.2)}
+.pin.grund{background:var(--y)} .pin.grop{background:#7fd1e0} .pin.sonarmål{background:var(--chili);color:var(--cream)} .pin.fisk{background:#b6f07a}
+.place{position:absolute;transform:translate(-50%,-50%);font-family:Anton;font-size:15px;letter-spacing:.06em;color:var(--cream);text-shadow:0 2px 3px rgba(0,0,0,.8);white-space:nowrap}
+#tg{display:none}
+@media (max-width:760px){
+  .bc-bar span{display:none}
+  #panel{top:auto;bottom:8px;left:8px;right:8px;width:auto;max-height:42vh;padding:9px 11px}
+  #panel:not(.open) .more{display:none}
+  #tg{display:block;position:absolute;right:12px;top:9px;font-weight:700;color:var(--chili)}
+  #card{top:44px;right:8px;left:8px;width:auto;max-height:52vh}
+}
+</style>
+</head>
+<body>
+<div class="bc-bar"><a href="/">← <b>BUTTERCUP</b></a><span>Ekolod · Torekov · 2016–2020</span></div>
+<canvas id="c"></canvas>
+<div id="labels"></div>
+<div id="tip"></div>
+<div id="load">LADDAR BOTTEN…</div>
+<div id="panel">
+  <div id="tg" onclick="panel.classList.toggle('open')">▾</div>
+  <h1>EKOLOD <span>TOREKOV</span></h1>
+  <div class="sub" id="stats">…</div>
+  <div class="more">
+  <h2>Turer</h2>
+  <div id="trips"></div>
+  <div class="row" style="margin-top:5px"><span class="chip" id="allOn">Alla</span><span class="chip" id="allOff">Inga</span></div>
+  <h2>Fynd på botten</h2>
+  <div class="row" id="kinds"></div>
+  <h2>Lager</h2>
+  <div class="row">
+    <span class="chip on" data-l="ss">Sidescan</span>
+    <span class="chip on" data-l="aer">Flygbild</span>
+    <span class="chip on" data-l="water">Vattenyta</span>
+    <span class="chip on" data-l="own">Visa egen data</span>
+  </div>
+  <h2>Djup</h2>
+  <div class="legend"></div><div class="lg"><span>0 m</span><span>10</span><span>20</span><span>26 m</span></div>
+  <div style="margin-top:6px">Höjdförstärkning <b id="exv">4×</b></div>
+  <input type="range" id="ex" min="1" max="12" step="0.5" value="4">
+  <p class="note">Klicka på ett spår eller en nål för att se ekolodsbilden från just där.
+  Skarp botten = dina egna lodningar. Suddigare områden = EMODnet (öppet sjökort, ~100 m upplösning).
+  Fynd är automatiskt hittade och handgranskade – men det är en tolkning, inte en dykning.</p>
+  </div>
+</div>
+<div id="card"><span class="x" onclick="closeCard()">×</span><div id="cardBody"></div></div>
+
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.164.1/build/three.module.js","three/addons/":"https://unpkg.com/three@0.164.1/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+
+const D = 'data/';
+const J = u => fetch(D + u).then(r => r.json());
+const IMG = u => new Promise((res, rej) => { const i = new Image(); i.crossOrigin = 'anonymous'; i.onload = () => res(i); i.onerror = rej; i.src = D + u; });
+const [meta, trips, pois, hImg] = await Promise.all([J('meta.json'), J('trips.json'), J('poi.json'), IMG('height.png')]);
+
+// ---------- heights: decode 16-bit PNG. Browsers give 8-bit RGBA from canvas, so we use a WebGL-free trick:
+// height.png is 16-bit grey -> canvas loses precision; therefore we also ship nothing else and accept 8-bit? No: decode via UPNG-lite below.
+const hbuf = await fetch(D + 'height.png').then(r => r.arrayBuffer());
+const heights = await decode16(hbuf);
+async function decode16(buf) {
+  const dv = new DataView(buf); let p = 8, W = 0, H = 0, bd = 0, ct = 0; const idat = [];
+  while (p < buf.byteLength) {
+    const len = dv.getUint32(p); const typ = String.fromCharCode(...new Uint8Array(buf, p + 4, 4));
+    if (typ === 'IHDR') { W = dv.getUint32(p + 8); H = dv.getUint32(p + 12); bd = dv.getUint8(p + 16); ct = dv.getUint8(p + 17); }
+    if (typ === 'IDAT') idat.push(new Uint8Array(buf, p + 8, len));
+    if (typ === 'IEND') break;
+    p += 12 + len;
+  }
+  const tot = idat.reduce((a, b) => a + b.length, 0); const z = new Uint8Array(tot); let o = 0; for (const c of idat) { z.set(c, o); o += c.length; }
+  const ds = new DecompressionStream('deflate');
+  const raw = new Uint8Array(await new Response(new Blob([z]).stream().pipeThrough(ds)).arrayBuffer());
+  const bpp = 2, stride = W * bpp; const out = new Float32Array(W * H); const prev = new Uint8Array(stride), cur = new Uint8Array(stride);
+  let q = 0;
+  for (let y = 0; y < H; y++) {
+    const f = raw[q++]; cur.set(raw.subarray(q, q + stride)); q += stride;
+    for (let i = 0; i < stride; i++) {
+      const a = i >= bpp ? cur[i - bpp] : 0, b = prev[i], c = i >= bpp ? prev[i - bpp] : 0; let x = cur[i];
+      if (f === 1) x += a; else if (f === 2) x += b; else if (f === 3) x += (a + b) >> 1;
+      else if (f === 4) { const pp = a + b - c, pa = Math.abs(pp - a), pb = Math.abs(pp - b), pc = Math.abs(pp - c); x += (pa <= pb && pa <= pc) ? a : (pb <= pc ? b : c); }
+      cur[i] = x & 255;
+    }
+    for (let x = 0; x < W; x++) out[y * W + x] = ((cur[2 * x] << 8) | cur[2 * x + 1]) / meta.hscale - meta.hoff;
+    prev.set(cur);
+  }
+  return { W, H, data: out };
+}
+
+// ---------- scene
+const S = 0.01; // 1 unit = 100 m
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b1a24);
+scene.fog = new THREE.Fog(0x0b1a24, 90, 260);
+const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.05, 1000);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.maxPolarAngle = Math.PI * 0.47; controls.minDistance = 1.2; controls.maxDistance = 160;
+controls.screenSpacePanning = false;
+scene.add(new THREE.HemisphereLight(0xfff3d6, 0x223344, 1.1));
+const sun = new THREE.DirectionalLight(0xffffff, 1.6); sun.position.set(-40, 60, 30); scene.add(sun);
+
+const { W: NX, H: NY, data: HD } = heights;
+const G = meta.G;
+const sizeX = (NX - 1) * G * S, sizeY = (NY - 1) * G * S;
+const cx = meta.x0 * S + sizeX / 2, cz = -meta.y1 * S + sizeY / 2; // world center
+const toW = (e, n) => [e * S - cx, -n * S - cz];            // world x,z from east/north metres
+let EX = 4;
+
+const geo = new THREE.PlaneGeometry(sizeX, sizeY, NX - 1, NY - 1);
+geo.rotateX(-Math.PI / 2);
+const pos = geo.attributes.position;
+function applyHeights() {
+  for (let i = 0; i < pos.count; i++) {
+    const z = HD[i];
+    pos.setY(i, (z > 0 ? z * 1.0 : z * EX) * S);
+  }
+  pos.needsUpdate = true; geo.computeVertexNormals();
+}
+applyHeights();
+const depthAttr = new Float32Array(pos.count); for (let i = 0; i < pos.count; i++) depthAttr[i] = HD[i];
+geo.setAttribute('zr', new THREE.BufferAttribute(depthAttr, 1));
+
+const tl = new THREE.TextureLoader();
+const loadTex = u => new Promise(r => tl.load(D + u, t => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; r(t); }));
+const [ssTex, aerTex, ownTex, landTex] = await Promise.all([loadTex('sidescan.png'), loadTex('aerial.jpg'), loadTex('ownmask.png'), loadTex('landmask.png')]);
+ownTex.colorSpace = THREE.NoColorSpace; landTex.colorSpace = THREE.NoColorSpace;
+// sidescan texture covers same extent but at its own pixel grid: extent ssW_m x ssH_m starting at x0,y1
+const U = { ss: { value: ssTex }, aer: { value: aerTex }, own: { value: ownTex }, landm: { value: landTex },
+  ssOn: { value: 1 }, aerOn: { value: 1 }, ownOn: { value: 1 }, ssScale: { value: new THREE.Vector2(sizeX / (meta.ssW_m * S), sizeY / (meta.ssH_m * S)) } };
+const mat = new THREE.MeshStandardMaterial({ roughness: 0.95, metalness: 0 });
+mat.onBeforeCompile = sh => {
+  Object.assign(sh.uniforms, U);
+  sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float zr; varying float vZ; varying vec2 vUv2;')
+    .replace('#include <begin_vertex>', '#include <begin_vertex>\nvZ = zr; vUv2 = uv;');
+  sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>
+    uniform sampler2D ss, aer, own, landm; uniform float ssOn, aerOn, ownOn; uniform vec2 ssScale; varying float vZ; varying vec2 vUv2;
+    vec3 depthCol(float d){ d = clamp(d/26.0,0.,1.);
+      vec3 a=vec3(.85,.95,.90), b=vec3(.42,.78,.79), c=vec3(.16,.50,.70), e=vec3(.10,.25,.48), f=vec3(.05,.10,.24);
+      return d<.25?mix(a,b,d/.25):d<.5?mix(b,c,(d-.25)/.25):d<.75?mix(c,e,(d-.5)/.25):mix(e,f,(d-.75)/.25);}`)
+    .replace('#include <map_fragment>', `
+      vec2 uvi = vec2(vUv2.x, 1.0 - vUv2.y);
+      float lm = texture2D(landm, vec2(vUv2.x, vUv2.y)).r;
+      vec3 col = depthCol(-vZ);
+      float contour = abs(fract(-vZ/2.0 + .5) - .5); col *= 1.0 - 0.18*smoothstep(0.04,0.0,contour)*step(0.,-vZ);
+      float ow = texture2D(own, vec2(vUv2.x, vUv2.y)).r;
+      col = mix(col, col*0.82 + vec3(0.02,0.03,0.05), (1.0-ow)*0.55*ownOn);
+      vec4 s = texture2D(ss, vec2(vUv2.x*ssScale.x, 1.0 - (1.0 - vUv2.y)*ssScale.y));
+      col = mix(col, s.rgb*1.15, s.a*ssOn*0.92*step(vZ,0.0));
+      vec3 rock = vec3(.50,.52,.42);
+      vec3 land = mix(rock, texture2D(aer, vUv2).rgb, aerOn);
+      col = mix(col, land, smoothstep(-0.05, 0.25, vZ));
+      diffuseColor.rgb = col;`);
+};
+const terrain = new THREE.Mesh(geo, mat);
+terrain.position.set(0, 0, 0);
+scene.add(terrain);
+
+// water surface
+const wmat = new THREE.MeshPhysicalMaterial({ color: 0x2c6f8f, transparent: true, opacity: 0.28, roughness: 0.15, metalness: 0, depthWrite: false });
+const water = new THREE.Mesh(new THREE.PlaneGeometry(sizeX * 3, sizeY * 3), wmat);
+water.rotation.x = -Math.PI / 2; water.position.y = 0.002; scene.add(water);
+// sea floor skirt
+const base = new THREE.Mesh(new THREE.PlaneGeometry(sizeX * 3, sizeY * 3), new THREE.MeshBasicMaterial({ color: 0x0d2233 }));
+base.rotation.x = -Math.PI / 2; base.position.y = -30 * S * EX; scene.add(base);
+
+// ---------- height sampling for lines
+function hAt(e, n) {
+  const fx = (e - meta.x0) / G, fy = (meta.y1 - n) / G;
+  const x = Math.max(0, Math.min(NX - 2, Math.floor(fx))), y = Math.max(0, Math.min(NY - 2, Math.floor(fy)));
+  const tx = fx - x, ty = fy - y, i = y * NX + x;
+  return (HD[i] * (1 - tx) + HD[i + 1] * tx) * (1 - ty) + (HD[i + NX] * (1 - tx) + HD[i + NX + 1] * tx) * ty;
+}
+const ys = z => (z > 0 ? z : z * EX) * S;
+
+// ---------- trips
+const PAL = ['#FCC222', '#ff7a45', '#ff4fa0', '#b98cff', '#5fd3ff', '#7cf2a0', '#ffe066', '#ff9f1c', '#f15bb5', '#e0f2ff'];
+const tripObjs = [];
+const tripData = {};
+await Promise.all(trips.map(async (t, k) => { tripData[t.name] = await J(`trips/${t.name}/track.json`); }));
+const tripsDiv = document.getElementById('trips');
+let totKm = 0;
+const fmtDate = s => { const d = new Date(s.replace(' ', 'T')); return d.toLocaleDateString('sv-SE', { day: 'numeric', month: 'short', year: 'numeric' }); };
+function buildTripLine(t, k) {
+  const tr = tripData[t.name];
+  const pts = []; const surf = []; const idxMap = [];
+  for (let i = 1; i < tr.length; i++) {
+    const a = tr[i - 1], b = tr[i];
+    if (Math.hypot(b[1] - a[1], b[2] - a[2]) > 45 || b[0] - a[0] > 20) continue;
+    const [x1, z1] = toW(a[1], a[2]), [x2, z2] = toW(b[1], b[2]);
+    surf.push(x1, 0.01, z1, x2, 0.01, z2); pts.push(x1, ys(-a[3]) + 0.004, z1, x2, ys(-b[3]) + 0.004, z2); idxMap.push(i - 1, i);
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(surf, 3));
+  const col = new THREE.Color(PAL[k % PAL.length]);
+  const line = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.95 }));
+  const g2 = new THREE.BufferGeometry(); g2.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+  const bline = new THREE.LineSegments(g2, new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.55 }));
+  line.userData.idxMap = idxMap; const grp = new THREE.Group(); grp.add(line, bline); grp.userData = { t, k }; scene.add(grp);
+  return grp;
+}
+trips.forEach((t, k) => {
+  totKm += t.km;
+  const grp = buildTripLine(t, k); tripObjs.push(grp);
+  const el = document.createElement('div'); el.className = 'trip';
+  el.innerHTML = `<i style="background:${PAL[k % PAL.length]}"></i><span class="d">${fmtDate(t.start)}</span><span class="m">${t.start.slice(11)}–${t.end.slice(11)} · ${t.km} km · ${t.dmin}–${t.dmax} m</span>`;
+  el.onclick = () => { grp.visible = !grp.visible; el.classList.toggle('off', !grp.visible); };
+  el.ondblclick = () => flyToTrip(k);
+  tripsDiv.appendChild(el); grp.userData.el = el;
+});
+document.getElementById('allOn').onclick = () => tripObjs.forEach(g => { g.visible = true; g.userData.el.classList.remove('off'); });
+document.getElementById('allOff').onclick = () => tripObjs.forEach(g => { g.visible = false; g.userData.el.classList.add('off'); });
+document.getElementById('stats').textContent = `${trips.length} turer · ${Math.round(totKm)} km spår · ${pois.length} fynd · 2016–2020`;
+function rebuildLines() { tripObjs.forEach((g, k) => { const v = g.visible, el = g.userData.el; scene.remove(g); const n = buildTripLine(trips[k], k); n.visible = v; n.userData.el = el; tripObjs[k] = n; el.onclick = () => { n.visible = !n.visible; el.classList.toggle('off', !n.visible); }; }); }
+
+// ---------- POI pins (HTML) + stems
+const KIND = { 'grund': ['Grund/sten', 'G'], 'grop': ['Gropar', 'R'], 'sonarmål': ['Sonarmål', 'S'], 'fisk': ['Fisk', 'F'] };
+const kindOn = { 'grund': true, 'grop': true, 'sonarmål': true, 'fisk': true };
+const kindsDiv = document.getElementById('kinds');
+for (const k in KIND) {
+  const n = pois.filter(p => p.kind === k).length;
+  const c = document.createElement('span'); c.className = 'chip on'; c.textContent = `${KIND[k][0]} ${n}`;
+  c.onclick = () => { kindOn[k] = !kindOn[k]; c.classList.toggle('on', kindOn[k]); };
+  kindsDiv.appendChild(c);
+}
+const labels = document.getElementById('labels');
+const stemMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
+for (const p of pois) {
+  const el = document.createElement('div'); el.className = 'pin ' + p.kind; el.textContent = KIND[p.kind][1];
+  el.title = p.title; el.onclick = ev => { ev.stopPropagation(); openPoi(p); };
+  labels.appendChild(el); p.el = el;
+  const [x, z] = toW(p.e, p.n);
+  const g = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x, ys(-p.depth), z), new THREE.Vector3(x, 0.25, z)]);
+  p.stem = new THREE.Line(g, stemMat); scene.add(p.stem);
+  p.w = new THREE.Vector3(x, 0.25, z);
+}
+const places = [['TOREKOV', 2650, -150], ['HALLANDS VÄDERÖ', -1900, 1300], ['KATTEGATT', -2500, -3200], ['SKÄLDERVIKEN →', 3600, 4400]];
+for (const [nm, e, n] of places) { const el = document.createElement('div'); el.className = 'place'; el.textContent = nm; labels.appendChild(el); const [x, z] = toW(e, n); el.w = new THREE.Vector3(x, 0.3, z); el.dataset.place = 1; }
+
+// ---------- camera start
+const [hx, hz] = toW(-300, 300);
+controls.target.set(hx, 0, hz);
+const narrow = innerWidth < 760;
+if (narrow) { const [mx, mz] = toW(-900, 600); controls.target.set(mx, 0, mz); camera.position.set(mx - 4, 105, mz + 55); } else camera.position.set(hx - 6, 46, hz + 52);
+
+function fly(target, dist = 14, polar = 0.9) {
+  const from = controls.target.clone(), fromC = camera.position.clone();
+  const dir = camera.position.clone().sub(controls.target).normalize();
+  const tc = target.clone().add(new THREE.Vector3(dir.x, 0, dir.z).normalize().multiplyScalar(Math.sin(polar) * dist)).add(new THREE.Vector3(0, Math.cos(polar) * dist, 0));
+  const t0 = performance.now(), T = 1100;
+  const step = () => { const u = Math.min(1, (performance.now() - t0) / T), k = u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+    controls.target.lerpVectors(from, target, k); camera.position.lerpVectors(fromC, tc, k); if (u < 1) requestAnimationFrame(step); };
+  step();
+}
+function flyToTrip(k) { const tr = tripData[trips[k].name]; let ex = 0, nn = 0; tr.forEach(r => { ex += r[1]; nn += r[2]; }); const [x, z] = toW(ex / tr.length, nn / tr.length); fly(new THREE.Vector3(x, 0, z), 40, 0.8); }
+
+// ---------- card
+const card = document.getElementById('card'), cardBody = document.getElementById('cardBody');
+window.closeCard = () => { card.style.display = 'none'; marker.visible = false; };
+const marker = new THREE.Mesh(new THREE.SphereGeometry(0.03, 16, 12), new THREE.MeshBasicMaterial({ color: 0xFCC222 }));
+marker.visible = false; scene.add(marker);
+const kn = v => v.toFixed(1).replace('.', ',');
+function wfHtml(trip, ping, info) {
+  if (!info.chunks) return '<p class="note">Ingen sidescan i denna fil.</p>';
+  const c = Math.floor(ping / 800), row = Math.floor((ping % 800) / 2);
+  const ss = info.ss ? Math.round(info.ss) : '?';
+  return `<div class="wf"><img src="${D}trips/${trip}/wf/${String(c).padStart(3, '0')}.jpg" id="wfimg" data-row="${row}" data-trip="${trip}" data-c="${c}" style="max-height:340px;object-fit:cover;object-position:0 ${0}px">
+    <span class="lbl" style="left:8px">Downscan</span><span class="lbl" style="left:36%">◄ Babord ${ss} m</span><span class="lbl" style="right:8px">Styrbord ${ss} m ►</span></div>
+    <div class="nav"><span class="chip" onclick="wfStep(-1)">▲ Tidigare</span><span class="chip" onclick="wfStep(1)">Senare ▼</span></div>`;
+}
+let cur = null;
+window.wfStep = d => { if (!cur) return; const info = trips.find(t => t.name === cur.trip); const nc = Math.max(0, Math.min(info.chunks - 1, Math.floor(cur.ping / 800) + d)); cur.ping = nc * 800 + 400; showTrackPoint(cur.trip, null, cur.ping); };
+function placeWf() {
+  const img = document.getElementById('wfimg'); if (!img) return;
+  const fit = () => { const row = +img.dataset.row, h = img.naturalHeight, disp = img.clientWidth / img.naturalWidth; const view = 340 / disp; const off = Math.max(0, Math.min(h - view, row - view / 2)); img.style.objectPosition = `0 ${-off * disp}px`;
+    img.style.height = Math.min(340, h * disp) + 'px'; };
+  img.complete ? fit() : img.onload = fit;
+}
+function openPoi(p) {
+  const info = trips.find(t => t.name === p.trip);
+  cur = { trip: p.trip, ping: p.ping };
+  cardBody.innerHTML = `<h3>${p.title}</h3><div class="note">${p.desc}</div>
+   ${p.thumb ? `<img src="${D}poi/${p.id}.jpg">` : ''}
+   <div class="kv"><b>Djup</b><span>${kn(p.depth)} m</span><b>Tur</b><span>${fmtDate(info.start)}</span>
+   <b>Position</b><span>${p.lat.toFixed(5)}° N, ${p.lon.toFixed(5)}° E · <a href="https://www.google.com/maps?q=${p.lat},${p.lon}" target="_blank">karta</a></span></div>
+   <p class="note" style="margin-top:6px">${p.kind==='sonarmål'?'Inzoomad sidescan, ca 30×20 m. Ljust = hårt eko, mörkt bakom = akustisk skugga (objektet sticker upp). Gul ring = fyndet.':'Downscan till vänster, sidescan (babord | styrbord) till höger, tiden går nedåt. Gula streck = fyndet.'}</p>`;
+  card.style.display = 'block';
+  const [x, z] = toW(p.e, p.n); marker.position.set(x, ys(-p.depth) + 0.05, z); marker.visible = true;
+  fly(new THREE.Vector3(x, ys(-p.depth), z), 5, 0.85);
+}
+function showTrackPoint(trip, idx, ping) {
+  const info = trips.find(t => t.name === trip); const tr = tripData[trip];
+  if (idx == null) { idx = 0; let b = 1e9; tr.forEach((r, i) => { const d = Math.abs(r[5] - ping); if (d < b) { b = d; idx = i; } }); }
+  const r = tr[idx]; ping = ping ?? r[5];
+  cur = { trip, ping };
+  const t0 = new Date(info.start.replace(' ', 'T')); const tt = new Date(t0.getTime() + r[0] * 1000);
+  cardBody.innerHTML = `<h3>${fmtDate(info.start)} · ${tt.toTimeString().slice(0, 5)}</h3>
+   <div class="kv"><b>Djup</b><span>${kn(r[3])} m</span><b>Fart</b><span>${kn(r[4])} knop</span><b>Tur</b><span>${info.km} km, ${info.start.slice(11)}–${info.end.slice(11)}</span></div>
+   ${wfHtml(trip, ping, info)}`;
+  card.style.display = 'block'; placeWf();
+  const [x, z] = toW(r[1], r[2]); marker.position.set(x, 0.03, z); marker.visible = true;
+}
+
+// ---------- picking on track lines
+const ray = new THREE.Raycaster(); ray.params.Line.threshold = 0.25;
+const mouse = new THREE.Vector2(); let down = null;
+canvas.addEventListener('pointerdown', e => down = [e.clientX, e.clientY]);
+canvas.addEventListener('pointerup', e => {
+  if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6) return;
+  const hit = pick(e); if (hit) showTrackPoint(hit.trip, hit.idx);
+});
+function pick(e) {
+  mouse.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(mouse, camera);
+  ray.params.Line.threshold = Math.max(0.05, camera.position.distanceTo(controls.target) * 0.012);
+  const objs = tripObjs.filter(g => g.visible).map(g => g.children[0]);
+  const h = ray.intersectObjects(objs, false)[0];
+  if (!h) return null; const g = h.object.parent; return { trip: g.userData.t.name, idx: h.object.userData.idxMap[h.index] ?? 0, k: g.userData.k };
+}
+const tip = document.getElementById('tip');
+canvas.addEventListener('pointermove', e => {
+  if (e.buttons) { tip.style.display = 'none'; return; }
+  const h = pick(e);
+  if (h) { const r = tripData[h.trip][h.idx]; tip.textContent = `${fmtDate(trips[h.k].start)} · ${kn(r[3])} m · ${kn(r[4])} kn`; tip.style.display = 'block'; tip.style.left = e.clientX + 14 + 'px'; tip.style.top = e.clientY + 10 + 'px'; canvas.style.cursor = 'pointer'; }
+  else { tip.style.display = 'none'; canvas.style.cursor = ''; }
+});
+
+// ---------- layer toggles
+document.querySelectorAll('[data-l]').forEach(c => c.onclick = () => {
+  c.classList.toggle('on'); const on = c.classList.contains('on') ? 1 : 0; const l = c.dataset.l;
+  if (l === 'ss') U.ssOn.value = on; if (l === 'aer') U.aerOn.value = on; if (l === 'own') U.ownOn.value = on; if (l === 'water') water.visible = !!on;
+});
+const ex = document.getElementById('ex');
+ex.oninput = () => { EX = +ex.value; document.getElementById('exv').textContent = EX + '×'; applyHeights(); base.position.y = -30 * S * EX;
+  for (const p of pois) { const [x, z] = toW(p.e, p.n); p.stem.geometry.setFromPoints([new THREE.Vector3(x, ys(-p.depth), z), new THREE.Vector3(x, 0.25, z)]); }
+  clearTimeout(ex._t); ex._t = setTimeout(rebuildLines, 120); };
+
+// ---------- render loop + labels
+const v = new THREE.Vector3();
+function updLabels() {
+  for (const p of pois) {
+    const vis = kindOn[p.kind]; p.stem.visible = vis;
+    v.copy(p.w).project(camera);
+    if (!vis || v.z > 1) { p.el.style.display = 'none'; continue; }
+    p.el.style.display = 'flex'; p.el.style.left = (v.x * .5 + .5) * innerWidth + 'px'; p.el.style.top = (-v.y * .5 + .5) * innerHeight + 'px';
+  }
+  labels.querySelectorAll('[data-place]').forEach(el => { v.copy(el.w).project(camera); el.style.display = v.z > 1 ? 'none' : 'block'; el.style.left = (v.x * .5 + .5) * innerWidth + 'px'; el.style.top = (-v.y * .5 + .5) * innerHeight + 'px'; });
+}
+function setView() { camera.aspect = innerWidth / innerHeight; if (innerWidth >= 760) camera.setViewOffset(innerWidth + 320, innerHeight, 0, 0, innerWidth, innerHeight); else camera.clearViewOffset(); camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); }
+addEventListener('resize', setView); setView();
+function loop() { controls.update(); updLabels(); renderer.render(scene, camera); requestAnimationFrame(loop); }
+loop();
+const ld = document.getElementById('load'); ld.style.opacity = 0; setTimeout(() => ld.remove(), 700);
+
+window.EK = { scene, camera, controls, pois, trips, tripData, openPoi, showTrackPoint, fly, toW, U, setEx: x => { ex.value = x; ex.oninput(); } };
+</script>
+</body>
+</html>
