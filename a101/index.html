@@ -70,6 +70,7 @@ input[type=number]{width:78px}
 .th svg{width:100%;height:56px;display:block}
 .th span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .th i{color:var(--mut);font-style:normal}
+.th.shared{border-color:#fbc021}
 #toast{position:absolute;left:50%;bottom:66px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:7px 12px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90%}
 #toast.show{opacity:.92}
 .rlabel{pointer-events:none;font-family:-apple-system,Helvetica,Arial,sans-serif}
@@ -957,10 +958,19 @@ for(const t of PALOP){ const b=document.createElement('button'); b.textContent='
 // ------------------------------------------------------------------ förslag
 const PRESET_NAME='L2 – preset';
 const PRESETS=[{id:'preset',name:PRESET_NAME,locked:true},{id:'ronander',name:'A101 Ronander 25/10',locked:true}];
-function allPlans(){ return [...PRESETS, ...FL.list]; }
-const isPreset = id => PRESETS.some(p=>p.id===id);
+let SHARED=[];   // delade förslag från delade.json – syns för alla, låsta
+function allPlans(){ return [...PRESETS, ...SHARED, ...FL.list]; }
+const isPreset = id => PRESETS.some(p=>p.id===id) || SHARED.some(p=>p.id===id);
+const isShared = id => SHARED.some(p=>p.id===id);
+fetch('delade.json?v='+Date.now()).then(r=>r.ok?r.json():[]).then(L=>{
+  if(!Array.isArray(L)) return;
+  SHARED=L.map(p=>({...p, locked:true, shared:true}));
+  // dölj lokala kopior med samma id
+  FL.list=FL.list.filter(q=>!SHARED.some(p=>p.id===q.id));
+  updateForslag();
+}).catch(()=>{});
 function curPlan(){ return allPlans().find(p=>p.id===CUR) || allPlans()[0]; }
-function planOf(p){ return p.id==='preset' ? startStateFull() : p.id==='ronander' ? ronanderState() : JSON.parse(JSON.stringify(p.plan)); }
+function planOf(p){ return p.shared ? JSON.parse(JSON.stringify(p.plan)) : p.id==='preset' ? startStateFull() : p.id==='ronander' ? ronanderState() : JSON.parse(JSON.stringify(p.plan)); }
 function askSaveFirst(){
   if(!DIRTY) return true;
   const c=curPlan();
@@ -994,8 +1004,8 @@ document.getElementById('fSaveAs').onclick=()=>saveAs();
 function backTo(id){ if(CUR===id && DIRTY){ if(!confirm('Släng ändringarna och gå tillbaka till originalet?')) return; DIRTY=false; } loadPlan(id); }
 document.getElementById('fPreset').onclick=()=>backTo('preset');
 document.getElementById('fPresetA').onclick=()=>backTo('ronander');
-document.getElementById('fRename').onclick=()=>{ const p=FL.list.find(q=>q.id===CUR); if(!p) return toast('Preseten kan inte byta namn – spara som nytt först'); const nm=prompt('Nytt namn',p.name); if(nm){ p.name=nm.trim(); render(); } };
-document.getElementById('fDel').onclick=()=>{ const p=FL.list.find(q=>q.id===CUR); if(!p) return toast('Preseten kan inte tas bort'); if(!confirm(`Ta bort ”${p.name}”?`)) return; FL.list=FL.list.filter(q=>q!==p); DIRTY=false; CUR='preset'; S=startStateFull(); sel=null; fit(); render(); toast('Borttaget'); };
+document.getElementById('fRename').onclick=()=>{ const p=FL.list.find(q=>q.id===CUR); if(!p) return toast(isShared(CUR)?'Delade förslag är låsta – spara som nytt först':'Preseten kan inte byta namn – spara som nytt först'); const nm=prompt('Nytt namn',p.name); if(nm){ p.name=nm.trim(); render(); } };
+document.getElementById('fDel').onclick=()=>{ const p=FL.list.find(q=>q.id===CUR); if(!p) return toast(isShared(CUR)?'Delade förslag kan inte tas bort här':'Preseten kan inte tas bort'); if(!confirm(`Ta bort ”${p.name}”?`)) return; FL.list=FL.list.filter(q=>q!==p); DIRTY=false; CUR='preset'; S=startStateFull(); sel=null; fit(); render(); toast('Borttaget'); };
 function miniSVG(plan){
   const R=plan.rooms; if(!R||!R.length) return '';
   let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9; for(const r of R){x0=Math.min(x0,r.x0);y0=Math.min(y0,r.y0);x1=Math.max(x1,r.x1);y1=Math.max(y1,r.y1);}
@@ -1009,9 +1019,9 @@ function updateForslag(){
   document.getElementById('fName').innerHTML = `${c.name}${DIRTY?' <span class="dirty">•</span>':''}<small>${i+1} av ${L.length}${DIRTY?' · ej sparat':''}</small>`;
   const th=document.getElementById('thumbs'); th.innerHTML='';
   for(const p of L){
-    const d=document.createElement('div'); d.className='th'+(p.id===CUR?' cur':'');
+    const d=document.createElement('div'); d.className='th'+(p.id===CUR?' cur':'')+(p.shared?' shared':'');
     const plan = p.id===CUR ? S : (p.id==='preset' ? (PRESET_MINI||(PRESET_MINI=startState())) : p.id==='ronander' ? (RON_MINI||(RON_MINI=ronanderState())) : p.plan);
-    const when = p.ts ? new Date(p.ts).toLocaleDateString('sv-SE',{day:'numeric',month:'short'}) : 'låst';
+    const when = p.shared ? ('delat · '+(p.by||'')) : p.ts ? new Date(p.ts).toLocaleDateString('sv-SE',{day:'numeric',month:'short'}) : 'låst';
     d.innerHTML = miniSVG(plan) + `<span>${p.name}${p.id===CUR&&DIRTY?' •':''}</span><i>${when}</i>`;
     d.onclick=()=>loadPlan(p.id); th.appendChild(d);
   }
@@ -1152,7 +1162,7 @@ window.addEventListener('resize',()=>{fit(); render();});
 if(!S) S=startStateFull();
 fit(); render();
 LIVE.start();
-window.__lock={anchorsFor,applyAnchors,isLocked}; window.__ron=ronanderState; window.__S=()=>S; window.__FL=()=>FL; window.__cur=()=>({CUR,DIRTY}); window.__f={saveAs,saveCur,loadPlan,step}; window.__api={resize:(name,d,ax)=>{axis=ax||'x'; resize(S.rooms.find(r=>r.name===name),d);}, union:unionStats, overlaps, holes, sel:(n)=>{sel={k:'room',id:S.rooms.find(r=>r.name===n).id}; render();}};
+window.__lock={anchorsFor,applyAnchors,isLocked}; window.__ron=ronanderState; window.__S=()=>S; window.__FL=()=>FL; window.__SH=()=>SHARED; window.__cur=()=>({CUR,DIRTY}); window.__f={saveAs,saveCur,loadPlan,step}; window.__api={resize:(name,d,ax)=>{axis=ax||'x'; resize(S.rooms.find(r=>r.name===name),d);}, union:unionStats, overlaps, holes, sel:(n)=>{sel={k:'room',id:S.rooms.find(r=>r.name===n).id}; render();}};
 </script>
 </body>
 </html>
