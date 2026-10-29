@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BAHN FAKKIN MI · LECHON & JEOW BÁNH MÌ · Buttercup</title>
+<meta name="description" content="Bánh mì med lechon belly – sidfläsk med krispig puffsvål, långkokt i 120 °C – och laotisk jeow som på kalamansi, fisksås, vitlök och chili. Efter Raymond Vera Cruz.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Buttercup">
+<meta property="og:title" content="BAHN FAKKIN MI · LECHON & JEOW BÁNH MÌ">
+<meta property="og:description" content="Bánh mì med lechon belly – sidfläsk med krispig puffsvål, långkokt i 120 °C – och laotisk jeow som på kalamansi, fisksås, vitlök och chili. Efter Raymond Vera Cruz.">
+<meta property="og:url" content="https://www.buttercup.nu/banhmi/">
+<meta property="og:image" content="https://www.buttercup.nu/banhmi/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.buttercup.nu/banhmi/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@700&family=Barlow:wght@400;500&family=Kanit:wght@500&family=Noto+Sans+Lao:wght@500&display=swap">
+<style>
+:root{
+  --buttercup:#FCC222; --chili:#C8340A; --oxblood:#8F1A00; --cream:#FFF6DC; --ink:#2A1206;
+  --display:"Anton","Impact","Haettenschweiler",sans-serif;
+  --label:"Barlow Condensed","Arial Narrow",sans-serif;
+  --body:"Barlow",system-ui,sans-serif;
+  --ease:cubic-bezier(.45,0,.2,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--buttercup);color:var(--oxblood);font-family:var(--body);font-size:17px;line-height:1.5;overflow-x:hidden;
+  background-image:radial-gradient(rgba(200,52,10,.13) 1.6px,transparent 1.8px);background-size:18px 18px}
+.bc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:var(--chili);color:var(--cream);
+  font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px;position:fixed;top:0;left:0;right:0;z-index:50}
+.bc-bar a{color:var(--cream);text-decoration:none}.bc-bar a:hover{text-decoration:underline}
+.bc-bar b{font-family:var(--display);font-weight:400;letter-spacing:.04em;font-size:18px;color:var(--buttercup)}
+
+/* ---------- HERO ---------- */
+header{padding:96px 16px 24px;text-align:center;position:relative}
+.eyebrow{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:15px;color:var(--oxblood);margin:0 0 10px}
+h1{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--chili);margin:0;line-height:1.02;
+  font-size:clamp(64px,17vw,190px);letter-spacing:.01em;
+  text-shadow:4px 4px 0 var(--oxblood),8px 8px 0 rgba(143,26,0,.25)}
+h1 .row{display:block;white-space:nowrap}
+.recipe{display:inline-block;margin:22px 0 0;font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;font-size:clamp(26px,4.4vw,40px);line-height:1;color:var(--cream);background:var(--chili);padding:10px 22px 12px;border-radius:14px;box-shadow:4px 4px 0 var(--oxblood);transform:rotate(-2deg)}
+.sub{font-family:var(--display);text-transform:uppercase;color:var(--oxblood);font-size:clamp(18px,3.2vw,26px);letter-spacing:.04em;margin:22px 0 0}
+.badge{display:inline-block;margin-top:16px;background:var(--chili);color:var(--cream);font-family:var(--label);font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;font-size:14px;padding:6px 14px;border-radius:999px;transform:rotate(-3deg)}
+
+/* ---------- INGREDIENT CARDS ---------- */
+main{max-width:1120px;margin:0 auto;padding:12px 16px 40px}
+.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px}
+@media (min-width:1000px){.grid{grid-template-columns:repeat(5,1fr);gap:18px}.stage{height:240px}}
+.steps a{color:var(--chili);font-weight:500}
+.card{position:relative;background:var(--cream);border:3px solid var(--chili);border-radius:22px;padding:18px 16px 18px;
+  box-shadow:6px 6px 0 var(--chili);text-align:center;overflow:hidden}
+.card::before{content:"";position:absolute;inset:7px;border:2px dashed rgba(200,52,10,.45);border-radius:16px;pointer-events:none}
+.num{position:absolute;top:14px;left:16px;font-family:var(--display);color:var(--chili);font-size:28px;line-height:1;z-index:2}
+.amt{position:absolute;top:12px;right:12px;z-index:3;background:var(--chili);color:var(--cream);font-family:var(--display);
+  font-size:22px;line-height:1;padding:8px 12px 9px;border-radius:12px;transform:rotate(4deg);box-shadow:3px 3px 0 var(--oxblood)}
+.amt.est{background:var(--buttercup);color:var(--chili);border:2px dashed var(--chili);box-shadow:3px 3px 0 var(--chili)}
+.stage{position:relative;height:290px;display:flex;align-items:flex-end;justify-content:center;margin:18px 0 6px}
+.stage img{height:100%;width:auto;max-width:80%;object-fit:contain;filter:drop-shadow(4px 5px 0 rgba(143,26,0,.18))}
+
+.card h2{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--chili);font-size:28px;line-height:1;margin:6px 0 4px;letter-spacing:.02em}
+.card p{margin:0;font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:14px;color:var(--oxblood)}
+.card p.th{font-family:"Kanit","Noto Sans Lao",var(--label);font-weight:500;text-transform:none;letter-spacing:0;font-size:19px;color:var(--chili);margin-top:6px;line-height:1.25}
+
+/* ---------- METHOD ---------- */
+.panel{background:var(--cream);border:3px solid var(--chili);border-radius:22px;box-shadow:6px 6px 0 var(--chili);padding:26px 24px;margin:34px 0 0;position:relative}
+.panel h3{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--chili);font-size:clamp(30px,5vw,44px);margin:0 0 12px;line-height:1}
+.steps{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:12px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start}
+.steps li::before{content:counter(s);font-family:var(--display);font-size:22px;background:var(--chili);color:var(--cream);border-radius:50%;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+.store{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+.store span{font-family:var(--display);text-transform:uppercase;font-size:20px;background:var(--buttercup);color:var(--chili);border:3px solid var(--chili);
+  border-radius:14px;padding:8px 14px;letter-spacing:.03em}
+.note{font-size:15px;color:var(--oxblood);opacity:.9}
+.note a{color:var(--chili)}
+footer{background:var(--chili);color:var(--cream);text-align:center;padding:28px 16px calc(28px + env(safe-area-inset-bottom));font-family:var(--label);
+  font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-top:40px}
+footer a{color:var(--buttercup)}
+@media (max-width:700px){
+  .bc-bar{padding:6px 12px;font-size:12px}.bc-bar span{display:none}.bc-bar b{font-size:15px}
+  header{padding-top:78px}
+  .stage{height:190px;margin-top:30px}
+  .grid{grid-template-columns:1fr 1fr;gap:14px}
+  .card:last-child{grid-column:1/-1}
+  .card{padding:12px 8px 14px;border-radius:18px;box-shadow:4px 4px 0 var(--chili)}
+  .num{font-size:20px;top:12px;left:12px}.amt{font-size:16px;padding:6px 8px 7px;top:9px;right:9px}
+  .card h2{font-size:20px}.card p{font-size:11px}.card p.th{font-size:15px}
+}
+.dish{margin-top:22px}
+.phase+.phase{margin-top:18px}
+.phase h4{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:17px;color:var(--oxblood);margin:0 0 10px;border-bottom:2px dashed rgba(200,52,10,.45);padding-bottom:6px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center;margin:0 0 20px;font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:13px}
+.legend i{font-style:normal;display:inline-block;font-family:var(--display);font-size:15px;padding:4px 9px;border-radius:9px;margin-right:6px;background:var(--chili);color:var(--cream)}
+.legend i.est{background:var(--buttercup);color:var(--chili);border:2px dashed var(--chili)}
+@media (min-width:1000px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:700px){.card:last-child{grid-column:auto}}
+
+.grp{display:flex;align-items:baseline;justify-content:center;gap:14px;flex-wrap:wrap;margin:38px 0 18px;text-align:center}
+.grp:first-of-type{margin-top:8px}
+.grp h3{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--chili);font-size:clamp(34px,6vw,56px);line-height:1;margin:0;
+  text-shadow:3px 3px 0 rgba(143,26,0,.25)}
+.grp span{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:14px;color:var(--oxblood)}
+.grp b{font-family:"Kanit","Noto Sans Lao",sans-serif;font-weight:500;letter-spacing:0;text-transform:none;font-size:20px;color:var(--chili)}
+@media (min-width:1000px){.grid{grid-template-columns:repeat(4,1fr)}}
+.temps{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 2px}
+.temps span{font-family:var(--display);font-size:19px;background:var(--chili);color:var(--cream);border-radius:12px;padding:6px 12px;box-shadow:3px 3px 0 var(--oxblood)}
+
+</style>
+</head>
+<body>
+<div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Kök · rätt</span><b>Plan B(lommeröd)</b></div>
+
+<header>
+  <p class="eyebrow">Lechon cebu · Jeow som · Bánh mì</p>
+  <h1><span class="row">BAHN FAKKIN</span><span class="row">MI</span></h1>
+  <p class="recipe">LECHON &amp; JEOW BÁNH MÌ</p>
+  <p class="sub">3 delar · 24 kort · ca 4 baguetter</p>
+  <span class="badge">2 dygn i kylen · värt varje minut</span>
+</header>
+
+<main>
+  <p class="legend"><span><i class="est">~1 msk</i>Alla mängder är våra uppskattningar</span><span><i>Del 1</i>Hänvisar till en del ovan</span></p>
+
+  <div class="grp"><h3>1 · Lechon</h3><span>Filippinsk rullad sidfläsk · <b>litson liempo</b></span></div>
+  <ul class="grid" id="g1"></ul>
+
+  <div class="grp"><h3>2 · Jeow som</h3><span>Laotisk sur chilisås · <b lang="lo">ແຈ່ວສົ້ມ</b></span></div>
+  <ul class="grid" id="g2"></ul>
+
+  <div class="grp"><h3>3 · Bánh mì</h3><span>Vietnamesisk baguette · <b lang="vi">bánh mì</b></span></div>
+  <ul class="grid" id="g3"></ul>
+
+  <section class="panel dish">
+    <h3>Så gör du</h3>
+    <div class="phase"><h4>1 · Lechon (2 dygn i förväg)</h4>
+      <ol class="steps">
+        <li><div>Stick hål i <b>svålen</b> över hela ytan, tätt. Han använder ett knippe grillpinnar som en spikmatta.</div></li>
+        <li><div>Vänd. Skåra <b>köttsidan</b> i rutor, ner mot svålen men inte igenom.</div></li>
+        <li><div>Gnid in rubben i alla skåror: <b>socker, salt, paprika, vitlökspulver och peppar</b>.</div></li>
+        <li><div>Strö över <b>citrongräs</b> och hela pepparkorn. Lägg <b>salladslök</b> på längden, <b>lagerblad</b> ovanpå och en hel knippe <b>koriander</b>.</div></li>
+        <li><div>Vik ihop till en rulle och <b>sy eller knyt den</b>. Tekniken lärde han sig av en sjuksköterska. Linda folie runt köttet så att bara svålen syns.</div></li>
+        <li><div>Pensla svålen och <b>salta den</b>. Ställ den <b>otäckt i kylen i 2 dygn</b> så att svålen torkar och rubben drar in.</div></li>
+      </ol></div>
+    <div class="phase"><h4>2 · Ugnen</h4>
+      <div class="temps"><span>120 °C → 90 °C inne · ca 3 h</span><span>230 °C · 15 min</span><span>Grill 230 °C · 10 min</span></div>
+      <ol class="steps">
+        <li><div>Låt den gå <b>lågt och länge i 120 °C (250 °F)</b> tills innertemperaturen är <b>90 °C (195 °F)</b>, ungefär 3 timmar.</div></li>
+        <li><div>Höj till <b>230 °C (450 °F) i 15 minuter</b> och kör sedan <b>grillelementet på 230 °C i 10 minuter</b> tills svålen puffar upp till luftig crackling. Håll koll så att den inte bränns.</div></li>
+        <li><div>Låt vila en stund och skiva i tjocka bitar, med svål på varje skiva.</div></li>
+      </ol></div>
+    <div class="phase"><h4>3 · Jeow som</h4>
+      <ol class="steps">
+        <li><div>Lägg <b>riven vitlök, krossad torkad chili och kandisocker</b> i en skål.</div></li>
+        <li><div>Häll på <b>kalamansijuice</b> i stället för lime, sedan <b>fisksås</b>. Rör tills sockret har löst sig.</div></li>
+        <li><div>Vänd ner massor av hackad <b>koriander</b>. Smaka av: surt först, sedan salt, sött och hett.</div></li>
+      </ol></div>
+    <div class="phase"><h4>4 · Bygg</h4>
+      <ol class="steps">
+        <li><div>Snitta baguetten längs ena sidan. Bred <b>pâté</b> på ena halvan och <b>majonnäs</b> på den andra.</div></li>
+        <li><div>Lägg i skivorna med <b>lechon</b> och ringla <b>jeow som</b> över, gärna rikligt.</div></li>
+        <li><div>Toppa med <b>gurkstavar, đồ chua och koriander</b>. Skär itu och ät direkt medan svålen knastrar.</div></li>
+      </ol></div>
+  </section>
+
+  <div class="two">
+    <section class="panel">
+      <h3>Tips</h3>
+      <div class="store"><span>Torr svål</span><span>Termometer</span><span>Đồ chua</span></div>
+      <p>Det är de <b>två dygnen i kylen</b> som ger luftig crackling. Svålen ska kännas torr som papper innan den åker in. Använd en <b>stektermometer</b>: hela poängen är 90 °C inne före värmechocken.</p>
+      <p>Đồ chua görs inte i videon. Så här gör vi: strimla morot och daikon, salta lätt i 10 minuter, skölj och lägg i lika delar ättika och vatten med socker efter smak. De är klara efter en timme.</p>
+    </section>
+    <section class="panel">
+      <h3>Om receptet</h3>
+      <p class="note">Källa: <a href="https://www.instagram.com/reel/DfD-HyJvgX8/">Raymond Vera Cruz (@raymondveracruz) på Instagram</a>, ”SỤBUẤY Sandwiches Vol. XII: Lechon &amp; Jeow Banh Mi”. Han har utvecklat sin lechon i tio år. Rubben, de två dygnen, alla temperaturer och att lime byts mot kalamansi kommer från hans text. <b>Inga mängder anges</b>, så de gula streckade lapparna är våra uppskattningar för ett ca 1,2 kg sidfläsk. Vad han penslar svålen med syns inte. Fyllningarna i baguetten och đồ chua-receptet har vi läst ut av bilderna. Namnen under korten är på filippinska, laotiska och vietnamesiska, efter var varje del kommer ifrån. Illustrationerna är tecknade med gpt-image efter bilder ur videon.</p>
+    </section>
+  </div>
+</main>
+
+<footer>Bahn fakkin mi · <a href="/planuea/">pla fakkin nuea</a> · <a href="/padnamprikpao/">pad fakkin prik</a> · <a href="/">buttercup.nu</a></footer>
+
+<script>
+const G={
+ g1:[
+  ["rawpork","Sidfläsk med svål","Ett helt stycke","~1,2 kg",true,"liempo"],
+  ["sugar","Socker","Till rubben","~1 msk",true,"asukal"],
+  ["salt","Kosher salt","Rubben + svålen","~2 msk",true,"asin"],
+  ["paprika","Paprika","Till rubben","~1 msk",true,"paprika"],
+  ["garlicpowder","Vitlökspulver","Till rubben","~2 tsk",true,"bawang"],
+  ["pepper","Svartpeppar","Malen + hela korn","~2 tsk",true,"paminta"],
+  ["lemongrass","Citrongräs","Tunt skivat","~2 stjälkar",true,"tanglad"],
+  ["springonion","Salladslök","Hela, på längden","~3 st",true,"dahon ng sibuyas"],
+  ["bay","Lagerblad","Mitt i rullen","~3 blad",true,"dahon ng laurel"],
+  ["cilantro","Koriander","En hel knippe in","1 knippe",true,"wansoy"]
+ ],
+ g2:[
+  ["garlic","Vitlök","Riven","~3 klyftor",true,"ກະທຽມ"],
+  ["chiliflakes","Thaichili","Torkad, krossad","~2 tsk",true,"ໝາກເຜັດ"],
+  ["rocksugar","Kandisocker","Rock sugar","~1 msk",true,"ນ້ຳຕານກ້ອນ"],
+  ["calamansi","Kalamansijuice","I stället för lime","~4 msk",true,"kalamansi"],
+  ["fish","Fisksås","Nam pa","~2 msk",true,"ນ້ຳປາ"],
+  ["cilantro","Koriander","Hackad, rikligt","1 näve",true,"ຜັກຫອມປ້ອມ"]
+ ],
+ g3:[
+  ["baguette","Baguette","Luftig, tunn skorpa","4 st",true,"bánh mì"],
+  ["pate","Leverpastej","Pâté, ena halvan","~1 burk",true,"pa tê"],
+  ["mayo","Majonnäs","Gul och smörig","~4 msk",true,"sốt bơ"],
+  ["lechon","Lechon","Tjocka skivor","Del 1",false,"heo quay"],
+  ["jeow","Jeow som","Ringla över","Del 2",false,"ແຈ່ວສົ້ມ"],
+  ["dochua","Đồ chua","Morot + daikon","1 näve",true,"đồ chua"],
+  ["cucumber","Gurka","Långa stavar","~½ st",true,"dưa leo"],
+  ["cilantro","Koriander","Kvistar","1 näve",true,"ngò rí"]
+ ]};
+let n=0;
+for(const [id,ING] of Object.entries(G)){
+ const g=document.getElementById(id);
+ ING.forEach(([k,name,sub,amt,est,th])=>{
+  const lang=/[\u0E80-\u0EFF]/.test(th)?'lo':(id==='g1'||k==='calamansi'?'tl':'vi');
+  g.insertAdjacentHTML('beforeend',
+   `<li class="card" data-k="${k}">
+      <span class="num">${String(++n).padStart(2,'0')}</span>
+      <span class="amt${est?' est':''}" title="${est?'Uppskattning, videon anger ingen mängd':''}">${amt}</span>
+      <div class="stage">
+        <img src="img/${k}.webp" alt="${name}" width="520" height="780" loading="${n<5?'eager':'lazy'}">
+      </div>
+      <h2>${name}</h2><p>${sub}</p><p class="th" lang="${lang}">${th}</p>
+    </li>`);
+ });
+}
+</script>
+</body>
+</html>
