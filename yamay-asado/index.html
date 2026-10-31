@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yamay Asado 1500 – interaktiv modell</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Yamay Asado – argentinsk parrilla för bordsmontage. Interaktiv 3D-modell direkt ur Fusion: höj och sänk gallren, sprängvy, snitt och klickbar stycklista.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="buttercup.nu">
+<meta property="og:title" content="Yamay Asado 1500 – interaktiv 3D-modell">
+<meta property="og:description" content="Argentinsk parrilla i Corten. Höj och sänk gallren, sprängvy, snitt och klickbar stycklista – direkt ur Fusion.">
+<meta property="og:url" content="https://www.buttercup.nu/yamay-asado/">
+<meta property="og:image" content="https://www.buttercup.nu/yamay-asado/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--gul:#fbc021;--chili:#c8321a;--ox:#5b1a12;--cream:#fff6dc;--ink:#2a1a14}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--gul);color:var(--ink);font-family:Barlow,system-ui,sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.bc-bar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;gap:12px;padding:8px 14px;padding-top:max(8px,env(safe-area-inset-top));background:var(--chili);color:var(--cream);font-family:'Barlow Condensed';font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:14px}
+.bc-bar a{color:var(--cream);text-decoration:none}
+.bc-bar b{font-family:Anton;font-weight:400;letter-spacing:.04em;font-size:18px}
+.bc-bar .sp{flex:1}
+#panel{position:fixed;z-index:20;top:54px;right:12px;width:310px;max-height:calc(100% - 70px);overflow:auto;background:var(--cream);border:2px solid var(--chili);border-radius:14px;box-shadow:0 6px 0 var(--ox);padding:4px 14px 14px}
+#panel h2{font-family:Anton;font-weight:400;font-size:26px;letter-spacing:.02em;margin:10px 0 2px;color:var(--chili)}
+#panel .sub{font-family:'Barlow Condensed';font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:12px;opacity:.75;margin-bottom:6px}
+details{border-top:2px dashed rgba(200,50,26,.35);padding:6px 0}
+details>summary{cursor:pointer;list-style:none;font-family:'Barlow Condensed';font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:15px;color:var(--ox);padding:4px 0}
+details>summary::after{content:'＋';float:right;color:var(--chili)}
+details[open]>summary::after{content:'－'}
+.row{display:flex;align-items:center;gap:8px;margin:7px 0;font-size:14px}
+.row label{flex:0 0 82px;font-weight:600;font-size:13px}
+.row input[type=range]{flex:1;accent-color:var(--chili);height:28px}
+.row output{flex:0 0 42px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.seg{display:flex;flex:1;border:2px solid var(--chili);border-radius:999px;overflow:hidden}
+.seg button{flex:1;border:0;background:transparent;font:600 14px 'Barlow Condensed';letter-spacing:.06em;padding:7px 0;color:var(--chili);cursor:pointer}
+.seg button.on{background:var(--chili);color:var(--cream)}
+.tg{display:flex;flex-wrap:wrap;gap:6px}
+.tg button,.chip{border:2px solid var(--chili);background:var(--cream);color:var(--chili);border-radius:999px;font:600 13px 'Barlow Condensed';letter-spacing:.06em;text-transform:uppercase;padding:6px 11px;cursor:pointer;white-space:nowrap}
+.tg button.on,.chip.on{background:var(--chili);color:var(--cream)}
+.mini{font-size:12px;opacity:.75;line-height:1.35;margin:6px 0 0}
+#stats{font-size:13px;line-height:1.45}
+#stats b{font-family:'Barlow Condensed';font-size:15px;letter-spacing:.04em}
+#bom{font-size:13px;width:100%;border-collapse:collapse}
+#bom td{padding:3px 2px;border-bottom:1px dotted rgba(91,26,18,.3);vertical-align:top}
+#bom td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;width:34px}
+#bom tr{cursor:pointer}
+#bom tr:hover td{background:rgba(251,192,33,.35)}
+#bom .h td{font-family:'Barlow Condensed';font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--chili);border-bottom:2px solid var(--chili);cursor:default;background:none!important;padding-top:10px}
+#bom .pn{display:block;font-size:11px;opacity:.7}
+#pick{position:fixed;z-index:25;left:12px;bottom:12px;max-width:340px;background:var(--cream);border:2px solid var(--chili);border-radius:14px;box-shadow:0 5px 0 var(--ox);padding:10px 14px;display:none}
+#pick h3{margin:0 26px 2px 0;font-family:Anton;font-weight:400;font-size:20px;color:var(--chili);line-height:1.1}
+#pick .x{position:absolute;top:6px;right:10px;border:0;background:none;font-size:22px;color:var(--chili);cursor:pointer}
+#pick p{margin:3px 0;font-size:13px}
+#chips{display:none}
+#load{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:var(--gul);font-family:Anton;font-size:28px;color:var(--chili);letter-spacing:.03em;transition:opacity .4s}
+#load .bar{width:220px;height:8px;border:2px solid var(--chili);border-radius:9px;overflow:hidden}
+#load .bar i{display:block;height:100%;width:0;background:var(--chili)}
+.lbl{font:600 12px 'Barlow Condensed';letter-spacing:.06em;color:var(--ox);background:rgba(255,246,220,.9);border:1.5px solid var(--chili);border-radius:6px;padding:1px 6px;white-space:nowrap;pointer-events:none}
+@media (max-width:700px){
+  .bc-bar{font-size:12px;padding:6px 10px;padding-top:max(6px,env(safe-area-inset-top))}
+  .bc-bar .hide-m{display:none}
+  #panel{top:auto;bottom:0;left:0;right:0;width:auto;max-height:44vh;border-radius:16px 16px 0 0;border-width:2px 0 0;box-shadow:0 -4px 0 var(--ox);padding:0 14px calc(12px + env(safe-area-inset-bottom))}
+  #panel.min{max-height:62px;overflow:hidden}
+  #panel h2{font-size:22px;margin:8px 0 0;display:flex;align-items:center}
+  #panel h2::after{content:'▾';margin-left:auto;font-size:18px}
+  #panel.min h2::after{content:'▴'}
+  #panel .sub{margin-bottom:2px}
+  .row input[type=range]{height:34px}
+  .seg button{padding:9px 0;font-size:15px}
+  #chips{display:flex;position:fixed;z-index:21;left:0;right:0;gap:6px;overflow-x:auto;padding:6px 10px;scrollbar-width:none}
+  #chips::-webkit-scrollbar{display:none}
+  #pick{left:8px;right:8px;max-width:none;top:52px;bottom:auto}
+}
+</style>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="bc-bar"><a href="/">← buttercup.nu</a><span class="sp"></span><b>YAMAY ASADO</b><span class="hide-m">· parrilla 1500</span></div>
+<div id="load"><div>YAMAY ASADO</div><div class="bar"><i></i></div><div id="lt" style="font:600 14px 'Barlow Condensed';letter-spacing:.08em">LADDAR MODELL…</div></div>
+<div id="chips"></div>
+<div id="panel">
+  <h2 id="ph">Yamay Asado</h2>
+  <div class="sub">Argentinsk parrilla · bordsmontage · modell direkt ur Fusion</div>
+  <details open><summary>Konfigurera</summary>
+    <div class="row"><label>Galler höger</label><input type="range" id="gh" min="-160" max="125" step="1" value="0"><output id="ghv">±0</output></div>
+    <div class="row"><label>Galler vänster</label><input type="range" id="gv" min="-20" max="265" step="1" value="0"><output id="gvv">±0</output></div>
+    <div class="row"><label>Corten</label><div class="seg" id="mat"><button data-m="rost" class="on">Rost</button><button data-m="ny">Ny</button><button data-m="rf">Rostfritt</button></div></div>
+    <p class="mini">Gallerhöjd i mm från grundläget, inom lyftets gränser. Rattarna snurrar med.</p>
+  </details>
+  <details open><summary>Visa</summary>
+    <div class="tg" id="grp"></div>
+    <div class="tg" style="margin-top:8px"><button id="tKop" class="on">Köpdelar</button><button id="tExp">Sprängvy</button><button id="tCut">Snitt</button><button id="tDim">Mått</button><button id="tSpin">Snurra</button></div>
+  </details>
+  <details><summary>Kameravyer</summary><div class="tg" id="views"></div></details>
+  <details><summary>Fakta</summary><div id="stats"></div></details>
+  <details><summary>Stycklista</summary><table id="bom"></table><p class="mini">Tryck på en rad för att markera delen i modellen. Köpdelar styrs av artikelnummer.</p></details>
+  <p class="mini">Modellen exporteras direkt ur Fusion 360 (Yamay Asado 1500). Gängor och små radier är förenklade för webben. Inga ritningsunderlag – måtten gäller i Fusion.</p>
+</div>
+<div id="pick"><button class="x" aria-label="Stäng">×</button><h3></h3><div class="b"></div></div>
+
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {CSS2DRenderer, CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
+
+const $ = s => document.querySelector(s);
+const MOB = () => matchMedia('(max-width:700px)').matches;
+const canvas = $('#c');
+const renderer = new THREE.WebGLRenderer({canvas, antialias: true});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.localClippingEnabled = true;
+const lr = new CSS2DRenderer(); lr.domElement.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:5'; document.body.appendChild(lr.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#fbc021');
+const pmrem = new THREE.PMREMGenerator(renderer); scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+const camera = new THREE.PerspectiveCamera(38, 1, 0.02, 50);
+const controls = new OrbitControls(camera, canvas); controls.enableDamping = true; controls.maxPolarAngle = Math.PI * 0.53; controls.minDistance = 0.25; controls.maxDistance = 8;
+const sun = new THREE.DirectionalLight('#fff4e0', 2.2); sun.position.set(2.2, 3.5, 2.6); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048); Object.assign(sun.shadow.camera, {left: -1.4, right: 1.4, top: 1.4, bottom: -1.4, near: 0.5, far: 9}); sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.01;
+scene.add(sun, new THREE.HemisphereLight('#fff6dc', '#c8321a', 0.55));
+const ground = new THREE.Mesh(new THREE.CircleGeometry(4, 64), new THREE.ShadowMaterial({opacity: 0.22})); ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+
+// ---------- material ----------
+function noiseTex(c1, c2, spots, seed = 1) {
+  const s = 512, cv = document.createElement('canvas'); cv.width = cv.height = s; const g = cv.getContext('2d');
+  g.fillStyle = c1; g.fillRect(0, 0, s, s); let r = seed;
+  const rnd = () => (r = (r * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < spots; i++) { const x = rnd() * s, y = rnd() * s, rad = 1.5 + rnd() * 12; const gr = g.createRadialGradient(x, y, 0, x, y, rad);
+    const col = c2[Math.floor(rnd() * c2.length)]; gr.addColorStop(0, col); gr.addColorStop(1, col.replace(/[\d.]+\)$/, '0)')); g.fillStyle = gr; g.fillRect(x - rad, y - rad, rad * 2, rad * 2); }
+  const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+const TEX = {
+  rost: noiseTex('#83431f', ['rgba(140,70,32,.35)', 'rgba(105,50,24,.35)', 'rgba(160,88,44,.3)', 'rgba(90,44,22,.3)'], 5200, 7),
+  ny: noiseTex('#3c3d40', ['rgba(70,72,78,.45)', 'rgba(40,40,44,.5)', 'rgba(95,80,70,.25)'], 1400, 3),
+};
+// triplanar via onBeforeCompile (inga UV i exporten)
+function triplanar(mat, scale) {
+  mat.onBeforeCompile = sh => {
+    sh.uniforms.tScale = {value: scale};
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vWP; varying vec3 vWN;')
+      .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvWP = (modelMatrix * vec4(transformed,1.0)).xyz; vWN = normalize(mat3(modelMatrix) * objectNormal);');
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vWP; varying vec3 vWN; uniform float tScale;')
+      .replace('#include <map_fragment>', `vec3 bw = pow(abs(vWN), vec3(6.0)); bw /= (bw.x+bw.y+bw.z);
+        vec4 tx = texture2D(map, vWP.yz*tScale)*bw.x + texture2D(map, vWP.xz*tScale)*bw.y + texture2D(map, vWP.xy*tScale)*bw.z;
+        diffuseColor *= tx;`);
+  };
+  mat.customProgramCacheKey = () => 'tri' + scale; return mat;
+}
+const clipPlane = new THREE.Plane(new THREE.Vector3(0, 0, -1), 0);
+const M = {
+  cortenrost: triplanar(new THREE.MeshStandardMaterial({map: TEX.rost, roughness: 0.9, metalness: 0.1}), 7.0),
+  cortenny: triplanar(new THREE.MeshStandardMaterial({map: TEX.ny, roughness: 0.6, metalness: 0.55}), 7.0),
+  rostfri: new THREE.MeshStandardMaterial({color: '#c9ccd0', roughness: 0.32, metalness: 0.9}),
+  skruv: new THREE.MeshStandardMaterial({color: '#d4d6d9', roughness: 0.3, metalness: 0.9}),
+  stal: new THREE.MeshStandardMaterial({color: '#9aa0a6', roughness: 0.45, metalness: 0.8}),
+  galler: new THREE.MeshStandardMaterial({color: '#2b2b2d', roughness: 0.55, metalness: 0.7, side: THREE.DoubleSide}),
+  sten: new THREE.MeshStandardMaterial({color: '#d9c7a4', roughness: 0.95, metalness: 0}),
+  isol: new THREE.MeshStandardMaterial({color: '#efe9dc', roughness: 1, metalness: 0}),
+  hi: new THREE.MeshStandardMaterial({color: '#c8321a', roughness: 0.5, metalness: 0.1, emissive: '#c8321a', emissiveIntensity: 0.35}),
+};
+Object.values(M).forEach(m => { m.clippingPlanes = []; m.clipShadows = true; });
+let matMode = 'rost';
+function matFor(ap, name) {
+  const a = (ap || '').toLowerCase(), n = (name || '').toLowerCase();
+  if (a.includes('corten')) return matMode === 'rost' ? M.cortenrost : matMode === 'ny' ? M.cortenny : M.rostfri;
+  if (a.includes('skruv') || a.includes('rostfri')) return M.skruv;
+  if (a.includes('galler') || n.includes('stracksmetall')) return M.galler;
+  if (a.includes('sten')) return M.sten;
+  if (a.includes('yamay') || n.includes('isolering')) return M.isol;
+  return M.stal;
+}
+
+// ---------- modell ----------
+const loader = new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
+const cache = {}; let model = null, groups = {}, parts = [], wheels = [], L = 1500;
+const lifts = {h: 0, v: 0}; let exploded = 0, explodeTarget = 0;
+function prog(p) { $('#load .bar i').style.width = Math.round(p * 100) + '%'; }
+async function loadL(len) {
+  if (!cache[len]) cache[len] = await new Promise((res, rej) => loader.load(`asado_${len}.glb`, g => res(g.scene), e => e.total && prog(e.loaded / e.total), rej));
+  return cache[len];
+}
+function setup(root) {
+  if (model) scene.remove(model);
+  model = root; scene.add(model); groups = {}; parts = []; wheels = [];
+  model.traverse(o => {
+    const ex = o.userData || {};
+    if (ex.grp && !('ap' in ex)) groups[ex.grp] = o;
+    if (o.isMesh) { o.castShadow = o.receiveShadow = true; }
+  });
+  for (const g of Object.values(groups)) for (const n of g.children) {
+    const ex = n.userData; if (!('ap' in ex)) continue;
+    n.userData.base = n.position.clone();
+    parts.push(n);
+    n.traverse(m => { if (m.isMesh) { m.userData.part = n; m.material = matFor(ex.ap, ex.name); } });
+    if (/handwheel|ratt gn ?228/i.test(ex.name)) wheels.push(n);
+  }
+  // explodera: riktning fran modellens centrum (fusion-koordinater i gruppens rum)
+  const c = new THREE.Box3().setFromObject(model).getCenter(new THREE.Vector3());
+  for (const n of parts) {
+    const b = new THREE.Box3().setFromObject(n), pc = b.getCenter(new THREE.Vector3());
+    const d = pc.clone().sub(c), ew = new THREE.Vector3(d.x * 0.55, d.y * 0.25 + 0.05, d.z * 0.9);
+    n.parent.updateWorldMatrix(true, false);
+    n.userData.exp = n.parent.worldToLocal(pc.clone().add(ew)).sub(n.parent.worldToLocal(pc.clone()));
+  }
+  // rattar: rotationsaxel = minsta utbredning, kring sitt centrum (i nodens lokala rum)
+  for (const w of wheels) {
+    const b = new THREE.Box3(); w.traverse(m => { if (m.isMesh) { m.geometry.computeBoundingBox(); b.union(m.geometry.boundingBox); } });
+    const s = b.getSize(new THREE.Vector3()), ax = s.x < s.y && s.x < s.z ? new THREE.Vector3(1, 0, 0) : s.y < s.z ? new THREE.Vector3(0, 1, 0) : new THREE.Vector3(0, 0, 1);
+    w.userData.wc = b.getCenter(new THREE.Vector3()); w.userData.wax = ax; w.userData.q0 = w.quaternion.clone(); w.userData.p0 = w.position.clone();
+    w.userData.side = new THREE.Box3().setFromObject(w).getCenter(new THREE.Vector3()).x > 0 ? 'h' : 'v';
+  }
+  buildGroupToggles(); applyAll(); buildBOM(); stats();
+}
+function applyAll() {
+  for (const n of parts) n.traverse(m => { if (m.isMesh && m.material !== M.hi) m.material = matFor(n.userData.ap, n.userData.name); });
+  for (const n of parts) n.visible = showKop || !n.userData.kop;
+  for (const [k, g] of Object.entries(groups)) g.visible = !hidden.has(k);
+  applyLift(); applyCut();
+}
+function applyLift() {
+  const gh = groups['Gallerlyft höger'], gv = groups['Gallerlyft vänster'];
+  if (gh) gh.position.z = lifts.h / 1000; if (gv) gv.position.z = lifts.v / 1000;
+  for (const w of wheels) {   // trumma O60: 1 varv = 188,5 mm
+    const a = (w.userData.side === 'h' ? lifts.h : -lifts.v) / 30;
+    const q = new THREE.Quaternion().setFromAxisAngle(w.userData.wax, a);
+    const c = w.userData.wc.clone();
+    w.quaternion.copy(w.userData.q0).multiply(q);
+    const c0 = c.clone().applyQuaternion(w.userData.q0), c1 = c.clone().applyQuaternion(w.quaternion);
+    w.position.copy(w.userData.base).addScaledVector(w.userData.exp, exploded).add(c0.sub(c1));
+  }
+}
+// ---------- grupper / toggles ----------
+const hidden = new Set(); let showKop = true, cut = false, dims = false, spin = false;
+function buildGroupToggles() {
+  const el = $('#grp'); el.innerHTML = '';
+  for (const k of Object.keys(groups)) {
+    const b = document.createElement('button'); b.textContent = k; b.className = hidden.has(k) ? '' : 'on';
+    b.onclick = () => { hidden.has(k) ? hidden.delete(k) : hidden.add(k); b.classList.toggle('on'); applyAll(); };
+    el.appendChild(b);
+  }
+}
+const tog = (id, f) => { const b = $(id); b.onclick = () => { b.classList.toggle('on'); f(b.classList.contains('on')); syncChips(); }; };
+tog('#tKop', v => { showKop = v; applyAll(); });
+tog('#tExp', v => { explodeTarget = v ? 1 : 0; });
+tog('#tCut', v => { cut = v; applyCut(); });
+tog('#tDim', v => { dims = v; drawDims(); });
+tog('#tSpin', v => { spin = v; controls.autoRotate = v; });
+function applyCut() { Object.values(M).forEach(m => { m.clippingPlanes = cut ? [clipPlane] : []; m.needsUpdate = true; }); }
+// ---------- matt ----------
+let dimObjs = [];
+function drawDims() {
+  dimObjs.forEach(o => { o.element?.remove(); o.parent?.remove(o); }); dimObjs = [];
+  if (!dims || !model) return;
+  const b = new THREE.Box3().setFromObject(model), s = b.getSize(new THREE.Vector3());
+  const mk = (txt, p) => { const d = document.createElement('div'); d.className = 'lbl'; d.textContent = txt; const o = new CSS2DObject(d); o.position.copy(p); scene.add(o); dimObjs.push(o); };
+  const line = (a, c) => { const g = new THREE.BufferGeometry().setFromPoints([a, c]); const l = new THREE.Line(g, new THREE.LineBasicMaterial({color: '#c8321a'})); scene.add(l); dimObjs.push(l); };
+  const y0 = b.min.y + 0.002, zf = b.max.z + 0.06, xr = b.max.x + 0.06;
+  line(new THREE.Vector3(b.min.x, y0, zf), new THREE.Vector3(b.max.x, y0, zf)); mk(`${Math.round(s.x * 1000)} mm totalt (inkl. rattar)`, new THREE.Vector3((b.min.x + b.max.x) / 2, y0, zf));
+  line(new THREE.Vector3(xr, y0, b.min.z), new THREE.Vector3(xr, y0, b.max.z)); mk(`${Math.round(s.z * 1000)} mm`, new THREE.Vector3(xr, y0, (b.min.z + b.max.z) / 2));
+  line(new THREE.Vector3(xr, b.min.y, zf), new THREE.Vector3(xr, b.max.y, zf)); mk(`${Math.round(s.y * 1000)} mm`, new THREE.Vector3(xr, (b.min.y + b.max.y) / 2, zf));
+  mk(`Grillbredd ${L} mm`, new THREE.Vector3(0, b.max.y + 0.05, 0));
+}
+// ---------- kameror ----------
+const VIEWS = {
+  'Översikt': [[1.15, 0.95, 1.55], [0, 0.32, 0]],
+  'Framifrån': [[0, 0.45, 2.2], [0, 0.35, 0]],
+  'Ovanifrån': [[0, 2.4, 0.01], [0, 0, 0]],
+  'Lyft höger': [[1.15, 0.7, 0.75], [0.68, 0.5, 0]],
+  'Spärr': [[1.3, 0.8, 0.6], [0.74, 0.58, 0.0]],
+  'Brasero': [[0.35, 0.95, 0.8], [0, 0.22, 0]],
+};
+let camAnim = null;
+const camF = () => innerWidth / innerHeight < 1 ? Math.max(1.35, 1.3 / (innerWidth / (innerHeight - 200))) : 1.12;
+function goView(k) {
+  const [e, t] = VIEWS[k], f = camF();
+  const eye = new THREE.Vector3(...e).sub(new THREE.Vector3(...t)).multiplyScalar(f).add(new THREE.Vector3(...t));
+  camAnim = {t0: performance.now(), e0: camera.position.clone(), t0v: controls.target.clone(), e1: eye, t1: new THREE.Vector3(...t)};
+}
+for (const k of Object.keys(VIEWS)) { const b = document.createElement('button'); b.textContent = k; b.onclick = () => goView(k); $('#views').appendChild(b); }
+// chips (mobil)
+const CH = [['Översikt', () => goView('Översikt')], ['Lyft höger', () => goView('Lyft höger')], ['Spärr', () => goView('Spärr')], ['Brasero', () => goView('Brasero')], ['Sprängvy', () => $('#tExp').click(), '#tExp'], ['Snitt', () => $('#tCut').click(), '#tCut'], ['Mått', () => $('#tDim').click(), '#tDim'], ['Köpdelar', () => $('#tKop').click(), '#tKop']];
+for (const [t, f, ref] of CH) { const b = document.createElement('button'); b.className = 'chip'; b.textContent = t; b.onclick = f; if (ref) b.dataset.ref = ref; $('#chips').appendChild(b); }
+function syncChips() { document.querySelectorAll('#chips .chip').forEach(c => { if (c.dataset.ref) c.classList.toggle('on', $(c.dataset.ref).classList.contains('on')); }); }
+// ---------- reglage ----------
+const fmt = v => (v > 0 ? '+' : v < 0 ? '−' : '±') + Math.abs(v);
+$('#gh').oninput = e => { lifts.h = +e.target.value; $('#ghv').textContent = fmt(lifts.h); applyLift(); };
+$('#gv').oninput = e => { lifts.v = +e.target.value; $('#gvv').textContent = fmt(lifts.v); applyLift(); };
+document.querySelectorAll('#mat button').forEach(b => b.onclick = () => { document.querySelectorAll('#mat button').forEach(x => x.classList.toggle('on', x === b)); matMode = b.dataset.m; applyAll(); });
+document.querySelectorAll('#len button').forEach(b => b.onclick = async () => {
+  const l = +b.dataset.l; if (l === L) return;
+  document.querySelectorAll('#len button').forEach(x => x.classList.toggle('on', x === b));
+  $('#load').style.opacity = 1; $('#load').style.display = 'flex'; $('#lt').textContent = `LADDAR ${l} MM…`;
+  const r = await loadL(l); L = l; setup(r); $('#ph').textContent = `Yamay Asado ${l}`; drawDims();
+  $('#load').style.opacity = 0; setTimeout(() => $('#load').style.display = 'none', 400);
+});
+// ---------- fakta + stycklista ----------
+function stats() {
+  const b = new THREE.Box3().setFromObject(model), s = b.getSize(new THREE.Vector3());
+  const tillv = new Set(parts.filter(p => !p.userData.kop).map(p => p.userData.name)).size;
+  const kop = parts.filter(p => p.userData.kop).length;
+  $('#stats').innerHTML = `<b>${L} mm</b> grillbredd · ${Math.round(s.x * 1000)} × ${Math.round(s.z * 1000)} × ${Math.round(s.y * 1000)} mm totalt<br>
+  ${tillv} unika tillverkade detaljer (laserskuren &amp; bockad Corten, inga svetsar, plåtkuber M6 i hörnen)<br>
+  ${kop} köpdelar (skruv, lager, rattar, vajer) · ${parts.length} delar totalt<br>
+  Gallerlyft: höger −160 … +125 mm, vänster −20 … +265 mm`;
+}
+function buildBOM() {
+  const t = $('#bom'); t.innerHTML = '';
+  const agg = (kop) => { const m = new Map(); for (const p of parts) { if (!!p.userData.kop !== kop) continue; const k = kop ? (p.userData.pn || p.userData.name) : p.userData.name; const e = m.get(k) || {n: 0, name: p.userData.name, pn: p.userData.pn, nodes: []}; e.n++; e.nodes.push(p); m.set(k, e); } return [...m.values()].sort((a, b) => a.name.localeCompare(b.name, 'sv')); };
+  const sec = (title, rows, kop) => {
+    t.insertAdjacentHTML('beforeend', `<tr class="h"><td colspan="2">${title}</td></tr>`);
+    for (const r of rows) { const tr = document.createElement('tr'); const nm = r.name.replace(/^Yamay Asado - /, '');
+      tr.innerHTML = `<td>${nm}${kop && r.pn && r.pn !== r.name ? `<span class="pn">${r.pn}</span>` : ''}</td><td class="n">${r.n}</td>`; tr.onclick = () => highlight(r.nodes, r.name, r.n); t.appendChild(tr); }
+  };
+  sec('Tillverkade detaljer', agg(false), false); sec('Köpdelar', agg(true), true);
+}
+// ---------- plocka ----------
+let hiNodes = [];
+function clearHi() { for (const n of hiNodes) n.traverse(m => { if (m.isMesh) m.material = matFor(n.userData.ap, n.userData.name); }); hiNodes = []; $('#pick').style.display = 'none'; }
+function highlight(nodes, name, n) {
+  clearHi(); hiNodes = nodes; for (const nd of nodes) nd.traverse(m => { if (m.isMesh) m.material = M.hi; });
+  const ex = nodes[0].userData, nm = name.replace(/^Yamay Asado - /, '');
+  const mat = (ex.ap || '').includes('Corten') ? (nm.match(/(\d) mm/) ? `Corten ${nm.match(/(\d) mm/)[1]} mm` : 'Corten') : ex.ap;
+  $('#pick h3').textContent = nm;
+  $('#pick .b').innerHTML = `<p><b>${ex.kop ? 'Köpdel' : 'Tillverkad detalj'}</b> · ${ex.grp}</p>` + (ex.kop && ex.pn ? `<p>Art.nr: <b>${ex.pn}</b></p>` : '') + (ex.desc && ex.desc !== ex.pn ? `<p>${ex.desc}</p>` : '') + `<p>Material: ${mat || '–'}</p><p>Antal i modellen: <b>${n}</b></p>`;
+  $('#pick').style.display = 'block';
+}
+$('#pick .x').onclick = clearHi;
+const ray = new THREE.Raycaster(), ptr = new THREE.Vector2(); let down = null;
+canvas.addEventListener('pointerdown', e => down = [e.clientX, e.clientY]);
+canvas.addEventListener('pointerup', e => {
+  if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6 || !model) return;
+  ptr.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(ptr, camera);
+  const hit = ray.intersectObject(model, true).find(h => h.object.visible && h.object.userData.part && (!cut || clipPlane.distanceToPoint(h.point) >= 0) && isVis(h.object));
+  if (!hit) { clearHi(); return; }
+  const p = hit.object.userData.part, same = parts.filter(q => q.userData.name === p.userData.name);
+  highlight(same, p.userData.name, same.length);
+});
+function isVis(o) { while (o) { if (!o.visible) return false; o = o.parent; } return true; }
+// mobil: panel min/max
+$('#ph').onclick = () => { if (MOB()) $('#panel').classList.toggle('min'); };
+// ---------- layout ----------
+function layout() {
+  const W = innerWidth, H = innerHeight; renderer.setSize(W, H); lr.setSize(W, H); camera.aspect = W / H;
+  if (MOB()) {
+    const ph = $('#panel').getBoundingClientRect().height; $('#chips').style.bottom = ph + 'px';
+    const off = (ph + 44 - 44) / 2; camera.setViewOffset(W, H, 0, off, W, H); camera.fov = 52;
+  } else { camera.clearViewOffset(); const pw = 330; camera.setViewOffset(W, H, pw / 2, 0, W, H); camera.fov = 38; }
+  camera.updateProjectionMatrix();
+}
+new ResizeObserver(layout).observe($('#panel')); addEventListener('resize', layout);
+// ---------- loop ----------
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const dt = Math.min(clock.getDelta(), 0.05);
+  if (Math.abs(exploded - explodeTarget) > 1e-3) { exploded += (explodeTarget - exploded) * Math.min(1, dt * 5);
+    for (const n of parts) n.position.copy(n.userData.base).addScaledVector(n.userData.exp, exploded);
+    applyLift(); }
+  if (camAnim) { const k = Math.min(1, (performance.now() - camAnim.t0) / 700), s = k * k * (3 - 2 * k);
+    camera.position.lerpVectors(camAnim.e0, camAnim.e1, s); controls.target.lerpVectors(camAnim.t0v, camAnim.t1, s); if (k >= 1) camAnim = null; }
+  if (cut) clipPlane.constant = 0.0;
+  controls.update(); renderer.render(scene, camera); lr.render(scene, camera);
+});
+// ---------- start ----------
+window.__three = {THREE, scene, renderer, camera, controls, get model() { return model; }, groups: () => groups, parts: () => parts, goView, lifts, applyLift};
+(async () => {
+  layout();
+  if (MOB()) $('#panel').classList.add('min');
+  try {
+    const r = await loadL(1500); setup(r);
+    const e = VIEWS['Översikt'], f = camF(); camera.position.set(...e[0].map((v, i) => (v - e[1][i]) * f + e[1][i])); controls.target.set(...e[1]);
+    $('#load').style.opacity = 0; setTimeout(() => $('#load').style.display = 'none', 400); layout();
+    // forladda ovriga langder i bakgrunden
+    
+  } catch (err) { $('#lt').textContent = 'KUNDE INTE LADDA MODELLEN'; console.error(err); window.__err = err; }
+})();
+</script>
+</body>
+</html>
