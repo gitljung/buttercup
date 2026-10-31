@@ -328,7 +328,7 @@ function stats() {
   $('#stats').innerHTML = `<b>${L} mm</b> grillbredd · ${Math.round(s.x * 1000)} × ${Math.round(s.z * 1000)} × ${Math.round(s.y * 1000)} mm totalt<br>
   ${tillv} unika tillverkade detaljer (laserskuren &amp; bockad Corten, inga svetsar, plåtkuber M6 i hörnen)<br>
   ${kop} köpdelar (skruv, lager, rattar, vajer) · ${ap.length} delar totalt<br>
-  Galler: höger ${galler.h === 'v' ? 'V-skenor 304 + fettränna' : 'sträckmetall (gamla hållaren)'}, vänster ${galler.v === 'v' ? 'V-skenor 304 + fettränna' : 'sträckmetall (gamla hållaren)'}<br>
+  Galler: höger ${galler.h === 'v' ? 'V-skenor 304 + fettråg' : 'sträckmetall (gamla hållaren)'}, vänster ${galler.v === 'v' ? 'V-skenor 304 + fettråg' : 'sträckmetall (gamla hållaren)'}<br>
   Gallerlyft: höger −160 … +125 mm, vänster −20 … +265 mm`;
 }
 function buildBOM() {
