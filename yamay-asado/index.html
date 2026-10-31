@@ -9,7 +9,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="buttercup.nu">
 <meta property="og:title" content="Yamay Asado 1500 – interaktiv 3D-modell">
-<meta property="og:description" content="Argentinsk parrilla i Corten. Höj och sänk gallren, sprängvy, snitt och klickbar stycklista – direkt ur Fusion.">
+<meta property="og:description" content="Argentinsk parrilla i Corten. V-galler i rostfritt med fettränna, höj och sänk gallren, byt till sträckmetall, klickbar stycklista – direkt ur Fusion.">
 <meta property="og:url" content="https://www.buttercup.nu/yamay-asado/">
 <meta property="og:image" content="https://www.buttercup.nu/yamay-asado/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -91,9 +91,11 @@ details[open]>summary::after{content:'－'}
   <h2 id="ph">Yamay Asado</h2>
   <div class="sub">Argentinsk parrilla · bordsmontage · modell direkt ur Fusion</div>
   <details open><summary>Konfigurera</summary>
-    <div class="row"><label>Galler höger</label><input type="range" id="gh" min="-160" max="125" step="1" value="0"><output id="ghv">±0</output></div>
-    <div class="row"><label>Galler vänster</label><input type="range" id="gv" min="-20" max="265" step="1" value="0"><output id="gvv">±0</output></div>
-    <div class="row"><label>Corten</label><div class="seg" id="mat"><button data-m="rost" class="on">Rost</button><button data-m="ny">Ny</button><button data-m="rf">Rostfritt</button></div></div>
+    <div class="row"><label>Höjd höger</label><input type="range" id="gh" min="-160" max="125" step="1" value="0"><output id="ghv">±0</output></div>
+    <div class="row"><label>Höjd vänster</label><input type="range" id="gv" min="-20" max="265" step="1" value="0"><output id="gvv">±0</output></div>
+    <div class="row"><label>Galler höger</label><div class="seg" id="galH"><button data-g="v" class="on">V-galler</button><button data-g="s">Sträckmetall</button></div></div>
+    <div class="row"><label>Galler vänster</label><div class="seg" id="galV"><button data-g="v" class="on">V-galler</button><button data-g="s">Sträckmetall</button></div></div>
+    <div class="row"><label>Corten</label><div class="seg" id="mat"><button data-m="ny" class="on">Grå</button><button data-m="rost">Rost</button><button data-m="rf">Rostfritt</button></div></div>
     <p class="mini">Gallerhöjd i mm från grundläget, inom lyftets gränser. Rattarna snurrar med – eller rulla direkt på ratten med fingret/musen.</p>
   </details>
   <details open><summary>Visa</summary>
@@ -144,7 +146,7 @@ function noiseTex(c1, c2, spots, seed = 1) {
 }
 const TEX = {
   rost: noiseTex('#83431f', ['rgba(140,70,32,.35)', 'rgba(105,50,24,.35)', 'rgba(160,88,44,.3)', 'rgba(90,44,22,.3)'], 5200, 7),
-  ny: noiseTex('#3c3d40', ['rgba(70,72,78,.45)', 'rgba(40,40,44,.5)', 'rgba(95,80,70,.25)'], 1400, 3),
+  ny: noiseTex('#575b5e', ['rgba(80,84,88,.45)', 'rgba(66,69,73,.45)', 'rgba(100,103,107,.35)'], 1400, 3),
 };
 // triplanar via onBeforeCompile (inga UV i exporten)
 function triplanar(mat, scale) {
@@ -173,7 +175,7 @@ const M = {
   hi: new THREE.MeshStandardMaterial({color: '#c8321a', roughness: 0.5, metalness: 0.1, emissive: '#c8321a', emissiveIntensity: 0.35}),
 };
 Object.values(M).forEach(m => { m.clippingPlanes = []; m.clipShadows = true; });
-let matMode = 'rost';
+let matMode = 'ny';
 function matFor(ap, name) {
   const a = (ap || '').toLowerCase(), n = (name || '').toLowerCase();
   if (a.includes('corten')) return matMode === 'rost' ? M.cortenrost : matMode === 'ny' ? M.cortenny : M.rostfri;
@@ -229,12 +231,12 @@ function setup(root) {
 function applyAll() {
   for (const n of parts) n.traverse(m => { if (m.isMesh && m.material !== M.hi) m.material = matFor(n.userData.ap, n.userData.name); });
   for (const n of parts) n.visible = showKop || !n.userData.kop;
-  for (const [k, g] of Object.entries(groups)) g.visible = !hidden.has(k);
+  for (const [k, g] of Object.entries(groups)) g.visible = !hidden.has(k) && grpOn(k);
   applyLift(); applyCut();
 }
 function applyLift() {
-  const gh = groups['Gallerlyft höger'], gv = groups['Gallerlyft vänster'];
-  if (gh) gh.position.z = lifts.h / 1000; if (gv) gv.position.z = lifts.v / 1000;
+  for (const k of ['Gallerlyft höger', 'Sträckmetall höger']) if (groups[k]) groups[k].position.z = lifts.h / 1000;
+  for (const k of ['Gallerlyft vänster', 'Sträckmetall vänster']) if (groups[k]) groups[k].position.z = lifts.v / 1000;
   for (const w of wheels) {   // trumma O60: 1 varv = 188,5 mm
     const a = (w.userData.side === 'h' ? lifts.h : -lifts.v) / 30;
     const q = new THREE.Quaternion().setFromAxisAngle(w.userData.wax, a);
@@ -246,9 +248,18 @@ function applyLift() {
 }
 // ---------- grupper / toggles ----------
 const hidden = new Set(); let showKop = true, cut = false, dims = false, spin = false;
+const galler = {h: 'v', v: 'v'};
+const OPT = {'Sträckmetall höger': ['h', 's'], 'Sträckmetall vänster': ['v', 's'], 'Gallerlyft höger': ['h', 'v'], 'Gallerlyft vänster': ['v', 'v']};
+function grpOn(k) { const o = OPT[k]; return !o || galler[o[0]] === o[1]; }
+function activeParts() { return parts.filter(p => grpOn(p.parent.userData.grp || p.parent.name)); }
+for (const [id, side] of [['#galH', 'h'], ['#galV', 'v']]) document.querySelectorAll(id + ' button').forEach(b => b.onclick = () => {
+  document.querySelectorAll(id + ' button').forEach(x => x.classList.toggle('on', x === b)); galler[side] = b.dataset.g;
+  clearHi(); applyAll(); buildBOM(); stats();
+});
 function buildGroupToggles() {
   const el = $('#grp'); el.innerHTML = '';
   for (const k of Object.keys(groups)) {
+    if (k.startsWith('Sträckmetall')) continue;
     const b = document.createElement('button'); b.textContent = k; b.className = hidden.has(k) ? '' : 'on';
     b.onclick = () => { hidden.has(k) ? hidden.delete(k) : hidden.add(k); b.classList.toggle('on'); applyAll(); };
     el.appendChild(b);
@@ -311,16 +322,18 @@ document.querySelectorAll('#len button').forEach(b => b.onclick = async () => {
 // ---------- fakta + stycklista ----------
 function stats() {
   const b = new THREE.Box3().setFromObject(model), s = b.getSize(new THREE.Vector3());
-  const tillv = new Set(parts.filter(p => !p.userData.kop).map(p => p.userData.name)).size;
-  const kop = parts.filter(p => p.userData.kop).length;
+  const ap = activeParts();
+  const tillv = new Set(ap.filter(p => !p.userData.kop).map(p => p.userData.name)).size;
+  const kop = ap.filter(p => p.userData.kop).length;
   $('#stats').innerHTML = `<b>${L} mm</b> grillbredd · ${Math.round(s.x * 1000)} × ${Math.round(s.z * 1000)} × ${Math.round(s.y * 1000)} mm totalt<br>
   ${tillv} unika tillverkade detaljer (laserskuren &amp; bockad Corten, inga svetsar, plåtkuber M6 i hörnen)<br>
-  ${kop} köpdelar (skruv, lager, rattar, vajer) · ${parts.length} delar totalt<br>
+  ${kop} köpdelar (skruv, lager, rattar, vajer) · ${ap.length} delar totalt<br>
+  Galler: höger ${galler.h === 'v' ? 'V-skenor 304 + fettränna' : 'sträckmetall (gamla hållaren)'}, vänster ${galler.v === 'v' ? 'V-skenor 304 + fettränna' : 'sträckmetall (gamla hållaren)'}<br>
   Gallerlyft: höger −160 … +125 mm, vänster −20 … +265 mm`;
 }
 function buildBOM() {
   const t = $('#bom'); t.innerHTML = '';
-  const agg = (kop) => { const m = new Map(); for (const p of parts) { if (!!p.userData.kop !== kop) continue; const k = kop ? (p.userData.pn || p.userData.name) : p.userData.name; const e = m.get(k) || {n: 0, name: p.userData.name, pn: p.userData.pn, nodes: []}; e.n++; e.nodes.push(p); m.set(k, e); } return [...m.values()].sort((a, b) => a.name.localeCompare(b.name, 'sv')); };
+  const agg = (kop) => { const m = new Map(); for (const p of activeParts()) { if (!!p.userData.kop !== kop) continue; const k = kop ? (p.userData.pn || p.userData.name) : p.userData.name; const e = m.get(k) || {n: 0, name: p.userData.name, pn: p.userData.pn, nodes: []}; e.n++; e.nodes.push(p); m.set(k, e); } return [...m.values()].sort((a, b) => a.name.localeCompare(b.name, 'sv')); };
   const sec = (title, rows, kop) => {
     t.insertAdjacentHTML('beforeend', `<tr class="h"><td colspan="2">${title}</td></tr>`);
     for (const r of rows) { const tr = document.createElement('tr'); const nm = r.name.replace(/^Yamay Asado - /, '');
@@ -347,7 +360,7 @@ canvas.addEventListener('pointerup', e => {
   ptr.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(ptr, camera);
   const hit = ray.intersectObject(model, true).find(h => h.object.visible && h.object.userData.part && (!cut || clipPlane.distanceToPoint(h.point) >= 0) && isVis(h.object));
   if (!hit) { clearHi(); return; }
-  const p = hit.object.userData.part, same = parts.filter(q => q.userData.name === p.userData.name);
+  const p = hit.object.userData.part, same = activeParts().filter(q => q.userData.name === p.userData.name);
   highlight(same, p.userData.name, same.length);
 });
 // ---------- rattar: rulla med fingret/musen pa ratten -> galler upp/ner ----------
