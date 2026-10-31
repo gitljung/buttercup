@@ -94,7 +94,7 @@ details[open]>summary::after{content:'－'}
     <div class="row"><label>Galler höger</label><input type="range" id="gh" min="-160" max="125" step="1" value="0"><output id="ghv">±0</output></div>
     <div class="row"><label>Galler vänster</label><input type="range" id="gv" min="-20" max="265" step="1" value="0"><output id="gvv">±0</output></div>
     <div class="row"><label>Corten</label><div class="seg" id="mat"><button data-m="rost" class="on">Rost</button><button data-m="ny">Ny</button><button data-m="rf">Rostfritt</button></div></div>
-    <p class="mini">Gallerhöjd i mm från grundläget, inom lyftets gränser. Rattarna snurrar med.</p>
+    <p class="mini">Gallerhöjd i mm från grundläget, inom lyftets gränser. Rattarna snurrar med – eller rulla direkt på ratten med fingret/musen.</p>
   </details>
   <details open><summary>Visa</summary>
     <div class="tg" id="grp"></div>
@@ -350,6 +350,40 @@ canvas.addEventListener('pointerup', e => {
   const p = hit.object.userData.part, same = parts.filter(q => q.userData.name === p.userData.name);
   highlight(same, p.userData.name, same.length);
 });
+// ---------- rattar: rulla med fingret/musen pa ratten -> galler upp/ner ----------
+const LIM = {h: [+$('#gh').min, +$('#gh').max], v: [+$('#gv').min, +$('#gv').max]};
+let wd = null;
+function wheelOf(o) { while (o) { if (wheels.includes(o)) return o; o = o.parent; } return null; }
+function toScr(v) { const p = v.clone().project(camera); return new THREE.Vector2((p.x + 1) / 2 * innerWidth, (1 - p.y) / 2 * innerHeight); }
+function setLift(side, val) {
+  const [lo, hi] = LIM[side]; lifts[side] = Math.max(lo, Math.min(hi, val));
+  const id = side === 'h' ? 'gh' : 'gv'; $('#' + id).value = Math.round(lifts[side]); $('#' + id + 'v').textContent = fmt(Math.round(lifts[side])); applyLift();
+}
+addEventListener('pointerdown', e => {
+  if (e.target !== canvas || !model || wd) return;
+  ptr.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(ptr, camera);
+  const hit = ray.intersectObject(model, true).find(h => h.object.visible && isVis(h.object) && (!cut || clipPlane.distanceToPoint(h.point) >= 0));
+  const w = hit && wheelOf(hit.object); if (!w) return;
+  wd = {id: e.pointerId, w, lp: w.worldToLocal(hit.point.clone()), x: e.clientX, y: e.clientY};
+  controls.enabled = false; canvas.style.cursor = 'grabbing';
+  try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+}, true);
+addEventListener('pointermove', e => {
+  if (!wd || e.pointerId !== wd.id) return;
+  const w = wd.w; w.updateWorldMatrix(true, false);
+  const p = w.localToWorld(wd.lp.clone()), c = w.localToWorld(w.userData.wc.clone());
+  const ax = w.userData.wax.clone().transformDirection(w.matrixWorld);
+  const t = ax.clone().cross(p.clone().sub(c));           // ytans hastighet per radian vid greppunkten
+  const eps = 0.05, s0 = toScr(p), ts = toScr(p.clone().addScaledVector(t, eps)).sub(s0);
+  const d = new THREE.Vector2(e.clientX - wd.x, e.clientY - wd.y); wd.x = e.clientX; wd.y = e.clientY;
+  const l2 = ts.lengthSq(); if (l2 < 64 * eps * eps) return;   // greppunkten ror sig knappt pa skarmen (navet/kanten mot kameran)
+  const da = d.dot(ts) / l2 * eps;                        // radianer
+  const side = w.userData.side;
+  setLift(side, lifts[side] + (side === 'h' ? da : -da) * 30);
+  e.preventDefault();
+}, {passive: false});
+function wheelEnd(e) { if (!wd || e.pointerId !== wd.id) return; wd = null; controls.enabled = true; canvas.style.cursor = ''; }
+addEventListener('pointerup', wheelEnd); addEventListener('pointercancel', wheelEnd);
 function isVis(o) { while (o) { if (!o.visible) return false; o = o.parent; } return true; }
 // mobil: panel min/max
 $('#ph').onclick = () => { if (MOB()) $('#panel').classList.toggle('min'); };
