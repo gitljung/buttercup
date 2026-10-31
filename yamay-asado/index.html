@@ -168,6 +168,7 @@ const M = {
   stal: new THREE.MeshStandardMaterial({color: '#9aa0a6', roughness: 0.45, metalness: 0.8}),
   galler: new THREE.MeshStandardMaterial({color: '#2b2b2d', roughness: 0.55, metalness: 0.7, side: THREE.DoubleSide}),
   sten: new THREE.MeshStandardMaterial({color: '#d9c7a4', roughness: 0.95, metalness: 0}),
+  morkstal: new THREE.MeshStandardMaterial({color: 'rgb(87,91,94)', roughness: 0.5, metalness: 0.75}),
   isol: new THREE.MeshStandardMaterial({color: '#efe9dc', roughness: 1, metalness: 0}),
   hi: new THREE.MeshStandardMaterial({color: '#c8321a', roughness: 0.5, metalness: 0.1, emissive: '#c8321a', emissiveIntensity: 0.35}),
 };
@@ -179,7 +180,8 @@ function matFor(ap, name) {
   if (a.includes('skruv') || a.includes('rostfri')) return M.skruv;
   if (a.includes('galler') || n.includes('stracksmetall')) return M.galler;
   if (a.includes('sten')) return M.sten;
-  if (a.includes('yamay') || n.includes('isolering')) return M.isol;
+  if (a.includes('yamay')) return M.morkstal;
+  if (n.includes('isolering')) return M.isol;
   return M.stal;
 }
 
