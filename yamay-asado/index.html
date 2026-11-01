@@ -293,7 +293,7 @@ function klick() {   // kort metalliskt klick (WebAudio, kraver en anvandargest 
 let lastKlick = 0;
 function applyRatchets() {
   for (const R of ratchets) {
-    const a = (R.side === 'h' ? lifts.h : -lifts.v) / 30;      // samma vinkel som ratten (samma axel)
+    const a = -(R.side === 'h' ? lifts.h : -lifts.v) / 30;   // lyft = vridning kring -x (vajern pa -y-sidan av trumman)      // samma vinkel som ratten (samma axel)
     rotAbout(R.hjul, R.axH, R.cH, a);
     const ph = Math.abs(a) / (2 * Math.PI / TEETH), tooth = Math.floor(ph), f = ph - tooth;
     rotAbout(R.hake, R.axK, R.cK, R.lyft * Math.pow(f, 0.8));   // rider upp langs flanken, faller ner i nasta lucka
@@ -310,7 +310,7 @@ function applyLift() {
   for (const k of ['Gallerlyft höger', 'Sträckmetall höger']) if (groups[k]) groups[k].position.z = lifts.h / 1000;
   for (const k of ['Gallerlyft vänster', 'Sträckmetall vänster']) if (groups[k]) groups[k].position.z = lifts.v / 1000;
   for (const w of wheels) {   // trumma O60: 1 varv = 188,5 mm
-    const a = (w.userData.side === 'h' ? lifts.h : -lifts.v) / 30;
+    const a = -(w.userData.side === 'h' ? lifts.h : -lifts.v) / 30;
     const q = new THREE.Quaternion().setFromAxisAngle(w.userData.wax, a);
     const c = w.userData.wc.clone();
     w.quaternion.copy(w.userData.q0).multiply(q);
@@ -465,7 +465,7 @@ addEventListener('pointermove', e => {
   const l2 = ts.lengthSq(); if (l2 < 64 * eps * eps) return;   // greppunkten ror sig knappt pa skarmen (navet/kanten mot kameran)
   const da = d.dot(ts) / l2 * eps;                        // radianer
   const side = w.userData.side;
-  setLift(side, lifts[side] + (side === 'h' ? da : -da) * 30);
+  setLift(side, lifts[side] - (side === 'h' ? da : -da) * 30);
   e.preventDefault();
 }, {passive: false});
 function wheelEnd(e) { if (!wd || e.pointerId !== wd.id) return; wd = null; controls.enabled = true; canvas.style.cursor = ''; }
