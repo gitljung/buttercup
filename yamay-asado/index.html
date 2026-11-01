@@ -96,7 +96,7 @@ details[open]>summary::after{content:'－'}
     <div class="row"><label>Galler höger</label><div class="seg" id="galH"><button data-g="v" class="on">V-galler</button><button data-g="s">Sträckmetall</button></div></div>
     <div class="row"><label>Galler vänster</label><div class="seg" id="galV"><button data-g="v" class="on">V-galler</button><button data-g="s">Sträckmetall</button></div></div>
     <div class="row"><label>Corten</label><div class="seg" id="mat"><button data-m="ny" class="on">Grå</button><button data-m="rost">Rost</button><button data-m="rf">Rostfritt</button></div></div>
-    <p class="mini">Gallerhöjd i mm från grundläget, inom lyftets gränser. Rattarna och spärrhjulen snurrar med och spärrhaken klickar över kuggarna – eller rulla direkt på ratten med fingret/musen.</p>
+    <p class="mini">Gallerhöjd i mm från grundläget, inom lyftets gränser. Rattarna och spärrhjulen snurrar med och spärrhaken klickar över kuggarna – eller rulla direkt på ratten med fingret/musen. Håll in spärrhaken (spaken) så släpper den och gallret sjunker.</p>
   </details>
   <details open><summary>Visa</summary>
     <div class="tg" id="grp"></div>
@@ -296,7 +296,8 @@ function applyRatchets() {
     const a = -(R.side === 'h' ? lifts.h : -lifts.v) / 30;   // lyft = vridning kring -x (vajern pa -y-sidan av trumman)      // samma vinkel som ratten (samma axel)
     rotAbout(R.hjul, R.axH, R.cH, a);
     const ph = Math.abs(a) / (2 * Math.PI / TEETH), tooth = Math.floor(ph), f = ph - tooth;
-    rotAbout(R.hake, R.axK, R.cK, R.lyft * Math.pow(f, 0.8));   // rider upp langs flanken, faller ner i nasta lucka
+    rotAbout(R.hake, R.axK, R.cK, R.rel ? R.lyft * 1.15 : R.lyft * Math.pow(f, 0.8));   // rider upp langs flanken, faller ner i nasta lucka (hallen spak = fri)
+    if (R.rel) { R.tooth = tooth; continue; }
     if (tooth !== R.tooth) { R.tooth = tooth; const now = performance.now(); if (now - lastKlick > 25) { lastKlick = now; klick(); } }
   }
 }
@@ -429,7 +430,7 @@ $('#pick .x').onclick = clearHi;
 const ray = new THREE.Raycaster(), ptr = new THREE.Vector2(); let down = null;
 canvas.addEventListener('pointerdown', e => down = [e.clientX, e.clientY]);
 canvas.addEventListener('pointerup', e => {
-  if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6 || !model) return;
+  if (!down || ld || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6 || !model) return;
   ptr.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(ptr, camera);
   const hit = ray.intersectObject(model, true).find(h => h.object.visible && h.object.userData.part && (!cut || clipPlane.distanceToPoint(h.point) >= 0) && isVis(h.object));
   if (!hit) { clearHi(); return; }
@@ -468,6 +469,33 @@ addEventListener('pointermove', e => {
   setLift(side, lifts[side] - (side === 'h' ? da : -da) * 30);
   e.preventDefault();
 }, {passive: false});
+// ---------- spaken: hall inne sparrhaken -> haken slapper kuggarna och gallret sjunker av egen vikt ----------
+let ld = null, ldT = 0;
+const SINK = 90;   // mm/s
+function hakeOf(o) { while (o) { const R = ratchets.find(r => r.hake === o); if (R) return R; o = o.parent; } return null; }
+addEventListener('pointerdown', e => {
+  if (e.target !== canvas || !model || wd || ld) return;
+  ptr.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(ptr, camera);
+  const hit = ray.intersectObject(model, true).find(h => h.object.visible && isVis(h.object) && (!cut || clipPlane.distanceToPoint(h.point) >= 0));
+  const R = hit && hakeOf(hit.object); if (!R) return;
+  ld = {id: e.pointerId, R}; R.rel = true; klick(); controls.enabled = false; canvas.style.cursor = 'grabbing'; down = null;
+  try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+  ldT = performance.now(); requestAnimationFrame(sink);
+}, true);
+function sink(t) {
+  if (!ld) return;
+  const dt = Math.min(0.05, Math.max(0, t - ldT) / 1000); ldT = t; const side = ld.R.side;
+  if (lifts[side] > LIM[side][0]) setLift(side, lifts[side] - SINK * dt); else applyLift();
+  requestAnimationFrame(sink);
+}
+function leverEnd(e) { if (!ld || e.pointerId !== ld.id) return; ld.R.rel = false; ld = null; applyLift(); klick(); controls.enabled = true; canvas.style.cursor = ''; }
+addEventListener('pointerup', leverEnd); addEventListener('pointercancel', leverEnd);
+canvas.addEventListener('pointermove', e => {
+  if (wd || ld || !model || e.buttons) return;
+  ptr.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(ptr, camera);
+  const hit = ray.intersectObject(model, true).find(h => h.object.visible && isVis(h.object));
+  canvas.style.cursor = hit && (hakeOf(hit.object) || wheelOf(hit.object)) ? 'grab' : '';
+});
 function wheelEnd(e) { if (!wd || e.pointerId !== wd.id) return; wd = null; controls.enabled = true; canvas.style.cursor = ''; }
 addEventListener('pointerup', wheelEnd); addEventListener('pointercancel', wheelEnd);
 function isVis(o) { while (o) { if (!o.visible) return false; o = o.parent; } return true; }
