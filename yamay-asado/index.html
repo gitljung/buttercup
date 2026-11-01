@@ -171,6 +171,7 @@ const M = {
   galler: new THREE.MeshStandardMaterial({color: '#2b2b2d', roughness: 0.55, metalness: 0.7, side: THREE.DoubleSide}),
   sten: new THREE.MeshStandardMaterial({color: '#d9c7a4', roughness: 0.95, metalness: 0}),
   morkstal: new THREE.MeshStandardMaterial({color: 'rgb(87,91,94)', roughness: 0.5, metalness: 0.75}),
+  svart: new THREE.MeshStandardMaterial({color: '#1c1c1e', roughness: 0.35, metalness: 0.3}),
   isol: new THREE.MeshStandardMaterial({color: '#efe9dc', roughness: 1, metalness: 0}),
   hi: new THREE.MeshStandardMaterial({color: '#c8321a', roughness: 0.5, metalness: 0.1, emissive: '#c8321a', emissiveIntensity: 0.35}),
 };
@@ -179,11 +180,12 @@ let matMode = 'ny';
 function matFor(ap, name) {
   const a = (ap || '').toLowerCase(), n = (name || '').toLowerCase();
   if (a.includes('corten')) return matMode === 'rost' ? M.cortenrost : matMode === 'ny' ? M.cortenny : M.rostfri;
+  if (a.includes('black') || a.includes('svart')) return M.svart;
   if (a.includes('skruv') || a.includes('rostfri')) return M.skruv;
   if (a.includes('galler') || n.includes('stracksmetall')) return M.galler;
   if (a.includes('sten')) return M.sten;
   if (a.includes('yamay')) return M.morkstal;
-  if (n.includes('isolering')) return M.isol;
+  if (n.includes('isolering') || n.includes('vermilite')) return M.isol;
   return M.stal;
 }
 
@@ -333,7 +335,7 @@ function stats() {
 }
 function buildBOM() {
   const t = $('#bom'); t.innerHTML = '';
-  const agg = (kop) => { const m = new Map(); for (const p of activeParts()) { if (!!p.userData.kop !== kop) continue; const k = kop ? (p.userData.pn || p.userData.name) : p.userData.name; const e = m.get(k) || {n: 0, name: p.userData.name, pn: p.userData.pn, nodes: []}; e.n++; e.nodes.push(p); m.set(k, e); } return [...m.values()].sort((a, b) => a.name.localeCompare(b.name, 'sv')); };
+  const agg = (kop) => { const m = new Map(); for (const p of activeParts()) { if (!!p.userData.kop !== kop) continue; const vm = /^Vermilite/.test(p.userData.name); const k = vm ? 'Vermilite' : kop ? (p.userData.pn || p.userData.name) : p.userData.name; const e = m.get(k) || {n: 0, name: vm ? 'Vermilite 600, 7 plattor 500×300×20 kapade till 10 bitar' : p.userData.name, pn: p.userData.pn, nodes: []}; e.n++; e.nodes.push(p); m.set(k, e); } return [...m.values()].sort((a, b) => a.name.localeCompare(b.name, 'sv')); };
   const sec = (title, rows, kop) => {
     t.insertAdjacentHTML('beforeend', `<tr class="h"><td colspan="2">${title}</td></tr>`);
     for (const r of rows) { const tr = document.createElement('tr'); const nm = r.name.replace(/^Yamay Asado - /, '');
