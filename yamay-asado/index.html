@@ -96,7 +96,7 @@ details[open]>summary::after{content:'－'}
     <div class="row"><label>Galler höger</label><div class="seg" id="galH"><button data-g="v" class="on">V-galler</button><button data-g="s">Sträckmetall</button></div></div>
     <div class="row"><label>Galler vänster</label><div class="seg" id="galV"><button data-g="v" class="on">V-galler</button><button data-g="s">Sträckmetall</button></div></div>
     <div class="row"><label>Corten</label><div class="seg" id="mat"><button data-m="ny" class="on">Grå</button><button data-m="rost">Rost</button><button data-m="rf">Rostfritt</button></div></div>
-    <p class="mini">Gallerhöjd i mm från grundläget, inom lyftets gränser. Rattarna snurrar med – eller rulla direkt på ratten med fingret/musen.</p>
+    <p class="mini">Gallerhöjd i mm från grundläget, inom lyftets gränser. Rattarna och spärrhjulen snurrar med och spärrhaken klickar över kuggarna – eller rulla direkt på ratten med fingret/musen.</p>
   </details>
   <details open><summary>Visa</summary>
     <div class="tg" id="grp"></div>
@@ -239,7 +239,66 @@ function setup(root) {
     }
   }
   window.__wheels = wheels;
+  setupRatchets();
   buildGroupToggles(); applyAll(); buildBOM(); stats();
+}
+// ---------- sparrhjul + sparrhake: hjulet snurrar med ratten, haken hoppar over kuggarna och klickar ----------
+const TEETH = 24, TOOTH_H = 0.0085;   // 24 kuggar, O120, kuggdjup 8 mm (s38_axel.py)
+let ratchets = [];
+const sideOf = n => new THREE.Box3().setFromObject(n).getCenter(new THREE.Vector3()).x > 0 ? 'h' : 'v';
+function locDir(n, wDir) { return wDir.clone().transformDirection(n.matrixWorld.clone().invert()); }
+function rotAbout(n, axL, cL, ang) {   // rotera noden kring axel axL genom cL (nodens lokala rum, viloläge q0)
+  n.quaternion.copy(n.userData.q0).multiply(new THREE.Quaternion().setFromAxisAngle(axL, ang));
+  const cs = cL.clone().multiply(n.scale), c0 = cs.clone().applyQuaternion(n.userData.q0), c1 = cs.clone().applyQuaternion(n.quaternion);
+  n.position.copy(n.userData.base).addScaledVector(n.userData.exp, exploded).add(c0.sub(c1));
+}
+function setupRatchets() {
+  ratchets = []; model.updateMatrixWorld(true);
+  for (const w of wheels) {
+    const side = w.userData.side, aw = w.userData.wax.clone().transformDirection(w.matrixWorld);
+    const hjul = parts.find(n => /sparrhjul/i.test(n.userData.name || '') && sideOf(n) === side);
+    const hake = parts.find(n => /sparrhake/i.test(n.userData.name || '') && sideOf(n) === side);
+    if (!hjul || !hake) continue;
+    const hc = new THREE.Box3().setFromObject(hjul).getCenter(new THREE.Vector3());
+    // hakens led = ansatsskruven ISO7379 10x40 som gar genom haken
+    const kb = new THREE.Box3().setFromObject(hake);
+    const led = parts.find(n => /iso7379 a2 10x40/i.test(n.userData.name || '') && kb.intersectsBox(new THREE.Box3().setFromObject(n)));
+    const pc = led ? new THREE.Box3().setFromObject(led).getCenter(new THREE.Vector3()) : kb.getCenter(new THREE.Vector3());
+    // hakens punkter i hjulets plan; lyftvinkel = den vridning kring leden dar narmaste punkten gar fri kuggtoppen (+TOOTH_H)
+    const pts = [], v = new THREE.Vector3();
+    hake.traverse(m => { if (!m.isMesh) return; const p = m.geometry.attributes.position;
+      for (let i = 0; i < p.count; i++) pts.push(v.fromBufferAttribute(p, i).applyMatrix4(m.matrixWorld).clone()); });
+    const rmin = ang => { const q = new THREE.Quaternion().setFromAxisAngle(aw, ang); let b = 1e9;
+      for (const p0 of pts) { const d = p0.clone().sub(pc).applyQuaternion(q).add(pc).sub(hc); d.addScaledVector(aw, -d.dot(aw)); b = Math.min(b, d.length()); } return b; };
+    const r0 = rmin(0), sg = rmin(0.02) > rmin(-0.02) ? 1 : -1;
+    let lo = 0, hi = 0.5; for (let k = 0; k < 30; k++) { const m = (lo + hi) / 2; rmin(sg * m) - r0 < TOOTH_H ? lo = m : hi = m; }
+    const lyft = sg * hi;
+    for (const n of [hjul, hake]) { n.userData.q0 = n.quaternion.clone(); }
+    ratchets.push({side, hjul, hake, axH: locDir(hjul, aw), cH: hjul.worldToLocal(hc.clone()), axK: locDir(hake, aw), cK: hake.worldToLocal(pc.clone()), lyft, tooth: 0});
+  }
+  window.__ratchets = ratchets;
+}
+let actx = null;
+function klick() {   // kort metalliskt klick (WebAudio, kraver en anvandargest forst)
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume();
+    const t = actx.currentTime, len = Math.floor(actx.sampleRate * 0.03), buf = actx.createBuffer(1, len, actx.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (len * 0.12));
+    const src = actx.createBufferSource(); src.buffer = buf;
+    const bp = actx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 3200; bp.Q.value = 4;
+    const g = actx.createGain(); g.gain.setValueAtTime(0.5, t);
+    src.connect(bp).connect(g).connect(actx.destination); src.start(t);
+  } catch (_) {}
+}
+let lastKlick = 0;
+function applyRatchets() {
+  for (const R of ratchets) {
+    const a = (R.side === 'h' ? lifts.h : -lifts.v) / 30;      // samma vinkel som ratten (samma axel)
+    rotAbout(R.hjul, R.axH, R.cH, a);
+    const ph = Math.abs(a) / (2 * Math.PI / TEETH), tooth = Math.floor(ph), f = ph - tooth;
+    rotAbout(R.hake, R.axK, R.cK, R.lyft * Math.pow(f, 0.8));   // rider upp langs flanken, faller ner i nasta lucka
+    if (tooth !== R.tooth) { R.tooth = tooth; const now = performance.now(); if (now - lastKlick > 25) { lastKlick = now; klick(); } }
+  }
 }
 function applyAll() {
   for (const n of parts) n.traverse(m => { if (m.isMesh && m.material !== M.hi) m.material = matFor(n.userData.ap, n.userData.name); });
@@ -258,6 +317,7 @@ function applyLift() {
     const c0 = c.clone().applyQuaternion(w.userData.q0), c1 = c.clone().applyQuaternion(w.quaternion);
     w.position.copy(w.userData.base).addScaledVector(w.userData.exp, exploded).add(c0.sub(c1));
   }
+  applyRatchets();
 }
 // ---------- grupper / toggles ----------
 const hidden = new Set(); let showKop = true, cut = false, dims = false, spin = false;
