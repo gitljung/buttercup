@@ -228,6 +228,17 @@ function setup(root) {
     w.userData.wc = b.getCenter(new THREE.Vector3()); w.userData.wax = ax; w.userData.q0 = w.quaternion.clone(); w.userData.p0 = w.position.clone();
     w.userData.side = new THREE.Box3().setFromObject(w).getCenter(new THREE.Vector3()).x > 0 ? 'h' : 'v';
   }
+  // handtag + mutter sitter i rattens falg: hang dem pa ratten sa de snurrar med
+  model.updateMatrixWorld(true);
+  for (const w of wheels) {
+    const wb = new THREE.Box3().setFromObject(w).expandByScalar(0.03);
+    for (const n of parts) {
+      if (n === w || !/handtag|din98|din934 a4 m10/i.test(n.userData.name || '')) continue;
+      if (!wb.intersectsBox(new THREE.Box3().setFromObject(n))) continue;
+      w.attach(n); n.userData.base = n.position.clone(); n.userData.exp = new THREE.Vector3();
+    }
+  }
+  window.__wheels = wheels;
   buildGroupToggles(); applyAll(); buildBOM(); stats();
 }
 function applyAll() {
