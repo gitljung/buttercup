@@ -699,6 +699,94 @@ const PHASES_M = [
 ];
 // startvikter maskiner (kvinna/man)
 const MW0 = {k:{benpress:30, latsdrag:20, sittrodd:20, brostpress:15, benstrack:15, pallof:5}, m:{benpress:50, latsdrag:35, sittrodd:35, brostpress:25, benstrack:25, pallof:10}};
+// ---------------- fler övningar (hantlar, maskiner, kroppsvikt) ----------------
+const WALKP = [P(ST,{kn:[124,160], an:[136,199], kn2:[100,160], an2:[88,198], el:[122,92], ha:[132,112], el2:[104,92], ha2:[96,112], kbo:null}),
+               P(ST,{kn2:[124,160], an2:[136,199], kn:[100,160], an:[88,198], el2:[122,92], ha2:[132,112], el:[104,92], ha:[96,112], kbo:null})];
+const BENT = {hip:[86,128], kn:[104,162], an:[110,199], sh:[140,110], head:[156,100]};
+const UP8 = (b) => Object.fromEntries(Object.entries(b).map(([k, v]) => [k, k === 'an' || k === 'an2' ? [v[0], v[1] - 7] : [v[0], v[1] - 8]]));
+Object.assign(EX_DB, {
+  sidolyft:{namn:'Sidolyft', bell:'l', tool:'db', kb2:true, unit:'reps', rest:60, niva:'Lätt',
+    tips:['Lätta hantlar – det här är en liten muskel','Lyft armarna ut åt sidan till axelhöjd, mjuka armbågar','Sänk långsamt. Axlarna ner från öronen'],
+    poses:[P(ST,{...DBH, el2:[107,92], ha2:[106,118], kbo:[0,2]}), P(ST,{el:[132,74], ha:[150,68], el2:[92,74], ha2:[76,68], kbo:[0,2]})], dur:1400},
+  bojdroddb:{namn:'Böjd rodd, två hantlar', bell:'t', tool:'db', kb2:true, unit:'reps', rest:75, niva:'Lätt',
+    tips:['Fäll fram från höften med rak rygg','Dra båda hantlarna mot magen','Kläm ihop skulderbladen och sänk långsamt'],
+    poses:[P(BENT,{el:[140,134], ha:[140,160], kbo:[0,3]}), P(BENT,{el:[114,104], ha:[124,128], kbo:[0,3]})], dur:1500},
+  flyes:{namn:'Flyes på golvet', bell:'l', tool:'db', kb2:true, unit:'reps', rest:60, prop:'mat', niva:'Lätt',
+    tips:['Ligg på rygg, hantlarna rakt ovanför bröstet','Sänk armarna ut åt sidorna i en stor båge – mjuka armbågar','Stanna när överarmarna nuddar golvet, för ihop igen'],
+    poses:[P(LIE,{el:[70,164], ha:[68,138], kbo:[0,-3]}), P(LIE,{el:[84,178], ha:[100,170], el2:[54,178], ha2:[40,170], kbo:[0,-3]})], dur:1600},
+  hammercurl:{namn:'Hammercurl', bell:'l', tool:'db', kb2:true, unit:'reps', rest:60, niva:'Lätt',
+    tips:['Tummarna uppåt hela tiden, som när man håller en hammare','Armbågarna stilla mot sidorna','Lyft och sänk lugnt – ingen gungning'],
+    poses:[P(ST,{el:[116,94], ha:[118,120], el2:[108,94], ha2:[110,120], kbo:[0,1]}), P(ST,{el:[116,94], ha:[138,78], el2:[108,94], ha2:[130,78], kbo:[0,1]})], dur:1300},
+  tricepsdb:{namn:'Tricepspress över huvudet', bell:'l', tool:'db', unit:'reps', rest:60, niva:'Lätt',
+    tips:['En hantel i båda händerna ovanför huvudet','Armbågarna pekar upp och står still','Sänk bakom huvudet och sträck upp'],
+    poses:[P(ST,{el:[116,40], ha:[114,16], kbo:[0,-4]}), P(ST,{el:[122,36], ha:[100,54], kbo:[0,-4]})], dur:1400},
+  sumodb:{namn:'Sumoknäböj', bell:'t', tool:'db', unit:'reps', rest:90, niva:'Lätt',
+    tips:['Brett mellan fötterna, tårna utåt','Håll hanteln med båda händerna mellan benen','Sänk rakt ner med knäna utåt, res dig med rak rygg'],
+    poses:[P(ST,{kn:[122,160], an:[130,199], kn2:[100,160], an2:[92,199], kbo:[0,4]}), P(ST,{hip:[100,152], kn:[132,160], an:[130,199], kn2:[90,166], an2:[92,199], sh:[112,98], head:[118,76], el:[114,124], ha:[114,150], kbo:[0,4]})], dur:1700},
+  vadpress:{namn:'Tåhävning med hantlar', bell:'t', tool:'db', kb2:true, unit:'reps', rest:60, niva:'Lätt',
+    tips:['En hantel i varje hand, stå rak','Gå upp på tå så högt du kan','Sänk långsamt. Ta stöd mot väggen om balansen sviktar'],
+    poses:[P(ST,{...DBH, kbo:[0,2]}), P(UP8({...ST, ...DBH}),{kbo:[0,2]})], dur:1100},
+  omvflyes:{namn:'Omvända flyes', bell:'l', tool:'db', kb2:true, unit:'reps', rest:60, niva:'Lätt',
+    tips:['Fäll fram från höften, rak rygg, lätta hantlar','Lyft armarna ut åt sidorna – tänk att du sprider vingarna','Kläm ihop skulderbladen i toppen, sänk långsamt'],
+    poses:[P(BENT,{el:[140,134], ha:[142,160], kbo:[0,3]}), P(BENT,{el:[150,112], ha:[166,116], el2:[128,112], ha2:[112,116], kbo:[0,3]})], dur:1500},
+});
+const SEATP = {hip:[96,160], sh:[94,104], head:[96,82], kn:[130,158], an:[134,199]};
+Object.assign(EX_M, {
+  axelpressm:{namn:'Axelpress i maskin', mw:true, unit:'reps', rest:90, prop:'chestpress', tool:'grip', lever:[64,40], niva:'Lätt',
+    tips:['Handtagen i axelhöjd när du sitter','Ryggen mot dynan – svanka inte','Pressa upp utan att låsa armbågarna, sänk långsamt'],
+    poses:[P(SEATP,{el:[112,104], ha:[110,80], kbo:[0,0]}), P(SEATP,{el:[104,58], ha:[102,34], kbo:[0,0]})], dur:1600},
+  larcurl:{namn:'Lårcurl sittande', mw:true, unit:'reps', rest:75, prop:'legext', tool:null, roller:true, niva:'Lätt',
+    tips:['Knäleden i linje med maskinens axel, dynan ovanpå låren','Böj benen och dra hälarna in under dig','Släpp tillbaka långsamt – inga ryck'],
+    poses:[{hip:[100,148], sh:[94,94], head:[96,72], el:[100,124], ha:[112,148], kn:[132,146], an:[172,138]},
+           {hip:[100,148], sh:[94,94], head:[96,72], el:[100,124], ha:[112,148], kn:[132,146], an:[134,188]}], dur:1500},
+  pushdown:{namn:'Tricepsdrag i kabel', mw:true, unit:'reps', rest:60, prop:'colR', tool:'bar', cable:[[168,4]], niva:'Lätt',
+    tips:['Stå nära kabeln, armbågarna mot sidorna','Tryck ner stången tills armarna är raka','Bara underarmarna rör sig. Släpp upp långsamt'],
+    poses:[P(ST,{el:[118,92], ha:[140,82], kbo:[0,0]}), P(ST,{el:[118,92], ha:[132,116], kbo:[0,0]})], dur:1300},
+  facepull:{namn:'Ansiktsdrag', mw:true, unit:'reps', rest:60, prop:'colR', tool:'bar', cable:[[196,52]], niva:'Lätt',
+    tips:['Kabeln i ansiktshöjd, rep- eller stånghandtag','Dra mot pannan med armbågarna högt och ut','Kläm ihop skulderbladen, släpp tillbaka lugnt'],
+    poses:[P(ST,{el:[136,62], ha:[160,56], kbo:[0,0]}), P(ST,{el:[96,54], ha:[122,46], kbo:[0,0]})], dur:1500},
+  roddmaskin:{namn:'Roddmaskin', mw:false, unit:'min', rest:60, prop:'rower', tool:'bar', cable:[[198,168]], effort:false, kgtxt:'Lugnt tempo', niva:'Lätt',
+    tips:['Ben – rygg – armar på vägen bak, tvärtom på vägen fram','Rak rygg, luta dig lite bakåt i slutet','Lugnt tempo: du ska kunna prata'],
+    poses:[{hip:[80,186], kn:[116,152], an:[148,186], sh:[104,134], head:[114,113], el:[128,156], ha:[152,158], kbo:[0,0]},
+           {hip:[50,186], kn:[88,178], an:[128,188], sh:[38,134], head:[34,112], el:[56,160], ha:[78,154], kbo:[0,0]}], dur:1500},
+  gangband:{namn:'Gåband i lutning', mw:false, unit:'min', rest:60, prop:'tread', tool:null, walk:true, effort:false, kgtxt:'Lutning 5–8 %', niva:'Lätt',
+    tips:['Ställ lutning 5–8 % och ett rask promenadtempo','Släpp handtagen om du kan – stå rak','Lagom: andfådd men kan prata'],
+    poses:WALKP, dur:520},
+});
+Object.assign(EX_KB, {
+  vaggarm:{namn:'Armhävning mot vägg', bell:null, unit:'reps', rest:60, prop:'wall', niva:'Lätt',
+    tips:['Händerna mot väggen i axelhöjd, ett steg ut','Kroppen rak – spänn mage och rumpa','Sänk bröstet mot väggen och tryck ifrån'],
+    poses:[{an:[90,199], kn:[103,163], hip:[116,128], sh:[133,80], head:[142,58], el:[158,80], ha:[183,74], kbo:null},
+           {an:[90,199], kn:[108,165], hip:[128,132], sh:[156,88], head:[166,68], el:[160,112], ha:[183,74], kbo:null}], dur:1500},
+  knaarm:{namn:'Armhävning på knä', bell:null, unit:'reps', rest:75, prop:'mat', niva:'Medel',
+    tips:['Knäna på mattan, händerna under axlarna','Rak linje från knä till huvud','Sänk bröstet mot golvet och pressa upp'],
+    poses:[{kn:[80,196], an:[50,184], hip:[104,170], sh:[150,142], head:[168,132], el:[150,168], ha:[150,197], kbo:null},
+           {kn:[80,196], an:[50,184], hip:[106,182], sh:[152,172], head:[172,166], el:[128,170], ha:[150,197], kbo:null}], dur:1500},
+  sidoplanka:{namn:'Sidoplanka', bell:null, unit:'sek', sida:true, rest:45, prop:'mat', effort:false, niva:'Medel',
+    tips:['Armbågen under axeln','Lyft höften så kroppen blir rak – börja gärna med knäna i golvet','Håll 15–20 sekunder per sida'],
+    poses:[{an:[184,196], kn:[152,186], hip:[118,176], sh:[72,154], head:[54,140], el:[72,196], ha:[96,196], el2:[100,162], ha2:[118,170], kbo:null},
+           {an:[184,196], kn:[152,183], hip:[118,170], sh:[72,152], head:[54,138], el:[72,196], ha:[96,196], el2:[100,158], ha2:[118,164], kbo:null}], dur:1300},
+  fagelhund:{namn:'Fågelhund', bell:null, unit:'reps', sida:true, rest:45, prop:'mat', effort:false, niva:'Lätt',
+    tips:['På alla fyra, rak rygg','Sträck ut motsatt arm och ben – långsamt','Håll 2 sekunder utan att höften tippar, byt sida'],
+    poses:[{hip:[92,146], sh:[150,148], head:[170,130], el:[150,172], ha:[150,197], kn:[94,196], an:[60,197], kbo:null},
+           {hip:[92,146], sh:[150,148], head:[170,130], el:[150,172], ha:[150,197], el2:[176,140], ha2:[200,134], kn:[94,196], an:[60,197], kn2:[54,144], an2:[18,142], kbo:null}], dur:1600},
+  stolres:{namn:'Resa sig från stol', bell:null, unit:'reps', rest:60, prop:'boxlow', niva:'Lätt',
+    tips:['Sitt längst fram på en stadig stol','Luta dig fram, res dig utan att ta i med händerna','Sätt dig långsamt – ta 3 sekunder ner'],
+    poses:[P(ST,{el:[132,88], ha:[154,90], kbo:null}), P(ST,{hip:[82,154], kn:[126,156], sh:[104,104], head:[110,82], el:[126,104], ha:[150,102], kbo:null})], dur:1700},
+  vadhav:{namn:'Tåhävning', bell:null, unit:'reps', rest:45, prop:'wall', effort:false, niva:'Lätt',
+    tips:['Stå nära en vägg och håll lätt i den','Gå upp på tå så högt det går','Sänk långsamt. Gör det på en trappkant för mer rörlighet'],
+    poses:[P(ST,{el:[132,86], ha:[156,80], kbo:null}), P(UP8({...ST, el:[132,86], ha:[156,80]}),{kbo:null})], dur:1100},
+  superman:{namn:'Superman på mage', bell:null, unit:'reps', rest:45, prop:'mat', effort:false, niva:'Lätt',
+    tips:['Ligg på mage med armarna framåt','Lyft armar, bröst och ben några centimeter','Håll 2 sekunder, sänk lugnt. Titta ner i mattan'],
+    poses:[{head:[56,184], sh:[76,192], hip:[130,192], kn:[170,194], an:[206,196], el:[52,195], ha:[30,195], kbo:null},
+           {head:[56,176], sh:[78,186], hip:[130,192], kn:[170,188], an:[204,180], el:[52,180], ha:[30,174], kbo:null}], dur:1500},
+});
+Object.assign(MGMAP, {
+  sidolyft:['axlar'], bojdroddb:['rygg','armar'], flyes:['brost'], hammercurl:['armar'], tricepsdb:['armar'], sumodb:['ben','rumpa'], vadpress:['ben'], omvflyes:['rygg','axlar'],
+  axelpressm:['axlar','armar'], larcurl:['rumpa','ben'], pushdown:['armar'], facepull:['axlar','rygg'], roddmaskin:['puls','rygg','ben'], gangband:['puls','ben'],
+  vaggarm:['brost','armar'], knaarm:['brost','armar','bal'], sidoplanka:['bal'], fagelhund:['bal','rygg'], stolres:['ben','rumpa'], vadhav:['ben'], superman:['rygg','rumpa'],
+});
+
 const GEARS = {
   kb:{id:'kb', namn:'Kettlebell', key:'bc_traning_kb_v1', EX:EX_KB, PHASES:PHASES_KB, WARM:WARM_KB, KG:[4,6,8,10,12,14,16,18,20,22,24,28,32], def:{k:{l:8, t:12}, m:{l:12, t:16}},
       titel:'Dina klockor', lbl:'Mina två kettlebells', tip:{k:'Förslag för kvinnor som börjar om: 8 kg + 12 kg. Hellre för lätt än för tungt.', m:'Förslag för män som börjar om: 12 kg + 16 kg. Hellre för lätt än för tungt.'}, ord:'tyngre klockor', icon:'#kb'},
@@ -769,7 +857,7 @@ function exPlan(id, sets, reps, mode) {
   let bell = e.bell; if (bell === 'l' && a.up) bell = 't';
   const r = e.unit === 'reps' && mode !== 'emom' ? Math.max(4, reps + a.r) : reps;
   const two = G.id === 'db' && e.kb2 ? '2 × ' : '';
-  const kg = G.id === 'mach' ? (e.mw ? (S.mw[id] ?? MW0[S.sex][id] ?? 10) + ' kg' : id === 'cykel' ? 'Lätt motstånd' : 'Kroppsvikt')
+  const kg = e.kgtxt ? e.kgtxt : G.id === 'mach' ? (e.mw ? (S.mw[id] ?? MW0[S.sex][id] ?? 10) + ' kg' : id === 'cykel' ? 'Lätt motstånd' : 'Kroppsvikt')
     : bell === 'l' ? two + S.bells.l + ' kg' : bell === 't' ? two + S.bells.t + ' kg' : bell === 'lt' ? S.bells.l + ' + ' + S.bells.t + ' kg' : 'Kroppsvikt';
   const per = e.sida ? (e.unit === 'varv' ? ' varv/håll' : e.unit === 'm' ? ' m/hand' : '/sida') : (e.unit === 'm' ? ' m' : e.unit === 'min' ? ' min' : e.unit === 'sek' ? ' sek' : '');
   const target = mode === 'emom' ? `${r} swingar varje minut` : id === 'cykel' && reps === 1 ? '1 min snabbt · 1 min lugnt' : `${r}${per}${e.unit === 'reps' && !e.sida ? ' reps' : ''}`;
@@ -930,6 +1018,10 @@ function figure(ex, f = fighterById(localStorage.getItem('bc_traning_fighter')),
     if (e.prop === 'chestpress') { bar('M64 202 L64 34 M97 202 L97 168'); pad({x:76, y:162, width:42, height:9}); pad({x:70, y:86, width:11, height:78}); mk('circle', {...pr, fill:'#8C949C', cx:64, cy:40, r:6}, props); }
     if (e.prop === 'legext') { bar('M100 202 L100 154 M132 202 L132 146'); pad({x:78, y:146, width:50, height:9}); pad({x:72, y:78, width:10, height:72}); mk('circle', {...pr, fill:'#8C949C', cx:132, cy:146, r:6}, props); }
     if (e.prop === 'hyper') { bar('M40 202 L60 182 L118 136 M118 136 L132 202 M60 182 L60 202'); mk('path', {...pr, fill:LN, d:'M84 112 L118 134 L110 146 L76 124Z'}, props); mk('rect', {...pr, fill:'#8C949C', x:44, y:178, width:26, height:6, rx:2}, props); }
+    if (e.prop === 'wall') { mk('rect', {...pr, fill:'#E9D9B0', x:186, y:-10, width:30, height:212}, props); mk('path', {...pr, fill:'none', d:'M186 40 h30 M186 100 h30 M186 160 h30', 'stroke-width':1.5}, props); }
+    if (e.prop === 'colR') { bar('M196 202 L196 4 L168 4'); mk('circle', {...pr, fill:'#8C949C', cx:168, cy:4, r:5}, props); mk('circle', {...pr, fill:'#8C949C', cx:196, cy:52, r:4}, props); }
+    if (e.prop === 'rower') { bar('M20 198 L212 198 M200 198 V176'); mk('circle', {...pr, fill:'#4A4F57', cx:200, cy:168, r:14}, props); mk('rect', {...pr, fill:LN, x:150, y:174, width:10, height:20, rx:2}, props); }
+    if (e.prop === 'tread') { mk('path', {...pr, fill:LN, d:'M24 200 L196 192 L198 202 L26 206Z'}, props); bar('M180 194 L168 80 L140 84'); mk('rect', {...pr, fill:'#4A4F57', x:156, y:66, width:28, height:16, rx:3}, props); }
     if (e.prop === 'column') { bar('M28 202 L28 12'); mk('circle', {...pr, fill:'#8C949C', cx:34, cy:86, r:5}, props); }
     if (e.prop === 'bike') { bar('M76 200 L180 200 M110 172 L98 120 M138 172 L150 100 M110 172 L150 176'); pad({x:84, y:113, width:28, height:8}); mk('path', {...steel, 'stroke-width':7, d:'M144 98 L162 94'}, props);
       mk('circle', {...pr, fill:'#8C949C', cx:152, cy:178, r:16}, props); }
