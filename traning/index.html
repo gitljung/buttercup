@@ -234,6 +234,39 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .wfig b{position:absolute;top:3px;left:4px;z-index:3;width:22px;height:22px;border-radius:50%;background:var(--chili);color:var(--cream);font:400 14px/22px var(--display);text-align:center}
 .wt{font-size:16px;line-height:1.3}
 .wlist2 li:nth-child(odd) .wfig{transform:rotate(-1.5deg)}.wlist2 li:nth-child(even) .wfig{transform:rotate(1.5deg)}
+.libbtn{display:block;width:100%;text-align:left;margin-top:22px;cursor:pointer;background:var(--chili);color:var(--cream);border:0;border-radius:6px;padding:16px 18px;box-shadow:6px 6px 0 var(--ox);font:inherit;position:relative;overflow:hidden;transition:transform .15s var(--pop)}
+.libbtn::after{content:"→";position:absolute;right:18px;top:50%;transform:translateY(-50%);font-family:var(--display);font-size:40px;color:var(--buttercup)}
+.libbtn:active{transform:translate(3px,3px)}
+.libbtn .lbl{color:var(--buttercup)}.libbtn b{display:block;font-family:var(--display);font-weight:400;font-size:30px;text-transform:uppercase;line-height:1.05}.libbtn small{font-size:14px;opacity:.9}
+#bodymap{width:100%;max-width:420px;display:block;margin:0 auto}
+#bodymap .nz,#bodymap [data-mg] path,#bodymap path[data-mg],#bodymap circle{stroke:var(--ink);stroke-width:2;stroke-linejoin:round}
+#bodymap .nz{fill:#F2C29A}
+#bodymap path[data-mg]{fill:var(--cream);cursor:pointer;transition:fill .2s}
+#bodymap path[data-mg].on{fill:var(--chili);animation:zone .35s var(--pop)}
+@keyframes zone{50%{transform:scale(1.02)}}
+#bodymap .heart{cursor:pointer}#bodymap .heart circle{fill:var(--cream)}#bodymap .heart .hp{fill:var(--chili);stroke:none}
+#bodymap .heart.on circle{fill:var(--chili)}#bodymap .heart.on .hp{fill:var(--cream);animation:beat .8s ease-in-out infinite;transform-origin:100px 42px}
+@keyframes beat{50%{transform:scale(1.2)}}
+.bmt{font-family:var(--label);font-weight:700;font-size:11px;letter-spacing:.12em;fill:var(--ox)}
+.mgchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;justify-content:center}
+.mgchips button{border:2px solid var(--chili);background:var(--cream);color:var(--chili);border-radius:999px;font:700 14px var(--label);letter-spacing:.06em;text-transform:uppercase;padding:7px 12px;cursor:pointer;transition:transform .15s var(--pop)}
+.mgchips button.on{background:var(--chili);color:var(--cream);transform:rotate(-2deg)}
+.libgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:18px}
+.libcard{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:center;background:var(--cream);border:3px solid var(--chili);border-radius:6px;box-shadow:4px 4px 0 var(--chili);padding:8px;animation:inn .4s var(--ease) both}
+.libfig{height:120px;border:2px solid var(--chili);border-radius:4px;overflow:hidden;cursor:pointer;background:#FFF1C9}
+.libfig .fig{width:100%;height:100%;max-height:none}
+.libinfo h3{margin:0;font-size:24px;cursor:pointer}
+.mgs{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0}
+.mgs span{font:700 11px var(--label);letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--chili);color:var(--chili);border-radius:999px;padding:1px 7px}
+.mgs span.hit{background:var(--chili);color:var(--cream)}
+.libinfo .lbl{font-size:12px;margin:0 0 6px}
+.addp{border:2px solid var(--chili);background:var(--buttercup);color:var(--chili);font:400 16px var(--display);text-transform:uppercase;border-radius:10px;padding:6px 10px;cursor:pointer}
+.addp.on{background:var(--chili);color:var(--cream)}
+.sheet{position:fixed;inset:0;z-index:70;display:none;align-items:flex-end;justify-content:center;background:rgba(42,18,6,.45)}
+.sheet.on{display:flex;animation:inn .3s var(--ease)}
+.sheet .in{position:relative;width:100%;max-width:640px;max-height:92dvh;overflow:auto;background:var(--buttercup);border-top:5px solid var(--chili);border-radius:16px 16px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
+.sheet .x{position:absolute;top:8px;right:12px;z-index:4;border:0;background:var(--chili);color:var(--cream);width:40px;height:40px;border-radius:50%;font:400 26px/1 var(--display);cursor:pointer}
+.sheet .fig{max-height:34vh}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -319,6 +352,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
     <div class="phases"><span>Lär</span><span>Bygg</span><span>Kondition</span></div>
     <div class="pass" id="passlist"></div>
   </div>
+  <button class="libbtn" id="go-lib"><span class="lbl">Övningsbank</span><b>Träna en muskelgrupp</b><small>Välj på kroppen – sätt ihop ett eget pass</small></button>
   <div class="card">
     <h3>Så här jobbar programmet</h3>
     <ul class="tips">
@@ -340,6 +374,20 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
   <div class="prog"><i id="ss-prog"></i></div>
   <div class="wake" id="wake"></div>
   <div id="ss-body"></div>
+</section>
+
+<!-- ============ ÖVNINGSBANK ============ -->
+<section class="screen" id="s-lib">
+  <div class="sshead"><button id="lib-back">‹ Programmet</button><span class="lbl">Övningsbank · <span id="lib-gear"></span></span><span style="width:60px"></span></div>
+  <h2 style="margin-top:6px">Vad vill du träna?</h2>
+  <div class="card">
+    <div id="lib-map"></div>
+    <div class="mgchips" id="mgchips"></div>
+    <p class="note" id="lib-count" style="margin:10px 0 0"></p>
+  </div>
+  <div class="libgrid" id="lib-list"></div>
+  <div style="height:110px"></div>
+  <div class="dock" id="lib-dock" style="display:none"><button class="btn big" id="lib-go">Kör fritt pass</button></div>
 </section>
 
 <!-- ============ KLART ============ -->
@@ -372,6 +420,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
   <div class="nxt" id="rest-next">Nästa: …</div>
   <div class="row" style="justify-content:center"><button class="btn ghost" id="rest-add">+15 s</button><button class="btn" id="rest-skip">Kör igen</button></div>
 </div></div>
+<div class="sheet" id="sheet"><div class="in"></div></div>
 <div class="toast" id="toast"></div>
 <div class="conf" id="conf"></div>
 <div class="flash" id="flash"></div>
@@ -452,6 +501,90 @@ const PHASES_KB = [
          C:{namn:'Pulspass', ex:[['swing',10,10,'emom'],['farmer',3,20],['halo',2,6]]}}},
 ];
 
+
+// ---------------- fler kettlebellövningar + muskelgrupper ----------------
+const RACK = {el:[126,94], ha:[124,72], kbo:[6,-6]};
+const KB_MORE = {
+  press:{namn:'Enarmspress', bell:'l', unit:'reps', sida:true, rest:75, niva:'Lätt',
+    tips:['Klockan i rack: vilar mot underarmen, handleden rak','Spänn rumpa och mage – pressa rakt upp','Sänk tillbaka till rack under kontroll. Byt arm'],
+    poses:[P(ST,RACK), P(ST,{el:[120,44], ha:[116,20], kbo:[6,-6]})], dur:1400},
+  clean:{namn:'Frivändning', bell:'l', unit:'reps', sida:true, rest:75, niva:'Medel',
+    tips:['Starta som en swing – klockan mellan benen','Skjut höften fram och för klockan nära kroppen upp','Fånga den mjukt i rack – den ska inte slå i underarmen'],
+    poses:[{hip:[86,126], kn:[104,162], an:[110,199], sh:[138,106], head:[154,96], el:[118,130], ha:[106,148], kbo:[0,14]}, P(ST,RACK)], dur:950},
+  frontbojj:{namn:'Knäböj i rack', bell:'l', unit:'reps', sida:true, rest:90, niva:'Medel',
+    tips:['En klocka i rack mot bröstet','Sätt dig ner mellan hälarna med bröstet upp','Låt inte klockan dra dig åt sidan – spänn magen'],
+    poses:[P(ST,RACK), P(ST,{hip:[82,154], kn:[126,156], sh:[104,104], head:[110,82], el:[118,126], ha:[118,104], kbo:[6,-6]})], dur:1700},
+  sumo:{namn:'Sumomarklyft', bell:'t', unit:'reps', rest:90, niva:'Lätt',
+    tips:['Brett mellan fötterna, tårna lite utåt','Klockan mellan fötterna – rak rygg, knäna utåt','Res dig genom att trycka isär golvet med fötterna'],
+    poses:[P(ST,{kn:[122,160], an:[130,199], kn2:[100,160], an2:[92,199]}), P(ST,{hip:[92,148], kn:[128,158], an:[130,199], kn2:[98,164], an2:[92,199], sh:[118,98], head:[128,78], el:[118,124], ha:[118,150]})], dur:1600},
+  enbens:{namn:'Enbensmarklyft', bell:'l', unit:'reps', sida:true, rest:75, niva:'Medel',
+    tips:['Håll i en stol eller vägg med fria handen','Fäll fram och låt bakre benet lyfta – rak linje från huvud till häl','Res dig med rumpan. Hellre kort och stabilt än djupt och vingligt'],
+    poses:[P(ST,{kn2:[106,161], an2:[100,199]}), {hip:[100,124], sh:[150,112], head:[168,108], kn:[104,162], an:[106,199], kn2:[70,122], an2:[36,120], el:[150,136], ha:[150,160], el2:[156,134], ha2:[162,156]}], dur:1800},
+  bojdrodd:{namn:'Böjd rodd', bell:'t', unit:'reps', rest:75, niva:'Lätt',
+    tips:['Fäll fram från höften, rak rygg, mjuka knän','Dra klockan med båda händerna mot naveln','Kläm ihop skulderbladen, sänk långsamt'],
+    poses:[{hip:[86,128], kn:[104,162], an:[110,199], sh:[140,110], head:[156,100], el:[140,134], ha:[140,160]}, {hip:[86,128], kn:[104,162], an:[110,199], sh:[140,110], head:[156,100], el:[118,102], ha:[130,126]}], dur:1500},
+  armhavning:{namn:'Armhävning mot bänk', bell:null, unit:'reps', rest:75, prop:'bench', niva:'Lätt',
+    tips:['Händerna på en bänk eller stol – ju högre, desto lättare','Kroppen rak som en planka','Sänk bröstet mot kanten och pressa upp'],
+    poses:[{an:[40,196], kn:[68,174], hip:[96,152], sh:[150,114], head:[168,106], el:[160,126], ha:[168,138], kbo:null},
+           {an:[40,196], kn:[70,178], hip:[100,160], sh:[156,128], head:[174,120], el:[142,124], ha:[168,138], kbo:null}], dur:1500},
+  pullover:{namn:'Pullover liggande', bell:'l', unit:'reps', rest:60, prop:'mat', niva:'Lätt',
+    tips:['Ligg på rygg, håll klockan i hornen över bröstet','För den bakåt över huvudet med nästan raka armar','Ländryggen i golvet – dra tillbaka med bröst och mage'],
+    poses:[P(LIE,{el:[70,164], ha:[70,138], kbo:[0,-6]}), P(LIE,{el:[44,170], ha:[22,178], kbo:[0,-6]})], dur:1700},
+  triceps:{namn:'Tricepspress', bell:'l', unit:'reps', rest:60, niva:'Lätt',
+    tips:['Håll klockan i hornen ovanför huvudet','Armbågarna pekar upp och stannar still','Sänk bakom huvudet och sträck upp igen'],
+    poses:[P(ST,{el:[116,40], ha:[114,16], kbo:[0,-4]}), P(ST,{el:[122,36], ha:[100,54], kbo:[0,-4]})], dur:1400},
+  curlkb:{namn:'Curl i hornen', bell:'l', unit:'reps', rest:60, niva:'Lätt',
+    tips:['Håll klockan i hornen, armbågarna mot sidorna','Lyft mot bröstet utan att gunga','Sänk långsamt hela vägen'],
+    poses:[P(ST,{el:[116,94], ha:[118,120], kbo:[0,4]}), P(ST,{el:[116,94], ha:[136,74], kbo:[0,4]})], dur:1300},
+  split:{namn:'Splitknäböj', bell:'l', unit:'reps', sida:true, rest:75, niva:'Lätt',
+    tips:['Ett stort steg isär – bakre hälen lyft','Sänk rakt ner tills bakre knät nästan nuddar golvet','Klockan mot bröstet. Byt ben efter alla reps'],
+    poses:[P(GOB,{hip:[110,124], kn:[128,160], an:[136,199], kn2:[96,160], an2:[74,196]}), P(GOB,{hip:[106,150], kn:[140,158], an:[142,199], kn2:[96,192], an2:[70,196], sh:[108,96], head:[110,74], el:[122,116], ha:[130,100]})], dur:1700},
+  halvgetup:{namn:'Halv get-up', bell:'l', unit:'reps', sida:true, rest:75, prop:'mat', niva:'Medel',
+    tips:['Ligg på rygg, klockan pressad rakt upp – titta på den','Rulla upp på armbågen, sedan på handen','Armen med klockan är lodrät hela tiden. Lägg dig lugnt tillbaka'],
+    poses:[P(LIE,{el:[68,164], ha:[66,138], el2:[90,198], ha2:[108,198], kbo:[0,-8]}),
+           {hip:[122,190], kn:[150,162], an:[176,198], sh:[84,158], head:[70,140], el:[84,132], ha:[84,108], el2:[74,178], ha2:[64,197], kbo:[0,-8]}], dur:2000},
+  waiter:{namn:'Bära över huvudet', bell:'l', unit:'m', sida:true, rest:60, walk:true, niva:'Medel',
+    tips:['Pressa upp klockan och lås armen','Biceps nära örat, revbenen ner','Gå lugnt 15–20 meter, byt arm'],
+    poses:[P(ST,{kn:[121,160], an:[131,199], kn2:[101,161], an2:[91,198], el:[116,42], ha:[116,18], el2:[106,92], ha2:[104,116], kbo:[0,-8]}),
+           P(ST,{kn2:[121,160], an2:[131,199], kn:[101,161], an:[91,198], el:[116,42], ha:[116,18], el2:[106,92], ha2:[104,116], kbo:[0,-8]})], dur:520},
+  rackbara:{namn:'Bära i rack', bell:'t', unit:'m', sida:true, rest:60, walk:true, niva:'Lätt',
+    tips:['Klockan i rack mot bröstet','Stå rak – luta dig inte bakåt','Gå lugnt 20 meter, byt sida'],
+    poses:[P(ST,{...RACK, kn:[121,160], an:[131,199], kn2:[101,161], an2:[91,198]}), P(ST,{...RACK, kn2:[121,160], an2:[131,199], kn:[101,161], an:[91,198]})], dur:520},
+  planka:{namn:'Planka', bell:null, unit:'sek', rest:45, prop:'mat', effort:false, niva:'Lätt',
+    tips:['Armbågarna under axlarna','Rak linje från huvud till häl – spänn rumpan','Börja med 20 sekunder. Andas lugnt'],
+    poses:[{head:[50,168], sh:[70,178], el:[72,197], ha:[94,197], hip:[124,182], kn:[154,188], an:[184,196], kbo:null},
+           {head:[50,167], sh:[70,177], el:[72,197], ha:[94,197], hip:[124,179], kn:[154,187], an:[184,196], kbo:null}], dur:1100},
+  rotation:{namn:'Sittande rotation', bell:'l', unit:'reps', sida:true, rest:60, prop:'mat', niva:'Lätt',
+    tips:['Sitt med böjda knän, luta dig lite bakåt','Håll klockan mot bröstet och vrid till ena sidan','Vrid med bröstkorgen, inte bara armarna. Hälarna i golvet'],
+    poses:[{hip:[100,190], sh:[116,140], head:[122,118], kn:[140,158], an:[164,196], el:[132,150], ha:[146,152]}, {hip:[100,190], sh:[112,140], head:[116,118], kn:[140,158], an:[164,196], el:[108,150], ha:[96,160]}], dur:1300},
+  hoftlyftkb:{namn:'Höftlyft med klocka', bell:'t', unit:'reps', rest:60, prop:'mat', niva:'Lätt',
+    tips:['Klockan vilar på höftbenen – håll den med båda händerna','Tryck i hälarna och lyft höften','Kläm rumpan i toppen. Sänk långsamt'],
+    poses:[P(LIE,{hip:[120,192], kn:[150,158], an:[172,198], el:[100,186], ha:[118,180], kbo:[0,-6]}), P(LIE,{hip:[124,158], kn:[157,150], an:[172,198], el:[100,166], ha:[122,150], kbo:[0,-6]})], dur:1400},
+};
+Object.assign(EX_KB, KB_MORE);
+// muskelgrupper
+const MG = [
+  {id:'ben', namn:'Lår', d:'M30 18h6l2 30h-4zM44 18h6l-2 30h-4z'},
+  {id:'rumpa', namn:'Rumpa & baksida', d:'M28 14q12-8 24 0v8q-12 6-24 0z'},
+  {id:'rygg', namn:'Rygg', d:'M28 4h24l-2 22h-20z'},
+  {id:'brost', namn:'Bröst', d:'M27 6q7-4 13 2q6-6 13-2v10q-6 4-13 0q-7 4-13 0z'},
+  {id:'axlar', namn:'Axlar', d:'M18 10a8 8 0 0 1 12-6v10zM62 10a8 8 0 0 0-12-6v10z'},
+  {id:'armar', namn:'Armar', d:'M16 10h8l-2 24h-6zM56 10h8l0 24h-6z'},
+  {id:'bal', namn:'Mage & bål', d:'M32 4h16v28h-16z'},
+  {id:'puls', namn:'Kondition', d:'M40 34s-14-8-14-18a7 7 0 0 1 14-3a7 7 0 0 1 14 3c0 10-14 18-14 18z'},
+];
+const MGMAP = {
+  marklyft:['rumpa','rygg','ben'], goblet:['ben','rumpa'], rodd:['rygg','armar'], golvpress:['brost','armar','axlar'], hoftlyft:['rumpa'], deadbug:['bal'],
+  bara:['bal','armar'], farmer:['bal','armar','puls'], swing:['rumpa','puls','rygg'], halo:['axlar','bal'], utfall:['ben','rumpa'],
+  press:['axlar','armar','bal'], clean:['rumpa','axlar','puls'], frontbojj:['ben','bal'], sumo:['ben','rumpa'], enbens:['rumpa','bal'], bojdrodd:['rygg','armar'],
+  armhavning:['brost','armar','bal'], pullover:['brost','rygg','bal'], triceps:['armar'], curlkb:['armar'], split:['ben','rumpa'], halvgetup:['bal','axlar'],
+  waiter:['axlar','bal'], rackbara:['bal','axlar'], planka:['bal'], rotation:['bal'], hoftlyftkb:['rumpa'],
+  // hantlar
+  gobletdb:['ben','rumpa'], rdl:['rumpa','rygg'], rodddb:['rygg','armar'], golvpressdb:['brost','armar'], axelpress:['axlar','armar'], utfalldb:['ben','rumpa'],
+  stepup:['ben','rumpa','puls'], curl:['armar'], farmerdb:['bal','armar'],
+  // maskiner
+  benpress:['ben','rumpa'], latsdrag:['rygg','armar'], sittrodd:['rygg','armar'], brostpress:['brost','armar'], benstrack:['ben'], rygglyft:['rygg','rumpa'], pallof:['bal'], cykel:['puls','ben'],
+};
 
 // ================= HANTLAR =================
 // knä-IK för cykeln: knät böjs framåt
@@ -624,7 +757,7 @@ function exPlan(id, sets, reps, mode) {
   const two = G.id === 'db' && e.kb2 ? '2 × ' : '';
   const kg = G.id === 'mach' ? (e.mw ? (S.mw[id] ?? MW0[S.sex][id] ?? 10) + ' kg' : id === 'cykel' ? 'Lätt motstånd' : 'Kroppsvikt')
     : bell === 'l' ? two + S.bells.l + ' kg' : bell === 't' ? two + S.bells.t + ' kg' : bell === 'lt' ? S.bells.l + ' + ' + S.bells.t + ' kg' : 'Kroppsvikt';
-  const per = e.sida ? (e.unit === 'varv' ? ' varv/håll' : e.unit === 'm' ? ' m/hand' : '/sida') : (e.unit === 'm' ? ' m' : e.unit === 'min' ? ' min' : '');
+  const per = e.sida ? (e.unit === 'varv' ? ' varv/håll' : e.unit === 'm' ? ' m/hand' : '/sida') : (e.unit === 'm' ? ' m' : e.unit === 'min' ? ' min' : e.unit === 'sek' ? ' sek' : '');
   const target = mode === 'emom' ? `${r} swingar varje minut` : id === 'cykel' && reps === 1 ? '1 min snabbt · 1 min lugnt' : `${r}${per}${e.unit === 'reps' && !e.sida ? ' reps' : ''}`;
   return {id, e, sets, reps:r, kg, bell, target, mode, rest: mode === 'emom' ? 45 : (phaseOf(week()).w[0] >= 9 ? Math.round(e.rest * .75) : e.rest)};
 }
@@ -726,7 +859,7 @@ function figure(ex, f = fighterById(localStorage.getItem('bc_traning_fighter')),
   const props = mk('g', {});
   if (!opts.noGround) { mk('rect', {x:-20, y:202, width:280, height:40, fill:'#E8A93A'}, props); mk('line', {x1:-20, y1:202, x2:260, y2:202, stroke:INK, 'stroke-width':3}, props); }
   const shadow = mk('ellipse', {cx:110, cy:204, rx:38, ry:4, fill:INK, opacity:.25});
-  const body = mk('g', {filter:`url(#${id})`});
+  const body = mk('g', opts.noBoil ? {} : {filter:`url(#${id})`});
   const W = 2.6;
   const path2 = (fill, w, par = body) => { const g = mk('g', {}, par); const a = mk('path', {stroke:INK, 'stroke-width':w + W * 2, 'stroke-linecap':'round', 'stroke-linejoin':'round', fill:'none'}, g);
     const b = mk('path', {stroke:fill, 'stroke-width':w, 'stroke-linecap':'round', 'stroke-linejoin':'round', fill:'none'}, g); return {set(d) { a.setAttribute('d', d); b.setAttribute('d', d); }, g}; };
@@ -805,6 +938,7 @@ function figure(ex, f = fighterById(localStorage.getItem('bc_traning_fighter')),
   function frame(now) {
     if (!svg.isConnected && now - t0 > 800) return;
     requestAnimationFrame(frame);
+    if (svg.paused) return;
     const step = Math.floor((now - t0) / (1000 / FPS));
     if (step === lastStep) return;           // på tvåor: rita bara om 12 ggr/s
     lastStep = step;
@@ -907,6 +1041,8 @@ document.querySelectorAll('.bell .pm button').forEach(b => b.onclick = () => {
   renderProfile(); const el = $('#kg-' + k); el.animate([{transform:'scale(1.35)'}, {transform:'scale(1)'}], {duration:300, easing:'cubic-bezier(.3,1.6,.5,1)'});
 });
 $('#go-prog').onclick = () => { save(); renderProg(); show('s-prog'); };
+$('#go-lib').onclick = () => openLib(); $('#lib-back').onclick = () => { renderProg(); show('s-prog'); }; $('#lib-go').onclick = () => startFree();
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#sheet').classList.remove('on'); });
 
 // ---------------- program ----------------
 function renderProg() {
@@ -1022,6 +1158,11 @@ document.addEventListener('pointerdown', () => { try { AC = AC || new (window.Au
 
 // avsluta + progression
 function finish(r) {
+  if (SS.free) { wakeOff(); S.free = (S.free || 0) + 1; save(); $('#ss-prog').style.width = '100%';
+    $('#d-eyebrow').textContent = `Fritt pass · ${{easy:'Lätt', ok:'Lagom', hard:'Tungt', too:'För tungt'}[r]}`; $('#d-stamp').textContent = 'Fritt!';
+    $('#d-head').textContent = 'Snyggt jobbat'; $('#d-msg').textContent = `${SS.plan.length} övningar avklarade. Fria pass räknas inte in i 12-veckorsprogrammet – men kroppen märker dem.`;
+    const df = $('#d-fig'); df.innerHTML = ''; df.appendChild(figure(ANIM.flex, undefined, {vb:'40 -30 160 236', noGround:true}));
+    stamps($('#d-stamps')); show('s-done'); confetti(); return; }
   const msgs = [];
   if (r === 'easy') { S.easy++; } else S.easy = 0;
   if (G.id === 'mach' && r === 'easy' && S.easy >= 2) {
@@ -1073,6 +1214,85 @@ function renderLog() {
   $('#l-list').innerHTML = S.log.length ? S.log.slice().reverse().slice(0, 15).map(l => `<li><span>V${l.w} · Pass ${l.k} · ${new Date(l.d).toLocaleDateString('sv-SE', {day:'numeric', month:'short'})}</span><span>${lab[l.r]}</span></li>`).join('') : '<li>Inga pass ännu. Första stämpeln väntar!</li>';
 }
 gearStatus();
+
+// ---------------- övningsbank: välj muskelgrupp ----------------
+const libSel = new Set(), passSel = new Set();
+let libIO = null;
+function bodyMapSVG() {
+  const z = (mg, d, extra = '') => `<path data-mg="${mg}" d="${d}" ${extra}/>`;
+  const fig = (cx, back) => {
+    const X = v => (cx - 50 + v).toFixed(1);
+    const R = (x, y, w, h, r = 4) => `M${X(x + r)} ${y} H${X(x + w - r)} Q${X(x + w)} ${y} ${X(x + w)} ${y + r} V${y + h - r} Q${X(x + w)} ${y + h} ${X(x + w - r)} ${y + h} H${X(x + r)} Q${X(x)} ${y + h} ${X(x)} ${y + h - r} V${y + r} Q${X(x)} ${y} ${X(x + r)} ${y}Z`;
+    let s = `<circle cx="${cx}" cy="14" r="10" class="nz"/><path class="nz" d="M${X(46)} 22h8v6h-8z"/>`;
+    if (!back) { s += z('brost', R(38, 28, 24, 16, 5)) + z('bal', R(40, 45, 20, 23, 4)); }
+    else { s += z('rygg', R(38, 28, 24, 34, 5)) + z('rumpa', `M${X(38)} 63 H${X(62)} V74 Q${X(56)} 80 ${X(50)} 74 Q${X(44)} 80 ${X(38)} 74Z`); }
+    s += z('axlar', `M${X(25)} 40 Q${X(24)} 26 ${X(39)} 26 L${X(39)} 34 Q${X(33)} 35 ${X(34)} 40Z`) + z('axlar', `M${X(75)} 40 Q${X(76)} 26 ${X(61)} 26 L${X(61)} 34 Q${X(67)} 35 ${X(66)} 40Z`);
+    s += z('armar', R(26, 40, 9, 24, 4)) + z('armar', R(65, 40, 9, 24, 4)) + `<path class="nz" d="${R(25, 65, 8, 22, 4)}"/><path class="nz" d="${R(67, 65, 8, 22, 4)}"/>`;
+    if (!back) s += z('ben', R(38, 70, 11, 36, 5)) + z('ben', R(51, 70, 11, 36, 5));
+    else s += z('rumpa', R(38, 80, 11, 28, 5)) + z('rumpa', R(51, 80, 11, 28, 5));
+    if (!back) s += `<path class="nz" d="${R(38, 69, 24, 4, 2)}"/>`;
+    s += `<path class="nz" d="${R(39, 108, 9, 30, 4)}"/><path class="nz" d="${R(52, 108, 9, 30, 4)}"/><path class="nz" d="M${X(36)} 138 h13 v5 h-13z M${X(51)} 138 h13 v5 h-13z"/>`;
+    s += `<text x="${cx}" y="156" text-anchor="middle" class="bmt">${back ? 'BAK' : 'FRAM'}</text>`;
+    return s;
+  };
+  return `<svg viewBox="0 0 200 162" id="bodymap">${fig(52, false)}${fig(148, true)}
+    <g data-mg="puls" class="heart"><circle cx="100" cy="40" r="15"/><path d="M100 50s-9-5-9-11a4.5 4.5 0 0 1 9-2a4.5 4.5 0 0 1 9 2c0 6-9 11-9 11z" class="hp"/></g></svg>`;
+}
+function doseOf(e) { return e.unit === 'm' ? 20 : e.unit === 'sek' ? 30 : e.unit === 'min' ? 5 : e.unit === 'varv' ? 5 : e.sida ? 8 : 10; }
+function openLib() {
+  $('#lib-gear').textContent = G.namn; $('#lib-map').innerHTML = bodyMapSVG();
+  $('#lib-map').querySelectorAll('[data-mg]').forEach(el => el.onclick = () => toggleMg(el.dataset.mg));
+  const ch = $('#mgchips'); ch.innerHTML = MG.map(m => `<button data-mg="${m.id}">${m.namn}</button>`).join('');
+  ch.querySelectorAll('button').forEach(b => b.onclick = () => toggleMg(b.dataset.mg));
+  renderLib(); show('s-lib');
+}
+function toggleMg(id) { libSel.has(id) ? libSel.delete(id) : libSel.add(id); blip(libSel.has(id) ? 500 : 700, libSel.has(id) ? 900 : 400, .08); renderLib(); }
+function renderLib() {
+  document.querySelectorAll('#lib-map [data-mg], #mgchips [data-mg]').forEach(el => el.classList.toggle('on', libSel.has(el.dataset.mg)));
+  const list = $('#lib-list'); list.innerHTML = '';
+  if (libIO) libIO.disconnect();
+  libIO = new IntersectionObserver(es => es.forEach(en => { const f = en.target.querySelector('.fig'); if (f) f.paused = !en.isIntersecting; }));
+  let items = Object.entries(EX).map(([id, e]) => ({id, e, mg:MGMAP[id] || [], hit:(MGMAP[id] || []).filter(m => libSel.has(m)).length}));
+  if (libSel.size) items = items.filter(x => x.hit).sort((a, b) => b.hit - a.hit || (MGMAP[a.id] || []).indexOf([...libSel][0]) - (MGMAP[b.id] || []).indexOf([...libSel][0]));
+  $('#lib-count').textContent = libSel.size ? `${items.length} övningar för ${[...libSel].map(m => MG.find(g => g.id === m).namn.toLowerCase()).join(', ')}` : `Alla ${items.length} övningar – välj muskelgrupp för att filtrera`;
+  items.forEach(({id, e, mg}, i) => {
+    const c = document.createElement('div'); c.className = 'libcard'; c.style.animationDelay = Math.min(i, 12) * 35 + 'ms';
+    const box = document.createElement('div'); box.className = 'libfig film';
+    box.appendChild(figure(e, undefined, {vb: e.prop === 'mat' ? '14 76 200 130' : e.prop === 'bike' ? '40 -4 170 210' : e.prop ? '20 -24 210 230' : '36 -26 170 232', rays:false, noBoil:true}));
+    c.appendChild(box);
+    const inP = passSel.has(id);
+    const info = document.createElement('div'); info.className = 'libinfo';
+    info.innerHTML = `<h3>${e.namn}</h3><p class="mgs">${mg.map(m => `<span class="${libSel.has(m) ? 'hit' : ''}">${MG.find(g => g.id === m).namn}</span>`).join('')}</p>
+      <p class="lbl">${e.niva || 'Lätt'}${e.sida ? ' · per sida' : ''}</p><button class="addp ${inP ? 'on' : ''}">${inP ? '✓ Med i passet' : '+ Lägg till i pass'}</button>`;
+    c.appendChild(info); list.appendChild(c); libIO.observe(c);
+    box.onclick = info.querySelector('h3').onclick = () => openSheet(id);
+    info.querySelector('.addp').onclick = (ev) => { passSel.has(id) ? passSel.delete(id) : passSel.add(id); blip(); renderDock(); const b = ev.currentTarget, on = passSel.has(id); b.classList.toggle('on', on); b.textContent = on ? '✓ Med i passet' : '+ Lägg till i pass'; };
+  });
+  renderDock();
+}
+function renderDock() { const n = [...passSel].filter(id => EX[id]).length; $('#lib-dock').style.display = n ? '' : 'none'; $('#lib-go').textContent = `Kör fritt pass · ${n} övning${n === 1 ? '' : 'ar'}`; }
+function openSheet(id) {
+  const e = EX[id], sh = $('#sheet'), x = exPlan(id, 3, doseOf(e));
+  sh.querySelector('.in').innerHTML = `<button class="x" aria-label="Stäng">×</button><div class="stage film"><span class="wbadge">${x.kg}</span></div>
+    <div class="exname">${e.namn}</div><div class="target">3 × ${x.target}</div>
+    <p class="mgs">${(MGMAP[id] || []).map(m => `<span class="hit">${MG.find(g => g.id === m).namn}</span>`).join('')}</p>
+    <ul class="tips">${e.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+    <button class="btn big" id="sh-add">${passSel.has(id) ? '✓ Med i passet' : '+ Lägg till i pass'}</button>`;
+  sh.querySelector('.stage').appendChild(figure(e));
+  sh.classList.add('on');
+  sh.querySelector('.x').onclick = () => sh.classList.remove('on');
+  $('#sh-add').onclick = () => { passSel.has(id) ? passSel.delete(id) : passSel.add(id); sh.classList.remove('on'); renderLib(); };
+}
+function startFree() {
+  const ids = [...passSel].filter(id => EX[id]);
+  const plan = ids.map(id => exPlan(id, 3, doseOf(EX[id])));
+  const steps = [{type:'warm'}];
+  plan.forEach((x, xi) => { for (let s = 1; s <= x.sets; s++) steps.push({type:'set', x, xi, s}); });
+  steps.push({type:'rpe'});
+  SS = {k:'F', w:week(), plan, steps, i:0, namn:'Fritt pass', t0:Date.now(), free:true};
+  $('#ss-title').textContent = `${G.namn} · Fritt pass`;
+  show('s-sess'); renderStep(); wakeOn();
+}
 
 // ---------------- choose your fighter ----------------
 let FBIG = null;
