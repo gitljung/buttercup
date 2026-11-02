@@ -368,7 +368,6 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
     <div class="phases"><span>Lär</span><span>Bygg</span><span>Kondition</span></div>
     <div class="pass" id="passlist"></div>
   </div>
-  <button class="libbtn" id="go-lib"><span class="lbl">Övningsbank</span><b>Träna en muskelgrupp</b><small>Välj på kroppen – sätt ihop ett eget pass</small></button>
   <div class="card">
     <h3>Så här jobbar programmet</h3>
     <ul class="tips">
@@ -1210,7 +1209,7 @@ document.querySelectorAll('.bell .pm button').forEach(b => b.onclick = () => {
   renderProfile(); const el = $('#kg-' + k); el.animate([{transform:'scale(1.35)'}, {transform:'scale(1)'}], {duration:300, easing:'cubic-bezier(.3,1.6,.5,1)'});
 });
 $('#go-prog').onclick = () => { save(); renderProg(); show('s-prog'); };
-$('#go-lib').onclick = () => openLib(); $('#lib-back').onclick = () => goBack(); $('#go-lib0').onclick = () => openLib(); $('#lib-go').onclick = () => startFree();
+$('#lib-back').onclick = () => goBack(); $('#go-lib0').onclick = () => openLib(); $('#lib-go').onclick = () => startFree();
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#sheet').classList.remove('on'); });
 
 // ---------------- fokus: extra övningar för valda muskelgrupper ----------------
