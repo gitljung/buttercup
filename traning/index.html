@@ -832,6 +832,39 @@ Object.assign(EX_KB, {
 Object.assign(MGMAP, {gorillarodd:['rygg','armar','bal'], gungpress:['axlar','armar','bal'], knapress:['axlar','bal'], knacurl:['armar'], bjornrodd:['rygg','bal'],
   hogadrag:['axlar','rygg','rumpa'], squatclean:['ben','rumpa','puls'], renegad:['rygg','bal','armar']});
 
+// ---------------- kettlebellövningar, omgång 3 (Instagram-tränare) ----------------
+const HINGE8 = {hip:[90,132], kn:[112,160], an:[110,199], sh:[136,104], head:[150,92]};
+Object.assign(EX_KB, {
+  sidoutfall:{namn:'Sidoutfall', bell:'l', unit:'reps', sida:true, rest:75, niva:'Lätt',
+    tips:['Klockan mot bröstet, stå med fötterna ihop','Kliv brett åt sidan och sätt dig ner på det benet – andra benet rakt','Tryck dig tillbaka till start. Bra för höfter och insida lår'],
+    poses:[P(GOB,{}), {hip:[100,150], kn:[128,156], an:[122,199], kn2:[86,174], an2:[62,198], sh:[112,98], head:[118,76], el:[124,118], ha:[132,102], kbo:[4,6]}], dur:1700},
+  thruster:{namn:'Knäböj till press', bell:'l', unit:'reps', rest:90, niva:'Medel',
+    tips:['Klockan i hornen mot bröstet','Gör en knäböj – och använd farten upp till att pressa klockan över huvudet','Sänk klockan till bröstet igen innan nästa knäböj'],
+    poses:[P(GOB,{head:[110,82], sh:[104,104], el:[120,124], ha:[130,110], hip:[82,154], kn:[126,156], kbo:[2,0]}), P(ST,{el:[118,42], ha:[116,18], kbo:[0,-8]})], dur:1500},
+  runtkroppen:{namn:'Runt kroppen', bell:'l', unit:'varv', sida:true, rest:45, effort:false, cycle:true, niva:'Lätt',
+    tips:['Stå stadigt, klockan i ena handen framför dig','Lämna över den till andra handen bakom ryggen och fortsätt runt','Höften står still – det är magen som jobbar. Byt håll'],
+    poses:[P(ST,{el:[124,100], ha:[136,118], el2:[118,100], ha2:[132,120], kbo:[0,12]}), P(ST,{el:[120,98], ha:[118,124], el2:[106,96], ha2:[108,118], kbo:[0,12]}),
+           P(ST,{el:[100,100], ha:[90,120], el2:[98,100], ha2:[88,122], kbo:[0,12]}), P(ST,{el:[110,96], ha:[112,118], el2:[104,98], ha2:[102,122], kbo:[0,12]})], dur:420},
+  attan:{namn:'Åttan mellan benen', bell:'l', unit:'reps', rest:60, cycle:true, effort:false, niva:'Medel',
+    tips:['Brett mellan fötterna, böj knäna lätt och fäll fram med rak rygg','För klockan mellan benen och lämna över till andra handen bakom benet','Den ritar en åtta runt benen. Lugnt tempo'],
+    poses:[P(HINGE8,{el:[124,140], ha:[114,172], kbo:[0,8]}), P(HINGE8,{el:[138,136], ha:[134,164], kbo:[0,8]}), P(HINGE8,{el:[126,144], ha:[114,176], kbo:[0,8]}), P(HINGE8,{el:[118,140], ha:[96,166], kbo:[0,8]})], dur:420},
+  taktutfall:{namn:'Utfall med överlämning', bell:'l', unit:'reps', rest:75, niva:'Medel',
+    tips:['Kliv bakåt i ett utfall med klockan i ena handen','I botten: lämna över klockan under främre låret till andra handen','Res dig, byt ben och upprepa'],
+    poses:[P(ST,{kn:[121,160], an:[131,199], kn2:[101,161], an2:[91,198], el:[114,92], ha:[116,117]}),
+           P(ST,{hip:[106,150], kn:[140,158], an:[142,199], kn2:[96,192], an2:[66,196], sh:[112,100], head:[116,78], el:[130,128], ha:[128,170], el2:[112,126], ha2:[122,172], kbo:[0,8]})], dur:1700},
+  marschkb:{namn:'Marsch med klocka i rack', bell:'l', unit:'reps', sida:true, rest:60, walk:true, niva:'Lätt',
+    tips:['Klockan i rack mot bröstet','Lyft knäna till höfthöjd, ett i taget','Stå rak – luta dig inte åt sidan. Byt sida efter halva'],
+    poses:[P(ST,{kn:[136,136], an:[132,174], kn2:[108,161], an2:[106,199], el:[126,94], ha:[124,72], kbo:[6,-6]}), P(ST,{kn2:[136,136], an2:[132,174], kn:[108,161], an:[106,199], el:[126,94], ha:[124,72], kbo:[6,-6]})], dur:560},
+  gobletpress:{namn:'Gobletpress', bell:'l', unit:'reps', rest:75, niva:'Lätt',
+    tips:['Håll klockan i hornen mot bröstet','Pressa den rakt upp över huvudet med båda händerna','Spänn magen och rumpan – svanka inte'],
+    poses:[P(GOB,{}), P(ST,{el:[118,42], ha:[116,18], kbo:[0,-8]})], dur:1400},
+  smalpress:{namn:'Smal golvpress', bell:'t', unit:'reps', rest:75, prop:'mat', niva:'Lätt',
+    tips:['Ligg på rygg och håll klockan i hornen med båda händerna','Armbågarna nära kroppen','Pressa rakt upp och sänk tills armbågarna nuddar golvet'],
+    poses:[P(LIE,{el:[86,192], ha:[92,170], kbo:[0,-6]}), P(LIE,{el:[76,160], ha:[72,134], kbo:[0,-6]})], dur:1500},
+});
+Object.assign(MGMAP, {sidoutfall:['ben','rumpa'], thruster:['ben','axlar','puls'], runtkroppen:['bal','axlar'], attan:['bal','rumpa','armar'], taktutfall:['ben','rumpa','bal'],
+  marschkb:['bal','puls'], gobletpress:['axlar','armar'], smalpress:['brost','armar']});
+
 // ================= CALISTHENICS =================
 const HANG = {head:[114,24], sh:[112,46], hip:[110,100], kn:[111,140], an:[112,179], el:[113,20], ha:[114,-4], kbo:null};
 const HIPH = {el:[128,96], ha:[116,119], el2:[98,96], ha2:[106,119], kbo:null};
