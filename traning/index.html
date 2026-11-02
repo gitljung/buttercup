@@ -251,6 +251,10 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .mgchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;justify-content:center}
 .mgchips button{border:2px solid var(--chili);background:var(--cream);color:var(--chili);border-radius:999px;font:700 14px var(--label);letter-spacing:.06em;text-transform:uppercase;padding:7px 12px;cursor:pointer;transition:transform .15s var(--pop)}
 .mgchips button.on{background:var(--chili);color:var(--cream);transform:rotate(-2deg)}
+.focusline{display:block;margin:10px 0 0;border:2px dashed var(--chili);background:transparent;color:var(--chili);border-radius:8px;padding:6px 12px;font:600 15px var(--label);letter-spacing:.04em;cursor:pointer;text-align:left}
+.focusline b{font-weight:800}
+.passcard .fx{color:var(--chili);font-weight:700}
+#focus button.on{animation:zone .3s var(--pop)}
 .geartabs{position:sticky;top:36px;z-index:5;display:flex;gap:6px;overflow-x:auto;margin:16px -4px 0;padding:8px 4px;background:var(--buttercup)}
 .geartabs button{flex:0 0 auto;border:3px solid var(--chili);background:var(--cream);color:var(--chili);border-radius:8px;font:400 18px var(--display);text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:transform .15s var(--pop)}
 .geartabs button.on{background:var(--chili);color:var(--buttercup);transform:rotate(-2deg) scale(1.04);box-shadow:3px 3px 0 var(--ox)}
@@ -345,6 +349,10 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
       <div class="seg" id="ppw"><button data-v="2">2 pass</button><button data-v="3">3 pass</button></div>
       <p class="note" style="margin:6px 0 0">Två räcker för att bli starkare. Det tredje är ett lugnt pulspass.</p>
     </div>
+    <div class="field"><span class="lbl">Vad vill du fokusera på?</span>
+      <div class="mgchips" id="focus" style="justify-content:flex-start"></div>
+      <p class="note" style="margin:8px 0 0" id="focus-note"></p>
+    </div>
     <div style="margin-top:22px"><button class="btn big" id="go-prog">Bygg mitt program</button></div>
   </div>
 </section>
@@ -354,6 +362,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
   <p class="eyebrow" id="p-eyebrow">Vecka 1 av 12</p>
   <h2 id="p-phase">Lär rörelserna</h2>
   <p class="note" id="p-phasetxt" style="margin:0"></p>
+  <button class="focusline" id="p-focus"></button>
   <div class="card">
     <div class="tl" id="tl"></div>
     <div class="phases"><span>Lär</span><span>Bygg</span><span>Kondition</span></div>
@@ -368,7 +377,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
       <li>Pratregeln: under pulspasset ska du kunna prata, men inte sjunga.</li>
       <li>Vila minst en dag mellan styrkepassen.</li>
     </ul>
-    <div class="row" style="margin-top:6px"><button class="btn ghost" id="edit-prof">Ändra vikter / pass</button></div>
+    <div class="row" style="margin-top:6px"><button class="btn ghost" id="edit-prof">Ändra vikter / pass / fokus</button></div>
   </div>
   <div class="card install" id="install"><h3>Ta med till gymmet</h3>
     <p class="note" id="inst-txt" style="margin:0 0 10px">Lägg sidan på hemskärmen så öppnas den som en app – och funkar även utan täckning.</p>
@@ -880,7 +889,7 @@ function withGear(gid, fn) {
 }
 function load() { try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch (_) { return null; } }
 function save() { localStorage.setItem(KEY, JSON.stringify(S)); }
-function fresh(sex = 'k') { return {sex, bells: G.def ? {...G.def[sex]} : null, mw: G.id === 'mach' ? {...MW0[sex]} : null, ppw:2, log:[], adj:{}, easy:0}; }
+function fresh(sex = 'k') { return {sex, bells: G.def ? {...G.def[sex]} : null, mw: G.id === 'mach' ? {...MW0[sex]} : null, ppw:2, log:[], adj:{}, easy:0, focus:[]}; }
 const week = () => Math.min(12, Math.floor(S.log.length / S.ppw) + 1);
 const phaseOf = w => PHASES.find(p => w >= p.w[0] && w <= p.w[1]);
 const passKeys = () => S.ppw === 3 ? ['A','B','C'] : ['A','B'];
@@ -1179,7 +1188,7 @@ function gearStatus() { for (const id of ['kb', 'db', 'mach']) { let st = null; 
   if (st && st.log && st.log.length) $('#g-' + id + ' small').textContent = `Vecka ${Math.min(12, Math.floor(st.log.length / st.ppw) + 1)} · fortsätt`; } }
 $('#bc-back').onclick = () => { goBack(); };
 $('#nav-log').onclick = () => { if (!S) { toast('Välj redskap först'); return; } renderLog(); show('s-log'); };
-$('#edit-prof').onclick = () => { renderProfile(); show('s-profile'); };
+$('#edit-prof').onclick = $('#p-focus').onclick = () => { renderProfile(); show('s-profile'); };
 $('#l-back').onclick = () => { renderProg(); show('s-prog'); };
 $('#d-back').onclick = () => { renderProg(); show('s-prog'); };
 $('#l-reset').onclick = () => { if (confirm(`Radera historiken för ${G.namn.toLowerCase()} och börja om?`)) { localStorage.removeItem(KEY); S = null; $('#g-' + G.id + ' small').textContent = 'Börja om'; show('s-start'); } };
@@ -1188,7 +1197,7 @@ $('#l-reset').onclick = () => { if (confirm(`Radera historiken för ${G.namn.toL
 function renderProfile() {
   document.querySelectorAll('#sex button').forEach(b => b.classList.toggle('on', b.dataset.v === S.sex));
   document.querySelectorAll('#ppw button').forEach(b => b.classList.toggle('on', +b.dataset.v === S.ppw));
-  $('#pf-title').textContent = G.titel;
+  $('#pf-title').textContent = G.titel; renderFocus();
   const m = G.id === 'mach'; $('#f-bells').style.display = m ? 'none' : ''; $('#f-mach').style.display = m ? '' : 'none';
   if (!m) { $('#bells-lbl').textContent = G.lbl; $('#kg-l').textContent = S.bells.l; $('#kg-t').textContent = S.bells.t; $('#kgtip').textContent = G.tip[S.sex];
     document.querySelectorAll('.bell svg').forEach(v => { v.setAttribute('viewBox', G.id === 'db' ? '0 -20 70 70' : '0 0 56 70'); v.innerHTML = `<use href="${G.icon}" width="${G.id === 'db' ? 70 : 56}" height="${G.id === 'db' ? 30 : 70}"/>`; }); }
@@ -1204,21 +1213,47 @@ $('#go-prog').onclick = () => { save(); renderProg(); show('s-prog'); };
 $('#go-lib').onclick = () => openLib(); $('#lib-back').onclick = () => goBack(); $('#go-lib0').onclick = () => openLib(); $('#lib-go').onclick = () => startFree();
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#sheet').classList.remove('on'); });
 
+// ---------------- fokus: extra övningar för valda muskelgrupper ----------------
+function passEx(ph, k) {
+  const base = ph.pass[k].ex, focus = (S && S.focus) || [];
+  if (!focus.length) return base;
+  const keys = passKeys(), ki = Math.max(0, keys.indexOf(k)), pi = PHASES.indexOf(ph), early = ph.w[0] === 1;
+  const n = Math.min(2, focus.length), picks = [];
+  const used = new Set(base.map(e => e[0]));
+  for (let j = 0; j < n; j++) {
+    const f = focus[(ki * n + j) % focus.length];
+    const cand = Object.keys(EX).filter(id => !used.has(id) && (MGMAP[id] || []).includes(f) && !(early && EX[id].niva === 'Medel'))
+      .sort((a, b) => MGMAP[a].indexOf(f) - MGMAP[b].indexOf(f));
+    if (!cand.length) continue;
+    const prim = cand.filter(id => MGMAP[id][0] === f), pool = prim.length ? prim : cand;
+    const id = pool[(ki + pi) % pool.length]; used.add(id);
+    picks.push([id, early ? 2 : 3, doseOf(EX[id]), undefined, f]);
+  }
+  return [...base, ...picks];
+}
+function renderFocus() {
+  const fs = S.focus || (S.focus = []);
+  const el = $('#focus'); el.innerHTML = MG.map(m => `<button data-mg="${m.id}" class="${fs.includes(m.id) ? 'on' : ''}">${m.namn}</button>`).join('');
+  el.querySelectorAll('button').forEach(b => b.onclick = () => { const i = fs.indexOf(b.dataset.mg); i < 0 ? fs.push(b.dataset.mg) : fs.splice(i, 1); blip(i < 0 ? 500 : 700, i < 0 ? 900 : 400, .08); renderFocus(); });
+  $('#focus-note').textContent = fs.length ? `Varje pass får upp till två extra övningar för ${fs.map(m => MG.find(g => g.id === m).namn.toLowerCase()).join(', ')}. Grundprogrammet för hela kroppen ligger kvar.` : 'Inget valt = jämn träning för hela kroppen. Välj en eller flera grupper så lägger vi till extra övningar för dem.';
+}
+
 // ---------------- program ----------------
 function renderProg() {
   const w = week(), ph = phaseOf(w), nk = nextKey(), done = S.log.length >= 12 * S.ppw;
   $('#p-eyebrow').textContent = done ? 'Alla 12 veckor klara!' : `Vecka ${w} av 12`;
   $('#p-phase').textContent = ph.namn; $('#p-phasetxt').textContent = ph.rpe;
+  const fs = S.focus || []; $('#p-focus').innerHTML = fs.length ? `Fokus: <b>${fs.map(m => MG.find(g => g.id === m).namn).join(', ')}</b> · ändra` : 'Hela kroppen · <b>välj fokus</b>';
   const tl = $('#tl'); tl.innerHTML = '';
   for (let i = 1; i <= 12; i++) { const e = document.createElement('i'); e.textContent = i; const c = S.log.filter(l => l.w === i).length;
     if (c >= S.ppw || i < w) e.className = 'done'; else if (i === w) e.className = 'now'; tl.appendChild(e); }
   const pl = $('#passlist'); pl.innerHTML = '';
   const doneThisWeek = S.log.filter(l => l.w === w).map(l => l.k);
   for (const k of passKeys()) {
-    const p = ph.pass[k], b = document.createElement('button'); b.className = 'passcard' + (k === nk ? ' next' : '');
+    const p = ph.pass[k], pe = passEx(ph, k), b = document.createElement('button'); b.className = 'passcard' + (k === nk ? ' next' : '');
     const isDone = doneThisWeek.includes(k);
     b.innerHTML = `<span class="ltr">${k}</span><span><h3>${p.namn}${k === nk ? '<span class="tag">Nästa</span>' : ''}${isDone ? '<span class="tag">✓ Klar</span>' : ''}</h3>
-      <p>${p.ex.map(e => EX[e[0]].namn).join(' · ')}</p><p class="lbl" style="margin-top:4px">${p.ex.length} övningar · ca ${k === 'C' ? 25 : 30} min</p></span>`;
+      <p>${pe.map(e => e[4] ? `<span class="fx">★ ${EX[e[0]].namn}</span>` : EX[e[0]].namn).join(' · ')}</p><p class="lbl" style="margin-top:4px">${pe.length} övningar · ca ${(k === 'C' ? 25 : 30) + (pe.length - p.ex.length) * 5} min</p></span>`;
     b.onclick = () => startSession(k); pl.appendChild(b);
   }
 }
@@ -1227,7 +1262,7 @@ function renderProg() {
 let SS = null;
 function startSession(k) {
   const w = week(), ph = phaseOf(w), p = ph.pass[k];
-  const plan = p.ex.map(e => exPlan(e[0], e[1], e[2], e[3]));
+  const plan = passEx(ph, k).map(e => exPlan(e[0], e[1], e[2], e[3]));
   const steps = [{type:'warm'}];
   plan.forEach((x, xi) => { for (let s = 1; s <= x.sets; s++) steps.push({type:'set', x, xi, s}); });
   steps.push({type:'rpe'});
