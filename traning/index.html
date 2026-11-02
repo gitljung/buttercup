@@ -271,7 +271,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 </style>
 </head>
 <body>
-<div class="bc-bar"><a href="/">← buttercup.nu</a><span class="hide-m">Olistad · träning</span><button id="nav-log">Min logg</button></div>
+<div class="bc-bar"><a href="/" id="bc-home">← buttercup.nu</a><button id="bc-back" style="display:none">‹ Tillbaka</button><span class="hide-m">Olistad · träning</span><button id="nav-log">Min logg</button></div>
 <main>
 
 <!-- ============ START ============ -->
@@ -1007,7 +1007,25 @@ function figure(ex, f = fighterById(localStorage.getItem('bc_traning_fighter')),
 }
 
 // ---------------- navigation ----------------
-function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); scrollTo({top:0, behavior:'smooth'}); }
+let CUR = 's-start', FROM = {};
+const PARENT = {'s-profile':'s-start', 's-prog':'s-start', 's-lib':'s-prog', 's-done':'s-prog', 's-sess':'s-prog'};
+function show(id, fromHistory) {
+  if (id !== CUR) { if (id === 's-log') FROM['s-log'] = CUR; if (!fromHistory) history.pushState({id}, ''); }
+  CUR = id;
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); scrollTo({top:0, behavior:'smooth'});
+  $('#bc-back').style.display = id === 's-start' ? 'none' : ''; $('#bc-home').style.display = id === 's-start' ? '' : 'none';
+}
+function goBack() {
+  if ($('#sheet').classList.contains('on')) { $('#sheet').classList.remove('on'); return true; }
+  if (CUR === 's-start') return false;
+  if (CUR === 's-sess') { if (!confirm('Avbryta passet? Det sparas inte.')) return true; stopRest(); wakeOff(); SS = null; }
+  const to = CUR === 's-log' ? (FROM['s-log'] || 's-start') : PARENT[CUR] || 's-start';
+  if (to === 's-prog' && S) renderProg();
+  if (to === 's-start') { if (typeof gearStatus === 'function') gearStatus(); }
+  show(to, true); return true;
+}
+history.replaceState({id:'s-start'}, '');
+addEventListener('popstate', () => { if (CUR === 's-start') return; if (goBack() && CUR !== 's-start') history.pushState({id:CUR}, ''); });
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('on'), 3200); }
 function confetti() {
   const c = $('#conf'), cols = ['#C8340A','#8F1A00','#FFF6DC','#C8340A'];
@@ -1018,6 +1036,7 @@ function openGear(id) { useGear(id); if (!S) S = fresh(); renderProfile(); show(
 $('#g-kb').onclick = () => openGear('kb'); $('#g-db').onclick = () => openGear('db'); $('#g-mach').onclick = () => openGear('mach');
 function gearStatus() { for (const id of ['kb', 'db', 'mach']) { let st = null; try { st = JSON.parse(localStorage.getItem(GEARS[id].key)); } catch (_) {}
   if (st && st.log && st.log.length) $('#g-' + id + ' small').textContent = `Vecka ${Math.min(12, Math.floor(st.log.length / st.ppw) + 1)} · fortsätt`; } }
+$('#bc-back').onclick = () => { goBack(); };
 $('#nav-log').onclick = () => { if (!S) { toast('Välj redskap först'); return; } renderLog(); show('s-log'); };
 $('#edit-prof').onclick = () => { renderProfile(); show('s-profile'); };
 $('#l-back').onclick = () => { renderProg(); show('s-prog'); };
