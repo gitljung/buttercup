@@ -358,6 +358,8 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
   <defs>
     <symbol id="kb" viewBox="0 0 56 70"><path d="M15 26 C11 6 45 6 41 26" fill="none" stroke="#C8340A" stroke-width="7" stroke-linecap="round"/>
       <circle cx="28" cy="44" r="22" fill="#C8340A"/><ellipse cx="20" cy="37" rx="6" ry="4" fill="#FFF6DC" opacity=".45"/><rect x="12" y="62" width="32" height="6" rx="3" fill="#8F1A00"/></symbol>
+    <symbol id="kbi" viewBox="0 0 56 70"><path d="M15 26 C11 6 45 6 41 26" fill="none" stroke="#2A1206" stroke-width="12" stroke-linecap="round"/><path d="M15 26 C11 6 45 6 41 26" fill="none" stroke="#4A4F57" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="28" cy="44" r="22" fill="#4A4F57" stroke="#2A1206" stroke-width="5"/><path d="M14 36 Q18 28 26 27" fill="none" stroke="#9AA3AD" stroke-width="4" stroke-linecap="round"/><rect x="18" y="40" width="20" height="9" rx="2" fill="#FCC222" stroke="#2A1206" stroke-width="2.5"/></symbol>
   </defs>
 </svg>
 
@@ -450,96 +452,104 @@ function exPlan(id, sets, reps, mode) {
 
 // ---------------- figur-renderare ----------------
 const NS = 'http://www.w3.org/2000/svg';
-// ---------------- fighters (yamay-serie möter 50-tals-maskot: en röd linje, krämfärgad fyllning) ----------------
+// ---------------- fighters (atompunk: 50-talsmaskotar i overall, mörk tuschlinje, platta färger) ----------------
+const INK = '#2A1206', CREAM = '#FFF6DC', LN = '#C8340A';
 const FIGHTERS = [
-  {id:'kent', namn:'Kettlebell-Kent', kort:'Kent', alder:44, ort:'Torekov', motto:'Ryggen är rak. Det är mer än man kan säga om grannen.', hair:'flint', shorts:true, belly:7, st:[4,2,5], move:'Rak rygg-stöten'},
-  {id:'bettan', namn:'Bettan Bell', kort:'Bettan', alder:42, ort:'Båstad', motto:'Jag svettas inte. Jag glittrar. Mycket.', hair:'tofs', belly:0, st:[3,5,4], move:'Tofs-snurren'},
-  {id:'pappa', namn:'Pappa Puls', kort:'Pappa P', alder:45, ort:'Höllviken', motto:'Har inte sprungit sen -98. Men den här klockan ska få se på fan.', hair:'keps', shorts:true, belly:12, st:[5,1,4], move:'Grillhuggaren'},
-  {id:'sussie', namn:'Svettis-Sussie', kort:'Sussie', alder:41, ort:'Malmö', motto:'Uppvärmning är för folk som tänker sluta.', hair:'lockar', belly:0, st:[4,4,5], move:'Svettstormen'},
+  {id:'kent', namn:'Kettlebell-Kent', kort:'Kent', alder:44, ort:'Torekov', motto:'Ryggen är rak. Det är mer än man kan säga om grannen.', hair:'flint', hc:'#7A4A22', skin:'#F2C29A', suit:'#C8340A', trim:'#FCC222', nr:'44', belly:7, st:[4,2,5], move:'Rak rygg-stöten'},
+  {id:'bettan', namn:'Bettan Bell', kort:'Bettan', alder:42, ort:'Båstad', motto:'Jag svettas inte. Jag glittrar. Mycket.', hair:'rullar', hc:'#F4C431', skin:'#F6D0AE', suit:'#2E8C86', trim:'#FCC222', nr:'42', belly:0, st:[3,5,4], move:'Tofs-snurren'},
+  {id:'pappa', namn:'Pappa Puls', kort:'Pappa P', alder:45, ort:'Höllviken', motto:'Har inte sprungit sen -98. Men den här klockan ska få se på fan.', hair:'pompadour', hc:'#4A2A14', skin:'#E3A97E', suit:'#1F4E8C', trim:'#FCC222', nr:'45', belly:12, st:[5,1,4], move:'Grillhuggaren', glasses:true},
+  {id:'sussie', namn:'Svettis-Sussie', kort:'Sussie', alder:41, ort:'Malmö', motto:'Uppvärmning är för folk som tänker sluta.', hair:'scarf', hc:'#2A1206', skin:'#9A6240', suit:'#8F1A00', trim:'#FFF6DC', scarf:'#C8340A', nr:'41', belly:0, st:[4,4,5], move:'Svettstormen'},
 ];
 const fighterById = id => FIGHTERS.find(f => f.id === id) || FIGHTERS[0];
+const shade = (hex, k) => { const n = parseInt(hex.slice(1), 16); return '#' + [n >> 16, n >> 8 & 255, n & 255].map(v => Math.min(255, Math.round(v * k)).toString(16).padStart(2, '0')).join(''); };
 const ANIM = {
   guard:{poses:[P(ST,{hip:[110,122], kn:[122,161], an:[126,199], kn2:[100,161], an2:[94,199], el:[126,98], ha:[138,80], el2:[118,98], ha2:[130,82], head:[115,45], kbo:null}),
                 P(ST,{hip:[110,128], sh:[112,73], head:[116,51], kn:[125,165], an:[126,199], kn2:[98,165], an2:[94,199], el:[127,104], ha:[139,86], el2:[119,104], ha2:[131,88], kbo:null})], dur:420, effort:false},
-  // tummen upp + blink, handen i sidan
   flex:{poses:[P(ST,{el:[140,96], ha:[162,84], el2:[92,96], ha2:[104,112], kn:[120,161], an:[124,199], kn2:[100,161], an2:[96,199], kbo:null, thumb:1, wink:1}),
                P(ST,{hip:[110,123], sh:[112,69], head:[115,47], el:[141,92], ha:[164,78], el2:[92,98], ha2:[104,114], kn:[121,162], an:[124,199], kn2:[99,162], an2:[96,199], kbo:null, thumb:1, wink:1})], dur:500, effort:false},
 };
-const LN = '#C8340A', FILL = '#FFF6DC';
 function headSVG(f) {
-  const l = `stroke="${LN}" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"`;
-  let back = '', top = '';
-  if (f.hair === 'flint') top = `<path d="M-8 -17 Q4 -24 14 -14" fill="none" ${l}/><path d="M-4 -19 Q6 -23 13 -17" fill="none" ${l}/>
-      <path d="M6 8 Q11 4 19 7 Q15 11 11 9 Q8 11 6 8Z" fill="${LN}" ${l}/><path d="M9 21 L10 18" ${l}/>`;
-  if (f.hair === 'tofs') { back = `<g class="tofs"><path d="M-14 -12 Q-34 -14 -30 6 Q-26 0 -22 2 Q-24 -6 -12 -6Z" fill="${LN}" ${l}/></g>`;
-      top = `<path d="M-17 -2 Q-20 -24 2 -23 Q18 -22 19 -8 Q8 -16 -2 -10 Q-8 -6 -12 2Z" fill="${LN}" ${l}/><circle cx="-14" cy="-10" r="3.5" fill="${FILL}" ${l}/>`; }
-  if (f.hair === 'keps') top = `<path d="M-18 -4 Q-18 -24 1 -24 Q18 -23 18 -7Z" fill="${LN}" ${l}/><path d="M12 -9 L32 -6 Q30 -1 13 -3Z" fill="${LN}" ${l}/>
-      <circle cx="0" cy="-15" r="3" fill="${FILL}"/><circle cx="4" cy="-3" r="5.5" fill="none" ${l}/><circle cx="15" cy="-3" r="5.5" fill="none" ${l}/><path d="M9.5 -3 L9.5 -3" ${l}/>`;
-  if (f.hair === 'lockar') { back = [[-15,-14],[-6,-21],[5,-21],[14,-16],[-20,-3],[-18,8]].map(([x,y]) => `<circle cx="${x}" cy="${y}" r="9" fill="${LN}" ${l}/>`).join('');
-      top = `<path d="M-15 -9 Q2 -17 18 -10" fill="none" stroke="${FILL}" stroke-width="6" stroke-linecap="round"/><path d="M-15 -9 Q2 -17 18 -10" fill="none" stroke="${LN}" stroke-width="1.5" stroke-dasharray="2 3"/>`; }
-  const glasses = f.hair === 'keps';
+  const l = `stroke="${INK}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"`;
+  const s = f.skin, h = f.hc;
+  let back = '', top = '', extra = '';
+  if (f.hair === 'flint') { top = `<path d="M-17 -4 Q-19 -12 -14 -15 Q-12 -6 -16 2Z" fill="${h}" ${l}/><path d="M-6 -19 Q6 -24 16 -15" fill="none" ${l}/>`;
+    extra = `<path d="M6 9 Q12 5 20 8 Q16 12 12 10 Q9 12 6 9Z" fill="${h}" ${l}/>`; }
+  if (f.hair === 'rullar') { back = `<g class="tofs"><path d="M-15 -8 Q-32 -8 -29 8 Q-26 16 -20 10 Q-26 2 -15 0Z" fill="${h}" ${l}/></g>`;
+    top = `<path d="M-18 -2 Q-22 -22 -4 -25 Q14 -27 20 -12 Q12 -20 2 -14 Q-6 -10 -12 2Z" fill="${h}" ${l}/><path d="M-4 -25 Q-10 -32 -2 -34 Q8 -34 6 -24" fill="${h}" ${l}/><path d="M2 -21 Q8 -22 12 -18" fill="none" ${l}/>`; }
+  if (f.hair === 'pompadour') top = `<path d="M-18 -2 Q-22 -20 -8 -26 Q4 -36 18 -30 Q26 -26 22 -16 Q16 -22 8 -18 Q14 -14 18 -10 Q4 -14 -6 -10 Q-12 -6 -14 2Z" fill="${h}" ${l}/><path d="M2 -28 Q12 -30 18 -25" fill="none" stroke="${shade(h, 1.8)}" stroke-width="2" stroke-linecap="round"/>`;
+  if (f.hair === 'scarf') { back = [[-17,-10],[-19,2],[-14,10]].map(([x,y]) => `<circle cx="${x}" cy="${y}" r="7" fill="${h}" ${l}/>`).join('');
+    top = `<path d="M-19 -6 Q-20 -27 2 -27 Q22 -26 21 -9 Q2 -16 -19 -6Z" fill="${f.scarf}" ${l}/>${[[-8,-20],[2,-22],[12,-18],[-12,-11],[6,-14]].map(([x,y]) => `<circle cx="${x}" cy="${y}" r="1.6" fill="${CREAM}"/>`).join('')}
+      <path d="M-3 -26 Q-6 -36 2 -35 Q6 -30 1 -26 Q8 -34 12 -30 Q12 -26 3 -25Z" fill="${f.scarf}" ${l}/>`; }
+  const eyes = `<g class="eyes-happy"><ellipse cx="5" cy="-4" rx="3.6" ry="4.6" fill="#fff" ${l}/><ellipse cx="14.5" cy="-4" rx="3.4" ry="4.4" fill="#fff" ${l}/><circle cx="6.6" cy="-3.6" r="1.8" fill="${INK}"/><circle cx="16" cy="-3.6" r="1.7" fill="${INK}"/></g>
+    <g class="eyes-wink" style="display:none"><path d="M1.5 -4 Q5 -7 8.5 -4" fill="none" ${l}/><ellipse cx="14.5" cy="-4" rx="3.4" ry="4.4" fill="#fff" ${l}/><circle cx="16" cy="-3.6" r="1.7" fill="${INK}"/></g>
+    <g class="eyes-grit" style="display:none"><path d="M1.5 -7 L7.5 -4 L1.5 -1.5" fill="none" ${l}/><path d="M18.5 -7 L12.5 -4 L18.5 -1.5" fill="none" ${l}/></g>`;
+  const brows = `<path class="brow" d="M1 -11 Q5 -14 9 -11" fill="none" ${l}/><path class="brow" d="M12 -11 Q15.5 -13.5 19 -10.5" fill="none" ${l}/>`;
+  const glasses = f.glasses ? `<g fill="none" ${l}><circle cx="5" cy="-4" r="6"/><circle cx="15" cy="-4" r="5.6"/><path d="M11 -5 L9.4 -5 M-1 -5 L-12 -4"/></g>` : '';
   return `${back}
-    <path d="M-17 -3 C-18 -21 17 -23 19 -5 C20 8 15 19 4 20 C-8 21 -17 11 -17 -3Z" fill="${FILL}" ${l}/>
-    <path d="M-15 -2 Q-21 3 -14 8" fill="${FILL}" ${l}/>
-    <path d="M19 -1 Q23 3 19 6" fill="none" ${l}/>
-    <g class="eyes-happy">${glasses ? '' : `<path d="M1 -3 Q4 -7 7 -3" fill="none" ${l}/>`}<path d="M12 -3 Q15 -7 18 -3" fill="none" ${l}/></g>
-    <g class="eyes-wink" style="display:none"><path d="M1 -4 L7 -3" fill="none" ${l}/><circle cx="15" cy="-4" r="2.4" fill="${LN}"/></g>
-    <g class="eyes-grit" style="display:none"><path d="M1 -6 L6 -3 L1 -1" fill="none" ${l}/><path d="M18 -6 L13 -3 L18 -1" fill="none" ${l}/></g>
-    <g class="m-happy"><path d="M3 7 Q11 18 19 6 Z" fill="${LN}" ${l}/><path d="M5 8 L17 7" stroke="${FILL}" stroke-width="2.4" stroke-linecap="round"/></g>
-    <g class="m-grit" style="display:none"><rect x="4" y="6" width="14" height="7" rx="3" fill="${FILL}" ${l}/><path d="M8 6 V13 M12 6 V13 M4 9.5 H18" stroke="${LN}" stroke-width="1.6"/></g>
-    <ellipse cx="18" cy="3" rx="3.4" ry="2.2" fill="${LN}" opacity=".75"/><ellipse cx="-1" cy="4" rx="3" ry="2" fill="${LN}" opacity=".55"/>
-    ${top}
-    <g class="sweat" style="display:none"><path d="M-6 -24 Q-10 -18 -6 -16 Q-2 -18 -6 -24Z" fill="${FILL}" ${l}/><path d="M24 -16 Q20 -10 24 -8 Q28 -10 24 -16Z" fill="${FILL}" ${l}/></g>`;
+    <path d="M-17 -4 C-18 -22 18 -24 21 -6 C23 8 17 20 4 21 C-9 22 -18 12 -17 -4Z" fill="${s}" ${l}/>
+    <path d="M-14 -3 Q-21 0 -16 8 Q-13 9 -12 6" fill="${s}" ${l}/><path d="M-15.5 1 Q-14 3 -15 5" fill="none" stroke="${INK}" stroke-width="1.6" stroke-linecap="round"/>
+    ${eyes}${brows}
+    <path d="M19 -2 Q26 2 20 6" fill="${s}" ${l}/>
+    <g class="m-happy"><path d="M3 8 Q4 6 7 7 Q14 8 20 5 Q21 16 11 18 Q4 18 3 8Z" fill="${INK}" ${l}/><path d="M4.5 8.6 Q12 10 19.4 6.4 L19 9 Q12 12 5 10.5Z" fill="#fff"/><path d="M8 16 Q12 13.5 16 15.5" fill="none" stroke="${LN}" stroke-width="2.4" stroke-linecap="round"/></g>
+    <g class="m-grit" style="display:none"><rect x="4" y="7" width="15" height="8" rx="3" fill="#fff" ${l}/><path d="M8.5 7 V15 M13.5 7 V15 M4 11 H19" stroke="${INK}" stroke-width="1.5"/></g>
+    <path d="M-2 9 Q-1 12 2 12" fill="none" stroke="${INK}" stroke-width="1.6" stroke-linecap="round"/>
+    ${extra}${glasses}${top}
+    <g class="sweat" style="display:none"><path d="M-8 -26 Q-12 -19 -8 -17 Q-4 -19 -8 -26Z" fill="#9FE3F5" ${l}/><path d="M25 -15 Q21 -9 25 -7 Q29 -9 25 -15Z" fill="#9FE3F5" ${l}/></g>`;
 }
 // Ritar en fighter som gör en övning. ex: {poses, dur, cycle, walk, bell, kb2, prop, effort}. svg.setAnim(ex) byter rörelse.
 function figure(ex, f = fighterById(localStorage.getItem('bc_traning_fighter')), opts = {}) {
   const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', opts.vb || '0 -14 240 230'); svg.classList.add('fig');
   const mk = (tag, at, par = svg) => { const n = document.createElementNS(NS, tag); for (const k in at) n.setAttribute(k, at[k]); par.appendChild(n); return n; };
-  // solstrålar (yamay)
-  if (opts.rays !== false) { const rg = mk('g', {class:'rays', opacity:.22}); const [vx, vy, vw, vh] = (opts.vb || '0 -14 240 230').split(' ').map(Number), cx = vx + vw / 2, cy = vy + vh * .45, R = Math.max(vw, vh);
-    for (let i = 0; i < 18; i++) { const a = i / 18 * Math.PI * 2; mk('line', {x1:cx + Math.cos(a) * R * .34, y1:cy + Math.sin(a) * R * .34, x2:cx + Math.cos(a) * R * (i % 2 ? .5 : .62), y2:cy + Math.sin(a) * R * (i % 2 ? .5 : .62), stroke:LN, 'stroke-width':5, 'stroke-linecap':'round'}, rg); }
-    rg.style.transformOrigin = `${cx}px ${cy}px`; rg.style.animation = 'spin 40s linear infinite'; }
+  if (opts.rays !== false) { const rg = mk('g', {class:'rays'}); const [vx, vy, vw, vh] = (opts.vb || '0 -14 240 230').split(' ').map(Number), cx = vx + vw / 2, cy = vy + vh * .45, R = Math.max(vw, vh);
+    for (let i = 0; i < 16; i++) { const a0 = i / 16 * Math.PI * 2, a1 = a0 + Math.PI / 16;
+      mk('path', {d:`M${cx} ${cy} L${cx + Math.cos(a0) * R} ${cy + Math.sin(a0) * R} L${cx + Math.cos(a1) * R} ${cy + Math.sin(a1) * R}Z`, fill:i % 2 ? '#FCC222' : '#FFE07A', opacity:.55}, rg); }
+    const at = mk('g', {opacity:.35, fill:'none', stroke:LN, 'stroke-width':2.5}, rg);
+    for (const r of [0, 60, 120]) mk('ellipse', {cx, cy, rx:R * .36, ry:R * .13, transform:`rotate(${r} ${cx} ${cy})`}, at);
+    rg.style.transformOrigin = `${cx}px ${cy}px`; rg.style.animation = 'spin 60s linear infinite'; }
   const props = mk('g', {});
-  if (!opts.noGround) mk('line', {x1:8, y1:202, x2:232, y2:202, stroke:LN, 'stroke-width':4, 'stroke-linecap':'round'}, props);
-  const shadow = mk('ellipse', {cx:110, cy:204, rx:40, ry:4, fill:LN, opacity:.25});
-  const W = 3.4;   // linjebredd
-  const tube = (w, fill = FILL, par = svg) => { const g = mk('g', {}, par); const a = mk('polyline', {stroke:LN, 'stroke-width':w + W * 2, 'stroke-linecap':'round', 'stroke-linejoin':'round', fill:'none'}, g);
+  if (!opts.noGround) { mk('rect', {x:-20, y:202, width:280, height:40, fill:'#E8A93A'}, props); mk('line', {x1:-20, y1:202, x2:260, y2:202, stroke:INK, 'stroke-width':3}, props); }
+  const shadow = mk('ellipse', {cx:110, cy:204, rx:40, ry:4, fill:INK, opacity:.25});
+  const W = 2.8;
+  const tube = (w, fill, par = svg) => { const g = mk('g', {}, par); const a = mk('polyline', {stroke:INK, 'stroke-width':w + W * 2, 'stroke-linecap':'round', 'stroke-linejoin':'round', fill:'none'}, g);
     const b = mk('polyline', {stroke:fill, 'stroke-width':w, 'stroke-linecap':'round', 'stroke-linejoin':'round', fill:'none'}, g); return {set(p) { a.setAttribute('points', p); b.setAttribute('points', p); }}; };
-  const kbg = () => { const g = mk('g', {}); g.innerHTML = `<g transform="translate(-12,-15) scale(.43)"><use href="#kb" width="56" height="70"/></g>`; return g; };
-  const handC = () => { const g = mk('g', {}); g.innerHTML = `<g class="fist" style="display:none"><path d="M-1 -4 Q-4 -15 1 -16 Q5 -16 5 -9 L6 -4" fill="${FILL}" stroke="${LN}" stroke-width="${W}" stroke-linejoin="round" transform="rotate(-18)"/>
-      <rect x="-8" y="-5" width="15" height="12" rx="5" fill="${FILL}" stroke="${LN}" stroke-width="${W}"/><path d="M-8 -1 H-2 M-8 3 H-2" stroke="${LN}" stroke-width="2" stroke-linecap="round"/></g>
-      <circle class="mitt" r="6.5" fill="${FILL}" stroke="${LN}" stroke-width="${W}"/>`; return g; };
-  // bortre sida (samma stil, lite ljusare linje)
-  const back = mk('g', {opacity:.55});
-  const shoe2 = tube(9, LN, back), shin2 = tube(10, f.shorts ? FILL : LN, back), thigh2 = tube(13, LN, back);
-  const kbBack = kbg(); back.appendChild(kbBack);
-  const arm2 = tube(9, FILL, back); const hand2 = handC(); back.appendChild(hand2);
-  // bål: alla konturer först, sedan alla fyllningar = en sammanhängande siluett
+  const kbg = () => { const g = mk('g', {}); g.innerHTML = `<g transform="translate(-12,-15) scale(.43)"><use href="#kbi" width="56" height="70"/></g>`; return g; };
+  const handC = (skin) => { const g = mk('g', {}); g.innerHTML = `<g class="fist" style="display:none"><path d="M-1 -4 Q-4 -16 1 -17 Q6 -17 5 -9 L6 -4" fill="${skin}" stroke="${INK}" stroke-width="${W}" stroke-linejoin="round" transform="rotate(-18)"/>
+      <rect x="-8" y="-5" width="15" height="12" rx="5" fill="${skin}" stroke="${INK}" stroke-width="${W}"/><path d="M-8 -1 H-2 M-8 3 H-2" stroke="${INK}" stroke-width="1.8" stroke-linecap="round"/></g>
+      <circle class="mitt" r="6.5" fill="${skin}" stroke="${INK}" stroke-width="${W}"/>`; return g; };
+  const suitD = shade(f.suit, .72), skinD = shade(f.skin, .82), boot = '#3B2414';
+  const shoe2 = tube(9, shade(boot, .8)), shin2 = tube(11, suitD), thigh2 = tube(13, suitD);
+  const kbBack = kbg();
+  const arm2 = tube(10, suitD); const cuff2 = mk('circle', {r:6, fill:shade(f.trim, .8), stroke:INK, 'stroke-width':W}); const hand2 = handC(skinD);
   const bodyO = mk('g', {}), bodyF = mk('g', {});
-  const tO = mk('polyline', {stroke:LN, 'stroke-width':31 + W * 2, 'stroke-linecap':'round', fill:'none'}, bodyO), tF = mk('polyline', {stroke:FILL, 'stroke-width':31, 'stroke-linecap':'round', fill:'none'}, bodyF);
-  const bO = mk('ellipse', {fill:LN}, bodyO), bF = mk('ellipse', {fill:FILL}, bodyF);
-  const pO = mk('polyline', {stroke:LN, 'stroke-width':30 + W * 2, 'stroke-linecap':'butt', fill:'none'}, bodyO), pF = mk('polyline', {stroke:LN, 'stroke-width':30, 'stroke-linecap':'round', fill:'none'}, bodyF);
-  const collar = mk('path', {fill:'none', stroke:LN, 'stroke-width':W, 'stroke-linecap':'round'});
-  const thigh = tube(13, LN), shin = tube(10, f.shorts ? FILL : LN), shoe = tube(9, LN);
+  const tO = mk('polyline', {stroke:INK, 'stroke-width':30 + W * 2, 'stroke-linecap':'round', fill:'none'}, bodyO), tF = mk('polyline', {stroke:f.suit, 'stroke-width':30, 'stroke-linecap':'round', fill:'none'}, bodyF);
+  const bO = mk('ellipse', {fill:INK}, bodyO), bF = mk('ellipse', {fill:f.suit}, bodyF);
+  const pO = mk('polyline', {stroke:INK, 'stroke-width':29 + W * 2, 'stroke-linecap':'butt', fill:'none'}, bodyO), pF = mk('polyline', {stroke:f.suit, 'stroke-width':29, 'stroke-linecap':'butt', fill:'none'}, bodyF);
+  const stripeO = mk('polyline', {stroke:INK, 'stroke-width':6 + W * 2, 'stroke-linecap':'round', fill:'none'}), stripe = mk('polyline', {stroke:f.trim, 'stroke-width':6, 'stroke-linecap':'round', fill:'none'});
+  const beltO = mk('polyline', {stroke:INK, 'stroke-width':5 + W * 2, 'stroke-linecap':'butt', fill:'none'}), belt = mk('polyline', {stroke:f.trim, 'stroke-width':5, 'stroke-linecap':'butt', fill:'none'});
+  const collar = mk('path', {fill:f.trim, stroke:INK, 'stroke-width':W, 'stroke-linejoin':'round'});
+  const badge = mk('g', {}); badge.innerHTML = `<circle r="5.5" fill="${CREAM}" stroke="${INK}" stroke-width="2"/><text y="2.3" text-anchor="middle" font-family="Anton,Impact,sans-serif" font-size="6.5" fill="${INK}">${f.nr}</text>`;
+  const thigh = tube(13, f.suit), shin = tube(11, f.suit), shoe = tube(9, boot);
   const headG = mk('g', {}); headG.innerHTML = headSVG(f);
   const q = c => headG.querySelector(c), tofs = q('.tofs');
   const kbFront = kbg();
-  const arm = tube(9); const hand = handC();
+  const arm = tube(10, f.suit); const cuff = mk('circle', {r:6, fill:f.trim, stroke:INK, 'stroke-width':W}); const hand = handC(f.skin);
   const lerp = (a, b, t) => a + (b - a) * t;
   const pts = (...p) => p.map(z => z[0].toFixed(1) + ',' + z[1].toFixed(1)).join(' ');
+  const along = (a, b, k) => [lerp(a[0], b[0], k), lerp(a[1], b[1], k)];
   let cur, t0, face = '';
   svg.setAnim = (e) => {
     cur = e; t0 = performance.now(); props.querySelectorAll('.prop').forEach(n => n.remove());
-    const pr = {fill:FILL, stroke:LN, 'stroke-width':W, 'stroke-linejoin':'round', class:'prop'};
-    if (e.prop === 'mat') mk('rect', {...pr, x:22, y:196, width:186, height:6, rx:3}, props);
+    const pr = {fill:'#7FB8B4', stroke:INK, 'stroke-width':W, 'stroke-linejoin':'round', class:'prop'};
+    if (e.prop === 'mat') mk('rect', {...pr, fill:LN, x:22, y:196, width:186, height:6, rx:3}, props);
     if (e.prop === 'boxlow') { mk('rect', {...pr, x:46, y:160, width:44, height:42, rx:4}, props); mk('path', {...pr, fill:'none', d:'M54 172 h28 M54 182 h28'}, props); }
-    if (e.prop === 'bench') { mk('rect', {...pr, x:146, y:138, width:76, height:11, rx:4}, props); mk('path', {...pr, fill:'none', d:'M158 149 V202 M210 149 V202', 'stroke-width':5}, props); }
+    if (e.prop === 'bench') { mk('rect', {...pr, fill:LN, x:146, y:138, width:76, height:11, rx:4}, props); mk('path', {...pr, fill:'none', d:'M158 149 V202 M210 149 V202', 'stroke-width':5}, props); }
   };
   svg.setAnim(ex);
   const L = (A, B, k, t) => { const a = A[k] ?? A[k.replace('2','')], b = B[k] ?? B[k.replace('2','')]; return [lerp(a[0], b[0], t), lerp(a[1], b[1], t)]; };
   const setFace = (m) => { if (m === face) return; face = m;
     q('.eyes-happy').style.display = m === 'happy' ? '' : 'none'; q('.eyes-wink').style.display = m === 'wink' ? '' : 'none'; q('.eyes-grit').style.display = m === 'grit' ? '' : 'none';
-    q('.m-happy').style.display = m === 'grit' ? 'none' : ''; q('.m-grit').style.display = m === 'grit' ? '' : 'none'; q('.sweat').style.display = m === 'grit' ? '' : 'none'; };
+    q('.m-happy').style.display = m === 'grit' ? 'none' : ''; q('.m-grit').style.display = m === 'grit' ? '' : 'none'; q('.sweat').style.display = m === 'grit' ? '' : 'none';
+    headG.querySelectorAll('.brow').forEach(b => b.setAttribute('transform', m === 'grit' ? 'translate(0,2.5)' : m === 'wink' ? 'translate(0,-1.5)' : '')); };
   function frame(now) {
     if (!svg.isConnected && now - t0 > 800) return;
     const e = cur, n = e.poses.length, u = (now - t0) / e.dur;
@@ -552,25 +562,31 @@ function figure(ex, f = fighterById(localStorage.getItem('bc_traning_fighter')),
     const hip = Bb(g('hip')), sh = Bb(g('sh')), kn = g('kn'), an = g('an'), kn2 = g('kn2'), an2 = g('an2'), el = Bb(g('el')), ha = Bb(g('ha')), el2 = Bb(g('el2')), ha2 = Bb(g('ha2')), hd0 = Bb(g('head'));
     const toe = a => [a[0] + 11, a[1] - 1], heel = a => [a[0] - 2, a[1] - 1];
     thigh2.set(pts(hip, kn2)); shin2.set(pts(kn2, an2)); shoe2.set(pts(heel(an2), toe(an2)));
-    arm2.set(pts(sh, el2, ha2)); hand2.setAttribute('transform', `translate(${ha2[0]},${ha2[1]})`);
+    const w2 = along(el2, ha2, .78); arm2.set(pts(sh, el2, w2)); cuff2.setAttribute('cx', w2[0]); cuff2.setAttribute('cy', w2[1]); hand2.setAttribute('transform', `translate(${ha2[0]},${ha2[1]})`);
     const v = [sh[0] - hip[0], sh[1] - hip[1]], len = Math.hypot(...v), u1 = [v[0] / len, v[1] / len], nrm = [-u1[1], u1[0]];
     const shT = [hip[0] + u1[0] * (len - 6), hip[1] + u1[1] * (len - 6)];
     tO.setAttribute('points', pts(hip, shT)); tF.setAttribute('points', pts(hip, shT));
     const bel = f.belly, bm = [hip[0] + v[0] * .42 + nrm[0] * (4 + bel * .55), hip[1] + v[1] * .42 + nrm[1] * (4 + bel * .55)], rot = Math.atan2(u1[1], u1[0]) * 180 / Math.PI + 90;
-    for (const [el_, extra] of [[bO, W], [bF, 0]]) { el_.setAttribute('cx', bm[0]); el_.setAttribute('cy', bm[1]); el_.setAttribute('rx', (bel ? 8 + bel : 0) + (bel ? extra : 0)); el_.setAttribute('ry', (bel ? 10 + bel * .6 : 0) + (bel ? extra : 0)); el_.setAttribute('transform', `rotate(${rot} ${bm[0]} ${bm[1]})`); }
+    for (const [el_, extra] of [[bO, W], [bF, 0]]) { el_.setAttribute('cx', bm[0]); el_.setAttribute('cy', bm[1]); el_.setAttribute('rx', bel ? 8 + bel + extra : 0); el_.setAttribute('ry', bel ? 10 + bel * .6 + extra : 0); el_.setAttribute('transform', `rotate(${rot} ${bm[0]} ${bm[1]})`); }
     const hp = [hip[0] + u1[0] * 9, hip[1] + u1[1] * 9], hq = [hip[0] - u1[0] * 7, hip[1] - u1[1] * 7]; pO.setAttribute('points', pts(hp, hq)); pF.setAttribute('points', pts(hp, hq));
-    const c1 = [shT[0] + nrm[0] * 8 - u1[0] * 2, shT[1] + nrm[1] * 8 - u1[1] * 2], c2 = [shT[0] - u1[0] * 7, shT[1] - u1[1] * 7];
-    collar.setAttribute('d', `M${c1[0].toFixed(1)} ${c1[1].toFixed(1)} Q${(c2[0] + nrm[0] * 3).toFixed(1)} ${(c2[1] + nrm[1] * 3).toFixed(1)} ${(shT[0] - nrm[0] * 6).toFixed(1)} ${(shT[1] - nrm[1] * 6).toFixed(1)}`);
+    const fr = (k, off) => [hip[0] + v[0] * k + nrm[0] * off, hip[1] + v[1] * k + nrm[1] * off];
+    const fo = 12 + bel * .9;
+    const sp = [fr(-.05, 13), fr(.25, fo), fr(.5, fo * .9), fr(.8, 12)];
+    stripeO.setAttribute('points', pts(...sp)); stripe.setAttribute('points', pts(...sp));
+    const b1 = fr(.12, -15), b2 = fr(.12, 14 + bel * .6); beltO.setAttribute('points', pts(b1, b2)); belt.setAttribute('points', pts(b1, b2));
+    const c1 = fr(.86, 13), c2 = fr(.98, 3), c3 = fr(.86, -8), c4 = fr(.95, -6), c5 = fr(1.03, 4), c6 = fr(.95, 14);
+    collar.setAttribute('d', 'M' + [c1, c2, c3, c4, c5, c6].map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L') + 'Z');
+    const bp = fr(.66, 2); badge.setAttribute('transform', `translate(${bp[0].toFixed(1)},${bp[1].toFixed(1)}) rotate(${rot})`);
     thigh.set(pts(hip, kn)); shin.set(pts(kn, an)); shoe.set(pts(heel(an), toe(an)));
-    // stort huvud: lite längre från axeln än i riggen
     const dv = [hd0[0] - sh[0], hd0[1] - sh[1]], dl = Math.hypot(...dv) || 1, hd = [sh[0] + dv[0] / dl * 33, sh[1] + dv[1] / dl * 33];
     const ang = Math.atan2(dv[1], dv[0]) * 180 / Math.PI + 90;
     headG.setAttribute('transform', `translate(${hd[0].toFixed(1)},${hd[1].toFixed(1)}) rotate(${ang.toFixed(1)}) scale(1.32)`);
-    if (tofs) tofs.setAttribute('transform', `rotate(${Math.sin(now / 170) * 12} -14 -8)`);
+    if (tofs) tofs.setAttribute('transform', `rotate(${Math.sin(now / 170) * 12} -14 -6)`);
     const effortOn = e.effort !== false && !e.walk && !e.cycle;
     setFace(A.wink ? 'wink' : (effortOn && raw > .62 ? 'grit' : 'happy'));
-    arm.set(pts(sh, el, ha)); hand.setAttribute('transform', `translate(${ha[0]},${ha[1]})`);
+    const w1 = along(el, ha, .78); arm.set(pts(sh, el, w1)); cuff.setAttribute('cx', w1[0]); cuff.setAttribute('cy', w1[1]); hand.setAttribute('transform', `translate(${ha[0]},${ha[1]})`);
     hand.querySelector('.fist').style.display = A.thumb ? '' : 'none'; hand.querySelector('.mitt').style.display = A.thumb ? 'none' : '';
+    cuff.style.display = A.thumb ? 'none' : '';
     shadow.setAttribute('cx', (hip[0] + an[0]) / 2);
     const oa = A.kbo === undefined ? [0, 14] : A.kbo, ob = B.kbo === undefined ? [0, 14] : B.kbo;
     if (oa && ob) { const o = [lerp(oa[0], ob[0], t), lerp(oa[1], ob[1], t)];
