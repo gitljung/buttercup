@@ -255,6 +255,20 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .focusline b{font-weight:800}
 .passcard .fx{color:var(--chili);font-weight:700}
 #focus button.on{animation:zone .3s var(--pop)}
+.ints{display:grid;gap:10px}
+.intcard{display:grid;grid-template-columns:54px 1fr;gap:12px;align-items:center;text-align:left;width:100%;cursor:pointer;background:var(--cream);color:var(--ink);border:3px solid var(--chili);border-radius:10px;padding:12px;box-shadow:4px 4px 0 var(--chili);font:inherit;transition:transform .15s var(--pop);animation:inn .35s var(--ease) both}
+.intcard:nth-child(2){animation-delay:60ms}.intcard:nth-child(3){animation-delay:120ms}
+.intcard:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--chili)}
+.intcard.last{background:#FFE9A8}
+.intcard .meter{display:flex;align-items:flex-end;gap:4px;height:44px;justify-content:center}
+.intcard .meter i{display:block;width:12px;border:2.5px solid var(--chili);border-radius:3px;background:var(--cream)}
+.intcard .meter i:nth-child(1){height:16px}.intcard .meter i:nth-child(2){height:28px}.intcard .meter i:nth-child(3){height:42px}
+.intcard .meter i.on{background:var(--chili);animation:pump 1.2s var(--d) ease-in-out infinite;transform-origin:bottom}
+@keyframes pump{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.82)}}
+.intcard b{font-family:var(--display);font-weight:400;font-size:28px;text-transform:uppercase;color:var(--chili);line-height:1}
+.intcard em{font-style:normal;margin-left:8px;background:var(--chili);color:var(--cream);font:700 11px var(--label);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:999px;vertical-align:middle}
+.intcard small{display:block;font-size:14px;line-height:1.35;margin:4px 0}
+.intcard .lbl{font-size:12px}
 .geartabs{position:sticky;top:36px;z-index:5;display:flex;gap:6px;overflow-x:auto;margin:16px -4px 0;padding:8px 4px;background:var(--buttercup)}
 .geartabs button{flex:0 0 auto;border:3px solid var(--chili);background:var(--cream);color:var(--chili);border-radius:8px;font:400 18px var(--display);text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:transform .15s var(--pop)}
 .geartabs button.on{background:var(--chili);color:var(--buttercup);transform:rotate(-2deg) scale(1.04);box-shadow:3px 3px 0 var(--ox)}
@@ -1012,17 +1026,24 @@ const passKeys = () => S.ppw === 3 ? ['A','B','C'] : ['A','B'];
 const nextKey = () => passKeys()[S.log.length % S.ppw];
 
 function stegeId(id) { if (G.id === 'cal') while (STEGE[id] && EX[STEGE[id]] && S.adj[id] && S.adj[id].up) id = STEGE[id]; return id; }
+const INTS = {
+  lugn:{namn:'Lugnt', bars:1, d:'Lite energi idag? Färre reps, lite längre vila och ett set mindre när det går. Att dyka upp räknas.', sets:-1, reps:-2, sek:-10, rest:1.1},
+  normal:{namn:'Normalt', bars:2, d:'Precis som programmet säger.', sets:0, reps:0, sek:0, rest:1},
+  tufft:{namn:'Tufft', bars:3, d:'Pigg och stark? Ett extra set och kortare vila. Tekniken går före – alltid.', sets:1, reps:0, sek:5, rest:.8},
+};
+let INT = 'normal';
 function exPlan(id, sets, reps, mode) {
   id = stegeId(id);
+  const I = INTS[INT] || INTS.normal; if (mode !== 'emom') sets = Math.max(Math.min(2, sets), Math.min(5, sets + I.sets));
   const e = EX[id], a = S.adj[id] || {r:0, up:false};
   let bell = e.bell; if (bell === 'l' && a.up) bell = 't';
-  const r = e.unit === 'reps' && mode !== 'emom' ? Math.max(4, reps + a.r) : e.unit === 'sek' ? Math.max(10, reps + a.r * 5) : reps;
+  const r = e.unit === 'reps' && mode !== 'emom' ? Math.max(4, reps + a.r + I.reps) : e.unit === 'sek' ? Math.max(10, reps + a.r * 5 + I.sek) : reps;
   const two = G.id === 'db' && e.kb2 ? '2 × ' : '';
   const kg = e.kgtxt ? e.kgtxt : G.id === 'mach' ? (e.mw ? (S.mw[id] ?? MW0[S.sex][id] ?? 10) + ' kg' : id === 'cykel' ? 'Lätt motstånd' : 'Kroppsvikt')
     : bell === 'l' ? two + S.bells.l + ' kg' : bell === 't' ? two + S.bells.t + ' kg' : bell === 'lt' ? S.bells.l + ' + ' + S.bells.t + ' kg' : 'Kroppsvikt';
   const per = e.sida ? (e.unit === 'varv' ? ' varv/håll' : e.unit === 'm' ? ' m/hand' : '/sida') : (e.unit === 'm' ? ' m' : e.unit === 'min' ? ' min' : e.unit === 'sek' ? ' sek' : '');
   const target = mode === 'emom' ? `${r} swingar varje minut` : id === 'cykel' && reps === 1 ? '1 min snabbt · 1 min lugnt' : `${r}${per}${e.unit === 'reps' && !e.sida ? ' reps' : ''}`;
-  return {id, e, sets, reps:r, kg, bell, target, mode, rest: mode === 'emom' ? 45 : (phaseOf(week()).w[0] >= 9 ? Math.round(e.rest * .75) : e.rest)};
+  return {id, e, sets, reps:r, kg, bell, target, mode, rest: mode === 'emom' ? 45 : Math.round((phaseOf(week()).w[0] >= 9 ? e.rest * .75 : e.rest) * I.rest / 5) * 5};
 }
 
 // ---------------- figur-renderare ----------------
@@ -1380,14 +1401,32 @@ function renderProg() {
 
 // ---------------- pass ----------------
 let SS = null;
+function workSec(x) { const u = x.e.unit, n = x.reps * (x.e.sida ? 2 : 1); return u === 'min' ? x.reps * 60 : u === 'sek' ? n : u === 'm' ? 30 * (x.e.sida ? 2 : 1) : u === 'varv' ? n * 4 : n * 3.5; }
+function estMin(plan) { return Math.round(5 + plan.reduce((t, x) => t + x.sets * (workSec(x) + x.rest + 10), 0) / 60); }
+function chooseInt(title, build, go) {
+  const sh = $('#sheet'), last = localStorage.getItem('bc_traning_int') || 'normal';
+  const cards = Object.entries(INTS).map(([id, I]) => { INT = id; const plan = build(); INT = 'normal';
+    const sets = plan.reduce((t, x) => t + x.sets, 0);
+    return `<button class="intcard ${id === last ? 'last' : ''}" data-i="${id}"><span class="meter">${[1, 2, 3].map(n => `<i class="${n <= I.bars ? 'on' : ''}" style="--d:${n * 90}ms"></i>`).join('')}</span>
+      <span class="it"><b>${I.namn}</b>${id === last ? '<em>Senast</em>' : ''}<small>${I.d}</small><span class="lbl">ca ${estMin(plan)} min · ${sets} set</span></span></button>`; }).join('');
+  sh.querySelector('.in').innerHTML = `<button class="x" aria-label="Stäng">×</button><p class="eyebrow" style="margin:0">${title}</p><h2 style="margin:4px 0 12px">Hur tufft idag?</h2>
+    <div class="ints">${cards}</div><p class="note" style="margin:12px 0 0">Osäker? Välj normalt. Kroppen säger till efteråt – och programmet anpassar sig.</p>`;
+  sh.classList.add('on');
+  sh.querySelector('.x').onclick = () => sh.classList.remove('on');
+  sh.querySelectorAll('.intcard').forEach(b => b.onclick = () => { localStorage.setItem('bc_traning_int', b.dataset.i); blip(500 + 200 * INTS[b.dataset.i].bars, 1000, .1);
+    sh.classList.remove('on'); INT = b.dataset.i; const plan = build(); INT = 'normal'; go(plan, b.dataset.i); });
+}
 function startSession(k) {
+  const w = week(), ph = phaseOf(w);
+  chooseInt(`${G.namn} · Pass ${k} · ${ph.pass[k].namn}`, () => passEx(ph, k).map(e => exPlan(e[0], e[1], e[2], e[3])), (plan, it) => runSession(k, plan, it));
+}
+function runSession(k, plan, it) {
   const w = week(), ph = phaseOf(w), p = ph.pass[k];
-  const plan = passEx(ph, k).map(e => exPlan(e[0], e[1], e[2], e[3]));
   const steps = [{type:'warm'}];
   plan.forEach((x, xi) => { for (let s = 1; s <= x.sets; s++) steps.push({type:'set', x, xi, s}); });
   steps.push({type:'rpe'});
-  SS = {k, w, plan, steps, i:0, namn:p.namn, t0:Date.now()};
-  $('#ss-title').textContent = `${G.namn} · Pass ${k} · V${w}`;
+  SS = {k, w, plan, steps, i:0, namn:p.namn, t0:Date.now(), it};
+  $('#ss-title').textContent = `${G.namn} · Pass ${k} · ${INTS[it].namn}`;
   show('s-sess'); renderStep(); wakeOn();
 }
 let WL = null;
@@ -1479,7 +1518,8 @@ function finish(r) {
     const df = $('#d-fig'); df.innerHTML = ''; df.appendChild(figure(ANIM.flex, undefined, {vb:'40 -30 160 236', noGround:true}));
     stamps($('#d-stamps')); show('s-done'); confetti(); return; }
   const msgs = [];
-  if (r === 'easy') { S.easy++; } else S.easy = 0;
+  if (r === 'easy') { if (SS.it !== 'lugn') S.easy++; } else S.easy = 0;
+  if (r === 'easy' && SS.it === 'lugn') msgs.push('Lugnt pass som kändes lätt – nästa gång kan du välja normalt.');
   if (G.id === 'mach' && r === 'easy' && S.easy >= 2) {
     S.easy = 0; for (const x of SS.plan) if (x.e.mw) { const c = S.mw[x.id] ?? parseFloat(x.kg); S.mw[x.id] = c + mstep(c); }
     msgs.push('Två lätta pass i rad – vikterna på dagens maskiner höjs till nästa gång.');
@@ -1512,10 +1552,10 @@ function finish(r) {
       if (a.up && a.r <= -2) { a.up = false; a.r = 4; } else a.r = Math.max(-4, a.r - 2); }
     msgs.push('Vi backar lite till nästa gång. Smart.');
   }
-  S.log.push({w:SS.w, k:SS.k, r, d:Date.now(), min:Math.round((Date.now() - SS.t0) / 60000)}); save();
+  S.log.push({w:SS.w, k:SS.k, r, it:SS.it, d:Date.now(), min:Math.round((Date.now() - SS.t0) / 60000)}); save();
   $('#ss-prog').style.width = '100%';
   const lab = {easy:'Lätt', ok:'Lagom', hard:'Tungt', too:'För tungt'}[r];
-  $('#d-eyebrow').textContent = `Pass ${SS.k} · vecka ${SS.w} · ${lab}`;
+  $('#d-eyebrow').textContent = `Pass ${SS.k} · vecka ${SS.w} · ${INTS[SS.it || 'normal'].namn} · ${lab}`;
   $('#d-stamp').textContent = 'Pass ' + SS.k; $('#d-stamp').style.animation = 'none'; void $('#d-stamp').offsetWidth; $('#d-stamp').style.animation = '';
   const total = S.log.length, left = 12 * S.ppw - total;
   gearStatus(); $('#d-head').textContent = left <= 0 ? 'Alla 12 veckor!' : r === 'too' ? 'Bra att du sa till' : 'Snyggt jobbat';
@@ -1646,12 +1686,14 @@ function openSheet(it) {
 }
 function startFree() {
   if (!S) S = fresh();
-  const plan = [...passSel].map(planOf);
+  chooseInt(`Fritt pass · ${passSel.size} övningar`, () => [...passSel].map(planOf), (plan, it) => runFree(plan, it));
+}
+function runFree(plan, it) {
   const steps = [{type:'warm'}];
   plan.forEach((x, xi) => { for (let s = 1; s <= x.sets; s++) steps.push({type:'set', x, xi, s}); });
   steps.push({type:'rpe'});
-  SS = {k:'F', w:week(), plan, steps, i:0, namn:'Fritt pass', t0:Date.now(), free:true};
-  $('#ss-title').textContent = 'Fritt pass';
+  SS = {k:'F', w:week(), plan, steps, i:0, namn:'Fritt pass', t0:Date.now(), free:true, it};
+  $('#ss-title').textContent = `Fritt pass · ${INTS[it].namn}`;
   show('s-sess'); renderStep(); wakeOn();
 }
 // ---------------- choose your fighter ----------------
