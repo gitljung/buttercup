@@ -1404,12 +1404,16 @@ function renderProg() {
       <p>${pe.map(e => e[4] ? `<span class="fx">★ ${EX[stegeId(e[0])].namn}</span>` : EX[stegeId(e[0])].namn).join(' · ')}</p><p class="lbl" style="margin-top:4px">${pe.length} övningar · ca ${(k === 'C' ? 25 : 30) + (pe.length - p.ex.length) * 5} min</p></span>`;
     b.onclick = () => startSession(k); pl.appendChild(b);
   }
+  if (G.id === 'kb') { const b = document.createElement('button'); b.className = 'passcard cxcard';
+    b.innerHTML = `<span class="ltr">⚡</span><span><h3>Helkroppskomplex<span class="tag">Extra</span></h3>
+      <p>${CX.ex.map(id => EX[id].namn).join(' → ')}</p><p class="lbl" style="margin-top:4px">1 lätt klocka · 6 reps var · varv efter varv · ca 15–25 min</p></span>`;
+    b.onclick = () => startComplex(); pl.appendChild(b); }
 }
 
 // ---------------- pass ----------------
 let SS = null;
 function workSec(x) { const u = x.e.unit, n = x.reps * (x.e.sida ? 2 : 1); return u === 'min' ? x.reps * 60 : u === 'sek' ? n : u === 'm' ? 30 * (x.e.sida ? 2 : 1) : u === 'varv' ? n * 4 : n * 3.5; }
-function estMin(plan) { return Math.round(5 + plan.reduce((t, x) => t + x.sets * (workSec(x) + x.rest + 10), 0) / 60); }
+function estMin(plan) { if (plan[0] && plan[0].cx) return Math.round(5 + plan[0].sets * (plan.reduce((t, x) => t + workSec(x) + 8, 0) + plan[0].rest) / 60); return Math.round(5 + plan.reduce((t, x) => t + x.sets * (workSec(x) + x.rest + 10), 0) / 60); }
 function chooseInt(title, build, go) {
   const sh = $('#sheet'), last = localStorage.getItem('bc_traning_int') || 'normal';
   const cards = Object.entries(INTS).map(([id, I]) => { INT = id; const plan = build(); INT = 'normal';
@@ -1461,7 +1465,7 @@ function renderStep() {
     const x = st.x, e = x.e;
     const wrap = document.createElement('div');
     const stage = document.createElement('div'); stage.className = 'stage film';
-    stage.innerHTML = `<span class="wbadge">${x.kg}</span><span class="setbadge">Set ${st.s}/${x.sets}</span>`;
+    stage.innerHTML = `<span class="wbadge">${x.kg}</span><span class="setbadge">${st.cx ? `Varv ${st.s}/${x.sets} · ${st.xi + 1}/${SS.plan.length}` : `Set ${st.s}/${x.sets}`}</span>`;
     if (e.mw) { const wb = stage.querySelector('.wbadge'); wb.classList.add('mwb');
       wb.innerHTML = `<button aria-label="Lättare">−</button><span>${x.kg}</span><button aria-label="Tyngre">+</button>`;
       const [mi, pl] = wb.querySelectorAll('button');
@@ -1473,11 +1477,12 @@ function renderStep() {
     info.innerHTML = `<div class="exname">${e.namn}</div><div class="target">${x.target}</div>
       <div class="dots">${Array.from({length:x.sets}, (_, i) => `<i class="${i < st.s - 1 ? 'done' : ''}"></i>`).join('')}</div>
       <details class="tipsd" ${st.s === 1 ? 'open' : ''}><summary>Teknik</summary><ul class="tips">${e.tips.map(t => `<li>${t}</li>`).join('')}</ul></details>
-      <div class="dock"><button class="btn big" id="nx">${st.s < x.sets ? 'Set klart ✓' : 'Övning klar ✓'}</button></div>`;
+      <div class="dock"><button class="btn big" id="nx">${st.cx ? (st.xi < SS.plan.length - 1 ? `Klar › ${SS.plan[st.xi + 1].e.namn}` : st.s < x.sets ? 'Varv klart ✓' : 'Sista varvet klart ✓') : st.s < x.sets ? 'Set klart ✓' : 'Övning klar ✓'}</button></div>`;
     wrap.appendChild(info); body.appendChild(wrap);
     $('#nx').onclick = () => {
       const d = body.querySelectorAll('.dots i')[st.s - 1]; if (d) d.classList.add('done');
       const nxt = SS.steps[SS.i + 1];
+      if (st.cx) { if (nxt && nxt.type === 'set' && nxt.s !== st.s) startRest(x.rest, `Varv ${nxt.s} av ${x.sets} · ${nxt.x.e.namn} först`); else next(); return; }
       if (nxt && nxt.type === 'set') startRest(x.rest, nxt.x === x ? `Nästa: set ${nxt.s} av ${x.sets}` : `Nästa: ${nxt.x.e.namn} · ${nxt.x.kg}`);
       else next();
     };
@@ -1522,7 +1527,7 @@ document.addEventListener('pointerdown', () => { try { AC = AC || new (window.Au
 function finish(r) {
   if (SS.free) { wakeOff(); if (S.log.length) { S.free = (S.free || 0) + 1; save(); } $('#ss-prog').style.width = '100%';
     $('#d-eyebrow').textContent = `Fritt pass · ${{easy:'Lätt', ok:'Lagom', hard:'Tungt', too:'För tungt'}[r]}`; $('#d-stamp').textContent = 'Fritt!';
-    $('#d-head').textContent = 'Snyggt jobbat'; $('#d-msg').textContent = `${SS.plan.length} övningar avklarade. Fria pass räknas inte in i 12-veckorsprogrammet – men kroppen märker dem.`;
+    $('#d-head').textContent = 'Snyggt jobbat'; $('#d-msg').textContent = SS.cx ? `${SS.cx.v} varv × ${SS.plan.length} övningar = ${SS.cx.v * SS.plan.length * CX.reps} reps. Komplexet räknas inte in i 12-veckorsprogrammet – men kroppen märker det.` : `${SS.plan.length} övningar avklarade. Fria pass räknas inte in i 12-veckorsprogrammet – men kroppen märker dem.`;
     const df = $('#d-fig'); df.innerHTML = ''; df.appendChild(figure(ANIM.flex, undefined, {vb:'40 -30 160 236', noGround:true}));
     stamps($('#d-stamps')); show('s-done'); confetti(); return; }
   const msgs = [];
@@ -1691,6 +1696,21 @@ function openSheet(it) {
   sh.classList.add('on');
   sh.querySelector('.x').onclick = () => sh.classList.remove('on');
   $('#sh-add').onclick = () => { passSel.has(key) ? passSel.delete(key) : passSel.add(key); sh.classList.remove('on'); renderLib(); };
+}
+// helkroppskomplex: en klocka, 6 reps av varje, utan vila mellan övningarna, vila efter varje varv
+const CX = {ex:['bojdrodd', 'swing', 'goblet', 'gobletpress'], reps:6, it:{lugn:{v:4, rest:60}, normal:{v:6, rest:45}, tufft:{v:8, rest:30}}};
+function cxPlan() { const c = CX.it[INT] || CX.it.normal;
+  return CX.ex.map(id => { const x = exPlan(id, 1, CX.reps); return {...x, sets:c.v, reps:CX.reps, bell:'l', kg:S.bells.l + ' kg', target:CX.reps + ' reps', rest:c.rest, g:'kb', cx:true}; }); }
+function startComplex() {
+  if (!S) S = fresh();
+  chooseInt('Helkroppskomplex · 1 kettlebell', cxPlan, (plan, it) => {
+    const c = CX.it[it], steps = [{type:'warm'}];
+    for (let v = 1; v <= c.v; v++) plan.forEach((x, xi) => steps.push({type:'set', x, xi, s:v, cx:true}));
+    steps.push({type:'rpe'});
+    SS = {k:'F', w:week(), plan, steps, i:0, namn:'Helkroppskomplex', t0:Date.now(), free:true, cx:c, it};
+    $('#ss-title').textContent = `Komplex · ${c.v} varv · ${INTS[it].namn}`;
+    show('s-sess'); renderStep(); wakeOn();
+  });
 }
 function startFree() {
   if (!S) S = fresh();
