@@ -53,7 +53,7 @@ h3{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var
 .card{position:relative;background:var(--cream);border:3px solid var(--chili);border-radius:22px;padding:20px 18px;box-shadow:6px 6px 0 var(--chili);margin:22px 0 0}
 .card::before{content:"";position:absolute;inset:7px;border:2px dashed rgba(200,52,10,.42);border-radius:16px;pointer-events:none}
 .card>*{position:relative}
-.gear{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+.gear{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
 .gear button{appearance:none;font:inherit;color:inherit;text-align:center;cursor:pointer;background:var(--cream);border:3px solid var(--chili);border-radius:20px;
   box-shadow:5px 5px 0 var(--chili);padding:14px 8px 12px;transition:transform .18s var(--pop),box-shadow .18s}
 .gear button:not([disabled]):hover{transform:translate(-2px,-2px) rotate(-1deg);box-shadow:8px 8px 0 var(--chili)}
@@ -159,7 +159,7 @@ details[open] summary::before{content:"– ";}
 .conf i{position:absolute;top:-30px;width:14px;height:14px;border-radius:3px;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
 .skip{background:none;border:0;font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--chili);text-decoration:underline;cursor:pointer;font-size:15px;margin-top:14px}
-@media (max-width:560px){.gear{gap:9px}.gear svg{height:70px}.bc-bar .hide-m{display:none}}
+@media (max-width:560px){.gear{gap:9px;grid-template-columns:repeat(2,1fr)}.gear svg{height:70px}.bc-bar .hide-m{display:none}}
 
 button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 /* choose your fighter */
@@ -318,6 +318,10 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
         <svg viewBox="0 0 100 90"><g fill="none" stroke="#C8340A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 80V14h46"/><path d="M68 14v22"/><rect x="60" y="36" width="16" height="26" rx="3" fill="#C8340A"/><path d="M22 58h26l6 22"/><path d="M14 80h66"/></g></svg>
         <b>Maskiner</b><small>På gymmet</small>
       </button>
+      <button id="g-cal" aria-label="Calisthenics">
+        <svg viewBox="0 0 100 90"><g fill="none" stroke="#C8340A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 12h72M24 12v74M76 12v74"/><path d="M42 12v14M58 12v14"/><circle cx="50" cy="34" r="7" fill="#C8340A"/><path d="M50 42v22M42 26l8 16 8-16M50 64l-7 18M50 64l7 18"/></g></svg>
+        <b>Calisthenics</b><small>Bara kroppen</small>
+      </button>
     </div>
     <button class="libbtn" id="go-lib0"><span class="lbl">Övningsbank</span><b>Alla övningar</b><small>Välj muskelgrupp och redskap – sätt ihop ett eget pass</small></button>
     <div class="warn"><b>Innan du börjar:</b> har du hjärt- eller kärlproblem, högt blodtryck, ont i ryggen eller nyligen opererats – prata med din vårdcentral först. Det ska kännas ansträngande, aldrig smärtsamt.</div>
@@ -343,7 +347,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
       <p class="note" style="margin:8px 0 0" id="kgtip"></p>
     </div>
     <div class="field" id="f-mach" style="display:none"><span class="lbl">Vikterna</span>
-      <p class="note" style="margin:0">Du ställer in vikten på varje maskin under passet med − och +. Sidan kommer ihåg den till nästa gång och höjer när det börjar kännas lätt. Vi föreslår en lätt startvikt.</p>
+      <p class="note" style="margin:0" id="f-mach-note">Du ställer in vikten på varje maskin under passet med − och +. Sidan kommer ihåg den till nästa gång och höjer när det börjar kännas lätt. Vi föreslår en lätt startvikt.</p>
     </div>
     <div class="field"><span class="lbl">Pass per vecka</span>
       <div class="seg" id="ppw"><button data-v="2">2 pass</button><button data-v="3">3 pass</button></div>
@@ -828,12 +832,92 @@ Object.assign(EX_KB, {
 Object.assign(MGMAP, {gorillarodd:['rygg','armar','bal'], gungpress:['axlar','armar','bal'], knapress:['axlar','bal'], knacurl:['armar'], bjornrodd:['rygg','bal'],
   hogadrag:['axlar','rygg','rumpa'], squatclean:['ben','rumpa','puls'], renegad:['rygg','bal','armar']});
 
+// ================= CALISTHENICS =================
+const HANG = {head:[114,24], sh:[112,46], hip:[110,100], kn:[111,140], an:[112,179], el:[113,20], ha:[114,-4], kbo:null};
+const HIPH = {el:[128,96], ha:[116,119], el2:[98,96], ha2:[106,119], kbo:null};
+const CAL_NEW = {
+  armhavfull:{namn:'Armhävning', bell:null, unit:'reps', rest:90, prop:'mat', niva:'Medel',
+    tips:['Händerna under axlarna, kroppen rak som en planka','Sänk bröstet mot golvet med armbågarna snett bakåt','Klarar du bara några – gör resten mot bänken'],
+    poses:[{an:[30,192], kn:[66,182], hip:[102,170], sh:[150,142], head:[168,132], el:[150,168], ha:[150,197], kbo:null},
+           {an:[30,192], kn:[68,186], hip:[104,180], sh:[152,170], head:[172,166], el:[128,170], ha:[150,197], kbo:null}], dur:1500},
+  lutrodd:{namn:'Lutad rodd mot räcke', bell:null, unit:'reps', rest:75, prop:'lowbar', niva:'Lätt',
+    tips:['Ta tag i ett stadigt räcke eller bordskant i midjehöjd','Luta dig bakåt med rak kropp – ju mer lutning, desto tyngre','Dra bröstet mot räcket och kläm ihop skulderbladen'],
+    poses:[{an:[150,199], kn:[140,172], hip:[128,146], sh:[104,104], head:[93,82], el:[132,112], ha:[160,118], kbo:null},
+           {an:[150,199], kn:[145,172], hip:[138,146], sh:[124,100], head:[118,78], el:[138,126], ha:[160,118], kbo:null}], dur:1500},
+  australrodd:{namn:'Australisk rodd', bell:null, unit:'reps', rest:90, prop:'lowbar', niva:'Medel',
+    tips:['Ligg under en stång eller ett stadigt bord, hälarna i golvet','Kroppen rak – dra bröstet upp mot stången','Böj knäna om det är för tungt'],
+    poses:[{an:[36,198], kn:[72,190], hip:[108,182], sh:[160,170], head:[182,166], el:[160,144], ha:[160,119], kbo:null},
+           {an:[36,198], kn:[72,184], hip:[108,166], sh:[158,140], head:[180,134], el:[138,140], ha:[160,119], kbo:null}], dur:1600},
+  hang:{namn:'Dött häng', bell:null, unit:'sek', rest:60, prop:'pullbar', effort:false, niva:'Lätt',
+    tips:['Häng i en stång med raka armar – lekparken funkar','Låt fötterna vila på en pall om greppet inte räcker','Andas lugnt. Börja med 10 sekunder'],
+    poses:[HANG, P(HANG,{kn:[114,140], an:[118,178]})], dur:1600},
+  skulderdrag:{namn:'Skulderdrag i stång', bell:null, unit:'reps', rest:75, prop:'pullbar', niva:'Medel',
+    tips:['Häng med raka armar','Dra ner axlarna från öronen så kroppen lyfts några centimeter','Armarna förblir raka – det är skulderbladen som jobbar'],
+    poses:[HANG, P(HANG,{head:[114,16], sh:[112,38], hip:[110,92], kn:[111,132], an:[112,171], el:[113,16]})], dur:1300},
+  negchins:{namn:'Långsam nedfirning i stång', bell:null, unit:'reps', rest:90, prop:'pullbar', niva:'Medel',
+    tips:['Kliv upp på en pall så hakan är över stången','Fira dig ner så långsamt du kan – sikta på 5 sekunder','Kliv upp igen. Det är så man lär sig chins'],
+    poses:[P(HANG,{head:[118,-14], sh:[112,12], hip:[110,66], kn:[111,106], an:[112,145], el:[132,20]}), HANG], dur:2800},
+  luftknaboj:{namn:'Knäböj', bell:null, unit:'reps', rest:75, niva:'Lätt',
+    tips:['Fötterna axelbrett, armarna framåt för balans','Sätt dig bakåt och ner så djupt som känns bra','Res dig med tryck i hela foten'],
+    poses:[P(ST,{el:[132,88], ha:[154,90], kbo:null}), P(ST,{hip:[84,152], kn:[126,156], sh:[104,104], head:[110,82], el:[126,104], ha:[150,102], kbo:null})], dur:1500},
+  splitkv:{namn:'Splitknäböj', bell:null, unit:'reps', sida:true, rest:75, niva:'Medel',
+    tips:['Ett stort steg isär, bakre hälen lyft','Sänk rakt ner tills bakre knät nästan nuddar golvet','Håll i en vägg om balansen sviktar'],
+    poses:[P(ST,{...HIPH, hip:[110,124], kn:[128,160], an:[136,199], kn2:[96,160], an2:[74,196]}), P(ST,{...HIPH, hip:[106,150], kn:[140,158], an:[142,199], kn2:[96,192], an2:[70,196], sh:[108,96], head:[110,74], el:[124,126], ha:[112,149], el2:[96,126], ha2:[102,149]})], dur:1700},
+  utfallkv:{namn:'Baklängesutfall', bell:null, unit:'reps', sida:true, rest:75, niva:'Lätt',
+    tips:['Kliv bakåt och sänk bakre knät mot golvet','Främre knät ovanför foten','Tryck ifrån med främre foten tillbaka upp'],
+    poses:[P(ST,HIPH), P(ST,{...HIPH, hip:[106,150], kn:[140,158], an:[142,199], kn2:[96,192], an2:[66,196], sh:[108,96], head:[110,74], el:[124,126], ha:[112,149], el2:[96,126], ha2:[102,149]})], dur:1600},
+  stepupkv:{namn:'Step-up', bell:null, unit:'reps', sida:true, rest:60, prop:'step', niva:'Lätt',
+    tips:['Stadig pall eller trappsteg','Hela foten upp – tryck dig upp med det benet','Kliv ner kontrollerat'],
+    poses:[{head:[112,46], sh:[108,68], el:[118,92], ha:[128,108], el2:[100,92], ha2:[92,110], hip:[104,122], kn:[134,146], an:[140,171], kn2:[102,161], an2:[98,199]},
+           {head:[138,24], sh:[136,46], el:[128,70], ha:[120,90], el2:[146,70], ha2:[156,88], hip:[134,100], kn:[140,136], an:[142,171], kn2:[128,138], an2:[124,166]}], dur:1600},
+  enbensbro:{namn:'Enbens höftlyft', bell:null, unit:'reps', sida:true, rest:60, prop:'mat', niva:'Medel',
+    tips:['Ligg på rygg, ena foten i golvet och andra benet rakt','Tryck i hälen och lyft höften','Höften ska inte tippa åt sidan'],
+    poses:[P(LIE,{kn2:[160,176], an2:[196,166], el:[96,198], ha:[120,198]}), P(LIE,{hip:[124,160], kn:[157,150], an:[172,198], kn2:[160,146], an2:[196,134], el:[96,198], ha:[120,198]})], dur:1400},
+  pikepress:{namn:'Pikepress', bell:null, unit:'reps', rest:90, prop:'mat', niva:'Medel',
+    tips:['Händer och fötter i golvet, rumpan högt – som ett upp-och-nedvänt V','Böj armarna och sänk huvudet mot golvet framför händerna','Pressa upp. Höj händerna på en bänk för att göra det lättare'],
+    poses:[{an:[70,197], kn:[84,160], hip:[100,122], sh:[138,152], head:[148,170], el:[144,175], ha:[150,197], kbo:null},
+           {an:[70,197], kn:[84,160], hip:[104,128], sh:[146,170], head:[158,188], el:[128,184], ha:[150,197], kbo:null}], dur:1600},
+  bankdips:{namn:'Dips mot bänk', bell:null, unit:'reps', rest:75, prop:'boxlow', niva:'Medel',
+    tips:['Händerna på kanten av en stadig stol eller bänk bakom dig','Sänk dig genom att böja armarna – max 90°','Pressa upp. Böjda ben är lättare än raka'],
+    poses:[{head:[100,90], sh:[96,112], el:[92,136], ha:[88,160], hip:[104,166], kn:[142,164], an:[146,199], kbo:null},
+           {head:[104,110], sh:[100,132], el:[72,142], ha:[88,160], hip:[106,188], kn:[144,170], an:[146,199], kbo:null}], dur:1500},
+  benlyft:{namn:'Sittande benlyft', bell:null, unit:'reps', sida:true, rest:60, prop:'mat', niva:'Medel',
+    tips:['Sitt med raka ben, händerna i golvet bredvid höften','Tryck ner händerna och lyft ena benet några centimeter','Håll 2 sekunder. Första steget mot en L-sit'],
+    poses:[{hip:[100,192], sh:[100,138], head:[104,116], el:[100,164], ha:[100,192], kn:[140,194], an:[180,196], kbo:null},
+           {hip:[100,190], sh:[100,136], head:[104,114], el:[100,163], ha:[100,192], kn:[140,186], an:[178,174], kn2:[140,194], an2:[180,196], kbo:null}], dur:1500},
+};
+// stegar: när det blir lätt byter vi till nästa, svårare variant
+const STEGE = {vaggarm:'armhavning', armhavning:'armhavfull', lutrodd:'australrodd', hang:'skulderdrag', skulderdrag:'negchins', stolres:'luftknaboj', luftknaboj:'splitkv', hoftlyft:'enbensbro'};
+const EX_CAL = {...CAL_NEW};
+for (const id of ['vaggarm','armhavning','stolres','hoftlyft','deadbug','planka','sidoplanka','fagelhund','superman','vadhav']) EX_CAL[id] = EX_KB[id];
+const WARM_CAL = [];
+const PHASES_CAL = [
+  {w:[1,3], namn:'Lär rörelserna', rpe:'Ska kännas lätt – runt 3–4 av 10. Du behöver en stol, en vägg och gärna ett räcke.',
+   pass:{A:{namn:'Ben + press', ex:[['stolres',2,8],['vaggarm',2,8],['lutrodd',2,8],['hoftlyft',2,10],['deadbug',2,5]]},
+         B:{namn:'Drag + bål', ex:[['stepupkv',2,6],['lutrodd',2,8],['hang',2,10],['fagelhund',2,5],['planka',2,20]]},
+         C:{namn:'Rörligt & lugnt', ex:[['fagelhund',2,6],['superman',2,8],['vadhav',2,12],['planka',2,20]]}}},
+  {w:[4,8], namn:'Bygg', rpe:'5–7 av 10. När något blir lätt flyttar vi dig till ett svårare steg.',
+   pass:{A:{namn:'Ben + press', ex:[['stolres',3,10],['vaggarm',3,8],['lutrodd',3,8],['hoftlyft',3,10],['deadbug',3,6]]},
+         B:{namn:'Drag + axlar', ex:[['utfallkv',3,6],['pikepress',2,5],['hang',3,15],['benlyft',2,5],['sidoplanka',2,15]]},
+         C:{namn:'Pulspass', ex:[['stepupkv',3,10],['bankdips',2,6],['fagelhund',2,8],['planka',3,25]]}}},
+  {w:[9,12], namn:'Kondition', rpe:'6–7 av 10. Kortare vila, fler reps. Du ska fortfarande kunna prata.',
+   pass:{A:{namn:'Stark helkropp', ex:[['stolres',3,12],['vaggarm',3,10],['lutrodd',3,10],['hoftlyft',3,12],['hang',3,20]]},
+         B:{namn:'Stark överkropp', ex:[['splitkv',3,8],['pikepress',3,6],['skulderdrag',3,6],['benlyft',3,6],['sidoplanka',3,20]]},
+         C:{namn:'Pulscirkel', ex:[['luftknaboj',3,12],['stepupkv',3,10],['vaggarm',3,10],['planka',3,30]]}}},
+];
+Object.assign(MGMAP, {armhavfull:['brost','armar','bal'], lutrodd:['rygg','armar'], australrodd:['rygg','armar','bal'], hang:['rygg','armar'], skulderdrag:['rygg'],
+  negchins:['rygg','armar'], luftknaboj:['ben','rumpa'], splitkv:['ben','rumpa'], utfallkv:['ben','rumpa'], stepupkv:['ben','rumpa','puls'], enbensbro:['rumpa'],
+  pikepress:['axlar','armar'], bankdips:['armar','brost'], benlyft:['bal']});
+
 const GEARS = {
   kb:{id:'kb', namn:'Kettlebell', key:'bc_traning_kb_v1', EX:EX_KB, PHASES:PHASES_KB, WARM:WARM_KB, KG:[4,6,8,10,12,14,16,18,20,22,24,28,32], def:{k:{l:8, t:12}, m:{l:12, t:16}},
       titel:'Dina klockor', lbl:'Mina två kettlebells', tip:{k:'Förslag för kvinnor som börjar om: 8 kg + 12 kg. Hellre för lätt än för tungt.', m:'Förslag för män som börjar om: 12 kg + 16 kg. Hellre för lätt än för tungt.'}, ord:'tyngre klockor', icon:'#kb'},
   db:{id:'db', namn:'Hantlar', key:'bc_traning_db_v1', EX:EX_DB, PHASES:PHASES_DB, WARM:WARM_DB, KG:[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30], def:{k:{l:4, t:8}, m:{l:8, t:12}},
       titel:'Dina hantlar', lbl:'Två par hantlar (kg per hantel)', tip:{k:'Förslag för kvinnor som börjar om: ett par 4 kg och ett par 8 kg. Har du justerbara hantlar – ställ in de vikterna.', m:'Förslag för män som börjar om: ett par 8 kg och ett par 12 kg. Har du justerbara hantlar – ställ in de vikterna.'}, ord:'tyngre hantlar', icon:'#db'},
-  mach:{id:'mach', namn:'Maskiner', key:'bc_traning_mach_v1', EX:EX_M, PHASES:PHASES_M, WARM:WARM_M, KG:null, ord:'tyngre vikter', titel:'Gymmet'},
+  mach:{id:'mach', namn:'Maskiner', key:'bc_traning_mach_v1', EX:EX_M, PHASES:PHASES_M, WARM:WARM_M, KG:null, ord:'tyngre vikter', titel:'Gymmet',
+      note:'Du ställer in vikten på varje maskin under passet med − och +. Sidan kommer ihåg den till nästa gång och höjer när det börjar kännas lätt. Vi föreslår en lätt startvikt.'},
+  cal:{id:'cal', namn:'Calisthenics', key:'bc_traning_cal_v1', EX:EX_CAL, PHASES:PHASES_CAL, WARM:WARM_CAL, KG:null, ord:'svårare steg', titel:'Kroppen är redskapet',
+      note:'Inga vikter – bara kroppen. Du behöver en stadig stol eller bänk, en vägg och gärna ett räcke eller en stång (lekparken funkar). När en övning blir lätt flyttar programmet dig till nästa steg: vägg → bänk → golv.'},
 };
 let G = GEARS[localStorage.getItem('bc_traning_gear')] || GEARS.kb;
 let EX = G.EX, PHASES = G.PHASES, WARM = G.WARM, KEY = G.key, KG = G.KG;
@@ -874,6 +958,7 @@ const WARMS = {
       ['Halo utan vikt eller med lätt klocka – 5 åt varje håll', 'halo'], ['Djup knäböj, håll i något – stanna i botten 20 s', 'djupkb']],
   db:[['Marsch på stället – 1 min', 'marsch'], ['Armcirklar – 10 framåt, 10 bakåt', 'armcirkel'], ['Höftfällning med händerna på höften – 10 st', 'hoftfall'],
       ['Knäböj utan vikt mot bänk – 8 st', 'knabojbank'], ['Utfall bakåt utan vikt – 4 per sida', 'utfall0']],
+  cal:[['Marsch på stället – 1 min', 'marsch'], ['Armcirklar – 10 framåt, 10 bakåt', 'armcirkel'], ['Katt och ko på alla fyra – 8 st', 'kattko'], ['Höftfällning – 10 st', 'hoftfall'], ['Knäböj utan vikt – 8 st', 'knaboj']],
   mach:[['Cykel eller crosstrainer – 5 min, lugnt', 'cykel'], ['Armcirklar – 10 framåt, 10 bakåt', 'armcirkel'], ['Höftfällning – 10 st', 'hoftfall'], ['Knäböj utan vikt – 8 st', 'knaboj']],
 };
 
@@ -893,10 +978,12 @@ const phaseOf = w => PHASES.find(p => w >= p.w[0] && w <= p.w[1]);
 const passKeys = () => S.ppw === 3 ? ['A','B','C'] : ['A','B'];
 const nextKey = () => passKeys()[S.log.length % S.ppw];
 
+function stegeId(id) { if (G.id === 'cal') while (STEGE[id] && EX[STEGE[id]] && S.adj[id] && S.adj[id].up) id = STEGE[id]; return id; }
 function exPlan(id, sets, reps, mode) {
+  id = stegeId(id);
   const e = EX[id], a = S.adj[id] || {r:0, up:false};
   let bell = e.bell; if (bell === 'l' && a.up) bell = 't';
-  const r = e.unit === 'reps' && mode !== 'emom' ? Math.max(4, reps + a.r) : reps;
+  const r = e.unit === 'reps' && mode !== 'emom' ? Math.max(4, reps + a.r) : e.unit === 'sek' ? Math.max(10, reps + a.r * 5) : reps;
   const two = G.id === 'db' && e.kb2 ? '2 × ' : '';
   const kg = e.kgtxt ? e.kgtxt : G.id === 'mach' ? (e.mw ? (S.mw[id] ?? MW0[S.sex][id] ?? 10) + ' kg' : id === 'cykel' ? 'Lätt motstånd' : 'Kroppsvikt')
     : bell === 'l' ? two + S.bells.l + ' kg' : bell === 't' ? two + S.bells.t + ' kg' : bell === 'lt' ? S.bells.l + ' + ' + S.bells.t + ' kg' : 'Kroppsvikt';
@@ -1059,6 +1146,8 @@ function figure(ex, f = fighterById(localStorage.getItem('bc_traning_fighter')),
     if (e.prop === 'chestpress') { bar('M64 202 L64 34 M97 202 L97 168'); pad({x:76, y:162, width:42, height:9}); pad({x:70, y:86, width:11, height:78}); mk('circle', {...pr, fill:'#8C949C', cx:64, cy:40, r:6}, props); }
     if (e.prop === 'legext') { bar('M100 202 L100 154 M132 202 L132 146'); pad({x:78, y:146, width:50, height:9}); pad({x:72, y:78, width:10, height:72}); mk('circle', {...pr, fill:'#8C949C', cx:132, cy:146, r:6}, props); }
     if (e.prop === 'hyper') { bar('M40 202 L60 182 L118 136 M118 136 L132 202 M60 182 L60 202'); mk('path', {...pr, fill:LN, d:'M84 112 L118 134 L110 146 L76 124Z'}, props); mk('rect', {...pr, fill:'#8C949C', x:44, y:178, width:26, height:6, rx:2}, props); }
+    if (e.prop === 'lowbar') { bar('M160 118 L140 202 M160 118 L180 202'); mk('circle', {...pr, fill:'#8C949C', cx:160, cy:118, r:5}, props); }
+    if (e.prop === 'pullbar') { bar('M60 202 L60 -6 L170 -6 L170 202'); mk('circle', {...pr, fill:'#8C949C', cx:114, cy:-6, r:4}, props); }
     if (e.prop === 'wall') { mk('rect', {...pr, fill:'#E9D9B0', x:186, y:-10, width:30, height:212}, props); mk('path', {...pr, fill:'none', d:'M186 40 h30 M186 100 h30 M186 160 h30', 'stroke-width':1.5}, props); }
     if (e.prop === 'colR') { bar('M196 202 L196 4 L168 4'); mk('circle', {...pr, fill:'#8C949C', cx:168, cy:4, r:5}, props); mk('circle', {...pr, fill:'#8C949C', cx:196, cy:52, r:4}, props); }
     if (e.prop === 'rower') { bar('M20 198 L212 198 M200 198 V176'); mk('circle', {...pr, fill:'#4A4F57', cx:200, cy:168, r:14}, props); mk('rect', {...pr, fill:LN, x:150, y:174, width:10, height:20, rx:2}, props); }
@@ -1181,8 +1270,8 @@ function confetti() {
     e.style.animationDuration = 1.6 + Math.random() * 1.6 + 's'; e.style.animationDelay = Math.random() * .5 + 's'; e.style.borderRadius = i % 3 ? '3px' : '50%'; c.appendChild(e); setTimeout(() => e.remove(), 4000); }
 }
 function openGear(id) { useGear(id); if (!S) S = fresh(); renderProfile(); show(S.log.length ? 's-prog' : 's-profile'); if (S.log.length) renderProg(); }
-$('#g-kb').onclick = () => openGear('kb'); $('#g-db').onclick = () => openGear('db'); $('#g-mach').onclick = () => openGear('mach');
-function gearStatus() { for (const id of ['kb', 'db', 'mach']) { let st = null; try { st = JSON.parse(localStorage.getItem(GEARS[id].key)); } catch (_) {}
+$('#g-kb').onclick = () => openGear('kb'); $('#g-db').onclick = () => openGear('db'); $('#g-mach').onclick = () => openGear('mach'); $('#g-cal').onclick = () => openGear('cal');
+function gearStatus() { for (const id of ['kb', 'db', 'mach', 'cal']) { let st = null; try { st = JSON.parse(localStorage.getItem(GEARS[id].key)); } catch (_) {}
   if (st && st.log && st.log.length) $('#g-' + id + ' small').textContent = `Vecka ${Math.min(12, Math.floor(st.log.length / st.ppw) + 1)} · fortsätt`; } }
 $('#bc-back').onclick = () => { goBack(); };
 $('#nav-log').onclick = () => { if (!S) { toast('Välj redskap först'); return; } renderLog(); show('s-log'); };
@@ -1196,7 +1285,7 @@ function renderProfile() {
   document.querySelectorAll('#sex button').forEach(b => b.classList.toggle('on', b.dataset.v === S.sex));
   document.querySelectorAll('#ppw button').forEach(b => b.classList.toggle('on', +b.dataset.v === S.ppw));
   $('#pf-title').textContent = G.titel; renderFocus();
-  const m = G.id === 'mach'; $('#f-bells').style.display = m ? 'none' : ''; $('#f-mach').style.display = m ? '' : 'none';
+  const m = !G.KG; $('#f-bells').style.display = m ? 'none' : ''; $('#f-mach').style.display = m ? '' : 'none'; if (m) { $('#f-mach-note').textContent = G.note; $('#f-mach .lbl').textContent = G.id === 'cal' ? 'Utrustning' : 'Vikterna'; }
   if (!m) { $('#bells-lbl').textContent = G.lbl; $('#kg-l').textContent = S.bells.l; $('#kg-t').textContent = S.bells.t; $('#kgtip').textContent = G.tip[S.sex];
     document.querySelectorAll('.bell svg').forEach(v => { v.setAttribute('viewBox', G.id === 'db' ? '0 -20 70 70' : '0 0 56 70'); v.innerHTML = `<use href="${G.icon}" width="${G.id === 'db' ? 70 : 56}" height="${G.id === 'db' ? 30 : 70}"/>`; }); }
 }
@@ -1251,7 +1340,7 @@ function renderProg() {
     const p = ph.pass[k], pe = passEx(ph, k), b = document.createElement('button'); b.className = 'passcard' + (k === nk ? ' next' : '');
     const isDone = doneThisWeek.includes(k);
     b.innerHTML = `<span class="ltr">${k}</span><span><h3>${p.namn}${k === nk ? '<span class="tag">Nästa</span>' : ''}${isDone ? '<span class="tag">✓ Klar</span>' : ''}</h3>
-      <p>${pe.map(e => e[4] ? `<span class="fx">★ ${EX[e[0]].namn}</span>` : EX[e[0]].namn).join(' · ')}</p><p class="lbl" style="margin-top:4px">${pe.length} övningar · ca ${(k === 'C' ? 25 : 30) + (pe.length - p.ex.length) * 5} min</p></span>`;
+      <p>${pe.map(e => e[4] ? `<span class="fx">★ ${EX[stegeId(e[0])].namn}</span>` : EX[stegeId(e[0])].namn).join(' · ')}</p><p class="lbl" style="margin-top:4px">${pe.length} övningar · ca ${(k === 'C' ? 25 : 30) + (pe.length - p.ex.length) * 5} min</p></span>`;
     b.onclick = () => startSession(k); pl.appendChild(b);
   }
 }
@@ -1364,7 +1453,20 @@ function finish(r) {
   }
   if (G.id === 'mach' && r === 'too') { for (const x of SS.plan) if (x.e.mw) { const c = S.mw[x.id] ?? parseFloat(x.kg); S.mw[x.id] = Math.max(0, c - mstep(c - .1)); }
     msgs.push('Vi sänker vikterna lite till nästa gång. Smart.'); }
-  if (G.id !== 'mach' && r === 'easy' && S.easy >= 2) {
+  if (G.id === 'cal' && r === 'easy' && S.easy >= 2) {
+    S.easy = 0; const seen = new Set();
+    for (const x of SS.plan) { const id = x.id, e = x.e; if (seen.has(id) || !['reps', 'sek'].includes(e.unit)) continue; seen.add(id);
+      const a = S.adj[id] = S.adj[id] || {r:0, up:false};
+      if (a.r >= 4 && STEGE[id] && !a.up) { a.up = true; S.adj[STEGE[id]] = S.adj[STEGE[id]] || {r:-2, up:false}; msgs.push(`${e.namn} sitter – nästa gång kör du ${EX[STEGE[id]].namn.toLowerCase()}!`); }
+      else if (a.r < 6) a.r += 2; }
+    msgs.unshift('Två lätta pass i rad – vi ökar repsen.');
+  }
+  if (G.id === 'cal' && r === 'too') {
+    for (const id of Object.keys(S.adj)) { const a = S.adj[id]; a.r = Math.max(-4, a.r - 2); }
+    for (const [lo, hi] of Object.entries(STEGE)) if (S.adj[lo] && S.adj[lo].up && SS.plan.some(x => x.id === hi) && !(S.adj[hi] && S.adj[hi].up)) { S.adj[lo].up = false; S.adj[lo].r = 2; msgs.push(`Vi går tillbaka till ${EX[lo].namn.toLowerCase()} ett tag.`); }
+    msgs.push('Vi backar lite till nästa gång. Smart.');
+  }
+  if (!['mach', 'cal'].includes(G.id) && r === 'easy' && S.easy >= 2) {
     S.easy = 0;
     for (const [id, e] of Object.entries(EX)) { if (e.unit !== 'reps' || !e.bell) continue;   // hela programmet, inte bara dagens pass
       const a = S.adj[id] = S.adj[id] || {r:0, up:false};
@@ -1372,7 +1474,7 @@ function finish(r) {
       else if (a.r < 6) { a.r += 2; } }
     msgs.unshift('Två lätta pass i rad – vi ökar repsen.');
   }
-  if (G.id !== 'mach' && r === 'too') {
+  if (!['mach', 'cal'].includes(G.id) && r === 'too') {
     for (const [id, e] of Object.entries(EX)) { if (e.unit !== 'reps') continue; const a = S.adj[id] = S.adj[id] || {r:0, up:false};
       if (a.up && a.r <= -2) { a.up = false; a.r = 4; } else a.r = Math.max(-4, a.r - 2); }
     msgs.push('Vi backar lite till nästa gång. Smart.');
@@ -1432,13 +1534,13 @@ function bodyMapSVG() {
     <g data-mg="puls" class="heart"><circle cx="100" cy="40" r="15"/><path d="M100 50s-9-5-9-11a4.5 4.5 0 0 1 9-2a4.5 4.5 0 0 1 9 2c0 6-9 11-9 11z" class="hp"/></g></svg>`;
 }
 function doseOf(e) { return e.unit === 'm' ? 20 : e.unit === 'sek' ? 30 : e.unit === 'min' ? 5 : e.unit === 'varv' ? 5 : e.sida ? 8 : 10; }
-const LIBG = [{id:'kb', namn:'Kettlebell', icon:'#kb', vb:'0 0 56 70'}, {id:'db', namn:'Hantlar', icon:'#db', vb:'0 -20 70 70'}, {id:'mach', namn:'Maskiner'}, {id:'bw', namn:'Kroppsvikt'}];
+const LIBG = [{id:'kb', namn:'Kettlebell', icon:'#kb', vb:'0 0 56 70'}, {id:'db', namn:'Hantlar', icon:'#db', vb:'0 -20 70 70'}, {id:'mach', namn:'Maskiner'}, {id:'cal', namn:'Calisthenics'}, {id:'bw', namn:'Kroppsvikt'}];
 let libGear = 'alla';
 function libItems() {   // varje övning en gång, sorterad under sitt redskap
   const seen = new Set(), out = [];
-  for (const gid of ['kb', 'db', 'mach']) for (const [id, e] of Object.entries(GEARS[gid].EX)) {
+  for (const gid of ['kb', 'db', 'mach', 'cal']) for (const [id, e] of Object.entries(GEARS[gid].EX)) {
     if (seen.has(id)) continue; seen.add(id);
-    const bw = gid !== 'mach' && !e.bell;
+    const bw = gid !== 'mach' && gid !== 'cal' && !e.bell;
     out.push({id, e, gid, sec: bw ? 'bw' : gid, key: gid + ':' + id, mg: MGMAP[id] || []});
   }
   return out;
