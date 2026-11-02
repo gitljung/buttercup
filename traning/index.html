@@ -258,7 +258,14 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .wlist2 li:nth-child(odd) .wfig{transform:rotate(-1.5deg)}.wlist2 li:nth-child(even) .wfig{transform:rotate(1.5deg)}
 .libbtn{display:block;width:100%;text-align:left;margin-top:22px;cursor:pointer;background:var(--chili);color:var(--cream);border:0;border-radius:6px;padding:16px 18px;box-shadow:6px 6px 0 var(--ox);font:inherit;position:relative;overflow:hidden;transition:transform .15s var(--pop)}
 .libbtn::after{content:"→";position:absolute;right:18px;top:50%;transform:translateY(-50%);font-family:var(--display);font-size:40px;color:var(--buttercup)}
-.libbtn.hasse{margin:18px 0 0;background:var(--ink);box-shadow:6px 6px 0 var(--chili)}.libbtn.hasse b{color:var(--buttercup);font-size:34px}.libbtn.hasse small{display:block;padding-right:34px}
+.libbtn.hasse{margin:18px 0 0;background:var(--ink);box-shadow:6px 6px 0 var(--chili);min-height:200px;padding:18px 47% 16px 18px;overflow:hidden}
+.libbtn.hasse b{color:var(--buttercup);font-size:36px;margin:2px 0 6px}.libbtn.hasse small{display:block}
+.libbtn.hasse::after{content:"Kör ›";top:auto;bottom:14px;left:18px;right:auto;transform:none;font-size:22px;background:var(--buttercup);color:var(--ink);padding:4px 12px 2px;border-radius:6px}
+.libbtn.hasse small{margin-bottom:44px}
+.libbtn.hasse img{position:absolute;right:-8px;bottom:-4px;height:min(196px,78%);width:auto;transform-origin:70% 100%;animation:hasse 2.6s var(--ease) infinite;pointer-events:none}
+.libbtn.hasse::before{content:"";position:absolute;right:-30px;top:-30px;width:210px;height:210px;border-radius:50%;background:radial-gradient(circle,var(--chili) 0 58%,transparent 59%);opacity:.9}
+@keyframes hasse{0%,100%{transform:rotate(0) translateY(0)}45%{transform:rotate(-2.5deg) translateY(-4px)}55%{transform:rotate(-2.5deg) translateY(-4px)}}
+@media (prefers-reduced-motion:reduce){.libbtn.hasse img{animation:none}}
 .libbtn:active{transform:translate(3px,3px)}
 .libbtn .lbl{color:var(--buttercup)}.libbtn b{display:block;font-family:var(--display);font-weight:400;font-size:30px;text-transform:uppercase;line-height:1.05}.libbtn small{font-size:14px;opacity:.9}
 #bodymap{width:100%;max-width:420px;display:block;margin:0 auto}
@@ -339,8 +346,8 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
         <div class="fmove" id="fmove"></div></div></div>
     <div class="fgrid" id="fgrid"></div>
   </div>
-  <button class="libbtn hasse" id="go-hasse"><span class="lbl">Kom igång direkt · 1 kettlebell · ca 20 min</span><b>Hasses superpass</b>
-    <small>Rodd → swing → knäböj → press. 6 reps var, varv efter varv. Timern räknar – du bara kör.</small></button>
+  <button class="libbtn hasse" id="go-hasse"><img src="hasse.webp" alt="Hasse med sin kettlebell" width="600" height="626"><span class="lbl">Kom igång direkt · 1 kettlebell · ca 13 min</span><b>Hasses superpass</b>
+    <small>Rodd → swing → knäböj → press. 6 reps var, rakt igenom. 10 varv, 30 s vila. Timern räknar – du bara kör.</small></button>
   <div class="card">
     <h2>Välj redskap</h2>
     <p class="note" style="margin:0">Programmen är byggda för dig som är runt 40–45 och inte tränat på ett tag. Vi börjar lätt, lär rörelserna och stegrar lugnt.</p>
@@ -1424,7 +1431,7 @@ function renderProg() {
   }
   if (G.id === 'kb') { const b = document.createElement('button'); b.className = 'passcard cxcard';
     b.innerHTML = `<span class="ltr">⚡</span><span><h3>Hasses superpass<span class="tag">Extra</span></h3>
-      <p>${CX.ex.map(id => EX[id].namn).join(' → ')}</p><p class="lbl" style="margin-top:4px">1 lätt klocka · 6 reps var · varv efter varv · ca 15–25 min</p></span>`;
+      <p>${CX.ex.map(id => EX[id].namn).join(' → ')}</p><p class="lbl" style="margin-top:4px">1 lätt klocka · 6 reps var · 10 varv · 30 s vila · ca 13 min</p></span>`;
     b.onclick = () => startComplex(); pl.appendChild(b); }
 }
 
@@ -1496,7 +1503,7 @@ function renderStep() {
       <div class="dots">${Array.from({length:x.sets}, (_, i) => `<i class="${i < st.s - 1 ? 'done' : ''}"></i>`).join('')}</div>
       <details class="tipsd" ${st.s === 1 ? 'open' : ''}><summary>Teknik</summary><ul class="tips">${e.tips.map(t => `<li>${t}</li>`).join('')}</ul></details>
       <div class="dock"><button class="btn big" id="nx">${st.cx ? (st.xi < SS.plan.length - 1 ? `Hoppa till ${SS.plan[st.xi + 1].e.namn} ›` : st.s < x.sets ? 'Varv klart ✓' : 'Sista varvet klart ✓') : st.s < x.sets ? 'Set klart ✓' : 'Övning klar ✓'}</button></div>`;
-    if (st.cx) { wrap.className = 'cxwrap'; const k = +(localStorage.getItem('bc_traning_cxk') || 1);
+    if (st.cx) { wrap.className = 'cxwrap'; const k = +(localStorage.getItem('bc_traning_cxk2') || 1);
       const tb = document.createElement('div'); tb.className = 'cxbox';
       tb.innerHTML = `<div class="cxrow"><b class="cxn">–</b><span class="cxl"></span></div><div class="cxbar"><i></i></div>
         <div class="cxpips">${Array.from({length:x.reps}, () => '<i></i>').join('')}</div>
@@ -1508,7 +1515,7 @@ function renderStep() {
     $('#nx').onclick = () => {
       const d = body.querySelectorAll('.dots i')[st.s - 1]; if (d) d.classList.add('done');
       const nxt = SS.steps[SS.i + 1];
-      if (st.cx) { if (nxt && nxt.type === 'set' && nxt.s !== st.s) startRest(x.rest, `Varv ${nxt.s} av ${x.sets} · ${nxt.x.e.namn} först`); else next(); return; }
+      if (st.cx) { if (nxt && nxt.type === 'set' && nxt.s !== st.s) startRest(x.rest, `Nästa: varv ${nxt.s} av ${x.sets} · ${nxt.x.e.namn}`); else next(); return; }
       if (nxt && nxt.type === 'set') startRest(x.rest, nxt.x === x ? `Nästa: set ${nxt.s} av ${x.sets}` : `Nästa: ${nxt.x.e.namn} · ${nxt.x.kg}`);
       else next();
     };
@@ -1724,24 +1731,26 @@ function openSheet(it) {
   $('#sh-add').onclick = () => { passSel.has(key) ? passSel.delete(key) : passSel.add(key); sh.classList.remove('on'); renderLib(); };
 }
 // helkroppskomplex: en klocka, 6 reps av varje, utan vila mellan övningarna, vila efter varje varv
-const CX = {ex:['bojdrodd', 'swing', 'goblet', 'gobletpress'], reps:6, it:{lugn:{v:4, rest:60}, normal:{v:6, rest:45}, tufft:{v:8, rest:30}}};
-function cxPlan() { const c = CX.it[INT] || CX.it.normal;
+const CX = {ex:['bojdrodd', 'swing', 'goblet', 'gobletpress'], reps:6, it:{normal:{v:10, rest:30}}};   // som i reelen (dave.fano): 10 varv, 30 s vila
+function cxPlan() { const c = CX.it.normal;
   return CX.ex.map(id => { const x = exPlan(id, 1, CX.reps); return {...x, sets:c.v, reps:CX.reps, bell:'l', kg:S.bells.l + ' kg', target:CX.reps + ' reps', rest:c.rest, g:'kb', cx:true}; }); }
-CX.tempo = {bojdrodd:3, swing:2, goblet:3.5, gobletpress:3};   // sekunder per rep
+CX.tempo = {bojdrodd:1.5, swing:1.5, goblet:2, gobletpress:2};   // sekunder per rep, reelens takt
 let CXT = null;
 function cxStop() { if (CXT) { clearInterval(CXT.iv); CXT = null; } }
 function cxTimer(st, box) {
   cxStop();
-  const x = st.x, n = x.reps, base = (CX.tempo[x.id] || 3) * 1000, prep = st.xi === 0 ? 5000 : 3000;
-  const T = CXT = {t:-prep, last:performance.now(), paused:false, rep:0, per:base * +(localStorage.getItem('bc_traning_cxk') || 1)};
+  const x = st.x, n = x.reps, base = (CX.tempo[x.id] || 3) * 1000, prep = st.xi === 0 && st.s === 1 ? 5000 : 0;
+  const T = CXT = {t:prep ? -prep : 0.001, last:performance.now(), paused:false, rep:0, per:base * +(localStorage.getItem('bc_traning_cxk2') || 1)};
   const big = box.querySelector('.cxn'), lab = box.querySelector('.cxl'), bar = box.querySelector('.cxbar i'), pb = box.querySelector('.cxpause');
-  const pips = box.querySelectorAll('.cxpips i');
+  const pips = box.querySelectorAll('.cxpips i'), spr = box.closest('.cxwrap').querySelector('.stage .exspr');
+  if (spr) spr.ext = true;
+  const frame = f => { if (spr) spr.style.backgroundPosition = `${Math.min(15, Math.floor(f * 16)) * 100 / 15}% 0`; };
   const draw = () => {
     if (T.t < 0) { box.classList.add('prep'); big.textContent = Math.ceil(-T.t / 1000);
-      lab.textContent = st.xi === 0 ? `Varv ${st.s} – gör dig redo` : `Byt till ${x.e.namn}`; bar.style.width = (100 * (1 + T.t / prep)) + '%'; return; }
+      lab.textContent = st.xi === 0 ? `Varv ${st.s} – gör dig redo` : `Byt till ${x.e.namn}`; bar.style.width = (100 * (1 + T.t / prep)) + '%'; frame(0); return; }
     box.classList.remove('prep');
     const r = Math.min(n, Math.floor(T.t / T.per) + 1);
-    big.textContent = r; lab.textContent = `rep av ${n}`; bar.style.width = (100 * ((T.t % T.per) / T.per)) + '%';
+    big.textContent = r; lab.textContent = `rep av ${n}`; bar.style.width = (100 * ((T.t % T.per) / T.per)) + '%'; frame((T.t % T.per) / T.per);
     pips.forEach((p, i) => p.className = i < r - 1 ? 'done' : i === r - 1 ? 'now' : '');
   };
   T.iv = setInterval(() => {
@@ -1756,22 +1765,22 @@ function cxTimer(st, box) {
   }, 80);
   pb.onclick = () => { T.paused = !T.paused; pb.textContent = T.paused ? '▶ Fortsätt' : '❚❚ Paus'; box.classList.toggle('paused', T.paused); };
   box.querySelectorAll('.cxtempo button').forEach(b => b.onclick = () => {
-    const k = Math.min(1.6, Math.max(.6, Math.round((+(localStorage.getItem('bc_traning_cxk') || 1) + (+b.dataset.d)) * 10) / 10));
-    localStorage.setItem('bc_traning_cxk', k); box.querySelector('.cxtempo span').textContent = cxTempoTxt(k);
+    const k = Math.min(1.6, Math.max(.6, Math.round((+(localStorage.getItem('bc_traning_cxk2') || 1) + (+b.dataset.d)) * 10) / 10));
+    localStorage.setItem('bc_traning_cxk2', k); box.querySelector('.cxtempo span').textContent = cxTempoTxt(k);
     const np = base * k; if (T.t > 0) T.t = T.t / T.per * np; T.per = np; T.rep = Math.floor(Math.max(0, T.t) / np); draw(); });
   draw();
 }
-const cxTempoTxt = k => k < .95 ? 'Snabbare' : k > 1.05 ? 'Lugnare' : 'Normalt tempo';
+const cxTempoTxt = k => k < .95 ? 'Snabbare' : k > 1.05 ? 'Lugnare' : 'Reelens tempo';
 function startComplex() {
   if (!S) S = fresh();
-  chooseInt('Hasses superpass · 1 kettlebell', cxPlan, (plan, it) => {
-    const c = CX.it[it], steps = [{type:'warm'}];
+  INT = 'normal'; const plan = cxPlan(), it = 'normal'; {
+    const c = CX.it.normal, steps = [{type:'warm'}];
     for (let v = 1; v <= c.v; v++) plan.forEach((x, xi) => steps.push({type:'set', x, xi, s:v, cx:true}));
     steps.push({type:'rpe'});
     SS = {k:'F', w:week(), plan, steps, i:0, namn:'Hasses superpass', t0:Date.now(), free:true, cx:c, it};
-    $('#ss-title').textContent = `Hasses superpass · ${c.v} varv · ${INTS[it].namn}`;
+    $('#ss-title').textContent = `Hasses superpass · ${c.v} varv`;
     show('s-sess'); renderStep(); wakeOn();
-  });
+  }
 }
 function startFree() {
   if (!S) S = fresh();
@@ -1818,7 +1827,7 @@ function exSprite(id, e) {
   d.dataset.src = `ex/${fid}/${id}.webp`; d.style.aspectRatio = `${w} / ${hh}`; d.style.backgroundPosition = '0 0';
   const flat = e && (e.walk || e.cycle);
   let i = 0, t = null;
-  const tick = () => { t = null; if (!d.isConnected || (sprIO && !d.vis)) return; d.style.backgroundPosition = `${i * 100 / 15}% 0`; const ms = flat ? 115 : EXDUR[i]; i = (i + 1) % 16; t = setTimeout(tick, ms); };
+  const tick = () => { t = null; if (d.ext || !d.isConnected || (sprIO && !d.vis)) return; d.style.backgroundPosition = `${i * 100 / 15}% 0`; const ms = flat ? 115 : EXDUR[i]; i = (i + 1) % 16; t = setTimeout(tick, ms); };
   d.go = () => { if (!t) t = setTimeout(tick, 30); };
   if (sprIO) setTimeout(() => sprIO.observe(d), 0); else { d.style.backgroundImage = `url(${d.dataset.src})`; if (!RM) d.go(); }
   return d;
