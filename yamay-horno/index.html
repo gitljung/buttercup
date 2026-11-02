@@ -375,7 +375,7 @@ function highlight(nodes, name, n) {
 }
 $('#pick .x').onclick = clearHi;
 // ---------- direkt manipulation: dra i lucka / galler / asklada, tryck pa spjallet ----------
-const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+const ray = new THREE.Raycaster(), ptr = new THREE.Vector2(); ray.params.Line.threshold = 0.002;
 function isVis(o) { while (o) { if (!o.visible) return false; o = o.parent; } return true; }
 function hitAt(e) {
   ptr.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(ptr, camera);
@@ -384,27 +384,29 @@ function hitAt(e) {
 function keyOf(part) { const m = part.userData.mech; if (!m.length) return null; if (m.includes('S')) return 'S'; return m.find(k => k !== 'S'); }
 function toScr(v) { const p = v.clone().project(camera); return new THREE.Vector2((p.x + 1) / 2 * innerWidth, (1 - p.y) / 2 * innerHeight); }
 let drag = null, down = null;
-canvas.addEventListener('pointerdown', e => {
+addEventListener('pointerdown', e => {   // fonstret, capture-fas: kor fore OrbitControls
+  if (e.target !== canvas) return;
   down = [e.clientX, e.clientY]; if (!model) return;
   const h = hitAt(e); if (!h) return;
   const k = keyOf(h.object.userData.part); if (!k || k === 'S') return;
   const m = MECH.find(x => x.k === k && x.nodes.includes(h.object.userData.part));
-  // riktningen i varlden (Fusion-axel genom gruppens matris) -> skarmvektor per mm
+  // dra langs delens axel: skarningspunkt mellan pekarstralen och ett plan genom axeln (vant mot kameran) -> delen foljer pekaren
   const par = h.object.userData.part.parent; par.updateWorldMatrix(true, false);
-  const dW = new THREE.Vector3(...m.dir).transformDirection(par.matrixWorld);
-  const s0 = toScr(h.point), s1 = toScr(h.point.clone().addScaledVector(dW, 0.05)), sv = s1.sub(s0).divideScalar(50);
-  if (sv.lengthSq() < 0.01) return;
-  drag = {id: e.pointerId, k, sv, x: e.clientX, y: e.clientY, v0: TG[k] * (m.dir.reduce((a, b) => a + b) < 0 && k === 'L' ? -1 : 1)};
-  drag.sign = 1; controls.enabled = false; canvas.style.cursor = 'grabbing';
+  const ax = new THREE.Vector3(...m.dir).transformDirection(par.matrixWorld).normalize();
+  const vd = camera.getWorldDirection(new THREE.Vector3());
+  const nrm = ax.clone().cross(vd.clone().cross(ax)).normalize();
+  if (nrm.lengthSq() < 1e-6) return;
+  drag = {id: e.pointerId, k, ax, plane: new THREE.Plane().setFromNormalAndCoplanarPoint(nrm, h.point), p0: h.point.clone(), v0: TG[k]};
+  controls.enabled = false; canvas.style.cursor = 'grabbing'; e.stopImmediatePropagation();
   try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
 }, true);
-canvas.addEventListener('pointermove', e => {
+addEventListener('pointermove', e => {
   if (drag && e.pointerId === drag.id) {
-    const d = new THREE.Vector2(e.clientX - drag.x, e.clientY - drag.y); drag.x = e.clientX; drag.y = e.clientY;
-    const mm = d.dot(drag.sv) / drag.sv.lengthSq();
-    setT(drag.k, TG[drag.k] + mm); ST[drag.k] = TG[drag.k]; e.preventDefault(); return;
+    ptr.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(ptr, camera);
+    const q = ray.ray.intersectPlane(drag.plane, new THREE.Vector3()); if (!q) return;
+    setT(drag.k, drag.v0 + q.sub(drag.p0).dot(drag.ax) * 1000); ST[drag.k] = TG[drag.k]; e.preventDefault(); return;
   }
-  if (!model || e.buttons) return;
+  if (!model || e.buttons || e.target !== canvas) return;
   const h = hitAt(e); canvas.style.cursor = h && keyOf(h.object.userData.part) ? (keyOf(h.object.userData.part) === 'S' ? 'pointer' : 'grab') : '';
 });
 function endDrag(e) { if (drag && e.pointerId === drag.id) { drag = null; controls.enabled = true; canvas.style.cursor = ''; } }
