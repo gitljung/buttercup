@@ -1,6 +1,6 @@
 // Stark igen: offline-cache sa sidan funkar pa gymmet utan tackning.
-const C = 'stark-igen-v20';
-const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
+const C = 'stark-igen-v21';
+const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './fighters/kent.webp', './fighters/bettan.webp', './fighters/pappa.webp', './fighters/sussie.webp'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(C).then(c => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== C).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', e => {

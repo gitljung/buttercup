@@ -174,6 +174,10 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .fstage{display:grid;grid-template-columns:1fr 1.1fr;gap:12px;align-items:center;border:4px solid var(--chili);border-radius:6px;padding:6px;background:var(--cream)}
 #fbig .fig{max-height:none;height:auto;width:100%}
 #fbig{position:relative}
+.spr{background-repeat:no-repeat;background-size:1600% 100%;width:100%;margin:0 auto;image-rendering:auto}
+#fbig .spr{width:auto;height:min(300px,62vw);max-width:100%;margin:6px auto 0}
+.fgrid button .spr{width:auto;height:96px;max-width:100%}
+@media (max-width:560px){.fgrid button .spr{height:74px}}
 .finfo h3{color:var(--chili);font-size:clamp(26px,6.5vw,38px);margin:0}
 .finfo .lbl{color:var(--ox);margin:2px 0 6px}
 .finfo .motto{font-size:15px;font-style:italic;margin:0 0 10px;color:var(--ox)}
@@ -1701,18 +1705,33 @@ let FBIG = null;
 function blip(f0 = 520, f1 = 1040, d = .12) { try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); const o = AC.createOscillator(), g = AC.createGain(); o.type = 'square';
   o.frequency.setValueAtTime(f0, AC.currentTime); o.frequency.exponentialRampToValueAtTime(f1, AC.currentTime + d); g.gain.setValueAtTime(.06, AC.currentTime); g.gain.exponentialRampToValueAtTime(.001, AC.currentTime + d + .05);
   o.connect(g); g.connect(AC.destination); o.start(); o.stop(AC.currentTime + d + .06); } catch (_) {} }
+// ---------------- sprite-figurer (gpt-image, 4x4-ark -> remsa med 16 bilder) ----------------
+const SPR = {kent:261, bettan:261, pappa:286, sussie:232}, SPR_H = 320;
+const SPR_DUR = [400, 90, 90, 250, 350, 200, 120, 250, 120, 140, 140, 180, 250, 350, 120, 150];
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function sprite(id, start = 0) {
+  const d = document.createElement('div'); d.className = 'spr';
+  d.style.backgroundImage = `url(fighters/${id}.webp)`; d.style.aspectRatio = `${SPR[id]} / ${SPR_H}`;
+  let i = start, t = null;
+  const set = () => d.style.backgroundPosition = `${i * 100 / 15}% 0`;
+  const tick = () => { if (!d.isConnected) return; set(); t = setTimeout(() => { i = (i + 1) % 16; tick(); }, SPR_DUR[i]); };
+  d.play = (from = 1) => { clearTimeout(t); i = from; RM ? set() : tick(); };
+  set(); if (!RM) setTimeout(tick, 30);
+  return d;
+}
 function renderFighters(animate) {
   const cur = fighterById(localStorage.getItem('bc_traning_fighter')), grid = $('#fgrid');
   if (!grid.children.length) FIGHTERS.forEach(f => {
     const b = document.createElement('button'); b.dataset.id = f.id; b.setAttribute('aria-label', f.namn);
-    b.appendChild(figure({...ANIM.guard, dur:ANIM.guard.dur + Math.random() * 120}, f, {vb:'56 -16 124 140', noGround:true, rays:false}));
+    b.appendChild(SPR[f.id] ? sprite(f.id, Math.floor(Math.random() * 16)) : figure({...ANIM.guard, dur:ANIM.guard.dur + Math.random() * 120}, f, {vb:'56 -16 124 140', noGround:true, rays:false}));
     const n = document.createElement('span'); n.textContent = f.kort; b.appendChild(n);
     b.onclick = () => pickFighter(f.id); grid.appendChild(b);
   });
   grid.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.id === cur.id));
   const big = $('#fbig'); if (FBIG) FBIG.remove();
-  FBIG = figure(animate ? ANIM.flex : ANIM.guard, cur, {vb:'40 -16 160 222', noGround:true}); big.appendChild(FBIG);
-  if (animate) setTimeout(() => FBIG && FBIG.isConnected && FBIG.setAnim(ANIM.guard), 1500);
+  if (SPR[cur.id]) { FBIG = sprite(cur.id, animate ? 1 : 0); big.appendChild(FBIG); }
+  else { FBIG = figure(animate ? ANIM.flex : ANIM.guard, cur, {vb:'40 -16 160 222', noGround:true}); big.appendChild(FBIG);
+    if (animate) setTimeout(() => FBIG && FBIG.isConnected && FBIG.setAnim(ANIM.guard), 1500); }
   $('#fname').textContent = cur.namn; $('#fmeta').textContent = `${cur.alder} år · ${cur.ort}`; $('#fmotto').textContent = '”' + cur.motto + '”';
   $('#fmove').textContent = 'Special: ' + cur.move;
   cur.st.forEach((v, i) => { const el = $('#fs' + i); el.style.width = '0'; requestAnimationFrame(() => requestAnimationFrame(() => el.style.width = v * 20 + '%')); });
