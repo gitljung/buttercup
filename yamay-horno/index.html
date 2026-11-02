@@ -98,7 +98,7 @@ details[open]>summary::after{content:'－'}
     <div class="row"><label>Asklåda</label><input type="range" id="sA" min="0" max="280" step="1" value="0"><output id="oA">inne</output></div>
     <div class="row"><label>Spjäll</label><div class="seg" id="spj"><button data-s="0" class="on">Öppet</button><button data-s="10">Halvt</button><button data-s="20">Stängt</button></div></div>
     <div class="row"><label>Corten</label><div class="seg" id="mat"><button data-m="ny" class="on">Grå</button><button data-m="rost">Rost</button></div></div>
-    <p class="mini">Dra direkt i modellen: fäll ner luckan (dra handtaget mot dig), dra gallren och asklådan ut och in. Tryck på spjället för att öppna/stänga. Gallren kräver att luckan är nedfälld – den fälls automatiskt.</p>
+    <p class="mini">Dra eller tryck direkt i modellen – med musen eller fingret: fäll ner luckan, dra ut gallren och asklådan (ett tryck växlar öppet/stängt, två fingrar zoomar och vrider). Tryck på spjället för att öppna/stänga. Gallren kräver att luckan är nedfälld – den fälls automatiskt.</p>
   </details>
   <details open><summary>Visa</summary>
     <div class="tg" id="grp"></div>
@@ -333,9 +333,9 @@ function stats() {
   $('#stats').innerHTML = `<b>Yamay Horno</b> · 670 × 460 × 708 mm (utan lucka/handtag)<br>
   Eldstad 540 × 400 mm · 3 gallernivåer (60 mm delning) för <b>GN 1/1</b> 530 × 325<br>
   Galler: 2 × gjutjärn Hendi 932018 + plancha Hendi 932001 – standard, så GN-brickor passar<br>
-  Lucka: fallucka som Josper HJX – led i yttre underkanten, fälls 90° till en hylla i kolrostens höjd; stopp på lagerbocken, dragfjäder 1.4568 via kedja över fjäderarm R60 håller den stängd<br>
+  Lucka: fallucka som Josper HJX – led i yttre underkanten, fälls 90° till en hylla i kolrostens höjd; stopp = klack på fjäderarmen mot fronten, dragfjäder 1.4568 via kedja över fjäderarm R60 håller den stängd<br>
   Kolrost: 4 laserskurna stavar 530 × 96 i 1.4828 (reservdel: Josper 0426AC) · lucköppning från 195 mm, 22 mm över kolen · asklåda med skjutspjäll<br>
-  Isolering: Vermilite 600 (20 mm) mellan innerlåda och yttre Corten-skal<br>
+  Isolering: Vermilite 600 (20 mm) mellan innerlåda och yttre Corten-skal, även innanför fronten ovanför luckan<br>
   Vikt ≈ 135 kg komplett (124 kg stål + Vermilite)`;
 }
 function buildBOM() {
@@ -366,20 +366,31 @@ function hitAt(e) {
 }
 function keyOf(part) { const m = part.userData.mech; if (!m.length) return null; if (m.includes('S')) return 'S'; return m.find(k => k !== 'S'); }
 function toScr(v) { const p = v.clone().project(camera); return new THREE.Vector2((p.x + 1) / 2 * innerWidth, (1 - p.y) / 2 * innerHeight); }
-let drag = null, down = null;
+let drag = null, down = null; const touches = new Set();
 addEventListener('pointerdown', e => {   // fonstret, capture-fas: kor fore OrbitControls
   if (e.target !== canvas) return;
+  touches.add(e.pointerId);
+  if (touches.size > 1) { if (drag) { drag = null; controls.enabled = true; } down = null; return; }   // tva fingrar = zooma/vrid
   down = [e.clientX, e.clientY]; if (!model) return;
   const h = hitAt(e); if (!h) return;
   const k = keyOf(h.object.userData.part); if (!k || k === 'S') return;
   const m = MECH.find(x => x.k === k && x.nodes.includes(h.object.userData.part));
   // dra langs delens axel: skarningspunkt mellan pekarstralen och ett plan genom axeln (vant mot kameran) -> delen foljer pekaren
   const par = h.object.userData.part.parent; par.updateWorldMatrix(true, false);
+  if (m.rot) {   // fallucka: vinkeln kring leden foljer pekaren (plan vinkelratt mot leden genom traffpunkten)
+    const axw = new THREE.Vector3(1, 0, 0).transformDirection(par.matrixWorld).normalize();
+    const pw = par.localToWorld(new THREE.Vector3(...LED.c).multiplyScalar(0.001));
+    const u = new THREE.Vector3(0, -1, 0).transformDirection(par.matrixWorld).normalize(), w = new THREE.Vector3(0, 0, 1).transformDirection(par.matrixWorld).normalize();
+    const plane = new THREE.Plane().setFromNormalAndCoplanarPoint(axw, h.point);
+    const ang = q => { const v = q.clone().sub(pw); return Math.atan2(v.dot(u), v.dot(w)) * 180 / Math.PI; };
+    drag = {id: e.pointerId, k, rot: true, plane, ang, a0: ang(h.point), v0: TG[k]};
+  } else {
   const ax = new THREE.Vector3(...m.dir).transformDirection(par.matrixWorld).normalize();
   const vd = camera.getWorldDirection(new THREE.Vector3());
   const nrm = ax.clone().cross(vd.clone().cross(ax)).normalize();
   if (nrm.lengthSq() < 1e-6) return;
   drag = {id: e.pointerId, k, ax, sc: m.scale || 1, plane: new THREE.Plane().setFromNormalAndCoplanarPoint(nrm, h.point), p0: h.point.clone(), v0: TG[k]};
+  }
   controls.enabled = false; canvas.style.cursor = 'grabbing'; e.stopImmediatePropagation();
   try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
 }, true);
@@ -387,19 +398,26 @@ addEventListener('pointermove', e => {
   if (drag && e.pointerId === drag.id) {
     ptr.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(ptr, camera);
     const q = ray.ray.intersectPlane(drag.plane, new THREE.Vector3()); if (!q) return;
-    setT(drag.k, drag.v0 + q.sub(drag.p0).dot(drag.ax) * 1000 * drag.sc); ST[drag.k] = TG[drag.k]; e.preventDefault(); return;
+    if (drag.rot) setT(drag.k, drag.v0 + drag.ang(q) - drag.a0);
+    else setT(drag.k, drag.v0 + q.sub(drag.p0).dot(drag.ax) * 1000 * drag.sc);
+    ST[drag.k] = TG[drag.k]; e.preventDefault(); return;
   }
   if (!model || e.buttons || e.target !== canvas) return;
   const h = hitAt(e); canvas.style.cursor = h && keyOf(h.object.userData.part) ? (keyOf(h.object.userData.part) === 'S' ? 'pointer' : 'grab') : '';
 });
-function endDrag(e) { if (drag && e.pointerId === drag.id) { drag = null; controls.enabled = true; canvas.style.cursor = ''; } }
+function endDrag(e) { touches.delete(e.pointerId); if (drag && e.pointerId === drag.id) { drag = null; controls.enabled = true; canvas.style.cursor = ''; } }
 addEventListener('pointerup', endDrag); addEventListener('pointercancel', endDrag);
 canvas.addEventListener('pointerup', e => {
   if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6 || !model) return;
   const h = hitAt(e); if (!h) { clearHi(); return; }
   const p = h.object.userData.part;
   if (keyOf(p) === 'S') { const v = TG.S > 10 ? 0 : 20; setT('S', v); document.querySelectorAll('#spj button').forEach(x => x.classList.toggle('on', +x.dataset.s === v)); toast(v ? 'Spjället stängt' : 'Spjället öppet'); return; }
-  if (keyOf(p)) return;
+  const k = keyOf(p);
+  if (k) {   // tryck = vaxla oppet/stangt (lattare med fingret an att dra)
+    const tog = {L: [45, 90], G1: [100, 250], G2: [100, 250], G3: [100, 250], A: [100, 280]}[k];
+    if (tog) { setT(k, TG[k] > tog[0] ? 0 : tog[1]); toast({L: 'Luckan', G1: 'Gallret', G2: 'Gallret', G3: 'Plancha', A: 'Asklådan'}[k] + (TG[k] > tog[0] ? (k === 'L' ? ' öppen' : ' ute') : (k === 'L' ? ' stängd' : ' inne'))); }
+    return;
+  }
   const same = parts.filter(q => q.userData.name === p.userData.name); highlight(same, p.userData.name, same.length);
 });
 $('#ph').onclick = () => { if (MOB()) $('#panel').classList.toggle('min'); };
