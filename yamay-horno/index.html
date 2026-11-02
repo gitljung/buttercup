@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Yamay Horno – interaktiv modell</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Yamay Horno – kolugn i Corten med vertikal motviktslucka. Interaktiv 3D-modell direkt ur Fusion: öppna luckan, dra ut GN 1/1-gallren och asklådan, ställ spjället.">
+<meta name="description" content="Yamay Horno – kolugn i Corten med fallucka (Josper-princip). Interaktiv 3D-modell direkt ur Fusion: öppna luckan, dra ut GN 1/1-gallren och asklådan, ställ spjället.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="buttercup.nu">
 <meta property="og:title" content="Yamay Horno – interaktiv 3D-modell">
-<meta property="og:description" content="Kolugn i Corten med vertikal motviktslucka. Öppna luckan, dra ut GN 1/1-gallren och asklådan, ställ spjället – direkt ur Fusion.">
+<meta property="og:description" content="Kolugn i Corten med fallucka (Josper-princip). Öppna luckan, dra ut GN 1/1-gallren och asklådan, ställ spjället – direkt ur Fusion.">
 <meta property="og:url" content="https://www.buttercup.nu/yamay-horno/">
 <meta property="og:image" content="https://www.buttercup.nu/yamay-horno/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -89,16 +89,16 @@ details[open]>summary::after{content:'－'}
 <div id="toast"></div>
 <div id="panel">
   <h2 id="ph">Yamay Horno</h2>
-  <div class="sub">Kolugn · motviktslucka · GN 1/1 · modell direkt ur Fusion</div>
+  <div class="sub">Kolugn · fallucka med fjäder · GN 1/1 · modell direkt ur Fusion</div>
   <details open><summary>Använd</summary>
-    <div class="row"><label>Lucka</label><input type="range" id="sL" min="0" max="260" step="1" value="0"><output id="oL">stängd</output></div>
+    <div class="row"><label>Lucka</label><input type="range" id="sL" min="0" max="90" step="1" value="0"><output id="oL">stängd</output></div>
     <div class="row"><label>Galler 1</label><input type="range" id="sG1" min="0" max="250" step="1" value="0"><output id="oG1">inne</output></div>
     <div class="row"><label>Galler 2</label><input type="range" id="sG2" min="0" max="250" step="1" value="0"><output id="oG2">inne</output></div>
     <div class="row"><label>Plancha</label><input type="range" id="sG3" min="0" max="250" step="1" value="0"><output id="oG3">inne</output></div>
     <div class="row"><label>Asklåda</label><input type="range" id="sA" min="0" max="280" step="1" value="0"><output id="oA">inne</output></div>
     <div class="row"><label>Spjäll</label><div class="seg" id="spj"><button data-s="0" class="on">Öppet</button><button data-s="10">Halvt</button><button data-s="20">Stängt</button></div></div>
     <div class="row"><label>Corten</label><div class="seg" id="mat"><button data-m="ny" class="on">Grå</button><button data-m="rost">Rost</button></div></div>
-    <p class="mini">Dra direkt i modellen: luckan (eller handtaget) upp och ner, gallren och asklådan ut och in. Tryck på spjället för att öppna/stänga. Gallren kräver att luckan är öppen – den lyfts automatiskt.</p>
+    <p class="mini">Dra direkt i modellen: fäll ner luckan (dra handtaget mot dig), dra gallren och asklådan ut och in. Tryck på spjället för att öppna/stänga. Gallren kräver att luckan är nedfälld – den fälls automatiskt.</p>
   </details>
   <details open><summary>Visa</summary>
     <div class="tg" id="grp"></div>
@@ -138,7 +138,7 @@ const ground = new THREE.Mesh(new THREE.CircleGeometry(3, 64), new THREE.ShadowM
 // glod: ljus + glodbadd ovanpa kolrosten (z 190 mm)
 const glow = new THREE.PointLight('#ff6a1a', 1.6, 0.9, 1.6); glow.position.set(0, 0.24, 0); scene.add(glow);
 const emberMat = new THREE.MeshStandardMaterial({color: '#2a0d05', emissive: '#ff5a10', emissiveIntensity: 1.6, roughness: 1});
-const ember = new THREE.Mesh(new THREE.BoxGeometry(0.39, 0.03, 0.27), emberMat); ember.position.set(0, 0.205, 0); scene.add(ember);
+const ember = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.03, 0.39), emberMat); ember.position.set(0, 0.189, 0.0275); scene.add(ember);
 
 // ---------- material ----------
 function noiseTex(c1, c2, spots, seed = 1) {
@@ -189,12 +189,13 @@ function matFor(ap, name) {
 }
 
 // ---------- mekanik (Fusion-mm, nodernas lokala rum = Fusion-rummet) ----------
-// L = luckans lyft 0..260, G1..G3 = galler utdragna (mot -y), A = asklada ut, S = spjall 0 oppet .. 20 stangt
+// L = falluckans vinkel 0..90 grader (led i luckans yttre underkant), G1..G3 = galler utdragna (mot -y), A = asklada ut, S = spjall 0 oppet .. 20 stangt
 const ST = {L: 0, G1: 0, G2: 0, G3: 0, A: 0, S: 0}, TG = {...ST};
-const LIM = {L: [0, 260], G1: [0, 250], G2: [0, 250], G3: [0, 250], A: [0, 280], S: [0, 20]};
-const GTOP = {G1: 311, G2: 371, G3: 426}, LUCK_Z0 = 240;          // gallrens overkant, luckans underkant (stangd)
-const needL = k => GTOP[k] - LUCK_Z0 + 8;                            // lyft som kravs for att gallret ska ga fri
-const TR = {r: 50, c: [0, -200, 800], yF: -250, yB: -150, luckTop: 520, mvTop: 730};
+const LIM = {L: [0, 90], G1: [0, 250], G2: [0, 250], G3: [0, 250], A: [0, 280], S: [0, 20]};
+const GTOP = {G1: 311, G2: 371, G3: 426};
+const needL = k => 88;                                                // gallret gar bara ut over en helt nedfalld lucka
+const LED = {c: [0, -265, 175]};                                      // falluckans led (Fusion-mm), axel +x
+const FJ = {rear: 196, len: 144, arm: 60, chainFront: -265, chainLen: 317};   // dragfjader (bakre ogla fast) + kedja
 const loader = new GLTFLoader();
 let model = null, groups = {}, parts = [], byId = {}, MECH = [];
 function prog(p) { $('#load .bar i').style.width = Math.round(p * 100) + '%'; }
@@ -217,8 +218,7 @@ function setup(root) {
   // vilka noder foljer vilket reglage (riktning i Fusion-mm)
   const sel = re => parts.filter(n => re.test(n.userData.top || ''));
   MECH = [
-    {k: 'L', nodes: sel(/^Lucka |^Handtag fjader#lucka/), dir: [0, 0, 1]},
-    {k: 'L', nodes: sel(/^Motvikt/), dir: [0, 0, -1]},
+    {k: 'L', nodes: sel(/^Lucka |^Handtag fjader#lucka|^Gangjarnsora|^Fjaderarm|^Ledtapp|^ISO 10642 A4 M10|^ISO 7380 A4 M10/), dir: [0, -1, 0], rot: true, scale: 90 / 250},
     {k: 'G1', nodes: [byId['Galler GN11#1']], dir: [0, -1, 0]},
     {k: 'G2', nodes: [byId['Galler GN11#2']], dir: [0, -1, 0]},
     {k: 'G3', nodes: [byId['Plancha GN11#1']], dir: [0, -1, 0]},
@@ -226,46 +226,29 @@ function setup(root) {
     {k: 'S', nodes: sel(/^Spjall/), dir: [-1, 0, 0]},
   ].map(m => ({...m, nodes: m.nodes.filter(Boolean)}));
   for (const n of parts) n.userData.mech = MECH.filter(m => m.nodes.includes(n)).map(m => m.k);
-  makeRopes();
   buildGroupToggles(); applyAll(); buildBOM(); stats();
 }
 function applyMech() {
   for (const n of parts) n.userData.off.set(0, 0, 0);
-  for (const m of MECH) for (const n of m.nodes) n.userData.off.add(new THREE.Vector3(...m.dir).multiplyScalar(ST[m.k] / 1000));
+  for (const m of MECH) if (!m.rot) for (const n of m.nodes) n.userData.off.add(new THREE.Vector3(...m.dir).multiplyScalar(ST[m.k] / 1000));
+  const qL = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), ST.L * Math.PI / 180), piv = new THREE.Vector3(...LED.c).multiplyScalar(0.001);
   for (const n of parts) {
-    n.position.copy(n.userData.base).add(n.userData.off).addScaledVector(n.userData.exp, exploded);
-    n.quaternion.copy(n.userData.q0);
+    const p = n.userData.base.clone();
+    n.quaternion.copy(n.userData.q0); n.scale.set(1, 1, 1);
+    if (n.userData.mech.includes('L')) { p.sub(piv).applyQuaternion(qL).add(piv); n.quaternion.premultiply(qL); }
+    n.position.copy(p).add(n.userData.off).addScaledVector(n.userData.exp, exploded);
   }
-  // trissorna: framre parten (mot luckan) gar upp nar luckan lyfts -> vinkel = -L / r kring +x
-  for (const id of ['Trissa hoger#1', 'Trissa vanster#1']) {
-    const n = byId[id]; if (!n) continue;
-    const x = id.includes('hoger') ? 301 : -301, cL = new THREE.Vector3(x, TR.c[1], TR.c[2]).multiplyScalar(0.001);
-    const q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -ST.L / TR.r);
-    n.quaternion.copy(n.userData.q0).multiply(q);
-    const c0 = cL.clone().applyQuaternion(n.userData.q0), c1 = cL.clone().applyQuaternion(n.quaternion);
-    n.position.add(c0.sub(c1));
+  // kedjan rullas upp pa fjaderarmen (R60) och fjadern strackts lika mycket
+  const s = FJ.arm * ST.L * Math.PI / 180;
+  for (const n of parts) {
+    const t = n.userData.top || '';
+    if (/^Dragfjader/.test(t)) { const f = (FJ.len + s) / FJ.len; n.scale.set(1, f, 1); n.position.y += (1 - f) * FJ.rear / 1000; }
+    else if (/^Kedja/.test(t)) { const f = (FJ.chainLen - s) / FJ.chainLen; n.scale.set(1, f, 1); n.position.y += (1 - f) * FJ.chainFront / 1000; }
   }
-  updateRopes(); outputs();
+  outputs();
 }
-// kedjor/vajrar trissa -> lucka och trissa -> motvikt (ritas, finns inte i Fusion)
-let ropes = []; const ropeMat = new THREE.LineBasicMaterial({color: '#1d1d1f'});
-function makeRopes() {
-  const mat = ropeMat;
-  for (const x of [301, -301]) for (const side of ['F', 'B']) {
-    const g = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
-    const l = new THREE.Line(g, mat); l.userData = {x, side}; groups['Mekanik']?.add(l); ropes.push(l);
-  }
-}
-function updateRopes() {
-  const e = exploded;
-  for (const l of ropes) {
-    const {x, side} = l.userData, y = side === 'F' ? TR.yF : TR.yB;
-    const zEnd = side === 'F' ? TR.luckTop + ST.L : TR.mvTop - ST.L;
-    const p = l.geometry.attributes.position; p.setXYZ(0, x / 1000, y / 1000, TR.c[2] / 1000); p.setXYZ(1, x / 1000, y / 1000, zEnd / 1000); p.needsUpdate = true;
-    l.visible = e < 0.02;
-  }
-}
-const fmtL = v => v < 1 ? 'stängd' : v > 255 ? 'öppen' : Math.round(v) + ' mm';
+const ropeMat = new THREE.LineBasicMaterial({color: '#1d1d1f'});
+const fmtL = v => v < 1 ? 'stängd' : v > 89 ? 'öppen (hylla)' : Math.round(v) + '°';
 const fmtU = v => v < 1 ? 'inne' : Math.round(v) + ' mm';
 function outputs() {
   $('#oL').textContent = fmtL(TG.L); for (const k of ['G1', 'G2', 'G3']) $('#o' + k).textContent = fmtU(TG[k]); $('#oA').textContent = fmtU(TG.A);
@@ -273,13 +256,13 @@ function outputs() {
 }
 let toastT = 0;
 function toast(t) { const el = $('#toast'); el.textContent = t; el.style.opacity = 1; clearTimeout(toastT); toastT = setTimeout(() => el.style.opacity = 0, 1800); }
-// regler: galler ut kraver lyft lucka; lucka kan inte stangas over ett utdraget galler
+// regler: galler ut kraver nedfalld lucka; luckan kan inte stangas over ett utdraget galler
 function setT(k, v, user = true) {
   const [lo, hi] = LIM[k]; v = Math.max(lo, Math.min(hi, v));
   if (k === 'L') {
     const need = Math.max(0, ...['G1', 'G2', 'G3'].filter(g => TG[g] > 2).map(needL));
     if (v < need) { if (user && TG.L >= need - 0.5) toast('Skjut in gallret först'); v = need; }
-  } else if (k in GTOP && v > 0 && TG.L < needL(k)) { TG.L = needL(k) + 20; if (user) toast('Luckan lyfts'); }
+  } else if (k in GTOP && v > 0 && TG.L < needL(k)) { TG.L = 90; if (user) toast('Luckan fälls ned'); }
   TG[k] = v; outputs();
 }
 ['L', 'G1', 'G2', 'G3', 'A'].forEach(k => $('#s' + k).oninput = e => setT(k, +e.target.value));
@@ -329,7 +312,7 @@ function drawDims() {
 const VIEWS = {
   'Översikt': [[1.05, 0.95, 1.45], [0, 0.42, 0]],
   'Framifrån': [[0, 0.5, 1.9], [0, 0.42, 0]],
-  'Lucka & motvikt': [[1.0, 0.75, 0.45], [0.3, 0.6, 0.15]],
+  'Lucka & fjäder': [[1.25, 0.65, 1.15], [0.1, 0.22, 0.15]],
   'Eldstad': [[0.05, 0.62, 0.9], [0, 0.33, 0]],
   'Asklåda': [[0.55, 0.3, 0.95], [0, 0.1, 0.2]],
   'Ovanifrån': [[0, 2.0, 0.01], [0, 0, 0]],
@@ -342,18 +325,18 @@ function goView(k) {
   camAnim = {t0: performance.now(), e0: camera.position.clone(), t0v: controls.target.clone(), e1: eye, t1: new THREE.Vector3(...t)};
 }
 for (const k of Object.keys(VIEWS)) { const b = document.createElement('button'); b.textContent = k; b.onclick = () => goView(k); $('#views').appendChild(b); }
-const CH = [['Översikt', () => goView('Översikt')], ['Öppna lucka', () => setT('L', TG.L > 130 ? 0 : 260)], ['Dra ut galler', () => setT('G1', TG.G1 > 100 ? 0 : 250)], ['Asklåda', () => setT('A', TG.A > 100 ? 0 : 280)], ['Spjäll', () => setT('S', TG.S > 10 ? 0 : 20)], ['Eldstad', () => goView('Eldstad')], ['Snitt', () => $('#tCut').click(), '#tCut'], ['Sprängvy', () => $('#tExp').click(), '#tExp'], ['Glöd', () => $('#tGlo').click(), '#tGlo']];
+const CH = [['Översikt', () => goView('Översikt')], ['Öppna lucka', () => setT('L', TG.L > 45 ? 0 : 90)], ['Dra ut galler', () => setT('G1', TG.G1 > 100 ? 0 : 250)], ['Asklåda', () => setT('A', TG.A > 100 ? 0 : 280)], ['Spjäll', () => setT('S', TG.S > 10 ? 0 : 20)], ['Eldstad', () => goView('Eldstad')], ['Snitt', () => $('#tCut').click(), '#tCut'], ['Sprängvy', () => $('#tExp').click(), '#tExp'], ['Glöd', () => $('#tGlo').click(), '#tGlo']];
 for (const [t, f, ref] of CH) { const b = document.createElement('button'); b.className = 'chip'; b.textContent = t; b.onclick = f; if (ref) b.dataset.ref = ref; $('#chips').appendChild(b); }
 function syncChips() { document.querySelectorAll('#chips .chip').forEach(c => { if (c.dataset.ref) c.classList.toggle('on', $(c.dataset.ref).classList.contains('on')); }); }
 // ---------- fakta + stycklista ----------
 function stats() {
-  $('#stats').innerHTML = `<b>Yamay Horno</b> · 670 × 460 × 860 mm (utan lucka/handtag)<br>
+  $('#stats').innerHTML = `<b>Yamay Horno</b> · 670 × 460 × 708 mm (utan lucka/handtag)<br>
   Eldstad 540 × 400 mm · 3 gallernivåer (60 mm delning) för <b>GN 1/1</b> 530 × 325<br>
   Galler: 2 × gjutjärn Hendi 932018 + plancha Hendi 932001 – standard, så GN-brickor passar<br>
-  Lucka: vertikal, motvikter 2 × 4,7 kg över dolda trissor Ø100, lyft 260 mm<br>
-  Kolrost: 3 × Kirami 135 × 290 gjutjärn på rostbädd · asklåda med skjutspjäll<br>
+  Lucka: fallucka som Josper HJX – led i yttre underkanten, fälls 90° till en hylla i kolrostens höjd; stopp på lagerbocken, dragfjäder 1.4568 via kedja över fjäderarm R60 håller den stängd<br>
+  Kolrost: 4 laserskurna stavar 530 × 96 i 1.4828 (reservdel: Josper 0426AC) · lucköppning från 195 mm, 22 mm över kolen · asklåda med skjutspjäll<br>
   Isolering: Vermilite 600 (20 mm) mellan innerlåda och yttre Corten-skal<br>
-  Vikt ≈ 145 kg komplett (beräknad)`;
+  Vikt ≈ 135 kg komplett (124 kg stål + Vermilite)`;
 }
 function buildBOM() {
   const t = $('#bom'); t.innerHTML = '';
@@ -396,7 +379,7 @@ addEventListener('pointerdown', e => {   // fonstret, capture-fas: kor fore Orbi
   const vd = camera.getWorldDirection(new THREE.Vector3());
   const nrm = ax.clone().cross(vd.clone().cross(ax)).normalize();
   if (nrm.lengthSq() < 1e-6) return;
-  drag = {id: e.pointerId, k, ax, plane: new THREE.Plane().setFromNormalAndCoplanarPoint(nrm, h.point), p0: h.point.clone(), v0: TG[k]};
+  drag = {id: e.pointerId, k, ax, sc: m.scale || 1, plane: new THREE.Plane().setFromNormalAndCoplanarPoint(nrm, h.point), p0: h.point.clone(), v0: TG[k]};
   controls.enabled = false; canvas.style.cursor = 'grabbing'; e.stopImmediatePropagation();
   try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
 }, true);
@@ -404,7 +387,7 @@ addEventListener('pointermove', e => {
   if (drag && e.pointerId === drag.id) {
     ptr.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(ptr, camera);
     const q = ray.ray.intersectPlane(drag.plane, new THREE.Vector3()); if (!q) return;
-    setT(drag.k, drag.v0 + q.sub(drag.p0).dot(drag.ax) * 1000); ST[drag.k] = TG[drag.k]; e.preventDefault(); return;
+    setT(drag.k, drag.v0 + q.sub(drag.p0).dot(drag.ax) * 1000 * drag.sc); ST[drag.k] = TG[drag.k]; e.preventDefault(); return;
   }
   if (!model || e.buttons || e.target !== canvas) return;
   const h = hitAt(e); canvas.style.cursor = h && keyOf(h.object.userData.part) ? (keyOf(h.object.userData.part) === 'S' ? 'pointer' : 'grab') : '';
