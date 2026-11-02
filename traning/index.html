@@ -1391,7 +1391,7 @@ $('#go-prog').onclick = () => { save(); renderProg(); show('s-prog'); };
 $('#lib-back').onclick = () => goBack(); $('#go-lib0').onclick = () => openLib(); const HEJ = Array.from({length:7}, (_, i) => `hasse/hej${i + 1}.mp3`); let hejLast = -1, hejAu = null;
 function hallaGanget() { let i; do i = Math.floor(Math.random() * HEJ.length); while (i === hejLast && HEJ.length > 1); hejLast = i;
   try { if (hejAu) hejAu.pause(); hejAu = new Audio(HEJ[i]); hejAu.volume = 1; hejAu.play().catch(() => {}); } catch (_) {} }
-$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget();
+$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); CX.ex.forEach(k => { new Image().src = `ex/hasse/${k}.webp`; });
   b.classList.add('talk'); setTimeout(() => { b.classList.remove('talk'); delete b.dataset.busy; useGear('kb'); if (!S) S = fresh(); startComplex(); }, 1500); }; $('#lib-go').onclick = () => startFree();
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#sheet').classList.remove('on'); });
 
@@ -1440,7 +1440,7 @@ function renderProg() {
   }
   if (G.id === 'kb') { const b = document.createElement('button'); b.className = 'passcard cxcard';
     b.innerHTML = `<span class="ltr">⚡</span><span><h3>Hasses superpass<span class="tag">Extra</span></h3>
-      <p>${CX.ex.map(id => EX[id].namn).join(' → ')}</p><p class="lbl" style="margin-top:4px">1 lätt klocka · 6 reps var · 10 varv · 30 s vila · ca 13 min</p></span>`;
+      <p>Böjd rodd → Swing → Goblet-knäböj → Press</p><p class="lbl" style="margin-top:4px">1 lätt klocka · 6 reps var · 10 varv · 30 s vila · ca 13 min</p></span>`;
     b.onclick = () => startComplex(); pl.appendChild(b); }
 }
 
@@ -1742,7 +1742,8 @@ function openSheet(it) {
 // helkroppskomplex: en klocka, 6 reps av varje, utan vila mellan övningarna, vila efter varje varv
 const CX = {ex:['bojdrodd', 'swing', 'goblet', 'gobletpress'], reps:6, it:{normal:{v:10, rest:30}}};   // som i reelen (dave.fano): 10 varv, 30 s vila
 function cxPlan() { const c = CX.it.normal;
-  return CX.ex.map(id => { const x = exPlan(id, 1, CX.reps); return {...x, sets:c.v, reps:CX.reps, bell:'l', kg:S.bells.l + ' kg', target:CX.reps + ' reps', rest:c.rest, g:'kb', cx:true}; }); }
+  return CX.ex.map(id => { const x = exPlan(id, 1, CX.reps); if (id === 'goblet') x.e = {...x.e, namn:'Goblet-knäböj', tips:['Håll klockan i hornen tätt mot bröstet','Sitt ner mellan hälarna – bröstet upp, knäna ut','Res dig rakt upp och kläm rumpan i toppen']};
+    return {...x, sets:c.v, reps:CX.reps, bell:'l', kg:S.bells.l + ' kg', target:CX.reps + ' reps', rest:c.rest, g:'kb', cx:true}; }); }
 CX.tempo = {bojdrodd:1.5, swing:1.5, goblet:2, gobletpress:2};   // sekunder per rep, reelens takt
 let CXT = null;
 function cxStop() { if (CXT) { clearInterval(CXT.iv); CXT = null; } }
@@ -1830,7 +1831,7 @@ const EXDUR = [320, 200, 110, 110, 110, 110, 110, 240, 240, 240, 110, 110, 110, 
 const sprIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const d = en.target; d.vis = en.isIntersecting;
   if (d.vis && !d.style.backgroundImage) d.style.backgroundImage = `url(${d.dataset.src})`; if (d.vis && !RM) d.go(); }), {rootMargin:'200px'}) : null;
 function exSprite(id, e) {
-  const fid = localStorage.getItem('bc_traning_fighter') || 'kent', v = EXM[fid] && EXM[fid][id], w = Array.isArray(v) ? v[0] : v, hh = Array.isArray(v) ? v[1] : (EXM.h || 256);
+  const fid = SS && SS.cx && EXM.hasse && EXM.hasse[id] ? 'hasse' : localStorage.getItem('bc_traning_fighter') || 'kent', v = EXM[fid] && EXM[fid][id], w = Array.isArray(v) ? v[0] : v, hh = Array.isArray(v) ? v[1] : (EXM.h || 256);
   if (!w) return null;
   const d = document.createElement('div'); d.className = 'spr exspr';
   d.dataset.src = `ex/${fid}/${id}.webp`; d.style.aspectRatio = `${w} / ${hh}`; d.style.backgroundPosition = '0 0';
@@ -1838,6 +1839,9 @@ function exSprite(id, e) {
   let i = 0, t = null;
   const tick = () => { t = null; if (d.ext || !d.isConnected || (sprIO && !d.vis)) return; d.style.backgroundPosition = `${i * 100 / 15}% 0`; const ms = flat ? 115 : EXDUR[i]; i = (i + 1) % 16; t = setTimeout(tick, ms); };
   d.go = () => { if (!t) t = setTimeout(tick, 30); };
+  const near = () => { if (!d.isConnected || d.style.backgroundImage) return; const r = d.getBoundingClientRect();
+    if (r.height && r.top < innerHeight + 200 && r.bottom > -200) { d.vis = true; d.style.backgroundImage = `url(${d.dataset.src})`; if (!RM) d.go(); } };
+  setTimeout(near, 60); setTimeout(near, 400);
   if (sprIO) setTimeout(() => sprIO.observe(d), 0); else { d.style.backgroundImage = `url(${d.dataset.src})`; if (!RM) d.go(); }
   return d;
 }
