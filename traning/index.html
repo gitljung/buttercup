@@ -787,6 +787,40 @@ Object.assign(MGMAP, {
   vaggarm:['brost','armar'], knaarm:['brost','armar','bal'], sidoplanka:['bal'], fagelhund:['bal','rygg'], stolres:['ben','rumpa'], vadhav:['ben'], superman:['rygg','rumpa'],
 });
 
+// ---------------- kettlebellövningar via @kettlebell_programming (Mike Dunn) ----------------
+const KNEEL = {hip:[112,158], kn:[112,198], an:[74,198], sh:[112,104], head:[114,82]};
+const KP = '@kettlebell_programming';
+Object.assign(EX_KB, {
+  gorillarodd:{namn:'Gorillarodd', bell:'l', kb2:true, unit:'reps', sida:true, rest:75, niva:'Medel', kalla:KP,
+    tips:['Två klockor på golvet mellan fötterna, brett isär','Fäll fram med rak rygg, en hand på varje klocka','Ro upp en klocka i taget – den andra stannar i golvet'],
+    poses:[P(BENT,{hip:[86,134], el:[114,104], ha:[124,128], el2:[140,138], ha2:[140,164]}), P(BENT,{hip:[86,134], el:[140,138], ha:[140,164], el2:[114,104], ha2:[124,128]})], dur:1100},
+  gungpress:{namn:'Gungpress', bell:'l', kb2:true, unit:'reps', sida:true, rest:90, niva:'Medel', kalla:KP,
+    tips:['En klocka i rack på varje sida','Pressa upp den ena – sänk den samtidigt som den andra går upp','Spänn magen så kroppen inte vickar'],
+    poses:[P(ST,{el:[120,44], ha:[116,20], el2:[104,94], ha2:[108,72], kbo:[6,-6]}), P(ST,{el:[126,94], ha:[124,72], el2:[106,44], ha2:[110,20], kbo:[6,-6]})], dur:1300},
+  knapress:{namn:'Press på knä', bell:'l', unit:'reps', sida:true, rest:75, prop:'mat', niva:'Lätt', kalla:KP,
+    tips:['Stå på knä med rak kropp, kläm rumpan','Klockan i rack – pressa rakt upp','Inget svank: på knä kan du inte fuska med benen'],
+    poses:[P(KNEEL,{el:[126,132], ha:[124,110], kbo:[6,-6]}), P(KNEEL,{el:[120,82], ha:[116,58], kbo:[6,-6]})], dur:1400},
+  knacurl:{namn:'Långsam curl på knä', bell:'l', unit:'reps', rest:60, prop:'mat', niva:'Lätt', kalla:KP,
+    tips:['Stå på knä, håll klockan i hornen','Lyft upp i normal takt','Sänk på 3–4 sekunder – det är där musklerna växer'],
+    poses:[P(KNEEL,{el:[116,132], ha:[118,158], kbo:[0,4]}), P(KNEEL,{el:[116,132], ha:[136,112], kbo:[0,4]})], dur:2200},
+  bjornrodd:{namn:'Björnrodd', bell:'l', unit:'reps', sida:true, rest:75, prop:'mat', niva:'Medel', kalla:KP,
+    tips:['På händer och fötter, knäna svävar några centimeter över golvet','Ena handen på klockan – ro upp den mot höften','Håll höften stilla och knäna nere hela setet'],
+    poses:[{hip:[92,150], kn:[110,180], an:[74,196], sh:[148,150], head:[168,136], el:[150,174], ha:[152,182], el2:[148,174], ha2:[148,197]},
+           {hip:[92,150], kn:[110,180], an:[74,196], sh:[148,150], head:[168,136], el:[126,140], ha:[136,162], el2:[148,174], ha2:[148,197]}], dur:1400},
+  hogadrag:{namn:'Höga drag', bell:'t', unit:'reps', rest:75, niva:'Medel', kalla:KP,
+    tips:['Klockan mellan fötterna, båda händerna på handtaget','Skjut fram höften och dra klockan upp mot bröstet','Armbågarna högt och ut. Sänk kontrollerat'],
+    poses:[P(BENT,{el:[140,134], ha:[140,160], kbo:[0,8]}), P(ST,{el:[136,58], ha:[124,76], kbo:[0,8]})], dur:1200},
+  squatclean:{namn:'Knäböjsvändning, två händer', bell:'t', unit:'reps', rest:90, niva:'Medel', kalla:KP,
+    tips:['Sätt dig ner och ta klockan i hornen mellan fötterna','Res dig explosivt och för upp klockan mot bröstet','Avsluta stående med klockan i goblet-läge, sänk och upprepa'],
+    poses:[{hip:[84,152], kn:[126,156], an:[110,199], sh:[110,104], head:[118,84], el:[122,128], ha:[118,150], kbo:[0,10]}, P(GOB,{})], dur:1500},
+  renegad:{namn:'Renegadrodd på knä', bell:'l', kb2:true, unit:'reps', sida:true, rest:90, prop:'mat', niva:'Medel', kalla:KP,
+    tips:['Planka på knä med händerna på två klockor','Ro upp en klocka mot höften utan att vrida kroppen','Byt sida. Bredare knän ger mer balans'],
+    poses:[{kn:[80,196], an:[50,184], hip:[104,168], sh:[150,142], head:[168,132], el:[150,164], ha:[150,182], el2:[150,164], ha2:[150,182], kbo:[0,0]},
+           {kn:[80,196], an:[50,184], hip:[104,168], sh:[150,142], head:[168,132], el:[128,136], ha:[138,158], el2:[150,164], ha2:[150,182], kbo:[0,0]}], dur:1300},
+});
+Object.assign(MGMAP, {gorillarodd:['rygg','armar','bal'], gungpress:['axlar','armar','bal'], knapress:['axlar','bal'], knacurl:['armar'], bjornrodd:['rygg','bal'],
+  hogadrag:['axlar','rygg','rumpa'], squatclean:['ben','rumpa','puls'], renegad:['rygg','bal','armar']});
+
 const GEARS = {
   kb:{id:'kb', namn:'Kettlebell', key:'bc_traning_kb_v1', EX:EX_KB, PHASES:PHASES_KB, WARM:WARM_KB, KG:[4,6,8,10,12,14,16,18,20,22,24,28,32], def:{k:{l:8, t:12}, m:{l:12, t:16}},
       titel:'Dina klockor', lbl:'Mina två kettlebells', tip:{k:'Förslag för kvinnor som börjar om: 8 kg + 12 kg. Hellre för lätt än för tungt.', m:'Förslag för män som börjar om: 12 kg + 16 kg. Hellre för lätt än för tungt.'}, ord:'tyngre klockor', icon:'#kb'},
@@ -1395,7 +1429,7 @@ function libCard(x, i) {
   const inP = passSel.has(key);
   const info = document.createElement('div'); info.className = 'libinfo';
   info.innerHTML = `<h3>${e.namn}</h3><p class="mgs">${mg.map(m => `<span class="${libSel.has(m) ? 'hit' : ''}">${MG.find(g => g.id === m).namn}</span>`).join('')}</p>
-    <p class="lbl">${e.niva || 'Lätt'}${e.sida ? ' · per sida' : ''}</p><button class="addp ${inP ? 'on' : ''}">${inP ? '✓ Med i passet' : '+ Lägg till i pass'}</button>`;
+    <p class="lbl">${e.niva || 'Lätt'}${e.sida ? ' · per sida' : ''}${e.kalla ? ` · <a href="https://www.instagram.com/${e.kalla.slice(1)}/" target="_blank" rel="noopener" style="color:inherit">${e.kalla}</a>` : ''}</p><button class="addp ${inP ? 'on' : ''}">${inP ? '✓ Med i passet' : '+ Lägg till i pass'}</button>`;
   c.appendChild(info); libIO.observe(c);
   box.onclick = info.querySelector('h3').onclick = () => openSheet(x);
   info.querySelector('.addp').onclick = (ev) => { passSel.has(key) ? passSel.delete(key) : passSel.add(key); blip(); renderDock(); const b = ev.currentTarget, on = passSel.has(key); b.classList.toggle('on', on); b.textContent = on ? '✓ Med i passet' : '+ Lägg till i pass'; };
