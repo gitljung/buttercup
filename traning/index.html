@@ -251,7 +251,13 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .mgchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;justify-content:center}
 .mgchips button{border:2px solid var(--chili);background:var(--cream);color:var(--chili);border-radius:999px;font:700 14px var(--label);letter-spacing:.06em;text-transform:uppercase;padding:7px 12px;cursor:pointer;transition:transform .15s var(--pop)}
 .mgchips button.on{background:var(--chili);color:var(--cream);transform:rotate(-2deg)}
-.libgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:18px}
+.geartabs{position:sticky;top:36px;z-index:5;display:flex;gap:6px;overflow-x:auto;margin:16px -4px 0;padding:8px 4px;background:var(--buttercup)}
+.geartabs button{flex:0 0 auto;border:3px solid var(--chili);background:var(--cream);color:var(--chili);border-radius:8px;font:400 18px var(--display);text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:transform .15s var(--pop)}
+.geartabs button.on{background:var(--chili);color:var(--buttercup);transform:rotate(-2deg) scale(1.04);box-shadow:3px 3px 0 var(--ox)}
+.libsec{display:flex;align-items:center;gap:10px;margin:24px 0 0;border-bottom:4px solid var(--chili);padding-bottom:4px}
+.libsec svg{width:30px;height:30px}.libsec h2{margin:0;font-size:30px}
+.libsec span{margin-left:auto;background:var(--chili);color:var(--cream);font:400 16px var(--display);border-radius:999px;padding:2px 10px}
+.libgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:12px}
 .libcard{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:center;background:var(--cream);border:3px solid var(--chili);border-radius:6px;box-shadow:4px 4px 0 var(--chili);padding:8px;animation:inn .4s var(--ease) both}
 .libfig{height:120px;border:2px solid var(--chili);border-radius:4px;overflow:hidden;cursor:pointer;background:#FFF1C9}
 .libfig .fig{width:100%;height:100%;max-height:none}
@@ -309,6 +315,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
         <b>Maskiner</b><small>På gymmet</small>
       </button>
     </div>
+    <button class="libbtn" id="go-lib0"><span class="lbl">Övningsbank</span><b>Alla övningar</b><small>Välj muskelgrupp och redskap – sätt ihop ett eget pass</small></button>
     <div class="warn"><b>Innan du börjar:</b> har du hjärt- eller kärlproblem, högt blodtryck, ont i ryggen eller nyligen opererats – prata med din vårdcentral först. Det ska kännas ansträngande, aldrig smärtsamt.</div>
   </div>
 </section>
@@ -378,14 +385,15 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 
 <!-- ============ ÖVNINGSBANK ============ -->
 <section class="screen" id="s-lib">
-  <div class="sshead"><button id="lib-back">‹ Programmet</button><span class="lbl">Övningsbank · <span id="lib-gear"></span></span><span style="width:60px"></span></div>
+  <div class="sshead"><button id="lib-back">‹ Programmet</button><span class="lbl">Övningsbank</span><span style="width:60px"></span></div>
   <h2 style="margin-top:6px">Vad vill du träna?</h2>
   <div class="card">
     <div id="lib-map"></div>
     <div class="mgchips" id="mgchips"></div>
     <p class="note" id="lib-count" style="margin:10px 0 0"></p>
   </div>
-  <div class="libgrid" id="lib-list"></div>
+  <div class="geartabs" id="geartabs"></div>
+  <div id="lib-list"></div>
   <div style="height:110px"></div>
   <div class="dock" id="lib-dock" style="display:none"><button class="btn big" id="lib-go">Kör fritt pass</button></div>
 </section>
@@ -742,6 +750,12 @@ const WARMS = {
 
 // ---------------- state ----------------
 let S = load();
+function withGear(gid, fn) {
+  if (gid === G.id) return fn();
+  const keep = {G, EX, PHASES, WARM, KEY, KG, S}, sex = S ? S.sex : 'k';
+  G = GEARS[gid]; ({EX, PHASES, WARM, key:KEY, KG} = G); S = load() || fresh(sex);
+  try { return fn(); } finally { ({G, EX, PHASES, WARM, KEY, KG, S} = keep); }
+}
 function load() { try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch (_) { return null; } }
 function save() { localStorage.setItem(KEY, JSON.stringify(S)); }
 function fresh(sex = 'k') { return {sex, bells: G.def ? {...G.def[sex]} : null, mw: G.id === 'mach' ? {...MW0[sex]} : null, ppw:2, log:[], adj:{}, easy:0}; }
@@ -1008,9 +1022,9 @@ function figure(ex, f = fighterById(localStorage.getItem('bc_traning_fighter')),
 
 // ---------------- navigation ----------------
 let CUR = 's-start', FROM = {};
-const PARENT = {'s-profile':'s-start', 's-prog':'s-start', 's-lib':'s-prog', 's-done':'s-prog', 's-sess':'s-prog'};
+const PARENT = {'s-profile':'s-start', 's-prog':'s-start', 's-done':'s-prog', 's-sess':'s-prog'};
 function show(id, fromHistory) {
-  if (id !== CUR) { if (id === 's-log') FROM['s-log'] = CUR; if (!fromHistory) history.pushState({id}, ''); }
+  if (id !== CUR) { if ((id === 's-log' || id === 's-lib') && !['s-done', 's-sess', 's-log', 's-lib'].includes(CUR)) FROM[id] = CUR; if (!fromHistory) history.pushState({id}, ''); }
   CUR = id;
   document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); scrollTo({top:0, behavior:'smooth'});
   $('#bc-back').style.display = id === 's-start' ? 'none' : ''; $('#bc-home').style.display = id === 's-start' ? '' : 'none';
@@ -1019,7 +1033,8 @@ function goBack() {
   if ($('#sheet').classList.contains('on')) { $('#sheet').classList.remove('on'); return true; }
   if (CUR === 's-start') return false;
   if (CUR === 's-sess') { if (!confirm('Avbryta passet? Det sparas inte.')) return true; stopRest(); wakeOff(); SS = null; }
-  const to = CUR === 's-log' ? (FROM['s-log'] || 's-start') : PARENT[CUR] || 's-start';
+  const to = FROM[CUR] && (CUR === 's-log' || CUR === 's-lib') ? FROM[CUR] : PARENT[CUR] || 's-start';
+  if (CUR === 's-done' && SS && SS.free && FROM['s-lib']) { show('s-lib', true); return true; }
   if (to === 's-prog' && S) renderProg();
   if (to === 's-start') { if (typeof gearStatus === 'function') gearStatus(); }
   show(to, true); return true;
@@ -1060,7 +1075,7 @@ document.querySelectorAll('.bell .pm button').forEach(b => b.onclick = () => {
   renderProfile(); const el = $('#kg-' + k); el.animate([{transform:'scale(1.35)'}, {transform:'scale(1)'}], {duration:300, easing:'cubic-bezier(.3,1.6,.5,1)'});
 });
 $('#go-prog').onclick = () => { save(); renderProg(); show('s-prog'); };
-$('#go-lib').onclick = () => openLib(); $('#lib-back').onclick = () => { renderProg(); show('s-prog'); }; $('#lib-go').onclick = () => startFree();
+$('#go-lib').onclick = () => openLib(); $('#lib-back').onclick = () => goBack(); $('#go-lib0').onclick = () => openLib(); $('#lib-go').onclick = () => startFree();
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#sheet').classList.remove('on'); });
 
 // ---------------- program ----------------
@@ -1119,10 +1134,10 @@ function renderStep() {
     const wrap = document.createElement('div');
     const stage = document.createElement('div'); stage.className = 'stage film';
     stage.innerHTML = `<span class="wbadge">${x.kg}</span><span class="setbadge">Set ${st.s}/${x.sets}</span>`;
-    if (G.id === 'mach' && e.mw) { const wb = stage.querySelector('.wbadge'); wb.classList.add('mwb');
+    if (e.mw) { const wb = stage.querySelector('.wbadge'); wb.classList.add('mwb');
       wb.innerHTML = `<button aria-label="Lättare">−</button><span>${x.kg}</span><button aria-label="Tyngre">+</button>`;
       const [mi, pl] = wb.querySelectorAll('button');
-      const upd = d => { const cur = S.mw[x.id] ?? parseFloat(x.kg); const nv = Math.max(0, cur + d * mstep(cur + (d < 0 ? -0.1 : 0))); S.mw[x.id] = nv; x.kg = nv + ' kg'; save();
+      const upd = d => { const nv = withGear(x.g || G.id, () => { const cur = S.mw[x.id] ?? parseFloat(x.kg); const v = Math.max(0, cur + d * mstep(cur + (d < 0 ? -0.1 : 0))); S.mw[x.id] = v; save(); return v; }); x.kg = nv + ' kg';
         wb.querySelector('span').textContent = x.kg; wb.querySelector('span').animate([{transform:'scale(1.3)'}, {transform:'scale(1)'}], {duration:250}); };
       mi.onclick = () => upd(-1); pl.onclick = () => upd(1); }
     stage.appendChild(figure(e)); wrap.appendChild(stage);
@@ -1177,7 +1192,7 @@ document.addEventListener('pointerdown', () => { try { AC = AC || new (window.Au
 
 // avsluta + progression
 function finish(r) {
-  if (SS.free) { wakeOff(); S.free = (S.free || 0) + 1; save(); $('#ss-prog').style.width = '100%';
+  if (SS.free) { wakeOff(); if (S.log.length) { S.free = (S.free || 0) + 1; save(); } $('#ss-prog').style.width = '100%';
     $('#d-eyebrow').textContent = `Fritt pass · ${{easy:'Lätt', ok:'Lagom', hard:'Tungt', too:'För tungt'}[r]}`; $('#d-stamp').textContent = 'Fritt!';
     $('#d-head').textContent = 'Snyggt jobbat'; $('#d-msg').textContent = `${SS.plan.length} övningar avklarade. Fria pass räknas inte in i 12-veckorsprogrammet – men kroppen märker dem.`;
     const df = $('#d-fig'); df.innerHTML = ''; df.appendChild(figure(ANIM.flex, undefined, {vb:'40 -30 160 236', noGround:true}));
@@ -1258,61 +1273,93 @@ function bodyMapSVG() {
     <g data-mg="puls" class="heart"><circle cx="100" cy="40" r="15"/><path d="M100 50s-9-5-9-11a4.5 4.5 0 0 1 9-2a4.5 4.5 0 0 1 9 2c0 6-9 11-9 11z" class="hp"/></g></svg>`;
 }
 function doseOf(e) { return e.unit === 'm' ? 20 : e.unit === 'sek' ? 30 : e.unit === 'min' ? 5 : e.unit === 'varv' ? 5 : e.sida ? 8 : 10; }
+const LIBG = [{id:'kb', namn:'Kettlebell', icon:'#kb', vb:'0 0 56 70'}, {id:'db', namn:'Hantlar', icon:'#db', vb:'0 -20 70 70'}, {id:'mach', namn:'Maskiner'}, {id:'bw', namn:'Kroppsvikt'}];
+let libGear = 'alla';
+function libItems() {   // varje övning en gång, sorterad under sitt redskap
+  const seen = new Set(), out = [];
+  for (const gid of ['kb', 'db', 'mach']) for (const [id, e] of Object.entries(GEARS[gid].EX)) {
+    if (seen.has(id)) continue; seen.add(id);
+    const bw = gid !== 'mach' && !e.bell;
+    out.push({id, e, gid, sec: bw ? 'bw' : gid, key: gid + ':' + id, mg: MGMAP[id] || []});
+  }
+  return out;
+}
 function openLib() {
-  $('#lib-gear').textContent = G.namn; $('#lib-map').innerHTML = bodyMapSVG();
+  $('#lib-map').innerHTML = bodyMapSVG();
   $('#lib-map').querySelectorAll('[data-mg]').forEach(el => el.onclick = () => toggleMg(el.dataset.mg));
   const ch = $('#mgchips'); ch.innerHTML = MG.map(m => `<button data-mg="${m.id}">${m.namn}</button>`).join('');
   ch.querySelectorAll('button').forEach(b => b.onclick = () => toggleMg(b.dataset.mg));
+  const gt = $('#geartabs'); gt.innerHTML = [{id:'alla', namn:'Alla'}, ...LIBG].map(g => `<button data-g="${g.id}">${g.namn}</button>`).join('');
+  gt.querySelectorAll('button').forEach(b => b.onclick = () => { libGear = b.dataset.g; blip(); renderLib(); });
   renderLib(); show('s-lib');
 }
 function toggleMg(id) { libSel.has(id) ? libSel.delete(id) : libSel.add(id); blip(libSel.has(id) ? 500 : 700, libSel.has(id) ? 900 : 400, .08); renderLib(); }
+function libCard(x, i) {
+  const {id, e, mg, key} = x;
+  const c = document.createElement('div'); c.className = 'libcard'; c.style.animationDelay = Math.min(i, 12) * 35 + 'ms';
+  const box = document.createElement('div'); box.className = 'libfig film';
+  box.appendChild(figure(e, undefined, {vb: e.prop === 'mat' ? '14 76 200 130' : e.prop === 'bike' ? '40 -4 170 210' : e.prop ? '20 -24 210 230' : '36 -26 170 232', rays:false, noBoil:true}));
+  c.appendChild(box);
+  const inP = passSel.has(key);
+  const info = document.createElement('div'); info.className = 'libinfo';
+  info.innerHTML = `<h3>${e.namn}</h3><p class="mgs">${mg.map(m => `<span class="${libSel.has(m) ? 'hit' : ''}">${MG.find(g => g.id === m).namn}</span>`).join('')}</p>
+    <p class="lbl">${e.niva || 'Lätt'}${e.sida ? ' · per sida' : ''}</p><button class="addp ${inP ? 'on' : ''}">${inP ? '✓ Med i passet' : '+ Lägg till i pass'}</button>`;
+  c.appendChild(info); libIO.observe(c);
+  box.onclick = info.querySelector('h3').onclick = () => openSheet(x);
+  info.querySelector('.addp').onclick = (ev) => { passSel.has(key) ? passSel.delete(key) : passSel.add(key); blip(); renderDock(); const b = ev.currentTarget, on = passSel.has(key); b.classList.toggle('on', on); b.textContent = on ? '✓ Med i passet' : '+ Lägg till i pass'; };
+  return c;
+}
 function renderLib() {
   document.querySelectorAll('#lib-map [data-mg], #mgchips [data-mg]').forEach(el => el.classList.toggle('on', libSel.has(el.dataset.mg)));
+  document.querySelectorAll('#geartabs button').forEach(b => b.classList.toggle('on', b.dataset.g === libGear));
   const list = $('#lib-list'); list.innerHTML = '';
   if (libIO) libIO.disconnect();
   libIO = new IntersectionObserver(es => es.forEach(en => { const f = en.target.querySelector('.fig'); if (f) f.paused = !en.isIntersecting; }));
-  let items = Object.entries(EX).map(([id, e]) => ({id, e, mg:MGMAP[id] || [], hit:(MGMAP[id] || []).filter(m => libSel.has(m)).length}));
-  if (libSel.size) items = items.filter(x => x.hit).sort((a, b) => b.hit - a.hit || (MGMAP[a.id] || []).indexOf([...libSel][0]) - (MGMAP[b.id] || []).indexOf([...libSel][0]));
-  $('#lib-count').textContent = libSel.size ? `${items.length} övningar för ${[...libSel].map(m => MG.find(g => g.id === m).namn.toLowerCase()).join(', ')}` : `Alla ${items.length} övningar – välj muskelgrupp för att filtrera`;
-  items.forEach(({id, e, mg}, i) => {
-    const c = document.createElement('div'); c.className = 'libcard'; c.style.animationDelay = Math.min(i, 12) * 35 + 'ms';
-    const box = document.createElement('div'); box.className = 'libfig film';
-    box.appendChild(figure(e, undefined, {vb: e.prop === 'mat' ? '14 76 200 130' : e.prop === 'bike' ? '40 -4 170 210' : e.prop ? '20 -24 210 230' : '36 -26 170 232', rays:false, noBoil:true}));
-    c.appendChild(box);
-    const inP = passSel.has(id);
-    const info = document.createElement('div'); info.className = 'libinfo';
-    info.innerHTML = `<h3>${e.namn}</h3><p class="mgs">${mg.map(m => `<span class="${libSel.has(m) ? 'hit' : ''}">${MG.find(g => g.id === m).namn}</span>`).join('')}</p>
-      <p class="lbl">${e.niva || 'Lätt'}${e.sida ? ' · per sida' : ''}</p><button class="addp ${inP ? 'on' : ''}">${inP ? '✓ Med i passet' : '+ Lägg till i pass'}</button>`;
-    c.appendChild(info); list.appendChild(c); libIO.observe(c);
-    box.onclick = info.querySelector('h3').onclick = () => openSheet(id);
-    info.querySelector('.addp').onclick = (ev) => { passSel.has(id) ? passSel.delete(id) : passSel.add(id); blip(); renderDock(); const b = ev.currentTarget, on = passSel.has(id); b.classList.toggle('on', on); b.textContent = on ? '✓ Med i passet' : '+ Lägg till i pass'; };
-  });
+  const first = [...libSel][0];
+  let items = libItems().map(x => ({...x, hit: x.mg.filter(m => libSel.has(m)).length}));
+  if (libSel.size) items = items.filter(x => x.hit);
+  if (libGear !== 'alla') items = items.filter(x => x.sec === libGear);
+  const mgTxt = [...libSel].map(m => MG.find(g => g.id === m).namn.toLowerCase()).join(', ');
+  const gTxt = libGear === 'alla' ? '' : ' · ' + LIBG.find(g => g.id === libGear).namn.toLowerCase();
+  $('#lib-count').textContent = libSel.size ? `${items.length} övningar för ${mgTxt}${gTxt}` : `${items.length} övningar${gTxt} – välj muskelgrupp för att filtrera`;
+  let n = 0;
+  for (const g of LIBG) {
+    const its = items.filter(x => x.sec === g.id).sort((a, b) => b.hit - a.hit || a.mg.indexOf(first) - b.mg.indexOf(first));
+    if (!its.length) continue;
+    const h = document.createElement('div'); h.className = 'libsec';
+    h.innerHTML = `${g.icon ? `<svg viewBox="${g.vb}"><use href="${g.icon}" width="${g.id === 'db' ? 70 : 56}" height="${g.id === 'db' ? 30 : 70}"/></svg>` : ''}<h2>${g.namn}</h2><span>${its.length}</span>`;
+    list.appendChild(h);
+    const grid = document.createElement('div'); grid.className = 'libgrid';
+    its.forEach(x => grid.appendChild(libCard(x, n++)));
+    list.appendChild(grid);
+  }
+  if (!items.length) list.innerHTML = '<p class="note" style="text-align:center;margin-top:20px">Inga övningar för det valet – prova ett annat redskap.</p>';
   renderDock();
 }
-function renderDock() { const n = [...passSel].filter(id => EX[id]).length; $('#lib-dock').style.display = n ? '' : 'none'; $('#lib-go').textContent = `Kör fritt pass · ${n} övning${n === 1 ? '' : 'ar'}`; }
-function openSheet(id) {
-  const e = EX[id], sh = $('#sheet'), x = exPlan(id, 3, doseOf(e));
+function renderDock() { const n = passSel.size; $('#lib-dock').style.display = n ? '' : 'none'; $('#lib-go').textContent = `Kör fritt pass · ${n} övning${n === 1 ? '' : 'ar'}`; }
+function planOf(key) { const [gid, id] = key.split(':'); return withGear(gid, () => ({...exPlan(id, 3, doseOf(EX[id])), g: gid})); }
+function openSheet(it) {
+  const {id, e, key} = it, sh = $('#sheet'), x = planOf(key);
   sh.querySelector('.in').innerHTML = `<button class="x" aria-label="Stäng">×</button><div class="stage film"><span class="wbadge">${x.kg}</span></div>
     <div class="exname">${e.namn}</div><div class="target">3 × ${x.target}</div>
     <p class="mgs">${(MGMAP[id] || []).map(m => `<span class="hit">${MG.find(g => g.id === m).namn}</span>`).join('')}</p>
     <ul class="tips">${e.tips.map(t => `<li>${t}</li>`).join('')}</ul>
-    <button class="btn big" id="sh-add">${passSel.has(id) ? '✓ Med i passet' : '+ Lägg till i pass'}</button>`;
+    <button class="btn big" id="sh-add">${passSel.has(key) ? '✓ Med i passet' : '+ Lägg till i pass'}</button>`;
   sh.querySelector('.stage').appendChild(figure(e));
   sh.classList.add('on');
   sh.querySelector('.x').onclick = () => sh.classList.remove('on');
-  $('#sh-add').onclick = () => { passSel.has(id) ? passSel.delete(id) : passSel.add(id); sh.classList.remove('on'); renderLib(); };
+  $('#sh-add').onclick = () => { passSel.has(key) ? passSel.delete(key) : passSel.add(key); sh.classList.remove('on'); renderLib(); };
 }
 function startFree() {
-  const ids = [...passSel].filter(id => EX[id]);
-  const plan = ids.map(id => exPlan(id, 3, doseOf(EX[id])));
+  if (!S) S = fresh();
+  const plan = [...passSel].map(planOf);
   const steps = [{type:'warm'}];
   plan.forEach((x, xi) => { for (let s = 1; s <= x.sets; s++) steps.push({type:'set', x, xi, s}); });
   steps.push({type:'rpe'});
   SS = {k:'F', w:week(), plan, steps, i:0, namn:'Fritt pass', t0:Date.now(), free:true};
-  $('#ss-title').textContent = `${G.namn} · Fritt pass`;
+  $('#ss-title').textContent = 'Fritt pass';
   show('s-sess'); renderStep(); wakeOn();
 }
-
 // ---------------- choose your fighter ----------------
 let FBIG = null;
 function blip(f0 = 520, f1 = 1040, d = .12) { try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); const o = AC.createOscillator(), g = AC.createGain(); o.type = 'square';
