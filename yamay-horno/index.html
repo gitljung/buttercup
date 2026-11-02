@@ -93,8 +93,7 @@ details[open]>summary::after{content:'－'}
   <details open><summary>Använd</summary>
     <div class="row"><label>Lucka</label><input type="range" id="sL" min="0" max="90" step="1" value="0"><output id="oL">stängd</output></div>
     <div class="row"><label>Galler 1</label><input type="range" id="sG1" min="0" max="250" step="1" value="0"><output id="oG1">inne</output></div>
-    <div class="row"><label>Galler 2</label><input type="range" id="sG2" min="0" max="250" step="1" value="0"><output id="oG2">inne</output></div>
-    <div class="row"><label>Plancha</label><input type="range" id="sG3" min="0" max="250" step="1" value="0"><output id="oG3">inne</output></div>
+    <div class="row"><label>Plancha</label><input type="range" id="sG2" min="0" max="250" step="1" value="0"><output id="oG2">inne</output></div>
     <div class="row"><label>Asklåda</label><input type="range" id="sA" min="0" max="280" step="1" value="0"><output id="oA">inne</output></div>
     <div class="row"><label>Spjäll</label><div class="seg" id="spj"><button data-s="0" class="on">Öppet</button><button data-s="10">Halvt</button><button data-s="20">Stängt</button></div></div>
     <div class="row"><label>Corten</label><div class="seg" id="mat"><button data-m="ny" class="on">Grå</button><button data-m="rost">Rost</button></div></div>
@@ -189,10 +188,10 @@ function matFor(ap, name) {
 }
 
 // ---------- mekanik (Fusion-mm, nodernas lokala rum = Fusion-rummet) ----------
-// L = falluckans vinkel 0..90 grader (led i luckans yttre underkant), G1..G3 = galler utdragna (mot -y), A = asklada ut, S = spjall 0 oppet .. 20 stangt
-const ST = {L: 0, G1: 0, G2: 0, G3: 0, A: 0, S: 0}, TG = {...ST};
-const LIM = {L: [0, 90], G1: [0, 250], G2: [0, 250], G3: [0, 250], A: [0, 280], S: [0, 20]};
-const GTOP = {G1: 311, G2: 371, G3: 426};
+// L = falluckans vinkel 0..90 grader (led i luckans yttre underkant), G1 = galler niva 1, G2 = plancha niva 2 (vaxlar med galler 2) (mot -y), A = asklada ut, S = spjall 0 oppet .. 20 stangt
+const ST = {L: 0, G1: 0, G2: 0, A: 0, S: 0}, TG = {...ST};
+const LIM = {L: [0, 90], G1: [0, 250], G2: [0, 250], A: [0, 280], S: [0, 20]};
+const GTOP = {G1: 301, G2: 356};
 const needL = k => 88;                                                // gallret gar bara ut over en helt nedfalld lucka
 const LED = {c: [0, -265, 175]};                                      // falluckans led (Fusion-mm), axel +x
 const FJ = {rear: 196, len: 144, arm: 60, chainFront: -265, chainLen: 317};   // dragfjader (bakre ogla fast) + kedja
@@ -220,8 +219,7 @@ function setup(root) {
   MECH = [
     {k: 'L', nodes: sel(/^Lucka |^Handtag fjader#lucka|^Gangjarnsora|^Fjaderarm|^Ledtapp|^ISO 10642 A4 M10|^ISO 7380 A4 M10/), dir: [0, -1, 0], rot: true, scale: 90 / 250},
     {k: 'G1', nodes: [byId['Galler GN11#1']], dir: [0, -1, 0]},
-    {k: 'G2', nodes: [byId['Galler GN11#2']], dir: [0, -1, 0]},
-    {k: 'G3', nodes: [byId['Plancha GN11#1']], dir: [0, -1, 0]},
+    {k: 'G2', nodes: [byId['Plancha GN11#1']], dir: [0, -1, 0]},
     {k: 'A', nodes: sel(/^Asklada|^Spjall|^Handtag fjader#ask/), dir: [0, -1, 0]},
     {k: 'S', nodes: sel(/^Spjall/), dir: [-1, 0, 0]},
   ].map(m => ({...m, nodes: m.nodes.filter(Boolean)}));
@@ -251,8 +249,8 @@ const ropeMat = new THREE.LineBasicMaterial({color: '#1d1d1f'});
 const fmtL = v => v < 1 ? 'stängd' : v > 89 ? 'öppen (hylla)' : Math.round(v) + '°';
 const fmtU = v => v < 1 ? 'inne' : Math.round(v) + ' mm';
 function outputs() {
-  $('#oL').textContent = fmtL(TG.L); for (const k of ['G1', 'G2', 'G3']) $('#o' + k).textContent = fmtU(TG[k]); $('#oA').textContent = fmtU(TG.A);
-  if (document.activeElement?.type !== 'range') { $('#sL').value = TG.L; for (const k of ['G1', 'G2', 'G3']) $('#s' + k).value = TG[k]; $('#sA').value = TG.A; }
+  $('#oL').textContent = fmtL(TG.L); for (const k of ['G1', 'G2']) $('#o' + k).textContent = fmtU(TG[k]); $('#oA').textContent = fmtU(TG.A);
+  if (document.activeElement?.type !== 'range') { $('#sL').value = TG.L; for (const k of ['G1', 'G2']) $('#s' + k).value = TG[k]; $('#sA').value = TG.A; }
 }
 let toastT = 0;
 function toast(t) { const el = $('#toast'); el.textContent = t; el.style.opacity = 1; clearTimeout(toastT); toastT = setTimeout(() => el.style.opacity = 0, 1800); }
@@ -260,12 +258,12 @@ function toast(t) { const el = $('#toast'); el.textContent = t; el.style.opacity
 function setT(k, v, user = true) {
   const [lo, hi] = LIM[k]; v = Math.max(lo, Math.min(hi, v));
   if (k === 'L') {
-    const need = Math.max(0, ...['G1', 'G2', 'G3'].filter(g => TG[g] > 2).map(needL));
+    const need = Math.max(0, ...['G1', 'G2'].filter(g => TG[g] > 2).map(needL));
     if (v < need) { if (user && TG.L >= need - 0.5) toast('Skjut in gallret först'); v = need; }
   } else if (k in GTOP && v > 0 && TG.L < needL(k)) { TG.L = 90; if (user) toast('Luckan fälls ned'); }
   TG[k] = v; outputs();
 }
-['L', 'G1', 'G2', 'G3', 'A'].forEach(k => $('#s' + k).oninput = e => setT(k, +e.target.value));
+['L', 'G1', 'G2', 'A'].forEach(k => $('#s' + k).oninput = e => setT(k, +e.target.value));
 document.querySelectorAll('#spj button').forEach(b => b.onclick = () => { document.querySelectorAll('#spj button').forEach(x => x.classList.toggle('on', x === b)); setT('S', +b.dataset.s); });
 document.querySelectorAll('#mat button').forEach(b => b.onclick = () => { document.querySelectorAll('#mat button').forEach(x => x.classList.toggle('on', x === b)); matMode = b.dataset.m; applyAll(); });
 
@@ -330,11 +328,11 @@ for (const [t, f, ref] of CH) { const b = document.createElement('button'); b.cl
 function syncChips() { document.querySelectorAll('#chips .chip').forEach(c => { if (c.dataset.ref) c.classList.toggle('on', $(c.dataset.ref).classList.contains('on')); }); }
 // ---------- fakta + stycklista ----------
 function stats() {
-  $('#stats').innerHTML = `<b>Yamay Horno</b> · 670 × 460 × 708 mm (utan lucka/handtag)<br>
-  Eldstad 540 × 400 mm · 3 gallernivåer (60 mm delning) för <b>GN 1/1</b> 530 × 325<br>
-  Galler: 2 × gjutjärn Hendi 932018 + plancha Hendi 932001 – standard, så GN-brickor passar<br>
+  $('#stats').innerHTML = `<b>Yamay Horno</b> · 670 × 460 × 653 mm inkl. justerfötter (utan lucka/handtag)<br>
+  Eldstad 540 × 400 mm · 2 gallernivåer som Josper (60 mm delning, övre nivån 74 mm under lucköppningens överkant) för <b>GN 1/1</b> 530 × 325<br>
+  Galler: 2 × gjutjärn Hendi 932018 + plancha Hendi 932001 (plancha eller galler på övre nivån) – standard, så GN-brickor passar<br>
   Lucka: fallucka som Josper HJX – led i yttre underkanten, fälls 90° till en hylla i kolrostens höjd; stopp = klack på fjäderarmen mot fronten, dragfjäder 1.4568 via kedja över fjäderarm R60 håller den stängd<br>
-  Kolrost: 4 laserskurna stavar 530 × 96 i 1.4828 (reservdel: Josper 0426AC) · lucköppning från 195 mm, 22 mm över kolen · asklåda med skjutspjäll<br>
+  Kolrost: 4 laserskurna stavar 530 × 96 i 1.4828 (reservdel: Josper 0426AC) · lucköppning från 195 mm, 22 mm över kolen · asklåda med skjutspjäll på rostfria hjul (massiva Ø25, utan lager/fett – tål värmen), C-skenor hindrar tippning, stopp efter ≈335 mm<br>
   Isolering: Vermilite 600 (20 mm) mellan innerlåda och yttre Corten-skal, även innanför fronten ovanför luckan<br>
   Fötter: sidor, front och bak går ned till benen i hörnen (som Yakitori/Asado); sidornas ben bockade till fotflänsar 60 × 25 med 4 rostfria justerfötter M8 Ø40 (±10 mm)<br>
   Vikt ≈ 135 kg komplett (125 kg stål + Vermilite)`;
@@ -415,8 +413,8 @@ canvas.addEventListener('pointerup', e => {
   if (keyOf(p) === 'S') { const v = TG.S > 10 ? 0 : 20; setT('S', v); document.querySelectorAll('#spj button').forEach(x => x.classList.toggle('on', +x.dataset.s === v)); toast(v ? 'Spjället stängt' : 'Spjället öppet'); return; }
   const k = keyOf(p);
   if (k) {   // tryck = vaxla oppet/stangt (lattare med fingret an att dra)
-    const tog = {L: [45, 90], G1: [100, 250], G2: [100, 250], G3: [100, 250], A: [100, 280]}[k];
-    if (tog) { setT(k, TG[k] > tog[0] ? 0 : tog[1]); toast({L: 'Luckan', G1: 'Gallret', G2: 'Gallret', G3: 'Plancha', A: 'Asklådan'}[k] + (TG[k] > tog[0] ? (k === 'L' ? ' öppen' : ' ute') : (k === 'L' ? ' stängd' : ' inne'))); }
+    const tog = {L: [45, 90], G1: [100, 250], G2: [100, 250], A: [100, 280]}[k];
+    if (tog) { setT(k, TG[k] > tog[0] ? 0 : tog[1]); toast({L: 'Luckan', G1: 'Gallret', G2: 'Plancha', A: 'Asklådan'}[k] + (TG[k] > tog[0] ? (k === 'L' ? ' öppen' : ' ute') : (k === 'L' ? ' stängd' : ' inne'))); }
     return;
   }
   const same = parts.filter(q => q.userData.name === p.userData.name); highlight(same, p.userData.name, same.length);
