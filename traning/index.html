@@ -111,8 +111,8 @@ details[open] summary::before{content:"– ";}
 /* session */
 .prog{height:12px;border:3px solid var(--chili);border-radius:999px;background:var(--cream);overflow:hidden;margin:2px 0 12px}
 .prog i{display:block;height:100%;background:var(--chili);width:0;transition:width .5s var(--ease)}
-.stage{position:relative;background:var(--cream);border:3px solid var(--chili);border-radius:22px;box-shadow:6px 6px 0 var(--chili);overflow:hidden}
-.stage::before{content:"";position:absolute;inset:7px;border:2px dashed rgba(200,52,10,.42);border-radius:16px;pointer-events:none;z-index:2}
+.stage{position:relative;background:var(--cream);border:5px solid var(--chili);border-radius:6px;box-shadow:6px 6px 0 var(--chili);overflow:hidden}
+.stage::before{display:none}
 .fig{display:block;width:100%;height:auto;max-height:42vh}
 .stage .setbadge{position:absolute;top:14px;right:14px;z-index:3;background:var(--chili);color:var(--cream);font-family:var(--display);font-size:22px;line-height:1;padding:8px 12px 9px;border-radius:12px;transform:rotate(4deg);box-shadow:3px 3px 0 var(--ox)}
 .stage .wbadge{position:absolute;top:14px;left:14px;z-index:3;background:var(--buttercup);color:var(--chili);border:2px dashed var(--chili);font-family:var(--display);font-size:22px;line-height:1;padding:7px 11px 8px;border-radius:12px;transform:rotate(-3deg)}
@@ -163,35 +163,35 @@ details[open] summary::before{content:"– ";}
 
 button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 /* choose your fighter */
-.fsel{background:#2A1206;border-color:var(--chili);color:var(--cream);box-shadow:6px 6px 0 var(--ox)}
-.fsel::before{border-color:rgba(252,194,34,.35)}
-.fsel .eyebrow{color:var(--buttercup);display:flex;justify-content:space-between}
+.fsel{background:var(--cream);border:5px solid var(--chili);border-radius:6px;box-shadow:8px 8px 0 var(--chili)}
+.fsel::before{display:none}
+.fsel .eyebrow{color:var(--chili);display:flex;justify-content:space-between}
 .fsel .eyebrow .blink{animation:blink 1s steps(2) infinite}
 @keyframes blink{50%{opacity:0}}
-.cyf{color:var(--buttercup);text-shadow:3px 3px 0 var(--chili);font-size:clamp(34px,9vw,58px);text-align:center;margin:2px 0 10px;animation:cyf 2.4s ease-in-out infinite}
-@keyframes cyf{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
-.fstage{display:grid;grid-template-columns:1fr 1.1fr;gap:12px;align-items:center;background:radial-gradient(circle at 40% 60%,rgba(252,194,34,.28),transparent 65%);border-radius:16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cyf{color:var(--chili);font-size:clamp(34px,9vw,58px);text-align:center;margin:2px 0 10px;text-shadow:3px 3px 0 var(--buttercup);animation:cyf 2.4s ease-in-out infinite}
+@keyframes cyf{0%,100%{transform:scale(1) rotate(-1deg)}50%{transform:scale(1.04) rotate(1deg)}}
+.fstage{display:grid;grid-template-columns:1fr 1.1fr;gap:12px;align-items:center;border:4px solid var(--chili);border-radius:6px;padding:6px;background:var(--cream)}
 #fbig .fig{max-height:none;height:auto;width:100%}
 #fbig{position:relative}
-#fbig::after{content:"";position:absolute;left:12%;right:12%;bottom:6%;height:8px;border-radius:50%;background:rgba(252,194,34,.35);filter:blur(3px)}
-.finfo h3{color:var(--buttercup);font-size:clamp(26px,6.5vw,38px);margin:0}
-.finfo .lbl{color:var(--cream);opacity:.85;margin:2px 0 6px}
-.finfo .motto{font-size:15px;font-style:italic;margin:0 0 10px;color:var(--cream)}
-.stat{display:grid;grid-template-columns:78px 1fr;gap:8px;align-items:center;margin:5px 0;font-family:var(--label);font-weight:700;letter-spacing:.08em;font-size:13px;text-transform:uppercase}
-.stat .bar{height:12px;border:2px solid var(--buttercup);border-radius:3px;overflow:hidden;background:rgba(255,246,220,.1)}
-.stat .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--chili),var(--buttercup));width:0;transition:width .6s var(--pop)}
-.fmove{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:13px;color:var(--buttercup);margin-top:8px}
+.finfo h3{color:var(--chili);font-size:clamp(26px,6.5vw,38px);margin:0}
+.finfo .lbl{color:var(--ox);margin:2px 0 6px}
+.finfo .motto{font-size:15px;font-style:italic;margin:0 0 10px;color:var(--ox)}
+.stat{display:grid;grid-template-columns:78px 1fr;gap:8px;align-items:center;margin:5px 0;font-family:var(--label);font-weight:700;letter-spacing:.08em;font-size:13px;text-transform:uppercase;color:var(--chili)}
+.stat .bar{height:14px;border:3px solid var(--chili);border-radius:3px;overflow:hidden;background:var(--cream)}
+.stat .bar i{display:block;height:100%;width:0;transition:width .6s var(--pop);background:repeating-linear-gradient(90deg,var(--chili) 0 calc(20% - 3px),var(--cream) calc(20% - 3px) 20%)}
+.fmove{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:13px;color:var(--cream);background:var(--chili);display:inline-block;padding:3px 10px;border-radius:999px;margin-top:8px;transform:rotate(-2deg)}
 .fgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
-.fgrid button{appearance:none;background:#3b2414;border:3px solid #5a3a22;border-radius:12px;padding:2px 2px 4px;cursor:pointer;position:relative;transition:transform .15s var(--pop),border-color .2s}
+.fgrid button{appearance:none;background:var(--cream);border:4px solid rgba(200,52,10,.35);border-radius:6px;padding:2px 2px 4px;cursor:pointer;position:relative;transition:transform .15s var(--pop),border-color .2s}
 .fgrid button .fig{max-height:none;width:100%;height:auto;display:block}
-.fgrid button span{display:block;font-family:var(--display);color:var(--cream);font-size:12px;line-height:1.05;text-transform:uppercase;letter-spacing:.02em}
-.fgrid button.on{border-color:var(--buttercup);background:#5a2a12;transform:translateY(-3px);box-shadow:0 0 0 3px var(--chili),0 0 18px rgba(252,194,34,.6)}
+.fgrid button span{display:block;font-family:var(--display);color:var(--chili);font-size:12px;line-height:1.05;text-transform:uppercase;letter-spacing:.02em}
+.fgrid button.on{border-color:var(--chili);background:var(--buttercup);transform:translateY(-3px) rotate(-2deg);box-shadow:4px 4px 0 var(--chili)}
 .fgrid button.on::after{content:"P1";position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--chili);color:var(--buttercup);font-family:var(--display);font-size:13px;padding:1px 7px;border-radius:6px;animation:blink 1s steps(2) infinite}
 .fgrid button:active{transform:scale(.94)}
 .flash{position:fixed;inset:0;background:#fff;pointer-events:none;z-index:90;opacity:0}
 .flash.go{animation:flash .35s ease-out}
 @keyframes flash{0%{opacity:.7}100%{opacity:0}}
-.ko{position:absolute;top:6px;left:0;right:0;text-align:center;font-family:var(--display);font-size:30px;color:var(--buttercup);text-shadow:3px 3px 0 var(--chili);opacity:0;pointer-events:none;text-transform:uppercase}
+.ko{position:absolute;top:6px;left:0;right:0;z-index:2;text-align:center;font-family:var(--display);font-size:30px;color:var(--chili);text-shadow:3px 3px 0 var(--buttercup);opacity:0;pointer-events:none;text-transform:uppercase}
 .ko.go{animation:ko .9s var(--pop)}
 @keyframes ko{0%{opacity:0;transform:scale(2.5)}30%{opacity:1;transform:scale(1)}80%{opacity:1}100%{opacity:0;transform:translateY(-10px)}}
 /* gym/mobil */
@@ -450,103 +450,127 @@ function exPlan(id, sets, reps, mode) {
 
 // ---------------- figur-renderare ----------------
 const NS = 'http://www.w3.org/2000/svg';
-// ---------------- fighters ----------------
+// ---------------- fighters (yamay-serie möter 50-tals-maskot: en röd linje, krämfärgad fyllning) ----------------
 const FIGHTERS = [
-  {id:'kent', namn:'Kettlebell-Kent', kort:'Kent', alder:44, ort:'Torekov', motto:'Ryggen är rak. Det är mer än man kan säga om grannen.', skin:'#E8B088', shirt:'#C8340A', pants:'#2A1206', shorts:true, shoe:'#FFF6DC', hair:'bald', hc:'#6B3A1E', belly:6, st:[4,2,5], move:'Rak rygg-stöten'},
-  {id:'bettan', namn:'Bettan Bell', kort:'Bettan', alder:42, ort:'Båstad', motto:'Jag svettas inte. Jag glittrar. Mycket.', skin:'#F2C49E', shirt:'#FCC222', pants:'#C8340A', shoe:'#2A1206', hair:'tofs', hc:'#7A3A12', band:'#C8340A', belly:0, st:[3,5,4], move:'Tofs-snurren'},
-  {id:'pappa', namn:'Pappa Puls', kort:'Pappa P', alder:45, ort:'Höllviken', motto:'Har inte sprungit sen -98. Men den här klockan ska få se på fan.', skin:'#D99B6E', shirt:'#1F3A5F', pants:'#8F1A00', shorts:true, shoe:'#FCC222', hair:'keps', hc:'#4A2A14', cap:'#C8340A', belly:11, st:[5,1,4], move:'Grillhuggaren'},
-  {id:'sussie', namn:'Svettis-Sussie', kort:'Sussie', alder:41, ort:'Malmö', motto:'Uppvärmning är för folk som tänker sluta.', skin:'#8D5A3B', shirt:'#8F1A00', pants:'#2A1206', shoe:'#FFF6DC', hair:'lockar', hc:'#2A1206', band:'#FFF6DC', belly:0, st:[4,4,5], move:'Svettstormen'},
+  {id:'kent', namn:'Kettlebell-Kent', kort:'Kent', alder:44, ort:'Torekov', motto:'Ryggen är rak. Det är mer än man kan säga om grannen.', hair:'flint', shorts:true, belly:7, st:[4,2,5], move:'Rak rygg-stöten'},
+  {id:'bettan', namn:'Bettan Bell', kort:'Bettan', alder:42, ort:'Båstad', motto:'Jag svettas inte. Jag glittrar. Mycket.', hair:'tofs', belly:0, st:[3,5,4], move:'Tofs-snurren'},
+  {id:'pappa', namn:'Pappa Puls', kort:'Pappa P', alder:45, ort:'Höllviken', motto:'Har inte sprungit sen -98. Men den här klockan ska få se på fan.', hair:'keps', shorts:true, belly:12, st:[5,1,4], move:'Grillhuggaren'},
+  {id:'sussie', namn:'Svettis-Sussie', kort:'Sussie', alder:41, ort:'Malmö', motto:'Uppvärmning är för folk som tänker sluta.', hair:'lockar', belly:0, st:[4,4,5], move:'Svettstormen'},
 ];
 const fighterById = id => FIGHTERS.find(f => f.id === id) || FIGHTERS[0];
 const ANIM = {
-  guard:{poses:[P(ST,{hip:[110,122], kn:[122,161], an:[126,199], kn2:[100,161], an2:[94,199], el:[124,96], ha:[136,78], el2:[116,96], ha2:[128,80], head:[115,45], kbo:null}),
-                P(ST,{hip:[110,128], sh:[112,73], head:[116,51], kn:[125,165], an:[126,199], kn2:[98,165], an2:[94,199], el:[125,102], ha:[137,84], el2:[117,102], ha2:[129,86], kbo:null})], dur:420},
-  flex:{poses:[P(ST,{el:[136,64], ha:[134,42], el2:[90,64], ha2:[92,42], kn:[120,161], an:[124,199], kn2:[100,161], an2:[96,199], kbo:null}), P(ST,{hip:[110,124], sh:[112,70], head:[114,48], el:[138,66], ha:[130,46], el2:[88,66], ha2:[96,46], kn:[122,163], an:[124,199], kn2:[98,163], an2:[96,199], kbo:null})], dur:380},
+  guard:{poses:[P(ST,{hip:[110,122], kn:[122,161], an:[126,199], kn2:[100,161], an2:[94,199], el:[126,98], ha:[138,80], el2:[118,98], ha2:[130,82], head:[115,45], kbo:null}),
+                P(ST,{hip:[110,128], sh:[112,73], head:[116,51], kn:[125,165], an:[126,199], kn2:[98,165], an2:[94,199], el:[127,104], ha:[139,86], el2:[119,104], ha2:[131,88], kbo:null})], dur:420, effort:false},
+  // tummen upp + blink, handen i sidan
+  flex:{poses:[P(ST,{el:[140,96], ha:[162,84], el2:[92,96], ha2:[104,112], kn:[120,161], an:[124,199], kn2:[100,161], an2:[96,199], kbo:null, thumb:1, wink:1}),
+               P(ST,{hip:[110,123], sh:[112,69], head:[115,47], el:[141,92], ha:[164,78], el2:[92,98], ha2:[104,114], kn:[121,162], an:[124,199], kn2:[99,162], an2:[96,199], kbo:null, thumb:1, wink:1})], dur:500, effort:false},
 };
-const shade = (hex, k) => { const n = parseInt(hex.slice(1), 16); const c = [n >> 16, n >> 8 & 255, n & 255].map(v => Math.round(v * k)); return '#' + c.map(v => v.toString(16).padStart(2, '0')).join(''); };
+const LN = '#C8340A', FILL = '#FFF6DC';
 function headSVG(f) {
-  const s = f.skin, o = '#2A1206';
-  let back = '', front = '';
-  if (f.hair === 'bald') { front = `<ellipse cx="-3" cy="-9" rx="6" ry="3" fill="#fff" opacity=".35"/><path d="M5 6 Q10 3 16 6 Q12 9 9 8 Q7 9 5 6Z" fill="${f.hc}"/><path d="M-13 -2 Q-15 6 -9 10" stroke="${f.hc}" stroke-width="4" fill="none" stroke-linecap="round"/>`; }
-  if (f.hair === 'tofs') { back = `<g class="tofs"><ellipse cx="-18" cy="-2" rx="6" ry="12" fill="${f.hc}" stroke="${o}" stroke-width="2" transform="rotate(25 -14 -8)"/></g>`;
-    front = `<path d="M-14 2 Q-16 -16 2 -15 Q12 -14 13 -6 Q2 -10 -6 -6 Q-10 -2 -10 4Z" fill="${f.hc}"/><path d="M-13 -6 Q0 -13 13 -7" stroke="${f.band}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`; }
-  if (f.hair === 'keps') { front = `<path d="M-14 -3 Q-13 -16 1 -16 Q13 -15 13 -5Z" fill="${f.cap}" stroke="${o}" stroke-width="2"/><path d="M9 -6 L24 -4 Q22 -1 10 -2Z" fill="${f.cap}" stroke="${o}" stroke-width="2"/>
-      <path d="M-6 4 Q-4 15 7 15 Q14 14 15 6 Q11 10 7 9 Q2 9 -1 4Z" fill="${f.hc}"/>`; }
-  if (f.hair === 'lockar') { back = [[-12,-10],[-4,-15],[5,-14],[-15,-1],[-13,7],[11,-11]].map(([x,y]) => `<circle cx="${x}" cy="${y}" r="7" fill="${f.hc}"/>`).join('');
-    front = `<path d="M-12 -6 Q0 -12 12 -8" stroke="${f.band}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`; }
-  return `${back}<circle r="14" fill="${s}" stroke="${o}" stroke-width="2.5"/>
-    <path d="M12 -3 Q18 1 13 4" fill="${s}" stroke="${o}" stroke-width="2"/>
-    <circle cx="6" cy="-3" r="2" fill="${o}"/><path d="M3 -7 L9 -7" stroke="${o}" stroke-width="2" stroke-linecap="round"/>
-    <path d="M7 8 Q10 9.5 12 7.5" stroke="${o}" stroke-width="2" fill="none" stroke-linecap="round"/>
-    <path d="M-7 -2 Q-11 2 -7 6" fill="none" stroke="${o}" stroke-width="2" stroke-linecap="round"/>${front}`;
+  const l = `stroke="${LN}" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"`;
+  let back = '', top = '';
+  if (f.hair === 'flint') top = `<path d="M-8 -17 Q4 -24 14 -14" fill="none" ${l}/><path d="M-4 -19 Q6 -23 13 -17" fill="none" ${l}/>
+      <path d="M6 8 Q11 4 19 7 Q15 11 11 9 Q8 11 6 8Z" fill="${LN}" ${l}/><path d="M9 21 L10 18" ${l}/>`;
+  if (f.hair === 'tofs') { back = `<g class="tofs"><path d="M-14 -12 Q-34 -14 -30 6 Q-26 0 -22 2 Q-24 -6 -12 -6Z" fill="${LN}" ${l}/></g>`;
+      top = `<path d="M-17 -2 Q-20 -24 2 -23 Q18 -22 19 -8 Q8 -16 -2 -10 Q-8 -6 -12 2Z" fill="${LN}" ${l}/><circle cx="-14" cy="-10" r="3.5" fill="${FILL}" ${l}/>`; }
+  if (f.hair === 'keps') top = `<path d="M-18 -4 Q-18 -24 1 -24 Q18 -23 18 -7Z" fill="${LN}" ${l}/><path d="M12 -9 L32 -6 Q30 -1 13 -3Z" fill="${LN}" ${l}/>
+      <circle cx="0" cy="-15" r="3" fill="${FILL}"/><circle cx="4" cy="-3" r="5.5" fill="none" ${l}/><circle cx="15" cy="-3" r="5.5" fill="none" ${l}/><path d="M9.5 -3 L9.5 -3" ${l}/>`;
+  if (f.hair === 'lockar') { back = [[-15,-14],[-6,-21],[5,-21],[14,-16],[-20,-3],[-18,8]].map(([x,y]) => `<circle cx="${x}" cy="${y}" r="9" fill="${LN}" ${l}/>`).join('');
+      top = `<path d="M-15 -9 Q2 -17 18 -10" fill="none" stroke="${FILL}" stroke-width="6" stroke-linecap="round"/><path d="M-15 -9 Q2 -17 18 -10" fill="none" stroke="${LN}" stroke-width="1.5" stroke-dasharray="2 3"/>`; }
+  const glasses = f.hair === 'keps';
+  return `${back}
+    <path d="M-17 -3 C-18 -21 17 -23 19 -5 C20 8 15 19 4 20 C-8 21 -17 11 -17 -3Z" fill="${FILL}" ${l}/>
+    <path d="M-15 -2 Q-21 3 -14 8" fill="${FILL}" ${l}/>
+    <path d="M19 -1 Q23 3 19 6" fill="none" ${l}/>
+    <g class="eyes-happy">${glasses ? '' : `<path d="M1 -3 Q4 -7 7 -3" fill="none" ${l}/>`}<path d="M12 -3 Q15 -7 18 -3" fill="none" ${l}/></g>
+    <g class="eyes-wink" style="display:none"><path d="M1 -4 L7 -3" fill="none" ${l}/><circle cx="15" cy="-4" r="2.4" fill="${LN}"/></g>
+    <g class="eyes-grit" style="display:none"><path d="M1 -6 L6 -3 L1 -1" fill="none" ${l}/><path d="M18 -6 L13 -3 L18 -1" fill="none" ${l}/></g>
+    <g class="m-happy"><path d="M3 7 Q11 18 19 6 Z" fill="${LN}" ${l}/><path d="M5 8 L17 7" stroke="${FILL}" stroke-width="2.4" stroke-linecap="round"/></g>
+    <g class="m-grit" style="display:none"><rect x="4" y="6" width="14" height="7" rx="3" fill="${FILL}" ${l}/><path d="M8 6 V13 M12 6 V13 M4 9.5 H18" stroke="${LN}" stroke-width="1.6"/></g>
+    <ellipse cx="18" cy="3" rx="3.4" ry="2.2" fill="${LN}" opacity=".75"/><ellipse cx="-1" cy="4" rx="3" ry="2" fill="${LN}" opacity=".55"/>
+    ${top}
+    <g class="sweat" style="display:none"><path d="M-6 -24 Q-10 -18 -6 -16 Q-2 -18 -6 -24Z" fill="${FILL}" ${l}/><path d="M24 -16 Q20 -10 24 -8 Q28 -10 24 -16Z" fill="${FILL}" ${l}/></g>`;
 }
-// Ritar en fighter som gör en övning. ex: {poses, dur, cycle, walk, bell, kb2, prop}. Returnerar svg; svg.setAnim(ex) byter rörelse.
+// Ritar en fighter som gör en övning. ex: {poses, dur, cycle, walk, bell, kb2, prop, effort}. svg.setAnim(ex) byter rörelse.
 function figure(ex, f = fighterById(localStorage.getItem('bc_traning_fighter')), opts = {}) {
-  const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', opts.vb || '0 0 240 216'); svg.classList.add('fig');
+  const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', opts.vb || '0 -14 240 230'); svg.classList.add('fig');
   const mk = (tag, at, par = svg) => { const n = document.createElementNS(NS, tag); for (const k in at) n.setAttribute(k, at[k]); par.appendChild(n); return n; };
-  const OX = '#2A1206';
+  // solstrålar (yamay)
+  if (opts.rays !== false) { const rg = mk('g', {class:'rays', opacity:.22}); const [vx, vy, vw, vh] = (opts.vb || '0 -14 240 230').split(' ').map(Number), cx = vx + vw / 2, cy = vy + vh * .45, R = Math.max(vw, vh);
+    for (let i = 0; i < 18; i++) { const a = i / 18 * Math.PI * 2; mk('line', {x1:cx + Math.cos(a) * R * .34, y1:cy + Math.sin(a) * R * .34, x2:cx + Math.cos(a) * R * (i % 2 ? .5 : .62), y2:cy + Math.sin(a) * R * (i % 2 ? .5 : .62), stroke:LN, 'stroke-width':5, 'stroke-linecap':'round'}, rg); }
+    rg.style.transformOrigin = `${cx}px ${cy}px`; rg.style.animation = 'spin 40s linear infinite'; }
   const props = mk('g', {});
-  if (!opts.noGround) { mk('rect', {x:0, y:202, width:240, height:14, fill:'#FCC222'}, props); mk('line', {x1:0, y1:202, x2:240, y2:202, stroke:'#C8340A', 'stroke-width':3}, props); }
-  const shadow = mk('ellipse', {cx:110, cy:203, rx:42, ry:4.5, fill:'#8F1A00', opacity:.2});
-  const seg = (col, w) => { const g = mk('g', {}); const a = mk('polyline', {stroke:OX, 'stroke-width':w + 5, 'stroke-linecap':'round', 'stroke-linejoin':'round', fill:'none'}, g);
-    const b = mk('polyline', {stroke:col, 'stroke-width':w, 'stroke-linecap':'round', 'stroke-linejoin':'round', fill:'none'}, g); return {set(p) { a.setAttribute('points', p); b.setAttribute('points', p); }, a, b}; };
-  const dk = .78;
-  const kbg = (op) => { const g = mk('g', {}); g.innerHTML = `<g transform="translate(-12,-15) scale(.43)" opacity="${op}"><use href="#kb" width="56" height="70"/></g>`; return g; };
-  // bortre sida
-  const shoe2 = seg(shade(f.shoe, dk), 8), shin2 = seg(shade(f.shorts ? f.skin : f.pants, dk), 12), thigh2 = seg(shade(f.pants, dk), 14);
-  const kbBack = kbg(1);
-  const fore2 = seg(shade(f.skin, dk), 9), up2 = seg(shade(f.shirt, dk), 11);
-  const hand2 = mk('circle', {r:5.5, fill:shade(f.skin, dk), stroke:OX, 'stroke-width':2.5});
-  // kropp
-  const torso = seg(f.shirt, 24);
-  const belly = mk('ellipse', {rx:0, ry:0, fill:f.shirt, stroke:OX, 'stroke-width':2.5});
-  const stripe = mk('polyline', {stroke:shade(f.shirt, 1.25), 'stroke-width':4, fill:'none', 'stroke-linecap':'round', opacity:.7});
-  const shorts = seg(f.pants, 26);
-  const thigh = seg(f.pants, 14), shin = seg(f.shorts ? f.skin : f.pants, 12), shoe = seg(f.shoe, 8);
+  if (!opts.noGround) mk('line', {x1:8, y1:202, x2:232, y2:202, stroke:LN, 'stroke-width':4, 'stroke-linecap':'round'}, props);
+  const shadow = mk('ellipse', {cx:110, cy:204, rx:40, ry:4, fill:LN, opacity:.25});
+  const W = 3.4;   // linjebredd
+  const tube = (w, fill = FILL, par = svg) => { const g = mk('g', {}, par); const a = mk('polyline', {stroke:LN, 'stroke-width':w + W * 2, 'stroke-linecap':'round', 'stroke-linejoin':'round', fill:'none'}, g);
+    const b = mk('polyline', {stroke:fill, 'stroke-width':w, 'stroke-linecap':'round', 'stroke-linejoin':'round', fill:'none'}, g); return {set(p) { a.setAttribute('points', p); b.setAttribute('points', p); }}; };
+  const kbg = () => { const g = mk('g', {}); g.innerHTML = `<g transform="translate(-12,-15) scale(.43)"><use href="#kb" width="56" height="70"/></g>`; return g; };
+  const handC = () => { const g = mk('g', {}); g.innerHTML = `<g class="fist" style="display:none"><path d="M-1 -4 Q-4 -15 1 -16 Q5 -16 5 -9 L6 -4" fill="${FILL}" stroke="${LN}" stroke-width="${W}" stroke-linejoin="round" transform="rotate(-18)"/>
+      <rect x="-8" y="-5" width="15" height="12" rx="5" fill="${FILL}" stroke="${LN}" stroke-width="${W}"/><path d="M-8 -1 H-2 M-8 3 H-2" stroke="${LN}" stroke-width="2" stroke-linecap="round"/></g>
+      <circle class="mitt" r="6.5" fill="${FILL}" stroke="${LN}" stroke-width="${W}"/>`; return g; };
+  // bortre sida (samma stil, lite ljusare linje)
+  const back = mk('g', {opacity:.55});
+  const shoe2 = tube(9, LN, back), shin2 = tube(10, f.shorts ? FILL : LN, back), thigh2 = tube(13, LN, back);
+  const kbBack = kbg(); back.appendChild(kbBack);
+  const arm2 = tube(9, FILL, back); const hand2 = handC(); back.appendChild(hand2);
+  // bål: alla konturer först, sedan alla fyllningar = en sammanhängande siluett
+  const bodyO = mk('g', {}), bodyF = mk('g', {});
+  const tO = mk('polyline', {stroke:LN, 'stroke-width':31 + W * 2, 'stroke-linecap':'round', fill:'none'}, bodyO), tF = mk('polyline', {stroke:FILL, 'stroke-width':31, 'stroke-linecap':'round', fill:'none'}, bodyF);
+  const bO = mk('ellipse', {fill:LN}, bodyO), bF = mk('ellipse', {fill:FILL}, bodyF);
+  const pO = mk('polyline', {stroke:LN, 'stroke-width':30 + W * 2, 'stroke-linecap':'butt', fill:'none'}, bodyO), pF = mk('polyline', {stroke:LN, 'stroke-width':30, 'stroke-linecap':'round', fill:'none'}, bodyF);
+  const collar = mk('path', {fill:'none', stroke:LN, 'stroke-width':W, 'stroke-linecap':'round'});
+  const thigh = tube(13, LN), shin = tube(10, f.shorts ? FILL : LN), shoe = tube(9, LN);
   const headG = mk('g', {}); headG.innerHTML = headSVG(f);
-  const tofs = headG.querySelector('.tofs');
-  const kbFront = kbg(1);
-  const up = seg(f.shirt, 11), fore = seg(f.skin, 9);
-  const hand = mk('circle', {r:5.5, fill:f.skin, stroke:OX, 'stroke-width':2.5});
+  const q = c => headG.querySelector(c), tofs = q('.tofs');
+  const kbFront = kbg();
+  const arm = tube(9); const hand = handC();
   const lerp = (a, b, t) => a + (b - a) * t;
-  const pts = (...p) => p.map(q => q[0].toFixed(1) + ',' + q[1].toFixed(1)).join(' ');
-  let cur, t0;
+  const pts = (...p) => p.map(z => z[0].toFixed(1) + ',' + z[1].toFixed(1)).join(' ');
+  let cur, t0, face = '';
   svg.setAnim = (e) => {
     cur = e; t0 = performance.now(); props.querySelectorAll('.prop').forEach(n => n.remove());
-    if (e.prop === 'mat') mk('rect', {class:'prop', x:22, y:198, width:186, height:5, rx:2.5, fill:'#8F1A00', opacity:.35}, props);
-    if (e.prop === 'boxlow') mk('rect', {class:'prop', x:46, y:160, width:44, height:42, rx:4, fill:'#FCC222', stroke:'#C8340A', 'stroke-width':3}, props);
-    if (e.prop === 'bench') { mk('rect', {class:'prop', x:146, y:140, width:74, height:9, rx:3, fill:'#C8340A'}, props); mk('line', {class:'prop', x1:156, y1:149, x2:156, y2:202, stroke:'#C8340A', 'stroke-width':5}, props); mk('line', {class:'prop', x1:210, y1:149, x2:210, y2:202, stroke:'#C8340A', 'stroke-width':5}, props); }
-    kbFront.style.display = e.bell ? '' : 'none'; kbBack.style.display = e.kb2 ? '' : 'none';
+    const pr = {fill:FILL, stroke:LN, 'stroke-width':W, 'stroke-linejoin':'round', class:'prop'};
+    if (e.prop === 'mat') mk('rect', {...pr, x:22, y:196, width:186, height:6, rx:3}, props);
+    if (e.prop === 'boxlow') { mk('rect', {...pr, x:46, y:160, width:44, height:42, rx:4}, props); mk('path', {...pr, fill:'none', d:'M54 172 h28 M54 182 h28'}, props); }
+    if (e.prop === 'bench') { mk('rect', {...pr, x:146, y:138, width:76, height:11, rx:4}, props); mk('path', {...pr, fill:'none', d:'M158 149 V202 M210 149 V202', 'stroke-width':5}, props); }
   };
   svg.setAnim(ex);
   const L = (A, B, k, t) => { const a = A[k] ?? A[k.replace('2','')], b = B[k] ?? B[k.replace('2','')]; return [lerp(a[0], b[0], t), lerp(a[1], b[1], t)]; };
+  const setFace = (m) => { if (m === face) return; face = m;
+    q('.eyes-happy').style.display = m === 'happy' ? '' : 'none'; q('.eyes-wink').style.display = m === 'wink' ? '' : 'none'; q('.eyes-grit').style.display = m === 'grit' ? '' : 'none';
+    q('.m-happy').style.display = m === 'grit' ? 'none' : ''; q('.m-grit').style.display = m === 'grit' ? '' : 'none'; q('.sweat').style.display = m === 'grit' ? '' : 'none'; };
   function frame(now) {
     if (!svg.isConnected && now - t0 > 800) return;
     const e = cur, n = e.poses.length, u = (now - t0) / e.dur;
-    let i, j, t;
-    if (e.cycle) { const k = u % n; i = Math.floor(k); j = (i + 1) % n; t = k - i; }
-    else { const k = u % 2; t = k < 1 ? k : 2 - k; i = 0; j = 1; }
+    let i, j, t, raw;
+    if (e.cycle) { const k = u % n; i = Math.floor(k); j = (i + 1) % n; t = k - i; raw = t; }
+    else { const k = u % 2; t = k < 1 ? k : 2 - k; i = 0; j = 1; raw = t; }
     t = .5 - Math.cos(Math.PI * t) / 2;
     const A = e.poses[i], B = e.poses[j], g = k => L(A, B, k, t);
     const bob = e.walk ? Math.abs(Math.sin(Math.PI * u)) * -2.5 : 0, Bb = p => [p[0], p[1] + bob];
-    const hip = Bb(g('hip')), sh = Bb(g('sh')), kn = g('kn'), an = g('an'), kn2 = g('kn2'), an2 = g('an2'), el = Bb(g('el')), ha = Bb(g('ha')), el2 = Bb(g('el2')), ha2 = Bb(g('ha2')), hd = Bb(g('head'));
-    const toe = a => [a[0] + 12, a[1] + 1], heel = a => [a[0] - 3, a[1] + 1];
+    const hip = Bb(g('hip')), sh = Bb(g('sh')), kn = g('kn'), an = g('an'), kn2 = g('kn2'), an2 = g('an2'), el = Bb(g('el')), ha = Bb(g('ha')), el2 = Bb(g('el2')), ha2 = Bb(g('ha2')), hd0 = Bb(g('head'));
+    const toe = a => [a[0] + 11, a[1] - 1], heel = a => [a[0] - 2, a[1] - 1];
     thigh2.set(pts(hip, kn2)); shin2.set(pts(kn2, an2)); shoe2.set(pts(heel(an2), toe(an2)));
-    up2.set(pts(sh, el2)); fore2.set(pts(el2, ha2)); hand2.setAttribute('cx', ha2[0]); hand2.setAttribute('cy', ha2[1]);
-    // bål: lite kortare upptill så halsen syns
+    arm2.set(pts(sh, el2, ha2)); hand2.setAttribute('transform', `translate(${ha2[0]},${ha2[1]})`);
     const v = [sh[0] - hip[0], sh[1] - hip[1]], len = Math.hypot(...v), u1 = [v[0] / len, v[1] / len], nrm = [-u1[1], u1[0]];
-    const shT = [hip[0] + u1[0] * (len - 2), hip[1] + u1[1] * (len - 2)];
-    torso.set(pts(hip, shT));
-    const bm = [hip[0] + v[0] * .5 + nrm[0] * (5 + f.belly * .5), hip[1] + v[1] * .5 + nrm[1] * (5 + f.belly * .5)];
-    if (f.belly) { belly.setAttribute('cx', bm[0]); belly.setAttribute('cy', bm[1]); belly.setAttribute('rx', 8 + f.belly); belly.setAttribute('ry', 9 + f.belly * .5);
-      belly.setAttribute('transform', `rotate(${Math.atan2(u1[1], u1[0]) * 180 / Math.PI + 90} ${bm[0]} ${bm[1]})`); }
-    stripe.setAttribute('points', pts([hip[0] + v[0] * .55 + nrm[0] * -3, hip[1] + v[1] * .55 + nrm[1] * -3], [hip[0] + v[0] * .55 + nrm[0] * 9, hip[1] + v[1] * .55 + nrm[1] * 9]));
-    shorts.set(pts([hip[0] + u1[0] * 2, hip[1] + u1[1] * 2], hip));
+    const shT = [hip[0] + u1[0] * (len - 6), hip[1] + u1[1] * (len - 6)];
+    tO.setAttribute('points', pts(hip, shT)); tF.setAttribute('points', pts(hip, shT));
+    const bel = f.belly, bm = [hip[0] + v[0] * .42 + nrm[0] * (4 + bel * .55), hip[1] + v[1] * .42 + nrm[1] * (4 + bel * .55)], rot = Math.atan2(u1[1], u1[0]) * 180 / Math.PI + 90;
+    for (const [el_, extra] of [[bO, W], [bF, 0]]) { el_.setAttribute('cx', bm[0]); el_.setAttribute('cy', bm[1]); el_.setAttribute('rx', (bel ? 8 + bel : 0) + (bel ? extra : 0)); el_.setAttribute('ry', (bel ? 10 + bel * .6 : 0) + (bel ? extra : 0)); el_.setAttribute('transform', `rotate(${rot} ${bm[0]} ${bm[1]})`); }
+    const hp = [hip[0] + u1[0] * 9, hip[1] + u1[1] * 9], hq = [hip[0] - u1[0] * 7, hip[1] - u1[1] * 7]; pO.setAttribute('points', pts(hp, hq)); pF.setAttribute('points', pts(hp, hq));
+    const c1 = [shT[0] + nrm[0] * 8 - u1[0] * 2, shT[1] + nrm[1] * 8 - u1[1] * 2], c2 = [shT[0] - u1[0] * 7, shT[1] - u1[1] * 7];
+    collar.setAttribute('d', `M${c1[0].toFixed(1)} ${c1[1].toFixed(1)} Q${(c2[0] + nrm[0] * 3).toFixed(1)} ${(c2[1] + nrm[1] * 3).toFixed(1)} ${(shT[0] - nrm[0] * 6).toFixed(1)} ${(shT[1] - nrm[1] * 6).toFixed(1)}`);
     thigh.set(pts(hip, kn)); shin.set(pts(kn, an)); shoe.set(pts(heel(an), toe(an)));
-    const ang = Math.atan2(hd[1] - sh[1], hd[0] - sh[0]) * 180 / Math.PI + 90;
-    headG.setAttribute('transform', `translate(${hd[0]},${hd[1]}) rotate(${ang})`);
-    if (tofs) tofs.setAttribute('transform', `rotate(${Math.sin(now / 180) * 10} -12 -6)`);
-    up.set(pts(sh, el)); fore.set(pts(el, ha)); hand.setAttribute('cx', ha[0]); hand.setAttribute('cy', ha[1]);
+    // stort huvud: lite längre från axeln än i riggen
+    const dv = [hd0[0] - sh[0], hd0[1] - sh[1]], dl = Math.hypot(...dv) || 1, hd = [sh[0] + dv[0] / dl * 33, sh[1] + dv[1] / dl * 33];
+    const ang = Math.atan2(dv[1], dv[0]) * 180 / Math.PI + 90;
+    headG.setAttribute('transform', `translate(${hd[0].toFixed(1)},${hd[1].toFixed(1)}) rotate(${ang.toFixed(1)}) scale(1.32)`);
+    if (tofs) tofs.setAttribute('transform', `rotate(${Math.sin(now / 170) * 12} -14 -8)`);
+    const effortOn = e.effort !== false && !e.walk && !e.cycle;
+    setFace(A.wink ? 'wink' : (effortOn && raw > .62 ? 'grit' : 'happy'));
+    arm.set(pts(sh, el, ha)); hand.setAttribute('transform', `translate(${ha[0]},${ha[1]})`);
+    hand.querySelector('.fist').style.display = A.thumb ? '' : 'none'; hand.querySelector('.mitt').style.display = A.thumb ? 'none' : '';
     shadow.setAttribute('cx', (hip[0] + an[0]) / 2);
     const oa = A.kbo === undefined ? [0, 14] : A.kbo, ob = B.kbo === undefined ? [0, 14] : B.kbo;
     if (oa && ob) { const o = [lerp(oa[0], ob[0], t), lerp(oa[1], ob[1], t)];
@@ -720,7 +744,7 @@ function finish(r) {
   $('#d-head').textContent = left <= 0 ? 'Alla 12 veckor!' : r === 'too' ? 'Bra att du sa till' : 'Snyggt jobbat';
   $('#d-msg').textContent = (msgs.join(' ') + ' ' + (left > 0 ? `${total} pass gjorda, ${left} kvar.` : 'Du har gjort hela programmet. Kör en runda till med tyngre klockor?')).trim();
   wakeOff();
-  const df = $('#d-fig'); df.innerHTML = ''; df.appendChild(figure(ANIM.flex, undefined, {vb:'40 10 160 200', noGround:true}));
+  const df = $('#d-fig'); df.innerHTML = ''; df.appendChild(figure(ANIM.flex, undefined, {vb:'40 -16 160 222', noGround:true}));
   stamps($('#d-stamps'), true); show('s-done'); confetti();
   if (msgs.length > 1) setTimeout(() => toast(msgs[1]), 900);
 }
@@ -752,13 +776,13 @@ function renderFighters(animate) {
   const cur = fighterById(localStorage.getItem('bc_traning_fighter')), grid = $('#fgrid');
   if (!grid.children.length) FIGHTERS.forEach(f => {
     const b = document.createElement('button'); b.dataset.id = f.id; b.setAttribute('aria-label', f.namn);
-    b.appendChild(figure({...ANIM.guard, dur:ANIM.guard.dur + Math.random() * 120}, f, {vb:'62 18 106 112', noGround:true}));
+    b.appendChild(figure({...ANIM.guard, dur:ANIM.guard.dur + Math.random() * 120}, f, {vb:'56 -16 124 140', noGround:true, rays:false}));
     const n = document.createElement('span'); n.textContent = f.kort; b.appendChild(n);
     b.onclick = () => pickFighter(f.id); grid.appendChild(b);
   });
   grid.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.id === cur.id));
   const big = $('#fbig'); if (FBIG) FBIG.remove();
-  FBIG = figure(animate ? ANIM.flex : ANIM.guard, cur, {vb:'52 20 130 186', noGround:true}); big.appendChild(FBIG);
+  FBIG = figure(animate ? ANIM.flex : ANIM.guard, cur, {vb:'40 -16 160 222', noGround:true}); big.appendChild(FBIG);
   if (animate) setTimeout(() => FBIG && FBIG.setAnim(ANIM.guard), 1300);
   $('#fname').textContent = cur.namn; $('#fmeta').textContent = `${cur.alder} år · ${cur.ort}`; $('#fmotto').textContent = '”' + cur.motto + '”';
   $('#fmove').textContent = 'Special: ' + cur.move;
