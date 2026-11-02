@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>TRÄNING · Kettlebell · Buttercup</title>
+<meta name="description" content="Tolv veckor kettlebell för dig som vill komma igång igen. Två klockor, två–tre pass i veckan, 30 minuter.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Buttercup">
+<meta property="og:title" content="TRÄNING · Kettlebell">
+<meta property="og:description" content="Tolv veckor kettlebell för dig som vill komma igång igen. Två klockor, två–tre pass i veckan, 30 minuter.">
+<meta property="og:url" content="https://www.buttercup.nu/traning/">
+<meta property="og:image" content="https://www.buttercup.nu/traning/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#C8340A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+:root{--buttercup:#FCC222;--chili:#C8340A;--ox:#8F1A00;--cream:#FFF6DC;--ink:#2A1206;
+  --display:"Anton","Impact",sans-serif;--label:"Barlow Condensed","Arial Narrow",sans-serif;--body:"Barlow",system-ui,sans-serif;
+  --ease:cubic-bezier(.45,0,.2,1);--pop:cubic-bezier(.3,1.6,.5,1)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--buttercup);color:var(--ox);font-family:var(--body);font-size:17px;line-height:1.45;overflow-x:hidden;min-height:100dvh;
+  background-image:radial-gradient(rgba(200,52,10,.13) 1.6px,transparent 1.8px);background-size:18px 18px}
+.bc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:var(--chili);color:var(--cream);
+  font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px;position:fixed;top:0;left:0;right:0;z-index:50}
+.bc-bar a,.bc-bar button{color:var(--cream);text-decoration:none;background:none;border:0;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;padding:0}
+.bc-bar b{font-family:var(--display);font-weight:400;letter-spacing:.04em;font-size:18px;color:var(--buttercup)}
+main{max-width:760px;margin:0 auto;padding:62px 16px 60px;position:relative}
+.screen{display:none}
+.screen.on{display:block;animation:inn .45s var(--ease) both}
+@keyframes inn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+h1{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--chili);margin:0;line-height:.98;
+  font-size:clamp(58px,15vw,128px);text-shadow:4px 4px 0 var(--ox),8px 8px 0 rgba(143,26,0,.22)}
+h2{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--chili);font-size:clamp(32px,7vw,48px);line-height:1;margin:0 0 10px}
+h3{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--chili);font-size:26px;line-height:1;margin:0 0 6px}
+.eyebrow{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:15px;margin:0 0 8px}
+.lbl{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px}
+.hero{text-align:center;padding:18px 0 8px;position:relative}
+.badge{display:inline-block;margin-top:16px;background:var(--chili);color:var(--cream);font-family:var(--label);font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;font-size:14px;padding:6px 14px;border-radius:999px;transform:rotate(-3deg)}
+.card{position:relative;background:var(--cream);border:3px solid var(--chili);border-radius:22px;padding:20px 18px;box-shadow:6px 6px 0 var(--chili);margin:22px 0 0}
+.card::before{content:"";position:absolute;inset:7px;border:2px dashed rgba(200,52,10,.42);border-radius:16px;pointer-events:none}
+.card>*{position:relative}
+.gear{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+.gear button{appearance:none;font:inherit;color:inherit;text-align:center;cursor:pointer;background:var(--cream);border:3px solid var(--chili);border-radius:20px;
+  box-shadow:5px 5px 0 var(--chili);padding:14px 8px 12px;transition:transform .18s var(--pop),box-shadow .18s}
+.gear button:not([disabled]):hover{transform:translate(-2px,-2px) rotate(-1deg);box-shadow:8px 8px 0 var(--chili)}
+.gear button:not([disabled]):active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--chili)}
+.gear button[disabled]{opacity:.55;cursor:not-allowed;filter:saturate(.6)}
+.gear svg{width:100%;height:92px;display:block}
+.gear b{display:block;font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--chili);font-size:clamp(20px,4.6vw,28px);line-height:1;margin-top:6px}
+.gear small{display:block;font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:12px;margin-top:4px}
+.gear .on-kb{animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-6px) rotate(4deg)}}
+.btn{appearance:none;border:0;background:var(--chili);color:var(--cream);font-family:var(--display);font-size:26px;text-transform:uppercase;letter-spacing:.03em;
+  border-radius:16px;padding:12px 26px 13px;box-shadow:4px 4px 0 var(--ox);cursor:pointer;transition:transform .15s var(--pop),box-shadow .15s;line-height:1}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:6px 6px 0 var(--ox)}
+.btn:active{transform:translate(3px,3px) scale(.98);box-shadow:1px 1px 0 var(--ox)}
+.btn.big{width:100%;font-size:32px;padding:16px 20px}
+.btn.ghost{background:var(--cream);color:var(--chili);border:3px solid var(--chili);box-shadow:4px 4px 0 var(--chili)}
+.btn.yellow{background:var(--buttercup);color:var(--chili);border:3px solid var(--chili);box-shadow:4px 4px 0 var(--chili)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.seg{display:flex;border:3px solid var(--chili);border-radius:14px;overflow:hidden;background:var(--cream)}
+.seg button{flex:1;appearance:none;border:0;background:transparent;font-family:var(--display);font-size:22px;text-transform:uppercase;color:var(--chili);padding:10px 6px;cursor:pointer;transition:background .2s}
+.seg button+button{border-left:3px solid var(--chili)}
+.seg button.on{background:var(--chili);color:var(--cream)}
+.field{margin:18px 0 0}.field .lbl{display:block;margin-bottom:8px}
+.bells{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bell{background:var(--buttercup);border:3px solid var(--chili);border-radius:18px;padding:12px;text-align:center;box-shadow:4px 4px 0 var(--chili)}
+.bell .kg{font-family:var(--display);font-size:46px;color:var(--chili);line-height:1}
+.bell .kg small{font-size:22px}
+.bell .pm{display:flex;justify-content:center;gap:10px;margin-top:8px}
+.bell .pm button{width:44px;height:44px;border-radius:50%;border:3px solid var(--chili);background:var(--cream);color:var(--chili);font-family:var(--display);font-size:26px;line-height:1;cursor:pointer;transition:transform .15s var(--pop)}
+.bell .pm button:active{transform:scale(.88)}
+.bell svg{height:54px;display:block;margin:0 auto 4px}
+.note{font-size:15px}
+.warn{background:var(--buttercup);border:2px dashed var(--chili);border-radius:14px;padding:10px 14px;font-size:15px;margin-top:16px}
+details summary{cursor:pointer;font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--chili);list-style:none}
+details summary::before{content:"+ ";}
+details[open] summary::before{content:"– ";}
+/* program */
+.tl{display:grid;grid-template-columns:repeat(12,1fr);gap:5px;margin:12px 0 4px}
+.tl i{height:34px;border-radius:8px;border:2px solid var(--chili);background:var(--cream);display:grid;place-items:center;font-style:normal;font-family:var(--display);font-size:15px;color:var(--chili);position:relative;overflow:hidden}
+.tl i.done{background:var(--chili);color:var(--cream)}
+.tl i.now{background:var(--buttercup);animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.12)}}
+.phases{display:grid;grid-template-columns:3fr 5fr 4fr;gap:5px}
+.phases span{font-family:var(--label);font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:.06em;text-align:center;border-top:3px solid var(--chili);padding-top:3px}
+.pass{display:grid;gap:14px;margin-top:16px}
+.passcard{display:flex;gap:14px;align-items:center;background:var(--cream);border:3px solid var(--chili);border-radius:18px;box-shadow:4px 4px 0 var(--chili);padding:12px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%;transition:transform .18s var(--pop)}
+.passcard:hover{transform:translate(-2px,-2px)}
+.passcard .ltr{flex:none;width:58px;height:58px;border-radius:50%;background:var(--chili);color:var(--buttercup);font-family:var(--display);font-size:32px;display:grid;place-items:center;box-shadow:3px 3px 0 var(--ox)}
+.passcard.next{background:var(--buttercup)}
+.passcard.next .ltr{animation:wob 2s ease-in-out infinite}
+@keyframes wob{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+.passcard h3{margin:0}
+.passcard p{margin:2px 0 0;font-size:14px}
+.tag{display:inline-block;background:var(--chili);color:var(--cream);font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:12px;border-radius:999px;padding:2px 9px;margin-left:6px;vertical-align:middle}
+/* session */
+.prog{height:12px;border:3px solid var(--chili);border-radius:999px;background:var(--cream);overflow:hidden;margin:2px 0 12px}
+.prog i{display:block;height:100%;background:var(--chili);width:0;transition:width .5s var(--ease)}
+.stage{position:relative;background:var(--cream);border:3px solid var(--chili);border-radius:22px;box-shadow:6px 6px 0 var(--chili);overflow:hidden}
+.stage::before{content:"";position:absolute;inset:7px;border:2px dashed rgba(200,52,10,.42);border-radius:16px;pointer-events:none;z-index:2}
+.fig{display:block;width:100%;height:auto;max-height:42vh}
+.stage .setbadge{position:absolute;top:14px;right:14px;z-index:3;background:var(--chili);color:var(--cream);font-family:var(--display);font-size:22px;line-height:1;padding:8px 12px 9px;border-radius:12px;transform:rotate(4deg);box-shadow:3px 3px 0 var(--ox)}
+.stage .wbadge{position:absolute;top:14px;left:14px;z-index:3;background:var(--buttercup);color:var(--chili);border:2px dashed var(--chili);font-family:var(--display);font-size:22px;line-height:1;padding:7px 11px 8px;border-radius:12px;transform:rotate(-3deg)}
+.exname{font-family:var(--display);text-transform:uppercase;color:var(--chili);font-size:clamp(36px,9vw,58px);line-height:1;margin:16px 0 2px}
+.target{font-family:var(--display);text-transform:uppercase;font-size:clamp(26px,6vw,36px);color:var(--ox);line-height:1.05}
+.tips{margin:12px 0 18px;padding:0;list-style:none;display:grid;gap:6px}
+.tips li{display:grid;grid-template-columns:26px 1fr;gap:8px;font-size:16px}
+.tips li::before{content:"✱";color:var(--chili);font-weight:700;font-size:18px;line-height:1.2}
+.dots{display:flex;gap:8px;margin:8px 0 0}
+.dots i{width:22px;height:22px;border-radius:50%;border:3px solid var(--chili);background:var(--cream);transition:background .3s,transform .3s var(--pop)}
+.dots i.done{background:var(--chili);transform:scale(1.1)}
+.rest{position:fixed;inset:0;z-index:60;display:none;place-items:center;background:rgba(252,194,34,.94);
+  background-image:radial-gradient(rgba(200,52,10,.13) 1.6px,transparent 1.8px);background-size:18px 18px}
+.rest.on{display:grid;animation:inn .3s var(--ease)}
+.rest .in{text-align:center;padding:20px}
+.ring{width:min(70vw,300px);height:min(70vw,300px);display:block;margin:10px auto}
+.ring text{font-family:var(--display);fill:var(--chili)}
+.rest .nxt{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin:6px 0 18px}
+.rpe{display:grid;gap:12px;margin-top:14px}
+.rpe button{appearance:none;display:flex;gap:14px;align-items:center;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--cream);border:3px solid var(--chili);border-radius:18px;box-shadow:4px 4px 0 var(--chili);padding:10px 14px;transition:transform .18s var(--pop)}
+.rpe button:hover{transform:translate(-2px,-2px)}
+.rpe button .face{font-size:38px;line-height:1;flex:none;width:52px;text-align:center}
+.rpe button b{display:block;font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--chili);font-size:26px;line-height:1}
+.rpe button small{font-size:14px}
+/* stamps */
+.stamps{display:grid;gap:6px;margin-top:12px}
+.stamps .wk{display:grid;grid-template-columns:44px repeat(3,1fr);gap:8px;align-items:center}
+.stamps .wk>span{font-family:var(--display);color:var(--chili);font-size:18px}
+.slot{aspect-ratio:1/1;max-height:52px;border:2px dashed rgba(200,52,10,.55);border-radius:50%;display:grid;place-items:center;justify-self:center;width:100%;max-width:52px}
+.slot.off{visibility:hidden}
+.stamp{width:100%;height:100%;border-radius:50%;border:3px solid var(--chili);color:var(--chili);display:grid;place-items:center;font-family:var(--display);font-size:22px;line-height:1;text-transform:uppercase;transform:rotate(var(--r,-12deg));background:rgba(200,52,10,.08)}
+.stamp.new{animation:thump .6s var(--pop) both}
+@keyframes thump{0%{transform:scale(2.6) rotate(-30deg);opacity:0}60%{opacity:1}100%{transform:scale(1) rotate(var(--r,-12deg))}}
+.toast{position:fixed;left:50%;bottom:22px;z-index:80;transform:translate(-50%,160px);opacity:0;background:var(--chili);color:var(--cream);font-family:var(--display);font-size:22px;text-transform:uppercase;letter-spacing:.03em;padding:12px 20px;border-radius:16px;box-shadow:4px 4px 0 var(--ox);transition:transform .45s var(--pop),opacity .3s;max-width:92vw;text-align:center}
+.toast.on{transform:translate(-50%,0);opacity:1}
+.done-hero{text-align:center}
+.bigstamp{width:190px;height:190px;margin:10px auto 6px;border-radius:50%;border:6px solid var(--chili);display:grid;place-items:center;color:var(--chili);font-family:var(--display);font-size:34px;line-height:1;text-transform:uppercase;--r:-14deg;animation:thump .8s var(--pop) both;background:var(--cream);box-shadow:6px 6px 0 var(--chili)}
+.log{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:6px}
+.log li{display:flex;justify-content:space-between;gap:10px;border-bottom:2px dashed rgba(200,52,10,.35);padding:4px 0;font-size:15px}
+.wlist{margin:8px 0 0;padding:0;list-style:none;counter-reset:w;display:grid;gap:8px}
+.wlist li{counter-increment:w;display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center}
+.wlist li::before{content:counter(w);font-family:var(--display);background:var(--chili);color:var(--cream);border-radius:50%;width:32px;height:32px;display:grid;place-items:center}
+.conf{position:fixed;inset:0;pointer-events:none;z-index:70;overflow:hidden}
+.conf i{position:absolute;top:-30px;width:14px;height:14px;border-radius:3px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.skip{background:none;border:0;font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--chili);text-decoration:underline;cursor:pointer;font-size:15px;margin-top:14px}
+@media (max-width:560px){.gear{gap:9px}.gear svg{height:70px}.bc-bar .hide-m{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="bc-bar"><a href="/">← buttercup.nu</a><span class="hide-m">Olistad · träning</span><button id="nav-log">Min logg</button></div>
+<main>
+
+<!-- ============ START ============ -->
+<section class="screen on" id="s-start">
+  <div class="hero">
+    <p class="eyebrow">12 veckor · 2–3 pass · 30 minuter</p>
+    <h1>STARK<br>IGEN</h1>
+    <span class="badge">För dig som börjar om</span>
+  </div>
+  <div class="card">
+    <h2>Välj redskap</h2>
+    <p class="note" style="margin:0">Programmen är byggda för dig som är runt 40–45 och inte tränat på ett tag. Vi börjar lätt, lär rörelserna och stegrar lugnt.</p>
+    <div class="gear">
+      <button id="g-kb" aria-label="Kettlebell">
+        <svg viewBox="0 0 100 90"><g class="on-kb" style="transform-origin:50px 50px"><use href="#kb" x="22" y="10" width="56" height="70"/></g></svg>
+        <b>Kettlebell</b><small>2 klockor hemma</small>
+      </button>
+      <button disabled aria-label="Hantlar (kommer snart)">
+        <svg viewBox="0 0 100 90"><g fill="#C8340A"><rect x="14" y="30" width="12" height="30" rx="3"/><rect x="26" y="36" width="8" height="18" rx="2"/><rect x="34" y="42" width="32" height="6" rx="3"/><rect x="66" y="36" width="8" height="18" rx="2"/><rect x="74" y="30" width="12" height="30" rx="3"/></g></svg>
+        <b>Hantlar</b><small>Kommer snart</small>
+      </button>
+      <button disabled aria-label="Gymmaskiner (kommer snart)">
+        <svg viewBox="0 0 100 90"><g fill="none" stroke="#C8340A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 80V14h46"/><path d="M68 14v22"/><rect x="60" y="36" width="16" height="26" rx="3" fill="#C8340A"/><path d="M22 58h26l6 22"/><path d="M14 80h66"/></g></svg>
+        <b>Maskiner</b><small>Kommer snart</small>
+      </button>
+    </div>
+    <div class="warn"><b>Innan du börjar:</b> har du hjärt- eller kärlproblem, högt blodtryck, ont i ryggen eller nyligen opererats – prata med din vårdcentral först. Det ska kännas ansträngande, aldrig smärtsamt.</div>
+  </div>
+</section>
+
+<!-- ============ PROFIL ============ -->
+<section class="screen" id="s-profile">
+  <p class="eyebrow">Steg 1 av 1</p>
+  <h2>Dina klockor</h2>
+  <div class="card">
+    <div class="field"><span class="lbl">Jag är</span>
+      <div class="seg" id="sex"><button data-v="k">Kvinna</button><button data-v="m">Man</button></div>
+      <p class="note" style="margin:6px 0 0">Används bara för att föreslå vikter.</p>
+    </div>
+    <div class="field"><span class="lbl">Mina två kettlebells</span>
+      <div class="bells">
+        <div class="bell"><svg viewBox="0 0 56 70"><use href="#kb" width="56" height="70"/></svg><div class="lbl">Lätt</div><div class="kg"><span id="kg-l">8</span><small> kg</small></div>
+          <div class="pm"><button data-b="l" data-d="-1" aria-label="Lättare">−</button><button data-b="l" data-d="1" aria-label="Tyngre">+</button></div></div>
+        <div class="bell"><svg viewBox="0 0 56 70"><use href="#kb" width="56" height="70"/></svg><div class="lbl">Tung</div><div class="kg"><span id="kg-t">12</span><small> kg</small></div>
+          <div class="pm"><button data-b="t" data-d="-1" aria-label="Lättare">−</button><button data-b="t" data-d="1" aria-label="Tyngre">+</button></div></div>
+      </div>
+      <p class="note" style="margin:8px 0 0" id="kgtip"></p>
+    </div>
+    <div class="field"><span class="lbl">Pass per vecka</span>
+      <div class="seg" id="ppw"><button data-v="2">2 pass</button><button data-v="3">3 pass</button></div>
+      <p class="note" style="margin:6px 0 0">Två räcker för att bli starkare. Det tredje är ett lugnt pulspass.</p>
+    </div>
+    <div style="margin-top:22px"><button class="btn big" id="go-prog">Bygg mitt program</button></div>
+  </div>
+</section>
+
+<!-- ============ PROGRAM ============ -->
+<section class="screen" id="s-prog">
+  <p class="eyebrow" id="p-eyebrow">Vecka 1 av 12</p>
+  <h2 id="p-phase">Lär rörelserna</h2>
+  <p class="note" id="p-phasetxt" style="margin:0"></p>
+  <div class="card">
+    <div class="tl" id="tl"></div>
+    <div class="phases"><span>Lär</span><span>Bygg</span><span>Kondition</span></div>
+    <div class="pass" id="passlist"></div>
+  </div>
+  <div class="card">
+    <h3>Så här jobbar programmet</h3>
+    <ul class="tips">
+      <li>Efter varje pass säger du hur det kändes. Kändes det lätt två gånger i rad ökar vi repsen – och till slut byter du upp till den tunga klockan.</li>
+      <li>Kändes det för tungt backar vi direkt. Ingen skam i det.</li>
+      <li>Pratregeln: under pulspasset ska du kunna prata, men inte sjunga.</li>
+      <li>Vila minst en dag mellan styrkepassen.</li>
+    </ul>
+    <div class="row" style="margin-top:6px"><button class="btn ghost" id="edit-prof">Ändra vikter / pass</button></div>
+  </div>
+</section>
+
+<!-- ============ PASS ============ -->
+<section class="screen" id="s-sess">
+  <div class="row" style="justify-content:space-between"><span class="lbl" id="ss-title">Pass A · Vecka 1</span><button class="skip" style="margin:0" id="ss-quit">Avbryt</button></div>
+  <div class="prog"><i id="ss-prog"></i></div>
+  <div id="ss-body"></div>
+</section>
+
+<!-- ============ KLART ============ -->
+<section class="screen" id="s-done">
+  <div class="done-hero">
+    <p class="eyebrow" id="d-eyebrow">Pass klart</p>
+    <div class="bigstamp" id="d-stamp">Klart!</div>
+    <h2 id="d-head">Snyggt jobbat</h2>
+    <p class="note" id="d-msg"></p>
+  </div>
+  <div class="card"><h3>Stämpelkortet</h3><div class="stamps" id="d-stamps"></div></div>
+  <div style="margin-top:22px" class="row"><button class="btn big" id="d-back">Till programmet</button></div>
+</section>
+
+<!-- ============ LOGG ============ -->
+<section class="screen" id="s-log">
+  <h2>Min logg</h2>
+  <div class="card"><h3>Stämpelkortet</h3><div class="stamps" id="l-stamps"></div></div>
+  <div class="card"><h3>Senaste passen</h3><ul class="log" id="l-list"></ul>
+    <div class="row" style="margin-top:16px"><button class="btn ghost" id="l-back">Tillbaka</button><button class="skip" id="l-reset">Börja om från noll</button></div></div>
+</section>
+
+</main>
+
+<div class="rest" id="rest"><div class="in">
+  <p class="eyebrow">Vila</p>
+  <svg class="ring" viewBox="0 0 200 200"><circle cx="100" cy="100" r="86" fill="#FFF6DC" stroke="#C8340A" stroke-width="5"/>
+    <circle id="ring" cx="100" cy="100" r="74" fill="none" stroke="#C8340A" stroke-width="16" stroke-linecap="round" transform="rotate(-90 100 100)" stroke-dasharray="465" stroke-dashoffset="0"/>
+    <text id="ring-t" x="100" y="118" text-anchor="middle" font-size="58">90</text></svg>
+  <div class="nxt" id="rest-next">Nästa: …</div>
+  <div class="row" style="justify-content:center"><button class="btn ghost" id="rest-add">+15 s</button><button class="btn" id="rest-skip">Kör igen</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+<div class="conf" id="conf"></div>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="kb" viewBox="0 0 56 70"><path d="M15 26 C11 6 45 6 41 26" fill="none" stroke="#C8340A" stroke-width="7" stroke-linecap="round"/>
+      <circle cx="28" cy="44" r="22" fill="#C8340A"/><ellipse cx="20" cy="37" rx="6" ry="4" fill="#FFF6DC" opacity=".45"/><rect x="12" y="62" width="32" height="6" rx="3" fill="#8F1A00"/></symbol>
+  </defs>
+</svg>
+
+<script>
+const $ = s => document.querySelector(s);
+const KEY = 'bc_traning_kb_v1';
+const KG = [4,6,8,10,12,14,16,18,20,22,24,28,32];
+
+// ---------------- övningar + animerade figurer ----------------
+// Figuren ritas i sidvy. Leder: head, sh(axel), el, ha(hand), hip, kn, an(fotled); 2-varianter = bortre arm/ben.
+const ST = {head:[114,44], sh:[112,66], el:[113,92], ha:[114,117], hip:[110,120], kn:[111,160], an:[110,199]};
+const GOB = {...ST, el:[122,94], ha:[132,78], kbo:[4,6]};
+const LIE = {head:[44,184], sh:[66,190], hip:[122,190], kn:[150,162], an:[176,198]};
+const P = (base, o) => ({...base, ...o});
+const EX = {
+  marklyft:{namn:'Marklyft', bell:'t', unit:'reps', rest:90,
+    tips:['Fötterna höftbrett, klockan mellan fötterna','Skjut rumpan bakåt – rak rygg, blicken snett ner','Res dig genom att trycka ner i golvet. Kläm rumpan i toppen'],
+    poses:[ST, P(ST,{head:[156,92], sh:[140,106], el:[140,133], ha:[140,160], hip:[86,128], kn:[104,163]})], dur:1500},
+  goblet:{namn:'Knäböj mot bänk', bell:'l', unit:'reps', rest:90, prop:'boxlow',
+    tips:['Håll klockan i hornen mot bröstet','Sätt dig bakåt tills rumpan nuddar bänken','Knäna följer tårna – res dig med tryck i hela foten'],
+    poses:[GOB, P(GOB,{head:[110,82], sh:[104,104], el:[120,124], ha:[130,110], hip:[82,154], kn:[126,156]})], dur:1700},
+  rodd:{namn:'Enarmsrodd', bell:'l', unit:'reps', sida:true, rest:75, prop:'bench',
+    tips:['Ena handen på bänken, ryggen rak som ett bord','Dra klockan mot höften – armbågen nära kroppen','Sänk kontrollerat. Ingen vridning i ryggen'],
+    poses:[{head:[156,103], sh:[138,108], el:[138,133], ha:[138,157], hip:[80,122], kn:[92,160], an:[88,199], kn2:[72,160], an2:[62,199], el2:[148,126], ha2:[160,141]},
+           {head:[156,103], sh:[138,108], el:[114,98], ha:[124,124], hip:[80,122], kn:[92,160], an:[88,199], kn2:[72,160], an2:[62,199], el2:[148,126], ha2:[160,141]}], dur:1500},
+  golvpress:{namn:'Golvpress', bell:'l', unit:'reps', sida:true, rest:75, prop:'mat',
+    tips:['Ligg på rygg med böjda knän','Överarmen vilar mot golvet i botten','Pressa rakt upp – handleden rak, armbågen sträcks helt'],
+    poses:[P(LIE,{el:[86,198], ha:[86,174], kbo:[-3,-8]}), P(LIE,{el:[70,164], ha:[68,138], kbo:[-3,-8]})], dur:1500},
+  hoftlyft:{namn:'Höftlyft', bell:null, unit:'reps', rest:60, prop:'mat',
+    tips:['Ligg på rygg, fötterna nära rumpan','Tryck i hälarna och lyft höften','Kläm rumpan i toppen i en sekund – svank inte'],
+    poses:[P(LIE,{hip:[120,192], kn:[150,158], an:[172,198], el:[92,197], ha:[116,197], kbo:null}), P(LIE,{hip:[124,158], kn:[157,150], an:[172,198], el:[92,197], ha:[116,197], kbo:null})], dur:1400},
+  deadbug:{namn:'Dead bug', bell:null, unit:'reps', sida:true, rest:60, prop:'mat',
+    tips:['Ligg på rygg, armar mot taket, knän i 90°','Pressa ländryggen mot golvet hela tiden','Sträck ut motsatt arm och ben – långsamt – och tillbaka'],
+    poses:[{head:[44,184], sh:[66,190], hip:[118,190], kn:[118,152], an:[152,152], el:[68,164], ha:[70,138], kn2:[118,152], an2:[152,152], el2:[68,164], ha2:[70,138], kbo:null},
+           {head:[44,184], sh:[66,190], hip:[118,190], kn:[152,172], an:[190,184], el:[44,178], ha:[20,186], kn2:[118,152], an2:[152,152], el2:[68,164], ha2:[70,138], kbo:null}], dur:1800},
+  bara:{namn:'Bära med en hand', bell:'l', unit:'m', sida:true, rest:60, walk:true,
+    tips:['Klockan i ena handen, stå rak som en stolpe','Luta dig inte åt sidan – spänn magen','Gå lugnt 20 meter, byt hand'],
+    poses:[P(ST,{kn:[121,160], an:[131,199], kn2:[101,161], an2:[91,198]}), P(ST,{kn2:[121,160], an2:[131,199], kn:[101,161], an:[91,198]})], dur:520},
+  farmer:{namn:'Bära med båda', bell:'lt', unit:'m', rest:75, walk:true, kb2:true,
+    tips:['En klocka i varje hand – lätt och tung','Axlarna ner och bak, blicken framåt','Korta lugna steg, 20 meter'],
+    poses:[P(ST,{kn:[121,160], an:[131,199], kn2:[101,161], an2:[91,198]}), P(ST,{kn2:[121,160], an2:[131,199], kn:[101,161], an:[91,198]})], dur:520},
+  swing:{namn:'Kettlebell-swing', bell:'l', unit:'reps', rest:75,
+    tips:['Det är ett explosivt marklyft – inte en knäböj','Skjut höften framåt, armarna är bara rep','Klockan flyter till brösthöjd. Andas ut i toppen'],
+    poses:[{head:[156,94], sh:[140,106], el:[124,128], ha:[108,150], hip:[84,126], kn:[104,162], an:[110,199], kbo:[0,14]},
+           P(ST,{el:[138,70], ha:[164,72], kbo:[12,2]})], dur:760},
+  halo:{namn:'Halo', bell:'l', unit:'varv', sida:true, rest:60, cycle:true,
+    tips:['Håll klockan upp och ner i hornen','För den runt huvudet nära kroppen','Spänn magen – svanka inte. Båda hållen'],
+    poses:[P(ST,{el:[132,74], ha:[138,54], kbo:[0,-8]}), P(ST,{el:[126,42], ha:[114,22], kbo:[0,-8]}), P(ST,{el:[94,58], ha:[88,44], kbo:[0,-8]}), P(ST,{el:[118,80], ha:[118,58], kbo:[0,-8]})], dur:650},
+  utfall:{namn:'Baklängesutfall', bell:'l', unit:'reps', sida:true, rest:75,
+    tips:['Klockan mot bröstet, håll i något om du vill','Kliv bakåt och sänk bakre knät mot golvet','Tryck ifrån med främre foten'],
+    poses:[GOB, P(GOB,{hip:[106,150], kn:[140,158], an:[142,199], kn2:[96,192], an2:[66,196], sh:[108,96], head:[110,74], el:[122,116], ha:[130,100]})], dur:1700},
+};
+const WARM = ['Höftcirklar – 10 åt varje håll','Katt och ko på alla fyra – 8 st','Höftfällning med händerna på höften – 10 st','Halo utan vikt eller med lätt klocka – 5 åt varje håll','Djup knäböj, håll i något – stanna i botten 20 s'];
+
+// ---------------- programmet ----------------
+const PHASES = [
+  {w:[1,3], namn:'Lär rörelserna', rpe:'Ska kännas lätt – runt 3–4 av 10. Fokus på teknik.',
+   pass:{A:{namn:'Ben + rygg', ex:[['marklyft',2,8],['goblet',2,8],['rodd',2,8],['hoftlyft',2,10],['deadbug',2,5]]},
+         B:{namn:'Press + bål', ex:[['marklyft',2,8],['golvpress',2,8],['goblet',2,8],['bara',2,20],['deadbug',2,5]]},
+         C:{namn:'Lugnt & rörligt', ex:[['hoftlyft',2,12],['halo',2,4],['bara',3,20],['deadbug',2,6]]}}},
+  {w:[4,8], namn:'Bygg', rpe:'Nu får det bli tyngre – 5–7 av 10. Sista repsen ska kännas, men tekniken håller.',
+   pass:{A:{namn:'Swing + drag', ex:[['swing',4,10],['goblet',3,8],['rodd',3,8],['halo',2,5],['deadbug',3,6]]},
+         B:{namn:'Lyft + press', ex:[['marklyft',3,10],['golvpress',3,8],['utfall',2,6],['farmer',3,20],['hoftlyft',3,12]]},
+         C:{namn:'Pulspass', ex:[['swing',5,10],['bara',3,20],['halo',2,5],['hoftlyft',2,15]]}}},
+  {w:[9,12], namn:'Kondition', rpe:'6–7 av 10. Kortare vila, mer puls. Du ska fortfarande kunna prata.',
+   pass:{A:{namn:'Swing-intervaller', ex:[['swing',8,10,'emom'],['goblet',3,10],['rodd',3,10],['deadbug',3,8]]},
+         B:{namn:'Stark helkropp', ex:[['marklyft',3,12],['golvpress',3,10],['utfall',3,8],['farmer',4,20]]},
+         C:{namn:'Pulspass', ex:[['swing',10,10,'emom'],['farmer',3,20],['halo',2,6]]}}},
+];
+
+// ---------------- state ----------------
+let S = load();
+function load() { try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch (_) { return null; } }
+function save() { localStorage.setItem(KEY, JSON.stringify(S)); }
+function fresh(sex = 'k') { return {sex, bells: sex === 'm' ? {l:12, t:16} : {l:8, t:12}, ppw:2, log:[], adj:{}, easy:0}; }
+const week = () => Math.min(12, Math.floor(S.log.length / S.ppw) + 1);
+const phaseOf = w => PHASES.find(p => w >= p.w[0] && w <= p.w[1]);
+const passKeys = () => S.ppw === 3 ? ['A','B','C'] : ['A','B'];
+const nextKey = () => passKeys()[S.log.length % S.ppw];
+
+function exPlan(id, sets, reps, mode) {
+  const e = EX[id], a = S.adj[id] || {r:0, up:false};
+  let bell = e.bell; if (bell === 'l' && a.up) bell = 't';
+  const r = e.unit === 'reps' && mode !== 'emom' ? Math.max(4, reps + a.r) : reps;
+  const kg = bell === 'l' ? S.bells.l + ' kg' : bell === 't' ? S.bells.t + ' kg' : bell === 'lt' ? S.bells.l + ' + ' + S.bells.t + ' kg' : 'Kroppsvikt';
+  const per = e.sida ? (e.unit === 'varv' ? ' varv/håll' : e.unit === 'm' ? ' m/hand' : '/sida') : (e.unit === 'm' ? ' m' : '');
+  const target = mode === 'emom' ? `${r} swingar varje minut` : `${r}${per}${e.unit === 'reps' && !e.sida ? ' reps' : ''}`;
+  return {id, e, sets, reps:r, kg, bell, target, mode, rest: mode === 'emom' ? 45 : (phaseOf(week()).w[0] >= 9 ? Math.round(e.rest * .75) : e.rest)};
+}
+
+// ---------------- figur-renderare ----------------
+const NS = 'http://www.w3.org/2000/svg';
+function figure(ex) {
+  const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 240 216'); svg.classList.add('fig');
+  const mk = (tag, at) => { const n = document.createElementNS(NS, tag); for (const k in at) n.setAttribute(k, at[k]); svg.appendChild(n); return n; };
+  mk('rect', {x:0, y:202, width:240, height:14, fill:'#FCC222'}); mk('line', {x1:0, y1:202, x2:240, y2:202, stroke:'#C8340A', 'stroke-width':3});
+  if (ex.prop === 'mat') mk('rect', {x:22, y:198, width:186, height:5, rx:2.5, fill:'#8F1A00', opacity:.35});
+  if (ex.prop === 'boxlow') { mk('rect', {x:46, y:160, width:44, height:42, rx:4, fill:'#FCC222', stroke:'#C8340A', 'stroke-width':3}); }
+  if (ex.prop === 'bench') { mk('rect', {x:146, y:140, width:74, height:9, rx:3, fill:'#C8340A'}); mk('line', {x1:156, y1:149, x2:156, y2:202, stroke:'#C8340A', 'stroke-width':5}); mk('line', {x1:210, y1:149, x2:210, y2:202, stroke:'#C8340A', 'stroke-width':5}); }
+  const back = {stroke:'#8F1A00', 'stroke-width':10, 'stroke-linecap':'round', 'stroke-linejoin':'round', fill:'none', opacity:.45};
+  const front = {stroke:'#C8340A', 'stroke-width':12, 'stroke-linecap':'round', 'stroke-linejoin':'round', fill:'none'};
+  const shadow = mk('ellipse', {cx:110, cy:203, rx:40, ry:4, fill:'#8F1A00', opacity:.18});
+  const leg2 = mk('polyline', back), arm2 = mk('polyline', back);
+  const kbs = [];
+  const kbg = (op) => { const g = document.createElementNS(NS, 'g'); g.innerHTML = `<g transform="translate(-12,-15) scale(.43)" opacity="${op}"><use href="#kb" width="56" height="70"/></g>`; svg.appendChild(g); return g; };
+  if (ex.kb2) kbs.push(kbg(.55));
+  const torso = mk('polyline', {...front, 'stroke-width':16}), leg = mk('polyline', front), arm = mk('polyline', front);
+  const head = mk('circle', {r:13, fill:'#C8340A'});
+  if (ex.bell) kbs.unshift(kbg(1));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const L = (A, B, k, t) => { const a = A[k] ?? A[k.replace('2','')], b = B[k] ?? B[k.replace('2','')]; return [lerp(a[0], b[0], t), lerp(a[1], b[1], t)]; };
+  const pts = (...p) => p.map(q => q.join(',')).join(' ');
+  let t0 = performance.now(), alive = true;
+  function frame(now) {
+    if (!svg.isConnected && now - t0 > 500) return;   // figuren har bytts ut: sluta animera
+    const n = ex.poses.length, cyc = ex.cycle;
+    let u = ((now - t0) / ex.dur);
+    let i, j, t;
+    if (cyc) { const k = u % n; i = Math.floor(k); j = (i + 1) % n; t = k - i; }
+    else { const k = u % 2; const fw = k < 1; t = fw ? k : 2 - k; i = 0; j = 1; }
+    t = .5 - Math.cos(Math.PI * t) / 2;
+    const A = ex.poses[i], B = ex.poses[j];
+    const g = k => L(A, B, k, t);
+    const hip = g('hip'), sh = g('sh'), kn = g('kn'), an = g('an'), kn2 = g('kn2'), an2 = g('an2'), el = g('el'), ha = g('ha'), el2 = g('el2'), ha2 = g('ha2'), hd = g('head');
+    const bob = ex.walk ? Math.abs(Math.sin(Math.PI * u)) * -2 : 0;
+    const B2 = p => [p[0], p[1] + bob];
+    const toe = a => [a[0] + 13, a[1]];
+    leg2.setAttribute('points', pts(B2(hip), kn2, an2, toe(an2)));
+    arm2.setAttribute('points', pts(B2(sh), B2(el2), B2(ha2)));
+    torso.setAttribute('points', pts(B2(hip), B2(sh)));
+    leg.setAttribute('points', pts(B2(hip), kn, an, toe(an)));
+    arm.setAttribute('points', pts(B2(sh), B2(el), B2(ha)));
+    head.setAttribute('cx', hd[0]); head.setAttribute('cy', hd[1] + bob);
+    shadow.setAttribute('cx', (hip[0] + an[0]) / 2);
+    const oa = A.kbo === undefined ? [0,14] : A.kbo, ob = B.kbo === undefined ? [0,14] : B.kbo;
+    if (oa && ob) { const o = [lerp(oa[0], ob[0], t), lerp(oa[1], ob[1], t)];
+      kbs.forEach((k, q) => { const h = q === 0 ? ha : ha2; k.setAttribute('transform', `translate(${h[0] + o[0] + (q ? -6 : 0)},${h[1] + o[1] + bob})`); k.style.display = ''; }); }
+    else kbs.forEach(k => k.style.display = 'none');
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  return svg;
+}
+
+// ---------------- navigation ----------------
+function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); scrollTo({top:0, behavior:'smooth'}); }
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('on'), 3200); }
+function confetti() {
+  const c = $('#conf'), cols = ['#C8340A','#8F1A00','#FFF6DC','#C8340A'];
+  for (let i = 0; i < 60; i++) { const e = document.createElement('i'); e.style.left = Math.random() * 100 + 'vw'; e.style.background = cols[i % 4];
+    e.style.animationDuration = 1.6 + Math.random() * 1.6 + 's'; e.style.animationDelay = Math.random() * .5 + 's'; e.style.borderRadius = i % 3 ? '3px' : '50%'; c.appendChild(e); setTimeout(() => e.remove(), 4000); }
+}
+$('#g-kb').onclick = () => { if (!S) { S = fresh(); } renderProfile(); show(S.log.length ? 's-prog' : 's-profile'); if (S.log.length) renderProg(); };
+$('#nav-log').onclick = () => { if (!S) { toast('Välj redskap först'); return; } renderLog(); show('s-log'); };
+$('#edit-prof').onclick = () => { renderProfile(); show('s-profile'); };
+$('#l-back').onclick = () => { renderProg(); show('s-prog'); };
+$('#d-back').onclick = () => { renderProg(); show('s-prog'); };
+$('#l-reset').onclick = () => { if (confirm('Radera all historik och börja om?')) { localStorage.removeItem(KEY); S = null; show('s-start'); } };
+
+// ---------------- profil ----------------
+function renderProfile() {
+  document.querySelectorAll('#sex button').forEach(b => b.classList.toggle('on', b.dataset.v === S.sex));
+  document.querySelectorAll('#ppw button').forEach(b => b.classList.toggle('on', +b.dataset.v === S.ppw));
+  $('#kg-l').textContent = S.bells.l; $('#kg-t').textContent = S.bells.t;
+  $('#kgtip').textContent = S.sex === 'm' ? 'Förslag för män som börjar om: 12 kg + 16 kg. Hellre för lätt än för tungt.' : 'Förslag för kvinnor som börjar om: 8 kg + 12 kg. Hellre för lätt än för tungt.';
+}
+document.querySelectorAll('#sex button').forEach(b => b.onclick = () => { S.sex = b.dataset.v; if (!S.log.length) S.bells = fresh(S.sex).bells; renderProfile(); });
+document.querySelectorAll('#ppw button').forEach(b => b.onclick = () => { S.ppw = +b.dataset.v; renderProfile(); });
+document.querySelectorAll('.bell .pm button').forEach(b => b.onclick = () => {
+  const k = b.dataset.b, i = KG.indexOf(S.bells[k]) + +b.dataset.d; if (i < 0 || i >= KG.length) return;
+  S.bells[k] = KG[i]; if (S.bells.l >= S.bells.t) { if (k === 'l') S.bells.t = KG[Math.min(KG.length - 1, i + 1)]; else S.bells.l = KG[Math.max(0, i - 1)]; }
+  renderProfile(); const el = $('#kg-' + k); el.animate([{transform:'scale(1.35)'}, {transform:'scale(1)'}], {duration:300, easing:'cubic-bezier(.3,1.6,.5,1)'});
+});
+$('#go-prog').onclick = () => { save(); renderProg(); show('s-prog'); };
+
+// ---------------- program ----------------
+function renderProg() {
+  const w = week(), ph = phaseOf(w), nk = nextKey(), done = S.log.length >= 12 * S.ppw;
+  $('#p-eyebrow').textContent = done ? 'Alla 12 veckor klara!' : `Vecka ${w} av 12`;
+  $('#p-phase').textContent = ph.namn; $('#p-phasetxt').textContent = ph.rpe;
+  const tl = $('#tl'); tl.innerHTML = '';
+  for (let i = 1; i <= 12; i++) { const e = document.createElement('i'); e.textContent = i; const c = S.log.filter(l => l.w === i).length;
+    if (c >= S.ppw || i < w) e.className = 'done'; else if (i === w) e.className = 'now'; tl.appendChild(e); }
+  const pl = $('#passlist'); pl.innerHTML = '';
+  const doneThisWeek = S.log.filter(l => l.w === w).map(l => l.k);
+  for (const k of passKeys()) {
+    const p = ph.pass[k], b = document.createElement('button'); b.className = 'passcard' + (k === nk ? ' next' : '');
+    const isDone = doneThisWeek.includes(k);
+    b.innerHTML = `<span class="ltr">${k}</span><span><h3>${p.namn}${k === nk ? '<span class="tag">Nästa</span>' : ''}${isDone ? '<span class="tag">✓ Klar</span>' : ''}</h3>
+      <p>${p.ex.map(e => EX[e[0]].namn).join(' · ')}</p><p class="lbl" style="margin-top:4px">${p.ex.length} övningar · ca ${k === 'C' ? 25 : 30} min</p></span>`;
+    b.onclick = () => startSession(k); pl.appendChild(b);
+  }
+}
+
+// ---------------- pass ----------------
+let SS = null;
+function startSession(k) {
+  const w = week(), ph = phaseOf(w), p = ph.pass[k];
+  const plan = p.ex.map(e => exPlan(e[0], e[1], e[2], e[3]));
+  const steps = [{type:'warm'}];
+  plan.forEach((x, xi) => { for (let s = 1; s <= x.sets; s++) steps.push({type:'set', x, xi, s}); });
+  steps.push({type:'rpe'});
+  SS = {k, w, plan, steps, i:0, namn:p.namn, t0:Date.now()};
+  $('#ss-title').textContent = `Pass ${k} · ${p.namn} · Vecka ${w}`;
+  show('s-sess'); renderStep();
+}
+$('#ss-quit').onclick = () => { if (confirm('Avbryta passet? Det sparas inte.')) { stopRest(); renderProg(); show('s-prog'); } };
+function renderStep() {
+  const st = SS.steps[SS.i], body = $('#ss-body'); body.innerHTML = '';
+  $('#ss-prog').style.width = (SS.i / (SS.steps.length - 1) * 100) + '%';
+  body.animate([{opacity:0, transform:'translateX(30px)'}, {opacity:1, transform:'none'}], {duration:380, easing:'cubic-bezier(.45,0,.2,1)'});
+  if (st.type === 'warm') {
+    body.innerHTML = `<div class="card" style="margin-top:6px"><p class="eyebrow">Uppvärmning · 5 min</p><h2>Värm upp</h2>
+      <ol class="wlist">${WARM.map(w => `<li>${w}</li>`).join('')}</ol>
+      <p class="note">Lugnt tempo. Du ska bli varm, inte trött.</p></div>
+      <div style="margin-top:20px"><button class="btn big" id="nx">Jag är varm – kör!</button></div>`;
+    $('#nx').onclick = next; return;
+  }
+  if (st.type === 'set') {
+    const x = st.x, e = x.e;
+    const wrap = document.createElement('div');
+    const stage = document.createElement('div'); stage.className = 'stage';
+    stage.innerHTML = `<span class="wbadge">${x.kg}</span><span class="setbadge">Set ${st.s}/${x.sets}</span>`;
+    stage.appendChild(figure(e)); wrap.appendChild(stage);
+    const info = document.createElement('div');
+    info.innerHTML = `<div class="exname">${e.namn}</div><div class="target">${x.target}</div>
+      <div class="dots">${Array.from({length:x.sets}, (_, i) => `<i class="${i < st.s - 1 ? 'done' : ''}"></i>`).join('')}</div>
+      <ul class="tips">${e.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+      <button class="btn big" id="nx">${st.s < x.sets ? 'Set klart' : 'Övning klar'}</button>`;
+    wrap.appendChild(info); body.appendChild(wrap);
+    $('#nx').onclick = () => {
+      const d = body.querySelectorAll('.dots i')[st.s - 1]; if (d) d.classList.add('done');
+      const nxt = SS.steps[SS.i + 1];
+      if (nxt && nxt.type === 'set') startRest(x.rest, nxt.x === x ? `Nästa: set ${nxt.s} av ${x.sets}` : `Nästa: ${nxt.x.e.namn} · ${nxt.x.kg}`);
+      else next();
+    };
+    return;
+  }
+  if (st.type === 'rpe') {
+    body.innerHTML = `<div class="card" style="margin-top:6px"><p class="eyebrow">Sista steget</p><h2>Hur kändes det?</h2>
+      <p class="note" style="margin:0">Var ärlig – programmet anpassar sig efter ditt svar.</p>
+      <div class="rpe">
+        <button data-r="easy"><span class="face">😎</span><span><b>Lätt</b><small>Hade kunnat göra mycket mer</small></span></button>
+        <button data-r="ok"><span class="face">💪</span><span><b>Lagom</b><small>Jobbigt på slutet, men tekniken höll</small></span></button>
+        <button data-r="hard"><span class="face">🥵</span><span><b>Tungt</b><small>Nära gränsen</small></span></button>
+        <button data-r="too"><span class="face">🛑</span><span><b>För tungt</b><small>Tekniken sviktade eller det gjorde ont</small></span></button>
+      </div></div>`;
+    body.querySelectorAll('.rpe button').forEach(b => b.onclick = () => finish(b.dataset.r));
+  }
+}
+function next() { stopRest(); SS.i++; renderStep(); }
+
+// vila
+let RT = null;
+function startRest(sec, txt) {
+  $('#rest').classList.add('on'); $('#rest-next').textContent = txt;
+  RT = {end: performance.now() + sec * 1000, total: sec * 1000, beeped:false};
+  const ring = $('#ring'), C = 2 * Math.PI * 74; ring.setAttribute('stroke-dasharray', C);
+  (function tick(now) {
+    if (!RT) return; const left = Math.max(0, RT.end - now);
+    ring.setAttribute('stroke-dashoffset', C * (1 - left / RT.total));
+    $('#ring-t').textContent = Math.ceil(left / 1000);
+    if (left <= 0) { beep(); if (navigator.vibrate) navigator.vibrate([120, 60, 120]); next(); return; }
+    requestAnimationFrame(tick);
+  })(performance.now());
+}
+function stopRest() { RT = null; $('#rest').classList.remove('on'); }
+$('#rest-skip').onclick = next;
+$('#rest-add').onclick = () => { if (RT) { RT.end += 15000; RT.total += 15000; } };
+let AC = null;
+function beep() { try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); [0, .18].forEach(d => { const o = AC.createOscillator(), g = AC.createGain(); o.frequency.value = 880; o.connect(g); g.connect(AC.destination); g.gain.setValueAtTime(.18, AC.currentTime + d); g.gain.exponentialRampToValueAtTime(.001, AC.currentTime + d + .15); o.start(AC.currentTime + d); o.stop(AC.currentTime + d + .16); }); } catch (_) {} }
+document.addEventListener('pointerdown', () => { try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); AC.resume(); } catch (_) {} }, {once:true});
+
+// avsluta + progression
+function finish(r) {
+  const msgs = [];
+  if (r === 'easy') { S.easy++; } else S.easy = 0;
+  if (r === 'easy' && S.easy >= 2) {
+    S.easy = 0;
+    for (const [id, e] of Object.entries(EX)) { if (e.unit !== 'reps' || !e.bell) continue;   // hela programmet, inte bara dagens pass
+      const a = S.adj[id] = S.adj[id] || {r:0, up:false};
+      if (a.r >= 4 && e.bell === 'l' && !a.up) { a.up = true; a.r = -2; msgs.push(`${e.namn}: upp till ${S.bells.t} kg!`); }
+      else if (a.r < 6) { a.r += 2; } }
+    msgs.unshift('Två lätta pass i rad – vi ökar repsen.');
+  }
+  if (r === 'too') {
+    for (const [id, e] of Object.entries(EX)) { if (e.unit !== 'reps') continue; const a = S.adj[id] = S.adj[id] || {r:0, up:false};
+      if (a.up && a.r <= -2) { a.up = false; a.r = 4; } else a.r = Math.max(-4, a.r - 2); }
+    msgs.push('Vi backar lite till nästa gång. Smart.');
+  }
+  S.log.push({w:SS.w, k:SS.k, r, d:Date.now(), min:Math.round((Date.now() - SS.t0) / 60000)}); save();
+  $('#ss-prog').style.width = '100%';
+  const lab = {easy:'Lätt', ok:'Lagom', hard:'Tungt', too:'För tungt'}[r];
+  $('#d-eyebrow').textContent = `Pass ${SS.k} · vecka ${SS.w} · ${lab}`;
+  $('#d-stamp').textContent = 'Pass ' + SS.k; $('#d-stamp').style.animation = 'none'; void $('#d-stamp').offsetWidth; $('#d-stamp').style.animation = '';
+  const total = S.log.length, left = 12 * S.ppw - total;
+  $('#d-head').textContent = left <= 0 ? 'Alla 12 veckor!' : r === 'too' ? 'Bra att du sa till' : 'Snyggt jobbat';
+  $('#d-msg').textContent = (msgs.join(' ') + ' ' + (left > 0 ? `${total} pass gjorda, ${left} kvar.` : 'Du har gjort hela programmet. Kör en runda till med tyngre klockor?')).trim();
+  stamps($('#d-stamps'), true); show('s-done'); confetti();
+  if (msgs.length > 1) setTimeout(() => toast(msgs[1]), 900);
+}
+function stamps(el, animLast) {
+  el.innerHTML = ''; const keys = ['A','B','C'];
+  for (let w = 1; w <= 12; w++) {
+    const row = document.createElement('div'); row.className = 'wk'; row.innerHTML = `<span>V${w}</span>`;
+    keys.forEach((k, i) => { const s = document.createElement('div'); s.className = 'slot' + (i >= S.ppw ? ' off' : '');
+      const hit = S.log.findIndex(l => l.w === w && l.k === k);
+      if (hit >= 0) { const st = document.createElement('div'); st.className = 'stamp' + (animLast && hit === S.log.length - 1 ? ' new' : ''); st.style.setProperty('--r', ((w * 7 + i * 13) % 30 - 15) + 'deg'); st.textContent = k; s.appendChild(st); }
+      row.appendChild(s); });
+    el.appendChild(row);
+  }
+}
+function renderLog() {
+  stamps($('#l-stamps'));
+  const lab = {easy:'😎 Lätt', ok:'💪 Lagom', hard:'🥵 Tungt', too:'🛑 För tungt'};
+  $('#l-list').innerHTML = S.log.length ? S.log.slice().reverse().slice(0, 15).map(l => `<li><span>V${l.w} · Pass ${l.k} · ${new Date(l.d).toLocaleDateString('sv-SE', {day:'numeric', month:'short'})}</span><span>${lab[l.r]}</span></li>`).join('') : '<li>Inga pass ännu. Första stämpeln väntar!</li>';
+}
+// direktstart om man redan har ett program
+if (S) { $('#g-kb small').textContent = `Vecka ${week()} · fortsätt`; }
+window.__t = {EX, PHASES, figure, get S() { return S; }};
+</script>
+</body>
+</html>
