@@ -227,6 +227,13 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .mwb{display:flex;align-items:center;gap:8px;padding:4px 6px!important;transform:rotate(-2deg)}
 .mwb button{width:40px;height:40px;border-radius:50%;border:3px solid var(--chili);background:var(--cream);color:var(--chili);font-family:var(--display);font-size:24px;line-height:1;cursor:pointer}
 .mwb button:active{transform:scale(.88)}
+.wlist2{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+.wlist2 li{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center}
+.wfig{position:relative;display:block;height:96px;background:var(--cream);border:3px solid var(--chili);border-radius:6px;overflow:hidden;box-shadow:3px 3px 0 var(--chili)}
+.wfig .fig{width:100%;height:100%;max-height:none}
+.wfig b{position:absolute;top:3px;left:4px;z-index:3;width:22px;height:22px;border-radius:50%;background:var(--chili);color:var(--cream);font:400 14px/22px var(--display);text-align:center}
+.wt{font-size:16px;line-height:1.3}
+.wlist2 li:nth-child(odd) .wfig{transform:rotate(-1.5deg)}.wlist2 li:nth-child(even) .wfig{transform:rotate(1.5deg)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -562,6 +569,43 @@ let G = GEARS[localStorage.getItem('bc_traning_gear')] || GEARS.kb;
 let EX = G.EX, PHASES = G.PHASES, WARM = G.WARM, KEY = G.key, KG = G.KG;
 function useGear(id) { G = GEARS[id]; ({EX, PHASES, WARM, key:KEY, KG} = G); localStorage.setItem('bc_traning_gear', id); S = load(); }
 const mstep = kg => kg < 20 ? 2.5 : 5;
+
+// ---------------- uppvärmning: små animerade rörelser ----------------
+const HIPS = {el:[128,96], ha:[116,119], el2:[98,96], ha2:[106,119], kbo:null};
+const WA = {
+  hoftcirkel:{cycle:true, dur:330, effort:false, bell:null, poses:[
+    P(ST,{...HIPS, hip:[117,120], sh:[109,66], head:[110,44]}), P(ST,{...HIPS, hip:[110,115], sh:[112,64], head:[113,42]}),
+    P(ST,{...HIPS, hip:[103,120], sh:[115,66], head:[117,44]}), P(ST,{...HIPS, hip:[110,125], sh:[112,70], head:[113,48]})]},
+  kattko:{dur:1300, effort:false, bell:null, prop:'mat', poses:[
+    {hip:[80,146], sh:[140,148], head:[160,130], el:[140,172], ha:[140,197], kn:[82,196], an:[48,197]},
+    {hip:[82,134], sh:[138,136], head:[148,162], el:[140,166], ha:[140,197], kn:[82,196], an:[48,197]}]},
+  hoftfall:{dur:1400, effort:false, bell:null, poses:[P(ST,HIPS),
+    P(ST,{head:[156,92], sh:[140,104], hip:[88,126], kn:[106,162], el:[114,104], ha:[94,120], el2:[108,100], ha2:[90,118], kbo:null})]},
+  halo:{...EX_KB.halo, effort:false},
+  djupkb:{dur:900, effort:false, bell:null, poses:[
+    {hip:[90,170], kn:[132,160], an:[114,199], sh:[108,112], head:[113,90], el:[130,110], ha:[152,112], kbo:null},
+    {hip:[90,165], kn:[132,158], an:[114,199], sh:[108,107], head:[113,85], el:[130,106], ha:[152,108], kbo:null}]},
+  marsch:{walk:true, dur:420, effort:false, bell:null, poses:[
+    P(ST,{kn:[136,136], an:[132,174], kn2:[108,161], an2:[106,199], el:[126,92], ha:[134,112], el2:[100,92], ha2:[92,112], kbo:null}),
+    P(ST,{kn2:[136,136], an2:[132,174], kn:[108,161], an:[106,199], el2:[126,92], ha2:[134,112], el:[100,92], ha:[92,112], kbo:null})]},
+  armcirkel:{cycle:true, dur:300, effort:false, bell:null, poses:[
+    P(ST,{el:[114,42], ha:[115,18], kbo:null}), P(ST,{el:[138,68], ha:[162,70], kbo:null}),
+    P(ST,{el:[113,92], ha:[114,118], kbo:null}), P(ST,{el:[88,68], ha:[64,64], kbo:null})]},
+  knabojbank:{dur:1500, effort:false, bell:null, prop:'boxlow', poses:[P(ST,{el:[132,88], ha:[154,90], kbo:null}),
+    P(ST,{hip:[82,154], kn:[126,156], sh:[104,104], head:[110,82], el:[126,104], ha:[150,102], kbo:null})]},
+  knaboj:{dur:1500, effort:false, bell:null, poses:[P(ST,{el:[132,88], ha:[154,90], kbo:null}),
+    P(ST,{hip:[84,152], kn:[126,156], sh:[104,104], head:[110,82], el:[126,104], ha:[150,102], kbo:null})]},
+  utfall0:{dur:1600, effort:false, bell:null, poses:[P(ST,HIPS),
+    P(ST,{...HIPS, hip:[106,150], kn:[140,158], an:[142,199], kn2:[96,192], an2:[66,196], sh:[108,96], head:[110,74], el:[124,126], ha:[112,149], el2:[96,126], ha2:[102,149]})]},
+  cykel:{...EX_M.cykel},
+};
+const WARMS = {
+  kb:[['Höftcirklar – 10 åt varje håll', 'hoftcirkel'], ['Katt och ko på alla fyra – 8 st', 'kattko'], ['Höftfällning med händerna på höften – 10 st', 'hoftfall'],
+      ['Halo utan vikt eller med lätt klocka – 5 åt varje håll', 'halo'], ['Djup knäböj, håll i något – stanna i botten 20 s', 'djupkb']],
+  db:[['Marsch på stället – 1 min', 'marsch'], ['Armcirklar – 10 framåt, 10 bakåt', 'armcirkel'], ['Höftfällning med händerna på höften – 10 st', 'hoftfall'],
+      ['Knäböj utan vikt mot bänk – 8 st', 'knabojbank'], ['Utfall bakåt utan vikt – 4 per sida', 'utfall0']],
+  mach:[['Cykel eller crosstrainer – 5 min, lugnt', 'cykel'], ['Armcirklar – 10 framåt, 10 bakåt', 'armcirkel'], ['Höftfällning – 10 st', 'hoftfall'], ['Knäböj utan vikt – 8 st', 'knaboj']],
+};
 
 // ---------------- state ----------------
 let S = load();
@@ -908,9 +952,11 @@ function renderStep() {
   body.animate([{opacity:0, transform:'translateX(30px)'}, {opacity:1, transform:'none'}], {duration:380, easing:'cubic-bezier(.45,0,.2,1)'});
   if (st.type === 'warm') {
     body.innerHTML = `<div class="card" style="margin-top:6px"><p class="eyebrow">Uppvärmning · 5 min</p><h2>Värm upp</h2>
-      <ol class="wlist">${WARM.map(w => `<li>${w}</li>`).join('')}</ol>
+      <ol class="wlist2">${WARMS[G.id].map(([t], i) => `<li><span class="wfig film"><b>${i + 1}</b></span><span class="wt">${t}</span></li>`).join('')}</ol>
       <p class="note">Lugnt tempo. Du ska bli varm, inte trött.</p></div>
       <div class="dock"><button class="btn big" id="nx">Jag är varm – kör!</button></div>`;
+    body.querySelectorAll('.wfig').forEach((el, i) => { const a = WA[WARMS[G.id][i][1]];
+      el.appendChild(figure(a, undefined, {vb: a.prop === 'mat' ? '10 70 210 140' : a.prop === 'bike' ? '40 -4 170 210' : '30 -22 180 230', rays:false})); });
     $('#nx').onclick = next; return;
   }
   if (st.type === 'set') {
