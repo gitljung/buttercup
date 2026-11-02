@@ -122,6 +122,21 @@ details[open] summary::before{content:"– ";}
 .tips li{display:grid;grid-template-columns:26px 1fr;gap:8px;font-size:16px}
 .tips li::before{content:"✱";color:var(--chili);font-weight:700;font-size:18px;line-height:1.2}
 .dots{display:flex;gap:8px;margin:8px 0 0}
+.cxbox{background:var(--cream);border:3px solid var(--ink);border-radius:16px;padding:10px 14px 12px;margin:10px 0;box-shadow:4px 4px 0 var(--ink)}
+.cxrow{display:flex;align-items:baseline;gap:10px}
+.cxn{font-family:var(--display);font-size:64px;line-height:1;color:var(--chili);min-width:1.1em;font-variant-numeric:tabular-nums}
+.cxl{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:15px}
+.cxbox.prep .cxn{color:var(--ink)}.cxbox.prep .cxbar i{background:var(--ink)}
+.cxbox.paused{opacity:.65}
+.cxbar{height:10px;border-radius:6px;background:rgba(42,18,6,.12);overflow:hidden;margin:6px 0 8px}
+.cxbar i{display:block;height:100%;width:0;background:var(--chili)}
+.cxpips{display:flex;gap:6px;margin-bottom:10px}.cxpips i{flex:1;height:8px;border-radius:4px;background:rgba(42,18,6,.12);transition:background .2s}
+.cxpips i.done{background:var(--chili)}.cxpips i.now{background:var(--buttercup)}
+.cxctl{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.cxctl button{font-family:var(--label);font-weight:700;text-transform:uppercase;border:2px solid var(--ink);border-radius:10px;background:#fff;padding:8px 12px;font-size:15px;color:var(--ink)}
+.cxtempo{display:flex;align-items:center;gap:6px;font-family:var(--label);font-weight:700;font-size:14px;text-transform:uppercase}
+.cxtempo button{width:36px;padding:6px 0}
+.btn.ghost{font-size:18px;padding:12px 14px;background:rgba(255,246,220,.6);color:var(--ink);box-shadow:none;border:3px solid var(--ink)}
 .dots i{width:22px;height:22px;border-radius:50%;border:3px solid var(--chili);background:var(--cream);transition:background .3s,transform .3s var(--pop)}
 .dots i.done{background:var(--chili);transform:scale(1.1)}
 .rest{position:fixed;inset:0;z-index:60;display:none;place-items:center;background:rgba(252,194,34,.94);
@@ -1445,8 +1460,8 @@ async function wakeOn() { try { WL = await navigator.wakeLock.request('screen');
   catch (_) { $('#wake').textContent = ''; } }
 function wakeOff() { try { WL && WL.release(); } catch (_) {} WL = null; }
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && SS && $('#s-sess').classList.contains('on')) wakeOn(); });
-$('#ss-backstep').onclick = () => { if (!SS || SS.i === 0) return; stopRest(); SS.i--; renderStep(); };
-$('#ss-quit').onclick = () => { if (confirm('Avbryta passet? Det sparas inte.')) { stopRest(); wakeOff(); SS = null; renderProg(); show('s-prog'); } };
+$('#ss-backstep').onclick = () => { if (!SS || SS.i === 0) return; cxStop(); stopRest(); SS.i--; renderStep(); };
+$('#ss-quit').onclick = () => { if (confirm('Avbryta passet? Det sparas inte.')) { cxStop(); stopRest(); wakeOff(); SS = null; renderProg(); show('s-prog'); } };
 function renderStep() {
   const st = SS.steps[SS.i], body = $('#ss-body'); body.innerHTML = '';
   $('#ss-prog').style.width = (SS.i / (SS.steps.length - 1) * 100) + '%';
@@ -1477,8 +1492,16 @@ function renderStep() {
     info.innerHTML = `<div class="exname">${e.namn}</div><div class="target">${x.target}</div>
       <div class="dots">${Array.from({length:x.sets}, (_, i) => `<i class="${i < st.s - 1 ? 'done' : ''}"></i>`).join('')}</div>
       <details class="tipsd" ${st.s === 1 ? 'open' : ''}><summary>Teknik</summary><ul class="tips">${e.tips.map(t => `<li>${t}</li>`).join('')}</ul></details>
-      <div class="dock"><button class="btn big" id="nx">${st.cx ? (st.xi < SS.plan.length - 1 ? `Klar › ${SS.plan[st.xi + 1].e.namn}` : st.s < x.sets ? 'Varv klart ✓' : 'Sista varvet klart ✓') : st.s < x.sets ? 'Set klart ✓' : 'Övning klar ✓'}</button></div>`;
+      <div class="dock"><button class="btn big" id="nx">${st.cx ? (st.xi < SS.plan.length - 1 ? `Hoppa till ${SS.plan[st.xi + 1].e.namn} ›` : st.s < x.sets ? 'Varv klart ✓' : 'Sista varvet klart ✓') : st.s < x.sets ? 'Set klart ✓' : 'Övning klar ✓'}</button></div>`;
+    if (st.cx) { wrap.className = 'cxwrap'; const k = +(localStorage.getItem('bc_traning_cxk') || 1);
+      const tb = document.createElement('div'); tb.className = 'cxbox';
+      tb.innerHTML = `<div class="cxrow"><b class="cxn">–</b><span class="cxl"></span></div><div class="cxbar"><i></i></div>
+        <div class="cxpips">${Array.from({length:x.reps}, () => '<i></i>').join('')}</div>
+        <div class="cxctl"><button class="cxpause">❚❚ Paus</button><span class="cxtempo"><button data-d="-0.1" aria-label="Snabbare">−</button><span>${cxTempoTxt(k)}</span><button data-d="0.1" aria-label="Lugnare">+</button></span></div>`;
+      info.querySelector('.target').after(tb); info.querySelector('.dots').remove(); info.querySelector('.tipsd').removeAttribute('open');
+      info.querySelector('#nx').classList.add('ghost'); }
     wrap.appendChild(info); body.appendChild(wrap);
+    if (st.cx) cxTimer(st, wrap.querySelector('.cxbox'));
     $('#nx').onclick = () => {
       const d = body.querySelectorAll('.dots i')[st.s - 1]; if (d) d.classList.add('done');
       const nxt = SS.steps[SS.i + 1];
@@ -1500,7 +1523,7 @@ function renderStep() {
     body.querySelectorAll('.rpe button').forEach(b => b.onclick = () => finish(b.dataset.r));
   }
 }
-function next() { stopRest(); SS.i++; renderStep(); }
+function next() { cxStop(); stopRest(); SS.i++; renderStep(); }
 
 // vila
 let RT = null;
@@ -1701,6 +1724,41 @@ function openSheet(it) {
 const CX = {ex:['bojdrodd', 'swing', 'goblet', 'gobletpress'], reps:6, it:{lugn:{v:4, rest:60}, normal:{v:6, rest:45}, tufft:{v:8, rest:30}}};
 function cxPlan() { const c = CX.it[INT] || CX.it.normal;
   return CX.ex.map(id => { const x = exPlan(id, 1, CX.reps); return {...x, sets:c.v, reps:CX.reps, bell:'l', kg:S.bells.l + ' kg', target:CX.reps + ' reps', rest:c.rest, g:'kb', cx:true}; }); }
+CX.tempo = {bojdrodd:3, swing:2, goblet:3.5, gobletpress:3};   // sekunder per rep
+let CXT = null;
+function cxStop() { if (CXT) { clearInterval(CXT.iv); CXT = null; } }
+function cxTimer(st, box) {
+  cxStop();
+  const x = st.x, n = x.reps, base = (CX.tempo[x.id] || 3) * 1000, prep = st.xi === 0 ? 5000 : 3000;
+  const T = CXT = {t:-prep, last:performance.now(), paused:false, rep:0, per:base * +(localStorage.getItem('bc_traning_cxk') || 1)};
+  const big = box.querySelector('.cxn'), lab = box.querySelector('.cxl'), bar = box.querySelector('.cxbar i'), pb = box.querySelector('.cxpause');
+  const pips = box.querySelectorAll('.cxpips i');
+  const draw = () => {
+    if (T.t < 0) { box.classList.add('prep'); big.textContent = Math.ceil(-T.t / 1000);
+      lab.textContent = st.xi === 0 ? `Varv ${st.s} – gör dig redo` : `Byt till ${x.e.namn}`; bar.style.width = (100 * (1 + T.t / prep)) + '%'; return; }
+    box.classList.remove('prep');
+    const r = Math.min(n, Math.floor(T.t / T.per) + 1);
+    big.textContent = r; lab.textContent = `rep av ${n}`; bar.style.width = (100 * ((T.t % T.per) / T.per)) + '%';
+    pips.forEach((p, i) => p.className = i < r - 1 ? 'done' : i === r - 1 ? 'now' : '');
+  };
+  T.iv = setInterval(() => {
+    const now = performance.now(), dt = now - T.last; T.last = now;
+    if (T.paused || CXT !== T) return;
+    if (!box.isConnected) { cxStop(); return; }
+    const before = T.t; T.t += dt;
+    if (before < 0 && T.t >= 0) { beep(); if (navigator.vibrate) navigator.vibrate(80); }
+    if (T.t >= 0) { const r = Math.floor(T.t / T.per); if (r > T.rep && r < n) { T.rep = r; blip(600, 900, .06); if (navigator.vibrate) navigator.vibrate(30); } }
+    if (T.t >= n * T.per) { cxStop(); box.closest('.cxwrap').querySelector('#nx').click(); return; }
+    draw();
+  }, 80);
+  pb.onclick = () => { T.paused = !T.paused; pb.textContent = T.paused ? '▶ Fortsätt' : '❚❚ Paus'; box.classList.toggle('paused', T.paused); };
+  box.querySelectorAll('.cxtempo button').forEach(b => b.onclick = () => {
+    const k = Math.min(1.6, Math.max(.6, Math.round((+(localStorage.getItem('bc_traning_cxk') || 1) + (+b.dataset.d)) * 10) / 10));
+    localStorage.setItem('bc_traning_cxk', k); box.querySelector('.cxtempo span').textContent = cxTempoTxt(k);
+    const np = base * k; if (T.t > 0) T.t = T.t / T.per * np; T.per = np; T.rep = Math.floor(Math.max(0, T.t) / np); draw(); });
+  draw();
+}
+const cxTempoTxt = k => k < .95 ? 'Snabbare' : k > 1.05 ? 'Lugnare' : 'Normalt tempo';
 function startComplex() {
   if (!S) S = fresh();
   chooseInt('Helkroppskomplex · 1 kettlebell', cxPlan, (plan, it) => {
