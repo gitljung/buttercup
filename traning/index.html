@@ -176,6 +176,9 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 #fbig{position:relative}
 .spr{background-repeat:no-repeat;background-size:1600% 100%;width:100%;margin:0 auto;image-rendering:auto}
 #fbig .spr{width:auto;height:min(300px,62vw);max-width:100%;margin:6px auto 0}
+.stage .exspr{height:min(300px,44vh);width:auto;max-width:100%;margin:8px auto 0}
+.sheet .stage .exspr{height:min(260px,34vh)}
+.libfig .exspr,.wfig .exspr{height:100%;width:auto;max-width:100%;margin:0 auto;background-color:transparent}
 .fgrid button .spr{width:auto;height:96px;max-width:100%}
 @media (max-width:560px){.fgrid button .spr{height:74px}}
 .finfo h3{color:var(--chili);font-size:clamp(26px,6.5vw,38px);margin:0}
@@ -1450,7 +1453,8 @@ function renderStep() {
       <p class="note">Lugnt tempo. Du ska bli varm, inte trött.</p></div>
       <div class="dock"><button class="btn big" id="nx">Jag är varm – kör!</button></div>`;
     body.querySelectorAll('.wfig').forEach((el, i) => { const a = WA[WARMS[G.id][i][1]];
-      el.appendChild(figure(a, undefined, {vb: a.prop === 'mat' ? '10 70 210 140' : a.prop === 'bike' ? '40 -4 170 210' : '30 -22 180 230', rays:false})); });
+      const wid = WARMS[G.id][i][1], sid = WAMAP[wid] || 'w_' + wid;
+      el.appendChild(exVis(sid, a, () => figure(a, undefined, {vb: a.prop === 'mat' ? '10 70 210 140' : a.prop === 'bike' ? '40 -4 170 210' : '30 -22 180 230', rays:false}))); });
     $('#nx').onclick = next; return;
   }
   if (st.type === 'set') {
@@ -1464,7 +1468,7 @@ function renderStep() {
       const upd = d => { const nv = withGear(x.g || G.id, () => { const cur = S.mw[x.id] ?? parseFloat(x.kg); const v = Math.max(0, cur + d * mstep(cur + (d < 0 ? -0.1 : 0))); S.mw[x.id] = v; save(); return v; }); x.kg = nv + ' kg';
         wb.querySelector('span').textContent = x.kg; wb.querySelector('span').animate([{transform:'scale(1.3)'}, {transform:'scale(1)'}], {duration:250}); };
       mi.onclick = () => upd(-1); pl.onclick = () => upd(1); }
-    stage.appendChild(figure(e)); wrap.appendChild(stage);
+    stage.appendChild(exVis(x.id, e, () => figure(e))); wrap.appendChild(stage);
     const info = document.createElement('div');
     info.innerHTML = `<div class="exname">${e.namn}</div><div class="target">${x.target}</div>
       <div class="dots">${Array.from({length:x.sets}, (_, i) => `<i class="${i < st.s - 1 ? 'done' : ''}"></i>`).join('')}</div>
@@ -1636,7 +1640,7 @@ function libCard(x, i) {
   const {id, e, mg, key} = x;
   const c = document.createElement('div'); c.className = 'libcard'; c.style.animationDelay = Math.min(i, 12) * 35 + 'ms';
   const box = document.createElement('div'); box.className = 'libfig film';
-  box.appendChild(figure(e, undefined, {vb: e.prop === 'mat' ? '14 76 200 130' : e.prop === 'bike' ? '40 -4 170 210' : e.prop ? '20 -24 210 230' : '36 -26 170 232', rays:false, noBoil:true}));
+  box.appendChild(exVis(id, e, () => figure(e, undefined, {vb: e.prop === 'mat' ? '14 76 200 130' : e.prop === 'bike' ? '40 -4 170 210' : e.prop ? '20 -24 210 230' : '36 -26 170 232', rays:false, noBoil:true})));
   c.appendChild(box);
   const inP = passSel.has(key);
   const info = document.createElement('div'); info.className = 'libinfo';
@@ -1683,7 +1687,7 @@ function openSheet(it) {
     <p class="mgs">${(MGMAP[id] || []).map(m => `<span class="hit">${MG.find(g => g.id === m).namn}</span>`).join('')}</p>
     <ul class="tips">${e.tips.map(t => `<li>${t}</li>`).join('')}</ul>
     <button class="btn big" id="sh-add">${passSel.has(key) ? '✓ Med i passet' : '+ Lägg till i pass'}</button>`;
-  sh.querySelector('.stage').appendChild(figure(e));
+  sh.querySelector('.stage').appendChild(exVis(id, e, () => figure(e)));
   sh.classList.add('on');
   sh.querySelector('.x').onclick = () => sh.classList.remove('on');
   $('#sh-add').onclick = () => { passSel.has(key) ? passSel.delete(key) : passSel.add(key); sh.classList.remove('on'); renderLib(); };
@@ -1719,6 +1723,26 @@ function sprite(id, start = 0) {
   set(); if (!RM) setTimeout(tick, 30);
   return d;
 }
+// övningssprites: ex/<fighter>/<id>.webp (16 bilder, 256 px höga), manifest i EXM
+let EXM = {};
+fetch('ex/manifest.json').then(r => r.ok ? r.json() : {}).then(m => { EXM = m || {}; }).catch(() => {});
+const WAMAP = {knaboj:'luftknaboj', knabojbank:'stolres', utfall0:'utfallkv', halo:'halo', cykel:'cykel'};
+const EXDUR = [320, 200, 110, 110, 110, 110, 110, 240, 240, 240, 110, 110, 110, 110, 110, 200];
+const sprIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const d = en.target; d.vis = en.isIntersecting;
+  if (d.vis && !d.style.backgroundImage) d.style.backgroundImage = `url(${d.dataset.src})`; if (d.vis && !RM) d.go(); }), {rootMargin:'200px'}) : null;
+function exSprite(id, e) {
+  const fid = localStorage.getItem('bc_traning_fighter') || 'kent', w = EXM[fid] && EXM[fid][id];
+  if (!w) return null;
+  const d = document.createElement('div'); d.className = 'spr exspr';
+  d.dataset.src = `ex/${fid}/${id}.webp`; d.style.aspectRatio = `${w} / 256`; d.style.backgroundPosition = '0 0';
+  const flat = e && (e.walk || e.cycle);
+  let i = 0, t = null;
+  const tick = () => { t = null; if (!d.isConnected || (sprIO && !d.vis)) return; d.style.backgroundPosition = `${i * 100 / 15}% 0`; const ms = flat ? 115 : EXDUR[i]; i = (i + 1) % 16; t = setTimeout(tick, ms); };
+  d.go = () => { if (!t) t = setTimeout(tick, 30); };
+  if (sprIO) setTimeout(() => sprIO.observe(d), 0); else { d.style.backgroundImage = `url(${d.dataset.src})`; if (!RM) d.go(); }
+  return d;
+}
+const exVis = (id, e, make) => exSprite(id, e) || make();
 function renderFighters(animate) {
   const cur = fighterById(localStorage.getItem('bc_traning_fighter')), grid = $('#fgrid');
   if (!grid.children.length) FIGHTERS.forEach(f => {
