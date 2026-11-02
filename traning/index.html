@@ -16,6 +16,12 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#C8340A">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Stark igen">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
@@ -154,6 +160,61 @@ details[open] summary::before{content:"– ";}
 @keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
 .skip{background:none;border:0;font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--chili);text-decoration:underline;cursor:pointer;font-size:15px;margin-top:14px}
 @media (max-width:560px){.gear{gap:9px}.gear svg{height:70px}.bc-bar .hide-m{display:none}}
+
+button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
+/* choose your fighter */
+.fsel{background:#2A1206;border-color:var(--chili);color:var(--cream);box-shadow:6px 6px 0 var(--ox)}
+.fsel::before{border-color:rgba(252,194,34,.35)}
+.fsel .eyebrow{color:var(--buttercup);display:flex;justify-content:space-between}
+.fsel .eyebrow .blink{animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.cyf{color:var(--buttercup);text-shadow:3px 3px 0 var(--chili);font-size:clamp(34px,9vw,58px);text-align:center;margin:2px 0 10px;animation:cyf 2.4s ease-in-out infinite}
+@keyframes cyf{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.fstage{display:grid;grid-template-columns:1fr 1.1fr;gap:12px;align-items:center;background:radial-gradient(circle at 40% 60%,rgba(252,194,34,.28),transparent 65%);border-radius:16px}
+#fbig .fig{max-height:none;height:auto;width:100%}
+#fbig{position:relative}
+#fbig::after{content:"";position:absolute;left:12%;right:12%;bottom:6%;height:8px;border-radius:50%;background:rgba(252,194,34,.35);filter:blur(3px)}
+.finfo h3{color:var(--buttercup);font-size:clamp(26px,6.5vw,38px);margin:0}
+.finfo .lbl{color:var(--cream);opacity:.85;margin:2px 0 6px}
+.finfo .motto{font-size:15px;font-style:italic;margin:0 0 10px;color:var(--cream)}
+.stat{display:grid;grid-template-columns:78px 1fr;gap:8px;align-items:center;margin:5px 0;font-family:var(--label);font-weight:700;letter-spacing:.08em;font-size:13px;text-transform:uppercase}
+.stat .bar{height:12px;border:2px solid var(--buttercup);border-radius:3px;overflow:hidden;background:rgba(255,246,220,.1)}
+.stat .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--chili),var(--buttercup));width:0;transition:width .6s var(--pop)}
+.fmove{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:13px;color:var(--buttercup);margin-top:8px}
+.fgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.fgrid button{appearance:none;background:#3b2414;border:3px solid #5a3a22;border-radius:12px;padding:2px 2px 4px;cursor:pointer;position:relative;transition:transform .15s var(--pop),border-color .2s}
+.fgrid button .fig{max-height:none;width:100%;height:auto;display:block}
+.fgrid button span{display:block;font-family:var(--display);color:var(--cream);font-size:12px;line-height:1.05;text-transform:uppercase;letter-spacing:.02em}
+.fgrid button.on{border-color:var(--buttercup);background:#5a2a12;transform:translateY(-3px);box-shadow:0 0 0 3px var(--chili),0 0 18px rgba(252,194,34,.6)}
+.fgrid button.on::after{content:"P1";position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--chili);color:var(--buttercup);font-family:var(--display);font-size:13px;padding:1px 7px;border-radius:6px;animation:blink 1s steps(2) infinite}
+.fgrid button:active{transform:scale(.94)}
+.flash{position:fixed;inset:0;background:#fff;pointer-events:none;z-index:90;opacity:0}
+.flash.go{animation:flash .35s ease-out}
+@keyframes flash{0%{opacity:.7}100%{opacity:0}}
+.ko{position:absolute;top:6px;left:0;right:0;text-align:center;font-family:var(--display);font-size:30px;color:var(--buttercup);text-shadow:3px 3px 0 var(--chili);opacity:0;pointer-events:none;text-transform:uppercase}
+.ko.go{animation:ko .9s var(--pop)}
+@keyframes ko{0%{opacity:0;transform:scale(2.5)}30%{opacity:1;transform:scale(1)}80%{opacity:1}100%{opacity:0;transform:translateY(-10px)}}
+/* gym/mobil */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:14px 16px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(rgba(252,194,34,0),var(--buttercup) 32%)}
+.dock .btn{display:block;width:100%;max-width:728px;margin:0 auto;font-size:34px;padding:20px}
+#ss-body{padding-bottom:120px}
+.sshead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sshead button{background:none;border:0;font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--chili);font-size:16px;cursor:pointer;padding:8px 2px;min-height:44px}
+.wake{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:12px;opacity:.75;text-align:center;margin:-6px 0 8px}
+.tipsd summary{margin-top:10px}
+.install{display:none}
+.install.on{display:block}
+.duo{display:grid;grid-template-columns:1fr 150px;gap:10px;align-items:center}
+@media (max-width:560px){
+  main{padding:56px 12px 40px}
+  .fstage{grid-template-columns:1fr 1.15fr}
+  .stat{grid-template-columns:62px 1fr;font-size:11px}
+  .finfo .motto{font-size:13px}
+  .exname{margin-top:12px}
+  .fig{max-height:36vh}
+  .card{padding:16px 14px}
+}
+@media (display-mode:standalone){.bc-bar{padding-top:calc(8px + env(safe-area-inset-top))}main{padding-top:calc(62px + env(safe-area-inset-top))}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -167,6 +228,17 @@ details[open] summary::before{content:"– ";}
     <p class="eyebrow">12 veckor · 2–3 pass · 30 minuter</p>
     <h1>STARK<br>IGEN</h1>
     <span class="badge">För dig som börjar om</span>
+  </div>
+  <div class="card fsel">
+    <p class="eyebrow"><span>Player 1</span><span class="blink">Insert coin</span></p>
+    <h2 class="cyf">Choose your fighter</h2>
+    <div class="fstage"><div id="fbig"><div class="ko" id="fko">Ready!</div></div>
+      <div class="finfo"><h3 id="fname"></h3><p class="lbl" id="fmeta"></p><p class="motto" id="fmotto"></p>
+        <div class="stat"><span>Styrka</span><span class="bar"><i id="fs0"></i></span></div>
+        <div class="stat"><span>Puls</span><span class="bar"><i id="fs1"></i></span></div>
+        <div class="stat"><span>Envishet</span><span class="bar"><i id="fs2"></i></span></div>
+        <div class="fmove" id="fmove"></div></div></div>
+    <div class="fgrid" id="fgrid"></div>
   </div>
   <div class="card">
     <h2>Välj redskap</h2>
@@ -235,12 +307,16 @@ details[open] summary::before{content:"– ";}
     </ul>
     <div class="row" style="margin-top:6px"><button class="btn ghost" id="edit-prof">Ändra vikter / pass</button></div>
   </div>
+  <div class="card install" id="install"><h3>Ta med till gymmet</h3>
+    <p class="note" id="inst-txt" style="margin:0 0 10px">Lägg sidan på hemskärmen så öppnas den som en app – och funkar även utan täckning.</p>
+    <button class="btn yellow" id="inst-btn" style="display:none">Installera</button></div>
 </section>
 
 <!-- ============ PASS ============ -->
 <section class="screen" id="s-sess">
-  <div class="row" style="justify-content:space-between"><span class="lbl" id="ss-title">Pass A · Vecka 1</span><button class="skip" style="margin:0" id="ss-quit">Avbryt</button></div>
+  <div class="sshead"><button id="ss-backstep">‹ Bakåt</button><span class="lbl" id="ss-title" style="text-align:center">Pass A</span><button id="ss-quit">Avbryt</button></div>
   <div class="prog"><i id="ss-prog"></i></div>
+  <div class="wake" id="wake"></div>
   <div id="ss-body"></div>
 </section>
 
@@ -248,7 +324,7 @@ details[open] summary::before{content:"– ";}
 <section class="screen" id="s-done">
   <div class="done-hero">
     <p class="eyebrow" id="d-eyebrow">Pass klart</p>
-    <div class="bigstamp" id="d-stamp">Klart!</div>
+    <div class="duo"><div id="d-fig"></div><div class="bigstamp" id="d-stamp" style="width:150px;height:150px;font-size:28px">Klart!</div></div>
     <h2 id="d-head">Snyggt jobbat</h2>
     <p class="note" id="d-msg"></p>
   </div>
@@ -276,6 +352,7 @@ details[open] summary::before{content:"– ";}
 </div></div>
 <div class="toast" id="toast"></div>
 <div class="conf" id="conf"></div>
+<div class="flash" id="flash"></div>
 
 <svg width="0" height="0" style="position:absolute">
   <defs>
@@ -373,52 +450,109 @@ function exPlan(id, sets, reps, mode) {
 
 // ---------------- figur-renderare ----------------
 const NS = 'http://www.w3.org/2000/svg';
-function figure(ex) {
-  const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 240 216'); svg.classList.add('fig');
-  const mk = (tag, at) => { const n = document.createElementNS(NS, tag); for (const k in at) n.setAttribute(k, at[k]); svg.appendChild(n); return n; };
-  mk('rect', {x:0, y:202, width:240, height:14, fill:'#FCC222'}); mk('line', {x1:0, y1:202, x2:240, y2:202, stroke:'#C8340A', 'stroke-width':3});
-  if (ex.prop === 'mat') mk('rect', {x:22, y:198, width:186, height:5, rx:2.5, fill:'#8F1A00', opacity:.35});
-  if (ex.prop === 'boxlow') { mk('rect', {x:46, y:160, width:44, height:42, rx:4, fill:'#FCC222', stroke:'#C8340A', 'stroke-width':3}); }
-  if (ex.prop === 'bench') { mk('rect', {x:146, y:140, width:74, height:9, rx:3, fill:'#C8340A'}); mk('line', {x1:156, y1:149, x2:156, y2:202, stroke:'#C8340A', 'stroke-width':5}); mk('line', {x1:210, y1:149, x2:210, y2:202, stroke:'#C8340A', 'stroke-width':5}); }
-  const back = {stroke:'#8F1A00', 'stroke-width':10, 'stroke-linecap':'round', 'stroke-linejoin':'round', fill:'none', opacity:.45};
-  const front = {stroke:'#C8340A', 'stroke-width':12, 'stroke-linecap':'round', 'stroke-linejoin':'round', fill:'none'};
-  const shadow = mk('ellipse', {cx:110, cy:203, rx:40, ry:4, fill:'#8F1A00', opacity:.18});
-  const leg2 = mk('polyline', back), arm2 = mk('polyline', back);
-  const kbs = [];
-  const kbg = (op) => { const g = document.createElementNS(NS, 'g'); g.innerHTML = `<g transform="translate(-12,-15) scale(.43)" opacity="${op}"><use href="#kb" width="56" height="70"/></g>`; svg.appendChild(g); return g; };
-  if (ex.kb2) kbs.push(kbg(.55));
-  const torso = mk('polyline', {...front, 'stroke-width':16}), leg = mk('polyline', front), arm = mk('polyline', front);
-  const head = mk('circle', {r:13, fill:'#C8340A'});
-  if (ex.bell) kbs.unshift(kbg(1));
+// ---------------- fighters ----------------
+const FIGHTERS = [
+  {id:'kent', namn:'Kettlebell-Kent', kort:'Kent', alder:44, ort:'Torekov', motto:'Ryggen är rak. Det är mer än man kan säga om grannen.', skin:'#E8B088', shirt:'#C8340A', pants:'#2A1206', shorts:true, shoe:'#FFF6DC', hair:'bald', hc:'#6B3A1E', belly:6, st:[4,2,5], move:'Rak rygg-stöten'},
+  {id:'bettan', namn:'Bettan Bell', kort:'Bettan', alder:42, ort:'Båstad', motto:'Jag svettas inte. Jag glittrar. Mycket.', skin:'#F2C49E', shirt:'#FCC222', pants:'#C8340A', shoe:'#2A1206', hair:'tofs', hc:'#7A3A12', band:'#C8340A', belly:0, st:[3,5,4], move:'Tofs-snurren'},
+  {id:'pappa', namn:'Pappa Puls', kort:'Pappa P', alder:45, ort:'Höllviken', motto:'Har inte sprungit sen -98. Men den här klockan ska få se på fan.', skin:'#D99B6E', shirt:'#1F3A5F', pants:'#8F1A00', shorts:true, shoe:'#FCC222', hair:'keps', hc:'#4A2A14', cap:'#C8340A', belly:11, st:[5,1,4], move:'Grillhuggaren'},
+  {id:'sussie', namn:'Svettis-Sussie', kort:'Sussie', alder:41, ort:'Malmö', motto:'Uppvärmning är för folk som tänker sluta.', skin:'#8D5A3B', shirt:'#8F1A00', pants:'#2A1206', shoe:'#FFF6DC', hair:'lockar', hc:'#2A1206', band:'#FFF6DC', belly:0, st:[4,4,5], move:'Svettstormen'},
+];
+const fighterById = id => FIGHTERS.find(f => f.id === id) || FIGHTERS[0];
+const ANIM = {
+  guard:{poses:[P(ST,{hip:[110,122], kn:[122,161], an:[126,199], kn2:[100,161], an2:[94,199], el:[124,96], ha:[136,78], el2:[116,96], ha2:[128,80], head:[115,45], kbo:null}),
+                P(ST,{hip:[110,128], sh:[112,73], head:[116,51], kn:[125,165], an:[126,199], kn2:[98,165], an2:[94,199], el:[125,102], ha:[137,84], el2:[117,102], ha2:[129,86], kbo:null})], dur:420},
+  flex:{poses:[P(ST,{el:[136,64], ha:[134,42], el2:[90,64], ha2:[92,42], kn:[120,161], an:[124,199], kn2:[100,161], an2:[96,199], kbo:null}), P(ST,{hip:[110,124], sh:[112,70], head:[114,48], el:[138,66], ha:[130,46], el2:[88,66], ha2:[96,46], kn:[122,163], an:[124,199], kn2:[98,163], an2:[96,199], kbo:null})], dur:380},
+};
+const shade = (hex, k) => { const n = parseInt(hex.slice(1), 16); const c = [n >> 16, n >> 8 & 255, n & 255].map(v => Math.round(v * k)); return '#' + c.map(v => v.toString(16).padStart(2, '0')).join(''); };
+function headSVG(f) {
+  const s = f.skin, o = '#2A1206';
+  let back = '', front = '';
+  if (f.hair === 'bald') { front = `<ellipse cx="-3" cy="-9" rx="6" ry="3" fill="#fff" opacity=".35"/><path d="M5 6 Q10 3 16 6 Q12 9 9 8 Q7 9 5 6Z" fill="${f.hc}"/><path d="M-13 -2 Q-15 6 -9 10" stroke="${f.hc}" stroke-width="4" fill="none" stroke-linecap="round"/>`; }
+  if (f.hair === 'tofs') { back = `<g class="tofs"><ellipse cx="-18" cy="-2" rx="6" ry="12" fill="${f.hc}" stroke="${o}" stroke-width="2" transform="rotate(25 -14 -8)"/></g>`;
+    front = `<path d="M-14 2 Q-16 -16 2 -15 Q12 -14 13 -6 Q2 -10 -6 -6 Q-10 -2 -10 4Z" fill="${f.hc}"/><path d="M-13 -6 Q0 -13 13 -7" stroke="${f.band}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`; }
+  if (f.hair === 'keps') { front = `<path d="M-14 -3 Q-13 -16 1 -16 Q13 -15 13 -5Z" fill="${f.cap}" stroke="${o}" stroke-width="2"/><path d="M9 -6 L24 -4 Q22 -1 10 -2Z" fill="${f.cap}" stroke="${o}" stroke-width="2"/>
+      <path d="M-6 4 Q-4 15 7 15 Q14 14 15 6 Q11 10 7 9 Q2 9 -1 4Z" fill="${f.hc}"/>`; }
+  if (f.hair === 'lockar') { back = [[-12,-10],[-4,-15],[5,-14],[-15,-1],[-13,7],[11,-11]].map(([x,y]) => `<circle cx="${x}" cy="${y}" r="7" fill="${f.hc}"/>`).join('');
+    front = `<path d="M-12 -6 Q0 -12 12 -8" stroke="${f.band}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`; }
+  return `${back}<circle r="14" fill="${s}" stroke="${o}" stroke-width="2.5"/>
+    <path d="M12 -3 Q18 1 13 4" fill="${s}" stroke="${o}" stroke-width="2"/>
+    <circle cx="6" cy="-3" r="2" fill="${o}"/><path d="M3 -7 L9 -7" stroke="${o}" stroke-width="2" stroke-linecap="round"/>
+    <path d="M7 8 Q10 9.5 12 7.5" stroke="${o}" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M-7 -2 Q-11 2 -7 6" fill="none" stroke="${o}" stroke-width="2" stroke-linecap="round"/>${front}`;
+}
+// Ritar en fighter som gör en övning. ex: {poses, dur, cycle, walk, bell, kb2, prop}. Returnerar svg; svg.setAnim(ex) byter rörelse.
+function figure(ex, f = fighterById(localStorage.getItem('bc_traning_fighter')), opts = {}) {
+  const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', opts.vb || '0 0 240 216'); svg.classList.add('fig');
+  const mk = (tag, at, par = svg) => { const n = document.createElementNS(NS, tag); for (const k in at) n.setAttribute(k, at[k]); par.appendChild(n); return n; };
+  const OX = '#2A1206';
+  const props = mk('g', {});
+  if (!opts.noGround) { mk('rect', {x:0, y:202, width:240, height:14, fill:'#FCC222'}, props); mk('line', {x1:0, y1:202, x2:240, y2:202, stroke:'#C8340A', 'stroke-width':3}, props); }
+  const shadow = mk('ellipse', {cx:110, cy:203, rx:42, ry:4.5, fill:'#8F1A00', opacity:.2});
+  const seg = (col, w) => { const g = mk('g', {}); const a = mk('polyline', {stroke:OX, 'stroke-width':w + 5, 'stroke-linecap':'round', 'stroke-linejoin':'round', fill:'none'}, g);
+    const b = mk('polyline', {stroke:col, 'stroke-width':w, 'stroke-linecap':'round', 'stroke-linejoin':'round', fill:'none'}, g); return {set(p) { a.setAttribute('points', p); b.setAttribute('points', p); }, a, b}; };
+  const dk = .78;
+  const kbg = (op) => { const g = mk('g', {}); g.innerHTML = `<g transform="translate(-12,-15) scale(.43)" opacity="${op}"><use href="#kb" width="56" height="70"/></g>`; return g; };
+  // bortre sida
+  const shoe2 = seg(shade(f.shoe, dk), 8), shin2 = seg(shade(f.shorts ? f.skin : f.pants, dk), 12), thigh2 = seg(shade(f.pants, dk), 14);
+  const kbBack = kbg(1);
+  const fore2 = seg(shade(f.skin, dk), 9), up2 = seg(shade(f.shirt, dk), 11);
+  const hand2 = mk('circle', {r:5.5, fill:shade(f.skin, dk), stroke:OX, 'stroke-width':2.5});
+  // kropp
+  const torso = seg(f.shirt, 24);
+  const belly = mk('ellipse', {rx:0, ry:0, fill:f.shirt, stroke:OX, 'stroke-width':2.5});
+  const stripe = mk('polyline', {stroke:shade(f.shirt, 1.25), 'stroke-width':4, fill:'none', 'stroke-linecap':'round', opacity:.7});
+  const shorts = seg(f.pants, 26);
+  const thigh = seg(f.pants, 14), shin = seg(f.shorts ? f.skin : f.pants, 12), shoe = seg(f.shoe, 8);
+  const headG = mk('g', {}); headG.innerHTML = headSVG(f);
+  const tofs = headG.querySelector('.tofs');
+  const kbFront = kbg(1);
+  const up = seg(f.shirt, 11), fore = seg(f.skin, 9);
+  const hand = mk('circle', {r:5.5, fill:f.skin, stroke:OX, 'stroke-width':2.5});
   const lerp = (a, b, t) => a + (b - a) * t;
+  const pts = (...p) => p.map(q => q[0].toFixed(1) + ',' + q[1].toFixed(1)).join(' ');
+  let cur, t0;
+  svg.setAnim = (e) => {
+    cur = e; t0 = performance.now(); props.querySelectorAll('.prop').forEach(n => n.remove());
+    if (e.prop === 'mat') mk('rect', {class:'prop', x:22, y:198, width:186, height:5, rx:2.5, fill:'#8F1A00', opacity:.35}, props);
+    if (e.prop === 'boxlow') mk('rect', {class:'prop', x:46, y:160, width:44, height:42, rx:4, fill:'#FCC222', stroke:'#C8340A', 'stroke-width':3}, props);
+    if (e.prop === 'bench') { mk('rect', {class:'prop', x:146, y:140, width:74, height:9, rx:3, fill:'#C8340A'}, props); mk('line', {class:'prop', x1:156, y1:149, x2:156, y2:202, stroke:'#C8340A', 'stroke-width':5}, props); mk('line', {class:'prop', x1:210, y1:149, x2:210, y2:202, stroke:'#C8340A', 'stroke-width':5}, props); }
+    kbFront.style.display = e.bell ? '' : 'none'; kbBack.style.display = e.kb2 ? '' : 'none';
+  };
+  svg.setAnim(ex);
   const L = (A, B, k, t) => { const a = A[k] ?? A[k.replace('2','')], b = B[k] ?? B[k.replace('2','')]; return [lerp(a[0], b[0], t), lerp(a[1], b[1], t)]; };
-  const pts = (...p) => p.map(q => q.join(',')).join(' ');
-  let t0 = performance.now(), alive = true;
   function frame(now) {
-    if (!svg.isConnected && now - t0 > 500) return;   // figuren har bytts ut: sluta animera
-    const n = ex.poses.length, cyc = ex.cycle;
-    let u = ((now - t0) / ex.dur);
+    if (!svg.isConnected && now - t0 > 800) return;
+    const e = cur, n = e.poses.length, u = (now - t0) / e.dur;
     let i, j, t;
-    if (cyc) { const k = u % n; i = Math.floor(k); j = (i + 1) % n; t = k - i; }
-    else { const k = u % 2; const fw = k < 1; t = fw ? k : 2 - k; i = 0; j = 1; }
+    if (e.cycle) { const k = u % n; i = Math.floor(k); j = (i + 1) % n; t = k - i; }
+    else { const k = u % 2; t = k < 1 ? k : 2 - k; i = 0; j = 1; }
     t = .5 - Math.cos(Math.PI * t) / 2;
-    const A = ex.poses[i], B = ex.poses[j];
-    const g = k => L(A, B, k, t);
-    const hip = g('hip'), sh = g('sh'), kn = g('kn'), an = g('an'), kn2 = g('kn2'), an2 = g('an2'), el = g('el'), ha = g('ha'), el2 = g('el2'), ha2 = g('ha2'), hd = g('head');
-    const bob = ex.walk ? Math.abs(Math.sin(Math.PI * u)) * -2 : 0;
-    const B2 = p => [p[0], p[1] + bob];
-    const toe = a => [a[0] + 13, a[1]];
-    leg2.setAttribute('points', pts(B2(hip), kn2, an2, toe(an2)));
-    arm2.setAttribute('points', pts(B2(sh), B2(el2), B2(ha2)));
-    torso.setAttribute('points', pts(B2(hip), B2(sh)));
-    leg.setAttribute('points', pts(B2(hip), kn, an, toe(an)));
-    arm.setAttribute('points', pts(B2(sh), B2(el), B2(ha)));
-    head.setAttribute('cx', hd[0]); head.setAttribute('cy', hd[1] + bob);
+    const A = e.poses[i], B = e.poses[j], g = k => L(A, B, k, t);
+    const bob = e.walk ? Math.abs(Math.sin(Math.PI * u)) * -2.5 : 0, Bb = p => [p[0], p[1] + bob];
+    const hip = Bb(g('hip')), sh = Bb(g('sh')), kn = g('kn'), an = g('an'), kn2 = g('kn2'), an2 = g('an2'), el = Bb(g('el')), ha = Bb(g('ha')), el2 = Bb(g('el2')), ha2 = Bb(g('ha2')), hd = Bb(g('head'));
+    const toe = a => [a[0] + 12, a[1] + 1], heel = a => [a[0] - 3, a[1] + 1];
+    thigh2.set(pts(hip, kn2)); shin2.set(pts(kn2, an2)); shoe2.set(pts(heel(an2), toe(an2)));
+    up2.set(pts(sh, el2)); fore2.set(pts(el2, ha2)); hand2.setAttribute('cx', ha2[0]); hand2.setAttribute('cy', ha2[1]);
+    // bål: lite kortare upptill så halsen syns
+    const v = [sh[0] - hip[0], sh[1] - hip[1]], len = Math.hypot(...v), u1 = [v[0] / len, v[1] / len], nrm = [-u1[1], u1[0]];
+    const shT = [hip[0] + u1[0] * (len - 2), hip[1] + u1[1] * (len - 2)];
+    torso.set(pts(hip, shT));
+    const bm = [hip[0] + v[0] * .5 + nrm[0] * (5 + f.belly * .5), hip[1] + v[1] * .5 + nrm[1] * (5 + f.belly * .5)];
+    if (f.belly) { belly.setAttribute('cx', bm[0]); belly.setAttribute('cy', bm[1]); belly.setAttribute('rx', 8 + f.belly); belly.setAttribute('ry', 9 + f.belly * .5);
+      belly.setAttribute('transform', `rotate(${Math.atan2(u1[1], u1[0]) * 180 / Math.PI + 90} ${bm[0]} ${bm[1]})`); }
+    stripe.setAttribute('points', pts([hip[0] + v[0] * .55 + nrm[0] * -3, hip[1] + v[1] * .55 + nrm[1] * -3], [hip[0] + v[0] * .55 + nrm[0] * 9, hip[1] + v[1] * .55 + nrm[1] * 9]));
+    shorts.set(pts([hip[0] + u1[0] * 2, hip[1] + u1[1] * 2], hip));
+    thigh.set(pts(hip, kn)); shin.set(pts(kn, an)); shoe.set(pts(heel(an), toe(an)));
+    const ang = Math.atan2(hd[1] - sh[1], hd[0] - sh[0]) * 180 / Math.PI + 90;
+    headG.setAttribute('transform', `translate(${hd[0]},${hd[1]}) rotate(${ang})`);
+    if (tofs) tofs.setAttribute('transform', `rotate(${Math.sin(now / 180) * 10} -12 -6)`);
+    up.set(pts(sh, el)); fore.set(pts(el, ha)); hand.setAttribute('cx', ha[0]); hand.setAttribute('cy', ha[1]);
     shadow.setAttribute('cx', (hip[0] + an[0]) / 2);
-    const oa = A.kbo === undefined ? [0,14] : A.kbo, ob = B.kbo === undefined ? [0,14] : B.kbo;
+    const oa = A.kbo === undefined ? [0, 14] : A.kbo, ob = B.kbo === undefined ? [0, 14] : B.kbo;
     if (oa && ob) { const o = [lerp(oa[0], ob[0], t), lerp(oa[1], ob[1], t)];
-      kbs.forEach((k, q) => { const h = q === 0 ? ha : ha2; k.setAttribute('transform', `translate(${h[0] + o[0] + (q ? -6 : 0)},${h[1] + o[1] + bob})`); k.style.display = ''; }); }
-    else kbs.forEach(k => k.style.display = 'none');
+      kbFront.style.display = e.bell ? '' : 'none'; kbBack.style.display = e.kb2 ? '' : 'none';
+      kbFront.setAttribute('transform', `translate(${ha[0] + o[0]},${ha[1] + o[1]})`); kbBack.setAttribute('transform', `translate(${ha2[0] + o[0] - 6},${ha2[1] + o[1]})`); }
+    else { kbFront.style.display = 'none'; kbBack.style.display = 'none'; }
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
@@ -484,10 +618,16 @@ function startSession(k) {
   plan.forEach((x, xi) => { for (let s = 1; s <= x.sets; s++) steps.push({type:'set', x, xi, s}); });
   steps.push({type:'rpe'});
   SS = {k, w, plan, steps, i:0, namn:p.namn, t0:Date.now()};
-  $('#ss-title').textContent = `Pass ${k} · ${p.namn} · Vecka ${w}`;
-  show('s-sess'); renderStep();
+  $('#ss-title').textContent = `Pass ${k} · Vecka ${w}`;
+  show('s-sess'); renderStep(); wakeOn();
 }
-$('#ss-quit').onclick = () => { if (confirm('Avbryta passet? Det sparas inte.')) { stopRest(); renderProg(); show('s-prog'); } };
+let WL = null;
+async function wakeOn() { try { WL = await navigator.wakeLock.request('screen'); $('#wake').textContent = '🔆 Skärmen hålls tänd under passet'; WL.addEventListener('release', () => { if (SS) $('#wake').textContent = ''; }); }
+  catch (_) { $('#wake').textContent = ''; } }
+function wakeOff() { try { WL && WL.release(); } catch (_) {} WL = null; }
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && SS && $('#s-sess').classList.contains('on')) wakeOn(); });
+$('#ss-backstep').onclick = () => { if (!SS || SS.i === 0) return; stopRest(); SS.i--; renderStep(); };
+$('#ss-quit').onclick = () => { if (confirm('Avbryta passet? Det sparas inte.')) { stopRest(); wakeOff(); SS = null; renderProg(); show('s-prog'); } };
 function renderStep() {
   const st = SS.steps[SS.i], body = $('#ss-body'); body.innerHTML = '';
   $('#ss-prog').style.width = (SS.i / (SS.steps.length - 1) * 100) + '%';
@@ -496,7 +636,7 @@ function renderStep() {
     body.innerHTML = `<div class="card" style="margin-top:6px"><p class="eyebrow">Uppvärmning · 5 min</p><h2>Värm upp</h2>
       <ol class="wlist">${WARM.map(w => `<li>${w}</li>`).join('')}</ol>
       <p class="note">Lugnt tempo. Du ska bli varm, inte trött.</p></div>
-      <div style="margin-top:20px"><button class="btn big" id="nx">Jag är varm – kör!</button></div>`;
+      <div class="dock"><button class="btn big" id="nx">Jag är varm – kör!</button></div>`;
     $('#nx').onclick = next; return;
   }
   if (st.type === 'set') {
@@ -508,8 +648,8 @@ function renderStep() {
     const info = document.createElement('div');
     info.innerHTML = `<div class="exname">${e.namn}</div><div class="target">${x.target}</div>
       <div class="dots">${Array.from({length:x.sets}, (_, i) => `<i class="${i < st.s - 1 ? 'done' : ''}"></i>`).join('')}</div>
-      <ul class="tips">${e.tips.map(t => `<li>${t}</li>`).join('')}</ul>
-      <button class="btn big" id="nx">${st.s < x.sets ? 'Set klart' : 'Övning klar'}</button>`;
+      <details class="tipsd" ${st.s === 1 ? 'open' : ''}><summary>Teknik</summary><ul class="tips">${e.tips.map(t => `<li>${t}</li>`).join('')}</ul></details>
+      <div class="dock"><button class="btn big" id="nx">${st.s < x.sets ? 'Set klart ✓' : 'Övning klar ✓'}</button></div>`;
     wrap.appendChild(info); body.appendChild(wrap);
     $('#nx').onclick = () => {
       const d = body.querySelectorAll('.dots i')[st.s - 1]; if (d) d.classList.add('done');
@@ -579,6 +719,8 @@ function finish(r) {
   const total = S.log.length, left = 12 * S.ppw - total;
   $('#d-head').textContent = left <= 0 ? 'Alla 12 veckor!' : r === 'too' ? 'Bra att du sa till' : 'Snyggt jobbat';
   $('#d-msg').textContent = (msgs.join(' ') + ' ' + (left > 0 ? `${total} pass gjorda, ${left} kvar.` : 'Du har gjort hela programmet. Kör en runda till med tyngre klockor?')).trim();
+  wakeOff();
+  const df = $('#d-fig'); df.innerHTML = ''; df.appendChild(figure(ANIM.flex, undefined, {vb:'40 10 160 200', noGround:true}));
   stamps($('#d-stamps'), true); show('s-done'); confetti();
   if (msgs.length > 1) setTimeout(() => toast(msgs[1]), 900);
 }
@@ -600,7 +742,49 @@ function renderLog() {
 }
 // direktstart om man redan har ett program
 if (S) { $('#g-kb small').textContent = `Vecka ${week()} · fortsätt`; }
-window.__t = {EX, PHASES, figure, get S() { return S; }};
+
+// ---------------- choose your fighter ----------------
+let FBIG = null;
+function blip(f0 = 520, f1 = 1040, d = .12) { try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); const o = AC.createOscillator(), g = AC.createGain(); o.type = 'square';
+  o.frequency.setValueAtTime(f0, AC.currentTime); o.frequency.exponentialRampToValueAtTime(f1, AC.currentTime + d); g.gain.setValueAtTime(.06, AC.currentTime); g.gain.exponentialRampToValueAtTime(.001, AC.currentTime + d + .05);
+  o.connect(g); g.connect(AC.destination); o.start(); o.stop(AC.currentTime + d + .06); } catch (_) {} }
+function renderFighters(animate) {
+  const cur = fighterById(localStorage.getItem('bc_traning_fighter')), grid = $('#fgrid');
+  if (!grid.children.length) FIGHTERS.forEach(f => {
+    const b = document.createElement('button'); b.dataset.id = f.id; b.setAttribute('aria-label', f.namn);
+    b.appendChild(figure({...ANIM.guard, dur:ANIM.guard.dur + Math.random() * 120}, f, {vb:'62 18 106 112', noGround:true}));
+    const n = document.createElement('span'); n.textContent = f.kort; b.appendChild(n);
+    b.onclick = () => pickFighter(f.id); grid.appendChild(b);
+  });
+  grid.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.id === cur.id));
+  const big = $('#fbig'); if (FBIG) FBIG.remove();
+  FBIG = figure(animate ? ANIM.flex : ANIM.guard, cur, {vb:'52 20 130 186', noGround:true}); big.appendChild(FBIG);
+  if (animate) setTimeout(() => FBIG && FBIG.setAnim(ANIM.guard), 1300);
+  $('#fname').textContent = cur.namn; $('#fmeta').textContent = `${cur.alder} år · ${cur.ort}`; $('#fmotto').textContent = '”' + cur.motto + '”';
+  $('#fmove').textContent = 'Special: ' + cur.move;
+  cur.st.forEach((v, i) => { const el = $('#fs' + i); el.style.width = '0'; requestAnimationFrame(() => requestAnimationFrame(() => el.style.width = v * 20 + '%')); });
+}
+function pickFighter(id) {
+  const same = localStorage.getItem('bc_traning_fighter') === id;
+  localStorage.setItem('bc_traning_fighter', id); blip(same ? 700 : 400, same ? 1400 : 900);
+  const fl = $('#flash'); fl.classList.remove('go'); void fl.offsetWidth; fl.classList.add('go');
+  const ko = $('#fko'); ko.textContent = ['Ready!', 'Fight!', 'Let’s go!', 'Kör!'][Math.floor(Math.random() * 4)]; ko.classList.remove('go'); void ko.offsetWidth; ko.classList.add('go');
+  renderFighters(true);
+}
+if (!localStorage.getItem('bc_traning_fighter')) localStorage.setItem('bc_traning_fighter', 'kent');
+renderFighters(false);
+
+// ---------------- installera / offline ----------------
+const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+let deferred = null;
+if (!standalone) {
+  $('#install').classList.add('on');
+  if (/iPhone|iPad|iPod/.test(navigator.userAgent)) $('#inst-txt').innerHTML = 'Lägg sidan på hemskärmen så öppnas den som en app – och funkar utan täckning: tryck på <b>Dela</b> (rutan med pilen) → <b>Lägg till på hemskärmen</b>.';
+}
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; $('#inst-btn').style.display = ''; });
+$('#inst-btn').onclick = async () => { if (!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $('#inst-btn').style.display = 'none'; };
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+window.__t = {EX, PHASES, figure, FIGHTERS, ANIM, get S() { return S; }};
 </script>
 </body>
 </html>

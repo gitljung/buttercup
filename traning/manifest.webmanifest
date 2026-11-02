@@ -1,0 +1,16 @@
+{
+  "name": "Stark igen – kettlebell",
+  "short_name": "Stark igen",
+  "start_url": "/traning/",
+  "scope": "/traning/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FCC222",
+  "theme_color": "#C8340A",
+  "lang": "sv",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
