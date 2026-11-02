@@ -1463,7 +1463,7 @@ function libCard(x, i) {
   const inP = passSel.has(key);
   const info = document.createElement('div'); info.className = 'libinfo';
   info.innerHTML = `<h3>${e.namn}</h3><p class="mgs">${mg.map(m => `<span class="${libSel.has(m) ? 'hit' : ''}">${MG.find(g => g.id === m).namn}</span>`).join('')}</p>
-    <p class="lbl">${e.niva || 'Lätt'}${e.sida ? ' · per sida' : ''}${e.kalla ? ` · <a href="https://www.instagram.com/${e.kalla.slice(1)}/" target="_blank" rel="noopener" style="color:inherit">${e.kalla}</a>` : ''}</p><button class="addp ${inP ? 'on' : ''}">${inP ? '✓ Med i passet' : '+ Lägg till i pass'}</button>`;
+    <p class="lbl">${e.niva || 'Lätt'}${e.sida ? ' · per sida' : ''}</p><button class="addp ${inP ? 'on' : ''}">${inP ? '✓ Med i passet' : '+ Lägg till i pass'}</button>`;
   c.appendChild(info); libIO.observe(c);
   box.onclick = info.querySelector('h3').onclick = () => openSheet(x);
   info.querySelector('.addp').onclick = (ev) => { passSel.has(key) ? passSel.delete(key) : passSel.add(key); blip(); renderDock(); const b = ev.currentTarget, on = passSel.has(key); b.classList.toggle('on', on); b.textContent = on ? '✓ Med i passet' : '+ Lägg till i pass'; };
