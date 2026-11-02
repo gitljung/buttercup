@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yamay Horno – interaktiv modell</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Yamay Horno – kolugn i Corten med vertikal motviktslucka. Interaktiv 3D-modell direkt ur Fusion: öppna luckan, dra ut GN 1/1-gallren och asklådan, ställ spjället.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="buttercup.nu">
+<meta property="og:title" content="Yamay Horno – interaktiv 3D-modell">
+<meta property="og:description" content="Kolugn i Corten med vertikal motviktslucka. Öppna luckan, dra ut GN 1/1-gallren och asklådan, ställ spjället – direkt ur Fusion.">
+<meta property="og:url" content="https://www.buttercup.nu/yamay-horno/">
+<meta property="og:image" content="https://www.buttercup.nu/yamay-horno/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--gul:#fbc021;--chili:#c8321a;--ox:#5b1a12;--cream:#fff6dc;--ink:#2a1a14}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--gul);color:var(--ink);font-family:Barlow,system-ui,sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.bc-bar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;gap:12px;padding:8px 14px;padding-top:max(8px,env(safe-area-inset-top));background:var(--chili);color:var(--cream);font-family:'Barlow Condensed';font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:14px}
+.bc-bar a{color:var(--cream);text-decoration:none}
+.bc-bar b{font-family:Anton;font-weight:400;letter-spacing:.04em;font-size:18px}
+.bc-bar .sp{flex:1}
+#panel{position:fixed;z-index:20;top:54px;right:12px;width:310px;max-height:calc(100% - 70px);overflow:auto;background:var(--cream);border:2px solid var(--chili);border-radius:14px;box-shadow:0 6px 0 var(--ox);padding:4px 14px 14px}
+#panel h2{font-family:Anton;font-weight:400;font-size:26px;letter-spacing:.02em;margin:10px 0 2px;color:var(--chili)}
+#panel .sub{font-family:'Barlow Condensed';font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:12px;opacity:.75;margin-bottom:6px}
+details{border-top:2px dashed rgba(200,50,26,.35);padding:6px 0}
+details>summary{cursor:pointer;list-style:none;font-family:'Barlow Condensed';font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:15px;color:var(--ox);padding:4px 0}
+details>summary::after{content:'＋';float:right;color:var(--chili)}
+details[open]>summary::after{content:'－'}
+.row{display:flex;align-items:center;gap:8px;margin:7px 0;font-size:14px}
+.row label{flex:0 0 82px;font-weight:600;font-size:13px}
+.row input[type=range]{flex:1;accent-color:var(--chili);height:28px}
+.row output{flex:0 0 46px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.seg{display:flex;flex:1;border:2px solid var(--chili);border-radius:999px;overflow:hidden}
+.seg button{flex:1;border:0;background:transparent;font:600 14px 'Barlow Condensed';letter-spacing:.06em;padding:7px 0;color:var(--chili);cursor:pointer}
+.seg button.on{background:var(--chili);color:var(--cream)}
+.tg{display:flex;flex-wrap:wrap;gap:6px}
+.tg button,.chip{border:2px solid var(--chili);background:var(--cream);color:var(--chili);border-radius:999px;font:600 13px 'Barlow Condensed';letter-spacing:.06em;text-transform:uppercase;padding:6px 11px;cursor:pointer;white-space:nowrap}
+.tg button.on,.chip.on{background:var(--chili);color:var(--cream)}
+.mini{font-size:12px;opacity:.75;line-height:1.35;margin:6px 0 0}
+#stats{font-size:13px;line-height:1.45}
+#bom{font-size:13px;width:100%;border-collapse:collapse}
+#bom td{padding:3px 2px;border-bottom:1px dotted rgba(91,26,18,.3);vertical-align:top}
+#bom td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;width:34px}
+#bom tr{cursor:pointer}
+#bom tr:hover td{background:rgba(251,192,33,.35)}
+#bom .h td{font-family:'Barlow Condensed';font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--chili);border-bottom:2px solid var(--chili);cursor:default;background:none!important;padding-top:10px}
+#bom .pn{display:block;font-size:11px;opacity:.7}
+#pick{position:fixed;z-index:25;left:12px;bottom:12px;max-width:340px;background:var(--cream);border:2px solid var(--chili);border-radius:14px;box-shadow:0 5px 0 var(--ox);padding:10px 14px;display:none}
+#pick h3{margin:0 26px 2px 0;font-family:Anton;font-weight:400;font-size:20px;color:var(--chili);line-height:1.1}
+#pick .x{position:absolute;top:6px;right:10px;border:0;background:none;font-size:22px;color:var(--chili);cursor:pointer}
+#pick p{margin:3px 0;font-size:13px}
+#toast{position:fixed;z-index:26;left:50%;top:62px;transform:translateX(-50%);background:var(--ox);color:var(--cream);font:600 14px 'Barlow Condensed';letter-spacing:.06em;padding:6px 14px;border-radius:999px;opacity:0;transition:opacity .3s;pointer-events:none}
+#chips{display:none}
+#load{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:var(--gul);font-family:Anton;font-size:28px;color:var(--chili);letter-spacing:.03em;transition:opacity .4s}
+#load .bar{width:220px;height:8px;border:2px solid var(--chili);border-radius:9px;overflow:hidden}
+#load .bar i{display:block;height:100%;width:0;background:var(--chili)}
+.lbl{font:600 12px 'Barlow Condensed';letter-spacing:.06em;color:var(--ox);background:rgba(255,246,220,.9);border:1.5px solid var(--chili);border-radius:6px;padding:1px 6px;white-space:nowrap;pointer-events:none}
+@media (max-width:700px){
+  .bc-bar{font-size:12px;padding:6px 10px;padding-top:max(6px,env(safe-area-inset-top))}
+  .bc-bar .hide-m{display:none}
+  #panel{top:auto;bottom:0;left:0;right:0;width:auto;max-height:46vh;border-radius:16px 16px 0 0;border-width:2px 0 0;box-shadow:0 -4px 0 var(--ox);padding:0 14px calc(12px + env(safe-area-inset-bottom))}
+  #panel.min{max-height:62px;overflow:hidden}
+  #panel h2{font-size:22px;margin:8px 0 0;display:flex;align-items:center}
+  #panel h2::after{content:'▾';margin-left:auto;font-size:18px}
+  #panel.min h2::after{content:'▴'}
+  .row input[type=range]{height:34px}
+  .seg button{padding:9px 0;font-size:15px}
+  #chips{display:flex;position:fixed;z-index:21;left:0;right:0;gap:6px;overflow-x:auto;padding:6px 10px;scrollbar-width:none}
+  #chips::-webkit-scrollbar{display:none}
+  #pick{left:8px;right:8px;max-width:none;top:52px;bottom:auto}
+}
+</style>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="bc-bar"><a href="/">← buttercup.nu</a><span class="sp"></span><b>YAMAY HORNO</b><span class="hide-m">· kolugn</span></div>
+<div id="load"><div>YAMAY HORNO</div><div class="bar"><i></i></div><div id="lt" style="font:600 14px 'Barlow Condensed';letter-spacing:.08em">LADDAR MODELL…</div></div>
+<div id="chips"></div>
+<div id="toast"></div>
+<div id="panel">
+  <h2 id="ph">Yamay Horno</h2>
+  <div class="sub">Kolugn · motviktslucka · GN 1/1 · modell direkt ur Fusion</div>
+  <details open><summary>Använd</summary>
+    <div class="row"><label>Lucka</label><input type="range" id="sL" min="0" max="260" step="1" value="0"><output id="oL">stängd</output></div>
+    <div class="row"><label>Galler 1</label><input type="range" id="sG1" min="0" max="250" step="1" value="0"><output id="oG1">inne</output></div>
+    <div class="row"><label>Galler 2</label><input type="range" id="sG2" min="0" max="250" step="1" value="0"><output id="oG2">inne</output></div>
+    <div class="row"><label>Plancha</label><input type="range" id="sG3" min="0" max="250" step="1" value="0"><output id="oG3">inne</output></div>
+    <div class="row"><label>Asklåda</label><input type="range" id="sA" min="0" max="280" step="1" value="0"><output id="oA">inne</output></div>
+    <div class="row"><label>Spjäll</label><div class="seg" id="spj"><button data-s="0" class="on">Öppet</button><button data-s="10">Halvt</button><button data-s="20">Stängt</button></div></div>
+    <div class="row"><label>Corten</label><div class="seg" id="mat"><button data-m="ny" class="on">Grå</button><button data-m="rost">Rost</button></div></div>
+    <p class="mini">Dra direkt i modellen: luckan (eller handtaget) upp och ner, gallren och asklådan ut och in. Tryck på spjället för att öppna/stänga. Gallren kräver att luckan är öppen – den lyfts automatiskt.</p>
+  </details>
+  <details open><summary>Visa</summary>
+    <div class="tg" id="grp"></div>
+    <div class="tg" style="margin-top:8px"><button id="tGlo" class="on">Glöd</button><button id="tKop" class="on">Köpdelar</button><button id="tExp">Sprängvy</button><button id="tCut">Snitt</button><button id="tDim">Mått</button><button id="tSpin">Snurra</button></div>
+  </details>
+  <details><summary>Kameravyer</summary><div class="tg" id="views"></div></details>
+  <details><summary>Fakta</summary><div id="stats"></div></details>
+  <details><summary>Stycklista</summary><table id="bom"></table><p class="mini">Tryck på en rad för att markera delen i modellen.</p></details>
+  <p class="mini">Modellen exporteras direkt ur Fusion (Yamay Horno). Köpdelar (galler, kolrost, handtag, rullar) är förenklade. Prototyp – inga ritningsunderlag, måtten gäller i Fusion.</p>
+</div>
+<div id="pick"><button class="x" aria-label="Stäng">×</button><h3></h3><div class="b"></div></div>
+
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {CSS2DRenderer, CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
+
+const $ = s => document.querySelector(s);
+const MOB = () => matchMedia('(max-width:700px)').matches;
+const canvas = $('#c');
+const renderer = new THREE.WebGLRenderer({canvas, antialias: true, preserveDrawingBuffer: true});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.localClippingEnabled = true;
+const lr = new CSS2DRenderer(); lr.domElement.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:5'; document.body.appendChild(lr.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#fbc021');
+const pmrem = new THREE.PMREMGenerator(renderer); scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+const camera = new THREE.PerspectiveCamera(38, 1, 0.02, 50);
+const controls = new OrbitControls(camera, canvas); controls.enableDamping = true; controls.maxPolarAngle = Math.PI * 0.53; controls.minDistance = 0.25; controls.maxDistance = 6;
+const sun = new THREE.DirectionalLight('#fff4e0', 2.2); sun.position.set(1.8, 3.2, 2.6); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048); Object.assign(sun.shadow.camera, {left: -1, right: 1, top: 1.2, bottom: -0.3, near: 0.5, far: 8}); sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.01;
+scene.add(sun, new THREE.HemisphereLight('#fff6dc', '#c8321a', 0.55));
+const ground = new THREE.Mesh(new THREE.CircleGeometry(3, 64), new THREE.ShadowMaterial({opacity: 0.22})); ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+// glod: ljus + glodbadd ovanpa kolrosten (z 190 mm)
+const glow = new THREE.PointLight('#ff6a1a', 1.6, 0.9, 1.6); glow.position.set(0, 0.24, 0); scene.add(glow);
+const emberMat = new THREE.MeshStandardMaterial({color: '#2a0d05', emissive: '#ff5a10', emissiveIntensity: 1.6, roughness: 1});
+const ember = new THREE.Mesh(new THREE.BoxGeometry(0.39, 0.03, 0.27), emberMat); ember.position.set(0, 0.205, 0); scene.add(ember);
+
+// ---------- material ----------
+function noiseTex(c1, c2, spots, seed = 1) {
+  const s = 512, cv = document.createElement('canvas'); cv.width = cv.height = s; const g = cv.getContext('2d');
+  g.fillStyle = c1; g.fillRect(0, 0, s, s); let r = seed;
+  const rnd = () => (r = (r * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < spots; i++) { const x = rnd() * s, y = rnd() * s, rad = 1.5 + rnd() * 12; const gr = g.createRadialGradient(x, y, 0, x, y, rad);
+    const col = c2[Math.floor(rnd() * c2.length)]; gr.addColorStop(0, col); gr.addColorStop(1, col.replace(/[\d.]+\)$/, '0)')); g.fillStyle = gr; g.fillRect(x - rad, y - rad, rad * 2, rad * 2); }
+  const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+const TEX = {
+  rost: noiseTex('#83431f', ['rgba(140,70,32,.35)', 'rgba(105,50,24,.35)', 'rgba(160,88,44,.3)', 'rgba(90,44,22,.3)'], 5200, 7),
+  ny: noiseTex('#575b5e', ['rgba(80,84,88,.45)', 'rgba(66,69,73,.45)', 'rgba(100,103,107,.35)'], 1400, 3),
+};
+function triplanar(mat, scale) {
+  mat.onBeforeCompile = sh => {
+    sh.uniforms.tScale = {value: scale};
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vWP; varying vec3 vWN;')
+      .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvWP = (modelMatrix * vec4(transformed,1.0)).xyz; vWN = normalize(mat3(modelMatrix) * objectNormal);');
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vWP; varying vec3 vWN; uniform float tScale;')
+      .replace('#include <map_fragment>', `vec3 bw = pow(abs(vWN), vec3(6.0)); bw /= (bw.x+bw.y+bw.z);
+        vec4 tx = texture2D(map, vWP.yz*tScale)*bw.x + texture2D(map, vWP.xz*tScale)*bw.y + texture2D(map, vWP.xy*tScale)*bw.z;
+        diffuseColor *= tx;`);
+  };
+  mat.customProgramCacheKey = () => 'tri' + scale; return mat;
+}
+const clipPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0);
+const M = {
+  cortenrost: triplanar(new THREE.MeshStandardMaterial({map: TEX.rost, roughness: 0.9, metalness: 0.1, side: THREE.DoubleSide}), 7.0),
+  cortenny: triplanar(new THREE.MeshStandardMaterial({map: TEX.ny, roughness: 0.6, metalness: 0.55, side: THREE.DoubleSide}), 7.0),
+  rostfri: new THREE.MeshStandardMaterial({color: '#c9ccd0', roughness: 0.32, metalness: 0.9, side: THREE.DoubleSide}),
+  stal: new THREE.MeshStandardMaterial({color: '#8d9399', roughness: 0.45, metalness: 0.8}),
+  gjut: new THREE.MeshStandardMaterial({color: '#262628', roughness: 0.7, metalness: 0.55, side: THREE.DoubleSide}),
+  isol: new THREE.MeshStandardMaterial({color: '#e9dfc9', roughness: 1, metalness: 0, side: THREE.DoubleSide}),
+  fiber: new THREE.MeshStandardMaterial({color: '#f4efe2', roughness: 1, metalness: 0}),
+  hi: new THREE.MeshStandardMaterial({color: '#c8321a', roughness: 0.5, metalness: 0.1, emissive: '#c8321a', emissiveIntensity: 0.35}),
+};
+Object.values(M).forEach(m => { m.clippingPlanes = []; m.clipShadows = true; });
+let matMode = 'ny';
+function matFor(ap, name) {
+  const a = (ap || '').toLowerCase();
+  if (a.includes('corten')) return matMode === 'rost' ? M.cortenrost : M.cortenny;
+  if (a.includes('rostfri')) return M.rostfri;
+  if (a.includes('gjutj')) return M.gjut;
+  if (a.includes('vermi')) return M.isol;
+  if (a.includes('keramisk')) return M.fiber;
+  return M.stal;
+}
+
+// ---------- mekanik (Fusion-mm, nodernas lokala rum = Fusion-rummet) ----------
+// L = luckans lyft 0..260, G1..G3 = galler utdragna (mot -y), A = asklada ut, S = spjall 0 oppet .. 20 stangt
+const ST = {L: 0, G1: 0, G2: 0, G3: 0, A: 0, S: 0}, TG = {...ST};
+const LIM = {L: [0, 260], G1: [0, 250], G2: [0, 250], G3: [0, 250], A: [0, 280], S: [0, 20]};
+const GTOP = {G1: 311, G2: 371, G3: 426}, LUCK_Z0 = 240;          // gallrens overkant, luckans underkant (stangd)
+const needL = k => GTOP[k] - LUCK_Z0 + 8;                            // lyft som kravs for att gallret ska ga fri
+const TR = {r: 50, c: [0, -200, 800], yF: -250, yB: -150, luckTop: 520, mvTop: 730};
+const loader = new GLTFLoader();
+let model = null, groups = {}, parts = [], byId = {}, MECH = [];
+function prog(p) { $('#load .bar i').style.width = Math.round(p * 100) + '%'; }
+function setup(root) {
+  model = root; scene.add(model); groups = {}; parts = []; byId = {};
+  model.traverse(o => { const ex = o.userData || {}; if (ex.grp && !('ap' in ex)) groups[ex.grp] = o; if (o.isMesh) o.castShadow = o.receiveShadow = true; });
+  for (const g of Object.values(groups)) for (const n of g.children) {
+    const ex = n.userData; if (!('ap' in ex)) continue;
+    n.userData.base = n.position.clone(); n.userData.q0 = n.quaternion.clone(); n.userData.off = new THREE.Vector3();
+    parts.push(n); byId[ex.id] = n;
+    n.traverse(m => { if (m.isMesh) { m.userData.part = n; m.material = matFor(ex.ap, ex.name); } });
+  }
+  const c = new THREE.Box3().setFromObject(model).getCenter(new THREE.Vector3());
+  for (const n of parts) {
+    const pc = new THREE.Box3().setFromObject(n).getCenter(new THREE.Vector3());
+    const d = pc.clone().sub(c), ew = new THREE.Vector3(d.x * 0.7, d.y * 0.35 + 0.04, d.z * 0.9);
+    n.parent.updateWorldMatrix(true, false);
+    n.userData.exp = n.parent.worldToLocal(pc.clone().add(ew)).sub(n.parent.worldToLocal(pc.clone()));
+  }
+  // vilka noder foljer vilket reglage (riktning i Fusion-mm)
+  const sel = re => parts.filter(n => re.test(n.userData.top || ''));
+  MECH = [
+    {k: 'L', nodes: sel(/^Lucka |^Handtag fjader#lucka/), dir: [0, 0, 1]},
+    {k: 'L', nodes: sel(/^Motvikt/), dir: [0, 0, -1]},
+    {k: 'G1', nodes: [byId['Galler GN11#1']], dir: [0, -1, 0]},
+    {k: 'G2', nodes: [byId['Galler GN11#2']], dir: [0, -1, 0]},
+    {k: 'G3', nodes: [byId['Plancha GN11#1']], dir: [0, -1, 0]},
+    {k: 'A', nodes: sel(/^Asklada|^Spjall|^Handtag fjader#ask/), dir: [0, -1, 0]},
+    {k: 'S', nodes: sel(/^Spjall/), dir: [-1, 0, 0]},
+  ].map(m => ({...m, nodes: m.nodes.filter(Boolean)}));
+  for (const n of parts) n.userData.mech = MECH.filter(m => m.nodes.includes(n)).map(m => m.k);
+  makeRopes();
+  buildGroupToggles(); applyAll(); buildBOM(); stats();
+}
+function applyMech() {
+  for (const n of parts) n.userData.off.set(0, 0, 0);
+  for (const m of MECH) for (const n of m.nodes) n.userData.off.add(new THREE.Vector3(...m.dir).multiplyScalar(ST[m.k] / 1000));
+  for (const n of parts) {
+    n.position.copy(n.userData.base).add(n.userData.off).addScaledVector(n.userData.exp, exploded);
+    n.quaternion.copy(n.userData.q0);
+  }
+  // trissorna: framre parten (mot luckan) gar upp nar luckan lyfts -> vinkel = -L / r kring +x
+  for (const id of ['Trissa hoger#1', 'Trissa vanster#1']) {
+    const n = byId[id]; if (!n) continue;
+    const x = id.includes('hoger') ? 301 : -301, cL = new THREE.Vector3(x, TR.c[1], TR.c[2]).multiplyScalar(0.001);
+    const q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -ST.L / TR.r);
+    n.quaternion.copy(n.userData.q0).multiply(q);
+    const c0 = cL.clone().applyQuaternion(n.userData.q0), c1 = cL.clone().applyQuaternion(n.quaternion);
+    n.position.add(c0.sub(c1));
+  }
+  updateRopes(); outputs();
+}
+// kedjor/vajrar trissa -> lucka och trissa -> motvikt (ritas, finns inte i Fusion)
+let ropes = []; const ropeMat = new THREE.LineBasicMaterial({color: '#1d1d1f'});
+function makeRopes() {
+  const mat = ropeMat;
+  for (const x of [301, -301]) for (const side of ['F', 'B']) {
+    const g = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+    const l = new THREE.Line(g, mat); l.userData = {x, side}; groups['Mekanik']?.add(l); ropes.push(l);
+  }
+}
+function updateRopes() {
+  const e = exploded;
+  for (const l of ropes) {
+    const {x, side} = l.userData, y = side === 'F' ? TR.yF : TR.yB;
+    const zEnd = side === 'F' ? TR.luckTop + ST.L : TR.mvTop - ST.L;
+    const p = l.geometry.attributes.position; p.setXYZ(0, x / 1000, y / 1000, TR.c[2] / 1000); p.setXYZ(1, x / 1000, y / 1000, zEnd / 1000); p.needsUpdate = true;
+    l.visible = e < 0.02;
+  }
+}
+const fmtL = v => v < 1 ? 'stängd' : v > 255 ? 'öppen' : Math.round(v) + ' mm';
+const fmtU = v => v < 1 ? 'inne' : Math.round(v) + ' mm';
+function outputs() {
+  $('#oL').textContent = fmtL(TG.L); for (const k of ['G1', 'G2', 'G3']) $('#o' + k).textContent = fmtU(TG[k]); $('#oA').textContent = fmtU(TG.A);
+  if (document.activeElement?.type !== 'range') { $('#sL').value = TG.L; for (const k of ['G1', 'G2', 'G3']) $('#s' + k).value = TG[k]; $('#sA').value = TG.A; }
+}
+let toastT = 0;
+function toast(t) { const el = $('#toast'); el.textContent = t; el.style.opacity = 1; clearTimeout(toastT); toastT = setTimeout(() => el.style.opacity = 0, 1800); }
+// regler: galler ut kraver lyft lucka; lucka kan inte stangas over ett utdraget galler
+function setT(k, v, user = true) {
+  const [lo, hi] = LIM[k]; v = Math.max(lo, Math.min(hi, v));
+  if (k === 'L') {
+    const need = Math.max(0, ...['G1', 'G2', 'G3'].filter(g => TG[g] > 2).map(needL));
+    if (v < need) { if (user && TG.L >= need - 0.5) toast('Skjut in gallret först'); v = need; }
+  } else if (k in GTOP && v > 0 && TG.L < needL(k)) { TG.L = needL(k) + 20; if (user) toast('Luckan lyfts'); }
+  TG[k] = v; outputs();
+}
+['L', 'G1', 'G2', 'G3', 'A'].forEach(k => $('#s' + k).oninput = e => setT(k, +e.target.value));
+document.querySelectorAll('#spj button').forEach(b => b.onclick = () => { document.querySelectorAll('#spj button').forEach(x => x.classList.toggle('on', x === b)); setT('S', +b.dataset.s); });
+document.querySelectorAll('#mat button').forEach(b => b.onclick = () => { document.querySelectorAll('#mat button').forEach(x => x.classList.toggle('on', x === b)); matMode = b.dataset.m; applyAll(); });
+
+// ---------- grupper / toggles ----------
+const hidden = new Set(); let showKop = true, cut = false, dims = false, exploded = 0, explodeTarget = 0;
+function applyAll() {
+  for (const n of parts) n.traverse(m => { if (m.isMesh && m.material !== M.hi) m.material = matFor(n.userData.ap, n.userData.name); });
+  for (const n of parts) n.visible = showKop || !n.userData.kop;
+  for (const [k, g] of Object.entries(groups)) g.visible = !hidden.has(k);
+  applyMech(); applyCut();
+}
+function buildGroupToggles() {
+  const el = $('#grp'); el.innerHTML = '';
+  for (const k of Object.keys(groups)) {
+    const b = document.createElement('button'); b.textContent = k; b.className = hidden.has(k) ? '' : 'on';
+    b.onclick = () => { hidden.has(k) ? hidden.delete(k) : hidden.add(k); b.classList.toggle('on'); applyAll(); };
+    el.appendChild(b);
+  }
+}
+const tog = (id, f) => { const b = $(id); b.onclick = () => { b.classList.toggle('on'); f(b.classList.contains('on')); syncChips(); }; };
+tog('#tKop', v => { showKop = v; applyAll(); });
+tog('#tExp', v => { explodeTarget = v ? 1 : 0; });
+tog('#tCut', v => { cut = v; applyCut(); });
+tog('#tDim', v => { dims = v; drawDims(); });
+tog('#tSpin', v => { controls.autoRotate = v; });
+tog('#tGlo', v => { glow.visible = ember.visible = v; });
+function applyCut() { Object.values(M).forEach(m => { m.clippingPlanes = cut ? [clipPlane] : []; m.needsUpdate = true; }); emberMat.clippingPlanes = ropeMat.clippingPlanes = cut ? [clipPlane] : []; emberMat.needsUpdate = ropeMat.needsUpdate = true; }
+// ---------- matt ----------
+let dimObjs = [];
+function drawDims() {
+  dimObjs.forEach(o => { o.element?.remove(); o.parent?.remove(o); }); dimObjs = [];
+  if (!dims || !model) return;
+  const box = new THREE.Box3(); for (const k of ['Stomme']) if (groups[k]) box.expandByObject(groups[k]);
+  const b = box, s = b.getSize(new THREE.Vector3());
+  const mk = (txt, p) => { const d = document.createElement('div'); d.className = 'lbl'; d.textContent = txt; const o = new CSS2DObject(d); o.position.copy(p); scene.add(o); dimObjs.push(o); };
+  const line = (a, c) => { const g = new THREE.BufferGeometry().setFromPoints([a, c]); const l = new THREE.Line(g, new THREE.LineBasicMaterial({color: '#c8321a'})); scene.add(l); dimObjs.push(l); };
+  const y0 = b.min.y + 0.002, zf = b.max.z + 0.12, xr = b.max.x + 0.08;
+  line(new THREE.Vector3(b.min.x, y0, zf), new THREE.Vector3(b.max.x, y0, zf)); mk(`${Math.round(s.x * 1000)} mm`, new THREE.Vector3(0, y0, zf));
+  line(new THREE.Vector3(xr, y0, b.min.z), new THREE.Vector3(xr, y0, b.max.z)); mk(`${Math.round(s.z * 1000)} mm (utan lucka)`, new THREE.Vector3(xr, y0, (b.min.z + b.max.z) / 2));
+  line(new THREE.Vector3(xr, b.min.y, zf), new THREE.Vector3(xr, b.max.y, zf)); mk(`${Math.round(s.y * 1000)} mm`, new THREE.Vector3(xr, (b.min.y + b.max.y) / 2, zf));
+  mk('Galler GN 1/1 · 530 × 325', new THREE.Vector3(0, 0.38, 0.0));
+}
+// ---------- kameror ----------
+const VIEWS = {
+  'Översikt': [[1.05, 0.95, 1.45], [0, 0.42, 0]],
+  'Framifrån': [[0, 0.5, 1.9], [0, 0.42, 0]],
+  'Lucka & motvikt': [[1.0, 0.75, 0.45], [0.3, 0.6, 0.15]],
+  'Eldstad': [[0.05, 0.62, 0.9], [0, 0.33, 0]],
+  'Asklåda': [[0.55, 0.3, 0.95], [0, 0.1, 0.2]],
+  'Ovanifrån': [[0, 2.0, 0.01], [0, 0, 0]],
+};
+let camAnim = null;
+const camF = () => innerWidth / innerHeight < 1 ? Math.max(0.95, 0.85 / (innerWidth / (innerHeight - 200))) : 1.0;
+function goView(k) {
+  const [e, t] = VIEWS[k], f = camF();
+  const eye = new THREE.Vector3(...e).sub(new THREE.Vector3(...t)).multiplyScalar(f).add(new THREE.Vector3(...t));
+  camAnim = {t0: performance.now(), e0: camera.position.clone(), t0v: controls.target.clone(), e1: eye, t1: new THREE.Vector3(...t)};
+}
+for (const k of Object.keys(VIEWS)) { const b = document.createElement('button'); b.textContent = k; b.onclick = () => goView(k); $('#views').appendChild(b); }
+const CH = [['Översikt', () => goView('Översikt')], ['Öppna lucka', () => setT('L', TG.L > 130 ? 0 : 260)], ['Dra ut galler', () => setT('G1', TG.G1 > 100 ? 0 : 250)], ['Asklåda', () => setT('A', TG.A > 100 ? 0 : 280)], ['Spjäll', () => setT('S', TG.S > 10 ? 0 : 20)], ['Eldstad', () => goView('Eldstad')], ['Snitt', () => $('#tCut').click(), '#tCut'], ['Sprängvy', () => $('#tExp').click(), '#tExp'], ['Glöd', () => $('#tGlo').click(), '#tGlo']];
+for (const [t, f, ref] of CH) { const b = document.createElement('button'); b.className = 'chip'; b.textContent = t; b.onclick = f; if (ref) b.dataset.ref = ref; $('#chips').appendChild(b); }
+function syncChips() { document.querySelectorAll('#chips .chip').forEach(c => { if (c.dataset.ref) c.classList.toggle('on', $(c.dataset.ref).classList.contains('on')); }); }
+// ---------- fakta + stycklista ----------
+function stats() {
+  $('#stats').innerHTML = `<b>Yamay Horno</b> · 670 × 460 × 860 mm (utan lucka/handtag)<br>
+  Eldstad 540 × 400 mm · 3 gallernivåer (60 mm delning) för <b>GN 1/1</b> 530 × 325<br>
+  Galler: 2 × gjutjärn Hendi 932018 + plancha Hendi 932001 – standard, så GN-brickor passar<br>
+  Lucka: vertikal, motvikter 2 × 4,7 kg över dolda trissor Ø100, lyft 260 mm<br>
+  Kolrost: 3 × Kirami 135 × 290 gjutjärn på rostbädd · asklåda med skjutspjäll<br>
+  Isolering: Vermilite 600 (20 mm) mellan innerlåda och yttre Corten-skal<br>
+  Vikt ≈ 145 kg komplett (beräknad)`;
+}
+function buildBOM() {
+  const t = $('#bom'); t.innerHTML = '';
+  const agg = kop => { const m = new Map(); for (const p of parts) { if (!!p.userData.kop !== kop) continue; const k = p.userData.name; const e = m.get(k) || {n: 0, name: k, desc: p.userData.desc, nodes: []}; e.n++; e.nodes.push(p); m.set(k, e); } return [...m.values()].sort((a, b) => a.name.localeCompare(b.name, 'sv')); };
+  const sec = (title, rows) => {
+    t.insertAdjacentHTML('beforeend', `<tr class="h"><td colspan="2">${title}</td></tr>`);
+    for (const r of rows) { const tr = document.createElement('tr'); tr.innerHTML = `<td>${r.name}</td><td class="n">${r.n}</td>`; tr.onclick = () => highlight(r.nodes, r.name, r.n); t.appendChild(tr); }
+  };
+  sec('Tillverkade detaljer', agg(false)); sec('Köpdelar', agg(true));
+}
+let hiNodes = [];
+function clearHi() { for (const n of hiNodes) n.traverse(m => { if (m.isMesh) m.material = matFor(n.userData.ap, n.userData.name); }); hiNodes = []; $('#pick').style.display = 'none'; }
+function highlight(nodes, name, n) {
+  clearHi(); hiNodes = nodes; for (const nd of nodes) nd.traverse(m => { if (m.isMesh) m.material = M.hi; });
+  const ex = nodes[0].userData;
+  $('#pick h3').textContent = name;
+  $('#pick .b').innerHTML = `<p><b>${ex.kop ? 'Köpdel' : 'Tillverkad detalj'}</b> · ${ex.grp}</p>` + (ex.desc ? `<p>${ex.desc}</p>` : '') + `<p>Antal i modellen: <b>${n}</b></p>`;
+  $('#pick').style.display = 'block';
+}
+$('#pick .x').onclick = clearHi;
+// ---------- direkt manipulation: dra i lucka / galler / asklada, tryck pa spjallet ----------
+const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+function isVis(o) { while (o) { if (!o.visible) return false; o = o.parent; } return true; }
+function hitAt(e) {
+  ptr.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(ptr, camera);
+  return ray.intersectObject(model, true).find(h => h.object.isMesh && h.object.userData.part && isVis(h.object) && (!cut || clipPlane.distanceToPoint(h.point) >= 0));
+}
+function keyOf(part) { const m = part.userData.mech; if (!m.length) return null; if (m.includes('S')) return 'S'; return m.find(k => k !== 'S'); }
+function toScr(v) { const p = v.clone().project(camera); return new THREE.Vector2((p.x + 1) / 2 * innerWidth, (1 - p.y) / 2 * innerHeight); }
+let drag = null, down = null;
+canvas.addEventListener('pointerdown', e => {
+  down = [e.clientX, e.clientY]; if (!model) return;
+  const h = hitAt(e); if (!h) return;
+  const k = keyOf(h.object.userData.part); if (!k || k === 'S') return;
+  const m = MECH.find(x => x.k === k && x.nodes.includes(h.object.userData.part));
+  // riktningen i varlden (Fusion-axel genom gruppens matris) -> skarmvektor per mm
+  const par = h.object.userData.part.parent; par.updateWorldMatrix(true, false);
+  const dW = new THREE.Vector3(...m.dir).transformDirection(par.matrixWorld);
+  const s0 = toScr(h.point), s1 = toScr(h.point.clone().addScaledVector(dW, 0.05)), sv = s1.sub(s0).divideScalar(50);
+  if (sv.lengthSq() < 0.01) return;
+  drag = {id: e.pointerId, k, sv, x: e.clientX, y: e.clientY, v0: TG[k] * (m.dir.reduce((a, b) => a + b) < 0 && k === 'L' ? -1 : 1)};
+  drag.sign = 1; controls.enabled = false; canvas.style.cursor = 'grabbing';
+  try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+}, true);
+canvas.addEventListener('pointermove', e => {
+  if (drag && e.pointerId === drag.id) {
+    const d = new THREE.Vector2(e.clientX - drag.x, e.clientY - drag.y); drag.x = e.clientX; drag.y = e.clientY;
+    const mm = d.dot(drag.sv) / drag.sv.lengthSq();
+    setT(drag.k, TG[drag.k] + mm); ST[drag.k] = TG[drag.k]; e.preventDefault(); return;
+  }
+  if (!model || e.buttons) return;
+  const h = hitAt(e); canvas.style.cursor = h && keyOf(h.object.userData.part) ? (keyOf(h.object.userData.part) === 'S' ? 'pointer' : 'grab') : '';
+});
+function endDrag(e) { if (drag && e.pointerId === drag.id) { drag = null; controls.enabled = true; canvas.style.cursor = ''; } }
+addEventListener('pointerup', endDrag); addEventListener('pointercancel', endDrag);
+canvas.addEventListener('pointerup', e => {
+  if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6 || !model) return;
+  const h = hitAt(e); if (!h) { clearHi(); return; }
+  const p = h.object.userData.part;
+  if (keyOf(p) === 'S') { const v = TG.S > 10 ? 0 : 20; setT('S', v); document.querySelectorAll('#spj button').forEach(x => x.classList.toggle('on', +x.dataset.s === v)); toast(v ? 'Spjället stängt' : 'Spjället öppet'); return; }
+  if (keyOf(p)) return;
+  const same = parts.filter(q => q.userData.name === p.userData.name); highlight(same, p.userData.name, same.length);
+});
+$('#ph').onclick = () => { if (MOB()) $('#panel').classList.toggle('min'); };
+// ---------- layout ----------
+function layout() {
+  const W = innerWidth, H = innerHeight; renderer.setSize(W, H); lr.setSize(W, H); camera.aspect = W / H;
+  if (MOB()) { const ph = $('#panel').getBoundingClientRect().height; $('#chips').style.bottom = ph + 'px'; camera.setViewOffset(W, H, 0, ph / 2, W, H); camera.fov = 52; }
+  else { camera.clearViewOffset(); camera.setViewOffset(W, H, 165, 0, W, H); camera.fov = 38; }
+  camera.updateProjectionMatrix();
+}
+new ResizeObserver(layout).observe($('#panel')); addEventListener('resize', layout);
+// ---------- loop ----------
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const dt = Math.min(clock.getDelta(), 0.05), t = performance.now() / 1000;
+  let moved = false;
+  for (const k in ST) if (Math.abs(ST[k] - TG[k]) > 0.05) { ST[k] += (TG[k] - ST[k]) * Math.min(1, dt * 7); moved = true; } else if (ST[k] !== TG[k]) { ST[k] = TG[k]; moved = true; }
+  if (Math.abs(exploded - explodeTarget) > 1e-3) { exploded += (explodeTarget - exploded) * Math.min(1, dt * 5); moved = true; }
+  if (moved && model) applyMech();
+  if (glow.visible) { const f = 1 + 0.12 * Math.sin(t * 7.3) + 0.08 * Math.sin(t * 13.1); glow.intensity = 1.6 * f; emberMat.emissiveIntensity = 1.5 * f; }
+  if (camAnim) { const k = Math.min(1, (performance.now() - camAnim.t0) / 700), s = k * k * (3 - 2 * k);
+    camera.position.lerpVectors(camAnim.e0, camAnim.e1, s); controls.target.lerpVectors(camAnim.t0v, camAnim.t1, s); if (k >= 1) camAnim = null; }
+  controls.update(); renderer.render(scene, camera); lr.render(scene, camera);
+});
+window.__h = {THREE, scene, camera, controls, ST, TG, setT, goView, get model() { return model; }, groups: () => groups, parts: () => parts, byId: () => byId};
+(async () => {
+  layout(); if (MOB()) $('#panel').classList.add('min');
+  try {
+    const g = await new Promise((res, rej) => loader.load('horno.glb', res, e => e.total && prog(e.loaded / e.total), rej));
+    setup(g.scene);
+    const e = VIEWS['Översikt'], f = camF(); camera.position.set(...e[0].map((v, i) => (v - e[1][i]) * f + e[1][i])); controls.target.set(...e[1]);
+    $('#load').style.opacity = 0; setTimeout(() => $('#load').style.display = 'none', 400); layout();
+    window.__ok = true;
+  } catch (err) { $('#lt').textContent = 'KUNDE INTE LADDA MODELLEN'; console.error(err); window.__err = String(err); }
+})();
+</script>
+</body>
+</html>
