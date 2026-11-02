@@ -264,6 +264,11 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .libbtn.hasse small{margin-bottom:44px}
 .libbtn.hasse img{position:absolute;right:-8px;bottom:-4px;height:min(196px,78%);width:auto;transform-origin:70% 100%;animation:hasse 2.6s var(--ease) infinite;pointer-events:none}
 .libbtn.hasse::before{content:"";position:absolute;right:-30px;top:-30px;width:210px;height:210px;border-radius:50%;background:radial-gradient(circle,var(--chili) 0 58%,transparent 59%);opacity:.9}
+.libbtn.hasse .hej{position:absolute;right:10px;top:10px;background:var(--cream);color:var(--ink);font-family:var(--display);font-size:17px;text-transform:uppercase;padding:5px 10px 3px;border:3px solid var(--ink);border-radius:14px;transform:scale(0) rotate(-6deg);transform-origin:90% 100%;transition:transform .3s var(--pop);z-index:2;white-space:nowrap}
+.libbtn.hasse .hej::after{content:"";position:absolute;left:28px;bottom:-12px;border:8px solid transparent;border-top:10px solid var(--ink)}
+.libbtn.hasse.talk .hej{transform:scale(1) rotate(-6deg)}
+.libbtn.hasse.talk img{animation:hassetalk .18s steps(2) infinite}
+@keyframes hassetalk{50%{transform:translateY(-3px) rotate(1deg)}}
 @keyframes hasse{0%,100%{transform:rotate(0) translateY(0)}45%{transform:rotate(-2.5deg) translateY(-4px)}55%{transform:rotate(-2.5deg) translateY(-4px)}}
 @media (prefers-reduced-motion:reduce){.libbtn.hasse img{animation:none}}
 .libbtn:active{transform:translate(3px,3px)}
@@ -346,7 +351,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
         <div class="fmove" id="fmove"></div></div></div>
     <div class="fgrid" id="fgrid"></div>
   </div>
-  <button class="libbtn hasse" id="go-hasse"><img src="hasse.webp" alt="Hasse med sin kettlebell" width="600" height="626"><span class="lbl">Kom igång direkt · 1 kettlebell · ca 13 min</span><b>Hasses superpass</b>
+  <button class="libbtn hasse" id="go-hasse"><img src="hasse.webp" alt="Hasse med sin kettlebell" width="600" height="626"><span class="hej">Hallå gänget!</span><span class="lbl">Kom igång direkt · 1 kettlebell · ca 13 min</span><b>Hasses superpass</b>
     <small>Rodd → swing → knäböj → press. 6 reps var, rakt igenom. 10 varv, 30 s vila. Timern räknar – du bara kör.</small></button>
   <div class="card">
     <h2>Välj redskap</h2>
@@ -1383,7 +1388,11 @@ document.querySelectorAll('.bell .pm button').forEach(b => b.onclick = () => {
   renderProfile(); const el = $('#kg-' + k); el.animate([{transform:'scale(1.35)'}, {transform:'scale(1)'}], {duration:300, easing:'cubic-bezier(.3,1.6,.5,1)'});
 });
 $('#go-prog').onclick = () => { save(); renderProg(); show('s-prog'); };
-$('#lib-back').onclick = () => goBack(); $('#go-lib0').onclick = () => openLib(); $('#go-hasse').onclick = () => { useGear('kb'); if (!S) S = fresh(); startComplex(); }; $('#lib-go').onclick = () => startFree();
+$('#lib-back').onclick = () => goBack(); $('#go-lib0').onclick = () => openLib(); const HEJ = Array.from({length:7}, (_, i) => `hasse/hej${i + 1}.mp3`); let hejLast = -1, hejAu = null;
+function hallaGanget() { let i; do i = Math.floor(Math.random() * HEJ.length); while (i === hejLast && HEJ.length > 1); hejLast = i;
+  try { if (hejAu) hejAu.pause(); hejAu = new Audio(HEJ[i]); hejAu.volume = 1; hejAu.play().catch(() => {}); } catch (_) {} }
+$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget();
+  b.classList.add('talk'); setTimeout(() => { b.classList.remove('talk'); delete b.dataset.busy; useGear('kb'); if (!S) S = fresh(); startComplex(); }, 1500); }; $('#lib-go').onclick = () => startFree();
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#sheet').classList.remove('on'); });
 
 // ---------------- fokus: extra övningar för valda muskelgrupper ----------------
