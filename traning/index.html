@@ -1710,7 +1710,7 @@ function blip(f0 = 520, f1 = 1040, d = .12) { try { AC = AC || new (window.Audio
   o.frequency.setValueAtTime(f0, AC.currentTime); o.frequency.exponentialRampToValueAtTime(f1, AC.currentTime + d); g.gain.setValueAtTime(.06, AC.currentTime); g.gain.exponentialRampToValueAtTime(.001, AC.currentTime + d + .05);
   o.connect(g); g.connect(AC.destination); o.start(); o.stop(AC.currentTime + d + .06); } catch (_) {} }
 // ---------------- sprite-figurer (gpt-image, 4x4-ark -> remsa med 16 bilder) ----------------
-const SPR = {kent:261, bettan:261, pappa:286, sussie:232}, SPR_H = 320;
+let SPR = {kent:487, bettan:446, pappa:502, sussie:424}, SPR_H = 600;
 const SPR_DUR = [400, 90, 90, 250, 350, 200, 120, 250, 120, 140, 140, 180, 250, 350, 120, 150];
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function sprite(id, start = 0) {
@@ -1731,10 +1731,10 @@ const EXDUR = [320, 200, 110, 110, 110, 110, 110, 240, 240, 240, 110, 110, 110, 
 const sprIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const d = en.target; d.vis = en.isIntersecting;
   if (d.vis && !d.style.backgroundImage) d.style.backgroundImage = `url(${d.dataset.src})`; if (d.vis && !RM) d.go(); }), {rootMargin:'200px'}) : null;
 function exSprite(id, e) {
-  const fid = localStorage.getItem('bc_traning_fighter') || 'kent', w = EXM[fid] && EXM[fid][id];
+  const fid = localStorage.getItem('bc_traning_fighter') || 'kent', v = EXM[fid] && EXM[fid][id], w = Array.isArray(v) ? v[0] : v, hh = Array.isArray(v) ? v[1] : (EXM.h || 256);
   if (!w) return null;
   const d = document.createElement('div'); d.className = 'spr exspr';
-  d.dataset.src = `ex/${fid}/${id}.webp`; d.style.aspectRatio = `${w} / 256`; d.style.backgroundPosition = '0 0';
+  d.dataset.src = `ex/${fid}/${id}.webp`; d.style.aspectRatio = `${w} / ${hh}`; d.style.backgroundPosition = '0 0';
   const flat = e && (e.walk || e.cycle);
   let i = 0, t = null;
   const tick = () => { t = null; if (!d.isConnected || (sprIO && !d.vis)) return; d.style.backgroundPosition = `${i * 100 / 15}% 0`; const ms = flat ? 115 : EXDUR[i]; i = (i + 1) % 16; t = setTimeout(tick, ms); };
