@@ -57,3 +57,8 @@ Utnyttjande snö / vind / lyft (max):
 Uppmätt/avläst: fläns 70 bred (tumstock), plywood ca 15 mm (skikt), fotkloss ca 300 lång, klossar ca c/c 250, regel 20×95 genom fack, vinkel 70×70×55 vid foten. Antaget: djup 100–120, nock ~2,45, c/c 1050, kanalplast EJ medräknad.
 - 20 m/s (Norhages klassning): vind 0,76–0,79, snö 1,05–1,1 (sk 1,5 ≈ 150 kg/m², deras klassning för Tunnel 300) → modellen stämmer med tillverkarens klassning.
 - 25 m/s: 1,0–1,3. Eurocode: ~3. → det är lastnivån, inte modellen, som skiljer.
+
+## Beslut vind 20 m/s (Victor 2026-11-03) – svep_20ms.json, c/c 1250, snö Höör fullt
+Djup 100: 2x12/95 kl410 1,14 · kl300 0,92 · kl200 0,82 | 2x12/120 kl410 0,88 · kl300 0,72 | 3x12/95 kl410 0,70 | 3x12/120 0,53–0,55
+Djup 120: 2x12/95 kl410 1,02 · kl300 0,75 | 2x12/120 kl410 0,80 · kl300 0,59 | 3x12/95 kl410 0,53
+Snön styr nu (inte vinden). Tunnaste som håller: 100 djup, 2x12 lameller, bredd 120, klossar c/c 300 (0,72) eller 3x12/95 kl410 (0,70).
