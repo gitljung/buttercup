@@ -17,3 +17,6 @@ Projekt `vaxthus`, master "Växthus - parametrar". Gammal DirectDesign-modell i 
 - 2026-11-03 Victor: kör a -> SyllUtstick 120 (långsyll förbi gavlarna), hörnvinkel utsida i st f spikplåt. kedja_45.sh (v04 + v05) KÖAD.
 - 2026-11-03 Steg 4 + 6a KLARA (kedja_45): Växthus sparad. 9 bågar c/c 1250, Syllram (utstick 120), Nockregel, Sidoreglar, Vinklar bågfot 32, Vinklar nock 32, Syllbeslag 8 (4 hörn × insida/utsida). 350 kroppar, 0 fel, 0 krockar, alla skisser låsta. Flex (13 bågar): 0 fel/krock, beslag följer (48/48/8); återställt identiskt.
   Känt: speglade kroppar har fel namn (höger/vänster, fram/bak byter) – kosmetiskt, fixas. Nästa: steg 5 gavlar + dörrar (dörrstolpar på gavelsyllens ändar, överliggare, nockstolpe, gavelstag) + beslag där.
+- 2026-11-03 Victor: kör steg 5. v06_gavlar.py (gavlar, dörrar, gavelbeslag, namnrättning) KÖAD. Gavelstag utelämnat: dörrstolparna går upp till bågen.
+- 2026-11-03 Victor: kör (dörrbeslag). v06 ändrad: dörrblad i liv med stolparnas utsida. v07_dorrbeslag.py KÖAD efter v06. Stolptopp/nockstolpe: snedskruvad konstruktionsskruv (ej ritad).
+- 2026-11-03 Steg 5 + 6c KLARA (398 kroppar, 0 fel/krock, flex OK). FEL hittat: bakre vänstra gavelsyllen saknades sedan steg 4 (spegling). v04 rättad för ombygge; v07b_syllfix.py KÖAD.

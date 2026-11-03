@@ -46,7 +46,8 @@ def bygg_syll(des, comp):
     if abs(mid.geometry.origin.y * 10 - D.ev('Langd') / 2) > 1e-3:
         mid.deleteMe(); pi = comp.constructionPlanes.createInput(); pi.setByOffset(comp.xZConstructionPlane, VI('-Langd / 2'))
         mid = comp.constructionPlanes.add(pi); mid.name = 'Mittplan längs (Langd / 2)'
-    bak = mirror(comp, [g, gv[-1]], mid, 'Syll gavel bak (spegling)')
+    gvl = [x for x in comp.bRepBodies if x.entityToken != g.entityToken and x.name != 'Syll långsida höger' and (x.boundingBox.maxPoint.y - x.boundingBox.minPoint.y) * 10 < 1000][0]
+    bak = mirror(comp, [g, gvl], mid, 'Syll gavel bak (spegling)')
     for k, bb in enumerate(sorted(bak[-2:], key=lambda x: x.boundingBox.minPoint.x)):
         bb.name = 'Syll gavel bak ' + ('vänster' if k == 0 else 'höger')
     mid.isLightBulbOn = False

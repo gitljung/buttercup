@@ -1,0 +1,83 @@
+[
+ {
+  "tag": "standard",
+  "BagR": 3856.1,
+  "AntalBagar": 9.0,
+  "bage_occ": 9,
+  "kroppar_totalt": 374,
+  "kroppar_halvbage": 15,
+  "fel": [],
+  "ej_last": [],
+  "krock": [],
+  "antal_krock": 0,
+  "remsor_mm": {
+   "Ytterremsa 1": 2073,
+   "Innerremsa 1": 1632,
+   "Ytterremsa 2": 2091,
+   "Innerremsa 2": 2394
+  },
+  "for_langa": [],
+  "x0_x1_y0_y1_zmax": [
+   -2060,
+   2060,
+   -155,
+   10155,
+   3545
+  ]
+ },
+ {
+  "tag": "flex",
+  "BagR": 4830.7,
+  "AntalBagar": 13.0,
+  "bage_occ": 13,
+  "kroppar_totalt": 552,
+  "kroppar_halvbage": 16,
+  "fel": [],
+  "ej_last": [],
+  "krock": [],
+  "antal_krock": 0,
+  "remsor_mm": {
+   "Ytterremsa 1": 2071,
+   "Innerremsa 1": 1633,
+   "Ytterremsa 2": 2724,
+   "Innerremsa 2": 3023
+  },
+  "for_langa": [
+   "Ytterremsa 2",
+   "Innerremsa 2"
+  ],
+  "x0_x1_y0_y1_zmax": [
+   -2460,
+   2460,
+   -155,
+   12155,
+   4045
+  ]
+ },
+ {
+  "tag": "återställt",
+  "BagR": 3856.1,
+  "AntalBagar": 9.0,
+  "bage_occ": 9,
+  "kroppar_totalt": 374,
+  "kroppar_halvbage": 15,
+  "fel": [],
+  "ej_last": [],
+  "krock": [],
+  "antal_krock": 0,
+  "remsor_mm": {
+   "Ytterremsa 1": 2073,
+   "Innerremsa 1": 1632,
+   "Ytterremsa 2": 2091,
+   "Innerremsa 2": 2394
+  },
+  "for_langa": [],
+  "x0_x1_y0_y1_zmax": [
+   -2060,
+   2060,
+   -155,
+   10155,
+   3545
+  ]
+ }
+]
