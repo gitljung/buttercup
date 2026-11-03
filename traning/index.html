@@ -1393,6 +1393,7 @@ document.querySelectorAll('.bell .pm button').forEach(b => b.onclick = () => {
 });
 $('#go-prog').onclick = () => { save(); renderProg(); show('s-prog'); };
 $('#lib-back').onclick = () => goBack(); $('#go-lib0').onclick = () => openLib(); const HEJ = Array.from({length:7}, (_, i) => `hasse/hej${i + 1}.mp3`); let hejLast = -1, hejAu = null;
+function tempel(v) { setTimeout(() => { try { if (hejAu) hejAu.pause(); hejAu = new Audio(`hasse/tempel${v % 2 ? 1 : 2}.mp3`); hejAu.play().catch(() => {}); } catch (_) {} }, 600); }
 function pepp() { hallaGanget(); if (navigator.vibrate) navigator.vibrate([40, 40, 40]); }
 function hallaGanget() { let i; do i = Math.floor(Math.random() * HEJ.length); while (i === hejLast && HEJ.length > 1); hejLast = i;
   try { if (hejAu) hejAu.pause(); hejAu = new Audio(HEJ[i]); hejAu.volume = 1; hejAu.play().catch(() => {}); } catch (_) {} }
@@ -1529,7 +1530,7 @@ function renderStep() {
     $('#nx').onclick = () => {
       const d = body.querySelectorAll('.dots i')[st.s - 1]; if (d) d.classList.add('done');
       const nxt = SS.steps[SS.i + 1];
-      if (st.cx) { if (nxt && nxt.type === 'set' && nxt.s !== st.s) startRest(x.rest, `Nästa: varv ${nxt.s} av ${x.sets} · ${nxt.x.e.namn}`); else next(); return; }
+      if (st.cx) { if (nxt && nxt.type === 'set' && nxt.s !== st.s) { tempel(st.s); } if (nxt && nxt.type === 'set' && nxt.s !== st.s) startRest(x.rest, `Nästa: varv ${nxt.s} av ${x.sets} · ${nxt.x.e.namn}`); else next(); return; }
       if (nxt && nxt.type === 'set') startRest(x.rest, nxt.x === x ? `Nästa: set ${nxt.s} av ${x.sets}` : `Nästa: ${nxt.x.e.namn} · ${nxt.x.kg}`);
       else next();
     };
