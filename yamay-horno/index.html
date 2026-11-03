@@ -224,6 +224,8 @@ function setup(root) {
     {k: 'S', nodes: sel(/^Spjall/), dir: [-1, 0, 0]},
   ].map(m => ({...m, nodes: m.nodes.filter(Boolean)}));
   for (const n of parts) n.userData.mech = MECH.filter(m => m.nodes.includes(n)).map(m => m.k);
+  VRN = parts.filter(n => /^Vred (hake|nav|bricka|grepp|bult)$/.test(n.userData.top || ''));
+  VPULL = VRN.filter(n => !/^Vred bult$/.test(n.userData.top));
   buildGroupToggles(); applyAll(); buildBOM(); stats();
 }
 function applyMech() {
@@ -236,6 +238,7 @@ function applyMech() {
     if (n.userData.mech.includes('L')) { p.sub(piv).applyQuaternion(qL).add(piv); n.quaternion.premultiply(qL); }
     n.position.copy(p).add(n.userData.off).addScaledVector(n.userData.exp, exploded);
   }
+  applyVred();
   // kedjan rullas upp pa fjaderarmen (R60) och fjadern strackts lika mycket
   const s = FJ.arm * ST.L * Math.PI / 180;
   for (const n of parts) {
@@ -244,6 +247,15 @@ function applyMech() {
     else if (/^Kedja/.test(t)) { const f = (FJ.chainLen - s) / FJ.chainLen; n.scale.set(1, f, 1); n.position.y += (1 - f) * FJ.chainFront / 1000; }
   }
   outputs();
+}
+// vredet: dra ut 5 mm, vrid, slapp in - innan luckan kan fallas (och tillbaka forst nar luckan ar stangd)
+let VR = 0, VRN = [], VPULL = [];
+const VRED = {z: 475, ang: 180, pull: 5};
+function applyVred() {
+  const pl = VR < 0.25 ? VR / 0.25 : VR < 0.75 ? 1 : (1 - VR) / 0.25, a = Math.max(0, Math.min(1, (VR - 0.25) / 0.5)) * VRED.ang;
+  const q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), -a * Math.PI / 180), piv = new THREE.Vector3(0, 0, VRED.z / 1000);
+  for (const n of VRN) { n.position.sub(piv).applyQuaternion(q).add(piv); n.quaternion.premultiply(q); }
+  for (const n of VPULL) n.position.y -= pl * VRED.pull / 1000;
 }
 const ropeMat = new THREE.LineBasicMaterial({color: '#1d1d1f'});
 const fmtL = v => v < 1 ? 'stängd' : v > 89 ? 'öppen (hylla)' : Math.round(v) + '°';
@@ -449,6 +461,10 @@ renderer.setAnimationLoop(() => {
   const dt = Math.min(clock.getDelta(), 0.05), t = performance.now() / 1000;
   let moved = false;
   for (const k in ST) if (Math.abs(ST[k] - TG[k]) > 0.05) { ST[k] += (TG[k] - ST[k]) * Math.min(1, dt * 7); moved = true; } else if (ST[k] !== TG[k]) { ST[k] = TG[k]; moved = true; }
+  { const want = (TG.L > 0.5 || ST.L > 0.5) ? 1 : 0;
+    if (VR !== want) { VR = want ? Math.min(1, VR + dt * 1.6) : Math.max(0, VR - dt * 1.6); moved = true; }
+    if (VR < 1 && ST.L > 0 && want) { ST.L = 0; }            // luckan valtar tills vredet ar vridet
+  }
   if (Math.abs(exploded - explodeTarget) > 1e-3) { exploded += (explodeTarget - exploded) * Math.min(1, dt * 5); moved = true; }
   if (moved && model) applyMech();
   if (glow.visible) { const f = 1 + 0.12 * Math.sin(t * 7.3) + 0.08 * Math.sin(t * 13.1); glow.intensity = 1.6 * f; emberMat.emissiveIntensity = 1.5 * f; }
