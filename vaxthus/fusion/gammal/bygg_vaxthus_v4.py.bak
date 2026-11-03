@@ -1,0 +1,411 @@
+import adsk.core, adsk.fusion, math
+
+# Bågväxthus i Fusion. Samma standardmått som buttercup.nu/vaxthus.
+# Koordinater i skriptet: (x, z, y) = (tvärs, längs huset, höjd), meter. Fusion internt cm, Z upp.
+A = 2.0      # halva bredden (bredd 4 000)
+H = 3.5      # nockhöjd från mark
+YC = 0.0     # radiecentrums höjd relativt bågfoten (0 = rund, negativ = spetsigare)
+L = 10.0     # längd (c/c gavelbågar)
+SP = 2.0     # bågavstånd
+DW = 1.0     # halva dörrbredden (c/c dörrstolpar)
+DH = 2.0     # dörrhöjd
+TR = 0.45    # överljus
+
+S = 0.12     # syllhöjd: bågen står PÅ syllen
+CH = .0425   # plywoodremsornas mittradie ± CH
+RO = .05     # bågens halva djup (15 + 70 + 15 = 100 mm)
+PY = 1.9     # sidoregelns mitt
+SAFE = 0     # används ej
+
+HA = H - S   # bågens höjd över syllen
+C = (HA*HA - A*A - 2*HA*YC) / (2*A)
+R = math.sqrt((C+A)**2 + YC**2)
+T0 = math.pi - math.asin(-YC/R)
+T1 = math.atan2(HA-YC, -C)
+ARC = R*(T0-T1)
+N = max(2, math.ceil(L/SP - 1e-9) + 1)
+NS = max(12, round(ARC/.3))
+
+app = adsk.core.Application.get()
+COUNT = {}
+
+
+def fit():
+    global DW, DH, TR
+    DW = min(DW, A-1)
+    lim = S + YC + math.sqrt(R*R - (DW+.05+C)**2) - RO - .15
+    if DH+TR > lim:
+        TR = max(0, math.floor((lim-DH)*20+1e-6)/20)
+    if DH+TR > lim:
+        DH = math.floor(lim*20+1e-6)/20
+
+
+def V(x, z, y):
+    return adsk.core.Vector3D.create(x, z, y)
+
+
+def P(x, z, y):
+    return adsk.core.Point3D.create(x*100, z*100, y*100)
+
+
+def arcpt(th, side, r):
+    x = C + r*math.cos(th)
+    return (x if side < 0 else -x, S + YC + r*math.sin(th))
+
+
+def ap(u, side, r):
+    t0 = math.pi - math.asin(min(1, -YC/r))
+    t1 = math.acos(-C/r)
+    return arcpt(t0 - u*(t0-t1), side, r)
+
+
+def xin(y, r):
+    # |x| för bågradien r på höjden y (absolut)
+    return math.sqrt(r*r - (y-S-YC)**2) - C
+
+
+def s_at_y(y):
+    # båglängd från foten (mittradien) till höjden y
+    th = math.pi - math.asin((y-S-YC)/R)
+    return R*(T0-th)
+
+
+def run(_context: str):
+    fit()
+    top = DH + TR
+    design = adsk.fusion.Design.cast(app.activeProduct)
+    root = design.rootComponent
+    ours = root.occurrences.count > 0 and root.occurrences.item(0).component.name == 'Syllar'
+    empty = root.occurrences.count == 0 and root.bRepBodies.count == 0
+    if not (app.activeDocument.name.startswith('Untitled') and (ours or empty)):
+        app.documents.add(adsk.core.DocumentTypes.FusionDesignDocumentType)
+        design = adsk.fusion.Design.cast(app.activeProduct)
+        root = design.rootComponent
+    design.designType = adsk.fusion.DesignTypes.DirectDesignType
+    design.fusionUnitsManager.distanceDisplayUnits = adsk.fusion.DistanceUnits.MillimeterDistanceUnits
+    while root.occurrences.count:
+        root.occurrences.item(0).deleteMe()
+    tb = adsk.fusion.TemporaryBRepManager.get()
+
+    lib = app.materialLibraries.itemByName('Fusion Appearance Library')
+
+    def appear(name, src):
+        a = design.appearances.itemByName(name)
+        return a if a else design.appearances.addByCopy(lib.appearances.itemByName(src), name)
+    steel_src = 'Steel - Satin'
+    for i in range(lib.appearances.count):
+        n = lib.appearances.item(i).name
+        if 'Galvaniz' in n:
+            steel_src = n
+            break
+    wood_a = appear('Tra', 'Pine')
+    film_a = appear('Polyetenfilm frostad', 'Glass - Frosted Light')
+    steel_a = appear('Forzinkat stal', steel_src)
+
+    def comp(name):
+        occ = root.occurrences.addNewComponent(adsk.core.Matrix3D.create())
+        occ.component.name = name
+        return occ.component
+
+    def addbody(cmp, brep, name, ap_):
+        b = cmp.bRepBodies.add(brep)
+        b.name = name
+        b.appearance = ap_
+        COUNT[name] = COUNT.get(name, 0) + 1
+        return b
+
+    def boxb(c, dl, dw, l, w, h):
+        dl = V(*dl); dw = V(*dw)
+        dl.normalize(); dw.normalize()
+        return tb.createBox(adsk.core.OrientedBoundingBox3D.create(P(*c), dl, dw, l*100, w*100, h*100))
+
+    def beam(cmp, name, p, q, w, h):
+        # w = tvärmått i horisontalplanet, h = vertikalt (för stående: w längs x, h längs z)
+        pv = V(*p); qv = V(*q)
+        d = qv.copy(); d.subtract(pv)
+        ln = d.length
+        d.normalize()
+        wd = V(1, 0, 0) if abs(d.z) > .99 else V(0, 0, 1).crossProduct(d)
+        c = ((p[0]+q[0])/2, (p[1]+q[1])/2, (p[2]+q[2])/2)
+        return addbody(cmp, boxb(c, (d.x, d.y, d.z), (wd.x, wd.y, wd.z), ln, w, h), name, wood_a)
+
+    def vinkel(cmp, name, corner, dA, dB, la, lb, W, t=.0025):
+        a = V(*dA); b = V(*dB)
+        w = a.crossProduct(b)
+        cA = (corner[0]+dA[0]*la/2+dB[0]*t/2, corner[1]+dA[1]*la/2+dB[1]*t/2, corner[2]+dA[2]*la/2+dB[2]*t/2)
+        cB = (corner[0]+dB[0]*lb/2+dA[0]*t/2, corner[1]+dB[1]*lb/2+dA[1]*t/2, corner[2]+dB[2]*lb/2+dA[2]*t/2)
+        legA = boxb(cA, dA, (w.x, w.y, w.z), la, W, t)
+        legB = boxb(cB, dB, (w.x, w.y, w.z), lb, W, t)
+        tb.booleanOperation(legA, legB, adsk.fusion.BooleanTypes.UnionBooleanType)
+        return addbody(cmp, legA, name, steel_a)
+
+    def plat(cmp, name, c, dl, dw, l=.2, w=.06, t=.002):
+        return addbody(cmp, boxb(c, dl, dw, l, w, t), name, steel_a)
+
+    VB = 'Vinkelbeslag 90x90x65'
+    VS = 'Vinkelbeslag 60x60x40'
+    VP = 'Vinkelbeslag 90x90x40'
+    SPK = 'Spikplat 60x200'
+
+    z0, z1 = L/2, -L/2
+    ends = ((z0, 1), (z1, -1))   # (z, e) e = utåt
+
+    # ================= SYLLAR 120x120 =================
+    sy = comp('Syllar')
+    for s in (-1, 1):
+        beam(sy, 'Syll langsida 120x120', (s*A, z0+.035, .06), (s*A, z1-.035, .06), .12, .12)
+        for (ze, e) in ends:
+            zg = ze - e*.025
+            beam(sy, 'Syll gavel 120x120', (s*(A-.06), zg, .06), (s*(DW-.05), zg, .06), .12, .12)
+
+    # ================= BÅGAR =================
+    bg = comp('Bagar')
+    tmpl = []
+    ske = bg.sketches.add(bg.xZConstructionPlane)
+
+    def sp(x, y):
+        return ske.modelToSketchSpace(P(x, 0, y))
+    for rc in (R-CH, R+CH):
+        ra, rb = rc-.0075, rc+.0075
+        for side in (-1, 1):
+            a0 = ap(0, side, ra); a1 = ap(1, side, ra); am = ap(.5, side, ra)
+            b0 = ap(0, side, rb); b1 = ap(1, side, rb); bm = ap(.5, side, rb)
+            ske.sketchCurves.sketchArcs.addByThreePoints(sp(*a0), sp(*am), sp(*a1))
+            ske.sketchCurves.sketchArcs.addByThreePoints(sp(*b0), sp(*bm), sp(*b1))
+            ske.sketchCurves.sketchLines.addByTwoPoints(sp(*a0), sp(*b0))
+            ske.sketchCurves.sketchLines.addByTwoPoints(sp(*a1), sp(*b1))
+    profs = adsk.core.ObjectCollection.create()
+    for i in range(ske.profiles.count):
+        profs.add(ske.profiles.item(i))
+    ei = bg.features.extrudeFeatures.createInput(profs, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
+    ei.setSymmetricExtent(adsk.core.ValueInput.createByReal(7.0), True)
+    for b in bg.features.extrudeFeatures.add(ei).bodies:
+        tmpl.append(('Plywood 15x70', b))
+
+    # klossar: specialklossar där beslag sitter + vanliga ca var 30:e cm
+    # Reglarna (34x145) ligger i facket mellan två klossar, flatt mot innerremsan,
+    # 145-sidan längs bågen. Facket = 145 + 2 x 2,5 mm spel.
+    FACK = .145 + .005
+    rr_c = R - .0175                              # regelns mitt, radiellt
+    th_r = math.pi - math.asin((PY - S - YC)/R)   # vinkel för sidoregelns mitt
+    s_r = R*(T0 - th_r)
+    ds_r = (FACK/2) / (R-.035) * R                # halvt fack mätt på mittradien
+    # nocken: regeln ligger vågrätt över hjässan, facket öppnas tills |x| >= 75 mm på innerradien
+    FACK_N = .120 + .005
+    th_k = math.acos(-(C + FACK_N/2) / (R-.035))
+    s_k = R*(T0 - th_k)
+    special = [('Fotkloss 70x70', 0.0, .20),
+               ('Kloss sidoregel 70x70', s_r - ds_r - .12, s_r - ds_r),
+               ('Kloss sidoregel 70x70', s_r + ds_r, s_r + ds_r + .12),
+               ('Kloss gavelstag 70x70', s_at_y(top) - .07, s_at_y(top) + .07),
+               ('Nockkloss 70x70', s_k - .20, s_k)]
+    klist = list(special)
+    for j in range(NS):
+        sc = (j+.5)*ARC/NS
+        a_, b_ = sc-.06, sc+.06
+        if all(b_ < s0-.04 or a_ > s1+.04 for (_, s0, s1) in special) and a_ > 0 and b_ < s_k - .24 and not (s_r-ds_r-.12-.04 < b_ and a_ < s_r+ds_r+.12+.04):
+            klist.append(('Kloss 70x70', a_, b_))
+    skb = {}
+    for (nm, s0, s1) in klist:
+        if nm not in skb:
+            skb[nm] = bg.sketches.add(bg.xZConstructionPlane)
+        sk = skb[nm]
+        for side in (-1, 1):
+            def kp(rr, ss):
+                x, y = arcpt(T0 - ss/R, side, rr)
+                return sk.modelToSketchSpace(P(x, 0, y))
+            ri, ro_ = R-.0349, R+.0349
+            sm = (s0+s1)/2
+            sk.sketchCurves.sketchArcs.addByThreePoints(kp(ri, s0), kp(ri, sm), kp(ri, s1))
+            sk.sketchCurves.sketchArcs.addByThreePoints(kp(ro_, s0), kp(ro_, sm), kp(ro_, s1))
+            sk.sketchCurves.sketchLines.addByTwoPoints(kp(ri, s0), kp(ro_, s0))
+            sk.sketchCurves.sketchLines.addByTwoPoints(kp(ri, s1), kp(ro_, s1))
+    for nm in skb:
+        sk = skb[nm]
+        profs = adsk.core.ObjectCollection.create()
+        for i in range(sk.profiles.count):
+            profs.add(sk.profiles.item(i))
+        ei = bg.features.extrudeFeatures.createInput(profs, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
+        ei.setSymmetricExtent(adsk.core.ValueInput.createByReal(7.0), True)
+        for b in bg.features.extrudeFeatures.add(ei).bodies:
+            tmpl.append((nm, b))
+        sk.isVisible = False
+    ske.isVisible = False
+
+    zs = [z0 - L*i/(N-1) for i in range(N)]
+    for i, z in enumerate(zs):
+        m = adsk.core.Matrix3D.create()
+        m.translation = adsk.core.Vector3D.create(0, z*100, 0)
+        for (nm, b) in tmpl:
+            t = tb.copy(b)
+            tb.transform(t, m)
+            nb = bg.bRepBodies.add(t)
+            nb.name = 'Bage %d - %s' % (i+1, nm)
+            nb.appearance = wood_a
+            COUNT[nm] = COUNT.get(nm, 0) + 1
+    for (nm, b) in tmpl:
+        b.deleteMe()
+
+    # ================= NOCK OCH SIDOREGLAR =================
+    nk = comp('Nock och sidoreglar')
+    rin = R - RO
+    ynin = S + YC + math.sqrt(rin*rin - C*C)      # bågens insida vid nocken
+    tn = C / math.sqrt(rin*rin - C*C)             # tan(taklutning vid nock)
+    yn_ply = S + YC + math.sqrt((R-.035)**2 - C*C)   # innerremsans ovansida vid nocken
+    yr = yn_ply + .0005 + .0225                  # 45x120 flatt i nockfacket
+    addbody(nk, boxb((0, 0, yr), (0, 1, 0), (1, 0, 0), L+.07, .120, .045), 'Nockregel 45x120', wood_a)
+    for s in (-1, 1):
+        cx = C + rr_c*math.cos(th_r)
+        cy = S + YC + rr_c*math.sin(th_r)
+        tx, ty = -math.sin(th_r), math.cos(th_r)
+        if s > 0:
+            cx, tx = -cx, -tx
+        addbody(nk, boxb((cx, 0, cy), (0, 1, 0), (tx, 0, ty), L+.07, .145, .034), 'Sidoregel 34x145', wood_a)
+
+    # ================= GAVLAR =================
+    gv = comp('Gavlar')
+    xs = xin(top+.035, R-RO) - .002               # gavelstagets ände mot bågen
+    for (ze, e) in ends:
+        zp = ze - e*.025
+        for s in (-1, 1):
+            beam(gv, 'Dorrstolpe 95x95', (s*DW, zp, S), (s*DW, zp, top+.05), .1, .1)
+            beam(gv, 'Gavelstag 70x70', (s*(DW+.05), ze, top), (s*xs, ze, top), .07, .07)
+        beam(gv, 'Overliggare dorr 95x95', (-(DW-.05), zp, DH), (DW-.05, zp, DH), .1, .1)
+        beam(gv, 'Overliggare overljus 95x95', (-(DW-.05), zp, top), (DW-.05, zp, top), .1, .1)
+        beam(gv, 'Nockstolpe 70x70', (0, ze, top+.05), (0, ze, ynin - .035*tn - .002), .07, .07)
+
+    # ================= BESLAG =================
+    bs = comp('Beslag')
+    for i, z in enumerate(zs):
+        endE = 1 if i == 0 else (-1 if i == N-1 else 0)
+        for side in (-1, 1):
+            xf = ap(0, side, R)[0]
+            for f in (-1, 1):
+                if f == endE:
+                    # gavelbågens utsida: spikplåt över bågfot och syllände (liv i liv)
+                    plat(bs, SPK, (xf, z+f*.036, S), (0, 0, 1), (1, 0, 0))
+                else:
+                    vinkel(bs, VB, (xf, z+f*.035, S), (0, 0, 1), (0, f, 0), .09, .09, .065)
+    for (ze, e) in ends:
+        zp = ze - e*.025
+        for s in (-1, 1):
+            # syllhörn, insida
+            vinkel(bs, VB, (s*(A-.06), ze-e*.085, .06), (-s, 0, 0), (0, -e, 0), .09, .09, .065)
+            # dörrstolpens fot, utsida
+            vinkel(bs, VB, (s*(DW+.05), zp, S), (0, 0, 1), (s, 0, 0), .09, .09, .065)
+            # överliggare mot stolpe, spikplåt båda sidor
+            for y in (DH, top):
+                for f in (-1, 1):
+                    plat(bs, SPK, (s*(DW-.05), zp+f*.051, y), (1, 0, 0), (0, 0, 1))
+            # gavelstag: vinkel under mot stolpe, spikplåtar mot bågen
+            vinkel(bs, VS, (s*(DW+.05), ze, top-.035), (0, 0, -1), (s, 0, 0), .06, .06, .04)
+            x0g, x1g = DW+.05, xs+.08
+            for f in (-1, 1):
+                plat(bs, SPK, (s*(x0g+x1g)/2, ze+f*.036, top), (1, 0, 0), (0, 0, 1), l=x1g-x0g)
+            # nockstolpens fot
+            vinkel(bs, VS, (s*.035, ze, top+.05), (0, 0, 1), (s, 0, 0), .06, .06, .04)
+        plat(bs, SPK, (0, ze+e*.036, ynin - .05), (0, 0, 1), (1, 0, 0))
+
+    # ================= DÖRRAR =================
+    dr = comp('Dorrar')
+    db = comp('Dorrbeslag')
+    lw = DW - .05
+    RAILS = (.045, .25, DH/2-.02, DH-.135)    # tvärslåar
+    HINGES = (.25, DH/2-.02, DH-.135)         # gångjärn (stolpen börjar på syllen, 120 mm upp)
+
+    def union(parts, name):
+        b0 = parts[0]
+        for q in parts[1:]:
+            tb.booleanOperation(b0, q, adsk.fusion.BooleanTypes.UnionBooleanType)
+        return addbody(db, b0, name, steel_a)
+    X, Y, Z = (1, 0, 0), (0, 1, 0), (0, 0, 1)
+    for (ze, e) in ends:
+        zp = ze - e*.025
+        zd = zp + e*.025                         # dörrbladets mitt: utsidan i liv med stolpens utsida
+        zo = zp + e*.05                          # utsida
+        zi = zp                                  # insida
+        for sg in (-1, 1):
+            def bx(w, h, x, y):
+                cx = -sg*lw + sg*x
+                addbody(dr, boxb((cx, zd, y), (1, 0, 0), (0, 1, 0), w, .05, h), 'Dorrblad', wood_a)
+            # T-gångjärn: band 300 på dörrens tvärslå, plåt på stolpens utsida, led vid kanten
+            xh = -sg*lw
+            for y in HINGES:
+                strap = boxb((xh + sg*.15, zo + e*.0015, y), X, Z, .30, .035, .003)
+                plate = boxb((xh - sg*.035, zo + e*.0015, y), X, Z, .07, .10, .003)
+                knuck = boxb((xh, zo + e*.007, y), Z, X, .10, .012, .012)
+                union([strap, plate, knuck], 'Gangjarn T 300')
+            if sg > 0:
+                # aktivt blad: D-handtag ute, överfall för hänglås, stormhake inne
+                xm = -.035
+                bar = boxb((xm, zo + e*.045, 1.05), Z, X, .16, .02, .02)
+                st1 = boxb((xm, zo + e*.02, 1.05 + .07), Z, X, .02, .02, .04)
+                st2 = boxb((xm, zo + e*.02, 1.05 - .07), Z, X, .02, .02, .04)
+                union([bar, st1, st2], 'Dorrhandtag D 160')
+                union([boxb((-.035, zo + e*.002, 1.25), X, Z, .09, .04, .004)], 'Overfall 115')
+                union([boxb((.028, zo + e*.016, 1.25), X, Z, .012, .025, .03)], 'Overfall ogla (hanglas)')
+                hook = boxb((-.005, zi - e*.012, 1.25), X, Z, .09, .008, .008)
+                eye1 = boxb((-.045, zi - e*.006, 1.25), Y, X, .012, .015, .015)
+                union([hook, eye1], 'Stormhake 100')
+                union([boxb((.05, zi - e*.006, 1.25), Y, X, .012, .015, .015)], 'Stormhake ogla')
+            else:
+                # passivt blad: kantreglar inne, upp i överliggaren och ner i marken
+                xm = .035
+                for (yb, yend) in ((DH - .25, DH - .051), (.25, .005)):
+                    body = boxb((xm, zi - e*.0015, yb), Z, X, .12, .03, .003)
+                    ya, yb2 = sorted((yb, yend))
+                    rod = boxb((xm, zi - e*.008, (ya+yb2)/2), Z, X, yb2-ya, .01, .01)
+                    union([body, rod], 'Kantregel 120')
+            bx(.07, DH-.11, .035, (DH-.05)/2)
+            bx(.07, DH-.11, lw-.035, (DH-.05)/2)
+            for y in RAILS:
+                bx(lw-.14, .07, lw/2, y)
+
+    # ================= FILM =================
+    fm = comp('Film')
+    Rf = R + RO + .004
+    skr = fm.sketches.add(fm.xZConstructionPlane)
+    curves = adsk.core.ObjectCollection.create()
+    for side in (-1, 1):
+        f0 = ap(0, side, Rf); fmid = ap(.5, side, Rf); f1 = ap(1, side, Rf)
+        curves.add(skr.sketchCurves.sketchArcs.addByThreePoints(
+            skr.modelToSketchSpace(P(f0[0], 0, f0[1])), skr.modelToSketchSpace(P(fmid[0], 0, fmid[1])),
+            skr.modelToSketchSpace(P(f1[0], 0, f1[1]))))
+    prof = fm.features.createPath(curves, False)
+    ei = fm.features.extrudeFeatures.createInput(prof, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
+    ei.isSolid = False
+    ei.setSymmetricExtent(adsk.core.ValueInput.createByReal((L+.1)*100), True)
+    for b in fm.features.extrudeFeatures.add(ei).bodies:
+        b.name = 'Takfilm'
+        b.appearance = film_a
+    skr.isVisible = False
+
+    skg = fm.sketches.add(fm.xZConstructionPlane)
+
+    def gp(x, y):
+        return skg.modelToSketchSpace(P(x, 0, y))
+    Rg = R + RO
+    for side in (-1, 1):
+        f0 = ap(0, side, Rg); fmid = ap(.5, side, Rg); f1 = ap(1, side, Rg)
+        skg.sketchCurves.sketchArcs.addByThreePoints(gp(*f0), gp(*fmid), gp(*f1))
+        ln = skg.sketchCurves.sketchLines
+        ln.addByTwoPoints(gp(*f0), gp(f0[0], 0))
+        ln.addByTwoPoints(gp(f0[0], 0), gp(side*lw, 0))
+        ln.addByTwoPoints(gp(side*lw, 0), gp(side*lw, DH-.05))
+    skg.sketchCurves.sketchLines.addByTwoPoints(gp(-lw, DH-.05), gp(lw, DH-.05))
+    ei = fm.features.extrudeFeatures.createInput(skg.profiles.item(0), adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
+    ei.setSymmetricExtent(adsk.core.ValueInput.createByReal(.1), True)
+    gb = fm.features.extrudeFeatures.add(ei).bodies.item(0)
+    for (ze, e) in ends:
+        m = adsk.core.Matrix3D.create()
+        m.translation = adsk.core.Vector3D.create(0, (ze+e*.045)*100, 0)
+        t = tb.copy(gb)
+        tb.transform(t, m)
+        addbody(fm, t, 'Gavelfilm', film_a)
+    gb.deleteMe()
+    skg.isVisible = False
+
+    app.activeViewport.fit()
+    print('R', round(R*1000), 'ARC', round(ARC*1000), 'N', N, 'dorr', DW*2, DH, 'overljus', TR)
+    for k in sorted(COUNT):
+        print(k, COUNT[k])
