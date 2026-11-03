@@ -1862,7 +1862,7 @@ const CX2 = {ex:['gorillaswing', 'axelkast', 'pullover', 'squatpressout', 'utfal
   e:{gorillaswing:{namn:'Gorillaswing', tips:['Lite bredare än axlarna – båda händerna på handtaget','Sätt dig ner i en djup knäböj medan klockan pendlar upp till axelhöjd','Res dig rak när den faller, fäll sedan i höften och svinga tillbaka mellan benen']},
      axelkast:{namn:'Knäböj + axelsving', tips:['Båda händerna på handtaget hela tiden – släpp aldrig','Från ena axeln: ner i en djup knäböj med klockan mellan fötterna','Res dig och svinga upp den över andra axeln – höger, vänster, höger…']},
      pullover:{namn:'Rotation + pullover', tips:['Klockan i hornen mot bröstet','Vrid hela kroppen 90° åt sidan – snurra på framfoten, bakre hälen lyfts – och tillbaka','Klockan upp över huvudet och ner bakom nacken, armbågarna pekar upp. Nästa rep vrider du åt andra hållet']},
-     squatpressout:{namn:'Knäböj + utpress', tips:['Klockan i hornen tätt mot bröstet','Sitt djupt och pressa klockan rakt fram i botten','Res dig och pressa den framåt-uppåt i huvudhöjd stående']},
+     squatpressout:{namn:'Knäböj + utpress', tips:['Klockan i hornen tätt mot bröstet','Sitt djupt och pressa klockan rakt fram – armarna raka, i brösthöjd','Dra tillbaka till bröstet och res dig']},
      utfallhalo:{namn:'Utfall + halo', tips:['Klockan i hornen mot bröstet','Kliv bakåt i ett djupt utfall – bakre knät nästan i golvet','Stanna nere och för klockan ett varv runt huvudet, res dig och byt ben']}}};
 function cxPassNr() { return localStorage.getItem('bc_traning_hpass') === '2' ? 2 : 1; }
 function cx2Plan() { return CX2.ex.map(id => ({id, e:{...CX2.e[id], unit:'sek'}, sets:CX2.v, reps:CX2.work, work:CX2.work, bell:'l', kg:S.bells.l + ' kg',
@@ -1974,7 +1974,7 @@ const WAMAP = {knaboj:'luftknaboj', knabojbank:'stolres', utfall0:'utfallkv', ha
 const EXDUR = [320, 200, 110, 110, 110, 110, 110, 240, 240, 240, 110, 110, 110, 110, 110, 200];
 const sprIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const d = en.target; d.vis = en.isIntersecting;
   if (d.vis && !d.style.backgroundImage) d.style.backgroundImage = `url(${d.dataset.src})`; if (d.vis && !RM) d.go(); }), {rootMargin:'200px'}) : null;
-const EXFILE = {hasse:{gorillaswing:'gorillaswing4', axelkast:'axelkast3', pullover:'pullover4', squatpressout:'squatpressout4', utfallhalo:'utfallhalo3'}};   // omgjorda ark får nytt filnamn (cache)
+const EXFILE = {hasse:{gorillaswing:'gorillaswing4', axelkast:'axelkast3', pullover:'pullover4', squatpressout:'squatpressout5', utfallhalo:'utfallhalo3'}};   // omgjorda ark får nytt filnamn (cache)
 function exFile(fid, id) { return (EXFILE[fid] && EXFILE[fid][id]) || id; }
 function exSprite(id, e) {
   const fid = SS && SS.cx && EXM.hasse && EXM.hasse[id] ? 'hasse' : localStorage.getItem('bc_traning_fighter') || 'kent', v = EXM[fid] && EXM[fid][id], w = Array.isArray(v) ? v[0] : v, hh = Array.isArray(v) ? v[1] : (EXM.h || 256);
