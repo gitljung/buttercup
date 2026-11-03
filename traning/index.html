@@ -1810,7 +1810,10 @@ const CX = {ex:['bojdrodd', 'swing', 'goblet', 'gobletpress'], reps:6, it:{norma
 function cxPlan() { const c = CX.it.normal;
   return CX.ex.map(id => { const x = exPlan(id, 1, CX.reps); if (id === 'goblet') x.e = {...x.e, namn:'Goblet-knäböj', tips:['Håll klockan i hornen tätt mot bröstet','Sitt ner mellan hälarna – bröstet upp, knäna ut','Res dig rakt upp och kläm rumpan i toppen']};
     return {...x, sets:c.v, reps:CX.reps, bell:'l', kg:S.bells.l + ' kg', target:CX.reps + ' reps', rest:c.rest, g:'kb', cx:true}; }); }
-CX.tempo = {bojdrodd:2.5, swing:2.5, goblet:3, gobletpress:3};   // sekunder per rep (reelens takt +1 s, Victor)
+CX.tempo = {bojdrodd:2, swing:2, goblet:2.5, gobletpress:2.5};   // sekunder per rep (reelens takt +0,5 s, Victor)
+// repens fas -> bildruta enligt spritens egen timing (håll i start/topp), så rörelsen följer klockan; topp = ruta 8
+let CXC = null; const cxCum = () => CXC || (CXC = (() => { const tot = EXDUR.reduce((a, b) => a + b, 0); let c = 0; return EXDUR.map(d => (c += d) / tot); })());
+const cxFrame = f => { const C = cxCum(); let i = 0; while (i < 15 && f >= C[i]) i++; return i; }, CXTOP = 8;
 let CXT = null;
 function cxStop() { if (CXT) { clearInterval(CXT.iv); CXT = null; } }
 function cxTimer(st, box) {
@@ -1820,7 +1823,7 @@ function cxTimer(st, box) {
   const big = box.querySelector('.cxn'), lab = box.querySelector('.cxl'), bar = box.querySelector('.cxbar i'), pb = box.querySelector('.cxpause');
   const pips = box.querySelectorAll('.cxpips i'), spr = box.closest('.cxwrap').querySelector('.stage .exspr');
   if (spr) spr.ext = true;
-  const frame = f => { if (spr) spr.style.backgroundPosition = `${Math.min(15, Math.floor(f * 16)) * 100 / 15}% 0`; };
+  const frame = f => { if (spr) spr.style.backgroundPosition = `${cxFrame(f) * 100 / 15}% 0`; };
   const draw = () => {
     if (T.t < 0) { box.classList.add('prep'); big.textContent = Math.ceil(-T.t / 1000);
       lab.textContent = st.xi === 0 ? `Varv ${st.s} – gör dig redo` : `Nästa: ${x.e.namn} – gör dig redo`; bar.style.width = (100 * (1 + T.t / prep)) + '%'; frame(0); return; }
@@ -1836,10 +1839,12 @@ function cxTimer(st, box) {
     const before = T.t; T.t += dt;
     if (prep === 5000 && before < -1350 && T.t >= -1350) korVi();
     if (before < 0 && T.t >= 0) { beep(); if (navigator.vibrate) navigator.vibrate(80); }
-    if (T.t >= 0) { const r = Math.floor(T.t / T.per); if (r > T.rep && r < n) { T.rep = r; blip(600, 900, .06); if (navigator.vibrate) navigator.vibrate(30); } }
+    if (T.t >= 0) { const r = Math.floor(T.t / T.per); if (r > T.rep && r < n) { T.rep = r; blip(600, 900, .06); if (navigator.vibrate) navigator.vibrate(30); }
+      const ph0 = before < 0 ? -1 : (before % T.per) / T.per, ph = (T.t % T.per) / T.per, top = cxCum()[CXTOP - 1];
+      if (ph0 < top && ph >= top && Math.floor(before / T.per) === Math.floor(T.t / T.per)) blip(420, 300, .05); }
     if (T.t >= n * T.per) { cxStop(); box.closest('.cxwrap').querySelector('#nx').click(); return; }
     draw();
-  }, 80);
+  }, 33);
   box.querySelector('.cxpep').onclick = e => { pepp(); const st = box.closest('.cxwrap').querySelector('.stage');
     const bub = document.createElement('span'); bub.className = 'pepbub'; bub.textContent = 'Hallå gänget!'; st.appendChild(bub); setTimeout(() => bub.remove(), 1600);
     e.currentTarget.animate([{transform:'scale(1)'}, {transform:'scale(1.12) rotate(-3deg)'}, {transform:'scale(1)'}], {duration:300}); };
