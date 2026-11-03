@@ -46,3 +46,9 @@ Utnyttjande snö / vind / lyft (max):
 - 230 djup, 2×15, c/c 150 (25/halvbåge): 0,31 / 1,61 / 1,47 (+ hanbjälke 0,31 / 1,17 / 1,33)
 - Slutsats: c/c 200 är optimum – tätare ger nästan inget. Lika bra som limmad låda (1,21/1,35).
 - Nock 2,8 / 2,4 m: resultaten hoppar (numeriskt instabil knäckningslösning) – ej redovisade. Film 4,5 m låser nocken till ≈ 3,5 m ändå.
+
+## Jämförelse Norhage (monteringsanvisningar + produktsidor, 2026-11-03)
+- TRÄ500 5×10 m: gotisk stegbåge (2 böjda lameller + många klossar, "kryssfanerbågar"), h 3,2 m, c/c 1,0 m, nock: skarvplåt båda sidor, kanalplast 6/10/16 mm skruvad c/c 30–40 cm. Klassad 280 kg/m² snö, 25 m/s vind.
+- TRÄ300 3×4 m: samma princip, 45×70-virke. Tunnel 300: 150 kg/m², 20 m/s. Premium Tunnel (stål): 360 kg/m², 30 m/s.
+- Vindklassningarna i m/s motsvarar q = ½ρv²: 20 → 0,25, 25 → 0,39, 30 → 0,56 kN/m². Vår dimensionering: qp 0,99 (terräng I) / 0,79 (II) = 50-årsbyen.
+- Skalat till Norhages nivåer (vind är dimensionerande): 230 djup, 2×15, klossar c/c 200 + hanbjälke → ≈ 0,5 (25 m/s) / ≈ 0,7 (30 m/s).
