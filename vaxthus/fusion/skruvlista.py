@@ -5,13 +5,18 @@ Antal kroppar och längder kommer från modellen, så listan följer parametrarn
 import json, math, os, collections
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-A = json.load(open(os.path.join(HERE, 'v09_antal.json')))
+_f = 'v11_antal.json' if os.path.exists(os.path.join(HERE, 'v11_antal.json')) else 'v09_antal.json'
+A = json.load(open(os.path.join(HERE, _f)))
 P, LG, N = A['parametrar'], A['lasprofil_mm'], A['antal']
 SPILL = 1.10   # +10 % spill/tapp
 
 # skruvsorter
 S = {
     'T40':   'Träskruv 4,0×40 C4 (plywood mot kloss)',
+    'T30L':  'Träskruv 4,0×30 C4 eller klammer (presskruv när lamellerna limmas)',
+    'T95':   'Träskruv 5,0×90 C4 (fläns + kloss genomgående)',
+    'T50':   'Träskruv 4,0×50 C4 (fläns mot sidoregel 22×95)',
+    'TS':    'Takskruv 4,8×50 med EPDM-bricka (nockplåt)',
     'T60':   'Träskruv 4,5×60 C4 (lask + remsa mot kloss)',
     'T25':   'Träskruv 4,0×25 C4 (lask mot remsa utanför klossen)',
     'T45':   'Träskruv 4,5×45 C4 (remsa mot sidoregel)',
@@ -48,14 +53,23 @@ halv = hb.get('förekomster', 0); kb = hb.get('kroppar', {})
 vanl = kb.get('Kloss', 0) + kb.get('Fotkloss', 0) + kb.get('Nockkloss', 0)       # 120 långa
 fack = kb.get('Fackkloss', 0)                                                     # 250 långa
 lask = sum(v for k, v in kb.items() if k.startswith('Lask'))
-# varje kloss har två plywoodsidor (ytter + inner). Vanlig kloss 4 skruv/sida, fackkloss 6/sida.
-# de sidor som täcks av lasken (1 fackkloss per lask) tar längre skruv.
-R('Bågar: remsa mot vanlig kloss (4/sida × 2 sidor)', 'T40', halv * vanl * 4 * 2, f'{halv} halvbågar × {vanl} klossar')
-R('Bågar: remsa mot fackkloss, sida utan lask (6)', 'T40', halv * (fack * 2 - lask) * 6, f'{halv} × {fack * 2 - lask} sidor')
-R('Bågar: lask + remsa mot fackkloss (6)', 'T60', halv * lask * 6, f'{halv} × {lask} laskar')
-R('Bågar: lask mot remsa utanför klossen (2 per ände)', 'T25', halv * lask * 4, 'lim också')
-nb = int(P['AntalBagar'])
-R('Sidoregel genom ytter- och innerremsa (2 + 2 per båge och sida)', 'T45', nb * 2 * 4, f'{nb} bågar × 2 sidor')
+# Båge B: flänsar Lameller × LamellT limmade (PU). Klossar limmas + skruvas genomgående 5×90 (fläns 36 + kloss 24 + 30 in i andra flänsen).
+lam = int(P.get('Lameller', 1)); BL = P['BagLangd']
+if lam > 1:
+    R('Lameller: presskruv vid limning (1 rad sicksack c/c 150, per lager utöver det första, 2 flänsar)', 'T30L', halv * 2 * (lam - 1) * BL / 150, f'{halv} halvbågar, {lam} lager')
+    R('Vanlig kloss: 2 genomgående från varje sida (+ PU-lim)', 'T95', halv * vanl * 4, f'{halv} × {vanl} klossar')
+    R('Fackkloss: 3 genomgående från varje sida (+ PU-lim)', 'T95', halv * fack * 6, f'{halv} × {fack} fackklossar')
+    R('Lask över skarv (4 per lask)', 'T25', halv * lask * 4, 'skarvarna förskjuts mellan lagren – lasken kan utgå')
+    nb = int(P['AntalBagar'])
+    R('Sidoregel 22×95 genom ytter- och innerfläns (2 + 2 per båge och sida)', 'T50', nb * 2 * 4, f'{nb} bågar × 2 sidor')
+    R('Nockplåt mot bågarna (1 per sida och båge)', 'TS', nb * 2, f'{nb} bågar')
+else:
+    R('Bågar: remsa mot vanlig kloss (4/sida × 2 sidor)', 'T40', halv * vanl * 4 * 2, f'{halv} halvbågar × {vanl} klossar')
+    R('Bågar: remsa mot fackkloss, sida utan lask (6)', 'T40', halv * (fack * 2 - lask) * 6, f'{halv} × {fack * 2 - lask} sidor')
+    R('Bågar: lask + remsa mot fackkloss (6)', 'T60', halv * lask * 6, f'{halv} × {lask} laskar')
+    R('Bågar: lask mot remsa utanför klossen (2 per ände)', 'T25', halv * lask * 4, 'lim också')
+    nb = int(P['AntalBagar'])
+    R('Sidoregel genom ytter- och innerremsa (2 + 2 per båge och sida)', 'T45', nb * 2 * 4, f'{nb} bågar × 2 sidor')
 
 # --- beslag ---
 vink = n('Vinklar bågfot') + n('Vinklar nock') + n('Syllbeslag') + n('Gavelbeslag', 'Stolpfotsvinkel')

@@ -41,3 +41,5 @@ Projekt `vaxthus`, master "Växthus - parametrar". Gammal DirectDesign-modell i 
 - 2026-11-03 Victor: B. 3x12 lameller, bredd 95, KlossH 2xLamellT (djup 96), KlossCCmax 450 (11 klossar/halva), sidoregel 22x95. Beräknat 20 m/s: 0,75/0,66/0,67. v10b_bagB.py KÖAD.
 - 2026-11-03 Steg 10b KLAR: 473 kroppar, 0 fel/krock, flex OK (667, 13 bågar), återställt identiskt. Fläns ritas som en kropp 36 mm (lameller ej separata).
 - 2026-11-03 Victor: rita klart allt (sover). Hanbjälke ej (20 m/s utan: 0,87). v11_nock.py (nockprofil + nockplåt + antal + STEP) KÖAD.
+- 2026-11-03 v11 försök 1 FEL: combine av speglad nockplåt (invalid argument). Rättat: båda halvorna i samma skiss, ett extrude. Försök 2 KÖAD.
+- 2026-11-03 Steg 11 KLAR (försök 2): nockprofil + nockplåt 300×0,6. 475 kroppar, 0 fel/krock, flex OK (669), återställt identiskt, sparad. STEP: fusion/export/Vaxthus.step (2,3 MB). v11c_lista.py (läsande kroppsdump) KÖAD.

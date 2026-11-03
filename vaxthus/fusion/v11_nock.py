@@ -11,7 +11,7 @@ NYA11 = [
 ]
 
 
-def band_x(D, comp, rin, rout, xexpr, name):
+def band_x(D, comp, rin, rout, xexpr, name, full=False):
     """bågband (höger halva) mellan radierna rin och rout (uttryck), från x = 0 (nocken) till x = xexpr"""
     ev = D.ev
     R = ev('BagR'); cx = -ev('BagCx'); cz = ev('BagCz'); SH = ev('SyllH')
@@ -43,8 +43,16 @@ def band_x(D, comp, rin, rout, xexpr, name):
     along(sk, L0, 'z'); along(sk, LX, 'z')
     gc.addCoincident(L0.startSketchPoint, zax)
     dimx(sk, o, LX.startSketchPoint, 'x', xexpr, (X / 2, 0, zx(r1, X) - 60))
-    log(name, 'låst', sk.isFullyConstrained, free_report(sk)[:6])
+    if full:   # vänster halva i samma skiss: speglade ändpunkter, bågar med samma radier -> ett extrude = en kropp
+        LXm = LS.addByTwoPoints(Q((-X, 0, zx(r1, X))), Q((-X, 0, zx(r2, X))))
+        gc.addSymmetry(LXm.startSketchPoint, LX.startSketchPoint, zax); gc.addSymmetry(LXm.endSketchPoint, LX.endSketchPoint, zax)
+        for r, p0, p1 in ((r1, L0.startSketchPoint, LXm.startSketchPoint), (r2, L0.endSketchPoint, LXm.endSketchPoint)):
+            xm = X / 2
+            ar = sk.sketchCurves.sketchArcs.addByThreePoints(p0, Q((-xm, 0, zx(r, xm))), p1)
+            sk.sketchDimensions.addRadialDimension(ar, Q((-xm * 0.8, 0, zx(r, xm) - 30))).parameter.expression = rin if r == r1 else rout
+    log(name, 'låst', sk.isFullyConstrained, free_report(sk)[:6], 'profiler', sk.profiles.count)
     if not sk.isFullyConstrained: raise Exception('ej låst: ' + name)
+    if full: return coll([sk.profiles.item(i) for i in range(sk.profiles.count)])
     return min([sk.profiles.item(i) for i in range(sk.profiles.count)], key=lambda p: p.areaProperties().area)
 
 
@@ -66,13 +74,8 @@ def bygg_nock(des, comp):
     pb.appearance = appearance(des, 'Aluminium (låsprofil)', 'Paint - Metallic (Silver)', (190, 194, 198))
     # 2. nockplåt (höger halva + spegling, sammanfogad)
     r0 = 'BagR + BagDjup / 2 + ProfilH + NockPlatSpel'
-    f = D.ext(band_x(D, comp, r0, r0 + ' + NockPlatT', 'NockPlatB / 2', 'Skiss Nockplåt'), 'y', 'BagB / 2', 'Langd + BagB', -bb2, 'Nockplåt höger')
-    ph = f.bodies.item(0); ph.name = 'Nockplåt'
-    pv = mirror(comp, [ph], comp.yZConstructionPlane, 'Nockplåt vänster (spegling)')
-    cf = comp.features.combineFeatures
-    ci = cf.createInput(ph, coll(pv)); ci.operation = JOIN
-    c = cf.add(ci); c.name = 'Nockplåt sammanfogad'
-    nb = [b for b in comp.bRepBodies if b.name.startswith('Nockplåt')]
+    f = D.ext(band_x(D, comp, r0, r0 + ' + NockPlatT', 'NockPlatB / 2', 'Skiss Nockplåt', full=True), 'y', 'BagB / 2', 'Langd + BagB', -bb2, 'Nockplåt')
+    nb = [b for b in comp.bRepBodies if b != pb]
     log('nockplåt kroppar', len(nb), [bbmm(b) for b in nb])
     if len(nb) != 1: raise Exception('nockplåten blev inte en kropp')
     nb[0].name = 'Nockplåt'
