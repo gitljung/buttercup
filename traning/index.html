@@ -1432,7 +1432,13 @@ document.querySelectorAll('.bell .pm button').forEach(b => b.onclick = () => {
 $('#go-prog').onclick = () => { save(); renderProg(); show('s-prog'); };
 $('#lib-back').onclick = () => goBack(); $('#go-lib0').onclick = () => openLib(); const HEJ = Array.from({length:7}, (_, i) => `hasse/hej${i + 1}.mp3`); let hejLast = -1, hejAu = null;
 let hsLast = {src:'', t:0};
-function hsay(src) { const now = Date.now(); if (hsLast.src === src && now - hsLast.t < 2000) return; hsLast = {src, t:now}; try { if (hejAu) hejAu.pause(); hejAu = new Audio(src); hejAu.play().catch(() => {}); } catch (_) {} }
+let VIBE = null, VFT = null;
+function vibeVol(v, ms = 600) { if (!VIBE) return; clearInterval(VFT); const a = VIBE, v0 = a.volume, t0 = performance.now();
+  VFT = setInterval(() => { const k = Math.min(1, (performance.now() - t0) / ms); a.volume = Math.max(0, Math.min(1, v0 + (v - v0) * k)); if (k >= 1) { clearInterval(VFT); if (v === 0) { a.pause(); if (VIBE === a) VIBE = null; } } }, 40); }
+function vibeOn() { vibeOff(0); try { VIBE = new Audio('hasse/vibe.mp3'); VIBE.volume = 0; VIBE.play().catch(() => {}); vibeVol(.5, 1500); } catch (_) {} }
+function vibeOff(ms = 900) { if (!VIBE) return; VIBE.fading = true; if (!ms) { clearInterval(VFT); VIBE.pause(); VIBE = null; } else vibeVol(0, ms); }
+function hsay(src) { const now = Date.now(); if (hsLast.src === src && now - hsLast.t < 2000) return; hsLast = {src, t:now};
+  try { if (hejAu) hejAu.pause(); hejAu = new Audio(src); if (VIBE) { vibeVol(.16, 250); const me = hejAu, up = () => { if (hejAu === me && VIBE && !VIBE.fading) vibeVol(.5, 800); }; me.onended = up; setTimeout(up, 3200); } hejAu.play().catch(() => {}); } catch (_) {} }
 function tempel(v) { hsay(`hasse/tempel${v % 2 ? 1 : 2}.mp3`); }
 function korVi() { hsay('hasse/korvi.mp3'); }
 let RDT = null;
@@ -1442,7 +1448,7 @@ function hasseDans(on) { const r = $('#rest'), d = $('#rdance .spr'); clearInter
 function pepp() { hallaGanget(); if (navigator.vibrate) navigator.vibrate([40, 40, 40]); }
 function hallaGanget() { let i; do i = Math.floor(Math.random() * HEJ.length); while (i === hejLast && HEJ.length > 1); hejLast = i;
   try { if (hejAu) hejAu.pause(); hejAu = new Audio(HEJ[i]); hejAu.volume = 1; hejAu.play().catch(() => {}); } catch (_) {} }
-$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); new Image().src = 'ex/hasse/dans3.webp'; CX.ex.forEach(k => { new Image().src = `ex/hasse/${k}.webp`; });
+$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); new Image().src = 'ex/hasse/dans3.webp'; new Audio('hasse/vibe.mp3').load(); CX.ex.forEach(k => { new Image().src = `ex/hasse/${k}.webp`; });
   b.classList.add('talk'); setTimeout(() => { b.classList.remove('talk'); delete b.dataset.busy; useGear('kb'); if (!S) S = fresh(); startComplex(); }, 1500); }; $('#lib-go').onclick = () => startFree();
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#sheet').classList.remove('on'); });
 
@@ -1578,7 +1584,7 @@ function renderStep() {
     $('#nx').onclick = () => {
       const d = body.querySelectorAll('.dots i')[st.s - 1]; if (d) d.classList.add('done');
       const nxt = SS.steps[SS.i + 1];
-      if (st.cx) { if (nxt && nxt.type === 'set' && nxt.s !== st.s) startRest(x.rest, `Nästa: varv ${nxt.s} av ${x.sets} · ${nxt.x.e.namn}`, [{at:x.rest - 6, fn:() => hasseDans(true)}, {at:x.rest / 2 + 1, fn:() => tempel(st.s)}, {at:5, fn:() => hasseDans(false)}, {at:1.3, fn:korVi}]); else next(); return; }
+      if (st.cx) { cxStop(); if (nxt && nxt.type === 'set' && nxt.s !== st.s) startRest(x.rest, `Nästa: varv ${nxt.s} av ${x.sets} · ${nxt.x.e.namn}`, [{at:x.rest - .1, fn:vibeOn}, {at:x.rest - 6, fn:() => hasseDans(true)}, {at:2.6, fn:() => vibeOff(1200)}, {at:x.rest / 2 + 1, fn:() => tempel(st.s)}, {at:5, fn:() => hasseDans(false)}, {at:1.3, fn:korVi}]); else next(); return; }
       if (nxt && nxt.type === 'set') startRest(x.rest, nxt.x === x ? `Nästa: set ${nxt.s} av ${x.sets}` : `Nästa: ${nxt.x.e.namn} · ${nxt.x.kg}`);
       else next();
     };
@@ -1613,7 +1619,7 @@ function startRest(sec, txt, cues) {
     if (left <= 0) { clearInterval(R.iv); beep(); if (navigator.vibrate) navigator.vibrate([120, 60, 120]); next(); }
   }, 100);
 }
-function stopRest() { hasseDans(false); if (RT) clearInterval(RT.iv); RT = null; $('#rest').classList.remove('on'); }
+function stopRest() { hasseDans(false); vibeOff(300); if (RT) clearInterval(RT.iv); RT = null; $('#rest').classList.remove('on'); }
 $('#rest-skip').onclick = next;
 $('#rest-add').onclick = () => { if (RT) { RT.end += 15000; RT.total += 15000; } };
 let AC = null;
