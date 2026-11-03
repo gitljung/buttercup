@@ -1480,7 +1480,7 @@ function pepp() { hallaGanget(); if (navigator.vibrate) navigator.vibrate([40, 4
 function hallaGanget() { let i; do i = Math.floor(Math.random() * HEJ.length); while (i === hejLast && HEJ.length > 1); hejLast = i;
   try { if (hejAu) hejAu.pause(); hejAu = new Audio(HEJ[i]); hejAu.volume = 1; hejAu.play().catch(() => {}); } catch (_) {} }
 const HPTXT = {1:['Kom igång direkt · 1 kettlebell · ca 13 min', 'Rodd → swing → knäböj → press. 6 reps var, rakt igenom. 10 varv, 30 s vila. Timern räknar – du bara kör.'],
-  2:['Kom igång direkt · 1 kettlebell · ca 15 min', 'Gorillaswing → axelsving → pullover → utpress → halo-utfall. 30 s jobb, 30 s vila. 3 varv.']};
+  2:['Kom igång direkt · 1 kettlebell · ca 15 min', 'Gorillaswing → axelsving → vändning + pullover → utpress → utfall + halo. 30 s jobb, 30 s vila. 3 varv.']};
 function hpSel(nr) { if (nr) localStorage.setItem('bc_halsoresa_hpass', nr); const p = cxPassNr();
   document.querySelectorAll('.hsel button').forEach(b => { const on = +b.dataset.p === p; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
   $('#hp-lbl').textContent = HPTXT[p][0]; $('#go-hasse b').textContent = p === 2 ? 'Hasses superpass 2' : 'Hasses superpass'; $('#hp-txt').textContent = HPTXT[p][1]; }
@@ -1541,7 +1541,7 @@ function renderProg() {
     b.onclick = () => { hpSel(1); startComplex(1); }; pl.appendChild(b);
     const b2 = document.createElement('button'); b2.className = 'passcard cxcard';
     b2.innerHTML = `<span class="ltr">⚡</span><span><h3>Hasses superpass 2<span class="tag">Extra</span></h3>
-      <p>Gorillaswing → Axelsving → Pullover → Utpress → Halo-utfall</p><p class="lbl" style="margin-top:4px">1 lätt klocka · 30 s jobb / 30 s vila · 3 varv · ca 15 min</p></span>`;
+      <p>Gorillaswing → Axelsving → Vändning + pullover → Utpress → Utfall + halo</p><p class="lbl" style="margin-top:4px">1 lätt klocka · 30 s jobb / 30 s vila · 3 varv · ca 15 min</p></span>`;
     b2.onclick = () => { hpSel(2); startComplex(2); }; pl.appendChild(b2); }
 }
 
@@ -1855,13 +1855,13 @@ function cxPlan() { const c = CX.it.normal;
 CX.tempo = {bojdrodd:2, swing:2, goblet:2.5, gobletpress:2.5};
 // Hasses pass 2: tidsstyrt 30/30 – 3 varv × 5 övningar, 30 s arbete + 30 s vila efter varje övning
 const CX2 = {ex:['gorillaswing', 'axelkast', 'pullover', 'squatpressout', 'utfallhalo'], v:3, work:30, rest:30,
-  alt:{axelkast:'mirror', utfallhalo:'mirror', pullover:'rev'},   // sidbyte varje rep: speglas resp. spelas baklänges varannan rep
-  tempo:{gorillaswing:2, axelkast:3, pullover:4, squatpressout:3, utfallhalo:4},
-  e:{gorillaswing:{namn:'Gorillaswing', tips:['Brett och djupt i knäna – bröstet upp, platt rygg','Klockan pendlar mellan fötterna och upp till bröstet med raka armar','Kraften kommer från höfterna, inte armarna']},
-     axelkast:{namn:'Knäböj + axelsving', tips:['Båda händerna på handtaget hela tiden – släpp aldrig','Sitt ner med klockan mellan knäna, res dig och för den över axeln','Byt axel varje rep – höger, vänster, höger…']},
-     pullover:{namn:'Pullover + rotation', tips:['Håll klockan i hornen','Från ena höften – upp över huvudet och ner bakom nacken – till andra höften','Vrid ordentligt åt sidan och lyft bakre hälen, varannan rep åt varje håll']},
-     squatpressout:{namn:'Knäböj + utpress', tips:['Klockan i hornen tätt mot bröstet','Sitt djupt – pressa klockan rakt fram i botten','Dra tillbaka till bröstet och res dig']},
-     utfallhalo:{namn:'Halo + utfall', tips:['Klockan i hornen, för den runt huvudet tätt intill','Kliv bakåt i ett utfall – bakre knät nästan i golvet','Byt ben varje rep, överkroppen rak']}}};
+  alt:{axelkast:'mirror', utfallhalo:'mirror', pullover:'mirror'},   // sidbyte varje rep: speglas resp. spelas baklänges varannan rep
+  tempo:{gorillaswing:2, axelkast:3, pullover:4.5, squatpressout:4, utfallhalo:4},
+  e:{gorillaswing:{namn:'Gorillaswing', tips:['Brett mellan fötterna, tårna utåt – båda händerna på handtaget','I botten: höga höfter, platt rygg, klockan mellan benen','Sätt dig ner i en djup bred knäböj medan klockan pendlar upp till axelhöjd']},
+     axelkast:{namn:'Knäböj + axelsving', tips:['Båda händerna på handtaget hela tiden – släpp aldrig','Från ena axeln: ner i en djup knäböj med klockan mellan fötterna','Res dig och svinga upp den över andra axeln – höger, vänster, höger…']},
+     pullover:{namn:'Vändning + pullover', tips:['Klockan i hornen mot bröstet','Vänd hela kroppen ett varv med små steg på stället','Klockan upp över huvudet och ner bakom nacken – armbågarna pekar upp. Vänd åt andra hållet nästa rep']},
+     squatpressout:{namn:'Knäböj + utpress', tips:['Klockan i hornen tätt mot bröstet','Sitt djupt och pressa klockan rakt fram i botten','Res dig och pressa den framåt-uppåt i huvudhöjd stående']},
+     utfallhalo:{namn:'Utfall + halo', tips:['Klockan i hornen mot bröstet','Kliv bakåt i ett djupt utfall – bakre knät nästan i golvet','Stanna nere och för klockan ett varv runt huvudet, res dig och byt ben']}}};
 function cxPassNr() { return localStorage.getItem('bc_halsoresa_hpass') === '2' ? 2 : 1; }
 function cx2Plan() { return CX2.ex.map(id => ({id, e:{...CX2.e[id], unit:'sek'}, sets:CX2.v, reps:CX2.work, work:CX2.work, bell:'l', kg:S.bells.l + ' kg',
   target:CX2.work + ' s jobb · ' + CX2.rest + ' s vila', rest:CX2.rest, g:'kb', cx:true})); }
@@ -1972,7 +1972,7 @@ const WAMAP = {knaboj:'luftknaboj', knabojbank:'stolres', utfall0:'utfallkv', ha
 const EXDUR = [320, 200, 110, 110, 110, 110, 110, 240, 240, 240, 110, 110, 110, 110, 110, 200];
 const sprIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const d = en.target; d.vis = en.isIntersecting;
   if (d.vis && !d.style.backgroundImage) d.style.backgroundImage = `url(${d.dataset.src})`; if (d.vis && !RM) d.go(); }), {rootMargin:'200px'}) : null;
-const EXFILE = {hasse:{pullover:'pullover2'}};   // omgjorda ark får nytt filnamn (cache)
+const EXFILE = {hasse:{gorillaswing:'gorillaswing3', axelkast:'axelkast3', pullover:'pullover3', squatpressout:'squatpressout3', utfallhalo:'utfallhalo3'}};   // omgjorda ark får nytt filnamn (cache)
 function exFile(fid, id) { return (EXFILE[fid] && EXFILE[fid][id]) || id; }
 function exSprite(id, e) {
   const fid = SS && SS.cx && EXM.hasse && EXM.hasse[id] ? 'hasse' : localStorage.getItem('bc_halsoresa_fighter') || 'kent', v = EXM[fid] && EXM[fid][id], w = Array.isArray(v) ? v[0] : v, hh = Array.isArray(v) ? v[1] : (EXM.h || 256);
