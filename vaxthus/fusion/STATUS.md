@@ -31,3 +31,5 @@ Projekt `vaxthus`, master "Växthus - parametrar". Gammal DirectDesign-modell i 
 - 2026-11-03 v09 försök 2: 4 krockar gavelbågsprofil mot ytterlask. Ändrat: gavelbågens profil på bågens gavelsida (y=-BagB/2), yttre kant, från SyllH+VinkelA. Försök 3 KÖAD.
 - 2026-11-03 Steg 7a KLAR (försök 3): Låsprofiler 16 st, 53,0 m (gavelbåge 4x4086 på gavelsidan, långsida 2x10310, dörrstolpe 4x2095, överliggare 2x2126, gavelsyll 4x848). 437 kroppar, 0 fel/krock, flex OK, sparad. skruvlista.py -> SKRUVLISTA.md (ur v09_antal.json).
 - 2026-11-03 Victor: belastningsberäkning. berakning/ (FEM stegbåge, EKS/EN1991, Båstad sk1,5 vb27): nuvarande båge underkänd (snö ~7x, vind instabil). Varianter i BERAKNING.md. Väntar beslut.
+- 2026-11-03 Hugo: film 4,5 m bred -> en våd per sida (halvbåge ytter 4,20 m nu / 4,31 m vid 230 djup) + plåt i nocken. Låsprofil längs nocken per sida under plåten (ej ritat än).
+- 2026-11-03 Victor: filmbredden bestämmer nockhöjd (4,5 m -> ≈3,5 m). Svep klossar: 230 djup 2x15, klossar c/c 200 + hanbjälke = 0,35/1,21/1,35 (Eurocode 50 år), ≈ OK med EN 13031-1. Väntar beslut.

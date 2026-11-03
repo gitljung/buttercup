@@ -37,3 +37,12 @@ Utnyttjandegrad (≤ 1,0 = OK):
 - Längsled: vind mot gaveln ≈ 11 kN (kar.) per gavel → vindkryss behövs i ändfacken (finns inte i modellen).
 - Bruksgräns (kar.): snö osymm ≈ 55 mm, vind ≈ 370 mm deformation (nuvarande båge).
 - Med växthusstandarden EN 13031-1 (kortare livslängd, lägre klass) kan vind- och snölast sänkas ca 30–40 % – vind fäller ändå nuvarande båge med stor marginal.
+
+## Svep klossar (stegbåge utan sidoskivor, fyllt sidoregelfack), nock 3,5 m – svep_klossar.py
+Utnyttjande snö / vind / lyft (max):
+- 160 djup, 15 remsa, klossar c/c 150 + hanbjälke: 0,85 / 3,11 / 3,48
+- 230 djup, 2×15 remsa, c/c 300: 0,53 / 1,86 / 1,76 (+ hanbjälke 0,47 / 1,39 / 1,60)
+- 230 djup, 2×15, c/c 200 (20 klossar/halvbåge): 0,33 / 1,65 / 1,50 (+ hanbjälke 0,35 / 1,21 / 1,35)
+- 230 djup, 2×15, c/c 150 (25/halvbåge): 0,31 / 1,61 / 1,47 (+ hanbjälke 0,31 / 1,17 / 1,33)
+- Slutsats: c/c 200 är optimum – tätare ger nästan inget. Lika bra som limmad låda (1,21/1,35).
+- Nock 2,8 / 2,4 m: resultaten hoppar (numeriskt instabil knäckningslösning) – ej redovisade. Film 4,5 m låser nocken till ≈ 3,5 m ändå.
