@@ -102,7 +102,7 @@ tA = tN * 0.55; xA = -BagCx + (R + D / 2) * math.cos(tA); zA = BagCz + (R + D / 
 leader(X(xA), Y(zA), X(xA) + 120, Y(zA) - 70, 'Lådbåge 230 djup\n(se sektion A–A)', '1')
 leader(X(xi * 0.4), Y(ZH), X(xi * 0.4) + 40, Y(ZH) + 120, 'Hanbjälke 45×120 på 2,0 m\n2 × M10 genom båge', '2')
 leader(X(250), Y(Nockhojd - 150), X(700), Y(Nockhojd - 330), 'Nock: halvorna stöts mot varandra,\nlask 12 mm plywood på båda sidor\n(limmad + skruv) = stel nock', '3')
-leader(X(HB), Y(SyllH + 40), X(HB) + 60, Y(SyllH + 420), 'Bågfot på bredare syll\n2 × 120×120 (detalj 4)', '4')
+leader(X(HB - 100), Y(SyllH + 60), X(HB - 330), Y(SyllH + 520), 'Bågfot på bredare syll\n2 × 120×120 (detalj 4)', '4', anchor='end')
 leader(X(0), Y(Nockhojd - D / 2 - 60), X(0) - 120, Y(Nockhojd - D / 2) + 120, 'Nockregel 45×120 flyttas\nunder krönet (vinklar)', None, anchor='end', col=INK)
 line(X(1720), Y(1150), X(2200), Y(1250), RED, 2, '10 6'); txt(X(2210), Y(1260), 'A', 22, w='bold', col=RED)
 

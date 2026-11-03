@@ -115,12 +115,12 @@
 <text x="865.0" y="287.9" font-family="Barlow, Helvetica, Arial" font-size="19" font-weight="normal" fill="#1d1d1b" stroke="white" stroke-width="5" stroke-linejoin="round" paint-order="stroke" text-anchor="start">Nock: halvorna stöts mot varandra,</text>
 <text x="865.0" y="311.9" font-family="Barlow, Helvetica, Arial" font-size="19" font-weight="normal" fill="#1d1d1b" stroke="white" stroke-width="5" stroke-linejoin="round" paint-order="stroke" text-anchor="start">lask 12 mm plywood på båda sidor</text>
 <text x="865.0" y="335.9" font-family="Barlow, Helvetica, Arial" font-size="19" font-weight="normal" fill="#1d1d1b" stroke="white" stroke-width="5" stroke-linejoin="round" paint-order="stroke" text-anchor="start">(limmad + skruv) = stel nock</text>
-<line x1="1120.0" y1="973.2" x2="1180.0" y2="885.8" stroke="#c8321a" stroke-width="1.6"/>
-<circle cx="1120.0" cy="973.2" r="3.5" fill="#c8321a"/>
-<circle cx="1198.0" cy="885.8" r="17" fill="white" stroke="#c8321a" stroke-width="2.5"/>
-<text x="1198.0" y="892.8" font-family="Barlow, Helvetica, Arial" font-size="20" font-weight="bold" fill="#c8321a" stroke="white" stroke-width="5" stroke-linejoin="round" paint-order="stroke" text-anchor="middle">4</text>
-<text x="1224.0" y="892.8" font-family="Barlow, Helvetica, Arial" font-size="19" font-weight="normal" fill="#1d1d1b" stroke="white" stroke-width="5" stroke-linejoin="round" paint-order="stroke" text-anchor="start">Bågfot på bredare syll</text>
-<text x="1224.0" y="916.8" font-family="Barlow, Helvetica, Arial" font-size="19" font-weight="normal" fill="#1d1d1b" stroke="white" stroke-width="5" stroke-linejoin="round" paint-order="stroke" text-anchor="start">2 × 120×120 (detalj 4)</text>
+<line x1="1097.0" y1="968.6" x2="1044.1" y2="862.8" stroke="#c8321a" stroke-width="1.6"/>
+<circle cx="1097.0" cy="968.6" r="3.5" fill="#c8321a"/>
+<circle cx="1026.1" cy="862.8" r="17" fill="white" stroke="#c8321a" stroke-width="2.5"/>
+<text x="1026.1" y="869.8" font-family="Barlow, Helvetica, Arial" font-size="20" font-weight="bold" fill="#c8321a" stroke="white" stroke-width="5" stroke-linejoin="round" paint-order="stroke" text-anchor="middle">4</text>
+<text x="1000.1" y="869.8" font-family="Barlow, Helvetica, Arial" font-size="19" font-weight="normal" fill="#1d1d1b" stroke="white" stroke-width="5" stroke-linejoin="round" paint-order="stroke" text-anchor="end">Bågfot på bredare syll</text>
+<text x="1000.1" y="893.8" font-family="Barlow, Helvetica, Arial" font-size="19" font-weight="normal" fill="#1d1d1b" stroke="white" stroke-width="5" stroke-linejoin="round" paint-order="stroke" text-anchor="end">2 × 120×120 (detalj 4)</text>
 <line x1="660.0" y1="245.2" x2="540.0" y2="351.4" stroke="#1d1d1b" stroke-width="1.6"/>
 <circle cx="660.0" cy="245.2" r="3.5" fill="#1d1d1b"/>
 <text x="536.0" y="358.4" font-family="Barlow, Helvetica, Arial" font-size="19" font-weight="normal" fill="#1d1d1b" stroke="white" stroke-width="5" stroke-linejoin="round" paint-order="stroke" text-anchor="end">Nockregel 45×120 flyttas</text>
