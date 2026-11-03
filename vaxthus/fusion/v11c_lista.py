@@ -1,5 +1,10 @@
 # Läsande: dumpar alla kroppar (komponent, kropp, sorterade bbox-mått, volym) till v11_kroppar.json för inköpslistan. Sparar inget.
-exec(open(os.path.expanduser('~/code/buttercup/vaxthus/fusion/v03_topp.py')).read().split('\ndef run(')[0])
+import builtins as _bi
+_o = _bi.open
+def open(f, m='r', *a, **k):
+    if 'b' not in m and 'encoding' not in k and not a: k['encoding'] = 'utf-8'
+    return _o(f, m, *a, **k)
+exec(open(os.path.expanduser('~/code/buttercup/vaxthus/fusion/v03_topp.py'), encoding='utf-8').read().split('\ndef run(')[0])
 
 
 def run(_context: str):
@@ -19,5 +24,5 @@ def run(_context: str):
     for b in root.bRepBodies:
         bb = b.boundingBox
         out.append(dict(komp='(rot)', kropp=b.name, mått=sorted(round((getattr(bb.maxPoint, k) - getattr(bb.minPoint, k)) * 10, 1) for k in 'xyz'), vol_cm3=round(b.volume, 2)))
-    json.dump(out, open(os.path.expanduser('~/code/buttercup/vaxthus/fusion/v11_kroppar.json'), 'w'), ensure_ascii=False, indent=1)
+    json.dump(out, open(os.path.expanduser('~/code/buttercup/vaxthus/fusion/v11_kroppar.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     log('kroppar', len(out))

@@ -1,0 +1,5227 @@
+[
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Syllram",
+  "kropp": "Syll långsida höger",
+  "mått": [
+   120.0,
+   120.0,
+   10335.0
+  ],
+  "vol_cm3": 148824.0,
+  "fysisk_area_cm2": 49896.0
+ },
+ {
+  "komp": "Syllram",
+  "kropp": "Syll långsida vänster",
+  "mått": [
+   120.0,
+   120.0,
+   10335.0
+  ],
+  "vol_cm3": 148824.0,
+  "fysisk_area_cm2": 49896.0
+ },
+ {
+  "komp": "Syllram",
+  "kropp": "Syll gavel fram höger",
+  "mått": [
+   120.0,
+   120.0,
+   940.0
+  ],
+  "vol_cm3": 13536.0,
+  "fysisk_area_cm2": 4800.0
+ },
+ {
+  "komp": "Syllram",
+  "kropp": "Syll gavel fram vänster",
+  "mått": [
+   120.0,
+   120.0,
+   940.0
+  ],
+  "vol_cm3": 13536.0,
+  "fysisk_area_cm2": 4800.0
+ },
+ {
+  "komp": "Syllram",
+  "kropp": "Syll gavel bak höger",
+  "mått": [
+   120.0,
+   120.0,
+   940.0
+  ],
+  "vol_cm3": 13536.0,
+  "fysisk_area_cm2": 4800.0
+ },
+ {
+  "komp": "Syllram",
+  "kropp": "Syll gavel bak vänster",
+  "mått": [
+   120.0,
+   120.0,
+   940.0
+  ],
+  "vol_cm3": 13536.0,
+  "fysisk_area_cm2": 4800.0
+ },
+ {
+  "komp": "Nock och sidoreglar",
+  "kropp": "Nockregel",
+  "mått": [
+   45.0,
+   120.0,
+   10095.0
+  ],
+  "vol_cm3": 54513.0,
+  "fysisk_area_cm2": 33421.5
+ },
+ {
+  "komp": "Nock och sidoreglar",
+  "kropp": "Sidoregel höger",
+  "mått": [
+   63.4,
+   94.4,
+   10095.0
+  ],
+  "vol_cm3": 21098.55,
+  "fysisk_area_cm2": 23664.1
+ },
+ {
+  "komp": "Nock och sidoreglar",
+  "kropp": "Sidoregel vänster",
+  "mått": [
+   63.4,
+   94.4,
+   10095.0
+  ],
+  "vol_cm3": 21098.55,
+  "fysisk_area_cm2": 23664.1
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 1 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 2 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 1 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 2 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 2 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 3 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 4 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 5 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 6 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 7 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 8 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 3 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 4 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 5 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 6 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 7 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 8 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 9 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 2 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 3 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 4 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 5 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 6 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 7 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 8 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 3 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 4 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 5 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 6 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 7 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 8 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar bågfot",
+  "kropp": "Vinkel bågfot båge 9 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 1 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 2 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 1 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 2 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 2 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 3 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 4 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 5 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 6 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 7 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 8 +y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 3 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 4 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 5 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 6 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 7 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 8 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 9 -y höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 2 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 3 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 4 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 5 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 6 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 7 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 8 +y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 3 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 4 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 5 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 6 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 7 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 8 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Vinklar nock",
+  "kropp": "Vinkel nock båge 9 -y vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Syllbeslag",
+  "kropp": "Hörnvinkel insida fram höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Syllbeslag",
+  "kropp": "Hörnvinkel utsida fram höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Syllbeslag",
+  "kropp": "Hörnvinkel insida fram vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Syllbeslag",
+  "kropp": "Hörnvinkel utsida fram vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Syllbeslag",
+  "kropp": "Hörnvinkel insida bak höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Syllbeslag",
+  "kropp": "Hörnvinkel utsida bak höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Syllbeslag",
+  "kropp": "Hörnvinkel insida bak vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Syllbeslag",
+  "kropp": "Hörnvinkel utsida bak vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Gavlar",
+  "kropp": "Dörrstolpe fram höger",
+  "mått": [
+   95.0,
+   95.0,
+   2518.8
+  ],
+  "vol_cm3": 22233.28,
+  "fysisk_area_cm2": 9589.8
+ },
+ {
+  "komp": "Gavlar",
+  "kropp": "Överliggare fram",
+  "mått": [
+   95.0,
+   95.0,
+   2000.0
+  ],
+  "vol_cm3": 18050.0,
+  "fysisk_area_cm2": 7780.5
+ },
+ {
+  "komp": "Gavlar",
+  "kropp": "Nockstolpe fram",
+  "mått": [
+   45.0,
+   120.0,
+   1207.4
+  ],
+  "vol_cm3": 6519.99,
+  "fysisk_area_cm2": 4092.4
+ },
+ {
+  "komp": "Gavlar",
+  "kropp": "Dörrstolpe fram vänster",
+  "mått": [
+   95.0,
+   95.0,
+   2518.8
+  ],
+  "vol_cm3": 22233.28,
+  "fysisk_area_cm2": 9589.8
+ },
+ {
+  "komp": "Gavlar",
+  "kropp": "Dörrstolpe bak höger",
+  "mått": [
+   95.0,
+   95.0,
+   2518.8
+  ],
+  "vol_cm3": 22233.28,
+  "fysisk_area_cm2": 9589.8
+ },
+ {
+  "komp": "Gavlar",
+  "kropp": "Överliggare bak",
+  "mått": [
+   95.0,
+   95.0,
+   2000.0
+  ],
+  "vol_cm3": 18050.0,
+  "fysisk_area_cm2": 7780.5
+ },
+ {
+  "komp": "Gavlar",
+  "kropp": "Nockstolpe bak",
+  "mått": [
+   45.0,
+   120.0,
+   1207.4
+  ],
+  "vol_cm3": 6519.99,
+  "fysisk_area_cm2": 4092.4
+ },
+ {
+  "komp": "Gavlar",
+  "kropp": "Dörrstolpe bak vänster",
+  "mått": [
+   95.0,
+   95.0,
+   2518.8
+  ],
+  "vol_cm3": 22233.28,
+  "fysisk_area_cm2": 9589.8
+ },
+ {
+  "komp": "Dörrar",
+  "kropp": "Dörrblad fram höger",
+  "mått": [
+   45.0,
+   992.5,
+   1990.0
+  ],
+  "vol_cm3": 17907.75,
+  "fysisk_area_cm2": 13075.5
+ },
+ {
+  "komp": "Dörrar",
+  "kropp": "Dörrblad fram vänster",
+  "mått": [
+   45.0,
+   992.5,
+   1990.0
+  ],
+  "vol_cm3": 17907.75,
+  "fysisk_area_cm2": 13075.5
+ },
+ {
+  "komp": "Dörrar",
+  "kropp": "Dörrblad bak höger",
+  "mått": [
+   45.0,
+   992.5,
+   1990.0
+  ],
+  "vol_cm3": 17907.75,
+  "fysisk_area_cm2": 13075.5
+ },
+ {
+  "komp": "Dörrar",
+  "kropp": "Dörrblad bak vänster",
+  "mått": [
+   45.0,
+   992.5,
+   1990.0
+  ],
+  "vol_cm3": 17907.75,
+  "fysisk_area_cm2": 13075.5
+ },
+ {
+  "komp": "Gavelbeslag",
+  "kropp": "Stolpfotsvinkel fram höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Gavelbeslag",
+  "kropp": "Spikplåt överliggare utsida fram höger",
+  "mått": [
+   2.0,
+   100.0,
+   200.0
+  ],
+  "vol_cm3": 40.0,
+  "fysisk_area_cm2": 412.0
+ },
+ {
+  "komp": "Gavelbeslag",
+  "kropp": "Spikplåt överliggare insida fram höger",
+  "mått": [
+   2.0,
+   100.0,
+   200.0
+  ],
+  "vol_cm3": 40.0,
+  "fysisk_area_cm2": 412.0
+ },
+ {
+  "komp": "Gavelbeslag",
+  "kropp": "Stolpfotsvinkel fram vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Gavelbeslag",
+  "kropp": "Spikplåt överliggare utsida fram vänster",
+  "mått": [
+   2.0,
+   100.0,
+   200.0
+  ],
+  "vol_cm3": 40.0,
+  "fysisk_area_cm2": 412.0
+ },
+ {
+  "komp": "Gavelbeslag",
+  "kropp": "Spikplåt överliggare insida fram vänster",
+  "mått": [
+   2.0,
+   100.0,
+   200.0
+  ],
+  "vol_cm3": 40.0,
+  "fysisk_area_cm2": 412.0
+ },
+ {
+  "komp": "Gavelbeslag",
+  "kropp": "Stolpfotsvinkel bak höger",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Gavelbeslag",
+  "kropp": "Spikplåt överliggare utsida bak höger",
+  "mått": [
+   2.0,
+   100.0,
+   200.0
+  ],
+  "vol_cm3": 40.0,
+  "fysisk_area_cm2": 412.0
+ },
+ {
+  "komp": "Gavelbeslag",
+  "kropp": "Spikplåt överliggare insida bak höger",
+  "mått": [
+   2.0,
+   100.0,
+   200.0
+  ],
+  "vol_cm3": 40.0,
+  "fysisk_area_cm2": 412.0
+ },
+ {
+  "komp": "Gavelbeslag",
+  "kropp": "Stolpfotsvinkel bak vänster",
+  "mått": [
+   65.0,
+   90.0,
+   90.0
+  ],
+  "vol_cm3": 28.84,
+  "fysisk_area_cm2": 242.9
+ },
+ {
+  "komp": "Gavelbeslag",
+  "kropp": "Spikplåt överliggare utsida bak vänster",
+  "mått": [
+   2.0,
+   100.0,
+   200.0
+  ],
+  "vol_cm3": 40.0,
+  "fysisk_area_cm2": 412.0
+ },
+ {
+  "komp": "Gavelbeslag",
+  "kropp": "Spikplåt överliggare insida bak vänster",
+  "mått": [
+   2.0,
+   100.0,
+   200.0
+  ],
+  "vol_cm3": 40.0,
+  "fysisk_area_cm2": 412.0
+ },
+ {
+  "komp": "Dörrbeslag",
+  "kropp": "Gångjärn GJ60 nedre fram höger",
+  "mått": [
+   8.0,
+   100.0,
+   100.0
+  ],
+  "vol_cm3": 19.37,
+  "fysisk_area_cm2": 218.6
+ },
+ {
+  "komp": "Dörrbeslag",
+  "kropp": "Gångjärn GJ60 övre fram höger",
+  "mått": [
+   8.0,
+   100.0,
+   100.0
+  ],
+  "vol_cm3": 19.37,
+  "fysisk_area_cm2": 218.6
+ },
+ {
+  "komp": "Dörrbeslag",
+  "kropp": "Gångjärn GJ60 nedre fram vänster",
+  "mått": [
+   8.0,
+   100.0,
+   100.0
+  ],
+  "vol_cm3": 19.37,
+  "fysisk_area_cm2": 218.6
+ },
+ {
+  "komp": "Dörrbeslag",
+  "kropp": "Gångjärn GJ60 övre fram vänster",
+  "mått": [
+   8.0,
+   100.0,
+   100.0
+  ],
+  "vol_cm3": 19.37,
+  "fysisk_area_cm2": 218.6
+ },
+ {
+  "komp": "Dörrbeslag",
+  "kropp": "Kantregel övre fram vänster",
+  "mått": [
+   20.0,
+   20.0,
+   300.0
+  ],
+  "vol_cm3": 120.0,
+  "fysisk_area_cm2": 248.0
+ },
+ {
+  "komp": "Dörrbeslag",
+  "kropp": "Kantregel nedre fram vänster",
+  "mått": [
+   20.0,
+   20.0,
+   300.0
+  ],
+  "vol_cm3": 120.0,
+  "fysisk_area_cm2": 248.0
+ },
+ {
+  "komp": "Dörrbeslag",
+  "kropp": "Gångjärn GJ60 nedre bak höger",
+  "mått": [
+   8.0,
+   100.0,
+   100.0
+  ],
+  "vol_cm3": 19.37,
+  "fysisk_area_cm2": 218.6
+ },
+ {
+  "komp": "Dörrbeslag",
+  "kropp": "Gångjärn GJ60 övre bak höger",
+  "mått": [
+   8.0,
+   100.0,
+   100.0
+  ],
+  "vol_cm3": 19.37,
+  "fysisk_area_cm2": 218.6
+ },
+ {
+  "komp": "Dörrbeslag",
+  "kropp": "Gångjärn GJ60 nedre bak vänster",
+  "mått": [
+   8.0,
+   100.0,
+   100.0
+  ],
+  "vol_cm3": 19.37,
+  "fysisk_area_cm2": 218.6
+ },
+ {
+  "komp": "Dörrbeslag",
+  "kropp": "Gångjärn GJ60 övre bak vänster",
+  "mått": [
+   8.0,
+   100.0,
+   100.0
+  ],
+  "vol_cm3": 19.37,
+  "fysisk_area_cm2": 218.6
+ },
+ {
+  "komp": "Dörrbeslag",
+  "kropp": "Kantregel övre bak vänster",
+  "mått": [
+   20.0,
+   20.0,
+   300.0
+  ],
+  "vol_cm3": 120.0,
+  "fysisk_area_cm2": 248.0
+ },
+ {
+  "komp": "Dörrbeslag",
+  "kropp": "Kantregel nedre bak vänster",
+  "mått": [
+   20.0,
+   20.0,
+   300.0
+  ],
+  "vol_cm3": 120.0,
+  "fysisk_area_cm2": 248.0
+ },
+ {
+  "komp": "GN425 A2 200-M5 bygelhandtag",
+  "kropp": "Body1",
+  "mått": [
+   15.0,
+   43.0,
+   215.0
+  ],
+  "vol_cm3": 20.46,
+  "fysisk_area_cm2": 91.7
+ },
+ {
+  "komp": "GN425 A2 200-M5 bygelhandtag",
+  "kropp": "Body1",
+  "mått": [
+   15.0,
+   43.0,
+   215.0
+  ],
+  "vol_cm3": 20.46,
+  "fysisk_area_cm2": 91.7
+ },
+ {
+  "komp": "GN425 A2 200-M5 bygelhandtag",
+  "kropp": "Body1",
+  "mått": [
+   15.0,
+   43.0,
+   215.0
+  ],
+  "vol_cm3": 20.46,
+  "fysisk_area_cm2": 91.7
+ },
+ {
+  "komp": "GN425 A2 200-M5 bygelhandtag",
+  "kropp": "Body1",
+  "mått": [
+   15.0,
+   43.0,
+   215.0
+  ],
+  "vol_cm3": 20.46,
+  "fysisk_area_cm2": 91.7
+ },
+ {
+  "komp": "nit4x7-5",
+  "kropp": "Body1",
+  "mått": [
+   7.0,
+   7.0,
+   9.5
+  ],
+  "vol_cm3": 0.17,
+  "fysisk_area_cm2": 2.5
+ },
+ {
+  "komp": "nit4x5",
+  "kropp": "Body1",
+  "mått": [
+   7.0,
+   9.1,
+   9.1
+  ],
+  "vol_cm3": 0.14,
+  "fysisk_area_cm2": 2.2
+ },
+ {
+  "komp": "Wiberger-din934_m6",
+  "kropp": "Body1",
+  "mått": [
+   5.0,
+   10.0,
+   11.2
+  ],
+  "vol_cm3": 0.33,
+  "fysisk_area_cm2": 3.6
+ },
+ {
+  "komp": "Wiberger-el2030-100-fzb_rulle",
+  "kropp": "Body1",
+  "mått": [
+   10.0,
+   10.0,
+   26.5
+  ],
+  "vol_cm3": 1.45,
+  "fysisk_area_cm2": 9.5
+ },
+ {
+  "komp": "Wiberger-el2030-100-fzb_grepp",
+  "kropp": "Body1",
+  "mått": [
+   13.2,
+   16.5,
+   70.6
+  ],
+  "vol_cm3": 1.49,
+  "fysisk_area_cm2": 17.1
+ },
+ {
+  "komp": "Wiberger-el2030-100-fzb_grepp",
+  "kropp": "Body2",
+  "mått": [
+   13.2,
+   16.5,
+   70.6
+  ],
+  "vol_cm3": 1.49,
+  "fysisk_area_cm2": 17.1
+ },
+ {
+  "komp": "Wiberger-el2030-100-fzb_ganga",
+  "kropp": "Body1",
+  "mått": [
+   6.0,
+   8.0,
+   51.0
+  ],
+  "vol_cm3": 1.27,
+  "fysisk_area_cm2": 10.1
+ },
+ {
+  "komp": "Wiberger-el2030-100-fzb_platta",
+  "kropp": "Body1",
+  "mått": [
+   22.0,
+   40.0,
+   53.0
+  ],
+  "vol_cm3": 4.98,
+  "fysisk_area_cm2": 49.5
+ },
+ {
+  "komp": "Wiberger-el2030-100-fzb_bygel",
+  "kropp": "Body1",
+  "mått": [
+   10.0,
+   37.0,
+   44.0
+  ],
+  "vol_cm3": 3.03,
+  "fysisk_area_cm2": 23.2
+ },
+ {
+  "komp": "nit4x5",
+  "kropp": "Body1",
+  "mått": [
+   7.0,
+   7.0,
+   7.0
+  ],
+  "vol_cm3": 0.14,
+  "fysisk_area_cm2": 2.2
+ },
+ {
+  "komp": "nit4x7-5",
+  "kropp": "Body1",
+  "mått": [
+   7.0,
+   7.0,
+   9.5
+  ],
+  "vol_cm3": 0.17,
+  "fysisk_area_cm2": 2.5
+ },
+ {
+  "komp": "nit4x5",
+  "kropp": "Body1",
+  "mått": [
+   7.0,
+   9.1,
+   9.1
+  ],
+  "vol_cm3": 0.14,
+  "fysisk_area_cm2": 2.2
+ },
+ {
+  "komp": "Wiberger-din934_m6",
+  "kropp": "Body1",
+  "mått": [
+   5.0,
+   10.0,
+   11.2
+  ],
+  "vol_cm3": 0.33,
+  "fysisk_area_cm2": 3.6
+ },
+ {
+  "komp": "Wiberger-el2030-100-fzb_rulle",
+  "kropp": "Body1",
+  "mått": [
+   10.0,
+   10.0,
+   26.5
+  ],
+  "vol_cm3": 1.45,
+  "fysisk_area_cm2": 9.5
+ },
+ {
+  "komp": "Wiberger-el2030-100-fzb_grepp",
+  "kropp": "Body1",
+  "mått": [
+   13.2,
+   16.5,
+   70.6
+  ],
+  "vol_cm3": 1.49,
+  "fysisk_area_cm2": 17.1
+ },
+ {
+  "komp": "Wiberger-el2030-100-fzb_grepp",
+  "kropp": "Body2",
+  "mått": [
+   13.2,
+   16.5,
+   70.6
+  ],
+  "vol_cm3": 1.49,
+  "fysisk_area_cm2": 17.1
+ },
+ {
+  "komp": "Wiberger-el2030-100-fzb_ganga",
+  "kropp": "Body1",
+  "mått": [
+   6.0,
+   8.0,
+   51.0
+  ],
+  "vol_cm3": 1.27,
+  "fysisk_area_cm2": 10.1
+ },
+ {
+  "komp": "Wiberger-el2030-100-fzb_platta",
+  "kropp": "Body1",
+  "mått": [
+   22.0,
+   40.0,
+   53.0
+  ],
+  "vol_cm3": 4.98,
+  "fysisk_area_cm2": 49.5
+ },
+ {
+  "komp": "Wiberger-el2030-100-fzb_bygel",
+  "kropp": "Body1",
+  "mått": [
+   10.0,
+   37.0,
+   44.0
+  ],
+  "vol_cm3": 3.03,
+  "fysisk_area_cm2": 23.2
+ },
+ {
+  "komp": "nit4x5",
+  "kropp": "Body1",
+  "mått": [
+   7.0,
+   7.0,
+   7.0
+  ],
+  "vol_cm3": 0.14,
+  "fysisk_area_cm2": 2.2
+ },
+ {
+  "komp": "el1035-200_bygel",
+  "kropp": "Body1",
+  "mått": [
+   6.0,
+   20.0,
+   26.6
+  ],
+  "vol_cm3": 0.24,
+  "fysisk_area_cm2": 4.9
+ },
+ {
+  "komp": "el1035-200_grepp",
+  "kropp": "Body1",
+  "mått": [
+   12.2,
+   12.5,
+   40.3
+  ],
+  "vol_cm3": 0.84,
+  "fysisk_area_cm2": 15.6
+ },
+ {
+  "komp": "hake",
+  "kropp": "Body1",
+  "mått": [
+   9.0,
+   13.2,
+   28.0
+  ],
+  "vol_cm3": 0.64,
+  "fysisk_area_cm2": 10.4
+ },
+ {
+  "komp": "el1035-200_platta",
+  "kropp": "Body1",
+  "mått": [
+   9.0,
+   10.0,
+   22.0
+  ],
+  "vol_cm3": 0.29,
+  "fysisk_area_cm2": 6.4
+ },
+ {
+  "komp": "el1035-200_pinne",
+  "kropp": "Body1",
+  "mått": [
+   4.0,
+   4.0,
+   13.5
+  ],
+  "vol_cm3": 0.07,
+  "fysisk_area_cm2": 1.5
+ },
+ {
+  "komp": "el1035-200_bygel",
+  "kropp": "Body1",
+  "mått": [
+   6.0,
+   20.0,
+   26.6
+  ],
+  "vol_cm3": 0.24,
+  "fysisk_area_cm2": 4.9
+ },
+ {
+  "komp": "el1035-200_grepp",
+  "kropp": "Body1",
+  "mått": [
+   12.2,
+   12.5,
+   40.3
+  ],
+  "vol_cm3": 0.84,
+  "fysisk_area_cm2": 15.6
+ },
+ {
+  "komp": "hake",
+  "kropp": "Body1",
+  "mått": [
+   9.0,
+   13.2,
+   28.0
+  ],
+  "vol_cm3": 0.64,
+  "fysisk_area_cm2": 10.4
+ },
+ {
+  "komp": "el1035-200_platta",
+  "kropp": "Body1",
+  "mått": [
+   9.0,
+   10.0,
+   22.0
+  ],
+  "vol_cm3": 0.29,
+  "fysisk_area_cm2": 6.4
+ },
+ {
+  "komp": "el1035-200_pinne",
+  "kropp": "Body1",
+  "mått": [
+   4.0,
+   4.0,
+   13.5
+  ],
+  "vol_cm3": 0.07,
+  "fysisk_area_cm2": 1.5
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil gavelbåge fram höger",
+  "mått": [
+   13.0,
+   2047.0,
+   3344.7
+  ],
+  "vol_cm3": 336.8,
+  "fysisk_area_cm2": 4614.9
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil gavelsyll fram höger",
+  "mått": [
+   13.0,
+   32.0,
+   847.5
+  ],
+  "vol_cm3": 69.92,
+  "fysisk_area_cm2": 959.3
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil dörrstolpe fram höger",
+  "mått": [
+   13.0,
+   32.0,
+   2095.0
+  ],
+  "vol_cm3": 172.84,
+  "fysisk_area_cm2": 2369.0
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil gavelbåge fram vänster",
+  "mått": [
+   13.0,
+   2047.0,
+   3344.7
+  ],
+  "vol_cm3": 336.8,
+  "fysisk_area_cm2": 4614.9
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil gavelsyll fram vänster",
+  "mått": [
+   13.0,
+   32.0,
+   847.5
+  ],
+  "vol_cm3": 69.92,
+  "fysisk_area_cm2": 959.3
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil dörrstolpe fram vänster",
+  "mått": [
+   13.0,
+   32.0,
+   2095.0
+  ],
+  "vol_cm3": 172.84,
+  "fysisk_area_cm2": 2369.0
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil överliggare fram",
+  "mått": [
+   13.0,
+   32.0,
+   2126.0
+  ],
+  "vol_cm3": 175.39,
+  "fysisk_area_cm2": 2404.0
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil gavelbåge bak höger",
+  "mått": [
+   13.0,
+   2047.0,
+   3344.7
+  ],
+  "vol_cm3": 336.8,
+  "fysisk_area_cm2": 4614.9
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil gavelsyll bak höger",
+  "mått": [
+   13.0,
+   32.0,
+   847.5
+  ],
+  "vol_cm3": 69.92,
+  "fysisk_area_cm2": 959.3
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil dörrstolpe bak höger",
+  "mått": [
+   13.0,
+   32.0,
+   2095.0
+  ],
+  "vol_cm3": 172.84,
+  "fysisk_area_cm2": 2369.0
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil gavelbåge bak vänster",
+  "mått": [
+   13.0,
+   2047.0,
+   3344.7
+  ],
+  "vol_cm3": 336.8,
+  "fysisk_area_cm2": 4614.9
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil gavelsyll bak vänster",
+  "mått": [
+   13.0,
+   32.0,
+   847.5
+  ],
+  "vol_cm3": 69.92,
+  "fysisk_area_cm2": 959.3
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil dörrstolpe bak vänster",
+  "mått": [
+   13.0,
+   32.0,
+   2095.0
+  ],
+  "vol_cm3": 172.84,
+  "fysisk_area_cm2": 2369.0
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil överliggare bak",
+  "mått": [
+   13.0,
+   32.0,
+   2126.0
+  ],
+  "vol_cm3": 175.39,
+  "fysisk_area_cm2": 2404.0
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil långsida höger",
+  "mått": [
+   13.0,
+   32.0,
+   10335.0
+  ],
+  "vol_cm3": 852.64,
+  "fysisk_area_cm2": 11680.2
+ },
+ {
+  "komp": "Låsprofiler",
+  "kropp": "Låsprofil långsida vänster",
+  "mått": [
+   13.0,
+   32.0,
+   10335.0
+  ],
+  "vol_cm3": 852.64,
+  "fysisk_area_cm2": 11680.2
+ },
+ {
+  "komp": "Nockprofil och nockplåt",
+  "kropp": "Låsprofil nock",
+  "mått": [
+   13.0,
+   32.0,
+   10095.0
+  ],
+  "vol_cm3": 832.84,
+  "fysisk_area_cm2": 11409.0
+ },
+ {
+  "komp": "Nockprofil och nockplåt",
+  "kropp": "Nockplåt",
+  "mått": [
+   85.6,
+   300.0,
+   10095.0
+  ],
+  "vol_cm3": 2088.48,
+  "fysisk_area_cm2": 69761.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 1",
+  "mått": [
+   95.0,
+   557.3,
+   1957.4
+  ],
+  "vol_cm3": 6979.99,
+  "fysisk_area_cm2": 5415.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 1",
+  "mått": [
+   95.0,
+   389.7,
+   1617.9
+  ],
+  "vol_cm3": 5684.53,
+  "fysisk_area_cm2": 4423.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fotkloss",
+  "mått": [
+   25.9,
+   95.0,
+   120.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1",
+  "mått": [
+   37.7,
+   95.0,
+   122.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss nedre",
+  "mått": [
+   95.0,
+   127.0,
+   236.8
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Fackkloss övre",
+  "mått": [
+   95.0,
+   146.1,
+   228.3
+  ],
+  "vol_cm3": 570.0,
+  "fysisk_area_cm2": 640.6
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1",
+  "mått": [
+   91.1,
+   95.0,
+   110.4
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Nockkloss",
+  "mått": [
+   84.1,
+   95.0,
+   110.0
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 334.5
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 2",
+  "mått": [
+   49.2,
+   95.0,
+   122.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss nedre 1 (1)",
+  "mått": [
+   60.2,
+   95.0,
+   121.5
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 2",
+  "mått": [
+   95.0,
+   98.9,
+   104.6
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 3",
+  "mått": [
+   95.0,
+   97.6,
+   105.7
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Kloss övre 1 (1)",
+  "mått": [
+   89.7,
+   95.0,
+   111.3
+  ],
+  "vol_cm3": 273.6,
+  "fysisk_area_cm2": 331.2
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Ytterremsa 2",
+  "mått": [
+   95.0,
+   1483.0,
+   1499.3
+  ],
+  "vol_cm3": 7190.89,
+  "fysisk_area_cm2": 5582.1
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Innerremsa 2",
+  "mått": [
+   95.0,
+   1608.4,
+   1751.0
+  ],
+  "vol_cm3": 8153.96,
+  "fysisk_area_cm2": 6320.0
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask ytter",
+  "mått": [
+   95.0,
+   235.0,
+   369.9
+  ],
+  "vol_cm3": 1391.41,
+  "fysisk_area_cm2": 1134.3
+ },
+ {
+  "komp": "Halvbåge",
+  "kropp": "Lask inner",
+  "mått": [
+   95.0,
+   198.0,
+   371.6
+  ],
+  "vol_cm3": 1344.59,
+  "fysisk_area_cm2": 1098.5
+ }
+]

@@ -3,11 +3,12 @@
 Hus 4000×10000, nock 3500, 9 bågar c/c 1250. Spill +10 %.
 
 ## Per förband
-- Bågar: remsa mot vanlig kloss (4/sida × 2 sidor): 1008 × Träskruv 4,0×40 C4 (plywood mot kloss) (18 halvbågar × 7 klossar)
-- Bågar: remsa mot fackkloss, sida utan lask (6): 216 × Träskruv 4,0×40 C4 (plywood mot kloss) (18 × 2 sidor)
-- Bågar: lask + remsa mot fackkloss (6): 216 × Träskruv 4,5×60 C4 (lask + remsa mot kloss) (18 × 2 laskar)
-- Bågar: lask mot remsa utanför klossen (2 per ände): 144 × Träskruv 4,0×25 C4 (lask mot remsa utanför klossen) (lim också)
-- Sidoregel genom ytter- och innerremsa (2 + 2 per båge och sida): 72 × Träskruv 4,5×45 C4 (remsa mot sidoregel) (9 bågar × 2 sidor)
+- Lameller: presskruv vid limning (1 rad sicksack c/c 150, per lager utöver det första, 2 flänsar): 1966 × Träskruv 4,0×30 C4 eller klammer (presskruv när lamellerna limmas) (18 halvbågar, 3 lager)
+- Vanlig kloss: 2 genomgående från varje sida (+ PU-lim): 648 × Träskruv 5,0×90 C4 (fläns + kloss genomgående) (18 × 9 klossar)
+- Fackkloss: 3 genomgående från varje sida (+ PU-lim): 216 × Träskruv 5,0×90 C4 (fläns + kloss genomgående) (18 × 2 fackklossar)
+- Lask över skarv (4 per lask): 144 × Träskruv 4,0×25 C4 (lask mot remsa utanför klossen) (skarvarna förskjuts mellan lagren – lasken kan utgå)
+- Sidoregel 22×95 genom ytter- och innerfläns (2 + 2 per båge och sida): 72 × Träskruv 4,0×50 C4 (fläns mot sidoregel 22×95) (9 bågar × 2 sidor)
+- Nockplåt mot bågarna (1 per sida och båge): 18 × Takskruv 4,8×50 med EPDM-bricka (nockplåt) (9 bågar)
 - Vinklar 90×90×65 (5 per ben): 760 × Ankarspik/beslagsskruv 4,0×40 vfz (vinklar, spikplåtar) (76 vinklar)
 - Spikplåt 100×200 (10 per virke): 160 × Ankarspik/beslagsskruv 4,0×40 vfz (vinklar, spikplåtar) (8 plåtar)
 - Dörrstolpens topp mot bågen (2 snedskruv): 8 × Konstruktionsskruv 6×160 helgängad (gavelstomme) (4 stolpar)
@@ -21,13 +22,14 @@ Hus 4000×10000, nock 3500, 9 bågar c/c 1250. Spill +10 %.
 - Handtag GN425 ute + inne (2 gängstänger per par): 4 × M5 gängstång A2 65 mm + 2 hattmutter (handtagspar GN425, genom ramen) (2 handtagspar)
 - Excenterlås EL2030-100 (3 + 2 hål): 10 × Rostfri träskruv A2 5,0×25 (excenterlås EL2030) (2 lås)
 - Stormhake EL1035-200 (2 + 2 hål): 8 × Rostfri träskruv A2 3,0×20 (stormhake EL1035) (2 hakar)
-- Låsprofil, c/c 300 + ändarna: 232 × Rostfri skruv brickhuvud 4,2×25 (låsprofil) (53.0 m i 40 bitar)
+- Låsprofil, c/c 300 + ändarna: 274 × Rostfri skruv brickhuvud 4,2×25 (låsprofil) (63.1 m i 46 bitar)
 
 ## Att köpa (inkl. spill)
-- Träskruv 4,0×40 C4 (plywood mot kloss): 1224 st → 1347 st
-- Träskruv 4,5×60 C4 (lask + remsa mot kloss): 216 st → 238 st
+- Träskruv 4,0×30 C4 eller klammer (presskruv när lamellerna limmas): 1966 st → 2163 st
+- Träskruv 5,0×90 C4 (fläns + kloss genomgående): 864 st → 951 st
 - Träskruv 4,0×25 C4 (lask mot remsa utanför klossen): 144 st → 159 st
-- Träskruv 4,5×45 C4 (remsa mot sidoregel): 72 st → 80 st
+- Träskruv 4,0×50 C4 (fläns mot sidoregel 22×95): 72 st → 80 st
+- Takskruv 4,8×50 med EPDM-bricka (nockplåt): 18 st → 20 st
 - Ankarspik/beslagsskruv 4,0×40 vfz (vinklar, spikplåtar): 920 st → 1013 st
 - Konstruktionsskruv 6×160 helgängad (gavelstomme): 24 st → 27 st
 - Konstruktionsskruv 6×120 (stolpfot, snedskruv): 8 st → 9 st
@@ -38,6 +40,6 @@ Hus 4000×10000, nock 3500, 9 bågar c/c 1250. Spill +10 %.
 - M5 gängstång A2 65 mm + 2 hattmutter (handtagspar GN425, genom ramen): 4 st → 5 st
 - Rostfri träskruv A2 5,0×25 (excenterlås EL2030): 10 st → 11 st
 - Rostfri träskruv A2 3,0×20 (stormhake EL1035): 8 st → 9 st
-- Rostfri skruv brickhuvud 4,2×25 (låsprofil): 232 st → 256 st
+- Rostfri skruv brickhuvud 4,2×25 (låsprofil): 274 st → 302 st
 
-Låsprofil: 53.0 m (40 bitar à 2 m); fjädertråd lika långt (+ gavelbågarna dubbelt om tak- och gavelfilm låses med var sin tråd).
+Låsprofil: 63.1 m (46 bitar à 2 m); fjädertråd lika långt (+ gavelbågarna dubbelt om tak- och gavelfilm låses med var sin tråd).

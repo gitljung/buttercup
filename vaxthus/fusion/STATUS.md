@@ -43,3 +43,5 @@ Projekt `vaxthus`, master "Växthus - parametrar". Gammal DirectDesign-modell i 
 - 2026-11-03 Victor: rita klart allt (sover). Hanbjälke ej (20 m/s utan: 0,87). v11_nock.py (nockprofil + nockplåt + antal + STEP) KÖAD.
 - 2026-11-03 v11 försök 1 FEL: combine av speglad nockplåt (invalid argument). Rättat: båda halvorna i samma skiss, ett extrude. Försök 2 KÖAD.
 - 2026-11-03 Steg 11 KLAR (försök 2): nockprofil + nockplåt 300×0,6. 475 kroppar, 0 fel/krock, flex OK (669), återställt identiskt, sparad. STEP: fusion/export/Vaxthus.step (2,3 MB). v11c_lista.py (läsande kroppsdump) KÖAD.
+- 2026-11-03 Listor: skruvlista.py läser v11_antal.json (båge B: presskruv lameller, 5×90 genom klossar, sidoregel 4×50, takskruv nockplåt). inkopslista.py -> INKOPSLISTA.md (plywood 21 skivor 12 mm ≈ 9 000 kr, prissatt summa ≈ 15 200 kr). v11c_lista.py: kroppsdump (open() utan encoding kraschade i Fusion -> utf-8-wrapper).
+- Ej ritat (medvetet): hanbjälke (behövs ej vid 20 m/s), nocklask (nocken räknad ledad = vinklar + nockregel), vindkryss (hålband i ändfacken, står i inköpslistan), film (räknas).

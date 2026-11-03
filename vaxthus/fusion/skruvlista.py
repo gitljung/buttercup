@@ -50,7 +50,7 @@ def R(forband, sort, antal, hur):
 # --- bågar (halvbåge-komponenten finns i 2 × AntalBagar förekomster) ---
 hb = N.get('Halvbåge', N.get('Växthus - halvbåge', {}))
 halv = hb.get('förekomster', 0); kb = hb.get('kroppar', {})
-vanl = kb.get('Kloss', 0) + kb.get('Fotkloss', 0) + kb.get('Nockkloss', 0)       # 120 långa
+vanl = sum(v for k, v in kb.items() if k.startswith('Kloss')) + kb.get('Fotkloss', 0) + kb.get('Nockkloss', 0)       # 120 långa
 fack = kb.get('Fackkloss', 0)                                                     # 250 långa
 lask = sum(v for k, v in kb.items() if k.startswith('Lask'))
 # Båge B: flänsar Lameller × LamellT limmade (PU). Klossar limmas + skruvas genomgående 5×90 (fläns 36 + kloss 24 + 30 in i andra flänsen).
