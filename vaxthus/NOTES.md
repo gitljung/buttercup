@@ -19,9 +19,9 @@ Byggd av Hugo i Claude (desktop). En fil, `index.html`, three.js r128 från cdnj
 | Del | Dimension | Placering |
 |---|---|---|
 | Syll, långsidor och gavlar | 120×120 tryckimpregnerat | Vid gavlarna avbruten för dörröppningen |
-| Bågar | **Stegbåge:** två remsor plywood (12 mm, 70 mm breda, två limmade lager) med klossar 70×70 emellan | Bågavstånd `SP` (1 000 mm), antal = ceil(L/SP)+1 |
+| Bågar | **Stegbåge:** 15 mm plywood – kloss 70 – 15 mm plywood (100 mm djup), skarvplan förskjutna ytter/inner (skiva max 2 440), skarvklossar + lask | Bågavstånd `SP` (2 000 mm), antal = ceil(L/SP)+1 |
 | Klossar | 70×70, 120 mm | ca var 30:e cm längs bågen |
-| Nockregel | 45×145 | 13 cm under nocken |
+| Nockregel | 45×120 på högkant | i nocken, halvbågarna slutar mot dess sidor |
 | Sidoreglar | 34×145 | på höjden 1,9 m, en per sida |
 | Dörrstolpar | 95×95 | ×4 |
 | Överliggare dörr och överljus | 95×95 | |
@@ -66,3 +66,7 @@ Varje regel har `t0` och `t1` och "växer" fram längs sin egen längd. Alla reg
 - AP214, riktiga solider (MANIFOLD_SOLID_BREP med plana ytor), mm, Z uppåt. Varje regel och kloss blir en egen solid med namn och träfärg.
 - Film och glas är bara ytor, inga solider, och följer därför inte med i STEP. Ta GLB om du vill ha dem.
 - Kontrollerad med OpenCascade: 547 solider, 0 ogiltiga, bbox 4 120 × 10 120 × 3 570 mm.
+
+
+## Fusion (tillagd av Vickan, 6 okt)
+- `fusion/bygg_vaxthus.py` bygger hela huset parametriskt i Fusion (syll, bågar + klossar, nock, sidoreglar, gavlar, beslag, dörrar + beslag, film). Körs via `fusion/run_in_fusion.py` (Fusion MCP 127.0.0.1:27182). `*.bak` = tidigare versioner.
