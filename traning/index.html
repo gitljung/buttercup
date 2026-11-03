@@ -145,7 +145,12 @@ details[open] summary::before{content:"– ";}
 .cxctl{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .cxctl button{font-family:var(--label);font-weight:700;text-transform:uppercase;border:2px solid var(--ink);border-radius:10px;background:#fff;padding:8px 12px;font-size:15px;color:var(--ink)}
 .cxtempo{display:flex;align-items:center;gap:6px;font-family:var(--label);font-weight:700;font-size:14px;text-transform:uppercase}
-.cxtempo button{width:36px;padding:6px 0}
+.cxtempo{flex:1 1 100%;justify-content:center}.cxtempo i{font-style:normal;font-size:12px;opacity:.7}
+.cxtempo b{min-width:64px;text-align:right;font-family:Anton,sans-serif;font-weight:400;font-size:16px;color:#C8340A}
+.cxtempo input{-webkit-appearance:none;appearance:none;flex:1;max-width:220px;height:10px;border-radius:6px;border:2px solid #2A1206;
+  background:linear-gradient(90deg,#FCC222 var(--p,40%),#FFF6DC var(--p,40%));margin:0}
+.cxtempo input::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#C8340A;border:3px solid #2A1206;box-shadow:0 2px 0 #2A1206;cursor:pointer}
+.cxtempo input::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#C8340A;border:3px solid #2A1206;cursor:pointer}
 .btn.ghost{font-size:18px;padding:12px 14px;background:rgba(255,246,220,.6);color:var(--ink);box-shadow:none;border:3px solid var(--ink)}
 .dots i{width:22px;height:22px;border-radius:50%;border:3px solid var(--chili);background:var(--cream);transition:background .3s,transform .3s var(--pop)}
 .dots i.done{background:var(--chili);transform:scale(1.1)}
@@ -1576,7 +1581,7 @@ function renderStep() {
       const tb = document.createElement('div'); tb.className = 'cxbox';
       tb.innerHTML = `<div class="cxrow"><b class="cxn">–</b><span class="cxl"></span></div><div class="cxbar"><i></i></div>
         <div class="cxpips">${Array.from({length:x.reps}, () => '<i></i>').join('')}</div>
-        <button class="cxpep" aria-label="Pepp från Hasse">📣 Hallå gänget!</button><div class="cxctl"><button class="cxpause">❚❚ Paus</button><span class="cxtempo"><button data-d="-0.1" aria-label="Snabbare">−</button><span>${cxTempoTxt(k)}</span><button data-d="0.1" aria-label="Lugnare">+</button></span></div>`;
+        <button class="cxpep" aria-label="Pepp från Hasse">📣 Hallå gänget!</button><div class="cxctl"><button class="cxpause">❚❚ Paus</button><label class="cxtempo"><i>Snabbt</i><input type="range" min="0.6" max="1.6" step="0.05" value="${k}" aria-label="Tempo per repetition"><i>Lugnt</i><b class="cxtv"></b></label></div>`;
       info.querySelector('.target').after(tb); info.querySelector('.dots').remove(); info.querySelector('.tipsd').removeAttribute('open');
       info.querySelector('#nx').classList.add('ghost'); }
     wrap.appendChild(info); body.appendChild(wrap);
@@ -1839,13 +1844,13 @@ function cxTimer(st, box) {
     const bub = document.createElement('span'); bub.className = 'pepbub'; bub.textContent = 'Hallå gänget!'; st.appendChild(bub); setTimeout(() => bub.remove(), 1600);
     e.currentTarget.animate([{transform:'scale(1)'}, {transform:'scale(1.12) rotate(-3deg)'}, {transform:'scale(1)'}], {duration:300}); };
   pb.onclick = () => { T.paused = !T.paused; pb.textContent = T.paused ? '▶ Fortsätt' : '❚❚ Paus'; box.classList.toggle('paused', T.paused); };
-  box.querySelectorAll('.cxtempo button').forEach(b => b.onclick = () => {
-    const k = Math.min(1.6, Math.max(.6, Math.round((+(localStorage.getItem('bc_traning_cxk2') || 1) + (+b.dataset.d)) * 10) / 10));
-    localStorage.setItem('bc_traning_cxk2', k); box.querySelector('.cxtempo span').textContent = cxTempoTxt(k);
-    const np = base * k; if (T.t > 0) T.t = T.t / T.per * np; T.per = np; T.rep = Math.floor(Math.max(0, T.t) / np); draw(); });
+  const rg = box.querySelector('.cxtempo input'), tv = box.querySelector('.cxtv');
+  const tset = () => { const k = +rg.value; tv.textContent = (base * k / 1000).toFixed(1).replace('.', ',') + ' s/rep';
+    rg.style.setProperty('--p', ((k - .6) * 100) + '%'); return k; };
+  tset(); rg.oninput = () => { const k = tset(); localStorage.setItem('bc_traning_cxk2', k);
+    const np = base * k; if (T.t > 0) T.t = T.t / T.per * np; T.per = np; T.rep = Math.floor(Math.max(0, T.t) / np); draw(); };
   draw();
 }
-const cxTempoTxt = k => k < .95 ? 'Snabbare' : k > 1.05 ? 'Lugnare' : 'Tempo';
 function startComplex() {
   if (!S) S = fresh();
   INT = 'normal'; const plan = cxPlan(), it = 'normal'; {
