@@ -1830,7 +1830,7 @@ function cxTimer(st, box) {
     const np = base * k; if (T.t > 0) T.t = T.t / T.per * np; T.per = np; T.rep = Math.floor(Math.max(0, T.t) / np); draw(); });
   draw();
 }
-const cxTempoTxt = k => k < .95 ? 'Snabbare' : k > 1.05 ? 'Lugnare' : 'Reelens tempo';
+const cxTempoTxt = k => k < .95 ? 'Snabbare' : k > 1.05 ? 'Lugnare' : 'Tempo';
 function startComplex() {
   if (!S) S = fresh();
   INT = 'normal'; const plan = cxPlan(), it = 'normal'; {
