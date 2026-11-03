@@ -1972,7 +1972,7 @@ const WAMAP = {knaboj:'luftknaboj', knabojbank:'stolres', utfall0:'utfallkv', ha
 const EXDUR = [320, 200, 110, 110, 110, 110, 110, 240, 240, 240, 110, 110, 110, 110, 110, 200];
 const sprIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const d = en.target; d.vis = en.isIntersecting;
   if (d.vis && !d.style.backgroundImage) d.style.backgroundImage = `url(${d.dataset.src})`; if (d.vis && !RM) d.go(); }), {rootMargin:'200px'}) : null;
-const EXFILE = {hasse:{gorillaswing:'gorillaswing4', axelkast:'axelkast3', pullover:'pullover4', squatpressout:'squatpressout3', utfallhalo:'utfallhalo3'}};   // omgjorda ark får nytt filnamn (cache)
+const EXFILE = {hasse:{gorillaswing:'gorillaswing4', axelkast:'axelkast3', pullover:'pullover4', squatpressout:'squatpressout4', utfallhalo:'utfallhalo3'}};   // omgjorda ark får nytt filnamn (cache)
 function exFile(fid, id) { return (EXFILE[fid] && EXFILE[fid][id]) || id; }
 function exSprite(id, e) {
   const fid = SS && SS.cx && EXM.hasse && EXM.hasse[id] ? 'hasse' : localStorage.getItem('bc_halsoresa_fighter') || 'kent', v = EXM[fid] && EXM[fid][id], w = Array.isArray(v) ? v[0] : v, hh = Array.isArray(v) ? v[1] : (EXM.h || 256);
