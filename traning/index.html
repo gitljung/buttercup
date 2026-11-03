@@ -1396,7 +1396,7 @@ $('#lib-back').onclick = () => goBack(); $('#go-lib0').onclick = () => openLib()
 function pepp() { hallaGanget(); if (navigator.vibrate) navigator.vibrate([40, 40, 40]); }
 function hallaGanget() { let i; do i = Math.floor(Math.random() * HEJ.length); while (i === hejLast && HEJ.length > 1); hejLast = i;
   try { if (hejAu) hejAu.pause(); hejAu = new Audio(HEJ[i]); hejAu.volume = 1; hejAu.play().catch(() => {}); } catch (_) {} }
-$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); CX.ex.forEach(k => { new Image().src = `ex/hasse/${k}.webp`; });
+$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); CX.ex.forEach(k => { new Image().src = `ex/hasse/${k}.webp`; });
   b.classList.add('talk'); setTimeout(() => { b.classList.remove('talk'); delete b.dataset.busy; useGear('kb'); if (!S) S = fresh(); startComplex(); }, 1500); }; $('#lib-go').onclick = () => startFree();
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#sheet').classList.remove('on'); });
 
@@ -1773,6 +1773,7 @@ function cxTimer(st, box) {
     if (T.paused || CXT !== T) return;
     if (!box.isConnected) { cxStop(); return; }
     const before = T.t; T.t += dt;
+    if (prep === 5000 && before < -1350 && T.t >= -1350) { try { if (hejAu) hejAu.pause(); hejAu = new Audio('hasse/korvi.mp3'); hejAu.play().catch(() => {}); } catch (_) {} }
     if (before < 0 && T.t >= 0) { beep(); if (navigator.vibrate) navigator.vibrate(80); }
     if (T.t >= 0) { const r = Math.floor(T.t / T.per); if (r > T.rep && r < n) { T.rep = r; blip(600, 900, .06); if (navigator.vibrate) navigator.vibrate(30); } }
     if (T.t >= n * T.per) { cxStop(); box.closest('.cxwrap').querySelector('#nx').click(); return; }
