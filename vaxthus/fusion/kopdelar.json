@@ -1,0 +1,10 @@
+{
+  "_källa": "wiberger.se, priser kr/st ex moms, hämtade 2026-11-03",
+  "gangjarn": {"art": "GJ60 A2 100X100", "namn": "Gångjärn, rostfritt, 1,5 mm", "pris_ex": 43.70, "antal": 8, "url": "https://www.wiberger.se/produkt/gj60-gangjarn", "step": "kopdelar/gj60step/gj60_fzb_80x80-Wiberger.step (bara 80x80 i CAD-filen)"},
+  "gangjarn_alt": {"art": "GJ40 A4 50X50", "pris_ex": 79.80, "url": "https://www.wiberger.se/produkt/gj40-rostfritt-gangjarn", "not": "syrafast men för litet för 1x2 m blad"},
+  "handtag": {"art": "GN425 A2 200-M5", "namn": "Bygelhandtag, rostfritt", "pris_ex": 130.50, "antal": 4, "url": "https://www.wiberger.se/produkt/gn425a4-rostfritt-handtag", "step": "kopdelar/gn425a2-a4/Wiberger-GN425-NI-10-200-GS.step"},
+  "las": {"art": "EL2030-100-FZB", "namn": "Excenterlås, ställbart, ögla (hänglås)", "pris_ex": 29.00, "alt_rostfri": {"art": "EL2030-100-RFE", "pris_ex": 185.50}, "antal": 2, "url": "https://www.wiberger.se/produkt/el2030-100", "step": "https://cdn.wiberger.se/resources/cad/975/step/el2030-100.zip"},
+  "stormhake": {"art": "EL1035-200-RF", "namn": "Excenterlås, fast, rostfritt", "pris_ex": 23.00, "antal": 2, "url": "https://www.wiberger.se/produkt/el1035-200"},
+  "hake": {"art": "E BPG-6-SS", "pris_ex": 12.50, "url": "https://www.wiberger.se/produkt/bpg-6-hake", "step": "kopdelar/e_bpg-6step/Wiberger-e_bpg-6.STEP"},
+  "saknas_hos_wiberger": ["T-gångjärn", "kantregel", "överfall för hänglås (ersätts av EL2030-100 med ögla)", "vinkelbeslag/spikplåt för trä", "ankarspik"]
+}

@@ -20,3 +20,9 @@ Projekt `vaxthus`, master "Växthus - parametrar". Gammal DirectDesign-modell i 
 - 2026-11-03 Victor: kör steg 5. v06_gavlar.py (gavlar, dörrar, gavelbeslag, namnrättning) KÖAD. Gavelstag utelämnat: dörrstolparna går upp till bågen.
 - 2026-11-03 Victor: kör (dörrbeslag). v06 ändrad: dörrblad i liv med stolparnas utsida. v07_dorrbeslag.py KÖAD efter v06. Stolptopp/nockstolpe: snedskruvad konstruktionsskruv (ej ritad).
 - 2026-11-03 Steg 5 + 6c KLARA (398 kroppar, 0 fel/krock, flex OK). FEL hittat: bakre vänstra gavelsyllen saknades sedan steg 4 (spegling). v04 rättad för ombygge; v07b_syllfix.py KÖAD.
+- 2026-11-03 Victor: ja, byt till Wiberger-köpdelar (GJ60 A2 100x100 nativt parametrisk, GN425 A2 200, EL2030-100, EL1035-200 + BPG-6 som STEP). v08a_sond.py (läsande import) KÖAD efter syllfix; placering v08b skrivs efter sonden.
+- 2026-11-03 Syllfix KLAR: 4 gavelsyllar, 399 kroppar, 0 fel/krock, flex OK, sparad.
+- 2026-11-03 Sond klar (GN425: fötter y=0, +y 43, långt längs z; EL2030: fäste y=0 +y, längs x; EL1035: fäste y=0, en del till y -0,8 -> +1 mm). v08b_kopdelar.py KÖAD.
+- 2026-11-03 v08b försök 1 FEL: exec av v03 skrev över K (saknade ext). Rättat: kontroll tas från eget namnrum. Försök 2 KÖAD.
+- 2026-11-03 v08b försök 2: allt byggt, 0 krock, men STEP-importens tidslinjegrupper Group1-3 har healthState!=0 (tomt meddelande) -> sparade ej. Försök 3: grupperna löses upp.
+- 2026-11-03 Steg 6d KLAR (försök 3): Wiberger-köpdelar. 421 kroppar, 0 fel/krock, flex OK (köpdelar ej omplacerade), sparad. Importgrupper (healthState 5) upplösta.
