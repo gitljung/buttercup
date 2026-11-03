@@ -149,6 +149,13 @@ details[open] summary::before{content:"– ";}
 .rest .in{text-align:center;padding:20px}
 .ring{width:min(70vw,300px);height:min(70vw,300px);display:block;margin:10px auto}
 .ring text{font-family:var(--display);fill:var(--chili)}
+.rdance{display:none;position:relative;height:0;overflow:visible}
+.rdance .spr{position:absolute;left:50%;bottom:-6px;height:min(250px,32vh);width:auto;aspect-ratio:444/480;background-image:url(ex/hasse/dans.webp);transform:translateX(-50%);margin:0}
+.rest.dance .rdance{display:block;height:min(250px,32vh);animation:rdin .45s var(--pop)}
+.rest.dance .ring{width:110px;height:110px}
+.rd-notes{position:absolute;right:12%;top:0;font-size:30px;color:var(--chili);animation:rdnote 1.2s ease-in-out infinite}
+@keyframes rdin{0%{transform:scale(.3) translateY(60px);opacity:0}100%{transform:none;opacity:1}}
+@keyframes rdnote{50%{transform:translateY(-10px) rotate(8deg)}}
 .rest .nxt{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin:6px 0 18px}
 .rpe{display:grid;gap:12px;margin-top:14px}
 .rpe button{appearance:none;display:flex;gap:14px;align-items:center;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--cream);border:3px solid var(--chili);border-radius:18px;box-shadow:4px 4px 0 var(--chili);padding:10px 14px;transition:transform .18s var(--pop)}
@@ -502,6 +509,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
   <svg class="ring" viewBox="0 0 200 200"><circle cx="100" cy="100" r="86" fill="#FFF6DC" stroke="#C8340A" stroke-width="5"/>
     <circle id="ring" cx="100" cy="100" r="74" fill="none" stroke="#C8340A" stroke-width="16" stroke-linecap="round" transform="rotate(-90 100 100)" stroke-dasharray="465" stroke-dashoffset="0"/>
     <text id="ring-t" x="100" y="118" text-anchor="middle" font-size="58">90</text></svg>
+  <div class="rdance" id="rdance"><div class="spr"></div><span class="rd-notes">♪ ♫ ♪</span></div>
   <div class="nxt" id="rest-next">Nästa: …</div>
   <div class="row" style="justify-content:center"><button class="btn ghost" id="rest-add">+15 s</button><button class="btn" id="rest-skip">Kör igen</button></div>
 </div></div>
@@ -1421,10 +1429,14 @@ let hsLast = {src:'', t:0};
 function hsay(src) { const now = Date.now(); if (hsLast.src === src && now - hsLast.t < 2000) return; hsLast = {src, t:now}; try { if (hejAu) hejAu.pause(); hejAu = new Audio(src); hejAu.play().catch(() => {}); } catch (_) {} }
 function tempel(v) { hsay(`hasse/tempel${v % 2 ? 1 : 2}.mp3`); }
 function korVi() { hsay('hasse/korvi.mp3'); }
+let RDT = null;
+function hasseDans(on) { const r = $('#rest'), d = $('#rdance .spr'); clearInterval(RDT); RDT = null;
+  r.classList.toggle('dance', on); if (!on) return; let i = 0;
+  const f = () => { d.style.backgroundPosition = `${i * 100 / 15}% 0`; i = (i + 1) % 16; }; f(); if (!RM) RDT = setInterval(f, 140); }
 function pepp() { hallaGanget(); if (navigator.vibrate) navigator.vibrate([40, 40, 40]); }
 function hallaGanget() { let i; do i = Math.floor(Math.random() * HEJ.length); while (i === hejLast && HEJ.length > 1); hejLast = i;
   try { if (hejAu) hejAu.pause(); hejAu = new Audio(HEJ[i]); hejAu.volume = 1; hejAu.play().catch(() => {}); } catch (_) {} }
-$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); CX.ex.forEach(k => { new Image().src = `ex/hasse/${k}.webp`; });
+$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); new Image().src = 'ex/hasse/dans.webp'; CX.ex.forEach(k => { new Image().src = `ex/hasse/${k}.webp`; });
   b.classList.add('talk'); setTimeout(() => { b.classList.remove('talk'); delete b.dataset.busy; useGear('kb'); if (!S) S = fresh(); startComplex(); }, 1500); }; $('#lib-go').onclick = () => startFree();
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#sheet').classList.remove('on'); });
 
@@ -1557,7 +1569,7 @@ function renderStep() {
     $('#nx').onclick = () => {
       const d = body.querySelectorAll('.dots i')[st.s - 1]; if (d) d.classList.add('done');
       const nxt = SS.steps[SS.i + 1];
-      if (st.cx) { if (nxt && nxt.type === 'set' && nxt.s !== st.s) startRest(x.rest, `Nästa: varv ${nxt.s} av ${x.sets} · ${nxt.x.e.namn}`, [{at:x.rest / 2 + 1, fn:() => tempel(st.s)}, {at:1.3, fn:korVi}]); else next(); return; }
+      if (st.cx) { if (nxt && nxt.type === 'set' && nxt.s !== st.s) startRest(x.rest, `Nästa: varv ${nxt.s} av ${x.sets} · ${nxt.x.e.namn}`, [{at:x.rest - 6, fn:() => hasseDans(true)}, {at:x.rest / 2 + 1, fn:() => tempel(st.s)}, {at:5, fn:() => hasseDans(false)}, {at:1.3, fn:korVi}]); else next(); return; }
       if (nxt && nxt.type === 'set') startRest(x.rest, nxt.x === x ? `Nästa: set ${nxt.s} av ${x.sets}` : `Nästa: ${nxt.x.e.namn} · ${nxt.x.kg}`);
       else next();
     };
@@ -1592,7 +1604,7 @@ function startRest(sec, txt, cues) {
     if (left <= 0) { clearInterval(R.iv); beep(); if (navigator.vibrate) navigator.vibrate([120, 60, 120]); next(); }
   }, 100);
 }
-function stopRest() { if (RT) clearInterval(RT.iv); RT = null; $('#rest').classList.remove('on'); }
+function stopRest() { hasseDans(false); if (RT) clearInterval(RT.iv); RT = null; $('#rest').classList.remove('on'); }
 $('#rest-skip').onclick = next;
 $('#rest-add').onclick = () => { if (RT) { RT.end += 15000; RT.total += 15000; } };
 let AC = null;
