@@ -1,0 +1,90 @@
+{
+ "halvbage": {
+  "kroppar": 15,
+  "fel": [],
+  "ej_last": []
+ },
+ "kontroller": [
+  {
+   "tag": "standard",
+   "BagR": 3856.1,
+   "AntalBagar": 6.0,
+   "bage_occ": 6,
+   "kroppar_totalt": 180,
+   "kroppar_halvbage": 15,
+   "fel": [],
+   "ej_last": [],
+   "krock": [],
+   "antal_krock": 0,
+   "remsor_mm": {
+    "Ytterremsa 1": 2073,
+    "Innerremsa 1": 1632,
+    "Ytterremsa 2": 2091,
+    "Innerremsa 2": 2394
+   },
+   "for_langa": [],
+   "x0_x1_y0_y1_zmax": [
+    -2050,
+    2050,
+    -35,
+    10035,
+    3545
+   ]
+  },
+  {
+   "tag": "flex {\"Bredd\": \"4800 mm\", \"Nockhojd\": \"4000 mm\", \"Spetsighet\": \"300 mm\", \"Langd\": \"12000 mm\", \"Bagavstand\": \"1000 mm\"}",
+   "BagR": 4830.7,
+   "AntalBagar": 13.0,
+   "bage_occ": 13,
+   "kroppar_totalt": 416,
+   "kroppar_halvbage": 16,
+   "fel": [],
+   "ej_last": [],
+   "krock": [],
+   "antal_krock": 0,
+   "remsor_mm": {
+    "Ytterremsa 1": 2071,
+    "Innerremsa 1": 1633,
+    "Ytterremsa 2": 2724,
+    "Innerremsa 2": 3023
+   },
+   "for_langa": [
+    "Ytterremsa 2",
+    "Innerremsa 2"
+   ],
+   "x0_x1_y0_y1_zmax": [
+    -2450,
+    2450,
+    -35,
+    12035,
+    4045
+   ]
+  },
+  {
+   "tag": "återställt",
+   "BagR": 3856.1,
+   "AntalBagar": 6.0,
+   "bage_occ": 6,
+   "kroppar_totalt": 180,
+   "kroppar_halvbage": 15,
+   "fel": [],
+   "ej_last": [],
+   "krock": [],
+   "antal_krock": 0,
+   "remsor_mm": {
+    "Ytterremsa 1": 2073,
+    "Innerremsa 1": 1632,
+    "Ytterremsa 2": 2091,
+    "Innerremsa 2": 2394
+   },
+   "for_langa": [],
+   "x0_x1_y0_y1_zmax": [
+    -2050,
+    2050,
+    -35,
+    10035,
+    3545
+   ]
+  }
+ ]
+}

@@ -1,0 +1,4 @@
+{
+    "message": "qty2 före None\nfeature qty2 3\n{} före 1 efter add 12 efter computeAll 12 ['B:1', 'B:2', 'B:3', 'B:4', 'B:5', 'B:6', 'B:7', 'B:8', 'B:9', 'B:10', 'B:11', 'B:12']\nqty2 FEL 'ValueInput' object has no attribute 'expression'\nfeature qty2 1\n{\"fix\": 1} före 1 efter add 4 efter computeAll 4 ['B:1', 'B:2', 'B:3', 'B:4']\nqty2 FEL 'ValueInput' object has no attribute 'expression'\nfeature qty2 1\n{\"sub\": 1, \"sub2\": 1, \"ground\": 1, \"fix\": 1} före 1 efter add 4 efter computeAll 4 ['B:1', 'B:2', 'B:3', 'B:4']\n",
+    "success": true
+}

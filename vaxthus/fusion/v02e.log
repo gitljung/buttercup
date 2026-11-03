@@ -1,0 +1,4 @@
+{
+    "message": "test refs 1 Bredd_Ref 4000\nrefs efter masterändring [(8, 8, False)]\nupdateAllReferences True\nrefs efter update [(8, 8, False)]\nBredd_Ref efter uppdatering (öppen) 4000\nnyöppnad refs []\nBredd_Ref nyöppnad + update 4000\nmaster återställd\n",
+    "success": true
+}

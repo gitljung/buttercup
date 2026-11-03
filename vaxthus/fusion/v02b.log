@@ -1,0 +1,4 @@
+{
+    "message": "original {'Bredd': '4000 mm', 'Nockhojd': '3500 mm', 'Spetsighet': '0 mm'}\n{\"tag\": \"flex {\\\"Bredd\\\": \\\"4800 mm\\\", \\\"Nockhojd\\\": \\\"4000 mm\\\", \\\"Spetsighet\\\": \\\"300 mm\\\"}\", \"BagR_Ref\": 3856.1, \"kroppar\": 15, \"fel\": [], \"ej_last\": [], \"krock\": [], \"remsor_mm\": {\"Ytterremsa 1\": 2073, \"Innerremsa 1\": 1632, \"Ytterremsa 2\": 2091, \"Innerremsa 2\": 2394}, \"for_langa\": [], \"x_min_max_z_max\": [22, 2050, 3545], \"klossar\": 9}\nmaster återställd\n{\"tag\": \"standard\", \"BagR_Ref\": 3856.1, \"kroppar\": 15, \"fel\": [], \"ej_last\": [], \"krock\": [], \"remsor_mm\": {\"Ytterremsa 1\": 2073, \"Innerremsa 1\": 1632, \"Ytterremsa 2\": 2091, \"Innerremsa 2\": 2394}, \"for_langa\": [], \"x_min_max_z_max\": [22, 2050, 3545], \"klossar\": 9}\nsparad Växthus - halvbåge\n",
+    "success": true
+}
