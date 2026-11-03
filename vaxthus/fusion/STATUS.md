@@ -33,3 +33,5 @@ Projekt `vaxthus`, master "Växthus - parametrar". Gammal DirectDesign-modell i 
 - 2026-11-03 Victor: belastningsberäkning. berakning/ (FEM stegbåge, EKS/EN1991, Båstad sk1,5 vb27): nuvarande båge underkänd (snö ~7x, vind instabil). Varianter i BERAKNING.md. Väntar beslut.
 - 2026-11-03 Hugo: film 4,5 m bred -> en våd per sida (halvbåge ytter 4,20 m nu / 4,31 m vid 230 djup) + plåt i nocken. Låsprofil längs nocken per sida under plåten (ej ritat än).
 - 2026-11-03 Victor: filmbredden bestämmer nockhöjd (4,5 m -> ≈3,5 m). Svep klossar: 230 djup 2x15, klossar c/c 200 + hanbjälke = 0,35/1,21/1,35 (Eurocode 50 år), ≈ OK med EN 13031-1. Väntar beslut.
+- 2026-11-03 Plats: Blommeröd vid Ringsjön (Höör: sk 1,5, vb 27 – samma som antaget). Plywood: konstruktionsplywood K20/70 (Moelven, Byggmax, 12x2500x1200 429 kr) sågas till remsor; limklass ej verifierad. Victor frågade om kanalplast (svar givet, ej beslut). Victor: behöver inte räkna om.
+- 2026-11-03 Victor: skiss alt 1 stålsidoplåtar 3 mm (zon 0,8–3,0 m, 2x220x2232, 11,4 kg/st, 36 st ≈ 410 kg, M10 c/c150 540 st) -> berakning/skiss_sidoplat.png. Ej beräknat.
