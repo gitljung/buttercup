@@ -15,12 +15,11 @@
       "source": "/baglbox/:path*",
       "destination": "/bagl/:path*",
       "permanent": true
-    }
-  ],
-  "rewrites": [
+    },
     {
       "source": "/traning/halsoresa/",
-      "destination": "/traning/index.html"
+      "destination": "/halsoresa/",
+      "permanent": true
     }
   ]
 }
