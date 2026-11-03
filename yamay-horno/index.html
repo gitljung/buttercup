@@ -6,6 +6,7 @@
 <title>Yamay Horno – interaktiv modell</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Yamay Horno – kolugn i Corten med fallucka (Josper-princip). Interaktiv 3D-modell direkt ur Fusion: öppna luckan, dra ut GN 1/1-gallren och asklådan, ställ spjället.">
+<meta name="robots" content="noindex, nofollow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="buttercup.nu">
 <meta property="og:title" content="Yamay Horno – interaktiv 3D-modell">
@@ -343,7 +344,7 @@ function stats() {
   $('#stats').innerHTML = `<b>Yamay Horno</b> · 670 × 460 × ≈672 mm inkl. justerfötter (utan lucka/handtag)<br>
   Eldstad 540 × 400 mm · 2 gallernivåer som Josper (60 mm delning, övre nivån 74 mm under lucköppningens överkant) för <b>GN 1/1</b> 530 × 325<br>
   Galler: 2 × gjutjärn Hendi 932018 + plancha Hendi 932001 (plancha eller galler på övre nivån) – standard, så GN-brickor passar<br>
-  Lucka: fallucka som Josper HJX – led i yttre underkanten, fälls 90° till en hylla i kolrostens höjd; stopp = klack på fjäderarmen mot fronten, dragfjäder (Gutekunst RZ-130K-04I) via kedja över fjäderarm R60 håller den stängd<br>
+  Lucka: fallucka som Josper HJX – led i yttre underkanten, fälls 90° till en hylla i kolrostens höjd; stopp = klack på fjäderarmen mot fronten, dragfjäder 17-7PH (specialfjäder i Gutekunst RZ-130K-04I:s mått) via kedja, bakom en strålskärm i fjäderfästet över fjäderarm R60 håller den stängd<br>
   Text: THE YAMAY OVEN / スミビオーブン / SWEDISH STEEL – JAPANESE TRADITION (Mochiy Pop One) genomskuren i luckan, stencilbryggor 3 mm, Vermilite syns bakom<br>
   Isolering: Vermilite 20 mm även i botten under asklådan (asklådan 71 mm hög, ca 13,8 l); frontstenen bärs av en rostfri överkarm (J-profil 2 mm, 4 × M6)<br>
   Lås: fjäderbelastat vred med kort vingplåt med fingerurtag (rostfri 4 mm, 80 × 38, 2 × M5), fjäder Gutekunst VD-219A (ca 26 N vila / 43 N utdraget, beräknat) – dra ut 5 mm och vrid 90°: låst kl 6 (vingen lodrät), öppet kl 3 (vingen vågrät); haken snäpper över luckan vid stängning. BBQ-handtaget 30 mm lägre<br>
@@ -351,9 +352,10 @@ function stats() {
   Kolrost: 4 vattenskurna stavar 522 × 96 i 1.4828 (6 mm spel per sida mot sidoplåtarna, växer ~6 mm varm) (reservdel: Josper 0426AC) · lucköppning från 195 mm, 22 mm över kolen · asklåda med skjutspjäll på rostfria hjul (massiva Ø25, utan lager/fett – tål värmen), C-skenor hindrar tippning, stopp efter ≈335 mm<br>
   Isolering: Vermilite 600 (20 mm) mellan innerlåda och yttre Corten-skal, även innanför fronten ovanför luckan; sidorna skyddas av hela sidoplåtar i 1.4828 3 mm (z 100–450, avlånga hål för värmeutvidgning)<br>
   Rök och kylning: centrerad skorsten Ø120 baktill (som Josper HJX-PRO), krage Ø190, hatt Ø220 över en gnistkopp i perforerad rostfri plåt; kylluft in genom slitsar nertill och ut upptill i takspalten (z 615) · plåtarna styrs ihop med tänder 10 mm i urtag 10,5<br>
-  Fötter: sidor, front och bak går ned till benen i hörnen (som Yakitori/Asado); sidornas ben bockade till fotflänsar 60 × 25 med 4 justerfötter Ganter GN 343.6-40-M8 helt rostfria (kulled, 7 kN)<br>
-  Handtag: 2 × fjäderhandtag 6" rostfritt (BBQ Smoker Supply MD_106-0097) på bockad Ø12-stång<br>
-  Vikt ≈ 137 kg komplett (126 kg stål + Vermilite)`;
+  Fötter: sidor, front och bak går ned till benen i hörnen (som Yakitori/Asado); 4 fotbeslag (Corten 5 mm, L, 2 × M6 genom sidans ben) bär justerfötter M10 med platta Ø40 helt innanför sidan – bärande mutter under beslaget (nyckel 17 utifrån), låsmutter ovanpå, 0–17 mm, ingen gänga i plåten<br>
+  Handtag: 2 × fjäderhandtag 6" rostfritt (BBQ Smoker Supply MD_106-0097) på bockad Ø12-stång, M8-mutter + bricka innanför (Vermiliten har ficka)<br>
+  Skruvar: ISO 7380 – obehandlade 10.9 där förbandet bara är Corten, A4 där rostfritt eller innerlådan ingår · luckans insida flytborrad M6, hörnen med lösa mutterplattor i fickor i Vermiliten (insidan glider vid värme)<br>
+  Vikt ≈ 142 kg komplett (131 kg stål + Vermilite)`;
 }
 function buildBOM() {
   const t = $('#bom'); t.innerHTML = '';
