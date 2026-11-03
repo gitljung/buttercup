@@ -1,0 +1,83 @@
+[
+ {
+  "tag": "standard",
+  "BagR": 3856.1,
+  "AntalBagar": 9.0,
+  "bage_occ": 9,
+  "kroppar_totalt": 473,
+  "kroppar_halvbage": 17,
+  "fel": [],
+  "ej_last": [],
+  "krock": [],
+  "antal_krock": 0,
+  "remsor_mm": {
+   "Ytterremsa 1": 2041,
+   "Innerremsa 1": 1662,
+   "Ytterremsa 2": 2103,
+   "Innerremsa 2": 2384
+  },
+  "for_langa": [],
+  "x0_x1_y0_y1_zmax": [
+   -2073,
+   2073,
+   -168,
+   10168,
+   3555
+  ]
+ },
+ {
+  "tag": "flex (köpdelar ej omplacerade)",
+  "BagR": 4830.7,
+  "AntalBagar": 13.0,
+  "bage_occ": 13,
+  "kroppar_totalt": 667,
+  "kroppar_halvbage": 18,
+  "fel": [],
+  "ej_last": [],
+  "krock": [],
+  "antal_krock": 0,
+  "remsor_mm": {
+   "Ytterremsa 1": 2040,
+   "Innerremsa 1": 1663,
+   "Ytterremsa 2": 2735,
+   "Innerremsa 2": 3014
+  },
+  "for_langa": [
+   "Ytterremsa 2",
+   "Innerremsa 2"
+  ],
+  "x0_x1_y0_y1_zmax": [
+   -2473,
+   2473,
+   -168,
+   12168,
+   4055
+  ]
+ },
+ {
+  "tag": "återställt",
+  "BagR": 3856.1,
+  "AntalBagar": 9.0,
+  "bage_occ": 9,
+  "kroppar_totalt": 473,
+  "kroppar_halvbage": 17,
+  "fel": [],
+  "ej_last": [],
+  "krock": [],
+  "antal_krock": 0,
+  "remsor_mm": {
+   "Ytterremsa 1": 2041,
+   "Innerremsa 1": 1662,
+   "Ytterremsa 2": 2103,
+   "Innerremsa 2": 2384
+  },
+  "for_langa": [],
+  "x0_x1_y0_y1_zmax": [
+   -2073,
+   2073,
+   -168,
+   10168,
+   3555
+  ]
+ }
+]

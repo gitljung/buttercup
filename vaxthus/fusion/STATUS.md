@@ -39,3 +39,4 @@ Projekt `vaxthus`, master "Växthus - parametrar". Gammal DirectDesign-modell i 
 - 2026-11-03 Hugo: klossar ~120 långa, ~10 st per halvbåge. Räknat (30 m/s, c/c 1250, raka klossar c/c ~410): 2x12/200 → 1,23 (UNDERKÄND), 2x12/250 → 1,19, 3x12/200 → 0,64 OK, 3x12/250 → 0,58. Förslag: 3x12 lameller, djup 200, 10 klossar. Fackverkssvep avbrutet (diagonaler: flänsknäckning, krångliga förband).
 - 2026-11-03 Victor: vind 20 m/s, bågdjup ~100. Svep klart (svep_20ms).
 - 2026-11-03 Victor: B. 3x12 lameller, bredd 95, KlossH 2xLamellT (djup 96), KlossCCmax 450 (11 klossar/halva), sidoregel 22x95. Beräknat 20 m/s: 0,75/0,66/0,67. v10b_bagB.py KÖAD.
+- 2026-11-03 Steg 10b KLAR: 473 kroppar, 0 fel/krock, flex OK (667, 13 bågar), återställt identiskt. Fläns ritas som en kropp 36 mm (lameller ej separata).
