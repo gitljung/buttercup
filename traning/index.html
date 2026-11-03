@@ -2,6 +2,8 @@
 <html lang="sv">
 <head>
 <meta charset="utf-8">
+<script>window.HR = /halsoresa/.test(location.pathname) || /[?&]hr\b/.test(location.search);
+if (HR) { document.documentElement.classList.add('hr'); if (!/^\/traning\/?$/.test(location.pathname)) document.write('<base href="/traning/">'); }</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <title>STARK IGEN · Träning · Buttercup</title>
@@ -221,6 +223,11 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .fsheet .fsel{margin:0}
 .fsheet .fx{position:absolute;right:-8px;top:-14px;z-index:3;background:none;border:0;font-size:34px;line-height:1;color:var(--chili);cursor:pointer}
 .libbtn.hasse.inl{margin:10px 0 0}
+.hrstart{display:none}.hr .hrstart{display:block}.hr #s-start > :not(.hrstart){display:none}
+.hrlink{display:block;margin:12px 0 4px;text-align:right;font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:15px;color:var(--chili);text-decoration:none}
+.hrlink:hover{text-decoration:underline}
+.hr .hrhero h1{animation:hrin .7s var(--ease) both}.hr .hrhero .badge{animation:hrin .7s .15s var(--ease) both}
+@keyframes hrin{from{opacity:0;transform:translateY(14px) scale(.96)}}
 .hsel{display:flex;gap:8px;margin:22px 0 0}.hsel button{flex:1;font-family:var(--label);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.02em;
   padding:9px 6px 8px;border:3px solid var(--ink);border-radius:10px;background:var(--cream);color:var(--ink);cursor:pointer;transition:transform .15s,background .15s}
 .hsel button.on{background:var(--buttercup);box-shadow:3px 3px 0 var(--chili);transform:translateY(-2px)}
@@ -382,6 +389,20 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 
 <!-- ============ START ============ -->
 <section class="screen on" id="s-start">
+  <div class="hrstart">
+    <div class="hero hrhero">
+      <p class="eyebrow">En klocka · 15 minuter · hemma eller i parken</p>
+      <h1>HASSES<br>HÄLSORESA</h1>
+      <span class="badge">Hallå gänget!</span>
+    </div>
+    <div class="card">
+      <h2>Välj dagens pass</h2>
+      <p class="note" style="margin:0">Två pass med en kettlebell. Timern räknar, Hasse visar – du bara kör. Börja med en lätt klocka och kör i ditt eget tempo.</p>
+      <div id="hr-slot"></div>
+      <div class="warn"><b>Innan du börjar:</b> har du hjärt- eller kärlproblem, högt blodtryck, ont i ryggen eller nyligen opererats – prata med din vårdcentral först. Det ska kännas ansträngande, aldrig smärtsamt.</div>
+      <a class="hrlink" href="/traning/">Hela träningsprogrammet – STARK IGEN ›</a>
+    </div>
+  </div>
   <div class="hero">
     <p class="eyebrow">12 veckor · 2–3 pass · 30 minuter</p>
     <h1>STARK<br>IGEN</h1>
@@ -412,6 +433,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
     <div class="hsel" role="tablist" aria-label="Välj Hasses pass"><button data-p="1" role="tab">Pass 1 · Komplexet</button><button data-p="2" role="tab">Pass 2 · 30/30</button></div>
     <button class="libbtn hasse inl" id="go-hasse"><img src="hasse.webp" alt="Hasse med sin kettlebell" width="600" height="626"><span class="hej">Hallå gänget!</span><span class="lbl" id="hp-lbl">Kom igång direkt · 1 kettlebell · ca 13 min</span><b>Hasses superpass</b>
     <small id="hp-txt">Rodd → swing → knäböj → press. 6 reps var, rakt igenom. 10 varv, 30 s vila. Timern räknar – du bara kör.</small></button>
+    <a class="hrlink" href="/traning/halsoresa/">Hasses Hälsoresa – egen sida ›</a>
     <button class="libbtn" id="go-lib0"><span class="lbl">Övningsbank</span><b>Alla övningar</b><small>Välj muskelgrupp och redskap – sätt ihop ett eget pass</small></button>
     <div class="warn"><b>Innan du börjar:</b> har du hjärt- eller kärlproblem, högt blodtryck, ont i ryggen eller nyligen opererats – prata med din vårdcentral först. Det ska kännas ansträngande, aldrig smärtsamt.</div>
   </div>
@@ -1399,7 +1421,7 @@ function goBack() {
   if ($('#sheet').classList.contains('on')) { $('#sheet').classList.remove('on'); return true; }
   if (CUR === 's-start') return false;
   if (CUR === 's-sess') { if (!confirm('Avbryta passet? Det sparas inte.')) return true; stopRest(); wakeOff(); SS = null; }
-  const to = FROM[CUR] && (CUR === 's-log' || CUR === 's-lib') ? FROM[CUR] : PARENT[CUR] || 's-start';
+  const to = window.HR && (CUR === 's-sess' || CUR === 's-done') ? 's-start' : FROM[CUR] && (CUR === 's-log' || CUR === 's-lib') ? FROM[CUR] : PARENT[CUR] || 's-start';
   if (CUR === 's-done' && SS && SS.free && FROM['s-lib']) { show('s-lib', true); return true; }
   if (to === 's-prog' && S) renderProg();
   if (to === 's-start') { if (typeof gearStatus === 'function') gearStatus(); }
@@ -1421,7 +1443,7 @@ $('#bc-back').onclick = () => { goBack(); };
 $('#nav-log').onclick = () => { if (!S) { toast('Välj redskap först'); return; } renderLog(); show('s-log'); };
 $('#edit-prof').onclick = $('#p-focus').onclick = () => { renderProfile(); show('s-profile'); };
 $('#l-back').onclick = () => { renderProg(); show('s-prog'); };
-$('#d-back').onclick = () => { if (!S.log.length && !S.free) { show('s-start'); return; } if (!S.log.length) { renderProfile(); show('s-profile'); return; } renderProg(); show('s-prog'); };
+$('#d-back').onclick = () => { if (window.HR || (!S.log.length && !S.free)) { show('s-start'); return; } if (!S.log.length) { renderProfile(); show('s-profile'); return; } renderProg(); show('s-prog'); };
 $('#l-reset').onclick = () => { if (confirm(`Radera historiken för ${G.namn.toLowerCase()} och börja om?`)) { localStorage.removeItem(KEY); S = null; $('#g-' + G.id + ' small').textContent = 'Börja om'; show('s-start'); } };
 
 // ---------------- profil ----------------
@@ -1466,6 +1488,8 @@ function hpSel(nr) { if (nr) localStorage.setItem('bc_traning_hpass', nr); const
   $('#hp-lbl').textContent = HPTXT[p][0]; $('#go-hasse b').textContent = p === 2 ? 'Hasses superpass 2' : 'Hasses superpass'; $('#hp-txt').textContent = HPTXT[p][1]; }
 document.querySelectorAll('.hsel button').forEach(b => b.onclick = () => { hpSel(b.dataset.p); $('#go-hasse').animate([{transform:'scale(.97)'}, {transform:'scale(1)'}], {duration:220}); });
 hpSel();
+if (window.HR) { $('#hr-slot').append($('.hsel'), $('#go-hasse')); document.title = 'Hasses Hälsoresa · Buttercup';
+  const hb = document.querySelector('.bc-bar .hide-m'); if (hb) hb.textContent = 'Olistad · Hasses hälsoresa'; }
 $('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); new Image().src = 'ex/hasse/dans3.webp'; new Audio('hasse/vibe.mp3').load(); (cxPassNr() === 2 ? CX2.ex : CX.ex).forEach(k => { new Image().src = `ex/hasse/${k}.webp`; });
   b.classList.add('talk'); setTimeout(() => { b.classList.remove('talk'); delete b.dataset.busy; useGear('kb'); if (!S) S = fresh(); startComplex(); }, 1500); }; $('#lib-go').onclick = () => startFree();
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#sheet').classList.remove('on'); });
@@ -1559,7 +1583,7 @@ async function wakeOn() { try { WL = await navigator.wakeLock.request('screen');
 function wakeOff() { try { WL && WL.release(); } catch (_) {} WL = null; }
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && SS && $('#s-sess').classList.contains('on')) wakeOn(); });
 $('#ss-backstep').onclick = () => { if (!SS || SS.i === 0) return; cxStop(); stopRest(); SS.i--; renderStep(); };
-$('#ss-quit').onclick = () => { if (confirm('Avbryta passet? Det sparas inte.')) { cxStop(); stopRest(); wakeOff(); const home = SS && SS.cx && !S.log.length; SS = null; if (home) { show('s-start'); return; } renderProg(); show('s-prog'); } };
+$('#ss-quit').onclick = () => { if (confirm('Avbryta passet? Det sparas inte.')) { cxStop(); stopRest(); wakeOff(); const home = window.HR || (SS && SS.cx && !S.log.length); SS = null; if (home) { show('s-start'); return; } renderProg(); show('s-prog'); } };
 function renderStep() {
   const st = SS.steps[SS.i], body = $('#ss-body'); body.innerHTML = '';
   $('#ss-prog').style.width = (SS.i / (SS.steps.length - 1) * 100) + '%';
