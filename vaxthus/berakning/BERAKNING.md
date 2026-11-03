@@ -52,3 +52,8 @@ Utnyttjande snö / vind / lyft (max):
 - TRÄ300 3×4 m: samma princip, 45×70-virke. Tunnel 300: 150 kg/m², 20 m/s. Premium Tunnel (stål): 360 kg/m², 30 m/s.
 - Vindklassningarna i m/s motsvarar q = ½ρv²: 20 → 0,25, 25 → 0,39, 30 → 0,56 kN/m². Vår dimensionering: qp 0,99 (terräng I) / 0,79 (II) = 50-årsbyen.
 - Skalat till Norhages nivåer (vind är dimensionerande): 230 djup, 2×15, klossar c/c 200 + hanbjälke → ≈ 0,5 (25 m/s) / ≈ 0,7 (30 m/s).
+
+## Kalibrering mot Norhage TRÄ300 (Victors foton 2026-11-03, kalib_nh300.py)
+Uppmätt/avläst: fläns 70 bred (tumstock), plywood ca 15 mm (skikt), fotkloss ca 300 lång, klossar ca c/c 250, regel 20×95 genom fack, vinkel 70×70×55 vid foten. Antaget: djup 100–120, nock ~2,45, c/c 1050, kanalplast EJ medräknad.
+- 20 m/s (Norhages klassning): vind 0,76–0,79, snö 1,05–1,1 (sk 1,5 ≈ 150 kg/m², deras klassning för Tunnel 300) → modellen stämmer med tillverkarens klassning.
+- 25 m/s: 1,0–1,3. Eurocode: ~3. → det är lastnivån, inte modellen, som skiljer.
