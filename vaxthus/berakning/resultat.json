@@ -1,0 +1,629 @@
+{
+ "meta": {
+  "R": 3856.1,
+  "BagLangd": 4095.0,
+  "qp": 0.989,
+  "mu3": 2.0,
+  "gd": 0.91,
+  "kmod": {
+   "snö": 0.65,
+   "vind": 0.7
+  },
+  "sk": 1.5,
+  "vb": 27.0
+ },
+ "varianter": {
+  "Nu: klossar c/c ~0,5 m": {
+   "ULS1 snö jämn": {
+    "lambda_cr": 2.02,
+    "forstoring": 1.99,
+    "max_utnyttj": 7.49,
+    "var": [
+     "inner",
+     1,
+     120,
+     -5.14,
+     0.198
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.12,
+      3.15
+     ],
+     "vänster": [
+      1.12,
+      3.15
+     ]
+    },
+    "skruv_max_kN_per_sida": 5.14,
+    "skruv_var": [
+     "Fotkloss",
+     "inner",
+     1
+    ],
+    "max_tryck_remsa_kN": -10.31
+   },
+   "ULS2 snö osymmetrisk": {
+    "lambda_cr": 2.11,
+    "forstoring": 1.9,
+    "max_utnyttj": 7.11,
+    "var": [
+     "inner",
+     -1,
+     120,
+     -4.82,
+     0.189
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.08,
+      3.31
+     ],
+     "vänster": [
+      1.08,
+      2.61
+     ]
+    },
+    "skruv_max_kN_per_sida": 5.34,
+    "skruv_var": [
+     "Kloss övre 1",
+     "inner",
+     1
+    ],
+    "max_tryck_remsa_kN": -11.15
+   },
+   "ULS3 snö osymm + 0,3 vind": {
+    "lambda_cr": 2.02,
+    "forstoring": 1.98,
+    "max_utnyttj": 8.49,
+    "var": [
+     "inner",
+     1,
+     120,
+     -6.11,
+     0.244
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.37,
+      3.44
+     ],
+     "vänster": [
+      -0.25,
+      2.14
+     ]
+    },
+    "skruv_max_kN_per_sida": 6.11,
+    "skruv_var": [
+     "Fotkloss",
+     "inner",
+     1
+    ],
+    "max_tryck_remsa_kN": -12.94
+   },
+   "ULS4 vind + 0,6 snö": {
+    "lambda_cr": 0.8,
+    "forstoring": Infinity,
+    "max_utnyttj": Infinity,
+    "var": [
+     "ytter",
+     1,
+     4065,
+     0.85,
+     Infinity
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.63,
+      2.36
+     ],
+     "vänster": [
+      -3.75,
+      0.39
+     ]
+    },
+    "skruv_max_kN_per_sida": 16.01,
+    "skruv_var": [
+     "Kloss nedre 1",
+     "inner",
+     -1
+    ],
+    "max_tryck_remsa_kN": -42.64
+   },
+   "ULS5 vind, lyft": {
+    "lambda_cr": 0.96,
+    "forstoring": Infinity,
+    "max_utnyttj": Infinity,
+    "var": [
+     "ytter",
+     1,
+     4065,
+     2.2,
+     Infinity
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.91,
+      -1.16
+     ],
+     "vänster": [
+      -3.47,
+      -3.12
+     ]
+    },
+    "skruv_max_kN_per_sida": 14.17,
+    "skruv_var": [
+     "Kloss nedre 1",
+     "inner",
+     -1
+    ],
+    "max_tryck_remsa_kN": -34.04
+   },
+   "SLS snö osymm": {
+    "max_deformation_mm": 55.1
+   },
+   "SLS vind": {
+    "max_deformation_mm": 371.4
+   }
+  },
+  "Klossar c/c ~0,3 m": {
+   "ULS1 snö jämn": {
+    "lambda_cr": 3.11,
+    "forstoring": 1.47,
+    "max_utnyttj": 2.57,
+    "var": [
+     "inner",
+     -1,
+     120,
+     -4.13,
+     0.068
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.12,
+      3.15
+     ],
+     "vänster": [
+      1.12,
+      3.15
+     ]
+    },
+    "skruv_max_kN_per_sida": 4.13,
+    "skruv_var": [
+     "Fotkloss",
+     "inner",
+     -1
+    ],
+    "max_tryck_remsa_kN": -10.38
+   },
+   "ULS2 snö osymmetrisk": {
+    "lambda_cr": 3.28,
+    "forstoring": 1.44,
+    "max_utnyttj": 2.55,
+    "var": [
+     "inner",
+     1,
+     2347,
+     -3.83,
+     0.068
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.08,
+      3.31
+     ],
+     "vänster": [
+      1.08,
+      2.61
+     ]
+    },
+    "skruv_max_kN_per_sida": 4.1,
+    "skruv_var": [
+     "Fotkloss",
+     "inner",
+     1
+    ],
+    "max_tryck_remsa_kN": -11.15
+   },
+   "ULS3 snö osymm + 0,3 vind": {
+    "lambda_cr": 3.36,
+    "forstoring": 1.42,
+    "max_utnyttj": 2.85,
+    "var": [
+     "inner",
+     1,
+     2347,
+     -8.63,
+     0.066
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.37,
+      3.44
+     ],
+     "vänster": [
+      -0.25,
+      2.15
+     ]
+    },
+    "skruv_max_kN_per_sida": 4.86,
+    "skruv_var": [
+     "Fotkloss",
+     "inner",
+     1
+    ],
+    "max_tryck_remsa_kN": -13.04
+   },
+   "ULS4 vind + 0,6 snö": {
+    "lambda_cr": 2.73,
+    "forstoring": 1.58,
+    "max_utnyttj": 10.47,
+    "var": [
+     "inner",
+     -1,
+     2987,
+     29.4,
+     0.21
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.64,
+      2.38
+     ],
+     "vänster": [
+      -3.76,
+      0.4
+     ]
+    },
+    "skruv_max_kN_per_sida": 11.03,
+    "skruv_var": [
+     "Kloss nedre 1",
+     "inner",
+     -1
+    ],
+    "max_tryck_remsa_kN": -42.74
+   },
+   "ULS5 vind, lyft": {
+    "lambda_cr": 3.62,
+    "forstoring": 1.38,
+    "max_utnyttj": 8.46,
+    "var": [
+     "inner",
+     -1,
+     2667,
+     29.44,
+     0.139
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.92,
+      -1.14
+     ],
+     "vänster": [
+      -3.47,
+      -3.12
+     ]
+    },
+    "skruv_max_kN_per_sida": 9.96,
+    "skruv_var": [
+     "Kloss nedre 1",
+     "inner",
+     -1
+    ],
+    "max_tryck_remsa_kN": -34.14
+   },
+   "SLS snö osymm": {
+    "max_deformation_mm": 38.9
+   },
+   "SLS vind": {
+    "max_deformation_mm": 269.7
+   }
+  },
+  "Klossar c/c ~0,2 m": {
+   "ULS1 snö jämn": {
+    "lambda_cr": 3.42,
+    "forstoring": 1.41,
+    "max_utnyttj": 1.9,
+    "var": [
+     "ytter",
+     -1,
+     1775,
+     5.75,
+     0.031
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.12,
+      3.15
+     ],
+     "vänster": [
+      1.12,
+      3.15
+     ]
+    },
+    "skruv_max_kN_per_sida": 3.5,
+    "skruv_var": [
+     "Fotkloss",
+     "inner",
+     -1
+    ],
+    "max_tryck_remsa_kN": -10.38
+   },
+   "ULS2 snö osymmetrisk": {
+    "lambda_cr": 3.62,
+    "forstoring": 1.38,
+    "max_utnyttj": 2.0,
+    "var": [
+     "ytter",
+     -1,
+     1775,
+     7.97,
+     0.022
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.08,
+      3.31
+     ],
+     "vänster": [
+      1.08,
+      2.61
+     ]
+    },
+    "skruv_max_kN_per_sida": 3.5,
+    "skruv_var": [
+     "Fotkloss",
+     "inner",
+     1
+    ],
+    "max_tryck_remsa_kN": -11.15
+   },
+   "ULS3 snö osymm + 0,3 vind": {
+    "lambda_cr": 3.72,
+    "forstoring": 1.37,
+    "max_utnyttj": 2.21,
+    "var": [
+     "ytter",
+     1,
+     1775,
+     8.23,
+     0.033
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.36,
+      3.43
+     ],
+     "vänster": [
+      -0.25,
+      2.14
+     ]
+    },
+    "skruv_max_kN_per_sida": 4.07,
+    "skruv_var": [
+     "Fotkloss",
+     "inner",
+     1
+    ],
+    "max_tryck_remsa_kN": -13.03
+   },
+   "ULS4 vind + 0,6 snö": {
+    "lambda_cr": 4.66,
+    "forstoring": 1.27,
+    "max_utnyttj": 7.7,
+    "var": [
+     "inner",
+     -1,
+     1850,
+     43.0,
+     0.038
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.62,
+      2.34
+     ],
+     "vänster": [
+      -3.75,
+      0.38
+     ]
+    },
+    "skruv_max_kN_per_sida": 7.37,
+    "skruv_var": [
+     "Kloss nedre 1",
+     "inner",
+     -1
+    ],
+    "max_tryck_remsa_kN": -42.44
+   },
+   "ULS5 vind, lyft": {
+    "lambda_cr": 5.86,
+    "forstoring": 1.21,
+    "max_utnyttj": 6.68,
+    "var": [
+     "inner",
+     -1,
+     1825,
+     37.7,
+     0.031
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.91,
+      -1.18
+     ],
+     "vänster": [
+      -3.47,
+      -3.13
+     ]
+    },
+    "skruv_max_kN_per_sida": 7.63,
+    "skruv_var": [
+     "Fotkloss",
+     "inner",
+     -1
+    ],
+    "max_tryck_remsa_kN": -33.87
+   },
+   "SLS snö osymm": {
+    "max_deformation_mm": 35.3
+   },
+   "SLS vind": {
+    "max_deformation_mm": 245.1
+   }
+  },
+  "Låda: limmade sidoskivor/full samverkan": {
+   "ULS1 snö jämn": {
+    "lambda_cr": 3.47,
+    "forstoring": 1.41,
+    "max_utnyttj": 1.9,
+    "var": [
+     "ytter",
+     1,
+     1775,
+     5.77,
+     0.031
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.12,
+      3.15
+     ],
+     "vänster": [
+      1.12,
+      3.15
+     ]
+    },
+    "skruv_max_kN_per_sida": 9.03,
+    "skruv_var": [
+     "Låda nedre",
+     "inner",
+     1
+    ],
+    "max_tryck_remsa_kN": -10.38
+   },
+   "ULS2 snö osymmetrisk": {
+    "lambda_cr": 3.65,
+    "forstoring": 1.38,
+    "max_utnyttj": 1.99,
+    "var": [
+     "ytter",
+     -1,
+     1775,
+     7.97,
+     0.022
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.08,
+      3.31
+     ],
+     "vänster": [
+      1.08,
+      2.61
+     ]
+    },
+    "skruv_max_kN_per_sida": 10.74,
+    "skruv_var": [
+     "Låda nedre",
+     "inner",
+     -1
+    ],
+    "max_tryck_remsa_kN": -11.15
+   },
+   "ULS3 snö osymm + 0,3 vind": {
+    "lambda_cr": 3.77,
+    "forstoring": 1.36,
+    "max_utnyttj": 2.2,
+    "var": [
+     "ytter",
+     1,
+     1775,
+     8.22,
+     0.033
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.36,
+      3.43
+     ],
+     "vänster": [
+      -0.25,
+      2.14
+     ]
+    },
+    "skruv_max_kN_per_sida": 11.82,
+    "skruv_var": [
+     "Låda nedre",
+     "inner",
+     1
+    ],
+    "max_tryck_remsa_kN": -13.0
+   },
+   "ULS4 vind + 0,6 snö": {
+    "lambda_cr": 4.69,
+    "forstoring": 1.27,
+    "max_utnyttj": 7.67,
+    "var": [
+     "inner",
+     -1,
+     1835,
+     42.84,
+     0.038
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.62,
+      2.32
+     ],
+     "vänster": [
+      -3.74,
+      0.37
+     ]
+    },
+    "skruv_max_kN_per_sida": 42.83,
+    "skruv_var": [
+     "Låda övre",
+     "inner",
+     -1
+    ],
+    "max_tryck_remsa_kN": -42.26
+   },
+   "ULS5 vind, lyft": {
+    "lambda_cr": 5.9,
+    "forstoring": 1.2,
+    "max_utnyttj": 6.68,
+    "var": [
+     "inner",
+     -1,
+     1835,
+     37.54,
+     0.032
+    ],
+    "fot_H_V_kN": {
+     "höger": [
+      -1.9,
+      -1.2
+     ],
+     "vänster": [
+      -3.46,
+      -3.14
+     ]
+    },
+    "skruv_max_kN_per_sida": 37.54,
+    "skruv_var": [
+     "Låda nedre",
+     "inner",
+     -1
+    ],
+    "max_tryck_remsa_kN": -33.72
+   },
+   "SLS snö osymm": {
+    "max_deformation_mm": 34.9
+   },
+   "SLS vind": {
+    "max_deformation_mm": 241.3
+   }
+  }
+ }
+}
