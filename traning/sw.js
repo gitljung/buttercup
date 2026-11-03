@@ -1,6 +1,6 @@
 // Stark igen: offline-cache sa sidan funkar pa gymmet utan tackning.
-const C = 'stark-igen-v49';
-const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './fighters/kent.webp', './fighters/bettan.webp', './fighters/pappa.webp', './fighters/sussie.webp', './hasse.webp', './ex/hasse/bojdrodd.webp', './ex/hasse/gorillaswing.webp', './ex/hasse/axelkast.webp', './ex/hasse/pullover.webp', './ex/hasse/squatpressout.webp', './ex/hasse/utfallhalo.webp', './ex/hasse/swing.webp', './ex/hasse/goblet.webp', './ex/hasse/gobletpress.webp', './ex/hasse/dans3.webp'];
+const C = 'stark-igen-v50';
+const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './fighters/kent.webp', './fighters/bettan.webp', './fighters/pappa.webp', './fighters/sussie.webp', './hasse.webp', './ex/hasse/bojdrodd.webp', './ex/hasse/gorillaswing.webp', './ex/hasse/axelkast.webp', './ex/hasse/pullover2.webp', './ex/hasse/squatpressout.webp', './ex/hasse/utfallhalo.webp', './ex/hasse/swing.webp', './ex/hasse/goblet.webp', './ex/hasse/gobletpress.webp', './ex/hasse/dans3.webp'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(C).then(c => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== C).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', e => {

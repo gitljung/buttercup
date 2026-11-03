@@ -1488,7 +1488,7 @@ document.querySelectorAll('.hsel button').forEach(b => b.onclick = () => { hpSel
 hpSel();
 if (window.HR) { $('#hr-slot').append($('.hsel'), $('#go-hasse')); document.title = 'Hasses Hälsoresa · Buttercup';
   const hb = document.querySelector('.bc-bar .hide-m');  }
-$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); new Image().src = 'ex/hasse/dans3.webp'; new Audio('hasse/vibe.mp3').load(); (cxPassNr() === 2 ? CX2.ex : CX.ex).forEach(k => { new Image().src = `ex/hasse/${k}.webp`; });
+$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); new Image().src = 'ex/hasse/dans3.webp'; new Audio('hasse/vibe.mp3').load(); (cxPassNr() === 2 ? CX2.ex : CX.ex).forEach(k => { new Image().src = `ex/hasse/${exFile('hasse', k)}.webp`; });
   b.classList.add('talk'); setTimeout(() => { b.classList.remove('talk'); delete b.dataset.busy; useGear('kb'); if (!S) S = fresh(); startComplex(); }, 1500); }; $('#lib-go').onclick = () => startFree();
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#sheet').classList.remove('on'); });
 
@@ -1855,10 +1855,11 @@ function cxPlan() { const c = CX.it.normal;
 CX.tempo = {bojdrodd:2, swing:2, goblet:2.5, gobletpress:2.5};
 // Hasses pass 2: tidsstyrt 30/30 – 3 varv × 5 övningar, 30 s arbete + 30 s vila efter varje övning
 const CX2 = {ex:['gorillaswing', 'axelkast', 'pullover', 'squatpressout', 'utfallhalo'], v:3, work:30, rest:30,
+  alt:{axelkast:'mirror', utfallhalo:'mirror', pullover:'rev'},   // sidbyte varje rep: speglas resp. spelas baklänges varannan rep
   tempo:{gorillaswing:2, axelkast:3, pullover:4, squatpressout:3, utfallhalo:4},
   e:{gorillaswing:{namn:'Gorillaswing', tips:['Brett och djupt i knäna – bröstet upp, platt rygg','Klockan pendlar mellan fötterna och upp till bröstet med raka armar','Kraften kommer från höfterna, inte armarna']},
-     axelkast:{namn:'Knäböj + axelsving', tips:['Båda händerna på handtaget hela tiden – släpp aldrig','Sitt ner med klockan mellan knäna, res dig och för den över axeln','Byt axel varje rep eller varannan – lugnt i början']},
-     pullover:{namn:'Pullover + rotation', tips:['Håll klockan i hornen','Upp över huvudet och ner bakom nacken – armbågarna pekar upp','Vrid överkroppen åt sidorna, höfterna står still']},
+     axelkast:{namn:'Knäböj + axelsving', tips:['Båda händerna på handtaget hela tiden – släpp aldrig','Sitt ner med klockan mellan knäna, res dig och för den över axeln','Byt axel varje rep – höger, vänster, höger…']},
+     pullover:{namn:'Pullover + rotation', tips:['Håll klockan i hornen','Från ena höften – upp över huvudet och ner bakom nacken – till andra höften','Vrid ordentligt åt sidan och lyft bakre hälen, varannan rep åt varje håll']},
      squatpressout:{namn:'Knäböj + utpress', tips:['Klockan i hornen tätt mot bröstet','Sitt djupt – pressa klockan rakt fram i botten','Dra tillbaka till bröstet och res dig']},
      utfallhalo:{namn:'Halo + utfall', tips:['Klockan i hornen, för den runt huvudet tätt intill','Kliv bakåt i ett utfall – bakre knät nästan i golvet','Byt ben varje rep, överkroppen rak']}}};
 function cxPassNr() { return localStorage.getItem('bc_halsoresa_hpass') === '2' ? 2 : 1; }
@@ -1877,7 +1878,10 @@ function cxTimer(st, box) {
   const big = box.querySelector('.cxn'), lab = box.querySelector('.cxl'), bar = box.querySelector('.cxbar i'), pb = box.querySelector('.cxpause');
   const pips = box.querySelectorAll('.cxpips i'), spr = box.closest('.cxwrap').querySelector('.stage .exspr');
   if (spr) spr.ext = true;
-  const frame = f => { if (spr) spr.style.backgroundPosition = `${cxFrame(f) * 100 / 15}% 0`; };
+  const alt = x.work && CX2.alt[x.id];
+  const frame = f => { if (!spr) return; const odd = alt && T.t > 0 && Math.floor(T.t / T.per) % 2, i = cxFrame(f);
+    spr.style.backgroundPosition = `${(odd && alt === 'rev' ? 15 - i : i) * 100 / 15}% 0`;
+    if (alt === 'mirror') spr.style.transform = odd ? 'scaleX(-1)' : ''; };
   const draw = () => {
     if (T.t < 0) { box.classList.add('prep'); big.textContent = Math.ceil(-T.t / 1000);
       lab.textContent = st.xi === 0 ? `Varv ${st.s} – gör dig redo` : `Nästa: ${x.e.namn} – gör dig redo`; bar.style.width = (100 * (1 + T.t / prep)) + '%'; frame(0); return; }
@@ -1968,11 +1972,13 @@ const WAMAP = {knaboj:'luftknaboj', knabojbank:'stolres', utfall0:'utfallkv', ha
 const EXDUR = [320, 200, 110, 110, 110, 110, 110, 240, 240, 240, 110, 110, 110, 110, 110, 200];
 const sprIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const d = en.target; d.vis = en.isIntersecting;
   if (d.vis && !d.style.backgroundImage) d.style.backgroundImage = `url(${d.dataset.src})`; if (d.vis && !RM) d.go(); }), {rootMargin:'200px'}) : null;
+const EXFILE = {hasse:{pullover:'pullover2'}};   // omgjorda ark får nytt filnamn (cache)
+function exFile(fid, id) { return (EXFILE[fid] && EXFILE[fid][id]) || id; }
 function exSprite(id, e) {
   const fid = SS && SS.cx && EXM.hasse && EXM.hasse[id] ? 'hasse' : localStorage.getItem('bc_halsoresa_fighter') || 'kent', v = EXM[fid] && EXM[fid][id], w = Array.isArray(v) ? v[0] : v, hh = Array.isArray(v) ? v[1] : (EXM.h || 256);
   if (!w) return null;
   const d = document.createElement('div'); d.className = 'spr exspr';
-  d.dataset.src = `ex/${fid}/${id}.webp`; d.style.aspectRatio = `${w} / ${hh}`; d.style.backgroundPosition = '0 0';
+  d.dataset.src = `ex/${fid}/${exFile(fid, id)}.webp`; d.style.aspectRatio = `${w} / ${hh}`; d.style.backgroundPosition = '0 0';
   const flat = e && (e.walk || e.cycle);
   let i = 0, t = null;
   const tick = () => { t = null; if (d.ext || !d.isConnected || (sprIO && !d.vis)) return; d.style.backgroundPosition = `${i * 100 / 15}% 0`; const ms = flat ? 115 : EXDUR[i]; i = (i + 1) % 16; t = setTimeout(tick, ms); };
