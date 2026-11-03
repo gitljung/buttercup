@@ -1805,7 +1805,7 @@ const CX = {ex:['bojdrodd', 'swing', 'goblet', 'gobletpress'], reps:6, it:{norma
 function cxPlan() { const c = CX.it.normal;
   return CX.ex.map(id => { const x = exPlan(id, 1, CX.reps); if (id === 'goblet') x.e = {...x.e, namn:'Goblet-knäböj', tips:['Håll klockan i hornen tätt mot bröstet','Sitt ner mellan hälarna – bröstet upp, knäna ut','Res dig rakt upp och kläm rumpan i toppen']};
     return {...x, sets:c.v, reps:CX.reps, bell:'l', kg:S.bells.l + ' kg', target:CX.reps + ' reps', rest:c.rest, g:'kb', cx:true}; }); }
-CX.tempo = {bojdrodd:1.5, swing:1.5, goblet:2, gobletpress:2};   // sekunder per rep, reelens takt
+CX.tempo = {bojdrodd:2.5, swing:2.5, goblet:3, gobletpress:3};   // sekunder per rep (reelens takt +1 s, Victor)
 let CXT = null;
 function cxStop() { if (CXT) { clearInterval(CXT.iv); CXT = null; } }
 function cxTimer(st, box) {
