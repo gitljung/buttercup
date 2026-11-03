@@ -26,3 +26,7 @@ Projekt `vaxthus`, master "Växthus - parametrar". Gammal DirectDesign-modell i 
 - 2026-11-03 v08b försök 1 FEL: exec av v03 skrev över K (saknade ext). Rättat: kontroll tas från eget namnrum. Försök 2 KÖAD.
 - 2026-11-03 v08b försök 2: allt byggt, 0 krock, men STEP-importens tidslinjegrupper Group1-3 har healthState!=0 (tomt meddelande) -> sparade ej. Försök 3: grupperna löses upp.
 - 2026-11-03 Steg 6d KLAR (försök 3): Wiberger-köpdelar. 421 kroppar, 0 fel/krock, flex OK (köpdelar ej omplacerade), sparad. Importgrupper (healthState 5) upplösta.
+- 2026-11-03 Victor: fortsätt + börja räkna skruv. v09_lasprofil.py (låsprofiler gavelbåge/långsida/gavelsyll/dörrkarm + antal-JSON för skruvlista) KÖAD. Film ej som kropp (räknas).
+- 2026-11-03 v09 försök 1: geometri OK (alla skisser låsta), FEL i loggningen (enhetslösa parametrar via evaluateExpression mm). Rättat, försök 2 KÖAD.
+- 2026-11-03 v09 försök 2: 4 krockar gavelbågsprofil mot ytterlask. Ändrat: gavelbågens profil på bågens gavelsida (y=-BagB/2), yttre kant, från SyllH+VinkelA. Försök 3 KÖAD.
+- 2026-11-03 Steg 7a KLAR (försök 3): Låsprofiler 16 st, 53,0 m (gavelbåge 4x4086 på gavelsidan, långsida 2x10310, dörrstolpe 4x2095, överliggare 2x2126, gavelsyll 4x848). 437 kroppar, 0 fel/krock, flex OK, sparad. skruvlista.py -> SKRUVLISTA.md (ur v09_antal.json).

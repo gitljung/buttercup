@@ -1,0 +1,220 @@
+{
+ "parametrar": {
+  "Bredd": 4000.0,
+  "Langd": 10000.0,
+  "Nockhojd": 3500.0,
+  "BagR": 3856.1,
+  "BagDjup": 100.0,
+  "BagLangd": 4095.0,
+  "AntalBagar": 9.0,
+  "BagCC": 1250.0,
+  "NedreMellan": 2.0,
+  "OvreMellan": 3.0,
+  "DorrBredd": 2000.0,
+  "DorrHojd": 2000.0,
+  "StolpeB": 95.0,
+  "SyllUtstick": 120.0,
+  "ProfilL": 2000.0,
+  "ProfilSkruvCC": 300.0,
+  "FilmOverlapp": 500.0,
+  "BagB": 70.0
+ },
+ "lasprofil_mm": {
+  "Låsprofil gavelbåge": [
+   4086,
+   4086,
+   4086,
+   4086
+  ],
+  "Låsprofil gavelsyll": [
+   848,
+   848,
+   848,
+   848
+  ],
+  "Låsprofil dörrstolpe": [
+   2095,
+   2095,
+   2095,
+   2095
+  ],
+  "Låsprofil överliggare": [
+   2126,
+   2126
+  ],
+  "Låsprofil långsida": [
+   10310,
+   10310
+  ]
+ },
+ "antal": {
+  "Wiberger-din934_m6": {
+   "förekomster": 2,
+   "kroppar": {
+    "Body1": 1
+   }
+  },
+  "Wiberger-el2030-100-fzb_rulle": {
+   "förekomster": 2,
+   "kroppar": {
+    "Body1": 1
+   }
+  },
+  "Wiberger-el2030-100-fzb_grepp": {
+   "förekomster": 2,
+   "kroppar": {
+    "Body1": 1,
+    "Body2": 1
+   }
+  },
+  "Wiberger-el2030-100-fzb_ganga": {
+   "förekomster": 2,
+   "kroppar": {
+    "Body1": 1
+   }
+  },
+  "Wiberger-el2030-100-fzb_platta": {
+   "förekomster": 2,
+   "kroppar": {
+    "Body1": 1
+   }
+  },
+  "Wiberger-el2030-100-fzb_bygel": {
+   "förekomster": 2,
+   "kroppar": {
+    "Body1": 1
+   }
+  },
+  "el1035-200_grepp": {
+   "förekomster": 2,
+   "kroppar": {
+    "Body1": 1
+   }
+  },
+  "el1035-200_bygel": {
+   "förekomster": 2,
+   "kroppar": {
+    "Body1": 1
+   }
+  },
+  "el1035-200_pinne": {
+   "förekomster": 2,
+   "kroppar": {
+    "Body1": 1
+   }
+  },
+  "el1035-200_platta": {
+   "förekomster": 2,
+   "kroppar": {
+    "Body1": 1
+   }
+  },
+  "hake": {
+   "förekomster": 2,
+   "kroppar": {
+    "Body1": 1
+   }
+  },
+  "Nock och sidoreglar": {
+   "förekomster": 1,
+   "kroppar": {
+    "Nockregel": 1,
+    "Sidoregel": 2
+   }
+  },
+  "Syllram": {
+   "förekomster": 1,
+   "kroppar": {
+    "Syll långsida": 2,
+    "Syll gavel": 4
+   }
+  },
+  "GN425 A2 200-M5 bygelhandtag": {
+   "förekomster": 4,
+   "kroppar": {
+    "Body1": 1
+   }
+  },
+  "Halvbåge": {
+   "förekomster": 18,
+   "kroppar": {
+    "Ytterremsa": 2,
+    "Innerremsa": 2,
+    "Fotkloss": 1,
+    "Kloss": 5,
+    "Fackkloss": 2,
+    "Nockkloss": 1,
+    "Lask ytter": 1,
+    "Lask inner": 1
+   }
+  },
+  "nit4x5": {
+   "förekomster": 4,
+   "kroppar": {
+    "Body1": 1
+   }
+  },
+  "nit4x7-5": {
+   "förekomster": 2,
+   "kroppar": {
+    "Body1": 1
+   }
+  },
+  "Låsprofiler": {
+   "förekomster": 1,
+   "kroppar": {
+    "Låsprofil gavelbåge": 4,
+    "Låsprofil gavelsyll": 4,
+    "Låsprofil dörrstolpe": 4,
+    "Låsprofil överliggare": 2,
+    "Låsprofil långsida": 2
+   }
+  },
+  "Dörrar": {
+   "förekomster": 1,
+   "kroppar": {
+    "Dörrblad": 4
+   }
+  },
+  "Gavlar": {
+   "förekomster": 1,
+   "kroppar": {
+    "Dörrstolpe": 4,
+    "Överliggare": 2,
+    "Nockstolpe": 2
+   }
+  },
+  "Gavelbeslag": {
+   "förekomster": 1,
+   "kroppar": {
+    "Stolpfotsvinkel": 4,
+    "Spikplåt överliggare": 8
+   }
+  },
+  "Vinklar nock": {
+   "förekomster": 1,
+   "kroppar": {
+    "Vinkel nock båge": 32
+   }
+  },
+  "Syllbeslag": {
+   "förekomster": 1,
+   "kroppar": {
+    "Hörnvinkel": 8
+   }
+  },
+  "Vinklar bågfot": {
+   "förekomster": 1,
+   "kroppar": {
+    "Vinkel bågfot båge": 32
+   }
+  },
+  "Dörrbeslag": {
+   "förekomster": 1,
+   "kroppar": {
+    "Gångjärn GJ60": 8,
+    "Kantregel": 4
+   }
+  }
+ }
+}
