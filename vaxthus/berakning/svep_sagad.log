@@ -1,0 +1,19 @@
+{"djup": 150, "tjocklek": 42, "cc": 1000, "vindniva": "30 m/s", "snö": 3.31, "snö jämn": 1.98, "vind": 3.78, "lyft": 4.48, "max": 4.48}
+{"djup": 150, "tjocklek": 42, "cc": 1000, "vindniva": "Eurocode", "snö": 3.31, "snö jämn": 1.98, "vind": 7.63, "lyft": 8.26, "max": 8.26}
+{"djup": 150, "tjocklek": 42, "cc": 1250, "vindniva": "30 m/s", "snö": 4.27, "snö jämn": 2.55, "vind": 4.8, "lyft": 5.69, "max": 5.69}
+{"djup": 150, "tjocklek": 42, "cc": 1250, "vindniva": "Eurocode", "snö": 4.27, "snö jämn": 2.55, "vind": 9.83, "lyft": 10.6, "max": 10.6}
+{"djup": 180, "tjocklek": 42, "cc": 1000, "vindniva": "30 m/s", "snö": 3.1, "snö jämn": 1.92, "vind": 3.64, "lyft": 4.36, "max": 4.36}
+{"djup": 180, "tjocklek": 42, "cc": 1000, "vindniva": "Eurocode", "snö": 3.1, "snö jämn": 1.92, "vind": 7.39, "lyft": 7.97, "max": 7.97}
+{"djup": 180, "tjocklek": 42, "cc": 1250, "vindniva": "30 m/s", "snö": 3.97, "snö jämn": 2.44, "vind": 4.6, "lyft": 5.52, "max": 5.52}
+{"djup": 180, "tjocklek": 42, "cc": 1250, "vindniva": "Eurocode", "snö": 3.97, "snö jämn": 2.44, "vind": 9.47, "lyft": 10.17, "max": 10.17}
+{"djup": 180, "tjocklek": 30, "cc": 1000, "vindniva": "30 m/s", "snö": 4.5, "snö jämn": 2.77, "vind": 5.19, "lyft": 6.23, "max": 6.23}
+{"djup": 180, "tjocklek": 30, "cc": 1000, "vindniva": "Eurocode", "snö": 4.5, "snö jämn": 2.77, "vind": 10.76, "lyft": 11.54, "max": 11.54}
+{"djup": 180, "tjocklek": 30, "cc": 1250, "vindniva": "30 m/s", "snö": 5.82, "snö jämn": 3.57, "vind": 6.62, "lyft": 7.92, "max": 7.92}
+{"djup": 180, "tjocklek": 30, "cc": 1250, "vindniva": "Eurocode", "snö": 5.82, "snö jämn": 3.57, "vind": 13.92, "lyft": 14.87, "max": 14.87}
+{"djup": 220, "tjocklek": 42, "cc": 1000, "vindniva": "30 m/s", "snö": 2.95, "snö jämn": 1.89, "vind": 3.64, "lyft": 4.28, "max": 4.28}
+{"djup": 220, "tjocklek": 42, "cc": 1000, "vindniva": "Eurocode", "snö": 2.95, "snö jämn": 1.89, "vind": 7.26, "lyft": 7.77, "max": 7.77}
+{"djup": 220, "tjocklek": 42, "cc": 1250, "vindniva": "30 m/s", "snö": 3.75, "snö jämn": 2.39, "vind": 4.59, "lyft": 5.41, "max": 5.41}
+{"djup": 220, "tjocklek": 42, "cc": 1250, "vindniva": "Eurocode", "snö": 3.75, "snö jämn": 2.39, "vind": 9.26, "lyft": 9.88, "max": 9.88}
+{"djup": 220, "tjocklek": 30, "cc": 1000, "vindniva": "30 m/s", "snö": 4.24, "snö jämn": 2.7, "vind": 5.17, "lyft": 6.1, "max": 6.1}
+{"djup": 220, "tjocklek": 30, "cc": 1000, "vindniva": "Eurocode", "snö": 4.24, "snö jämn": 2.7, "vind": 10.49, "lyft": 11.18, "max": 11.18}
+{"djup": 220, "tjocklek": 30, "cc": 1250, "vindniva": "30 m/s", "snö": 5.42, "snö jämn": 3.45, "vind": 6.55, "lyft": 7.73, "max": 7.73}
