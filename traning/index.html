@@ -132,6 +132,10 @@ details[open] summary::before{content:"– ";}
 .cxbar i{display:block;height:100%;width:0;background:var(--chili)}
 .cxpips{display:flex;gap:6px;margin-bottom:10px}.cxpips i{flex:1;height:8px;border-radius:4px;background:rgba(42,18,6,.12);transition:background .2s}
 .cxpips i.done{background:var(--chili)}.cxpips i.now{background:var(--buttercup)}
+.cxpep{display:block;width:100%;margin:0 0 10px;font-family:var(--display);font-size:24px;text-transform:uppercase;letter-spacing:.02em;color:var(--ink);background:var(--buttercup);border:3px solid var(--ink);border-radius:12px;padding:8px 0 6px;box-shadow:4px 4px 0 var(--ink);cursor:pointer}
+.cxpep:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.pepbub{position:absolute;left:30%;top:4%;z-index:5;font-family:var(--display);font-size:30px;text-transform:uppercase;color:var(--ink);background:var(--cream);border:3px solid var(--ink);border-radius:16px;padding:6px 14px 3px;white-space:nowrap;box-shadow:4px 4px 0 var(--chili);animation:pepbub 1.6s var(--pop) forwards}
+@keyframes pepbub{0%{transform:translateX(-50%) scale(0) rotate(-8deg);opacity:0}15%{transform:translateX(-50%) scale(1.15) rotate(-4deg);opacity:1}30%{transform:translateX(-50%) scale(1) rotate(-4deg)}80%{opacity:1}100%{transform:translateX(-50%) translateY(-24px) scale(1) rotate(-4deg);opacity:0}}
 .cxctl{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .cxctl button{font-family:var(--label);font-weight:700;text-transform:uppercase;border:2px solid var(--ink);border-radius:10px;background:#fff;padding:8px 12px;font-size:15px;color:var(--ink)}
 .cxtempo{display:flex;align-items:center;gap:6px;font-family:var(--label);font-weight:700;font-size:14px;text-transform:uppercase}
@@ -1389,6 +1393,9 @@ document.querySelectorAll('.bell .pm button').forEach(b => b.onclick = () => {
 });
 $('#go-prog').onclick = () => { save(); renderProg(); show('s-prog'); };
 $('#lib-back').onclick = () => goBack(); $('#go-lib0').onclick = () => openLib(); const HEJ = Array.from({length:7}, (_, i) => `hasse/hej${i + 1}.mp3`); let hejLast = -1, hejAu = null;
+const PEP = ['hasse/pep1.mp3', 'hasse/pep2.mp3'], PEPTXT = ['Hallå ja!', 'Då kör vi!']; let pepLast = -1;
+function pepp() { const i = PEP.length > 1 ? (pepLast + 1 + Math.floor(Math.random() * (PEP.length - 1))) % PEP.length : 0; pepLast = i;
+  try { if (hejAu) hejAu.pause(); hejAu = new Audio(PEP[i]); hejAu.play().catch(() => {}); } catch (_) {} if (navigator.vibrate) navigator.vibrate([40, 40, 40]); }
 function hallaGanget() { let i; do i = Math.floor(Math.random() * HEJ.length); while (i === hejLast && HEJ.length > 1); hejLast = i;
   try { if (hejAu) hejAu.pause(); hejAu = new Audio(HEJ[i]); hejAu.volume = 1; hejAu.play().catch(() => {}); } catch (_) {} }
 $('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); CX.ex.forEach(k => { new Image().src = `ex/hasse/${k}.webp`; });
@@ -1516,7 +1523,7 @@ function renderStep() {
       const tb = document.createElement('div'); tb.className = 'cxbox';
       tb.innerHTML = `<div class="cxrow"><b class="cxn">–</b><span class="cxl"></span></div><div class="cxbar"><i></i></div>
         <div class="cxpips">${Array.from({length:x.reps}, () => '<i></i>').join('')}</div>
-        <div class="cxctl"><button class="cxpause">❚❚ Paus</button><span class="cxtempo"><button data-d="-0.1" aria-label="Snabbare">−</button><span>${cxTempoTxt(k)}</span><button data-d="0.1" aria-label="Lugnare">+</button></span></div>`;
+        <button class="cxpep" aria-label="Pepp från Hasse">📣 Hallå ja!</button><div class="cxctl"><button class="cxpause">❚❚ Paus</button><span class="cxtempo"><button data-d="-0.1" aria-label="Snabbare">−</button><span>${cxTempoTxt(k)}</span><button data-d="0.1" aria-label="Lugnare">+</button></span></div>`;
       info.querySelector('.target').after(tb); info.querySelector('.dots').remove(); info.querySelector('.tipsd').removeAttribute('open');
       info.querySelector('#nx').classList.add('ghost'); }
     wrap.appendChild(info); body.appendChild(wrap);
@@ -1773,6 +1780,9 @@ function cxTimer(st, box) {
     if (T.t >= n * T.per) { cxStop(); box.closest('.cxwrap').querySelector('#nx').click(); return; }
     draw();
   }, 80);
+  box.querySelector('.cxpep').onclick = e => { pepp(); const st = box.closest('.cxwrap').querySelector('.stage');
+    const bub = document.createElement('span'); bub.className = 'pepbub'; bub.textContent = PEPTXT[pepLast]; st.appendChild(bub); setTimeout(() => bub.remove(), 1600);
+    e.currentTarget.animate([{transform:'scale(1)'}, {transform:'scale(1.12) rotate(-3deg)'}, {transform:'scale(1)'}], {duration:300}); };
   pb.onclick = () => { T.paused = !T.paused; pb.textContent = T.paused ? '▶ Fortsätt' : '❚❚ Paus'; box.classList.toggle('paused', T.paused); };
   box.querySelectorAll('.cxtempo button').forEach(b => b.onclick = () => {
     const k = Math.min(1.6, Math.max(.6, Math.round((+(localStorage.getItem('bc_traning_cxk2') || 1) + (+b.dataset.d)) * 10) / 10));
