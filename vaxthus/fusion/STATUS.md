@@ -59,3 +59,5 @@ Projekt `vaxthus`, master "Växthus - parametrar". Gammal DirectDesign-modell i 
 - 2026-11-04 v14 försök 1: pval kraschade på parameter med annan enhet. Rättat (värde direkt). Försök 2.
 - 2026-11-04 Steg 14 KLAR (försök 2): HanZ 2433,6 (mitt kloss 10), ändar snett HanX 1230/HanXu 1319, NockLaskT 15. 563 kroppar, 0 fel/krock, flex OK, identiskt, sparad, STEP. Ny ritning_bage.pdf (1x15) + MONTERINGSANVISNING.pdf (1x15); gamla: ritning_bage_B.pdf, montering_B.py.
 - 2026-11-04 Victor: ja -> nock som Norhage. v15_nockbalk.py (hel nockbalk 45x70 i glipan NockT=50, nocklask med urtag + NockLaskUnder 60, bitar bort, nockstolpe följer) KÖAD.
+- v15 försök 1: nockstolpe (djup NockH 120) krockade med gavelns nocklask. Rättat: stolpens djup = BagB (45x95). Försök 2.
+- 2026-11-04 Steg 15 KLAR (försök 2): hel nockbalk 45x70, glipa 50, laskar med urtag, nockstolpe 45x95. 556 kroppar, 0 fel/krock, flex OK, identiskt, sparad, STEP. 15b färg.

@@ -64,6 +64,12 @@ def run(_context: str):
                         if nx != ex: dm.parameter.expression = nx; nd += 1; log('mått', comp.name, sk.name, nx)
                 except Exception: pass
     log('ändrade mått', nd)
+    gc_ = des.allComponents.itemByName('Gavlar')
+    for f in gc_.features.extrudeFeatures:
+        if f.name.startswith('Nockstolpe'):
+            try:
+                f.extentOne.distance.expression = 'BagB'; log('nockstolpe djup -> BagB', f.name)
+            except Exception as e: log('nockstolpe extent fel', f.name, str(e)[:120])
     des.computeAll()
     # --- nockbalk: gamla bitar bort, ny hel balk ---
     nc = des.allComponents.itemByName('Nock och sidoreglar'); D = K(des, nc)
