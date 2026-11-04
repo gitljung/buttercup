@@ -49,8 +49,11 @@ BULT = [pt(R, (kh[0] + kh[1] / 2 + d) / R) for d in (-30, 30)]
 bult_ok = all(HanZ - HanH / 2 + 15 < z < HanZ + HanH / 2 - 15 and x < han_x(z) - 15 for x, z in BULT)
 # nocklask (raka snitt)
 NLT, LX, LAV = P['NockLaskT'], P['NockLaskL'] / 2, P['NockLaskAvdrag']
-rr = ro - LAV; sag = LX ** 2 / (8 * ri)
-LASK = [(-LX, zc(rr, LX)), (0, zc(rr, 0)), (LX, zc(rr, LX)), (LX, zc(ri, LX) + sag), (0, zc(ri, 0) + sag), (-LX, zc(ri, LX) + sag)]
+rr = ro - LAV; sag = 0.0
+NBB, NBH, NLU = P['NockBalkB'], P['NockBalkH'], P['NockLaskUnder']
+ZOK = zc(ro, XN)                                   # nockens ytterkant (lokalt, fotens nivå = 0)
+zE, zS = zc(rr, LX), zc(rr, XN); zN = ZOK - NBH; zU0 = zN - NLU; zUE = zU0 - (zS - zE)
+LASK = [(-LX, zE), (-XN, zS), (-XN, zN), (XN, zN), (XN, zS), (LX, zE), (LX, zUE), (0, zU0), (-LX, zUE)]
 NHALV, NNLASK = 2 * int(P['AntalBagar']), 2 * (int(P['AntalBagar']) - 2) + 2
 
 # ======================= BLAD 1 =======================
@@ -86,7 +89,8 @@ S.p(T([(HanX - 900, HanZ - HanH / 2), (HanXu, HanZ - HanH / 2), (HanX, HanZ + Ha
 for bx, bz in BULT: S.c(X(bx), Y(bz), 0.6, 'white', RED, 0.3)
 S.t(X(HanX - 880), Y(HanZ + HanH / 2) - 1.2, 'hanbjälke (monteras efter)', 2.5, col=RED)
 # nocklask
-S.p(T([(XN, zc(rr, XN) - (zc(rr, XN) - zc(rr, 0)) * 0), (LX, LASK[2][1]), (LX, LASK[3][1]), (XN, zc(ri, XN) + sag)]), 'none', RED, 0.3, dash='1.2 0.6')
+S.p(T([(XN, zS), (LX, zE), (LX, zUE), (0.0, zU0), (0.0, zN), (XN, zN)]), 'none', RED, 0.3, dash='1.2 0.6')
+S.p(T([(-NBB / 2 + XN * 0, zN), (NBB / 2, zN), (NBB / 2, ZOK), (0, ZOK)]), 'none', RED, 0.3, dash='1.2 0.6')
 # mått
 fi, fo = x_at(ri, 0), x_at(ro, 0); zni, zno = zc(ri, XN), zc(ro, XN)
 S.dim((X(XN), Y(0)), (X(fo), Y(0)), -9, f'{fo - XN:.0f}')
@@ -101,7 +105,7 @@ S.dim((X(fo), Y(0)), (X(fo), Y(zf)), 26, f'{zf:.0f} sidoregel', 2.6)
 S.l(X(fo) + 27, Y(zf), X(srx) + 3, Y(zf), GREY, 0.12, '1 0.6')
 S.dim((X(fo), Y(0)), (X(fo), Y(HanZ)), 33, f'{HanZ:.0f} hanbjälke', 2.6)
 S.l(X(fo) + 34, Y(HanZ), X(x_at(ro, HanZ)) + 3, Y(HanZ), GREY, 0.12, '1 0.6')
-S.dim((X(XN), Y(LASK[2][1] + 40)), (X(LX), Y(LASK[2][1] + 40)), 5, f'lask {LX - XN:.0f}', 2.4)
+S.dim((X(0), Y(zE + 40)), (X(LX), Y(zE + 40)), 5, f'lask {LX:.0f}', 2.4)
 lx, lz = pt(ri, 0.62); S.l(X(lx), Y(lz), X(lx) - 30, Y(lz) + 8, INK, 0.15); S.t(X(lx) - 31, Y(lz) + 9, f'R {ri:.0f} insida', 3.0, 'end', w='bold')
 lx, lz = pt(ro, 0.85); S.l(X(lx), Y(lz), X(lx) + 40, Y(lz) - 6, INK, 0.15); S.t(X(lx) + 41, Y(lz) - 5.4, f'R {ro:.0f} utsida', 3.0, w='bold')
 S.t(X(110), Y(-160), f'Cirkelns centrum: {cx:.0f} bortom husets mitt, i fotens nivå (andra halvans sida).', 2.7, col=GREY)
@@ -143,7 +147,7 @@ S.dim((hx0 - fo * s4, hy0), (hx0 + fo * s4, hy0), -11, f'{2 * fo:.0f} utsida')
 S.dim((hx0 + 55, hy0), (hx0 + 55, hy0 - zno * s4), -3, f'{zno:.0f}', 2.4)
 S.t(hx0 + 50, hy0 - zno * s4 - 3, f'+ syll {SyllH:.0f} = nock {zno + SyllH:.0f}', 2.4, 'end', col=GREY)
 S.t(hx0, hy0 - (HanZ + HanH) * s4 - 1.5, f'hanbjälke 45×120 × {2 * HanXu:.0f} (underkant)', 2.5, 'middle')
-S.t(hx0, hy0 - zno * s4 - 5, f'nockglipa {NockT:.0f} + nocklask {2 * LX:.0f} båda sidor', 2.5, 'middle')
+S.t(hx0, hy0 - zno * s4 - 5, f'nockbalk {NBB:.0f}×{NBH:.0f} i glipan {NockT:.0f} + nocklask {2 * LX:.0f}', 2.5, 'middle')
 notes = ['ANMÄRKNINGAR',
          f'Foten kapas vågrätt, nocken lodrätt. Flänsarna kapas med {OVER:.0f} mm övermått i ändarna och putsas efter montering.',
          f'Hanbjälke mitt på kloss {kh_i + 1}: 2 bult M10×160, Ø11 genom klossen, ±30 från klossens mitt längs bågen' + ('.' if bult_ok else ' – KOLLA LÄGET.'),
@@ -259,21 +263,26 @@ for sd in (1, -1):
         S.p([(LX_(x), LY_(z)) for x, z in pts], 'none', GREY, 0.2, close=False, dash='1 0.6')
 for sd in (1, -1):
     for k in range(3):
-        xs_ = XN + 60 + k * 85; zs = (zc(ri, xs_) + sag + zc(rr, xs_)) / 2
+        xs_ = XN + 60 + k * 85; zs = (zc(ri + PT, xs_) + zc(ro - PT, xs_)) / 2
         S.c(LX_(sd * xs_), LY_(zs), 0.9, 'white', RED, 0.25)
-A, B_, C_, D_, E_, F_ = LASK
-S.dim((LX_(A[0]), LY_(F_[1])), (LX_(C_[0]), LY_(F_[1])), -12, f'{2 * LX:.0f}')
-S.dim((LX_(A[0]), LY_(F_[1])), (LX_(0), LY_(F_[1])), -6, f'{LX:.0f}', 2.4)
-S.dim((LX_(C_[0]), LY_(C_[1])), (LX_(C_[0]), LY_(B_[1])), -6, f'{B_[1] - C_[1]:.1f}', 2.4)
-S.dim((LX_(C_[0]), LY_(D_[1])), (LX_(C_[0]), LY_(C_[1])), -14, f'{C_[1] - D_[1]:.1f}', 2.4)
-S.dim((LX_(0), LY_(E_[1])), (LX_(0), LY_(B_[1])), 6, f'{B_[1] - E_[1]:.1f}', 2.4)
-S.dim((LX_(D_[0]), LY_(D_[1])), (LX_(D_[0]), LY_(E_[1])), -22, f'{E_[1] - D_[1]:.1f}', 2.4)
-ang = math.degrees(math.atan2(B_[1] - C_[1], LX))
-for i, t_ in enumerate([f'Sexhörning, bara raka snitt. Lutning ≈ {ang:.1f}° mot vågrätt, båda kanterna parallella.',
+S.p([(LX_(-NBB / 2), LY_(zN)), (LX_(NBB / 2), LY_(zN)), (LX_(NBB / 2), LY_(ZOK)), (LX_(-NBB / 2), LY_(ZOK))], 'none', RED, 0.3, dash='1 0.6')
+S.dim((LX_(-LX), LY_(zUE)), (LX_(LX), LY_(zUE)), -10, f'{2 * LX:.0f}')
+S.dim((LX_(-XN), LY_(zS)), (LX_(XN), LY_(zS)), 4, f'urtag {2 * XN:.0f}', 2.4)
+S.dim((LX_(LX), LY_(zUE)), (LX_(LX), LY_(zE)), -6, f'{zE - zUE:.1f}', 2.4)
+S.dim((LX_(XN), LY_(zN)), (LX_(XN), LY_(zS)), -6 - 8, f'{zS - zN:.1f}', 2.4)
+S.dim((LX_(0), LY_(zU0)), (LX_(0), LY_(zN)), 6, f'{NLU:.0f}', 2.4)
+# punkttabell
+tx, ty = lx0 - 40, LY_(zmin) + 24
+S.t(tx, ty, 'Hörn (x från mitten, ned = mm under ytterkanten i nocken):', 2.9, w='bold')
+names = ['A ände, överkant', 'B urtagets kant, överkant', 'C urtagets botten', 'D ände, underkant', 'E mitt, underkant']
+vals = [(LX, ZOK - zE), (XN, ZOK - zS), (XN, ZOK - zN), (LX, ZOK - zUE), (0, ZOK - zU0)]
+for i, (nm_, (xv, dv)) in enumerate(zip(names, vals)):
+    S.t(tx, ty + 5 + i * 4.3, nm_, 2.75); S.t(tx + 58, ty + 5 + i * 4.3, f'x = ±{xv:.1f}', 2.75); S.t(tx + 82, ty + 5 + i * 4.3, f'ned {dv:.1f}', 2.75, w='bold')
+for i, t_ in enumerate([f'Raka snitt. Urtaget ({2 * XN:.0f} × {zS - zN:.0f}) är där nockbalken {NBB:.0f}×{NBH:.0f} vilar.',
                         f'Överkanten {LAV:.0f} under bågens ytterkant så att nockens låsprofil går fri.',
-                        f'Grå streckad = bågarnas kanter; mitten = nockglipa {NockT:.0f}. Röda = skruv 4,5×40 i klossarna + PU-lim.',
-                        f'Antal: 2 per inre båge + 1 per gavelbåge = {NNLASK} st. Gör en mall av den första.']):
-    S.t(lx0 - 40, LY_(zmin) + 24 + i * 4.5, t_, 2.75, w='bold' if i == 3 else 'normal')
+                        'Röda = skruv 4,5×40 i flänsar och nockkloss + PU-lim. Gör en mall av den första.',
+                        f'Antal: 2 per inre båge + 1 per gavelbåge (insidan) = {NNLASK} st.']):
+    S.t(tx, ty + 30 + i * 4.5, t_, 2.75, w='bold' if i == 3 else 'normal')
 p3 = S.save('ritning_bage_3')
 from pypdf import PdfWriter
 w = PdfWriter()

@@ -20,9 +20,12 @@ def band(r0, r1, t0, t1, sd, n=8):
     a = [pt(r1, t0 + (t1 - t0) * k / n, sd) for k in range(n + 1)]
     b = [pt(r0, t1 - (t1 - t0) * k / n, sd) for k in range(n + 1)]
     return a + b
-rr = ro - LAV; sag = LX ** 2 / (8 * ri)
-LASK = [(-LX, zc(rr, LX) - ZT), (0, zc(rr, 0) - ZT), (LX, zc(rr, LX) - ZT), (LX, zc(ri, LX) + sag - ZT), (0, zc(ri, 0) + sag - ZT), (-LX, zc(ri, LX) + sag - ZT)]
-LB = CC - BB - 2 * LT                # nockbalkens längd
+rr = ro - LAV
+NBB, NBH, NLU = P['NockBalkB'], P['NockBalkH'], P['NockLaskUnder']
+XS = XN
+zE, zS = zc(rr, LX) - ZT, zc(rr, XS) - ZT
+zN = -NBH; zU0 = zN - NLU; zUE = zU0 - (zS - zE)
+LASK = [(-LX, zE), (-XS, zS), (-XS, zN), (XS, zN), (XS, zS), (LX, zE), (LX, zUE), (0, zU0), (-LX, zUE)]
 X_CUT = 470.0                        # hur långt ut bågen ritas
 t_cut = math.acos((X_CUT + cx) / R)
 
@@ -87,80 +90,68 @@ def bage(sc, y, lask_bada=True):
         y0 = y + sg * BB / 2; y1 = y0 + sg * LT
         sc.prism_xz(LASK, min(y0, y1), max(y0, y1), WHITE)
 
-def skruvar(y_end, sgn):
-    """2 korsade snedskruvar 6x120 i balkänden vid y_end (sgn = riktning mot bågen). Returnerar [(start, slut)]"""
-    out = []
-    for sx in (1, -1):
-        e = (sx * XN, y_end - sgn * 30, -24 if sx > 0 else -46)         # in i balkens sida, i nockklossens höjd
-        d = (-sx * 0.6, sgn * 0.75, -0.05); L_ = math.sqrt(sum(v * v for v in d)); d = tuple(v / L_ for v in d)
-        out.append((e, tuple(e[i] + d[i] * 120 for i in range(3)), d))
-    return out
+def rita_skruv(S, T, e, d, L=40, pull=110):
+    tip = tuple(e[i] + d[i] * L for i in range(3)); a = tuple(e[i] - d[i] * pull for i in range(3)); b = tuple(e[i] - d[i] * (pull - L) for i in range(3))
+    S.line(*T(a), *T(e), RED, 1.2, '3 6'); S.line(*T(a), *T(b), RED, 5); S.circ(*T(a), 8, WHITE, RED, 3)
 
-def rita_skruv(S, T, e, tip, d, pull=150):
-    a = tuple(e[i] - d[i] * pull for i in range(3)); b = tuple(tip[i] - d[i] * pull for i in range(3))
-    S.line(*T(e), *T(tip), RED, 1.4, '6 5')                                # skruvens väg i träet (streckad)
-    S.line(*T(a), *T(e), RED, 1.2, '3 6')
-    (ax_, ay_), (bx_, by_) = T(a), T(b)
-    S.line(ax_, ay_, bx_, by_, RED, 5)
-    S.circ(ax_, ay_, 9, WHITE, RED, 3)
+def vinkel(sc, y_face, sg):
+    """vinkelbeslag 30x30x25: ett ben mot balkens sida (x = NBB/2), ett mot laskens yta (y = y_face)"""
+    x0 = NBB / 2; z0, z1 = -55, -30; T_ = 2.5
+    sc.box(x0, x0 + T_, y_face, y_face + sg * 30 if sg > 0 else y_face, z0, z1, '#b9bec4') if sg > 0 else sc.box(x0, x0 + T_, y_face - 30, y_face, z0, z1, '#b9bec4')
+    ya, yb = (y_face, y_face + sg * T_) if sg > 0 else (y_face - T_, y_face)
+    sc.box(x0, x0 + 30, min(ya, yb), max(ya, yb), z0, z1, '#b9bec4')
 
-# ---------------- bild 1: översikt, lyft upp biten ----------------
+# ---------------- bild 1: lägg balken uppifrån ----------------
 S = Svg(1600, 1100)
-S.txt(40, 60, 'NOCKBALK 1 – lyft upp biten mellan bågarna (sett inifrån, underifrån)', 38, w='bold')
-S.txt(40, 96, f'Nockbalk 45×120 × {LB:.0f}, på högkant mitt i nocken, mellan nocklaskarna. Mät c/c {CC:.0f} med lattan.', 22, col=GREY)
-sc = Scene(-30, -18)
-bage(sc, 0); bage(sc, CC)
-sc.box(-XN, XN, BB / 2 + LT, CC - BB / 2 - LT, -NH, 0, PINK, RED, nseg=12)
-T = sc.render(S, (60, 130, 1480, 860), extra=[(0, -200, -700), (0, CC + 200, 200)])
-for yy in (BB / 2 + LT + 200, CC - BB / 2 - LT - 200):
-    S.arrow(*T((0, yy, -NH - 420)), *T((0, yy, -NH - 30)))
-yl0, yl1, zl = 0, CC, -NH - 520
-S.line(*T((0, yl0, zl)), *T((0, yl1, zl)), INK, 2.5)
-for yy in (yl0, yl1): S.line(*T((0, yy, zl - 40)), *T((0, yy, zl + 40)), INK, 2.5)
-mx, my = T((0, CC / 2, zl)); S.txt(mx, my + 36, f'mätlatta c/c {CC:.0f}', 24, 'middle', 'bold')
-bx, by = T((0, CC * 0.5, -NH)); S.bub(bx + 60, by + 60, '1'); S.line(bx, by, bx + 42, by + 45, RED, 1.6)
-lx, ly = T((LX * 0.6, -BB / 2 - LT, LASK[3][1])); S.bub(lx - 90, ly + 60, '2', INK); S.line(lx, ly, lx - 72, ly + 48, INK, 1.4)
-S.txt(60, 1050, '1  Nockbalk (ny, röd)     2  Nocklask, båda sidor om varje båge (gavelbåge: bara insidan)', 24)
+S.txt(40, 60, 'NOCKBALK 1 – lägg balken uppifrån i nockglipan', 38, w='bold')
+S.txt(40, 96, f'Nockbalk {NBB:.0f}×{NBH:.0f} i hela längder, på högkant. Den vilar i urtagen i nocklaskarna, överkant = bågarnas ytterkant.', 22, col=GREY)
+sc = Scene(-35, 28)
+for b_ in range(3): bage(sc, b_ * CC)
+LIFT = 320
+sc.box(-NBB / 2, NBB / 2, -200, 2 * CC + 400, -NBH + LIFT, LIFT, PINK, RED, nseg=14)
+T = sc.render(S, (60, 130, 1480, 880), extra=[(0, -300, 700), (0, 2 * CC + 500, -500)])
+for yy in (CC * 0.5, CC * 1.5):
+    S.arrow(*T((0, yy, LIFT + 300)), *T((0, yy, LIFT + 40)))
+bx, by = T((NBB / 2, CC, LIFT - NBH)); S.bub(bx + 60, by + 50, '1'); S.line(bx, by, bx + 42, by + 36, RED, 1.6)
+ux, uy = T((XS, CC + BB / 2 + LT, zN)); S.bub(ux + 90, uy + 70, '2', INK); S.line(ux, uy, ux + 72, uy + 56, INK, 1.4)
+S.txt(60, 1050, f'1  Nockbalk (ny, röd)     2  Urtag {2 * XS:.0f} × {NBH:.0f} i nocklasken – balken vilar här (gavelbåge: lask bara på insidan)', 24)
 p1 = S.save('nockbalk_1')
 
-# ---------------- bild 2: detalj korsade snedskruvar ----------------
+# ---------------- bild 2: vinkelbeslag ----------------
 S = Svg(1600, 1100)
-S.txt(40, 60, 'NOCKBALK 2 – korsade snedskruvar i varje ände', 38, w='bold')
-S.txt(40, 96, '2 × 6×120 per ände: en från varje sida, snett in genom balkänden och nocklasken in i motsatta halvans nockkloss. Förborra Ø4.', 22, col=GREY)
-sc = Scene(-55, -16)
+S.txt(40, 60, 'NOCKBALK 2 – ett vinkelbeslag per båge', 38, w='bold')
+S.txt(40, 96, 'Vinkelbeslag 30×30×25 på ena sidan: 2 skruv 4,5×40 i laskens yta och 2 i balkens sida. Mät c/c 1250 innan du skruvar.', 22, col=GREY)
+sc = Scene(62, 26)
 bage(sc, 0)
-sc.box(-XN, XN, BB / 2 + LT, BB / 2 + LT + 520, -NH, 0, PINK, RED, nseg=3)
-SK = skruvar(BB / 2 + LT, -1)
-T = sc.render(S, (60, 140, 1480, 880), extra=[e for e, t, d in SK] + [tuple(e[i] - d[i] * 170 for i in range(3)) for e, t, d in SK])
-for i, (e, tip, d) in enumerate(SK): rita_skruv(S, T, e, tip, d, 150)
-hx, hy = T(tuple(SK[0][0][i] - SK[0][2][i] * 150 for i in range(3))); S.bub(hx + 50, hy - 40, '3')
-bx, by = T((0, BB / 2 + LT + 400, -NH)); S.bub(bx + 30, by + 60, '1'); S.line(bx, by, bx + 15, by + 40, RED, 1.6)
-kx, ky = T(pt(R, (BL - KL / 2) / R, -1)[0:1] + (0,) + pt(R, (BL - KL / 2) / R, -1)[1:]) if False else T((-90, 0, -45))
-S.bub(kx - 70, ky + 90, '4', INK); S.line(kx, ky, kx - 52, ky + 72, INK, 1.4)
-S.txt(60, 1050, '1  Nockbalk     3  Skruv 6×120 (utdragen – streckat = vägen i träet)   4  Nockkloss (motsatta halvan)', 24)
+sc.box(-NBB / 2, NBB / 2, -250, 450, -NBH, 0, PINK, RED, nseg=6)
+yf = BB / 2 + LT
+vinkel(sc, yf, 1)
+T = sc.render(S, (60, 140, 1480, 860), extra=[(250, 400, 100), (-300, -200, -250)])
+for zz in (-37, -48):
+    rita_skruv(S, T, (NBB / 2 + 30 * 0.4 + (zz + 37) * 0, yf + 2.5, -42.5 + (zz + 42.5)), (0, -1, 0), 40, 120) if False else None
+for dz in (-36, -49):
+    rita_skruv(S, T, (NBB / 2 + 18, yf + 2.5, dz + 0), (0, -1, 0), 40, 120)     # i lasken
+    rita_skruv(S, T, (NBB / 2 + 2.5, yf + 18, dz + 0), (-1, 0, 0), 40, 120)     # i balken
+vx, vy = T((NBB / 2 + 30, yf + 30, -30)); S.bub(vx + 80, vy - 60, '3', INK); S.line(vx, vy, vx + 62, vy - 46, INK, 1.4)
+bx, by = T((NBB / 2, 380, -NBH)); S.bub(bx + 40, by + 60, '1'); S.line(bx, by, bx + 26, by + 44, RED, 1.6)
+S.txt(60, 1050, '1  Nockbalk     3  Vinkelbeslag 30×30×25 (grå)     röda = skruv 4,5×40, utdragna längs sin axel', 24)
 p2 = S.save('nockbalk_2')
 
-# ---------------- bild 3: uppifrån ----------------
-S = Svg(1600, 900)
-S.txt(40, 60, 'NOCKBALK 3 – uppifrån: skruvarna korsar glipan', 38, w='bold')
-S.txt(40, 96, f'Balken ({NockT:.0f} bred) ligger över nockglipan ({NockT:.0f}). Skruvarna går snett över till nockklossen på andra sidan.', 22, col=GREY)
-k = 2.1; ox, oy = 800, 520
-X = lambda x: ox + x * k; Y = lambda y: oy - (y - 60) * k
-# båge (snitt i nockhöjd): halvornas nockklossar + flänsar, glipa i mitten
-for sd in (1, -1):
-    S.poly([(X(sd * XN), Y(-BB / 2)), (X(sd * 300), Y(-BB / 2)), (X(sd * 300), Y(BB / 2)), (X(sd * XN), Y(BB / 2))], LG, INK, 1.4)
-    S.poly([(X(sd * XN), Y(-BB / 2)), (X(sd * (XN + 120)), Y(-BB / 2)), (X(sd * (XN + 120)), Y(BB / 2)), (X(sd * XN), Y(BB / 2))], '#d6d1c4', INK, 1.4)
-for sg in (-1, 1):
-    y0 = sg * BB / 2; y1 = y0 + sg * LT
-    S.poly([(X(-LX), Y(y0)), (X(LX), Y(y0)), (X(LX), Y(y1)), (X(-LX), Y(y1))], WHITE, INK, 1.4)
-S.poly([(X(-XN), Y(BB / 2 + LT)), (X(XN), Y(BB / 2 + LT)), (X(XN), Y(BB / 2 + LT + 160)), (X(-XN), Y(BB / 2 + LT + 160))], PINK, RED, 2)
-for e, tip, d in skruvar(BB / 2 + LT, -1):
-    S.line(X(e[0]), Y(e[1]), X(tip[0]), Y(tip[1]), RED, 5)
-    a = (e[0] - d[0] * 90, e[1] - d[1] * 90); S.line(X(a[0]), Y(a[1]), X(e[0]), Y(e[1]), RED, 1.4, '4 6'); S.circ(X(a[0]), Y(a[1]), 9, WHITE, RED, 3)
-S.txt(X(0), Y(-BB / 2) + 60, f'nockglipa {NockT:.0f}', 22, 'middle', col=GREY)
-S.txt(X(-200), Y(0) + 8, 'nockkloss', 22, 'middle'); S.txt(X(200), Y(0) + 8, 'nockkloss', 22, 'middle')
-S.txt(X(LX) + 14, Y(BB / 2 + LT / 2) + 8, f'nocklask {LT:.0f}', 22)
-S.txt(X(XN) + 14, Y(BB / 2 + LT + 120), 'nockbalk', 22, col=RED, w='bold')
-S.txt(60, 860, 'Sett ovanifrån i nockhöjd, en båge och balkens ände. Samma i balkens andra ände.', 24)
+# ---------------- bild 3: skarv ----------------
+S = Svg(1600, 1000)
+S.txt(40, 60, 'NOCKBALK 3 – skarv mitt i ett fack', 38, w='bold')
+S.txt(40, 96, 'Skarva mitt mellan två bågar (inte vid en båge – där är balkens sidor dolda). Spikplåt 2×100×200 på båda sidor, 8 ankarspik per halva.', 22, col=GREY)
+sc = Scene(-40, 18)
+bage(sc, 0); bage(sc, CC)
+sc.box(-NBB / 2, NBB / 2, -300, CC / 2 - 2, -NBH, 0, LG, INK, nseg=4)
+sc.box(-NBB / 2, NBB / 2, CC / 2 + 2, CC + 300, -NBH, 0, LG, INK, nseg=4)
+for sx in (1, -1):
+    x0 = sx * NBB / 2
+    sc.box(min(x0, x0 + sx * 2), max(x0, x0 + sx * 2), CC / 2 - 100, CC / 2 + 100, -NBH / 2 - 35 + 0, -NBH / 2 + 35, PINK, RED)
+T = sc.render(S, (60, 130, 1480, 760), extra=[(0, -400, 200), (0, CC + 400, -300)])
+for yy in (CC / 2 - 70, CC / 2 - 30, CC / 2 + 30, CC / 2 + 70):
+    rita_skruv(S, T, (NBB / 2 + 2, yy, -NBH / 2), (-1, 0, 0), 40, 110)
+sx_, sy_ = T((NBB / 2 + 2, CC / 2 + 100, -NBH / 2 + 35)); S.bub(sx_ + 70, sy_ - 50, '4'); S.line(sx_, sy_, sx_ + 52, sy_ - 36, RED, 1.6)
+S.txt(60, 960, 'Spikplåt (röd) på båda sidor om skarven. Skarvar t.ex. vid 3 125 och 6 875 från gaveln = längder ca 3,2 / 3,75 / 3,2 m.', 24)
 p3 = S.save('nockbalk_3')
-print(p1, p2, p3, 'LB', round(LB))
+print(p1, p2, p3)

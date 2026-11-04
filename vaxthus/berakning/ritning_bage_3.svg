@@ -94,55 +94,66 @@
 <text x="132.00" y="214.00" font-family="Barlow, Helvetica, Arial" font-size="2.7" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.76" paint-order="stroke">Skarven (röd streckad) mitt på lasken = mitt på fackklossen.</text>
 <text x="132.00" y="219.00" font-family="Barlow, Helvetica, Arial" font-size="2.7" font-weight="bold" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.76" paint-order="stroke">PU-lim + 8 skruv 4,5×25. 36 st totalt.</text>
 <text x="222.00" y="18.00" font-family="Barlow, Helvetica, Arial" font-size="4.0" font-weight="bold" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="1.12" paint-order="stroke">NOCKLASK  15 mm plywood  1:4</text>
-<path d="M262.00,103.70 L334.00,60.00 L406.00,103.70 L406.00,118.06 L334.00,73.54 L262.00,118.06 Z" fill="#ecd6a6" stroke="#1d1d1b" stroke-width="0.35" stroke-linejoin="round"/>
-<path d="M339.40,77.28 L341.94,78.72 L344.48,80.17 L347.02,81.63 L349.56,83.11 L352.10,84.59 L354.64,86.08 L357.18,87.59 L359.72,89.11 L362.26,90.64 L364.80,92.17 L367.34,93.73 L369.88,95.29 L372.42,96.86 L374.96,98.45 L377.50,100.04 L380.04,101.65 L382.58,103.27 L385.12,104.90 L387.66,106.54 L390.20,108.20 L392.74,109.87 L395.28,111.55 L397.82,113.24 L400.36,114.94 L402.90,116.66 L405.44,118.39 L407.98,120.13 L410.52,121.88 L413.06,123.65 L415.60,125.43" fill="none" stroke="#8a8a86" stroke-width="0.2" stroke-linejoin="round" stroke-dasharray="1 0.6"/>
-<path d="M339.40,56.67 L341.94,58.07 L344.48,59.49 L347.02,60.91 L349.56,62.35 L352.10,63.79 L354.64,65.25 L357.18,66.72 L359.72,68.19 L362.26,69.68 L364.80,71.18 L367.34,72.69 L369.88,74.21 L372.42,75.74 L374.96,77.29 L377.50,78.84 L380.04,80.41 L382.58,81.98 L385.12,83.57 L387.66,85.17 L390.20,86.78 L392.74,88.40 L395.28,90.04 L397.82,91.68 L400.36,93.34 L402.90,95.01 L405.44,96.69 L407.98,98.38 L410.52,100.08 L413.06,101.80 L415.60,103.53" fill="none" stroke="#8a8a86" stroke-width="0.2" stroke-linejoin="round" stroke-dasharray="1 0.6"/>
-<path d="M328.60,77.28 L326.06,78.72 L323.52,80.17 L320.98,81.63 L318.44,83.11 L315.90,84.59 L313.36,86.08 L310.82,87.59 L308.28,89.11 L305.74,90.64 L303.20,92.17 L300.66,93.73 L298.12,95.29 L295.58,96.86 L293.04,98.45 L290.50,100.04 L287.96,101.65 L285.42,103.27 L282.88,104.90 L280.34,106.54 L277.80,108.20 L275.26,109.87 L272.72,111.55 L270.18,113.24 L267.64,114.94 L265.10,116.66 L262.56,118.39 L260.02,120.13 L257.48,121.88 L254.94,123.65 L252.40,125.43" fill="none" stroke="#8a8a86" stroke-width="0.2" stroke-linejoin="round" stroke-dasharray="1 0.6"/>
-<path d="M328.60,56.67 L326.06,58.07 L323.52,59.49 L320.98,60.91 L318.44,62.35 L315.90,63.79 L313.36,65.25 L310.82,66.72 L308.28,68.19 L305.74,69.68 L303.20,71.18 L300.66,72.69 L298.12,74.21 L295.58,75.74 L293.04,77.29 L290.50,78.84 L287.96,80.41 L285.42,81.98 L282.88,83.57 L280.34,85.17 L277.80,86.78 L275.26,88.40 L272.72,90.04 L270.18,91.68 L267.64,93.34 L265.10,95.01 L262.56,96.69 L260.02,98.38 L257.48,100.08 L254.94,101.80 L252.40,103.53" fill="none" stroke="#8a8a86" stroke-width="0.2" stroke-linejoin="round" stroke-dasharray="1 0.6"/>
-<circle cx="353.80" cy="78.01" r="0.90" fill="white" stroke="#c8321a" stroke-width="0.25"/>
-<circle cx="374.20" cy="90.28" r="0.90" fill="white" stroke="#c8321a" stroke-width="0.25"/>
-<circle cx="394.60" cy="103.28" r="0.90" fill="white" stroke="#c8321a" stroke-width="0.25"/>
-<circle cx="314.20" cy="78.01" r="0.90" fill="white" stroke="#c8321a" stroke-width="0.25"/>
-<circle cx="293.80" cy="90.28" r="0.90" fill="white" stroke="#c8321a" stroke-width="0.25"/>
-<circle cx="273.40" cy="103.28" r="0.90" fill="white" stroke="#c8321a" stroke-width="0.25"/>
-<line x1="262.00" y1="117.06" x2="262.00" y2="104.56" stroke="#1d1d1b" stroke-width="0.15"/>
-<line x1="406.00" y1="117.06" x2="406.00" y2="104.56" stroke="#1d1d1b" stroke-width="0.15"/>
-<line x1="262.00" y1="106.06" x2="406.00" y2="106.06" stroke="#1d1d1b" stroke-width="0.2"/>
-<line x1="260.90" y1="104.96" x2="263.10" y2="107.16" stroke="#1d1d1b" stroke-width="0.35"/>
-<line x1="404.90" y1="104.96" x2="407.10" y2="107.16" stroke="#1d1d1b" stroke-width="0.35"/>
-<text x="334.00" y="105.16" font-family="Barlow, Helvetica, Arial" font-size="2.8" font-weight="normal" fill="#1d1d1b" text-anchor="middle" stroke="white" stroke-width="0.78" paint-order="stroke">600</text>
-<line x1="262.00" y1="117.06" x2="262.00" y2="110.56" stroke="#1d1d1b" stroke-width="0.15"/>
-<line x1="334.00" y1="117.06" x2="334.00" y2="110.56" stroke="#1d1d1b" stroke-width="0.15"/>
-<line x1="262.00" y1="112.06" x2="334.00" y2="112.06" stroke="#1d1d1b" stroke-width="0.2"/>
-<line x1="260.90" y1="110.96" x2="263.10" y2="113.16" stroke="#1d1d1b" stroke-width="0.35"/>
-<line x1="332.90" y1="110.96" x2="335.10" y2="113.16" stroke="#1d1d1b" stroke-width="0.35"/>
-<text x="298.00" y="111.16" font-family="Barlow, Helvetica, Arial" font-size="2.4" font-weight="normal" fill="#1d1d1b" text-anchor="middle" stroke="white" stroke-width="0.67" paint-order="stroke">300</text>
-<line x1="405.00" y1="103.70" x2="398.50" y2="103.70" stroke="#1d1d1b" stroke-width="0.15"/>
-<line x1="405.00" y1="60.00" x2="398.50" y2="60.00" stroke="#1d1d1b" stroke-width="0.15"/>
-<line x1="400.00" y1="103.70" x2="400.00" y2="60.00" stroke="#1d1d1b" stroke-width="0.2"/>
-<line x1="398.90" y1="104.80" x2="401.10" y2="102.60" stroke="#1d1d1b" stroke-width="0.35"/>
-<line x1="398.90" y1="61.10" x2="401.10" y2="58.90" stroke="#1d1d1b" stroke-width="0.35"/>
-<text x="399.10" y="81.85" font-family="Barlow, Helvetica, Arial" font-size="2.4" font-weight="normal" fill="#1d1d1b" text-anchor="middle" stroke="white" stroke-width="0.67" paint-order="stroke" transform="rotate(-90.00 399.10 81.85)">182.1</text>
-<line x1="405.00" y1="118.06" x2="390.50" y2="118.06" stroke="#1d1d1b" stroke-width="0.15"/>
-<line x1="405.00" y1="103.70" x2="390.50" y2="103.70" stroke="#1d1d1b" stroke-width="0.15"/>
-<line x1="392.00" y1="118.06" x2="392.00" y2="103.70" stroke="#1d1d1b" stroke-width="0.2"/>
-<line x1="390.90" y1="119.16" x2="393.10" y2="116.96" stroke="#1d1d1b" stroke-width="0.35"/>
-<line x1="390.90" y1="104.80" x2="393.10" y2="102.60" stroke="#1d1d1b" stroke-width="0.35"/>
-<text x="391.10" y="110.88" font-family="Barlow, Helvetica, Arial" font-size="2.4" font-weight="normal" fill="#1d1d1b" text-anchor="middle" stroke="white" stroke-width="0.67" paint-order="stroke" transform="rotate(-90.00 391.10 110.88)">59.9</text>
-<line x1="335.00" y1="73.54" x2="341.50" y2="73.54" stroke="#1d1d1b" stroke-width="0.15"/>
-<line x1="335.00" y1="60.00" x2="341.50" y2="60.00" stroke="#1d1d1b" stroke-width="0.15"/>
-<line x1="340.00" y1="73.54" x2="340.00" y2="60.00" stroke="#1d1d1b" stroke-width="0.2"/>
-<line x1="338.90" y1="74.64" x2="341.10" y2="72.44" stroke="#1d1d1b" stroke-width="0.35"/>
-<line x1="338.90" y1="61.10" x2="341.10" y2="58.90" stroke="#1d1d1b" stroke-width="0.35"/>
-<text x="340.90" y="66.77" font-family="Barlow, Helvetica, Arial" font-size="2.4" font-weight="normal" fill="#1d1d1b" text-anchor="middle" stroke="white" stroke-width="0.67" paint-order="stroke" transform="rotate(-90.00 340.90 66.77)">56.4</text>
-<line x1="405.00" y1="118.06" x2="382.50" y2="118.06" stroke="#1d1d1b" stroke-width="0.15"/>
-<line x1="405.00" y1="73.54" x2="382.50" y2="73.54" stroke="#1d1d1b" stroke-width="0.15"/>
-<line x1="384.00" y1="118.06" x2="384.00" y2="73.54" stroke="#1d1d1b" stroke-width="0.2"/>
-<line x1="382.90" y1="119.16" x2="385.10" y2="116.96" stroke="#1d1d1b" stroke-width="0.35"/>
-<line x1="382.90" y1="74.64" x2="385.10" y2="72.44" stroke="#1d1d1b" stroke-width="0.35"/>
-<text x="383.10" y="95.80" font-family="Barlow, Helvetica, Arial" font-size="2.4" font-weight="normal" fill="#1d1d1b" text-anchor="middle" stroke="white" stroke-width="0.67" paint-order="stroke" transform="rotate(-90.00 383.10 95.80)">185.5</text>
-<text x="222.00" y="142.06" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">Sexhörning, bara raka snitt. Lutning ≈ 31.3° mot vågrätt, båda kanterna parallella.</text>
-<text x="222.00" y="146.56" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">Överkanten 23 under bågens ytterkant så att nockens låsprofil går fri.</text>
-<text x="222.00" y="151.06" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">Grå streckad = bågarnas kanter; mitten = nockglipa 45. Röda = skruv 4,5×40 i klossarna + PU-lim.</text>
-<text x="222.00" y="155.56" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="bold" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">Antal: 2 per inre båge + 1 per gavelbåge = 16 st. Gör en mall av den första.</text>
+<path d="M262.00,100.39 L328.00,60.00 L328.00,70.49 L340.00,70.49 L340.00,60.00 L406.00,100.39 L406.00,125.28 L334.00,84.89 L262.00,125.28 Z" fill="#ecd6a6" stroke="#1d1d1b" stroke-width="0.35" stroke-linejoin="round"/>
+<path d="M340.00,74.31 L342.52,75.74 L345.04,77.18 L347.56,78.64 L350.08,80.10 L352.60,81.58 L355.12,83.06 L357.64,84.56 L360.16,86.06 L362.68,87.58 L365.20,89.11 L367.72,90.65 L370.24,92.20 L372.76,93.76 L375.28,95.34 L377.80,96.92 L380.32,98.52 L382.84,100.13 L385.36,101.75 L387.88,103.38 L390.40,105.02 L392.92,106.68 L395.44,108.35 L397.96,110.02 L400.48,111.72 L403.00,113.42 L405.52,115.13 L408.04,116.86 L410.56,118.60 L413.08,120.36 L415.60,122.12" fill="none" stroke="#8a8a86" stroke-width="0.2" stroke-linejoin="round" stroke-dasharray="1 0.6"/>
+<path d="M340.00,53.69 L342.52,55.09 L345.04,56.49 L347.56,57.91 L350.08,59.33 L352.60,60.77 L355.12,62.22 L357.64,63.67 L360.16,65.14 L362.68,66.62 L365.20,68.11 L367.72,69.61 L370.24,71.12 L372.76,72.64 L375.28,74.17 L377.80,75.72 L380.32,77.27 L382.84,78.84 L385.36,80.41 L387.88,82.00 L390.40,83.60 L392.92,85.21 L395.44,86.83 L397.96,88.46 L400.48,90.11 L403.00,91.76 L405.52,93.43 L408.04,95.11 L410.56,96.80 L413.08,98.51 L415.60,100.22" fill="none" stroke="#8a8a86" stroke-width="0.2" stroke-linejoin="round" stroke-dasharray="1 0.6"/>
+<path d="M328.00,74.31 L325.48,75.74 L322.96,77.18 L320.44,78.64 L317.92,80.10 L315.40,81.58 L312.88,83.06 L310.36,84.56 L307.84,86.06 L305.32,87.58 L302.80,89.11 L300.28,90.65 L297.76,92.20 L295.24,93.76 L292.72,95.34 L290.20,96.92 L287.68,98.52 L285.16,100.13 L282.64,101.75 L280.12,103.38 L277.60,105.02 L275.08,106.68 L272.56,108.35 L270.04,110.02 L267.52,111.72 L265.00,113.42 L262.48,115.13 L259.96,116.86 L257.44,118.60 L254.92,120.36 L252.40,122.12" fill="none" stroke="#8a8a86" stroke-width="0.2" stroke-linejoin="round" stroke-dasharray="1 0.6"/>
+<path d="M328.00,53.69 L325.48,55.09 L322.96,56.49 L320.44,57.91 L317.92,59.33 L315.40,60.77 L312.88,62.22 L310.36,63.67 L307.84,65.14 L305.32,66.62 L302.80,68.11 L300.28,69.61 L297.76,71.12 L295.24,72.64 L292.72,74.17 L290.20,75.72 L287.68,77.27 L285.16,78.84 L282.64,80.41 L280.12,82.00 L277.60,83.60 L275.08,85.21 L272.56,86.83 L270.04,88.46 L267.52,90.11 L265.00,91.76 L262.48,93.43 L259.96,95.11 L257.44,96.80 L254.92,98.51 L252.40,100.22" fill="none" stroke="#8a8a86" stroke-width="0.2" stroke-linejoin="round" stroke-dasharray="1 0.6"/>
+<circle cx="354.40" cy="72.21" r="0.90" fill="white" stroke="#c8321a" stroke-width="0.25"/>
+<circle cx="374.80" cy="84.45" r="0.90" fill="white" stroke="#c8321a" stroke-width="0.25"/>
+<circle cx="395.20" cy="97.42" r="0.90" fill="white" stroke="#c8321a" stroke-width="0.25"/>
+<circle cx="313.60" cy="72.21" r="0.90" fill="white" stroke="#c8321a" stroke-width="0.25"/>
+<circle cx="293.20" cy="84.45" r="0.90" fill="white" stroke="#c8321a" stroke-width="0.25"/>
+<circle cx="272.80" cy="97.42" r="0.90" fill="white" stroke="#c8321a" stroke-width="0.25"/>
+<path d="M328.60,70.49 L339.40,70.49 L339.40,53.69 L328.60,53.69 Z" fill="none" stroke="#c8321a" stroke-width="0.3" stroke-linejoin="round" stroke-dasharray="1 0.6"/>
+<line x1="262.00" y1="124.28" x2="262.00" y2="113.78" stroke="#1d1d1b" stroke-width="0.15"/>
+<line x1="406.00" y1="124.28" x2="406.00" y2="113.78" stroke="#1d1d1b" stroke-width="0.15"/>
+<line x1="262.00" y1="115.28" x2="406.00" y2="115.28" stroke="#1d1d1b" stroke-width="0.2"/>
+<line x1="260.90" y1="114.18" x2="263.10" y2="116.38" stroke="#1d1d1b" stroke-width="0.35"/>
+<line x1="404.90" y1="114.18" x2="407.10" y2="116.38" stroke="#1d1d1b" stroke-width="0.35"/>
+<text x="334.00" y="114.38" font-family="Barlow, Helvetica, Arial" font-size="2.8" font-weight="normal" fill="#1d1d1b" text-anchor="middle" stroke="white" stroke-width="0.78" paint-order="stroke">600</text>
+<line x1="328.00" y1="61.00" x2="328.00" y2="65.50" stroke="#1d1d1b" stroke-width="0.15"/>
+<line x1="340.00" y1="61.00" x2="340.00" y2="65.50" stroke="#1d1d1b" stroke-width="0.15"/>
+<line x1="328.00" y1="64.00" x2="340.00" y2="64.00" stroke="#1d1d1b" stroke-width="0.2"/>
+<line x1="326.90" y1="62.90" x2="329.10" y2="65.10" stroke="#1d1d1b" stroke-width="0.35"/>
+<line x1="338.90" y1="62.90" x2="341.10" y2="65.10" stroke="#1d1d1b" stroke-width="0.35"/>
+<text x="334.00" y="64.90" font-family="Barlow, Helvetica, Arial" font-size="2.4" font-weight="normal" fill="#1d1d1b" text-anchor="middle" stroke="white" stroke-width="0.67" paint-order="stroke">urtag 50</text>
+<line x1="405.00" y1="125.28" x2="398.50" y2="125.28" stroke="#1d1d1b" stroke-width="0.15"/>
+<line x1="405.00" y1="100.39" x2="398.50" y2="100.39" stroke="#1d1d1b" stroke-width="0.15"/>
+<line x1="400.00" y1="125.28" x2="400.00" y2="100.39" stroke="#1d1d1b" stroke-width="0.2"/>
+<line x1="398.90" y1="126.38" x2="401.10" y2="124.18" stroke="#1d1d1b" stroke-width="0.35"/>
+<line x1="398.90" y1="101.49" x2="401.10" y2="99.29" stroke="#1d1d1b" stroke-width="0.35"/>
+<text x="399.10" y="112.83" font-family="Barlow, Helvetica, Arial" font-size="2.4" font-weight="normal" fill="#1d1d1b" text-anchor="middle" stroke="white" stroke-width="0.67" paint-order="stroke" transform="rotate(-90.00 399.10 112.83)">103.7</text>
+<line x1="339.00" y1="70.49" x2="324.50" y2="70.49" stroke="#1d1d1b" stroke-width="0.15"/>
+<line x1="339.00" y1="60.00" x2="324.50" y2="60.00" stroke="#1d1d1b" stroke-width="0.15"/>
+<line x1="326.00" y1="70.49" x2="326.00" y2="60.00" stroke="#1d1d1b" stroke-width="0.2"/>
+<line x1="324.90" y1="71.59" x2="327.10" y2="69.39" stroke="#1d1d1b" stroke-width="0.35"/>
+<line x1="324.90" y1="61.10" x2="327.10" y2="58.90" stroke="#1d1d1b" stroke-width="0.35"/>
+<text x="325.10" y="65.24" font-family="Barlow, Helvetica, Arial" font-size="2.4" font-weight="normal" fill="#1d1d1b" text-anchor="middle" stroke="white" stroke-width="0.67" paint-order="stroke" transform="rotate(-90.00 325.10 65.24)">43.7</text>
+<line x1="335.00" y1="84.89" x2="341.50" y2="84.89" stroke="#1d1d1b" stroke-width="0.15"/>
+<line x1="335.00" y1="70.49" x2="341.50" y2="70.49" stroke="#1d1d1b" stroke-width="0.15"/>
+<line x1="340.00" y1="84.89" x2="340.00" y2="70.49" stroke="#1d1d1b" stroke-width="0.2"/>
+<line x1="338.90" y1="85.99" x2="341.10" y2="83.79" stroke="#1d1d1b" stroke-width="0.35"/>
+<line x1="338.90" y1="71.59" x2="341.10" y2="69.39" stroke="#1d1d1b" stroke-width="0.35"/>
+<text x="340.90" y="77.69" font-family="Barlow, Helvetica, Arial" font-size="2.4" font-weight="normal" fill="#1d1d1b" text-anchor="middle" stroke="white" stroke-width="0.67" paint-order="stroke" transform="rotate(-90.00 340.90 77.69)">60</text>
+<text x="222.00" y="149.28" font-family="Barlow, Helvetica, Arial" font-size="2.9" font-weight="bold" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.81" paint-order="stroke">Hörn (x från mitten, ned = mm under ytterkanten i nocken):</text>
+<text x="222.00" y="154.28" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">A ände, överkant</text>
+<text x="280.00" y="154.28" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">x = ±300.0</text>
+<text x="304.00" y="154.28" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="bold" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">ned 194.6</text>
+<text x="222.00" y="158.58" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">B urtagets kant, överkant</text>
+<text x="280.00" y="158.58" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">x = ±25.0</text>
+<text x="304.00" y="158.58" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="bold" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">ned 26.3</text>
+<text x="222.00" y="162.88" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">C urtagets botten</text>
+<text x="280.00" y="162.88" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">x = ±25.0</text>
+<text x="304.00" y="162.88" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="bold" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">ned 70.0</text>
+<text x="222.00" y="167.18" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">D ände, underkant</text>
+<text x="280.00" y="167.18" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">x = ±300.0</text>
+<text x="304.00" y="167.18" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="bold" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">ned 298.3</text>
+<text x="222.00" y="171.48" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">E mitt, underkant</text>
+<text x="280.00" y="171.48" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">x = ±0.0</text>
+<text x="304.00" y="171.48" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="bold" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">ned 130.0</text>
+<text x="222.00" y="179.28" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">Raka snitt. Urtaget (50 × 44) är där nockbalken 45×70 vilar.</text>
+<text x="222.00" y="183.78" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">Överkanten 23 under bågens ytterkant så att nockens låsprofil går fri.</text>
+<text x="222.00" y="188.28" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="normal" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">Röda = skruv 4,5×40 i flänsar och nockkloss + PU-lim. Gör en mall av den första.</text>
+<text x="222.00" y="192.78" font-family="Barlow, Helvetica, Arial" font-size="2.75" font-weight="bold" fill="#1d1d1b" text-anchor="start" stroke="white" stroke-width="0.77" paint-order="stroke">Antal: 2 per inre båge + 1 per gavelbåge (insidan) = 16 st.</text>
 </svg>
