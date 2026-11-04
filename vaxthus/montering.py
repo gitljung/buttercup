@@ -10,7 +10,7 @@ def T(rows): return {'type': 'table', 'rows': rows, 'header': True}
 def steg(lista): return Pp('<br/>'.join(f'<b>{i + 1}.</b> {s}' for i, s in enumerate(lista)))
 E = [
  H('Växthus 4 × 10 m – monteringsanvisning'),
- Pp('Bågväxthus i plywood och regel (som Norhage: fläns 1 × 15 × 95, klossar regel 45×95), 9 bågar c/c 1250, nock 3,5 m. Film 4,5 m med wiggle wire. '
+ Pp('Bågväxthus i plywood och regel (som Norhage: fläns 1 × 12 × 95, klossar regel 45×95), 9 bågar c/c 1250, nock 3,5 m. Film 4,5 m med wiggle wire. '
     'Mått och delar enligt Fusion-modellen "Växthus" och ritningen <i>ritning_bage.pdf</i> (blad 1–3). '
     'Ingen ny hållfasthetsberäkning för den här bågen.'),
  I(B + 'v14_iso.png', 470),
@@ -18,11 +18,11 @@ E = [
  Pp('Cirkelsåg med anslag (eller spårsåg med skena), kapsåg, skruvdragare + slagskruvdragare, borr Ø11 (lång), '
     'måttband, vinkelhake, vattenpass/laser, snöre, tvingar, handskar. Limning vid minst 15 °C.'),
  H('1. Såga remsor, laskar och klossar', 2),
- steg(['Såga plywood 15 × 2500 × 1200 i remsor 95 mm (12 per skiva), se ritning blad 2.',
+ steg(['Såga plywood 12 × 2500 × 1200 i remsor 95 mm (12 per skiva), se ritning blad 2.',
        'Kapa flänsbitarna enligt kapplistan: 4 bitar per halvbåge (innerfläns 1747 + 2350, ytterfläns 2005 + 2188, med 25 mm övermått).',
-       'Kapa 2 skarvlaskar 15 × 95 × 400 per halvbåge, gärna ur spillet.',
+       'Kapa 2 skarvlaskar 12 × 95 × 400 per halvbåge, gärna ur spillet.',
        'Kapa klossar av regel 45×95: 15 st à 130 och 1 fotkloss 300 per halvbåge (blad 3).',
-       'Såga 16 nocklaskar i 15 mm plywood (sexhörning, raka snitt, blad 3). Gör en mall av den första.']),
+       'Såga 16 nocklaskar i 12 mm plywood (raka snitt, urtag för nockbalken, blad 3). Gör en mall av den första.']),
  H('2. Bygg halvbågarna (18 st)', 2),
  steg(['Lägg upp bågens innerradie R 3819 i full skala (böjmall eller uppritad båge på golvet).',
        'Märk klossarnas lägen längs flänsen (tabell blad 1, mätt längs ytterkanten från foten).',
@@ -37,7 +37,7 @@ E = [
        'Hörnvinklar + 6×200 i hörnen. Nivellera och skruva syllen i markskruvarna.']),
  H('4. Montera bågarna på marken och res dem', 2),
  steg(['Lägg två halvbågar plant på marken. Kontrollera 4000 mellan fötternas mittlinje.',
-       'Nocklask 15 mm på båda sidor med PU-lim + 4,5×40 i nockklossarna (gavelbågar: bara insidan).',
+       'Nocklask 12 mm på båda sidor med PU-lim + 4,5×40 i nockklossarna (gavelbågar: bara insidan).',
        'Hanbjälke 45×120 mitt på kloss 10, ändarna snett kapade längs bågen. Borra Ø11 genom klossen, 2 × M10×160 per ände (inte gavelbågarna).',
        'Res bågen (3–4 personer), ställ den på syllen, vinklar vid foten. Börja i ena gaveln och stötta första bågen.',
        'Stötta första bågen och lås varje ny båge till den förra med en tillfällig regel tills sidoreglar och nockbalk sitter. Mät c/c 1250 vid foten.']),
@@ -76,7 +76,7 @@ E = [
  Pp('Ur modellen, med ca 10 % spill. Priser 2026-11-03 där de är kollade; övrigt pris ej kollat.'),
  H('Plywood och virke', 2),
  T([['Vara', 'Antal', 'Not'],
-    ['Plywood 15 × 2500 × 1200 K20/70', '9 skivor', 'pris ej kollat'],
+    ['Plywood 12 × 2500 × 1200 (Byggmax)', '8 skivor (+1 reserv)', 'ca 3 400 kr (429 kr/st)'],
     ['Regel 45×95 (klossar, nockstolpar)', '48 m', 'pris ej kollat'],
     ['120×120 tryckimpregnerat (syll)', '27 m', 'köp 5,4 m-längder'],
     ['45×120 C24 (hanbjälkar)', '20 m', 'ca 800 kr'],

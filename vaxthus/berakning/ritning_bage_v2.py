@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verkstadsritning A3 (PDF), båge "som Norhage" (steg 13b): fläns 1×15 plywood × 95, klossar regel 45×95 × 130,
+"""Verkstadsritning A3 (PDF), båge "som Norhage" (steg 13b): fläns 1×12 plywood × 95, klossar regel 45×95 × 130,
 fotkloss 300, djup 75. Värden ur Fusion (v13_param.json). Blad 1 halvbåge, 2 remsor, 3 klossar + laskar.
 Skriver ritning_bage.pdf (+ ritning_bage_1..3 .svg/.png)."""
 import json, math, os, subprocess
@@ -7,7 +7,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 P = json.load(open(os.path.join(HERE, '..', 'fusion', 'v13_param.json'), encoding='utf-8'))
 src = open(os.path.join(HERE, 'ritning_bage_B.py'), encoding='utf-8').read()
 INK, GREY, RED, PLY, PLY2, WOOD, LIGHT = '#1d1d1b', '#8a8a86', '#c8321a', '#ecd6a6', '#d9b77a', '#c9a46b', '#f4f1ea'
-exec(src.split('# ---------------- svg i mm ----------------')[1].split('def arcpts')[0].replace('båge B · mått', 'båge 1×15 · mått'))     # Sheet-klassen
+exec(src.split('# ---------------- svg i mm ----------------')[1].split('def arcpts')[0].replace('båge B · mått', 'båge 1×12 · mått'))     # Sheet-klassen
 # ---------------- geometri ----------------
 Bredd, Nockhojd, SyllH, NockT = P['Bredd'], P['Nockhojd'], P['SyllH'], P['NockT']
 HB = Bredd / 2; BH = Nockhojd - SyllH; cx = (BH * BH - HB * HB) / (2 * HB); R = cx + HB

@@ -62,3 +62,5 @@ Projekt `vaxthus`, master "Växthus - parametrar". Gammal DirectDesign-modell i 
 - v15 försök 1: nockstolpe (djup NockH 120) krockade med gavelns nocklask. Rättat: stolpens djup = BagB (45x95). Försök 2.
 - 2026-11-04 Steg 15 KLAR (försök 2): hel nockbalk 45x70, glipa 50, laskar med urtag, nockstolpe 45x95. 556 kroppar, 0 fel/krock, flex OK, identiskt, sparad, STEP. 15b färg.
 - 2026-11-04 Bilder nockbalk_1-3 (Norhage-nock), ritning blad 1/3 nocklask med urtag + punkttabell, anvisning steg 5 + listor (45x70 nockbalk, vinkel 30x30x25 9 st, spikplåt +4).
+- 2026-11-04 Victor: plywood 12x2500x1200. v16_ply12.py (LamellT 12) KÖAD.
+- 2026-11-04 Steg 16 KLAR: plywood 12 (LamellT 12), djup 69, ri 3822/ro 3891, NockOK 3525,6. 556 kroppar, 0 fel/krock, flex OK, identiskt, sparad, STEP. Ritning + anvisning: 7 skivor remsor + 1 nocklaskar.
