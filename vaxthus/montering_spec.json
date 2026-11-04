@@ -83,12 +83,22 @@
   },
   {
    "type": "paragraph",
-   "text": "<b>1.</b> Kapa 8 bitar 45×120 × 1125 (1250 c/c minus bågen 95 och två nocklaskar 15). Kapa vinkelrätt; provpassa den första och justera längden.<br/><b>2.</b> Gör en mätlatta på exakt 1250 att mäta c/c med i nocken – samma latta till alla fack.<br/><b>3.</b> När en ny båge står på syllen: lyft upp biten mellan den nya och föregående båge, på högkant, mitt i nocken.<br/><b>4.</b> Överkanten i nivå med bågarnas ytterkant i nocken, så att låsprofilen ligger plant över både bågar och balk.<br/><b>5.</b> Ställ in c/c 1250 med lattan och snedskruva 2 × 6×120 per ände genom balkens sida in i nocklasken och nockklossen. Förborra Ø4 i balken.<br/><b>6.</b> Mot gavelbågen: samma, biten skruvas mot gavelbågens insida (där lasken bara sitter på insidan).<br/><b>7.</b> När alla bågar står: spänn ett snöre längs nocken och kontrollera att den är rak innan sidoreglarna skruvas.<br/><b>8.</b> Nockens låsprofil skruvas ovanpå nockbalken i steg 8, med skarvarna på en balk – inte mitt över en båge."
+   "text": "<b>1.</b> Kapa 8 bitar 45×120 × 1125 (1250 c/c minus bågen 95 och två nocklaskar 15). Kapa vinkelrätt; provpassa den första och justera längden.<br/><b>2.</b> Gör en mätlatta på exakt 1250 att mäta c/c med i nocken – samma latta till alla fack.<br/><b>3.</b> När en ny båge står på syllen: lyft upp biten mellan den nya och föregående båge, på högkant, mitt i nocken.<br/><b>4.</b> Överkanten i nivå med bågarnas ytterkant i nocken, så att låsprofilen ligger plant över både bågar och balk.<br/><b>5.</b> Ställ in c/c 1250 med lattan. Skruva 2 × 6×120 per ände, korsade: en från varje sida av balken, ca 30 mm från änden och i nockklossens höjd (20–50 under överkant), snett genom balkänden och nocklasken in i nockklossen på andra sidan glipan. Förborra Ø4 i balken.<br/><b>6.</b> Mot gavelbågen: samma, biten skruvas mot gavelbågens insida (där lasken bara sitter på insidan).<br/><b>7.</b> När alla bågar står: spänn ett snöre längs nocken och kontrollera att den är rak innan sidoreglarna skruvas.<br/><b>8.</b> Nockens låsprofil skruvas ovanpå nockbalken i steg 8, med skarvarna på en balk – inte mitt över en båge."
   },
   {
    "type": "image",
-   "path": "/Users/hiro/code/buttercup/vaxthus/fusion/bilder/v14_nock.png",
-   "width": 380
+   "path": "/Users/hiro/code/buttercup/vaxthus/fusion/bilder/nockbalk_1.png",
+   "width": 440
+  },
+  {
+   "type": "image",
+   "path": "/Users/hiro/code/buttercup/vaxthus/fusion/bilder/nockbalk_2.png",
+   "width": 440
+  },
+  {
+   "type": "image",
+   "path": "/Users/hiro/code/buttercup/vaxthus/fusion/bilder/nockbalk_3.png",
+   "width": 440
   },
   {
    "type": "heading",
