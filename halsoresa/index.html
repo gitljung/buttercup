@@ -227,7 +227,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .hrlink:hover{text-decoration:underline}
 .hr .hrhero h1{animation:hrin .7s var(--ease) both}.hr .hrhero .badge{animation:hrin .7s .15s var(--ease) both}
 @keyframes hrin{from{opacity:0;transform:translateY(14px) scale(.96)}}
-.hsel{display:flex;gap:8px;margin:22px 0 0}.hsel button{flex:1;font-family:var(--label);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.02em;
+.hsel{display:flex;gap:8px;margin:22px 0 0}.hsel button{flex:1;font-family:var(--label);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.02em;
   padding:9px 6px 8px;border:3px solid var(--ink);border-radius:10px;background:var(--cream);color:var(--ink);cursor:pointer;transition:transform .15s,background .15s}
 .hsel button.on{background:var(--buttercup);box-shadow:3px 3px 0 var(--chili);transform:translateY(-2px)}
 .cxbox.last5 .cxn{color:var(--chili);animation:cxpuls .5s ease-in-out infinite alternate}@keyframes cxpuls{to{transform:scale(1.12)}}
@@ -428,7 +428,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
         <b>Calisthenics</b><small>Bara kroppen</small>
       </button>
     </div>
-    <div class="hsel" role="tablist" aria-label="Välj Hasses pass"><button data-p="1" role="tab">Pass 1 · Komplexet</button><button data-p="2" role="tab">Pass 2 · 30/30</button></div>
+    <div class="hsel" role="tablist" aria-label="Välj Hasses pass"><button data-p="1" role="tab">Pass 1 · Komplex</button><button data-p="2" role="tab">Pass 2 · 30/30</button><button data-p="3" role="tab">Pass 3 · AMRAP</button></div>
     <button class="libbtn hasse inl" id="go-hasse"><img src="hasse.webp" alt="Hasse med sin kettlebell" width="600" height="626"><span class="hej">Hallå gänget!</span><span class="lbl" id="hp-lbl">Kom igång direkt · 1 kettlebell · ca 13 min</span><b>Hasses superpass</b>
     <small id="hp-txt">Rodd → swing → knäböj → press. 6 reps var, rakt igenom. 10 varv, 30 s vila. Timern räknar – du bara kör.</small></button>
     <a class="hrlink" href="/halsoresa/">Hasses Hälsoresa – egen app ›</a>
@@ -1479,16 +1479,17 @@ function hasseDans(on) { const r = $('#rest'), d = $('#rdance .spr'); clearInter
 function pepp() { hallaGanget(); if (navigator.vibrate) navigator.vibrate([40, 40, 40]); }
 function hallaGanget() { let i; do i = Math.floor(Math.random() * HEJ.length); while (i === hejLast && HEJ.length > 1); hejLast = i;
   try { if (hejAu) hejAu.pause(); hejAu = new Audio(HEJ[i]); hejAu.volume = 1; hejAu.play().catch(() => {}); } catch (_) {} }
-const HPTXT = {1:['Kom igång direkt · 1 kettlebell · ca 13 min', 'Rodd → swing → knäböj → press. 6 reps var, rakt igenom. 10 varv, 30 s vila. Timern räknar – du bara kör.'],
+const HPTXT = {3:['Kom igång direkt · 1 kettlebell · 20 min', 'Roterande thruster → marklyft + halo → utfall + utpress → pullover + rotation → korsutfall. Så många varv du hinner på 20 minuter.'],
+  1:['Kom igång direkt · 1 kettlebell · ca 13 min', 'Rodd → swing → knäböj → press. 6 reps var, rakt igenom. 10 varv, 30 s vila. Timern räknar – du bara kör.'],
   2:['Kom igång direkt · 1 kettlebell · ca 15 min', 'Gorillaswing → axelsving → rotation + pullover → utpress → utfall + halo. 30 s jobb, 30 s vila. 3 varv.']};
 function hpSel(nr) { if (nr) localStorage.setItem('bc_halsoresa_hpass', nr); const p = cxPassNr();
   document.querySelectorAll('.hsel button').forEach(b => { const on = +b.dataset.p === p; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
-  $('#hp-lbl').textContent = HPTXT[p][0]; $('#go-hasse b').textContent = p === 2 ? 'Hasses superpass 2' : 'Hasses superpass'; $('#hp-txt').textContent = HPTXT[p][1]; }
+  $('#hp-lbl').textContent = HPTXT[p][0]; $('#go-hasse b').textContent = ['', 'Hasses superpass', 'Hasses superpass 2', 'Hasses superpass 3'][p]; $('#hp-txt').textContent = HPTXT[p][1]; }
 document.querySelectorAll('.hsel button').forEach(b => b.onclick = () => { hpSel(b.dataset.p); $('#go-hasse').animate([{transform:'scale(.97)'}, {transform:'scale(1)'}], {duration:220}); });
 hpSel();
 if (window.HR) { $('#hr-slot').append($('.hsel'), $('#go-hasse')); document.title = 'Hasses Hälsoresa · Buttercup';
   const hb = document.querySelector('.bc-bar .hide-m');  }
-$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); new Image().src = 'ex/hasse/dans3.webp'; new Audio('hasse/vibe.mp3').load(); (cxPassNr() === 2 ? CX2.ex : CX.ex).forEach(k => { new Image().src = `ex/hasse/${exFile('hasse', k)}.webp`; });
+$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); new Image().src = 'ex/hasse/dans3.webp'; new Audio('hasse/vibe.mp3').load(); ({1:CX.ex, 2:CX2.ex, 3:CX3.ex}[cxPassNr()]).forEach(k => { new Image().src = `ex/hasse/${exFile('hasse', k)}.webp`; });
   b.classList.add('talk'); setTimeout(() => { b.classList.remove('talk'); delete b.dataset.busy; useGear('kb'); if (!S) S = fresh(); startComplex(); }, 1500); }; $('#lib-go').onclick = () => startFree();
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#sheet').classList.remove('on'); });
 
@@ -1542,13 +1543,17 @@ function renderProg() {
     const b2 = document.createElement('button'); b2.className = 'passcard cxcard';
     b2.innerHTML = `<span class="ltr">⚡</span><span><h3>Hasses superpass 2<span class="tag">Extra</span></h3>
       <p>Gorillaswing → Axelsving → Rotation + pullover → Utpress → Utfall + halo</p><p class="lbl" style="margin-top:4px">1 lätt klocka · 30 s jobb / 30 s vila · 3 varv · ca 15 min</p></span>`;
-    b2.onclick = () => { hpSel(2); startComplex(2); }; pl.appendChild(b2); }
+    b2.onclick = () => { hpSel(2); startComplex(2); }; pl.appendChild(b2);
+    const b3 = document.createElement('button'); b3.className = 'passcard cxcard';
+    b3.innerHTML = `<span class="ltr">⚡</span><span><h3>Hasses superpass 3<span class="tag">Extra</span></h3>
+      <p>Roterande thruster → Marklyft + halo → Utfall + utpress → Pullover + rotation → Korsutfall</p><p class="lbl" style="margin-top:4px">1 lätt klocka · så många varv du hinner · 20 min</p></span>`;
+    b3.onclick = () => { hpSel(3); startComplex(3); }; pl.appendChild(b3); }
 }
 
 // ---------------- pass ----------------
 let SS = null;
 function workSec(x) { const u = x.e.unit, n = x.reps * (x.e.sida ? 2 : 1); return u === 'min' ? x.reps * 60 : u === 'sek' ? n : u === 'm' ? 30 * (x.e.sida ? 2 : 1) : u === 'varv' ? n * 4 : n * 3.5; }
-function estMin(plan) { if (plan[0] && plan[0].work) return Math.round(plan[0].sets * plan.length * (plan[0].work + plan[0].rest) / 60); if (plan[0] && plan[0].cx) return Math.round(5 + plan[0].sets * (plan.reduce((t, x) => t + workSec(x) + 8, 0) + plan[0].rest) / 60); return Math.round(5 + plan.reduce((t, x) => t + x.sets * (workSec(x) + x.rest + 10), 0) / 60); }
+function estMin(plan) { if (plan[0] && plan[0].p3) return CX3.min; if (plan[0] && plan[0].work) return Math.round(plan[0].sets * plan.length * (plan[0].work + plan[0].rest) / 60); if (plan[0] && plan[0].cx) return Math.round(5 + plan[0].sets * (plan.reduce((t, x) => t + workSec(x) + 8, 0) + plan[0].rest) / 60); return Math.round(5 + plan.reduce((t, x) => t + x.sets * (workSec(x) + x.rest + 10), 0) / 60); }
 function chooseInt(title, build, go) {
   const sh = $('#sheet'), last = localStorage.getItem('bc_halsoresa_int') || 'normal';
   const cards = Object.entries(INTS).map(([id, I]) => { INT = id; const plan = build(); INT = 'normal';
@@ -1631,7 +1636,7 @@ function renderStep() {
       if (st.cx && x.work) { cxStop(); if (nxt && nxt.type === 'set') { const nyttVarv = nxt.s !== st.s;
           startRest(x.rest, `Nästa: ${nxt.x.e.namn}${nyttVarv ? ` · varv ${nxt.s} av ${x.sets}` : ''}`, [{at:x.rest - .1, fn:vibeOn}, {at:x.rest - 6, fn:() => hasseDans(true)},
             {at:2.6, fn:() => vibeOff(1200)}, {at:5, fn:() => hasseDans(false)}].concat(nyttVarv ? [{at:x.rest / 2 + 1, fn:() => tempel(st.s)}, {at:1.3, fn:korVi}] : [])); } else next(); return; }
-      if (st.cx) { cxStop(); if (nxt && nxt.type === 'set' && nxt.s !== st.s) startRest(x.rest, `Nästa: varv ${nxt.s} av ${x.sets} · ${nxt.x.e.namn}`, [{at:x.rest - .1, fn:vibeOn}, {at:x.rest - 6, fn:() => hasseDans(true)}, {at:2.6, fn:() => vibeOff(1200)}, {at:x.rest / 2 + 1, fn:() => tempel(st.s)}, {at:5, fn:() => hasseDans(false)}, {at:1.3, fn:korVi}]); else next(); return; }
+      if (st.cx) { cxStop(); if (nxt && nxt.type === 'set' && nxt.s !== st.s && !(SS.cx.amrap && Date.now() > SS.dl)) startRest(x.rest, `Nästa: varv ${nxt.s}${SS.cx.amrap ? '' : ` av ${x.sets}`} · ${nxt.x.e.namn}`, [{at:x.rest - .1, fn:vibeOn}, {at:x.rest - 6, fn:() => hasseDans(true)}, {at:2.6, fn:() => vibeOff(1200)}, {at:x.rest / 2 + 1, fn:() => tempel(st.s)}, {at:5, fn:() => hasseDans(false)}, {at:1.3, fn:korVi}]); else next(); return; }
       if (nxt && nxt.type === 'set') startRest(x.rest, nxt.x === x ? `Nästa: set ${nxt.s} av ${x.sets}` : `Nästa: ${nxt.x.e.namn} · ${nxt.x.kg}`);
       else next();
     };
@@ -1649,7 +1654,10 @@ function renderStep() {
     body.querySelectorAll('.rpe button').forEach(b => b.onclick = () => finish(b.dataset.r));
   }
 }
-function next() { cxStop(); stopRest(); SS.i++; renderStep(); }
+function next() { cxStop(); stopRest();
+  if (SS && SS.cx && SS.cx.amrap) { const st = SS.steps[SS.i]; if (st && st.type === 'set' && st.xi === SS.plan.length - 1) SS.rounds = st.s;
+    if (Date.now() > SS.dl && st && st.type === 'set') { SS.extra = st.xi === SS.plan.length - 1 ? 0 : st.xi + 1; SS.i = SS.steps.length - 1; renderStep(); return; } }
+  SS.i++; renderStep(); }
 
 // vila
 let RT = null;
@@ -1677,7 +1685,7 @@ document.addEventListener('pointerdown', () => { try { AC = AC || new (window.Au
 function finish(r) {
   if (SS.free) { wakeOff(); if (S.log.length) { S.free = (S.free || 0) + 1; save(); } $('#ss-prog').style.width = '100%';
     $('#d-eyebrow').textContent = `Fritt pass · ${{easy:'Lätt', ok:'Lagom', hard:'Tungt', too:'För tungt'}[r]}`; $('#d-stamp').textContent = 'Fritt!';
-    $('#d-head').textContent = 'Snyggt jobbat'; $('#d-msg').textContent = SS.cx && SS.cx.work ? `${SS.cx.v} varv × ${SS.plan.length} övningar × ${SS.cx.work} s. Superpasset räknas inte in i 12-veckorsprogrammet – men kroppen märker det.` : SS.cx ? `${SS.cx.v} varv × ${SS.plan.length} övningar = ${SS.cx.v * SS.plan.length * CX.reps} reps. Superpasset räknas inte in i 12-veckorsprogrammet – men kroppen märker det.` : `${SS.plan.length} övningar avklarade. Fria pass räknas inte in i 12-veckorsprogrammet – men kroppen märker dem.`;
+    $('#d-head').textContent = 'Snyggt jobbat'; $('#d-msg').textContent = SS.cx && SS.cx.amrap ? `${SS.rounds || 0} hela varv${SS.extra ? ` + ${SS.extra} övningar` : ''} på ${Math.round((Date.now() - SS.t0) / 60000)} min. Skriv upp det – nästa gång slår du det!` : SS.cx && SS.cx.work ? `${SS.cx.v} varv × ${SS.plan.length} övningar × ${SS.cx.work} s. Superpasset räknas inte in i 12-veckorsprogrammet – men kroppen märker det.` : SS.cx ? `${SS.cx.v} varv × ${SS.plan.length} övningar = ${SS.cx.v * SS.plan.length * CX.reps} reps. Superpasset räknas inte in i 12-veckorsprogrammet – men kroppen märker det.` : `${SS.plan.length} övningar avklarade. Fria pass räknas inte in i 12-veckorsprogrammet – men kroppen märker dem.`;
     const df = $('#d-fig'); df.innerHTML = ''; df.appendChild(figure(ANIM.flex, undefined, {vb:'40 -30 160 236', noGround:true}));
     stamps($('#d-stamps')); show('s-done'); confetti(); return; }
   const msgs = [];
@@ -1862,10 +1870,22 @@ const CX2 = {ex:['gorillaswing', 'axelkast', 'pullover', 'squatpressout', 'utfal
      pullover:{namn:'Rotation + pullover', tips:['Klockan i hornen mot bröstet','Vrid hela kroppen 90° åt sidan – snurra på framfoten, bakre hälen lyfts – och tillbaka','Klockan upp över huvudet och ner bakom nacken, armbågarna pekar upp. Nästa rep vrider du åt andra hållet']},
      squatpressout:{namn:'Knäböj + utpress', tips:['Klockan i hornen tätt mot bröstet','Sitt djupt och pressa klockan rakt fram – armarna raka, i brösthöjd','Dra tillbaka till bröstet och res dig']},
      utfallhalo:{namn:'Utfall + halo', tips:['Klockan i hornen mot bröstet','Kliv bakåt i ett djupt utfall – bakre knät nästan i golvet','Stanna nere och för klockan ett varv runt huvudet, res dig och byt ben']}}};
-function cxPassNr() { return localStorage.getItem('bc_halsoresa_hpass') === '2' ? 2 : 1; }
+function cxPassNr() { const v = +localStorage.getItem('bc_halsoresa_hpass'); return v === 2 || v === 3 ? v : 1; }
 function cx2Plan() { return CX2.ex.map(id => ({id, e:{...CX2.e[id], unit:'sek'}, sets:CX2.v, reps:CX2.work, work:CX2.work, bell:'l', kg:S.bells.l + ' kg',
   target:CX2.work + ' s jobb · ' + CX2.rest + ' s vila', rest:CX2.rest, g:'kb', cx:true})); }
-const cxTempo = x => (x.work ? CX2.tempo : CX.tempo)[x.id] || 3;   // sekunder per rep (reelens takt +0,5 s, Victor)
+// Hasses pass 3 (Adrian Goldstein-reel): AMRAP 20 min – så många varv du hinner, reps enligt reelen, kort vila mellan varven
+const CX3 = {ex:['rotthruster', 'dlhalo', 'lungepress', 'pullrot', 'crosslunge'], v:12, rest:20, min:20, amrap:true,
+  reps:{rotthruster:20, dlhalo:15, lungepress:20, pullrot:20, crosslunge:20},
+  alt:{rotthruster:'mirror', dlhalo:'mirror', lungepress:'mirror', pullrot:'mirror', crosslunge:'mirror'},
+  tempo:{rotthruster:3, dlhalo:4.5, lungepress:4, pullrot:4.5, crosslunge:3.5},
+  e:{rotthruster:{namn:'Roterande thruster', tips:['Klockan i hornen mot bröstet – ner i en djup knäböj','Res dig, vrid hela kroppen 90° åt sidan och pressa klockan rakt upp – bakre hälen lyfts','Ner till bröstet och vrid tillbaka. Varannan rep åt varje håll – 10 per sida']},
+     dlhalo:{namn:'Marklyft + halo', tips:['Klockan på golvet mellan fötterna – fäll i höften med platt rygg','Res dig, lyft klockan till bröstet och ta den i hornen','Ett varv runt huvudet, ner till höften och tillbaka till golvet. Byt håll varje rep']},
+     lungepress:{namn:'Utfall + utpress', tips:['Klockan i hornen mot bröstet','Kliv bakåt i ett djupt utfall – bakre knät nästan i golvet','Pressa klockan rakt fram, dra tillbaka och res dig. Byt ben varje rep']},
+     pullrot:{namn:'Pullover + rotation', tips:['Klockan i hornen mot bröstet','Upp över huvudet och ner bakom nacken – armbågarna pekar upp – och tillbaka','Vrid hela kroppen 90° åt sidan och tillbaka. Varannan rep åt varje håll']},
+     crosslunge:{namn:'Korsutfall', tips:['Klockan i ena handen, andra armen ut för balans','Kliv bakåt snett bakom andra benet och sänk klockan diagonalt mot golvet utanför främre foten','Res dig och pendla klockan fram till brösthöjd. Byt sida varje rep']}}};
+function cx3Plan() { return CX3.ex.map(id => ({id, e:{...CX3.e[id]}, sets:CX3.v, reps:CX3.reps[id], bell:'l', kg:S.bells.l + ' kg',
+  target:CX3.reps[id] + ' reps', rest:CX3.rest, g:'kb', cx:true, p3:true})); }
+const cxTempo = x => (x.p3 ? CX3 : x.work ? CX2 : CX).tempo[x.id] || 3;   // sekunder per rep (reelens takt +0,5 s, Victor)
 // repens fas -> bildruta enligt spritens egen timing (håll i start/topp), så rörelsen följer klockan; topp = ruta 8
 let CXC = null; const cxCum = () => CXC || (CXC = (() => { const tot = EXDUR.reduce((a, b) => a + b, 0); let c = 0; return EXDUR.map(d => (c += d) / tot); })());
 const cxFrame = f => { const C = cxCum(); let i = 0; while (i < 15 && f >= C[i]) i++; return i; }, CXTOP = 8;
@@ -1878,7 +1898,7 @@ function cxTimer(st, box) {
   const big = box.querySelector('.cxn'), lab = box.querySelector('.cxl'), bar = box.querySelector('.cxbar i'), pb = box.querySelector('.cxpause');
   const pips = box.querySelectorAll('.cxpips i'), spr = box.closest('.cxwrap').querySelector('.stage .exspr');
   if (spr) spr.ext = true;
-  const alt = x.work && CX2.alt[x.id];
+  const alt = (x.p3 ? CX3.alt : x.work ? CX2.alt : {})[x.id];
   const frame = f => { if (!spr) return; const odd = alt && T.t > 0 && Math.floor(T.t / T.per) % 2, i = cxFrame(f);
     spr.style.backgroundPosition = `${(odd && alt === 'rev' ? 15 - i : i) * 100 / 15}% 0`;
     if (alt === 'mirror') spr.style.transform = odd ? 'scaleX(-1)' : ''; };
@@ -1917,8 +1937,17 @@ function cxTimer(st, box) {
     const np = base * k; if (T.t > 0) T.t = T.t / T.per * np; T.per = np; T.rep = Math.floor(Math.max(0, T.t) / np); draw(); };
   draw();
 }
+let CX3T = null;
 function startComplex(nr) {
   if (!S) S = fresh();
+  if ((nr || cxPassNr()) === 3) { INT = 'normal'; const plan = cx3Plan(), steps = [];
+    for (let v = 1; v <= CX3.v; v++) plan.forEach((x, xi) => steps.push({type:'set', x, xi, s:v, cx:true}));
+    steps.push({type:'rpe'});
+    SS = {k:'F', w:week(), plan, steps, i:0, namn:'Hasses superpass 3', t0:Date.now(), dl:Date.now() + CX3.min * 60000, rounds:0, free:true, cx:CX3, it:'normal'};
+    clearInterval(CX3T); const tick = () => { if (!SS || SS.cx !== CX3) { clearInterval(CX3T); return; } const l = Math.max(0, SS.dl - Date.now());
+      $('#ss-title').textContent = l ? `Hasses pass 3 · AMRAP · ${Math.floor(l / 60000)}:${String(Math.floor(l / 1000) % 60).padStart(2, '0')} kvar` : 'Tiden är ute – gör klart övningen!'; };
+    tick(); CX3T = setInterval(tick, 1000);
+    show('s-sess'); renderStep(); wakeOn(); return; }
   if ((nr || cxPassNr()) === 2) { INT = 'normal'; const plan = cx2Plan(), steps = [];
     for (let v = 1; v <= CX2.v; v++) plan.forEach((x, xi) => steps.push({type:'set', x, xi, s:v, cx:true}));
     steps.push({type:'rpe'});
