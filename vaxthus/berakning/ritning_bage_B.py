@@ -213,7 +213,7 @@ notes = ['ANMÄRKNINGAR',
          'Röd streckad = delar som monteras senare (sidoregel, hanbjälke, nocklask).',
          'Kontroll: två halvor ihop = 4000 c/c fot (mittlinjen), utsida ' + f'{2 * x_at(ro, 0):.0f}.']
 for i, n_ in enumerate(notes): S.t(nx0, ny0 + i * 4.6, n_, 3.0 if i == 0 else 2.7, w='bold' if i == 0 else 'normal')
-p1 = S.save('ritning_bage_1')
+p1 = S.save('ritning_bageB_1')
 
 # ======================= BLAD 2: remsor =======================
 S = Sheet()
@@ -291,7 +291,7 @@ for i, (o, nb, ns, rem) in enumerate(used[:6]):
     S.t(px0 + SKIVA_L * ps * 0.5 + 3, y + 2.8, f'spill {o:.0f} → {nb} × {FKL:.0f} + {ns} × {KL:.0f}', 2.5)
 S.t(px0, ey + 9 + 6 * 5 + 2, '(skala 1:28; ljus = flänsbit, mörk = klossbitar)', 2.4, col=GREY)
 TOT_SKIVOR_REMSOR = math.ceil(18 * 12 / 12)
-p2 = S.save('ritning_bage_2')
+p2 = S.save('ritning_bageB_2')
 
 # ======================= BLAD 3: klossar + nocklask =======================
 S = Sheet()
@@ -352,8 +352,8 @@ S.t(lx0, LY_(zmin) + 42, f'Antal: 2 per inre båge + 1 per gavelbåge (bara insi
 nh = (B_[1] - C_[1]) + (C_[1] - D_[1])
 pitch = C_[1] - D_[1] + KERF / math.cos(math.radians(ang))
 S.t(lx0, LY_(zmin) + 52, f'Ur skivan: lägg V:na i varandra – en bit {2 * LX:.0f} × ca {16 * pitch + (B_[1] - C_[1]):.0f} räcker till alla 16 (snitt {KERF:.0f}).', 2.75)
-p3 = S.save('ritning_bage_3')
-out = os.path.join(HERE, 'ritning_bage.pdf')
+p3 = S.save('ritning_bageB_3')
+out = os.path.join(HERE, 'ritning_bage_B.pdf')
 subprocess.run(['python3', '-c', f"""
 from pypdf import PdfWriter
 w = PdfWriter()
