@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Hasse 3D – prototyp</title>
+<style>
+  html,body{margin:0;height:100%;background:#FFF6DC;font-family:system-ui,sans-serif;color:#2A1206;overflow:hidden}
+  #c{display:block;width:100vw;height:100vh}
+  .ui{position:fixed;left:12px;right:12px;bottom:14px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+  .ui label{background:#FCC222;border:3px solid #2A1206;border-radius:12px;padding:6px 12px;font-weight:700;display:flex;gap:8px;align-items:center}
+  .ui button{background:#C8340A;color:#FFF6DC;border:3px solid #2A1206;border-radius:12px;padding:8px 14px;font-weight:800;cursor:pointer}
+  h1{position:fixed;top:10px;left:0;right:0;margin:0;text-align:center;font:400 30px/1 Impact,'Anton',sans-serif;letter-spacing:.02em}
+  h1 small{display:block;font:600 13px system-ui;opacity:.7;margin-top:4px}
+</style>
+</head>
+<body>
+<h1>HASSE 3D · ROTERANDE THRUSTER<small>Prototyp – rörelsen avläst från reelen</small></h1>
+<canvas id="c"></canvas>
+<div class="ui">
+  <label>Tempo <input id="sp" type="range" min="0.4" max="1.6" step="0.05" value="1"> <b id="spv">1,0×</b></label>
+  <label>Vinkel <input id="ang" type="range" min="-90" max="90" step="5" value="20"> <b id="angv">20°</b></label>
+  <button id="pp">❚❚ Paus</button>
+</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+const INK = 0x2A1206, SKIN = 0xF2C19A, SHIRT = 0xA9CBEA, VEST = 0x1E2C55, TROU = 0x3A3530, SHOE = 0x2A1E16,
+      HAIR = 0x8A4A2A, BEARD = 0x7E7368, BELL = 0x4A4F57, YEL = 0xFCC222;
+const cv = document.getElementById('c');
+const R = new THREE.WebGLRenderer({canvas:cv, antialias:true, preserveDrawingBuffer:true});
+R.setPixelRatio(Math.min(2, devicePixelRatio)); R.setClearColor(0xFFF6DC);
+const scene = new THREE.Scene();
+const cam = new THREE.PerspectiveCamera(26, 1, .1, 50);
+scene.add(new THREE.HemisphereLight(0xffffff, 0xe8d8b0, 1.6));
+const sun = new THREE.DirectionalLight(0xffffff, 1.6); sun.position.set(2, 4, 3); scene.add(sun);
+// 3-stegs toon-gradient → platta färgfält som i 2D-Hasse
+const g = new THREE.DataTexture(new Uint8Array([120, 200, 255]), 3, 1, THREE.RedFormat); g.minFilter = g.magFilter = THREE.NearestFilter; g.needsUpdate = true;
+const mat = (c, map) => new THREE.MeshToonMaterial({color:c, gradientMap:g, map:map || null});
+const OUT = new THREE.MeshBasicMaterial({color:INK, side:THREE.BackSide});
+const W = 0.016;   // konturtjocklek (m)
+function outlined(geo, m, grow = W) {           // "inverted hull" – svart kontur som i tecknad stil
+  const grp = new THREE.Group(), a = new THREE.Mesh(geo, m), o = new THREE.Mesh(geo, OUT);
+  geo.computeBoundingSphere(); const r = geo.boundingSphere.radius; o.scale.setScalar(1 + grow / r);
+  grp.add(o, a); return grp; }
+
+// ---------- väst-textur (egen design: snöflingeband, snögubbe, gran) ----------
+function vestTex() {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 256; const x = c.getContext('2d');
+  x.fillStyle = '#1E2C55'; x.fillRect(0, 0, 512, 256);
+  x.fillStyle = '#F4EEDF'; x.fillRect(0, 196, 512, 34);      // band upptill (texturen vänds: v=1 överst)
+  x.fillStyle = '#1E2C55'; for (let i = 0; i < 16; i++) { const cx = 16 + i * 32; x.beginPath(); x.moveTo(cx, 200); x.lineTo(cx + 8, 213); x.lineTo(cx, 226); x.lineTo(cx - 8, 213); x.fill(); }
+  x.fillStyle = '#C8340A'; x.fillRect(0, 0, 512, 10); x.fillStyle = '#2F7A3A'; x.fillRect(0, 10, 512, 8); x.fillStyle = '#C8340A'; x.fillRect(0, 18, 512, 8);
+  // snögubbe på rött fält (framsida vänster), gran (framsida höger)
+  x.fillStyle = '#C8340A'; x.fillRect(70, 70, 90, 110);
+  x.fillStyle = '#fff'; [[115, 150, 22], [115, 112, 16], [115, 86, 11]].forEach(([a, b, r]) => { x.beginPath(); x.arc(a, b, r, 0, 7); x.fill(); });
+  x.fillStyle = '#2F7A3A'; x.beginPath(); x.moveTo(330, 70); x.lineTo(372, 170); x.lineTo(288, 170); x.fill();
+  x.fillStyle = '#fff'; [[318, 120], [345, 140], [330, 98]].forEach(([a, b]) => { x.beginPath(); x.arc(a, b, 4, 0, 7); x.fill(); });
+  x.fillStyle = '#FCC222'; x.beginPath(); x.arc(330, 66, 7, 0, 7); x.fill();
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = THREE.RepeatWrapping; t.offset.x = .25; return t; }
+
+// ---------- Hasse byggd av primitiver ----------
+const hasse = new THREE.Group(); scene.add(hasse);
+const UP = new THREE.Vector3(0, 1, 0);
+function limb(r, m) { const geo = new THREE.CylinderGeometry(r, r, 1, 20, 1, true); const o = outlined(geo, m, 0); o.children[0].scale.set(1 + W / r, 1, 1 + W / r); hasse.add(o); return o; }
+function ball(r, m) { const o = outlined(new THREE.SphereGeometry(r, 24, 16), m); hasse.add(o); return o; }
+function place(o, a, b) { const d = new THREE.Vector3().subVectors(b, a), L = d.length(); o.position.copy(a).addScaledVector(d, .5);
+  o.quaternion.setFromUnitVectors(UP, d.normalize()); o.scale.set(1, L, 1); }
+const mShirt = mat(SHIRT), mSkin = mat(SKIN), mTrou = mat(TROU);
+const P = {
+  uarmL:limb(.058, mShirt), uarmR:limb(.058, mShirt), farmL:limb(.047, mSkin), farmR:limb(.047, mSkin),
+  thighL:limb(.085, mTrou), thighR:limb(.085, mTrou), shinL:limb(.065, mTrou), shinR:limb(.065, mTrou),
+  shL:ball(.058, mShirt), shR:ball(.058, mShirt), elL:ball(.05, mShirt), elR:ball(.05, mShirt),
+  cuffL:ball(.048, mShirt), cuffR:ball(.048, mShirt), haL:ball(.048, mSkin), haR:ball(.048, mSkin),
+  hiL:ball(.09, mTrou), hiR:ball(.09, mTrou), knL:ball(.068, mTrou), knR:ball(.068, mTrou), anL:ball(.055, mTrou), anR:ball(.055, mTrou),
+  neck:limb(.055, mSkin),
+};
+// skor
+function shoe() { const o = outlined(new THREE.BoxGeometry(.11, .08, .26).translate(0, .04, .06), mat(SHOE), .012); hasse.add(o); return o; }
+P.shoeL = shoe(); P.shoeR = shoe();
+// bål: elliptisk cylinder med väst + skjortkrage
+const torso = new THREE.Group(); hasse.add(torso);
+{ const geo = new THREE.CylinderGeometry(1, .92, 1, 32, 1, false); const t = outlined(geo, mat(0xffffff, vestTex()), 0);
+  t.children[0].scale.set(1.09, 1.0, 1.13); torso.add(t); torso.userData.body = t;
+  const col = outlined(new THREE.TorusGeometry(.75, .16, 10, 24, Math.PI * 1.2), mShirt, .01); col.rotation.set(Math.PI / 2, 0, -Math.PI * .1); torso.add(col); torso.userData.col = col; }
+// huvud
+const head = new THREE.Group(); hasse.add(head);
+{ head.add(outlined(new THREE.SphereGeometry(.105, 32, 24), mSkin));
+  const hair = outlined(new THREE.SphereGeometry(.112, 32, 16, 0, Math.PI * 2, 0, Math.PI * .42), mat(HAIR), .01); hair.rotation.x = -.55; head.add(hair);   // vikande hårfäste
+  const beard = outlined(new THREE.SphereGeometry(.1, 28, 16, 0, Math.PI * 2, Math.PI * .52, Math.PI * .48), mat(BEARD), .01); beard.scale.set(1.04, 1.25, 1.02); beard.position.set(0, -.005, .018); head.add(beard);
+  const mus = outlined(new THREE.CapsuleGeometry(.014, .06, 4, 8), mat(BEARD), .006); mus.rotation.z = Math.PI / 2; mus.position.set(0, -.03, .098); head.add(mus);
+  const nose = outlined(new THREE.SphereGeometry(.022, 12, 8), mSkin, .006); nose.position.set(0, -.005, .108); head.add(nose);
+  const gm = new THREE.MeshBasicMaterial({color:INK});
+  [-1, 1].forEach(s => { const r = new THREE.Mesh(new THREE.TorusGeometry(.03, .0065, 8, 24), gm); r.position.set(s * .042, .02, .1); head.add(r);
+    const e = new THREE.Mesh(new THREE.SphereGeometry(.009, 8, 6), gm); e.position.set(s * .042, .02, .1); head.add(e);
+    const arm = new THREE.Mesh(new THREE.CylinderGeometry(.004, .004, .1), gm); arm.rotation.x = Math.PI / 2; arm.position.set(s * .072, .02, .05); head.add(arm);
+    const ear = outlined(new THREE.SphereGeometry(.024, 10, 8), mSkin, .006); ear.scale.set(.6, 1, .9); ear.position.set(s * .104, 0, 0); head.add(ear); });
+  const br = new THREE.Mesh(new THREE.CylinderGeometry(.004, .004, .025), gm); br.rotation.z = Math.PI / 2; br.position.set(0, .022, .104); head.add(br);
+  [-1, 1].forEach(s => { const b = new THREE.Mesh(new THREE.BoxGeometry(.04, .008, .01), gm); b.position.set(s * .042, .06, .1); b.rotation.z = s * -.12; head.add(b); }); }
+// kettlebell (grå med gul etikett), hålls i hornen
+const kb = new THREE.Group(); hasse.add(kb);
+{ const body = outlined(new THREE.SphereGeometry(.1, 28, 20), mat(BELL)); body.scale.set(1, .95, 1); kb.add(body);
+  const h = outlined(new THREE.TorusGeometry(.075, .017, 10, 28, Math.PI), mat(BELL), .01); h.position.y = .06; kb.add(h);
+  [-1, 1].forEach(s => { const leg = outlined(new THREE.CylinderGeometry(.017, .017, .05), mat(BELL), .008); leg.position.set(s * .075, .045, 0); kb.add(leg); });
+  const lab = new THREE.Mesh(new THREE.CircleGeometry(.032, 20), new THREE.MeshBasicMaterial({color:YEL})); lab.position.set(0, -.01, .1); kb.add(lab);
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, .012, 20), mat(BELL)); base.position.y = -.095; kb.add(base); }
+// golvskugga
+const sh = new THREE.Mesh(new THREE.CircleGeometry(.42, 40), new THREE.MeshBasicMaterial({color:0x2A1206, transparent:true, opacity:.13}));
+sh.rotation.x = -Math.PI / 2; sh.position.y = .002; scene.add(sh);
+
+// ---------- data ----------
+const D = await (await fetch('rotthruster.json')).json();
+const N = D.n, FPS = D.fps;
+const v = (f, i) => new THREE.Vector3(D.p[f][i][0], D.p[f][i][1], -D.p[f][i][2]);
+const lerpPose = t => { const f = t * N, a = Math.floor(f) % N, b = (a + 1) % N, k = f - Math.floor(f);
+  return i => v(a, i).lerp(v(b, i), k); };
+const mid = (a, b) => a.clone().add(b).multiplyScalar(.5);
+const S = 1.12;   // skala upp till Hasses längd
+function pose(t) {
+  const q = lerpPose(t), J = i => q(i).multiplyScalar(S);
+  const sL = J(11), sR = J(12), eL = J(13), eR = J(14), wL = J(15), wR = J(16), hL = J(23), hR = J(24), kL = J(25), kR = J(26), aL = J(27), aR = J(28),
+        heL = J(29), heR = J(30), tL = J(31), tR = J(32), earL = J(7), earR = J(8), nose = J(0);
+  // bål-bas
+  const sm = mid(sL, sR), hm = mid(hL, hR), up = sm.clone().sub(hm).normalize();
+  const xax = sL.clone().sub(sR).add(hL.clone().sub(hR)).normalize();
+  const fw = new THREE.Vector3().crossVectors(xax, up).normalize(); xax.crossVectors(up, fw).normalize();
+  const bas = new THREE.Matrix4().makeBasis(xax, up, fw);
+  const tw = sL.distanceTo(sR) * .5, top = sm.clone().addScaledVector(up, -.02), bot = hm.clone().addScaledVector(up, -.06);
+  torso.position.copy(mid(top, bot)); torso.quaternion.setFromRotationMatrix(bas);
+  torso.userData.body.scale.set(tw * 1.12, top.distanceTo(bot), tw * .78);
+  torso.userData.col.position.set(0, top.distanceTo(bot) / 2 - .01, 0); torso.userData.col.scale.setScalar(tw * .32);
+  // huvud: mellan öronen, orienterat efter öron + nacke
+  const hc = mid(earL, earR), hx = earL.clone().sub(earR).normalize(), hup = hc.clone().sub(sm).normalize();
+  const hf = new THREE.Vector3().crossVectors(hx, hup).normalize(); if (hf.dot(nose.clone().sub(hc)) < 0) hf.negate();
+  const hu = new THREE.Vector3().crossVectors(hf, hx).normalize(); hx.crossVectors(hu, hf);
+  head.position.copy(hc).addScaledVector(hu, .01); head.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(hx, hu, hf));
+  place(P.neck, sm.clone().addScaledVector(up, -.03), hc.clone().addScaledVector(hu, -.06));
+  // armar (skjortärm till armbågen, uppkavlad: underarm hud)
+  P.shL.position.copy(sL); P.shR.position.copy(sR); P.elL.position.copy(eL); P.elR.position.copy(eR);
+  place(P.uarmL, sL, eL); place(P.uarmR, sR, eR); place(P.farmL, eL, wL); place(P.farmR, eR, wR);
+  P.cuffL.position.copy(eL.clone().lerp(wL, .18)); P.cuffR.position.copy(eR.clone().lerp(wR, .18));
+  const hdL = wL.clone().addScaledVector(wL.clone().sub(eL).normalize(), .05), hdR = wR.clone().addScaledVector(wR.clone().sub(eR).normalize(), .05);
+  P.haL.position.copy(hdL); P.haR.position.copy(hdR);
+  // ben
+  P.hiL.position.copy(hL); P.hiR.position.copy(hR); P.knL.position.copy(kL); P.knR.position.copy(kR); P.anL.position.copy(aL); P.anR.position.copy(aR);
+  place(P.thighL, hL, kL); place(P.thighR, hR, kR); place(P.shinL, kL, aL); place(P.shinR, kR, aR);
+  [[P.shoeL, heL, tL, aL], [P.shoeR, heR, tR, aR]].forEach(([o, he, to, an]) => { const d = to.clone().sub(he); d.y = 0; d.normalize();
+    o.position.set(an.x, Math.max(0, Math.min(he.y, to.y) - .02), an.z); o.rotation.set(0, Math.atan2(d.x, d.z), 0); });
+  // klockan: handtaget mellan händerna, kroppen hänger under (hornfattning)
+  const hm2 = mid(hdL, hdR), ax = hdL.clone().sub(hdR).normalize();
+  const kup = new THREE.Vector3(0, 1, 0).addScaledVector(ax, -ax.y).normalize(), kf = new THREE.Vector3().crossVectors(ax, kup).normalize();
+  kb.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(ax, kup, kf)); kb.position.copy(hm2).addScaledVector(kup, -.115);
+  sh.position.x = hm.x; sh.position.z = hm.z;
+}
+// ---------- loop ----------
+let t = 0, last = performance.now(), paused = false, speed = 1, ang = 20;
+const sp = document.getElementById('sp'), spv = document.getElementById('spv'), an = document.getElementById('ang'), anv = document.getElementById('angv');
+sp.oninput = () => { speed = +sp.value; spv.textContent = speed.toFixed(1).replace('.', ',') + '×'; };
+an.oninput = () => { ang = +an.value; anv.textContent = ang + '°'; };
+document.getElementById('pp').onclick = e => { paused = !paused; e.target.textContent = paused ? '▶ Spela' : '❚❚ Paus'; };
+function size() { const w = cv.clientWidth, h = cv.clientHeight; R.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); }
+addEventListener('resize', size); size();
+function aim() { const a = THREE.MathUtils.degToRad(ang), d = 5.6; cam.position.set(Math.sin(a) * d, 1.25, Math.cos(a) * d); cam.lookAt(0, 1.08, 0); }
+function frame(now) { const dt = (now - last) / 1000; last = now; if (!paused) t = (t + dt * speed / (N / FPS)) % 1; pose(t); aim(); R.render(scene, cam); requestAnimationFrame(frame); }
+requestAnimationFrame(frame);
+// för GIF-export: window.snap(t) ritar en exakt fas
+window.snap = (tt, a) => { paused = true; if (a !== undefined) ang = a; pose(tt); aim(); R.render(scene, cam); return cv.toDataURL('image/png'); };
+window.ready = true;
+</script>
+</body>
+</html>
