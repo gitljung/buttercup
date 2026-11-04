@@ -56,3 +56,5 @@ Projekt `vaxthus`, master "Växthus - parametrar". Gammal DirectDesign-modell i 
 - 2026-11-04 Victor: remsa 95, kloss 95x45 med Norhage-längd (foto: ca 130 längs bågen, 45 radiellt). v13b_kloss.py (BagB 95, KlossH 45, KlossL/FackKlossL 130, djup 75) KÖAD.
 - 2026-11-04 Steg 13b KLAR: remsa 95, kloss 45x95x130, c/c 264/258, 15 klossar/halvbåge, djup 75. 563 kroppar, 0 fel/krock, flex 849 OK, identiskt, sparad, STEP.
 - 2026-11-04 Victor: ja -> v14_hanbjalke.py (HanZ = mitt på övre kloss HanKloss=2, ändar snett längs ytterradien HanX/HanXu, NockLaskT = LamellT) KÖAD.
+- 2026-11-04 v14 försök 1: pval kraschade på parameter med annan enhet. Rättat (värde direkt). Försök 2.
+- 2026-11-04 Steg 14 KLAR (försök 2): HanZ 2433,6 (mitt kloss 10), ändar snett HanX 1230/HanXu 1319, NockLaskT 15. 563 kroppar, 0 fel/krock, flex OK, identiskt, sparad, STEP. Ny ritning_bage.pdf (1x15) + MONTERINGSANVISNING.pdf (1x15); gamla: ritning_bage_B.pdf, montering_B.py.

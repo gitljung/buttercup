@@ -10,11 +10,11 @@
   },
   {
    "type": "paragraph",
-   "text": "Bågväxthus i limmad plywood, 9 bågar c/c 1250, nock 3,5 m. Film 4,5 m med wiggle wire. Mått och delar enligt Fusion-modellen \"Växthus\" och ritningen <i>ritning_bage.pdf</i> (blad 1–3). Dimensionerat för snölast Höör och vind ca 20 m/s."
+   "text": "Bågväxthus i plywood och regel (som Norhage: fläns 1 × 15 × 95, klossar regel 45×95), 9 bågar c/c 1250, nock 3,5 m. Film 4,5 m med wiggle wire. Mått och delar enligt Fusion-modellen \"Växthus\" och ritningen <i>ritning_bage.pdf</i> (blad 1–3). Ingen ny hållfasthetsberäkning för den här bågen."
   },
   {
    "type": "image",
-   "path": "/Users/hiro/code/buttercup/vaxthus/fusion/bilder/v12_iso.png",
+   "path": "/Users/hiro/code/buttercup/vaxthus/fusion/bilder/v14_iso.png",
    "width": 470
   },
   {
@@ -28,21 +28,21 @@
   },
   {
    "type": "heading",
-   "text": "1. Såga remsor och klossar",
+   "text": "1. Såga remsor, laskar och klossar",
    "level": 2
   },
   {
    "type": "paragraph",
-   "text": "<b>1.</b> Såga plywoodskivorna 12 × 2500 × 1200 i remsor 95 mm (12 per skiva), se ritning blad 2.<br/><b>2.</b> Kapa flänsbitarna enligt kapplistan: 12 bitar per halvbåge (bit A + bit B i 6 lager). Märk lager 1–6.<br/><b>3.</b> Klossar ur spillet: limma två remsor på varandra, kapa 9 st 120 och 2 st 250 per halvbåge (blad 3).<br/><b>4.</b> Såga 16 nocklaskar (sexhörning, bara raka snitt, blad 3). Gör en mall av den första."
+   "text": "<b>1.</b> Såga plywood 15 × 2500 × 1200 i remsor 95 mm (12 per skiva), se ritning blad 2.<br/><b>2.</b> Kapa flänsbitarna enligt kapplistan: 4 bitar per halvbåge (innerfläns 1747 + 2350, ytterfläns 2005 + 2188, med 25 mm övermått).<br/><b>3.</b> Kapa 2 skarvlaskar 15 × 95 × 400 per halvbåge, gärna ur spillet.<br/><b>4.</b> Kapa klossar av regel 45×95: 15 st à 130 och 1 fotkloss 300 per halvbåge (blad 3).<br/><b>5.</b> Såga 16 nocklaskar i 15 mm plywood (sexhörning, raka snitt, blad 3). Gör en mall av den första."
   },
   {
    "type": "heading",
-   "text": "2. Limma halvbågarna (18 st)",
+   "text": "2. Bygg halvbågarna (18 st)",
    "level": 2
   },
   {
    "type": "paragraph",
-   "text": "<b>1.</b> Böj och limma innerflänsen (lager 1–3, PU-lim) i en böjmall med innerradie R 3808 och pressa jämnt. Härdar 2–4 h.<br/><b>2.</b> Märk klossarnas lägen (tabell blad 1). Limma klossarna och sedan ytterflänsens lager 4–6, pressa.<br/><b>3.</b> Efter härdning: 2 skruv 5×90 per kloss utifrån (3 i fackklossarna).<br/><b>4.</b> Kapa foten vågrätt och nocken lodrätt efter kaplinjerna. Märk halvbågen H1–H18.<br/><b>5.</b> Borra 2 × Ø11 för hanbjälken (inte på de 4 gavelhalvorna)."
+   "text": "<b>1.</b> Lägg upp bågens innerradie R 3819 i full skala (böjmall eller uppritad båge på golvet).<br/><b>2.</b> Märk klossarnas lägen längs flänsen (tabell blad 1, mätt längs ytterkanten från foten).<br/><b>3.</b> Böj innerflänsens två bitar mot mallen, skarven mitt på nedre fackklossen (kloss 7).<br/><b>4.</b> Lim + 2 skruv 5×60 genom innerflänsen i varje kloss. Böj ytterflänsen runt klossarna, skarven mitt på övre fackklossen (kloss 8), lim + 2 skruv 5×60 per kloss.<br/><b>5.</b> Skarvlaskar: innerflänsens på insidan, ytterflänsens på utsidan, PU-lim + 8 skruv 4,5×25.<br/><b>6.</b> Kapa foten vågrätt och nocken lodrätt. Märk halvbågen H1–H18."
   },
   {
    "type": "image",
@@ -65,16 +65,16 @@
   },
   {
    "type": "paragraph",
-   "text": "<b>1.</b> Lägg två halvbågar plant på marken. Kontrollera 4000 mellan fötternas mittlinje.<br/><b>2.</b> Nocklask på båda sidor med PU-lim + 4,5×40 (gavelbågar: bara insidan).<br/><b>3.</b> Bulta hanbjälken 45×120 med 2 × M10 per ände (inte gavelbågarna).<br/><b>4.</b> Res bågen (3–4 personer), ställ den på syllen, vinklar vid foten. Börja i ena gaveln och stötta första bågen.<br/><b>5.</b> Sätt nockregelbiten 45×120 mellan bågen och föregående båge innan nästa reses. Mät c/c 1250 vid foten och nocken."
+   "text": "<b>1.</b> Lägg två halvbågar plant på marken. Kontrollera 4000 mellan fötternas mittlinje.<br/><b>2.</b> Nocklask 15 mm på båda sidor med PU-lim + 4,5×40 i nockklossarna (gavelbågar: bara insidan).<br/><b>3.</b> Hanbjälke 45×120 mitt på kloss 10, ändarna snett kapade längs bågen. Borra Ø11 genom klossen, 2 × M10×160 per ände (inte gavelbågarna).<br/><b>4.</b> Res bågen (3–4 personer), ställ den på syllen, vinklar vid foten. Börja i ena gaveln och stötta första bågen.<br/><b>5.</b> Sätt nockregelbiten 45×120 mellan bågen och föregående båge innan nästa reses. Mät c/c 1250 vid foten och nocken."
   },
   {
    "type": "image",
-   "path": "/Users/hiro/code/buttercup/vaxthus/fusion/bilder/v12_nock.png",
+   "path": "/Users/hiro/code/buttercup/vaxthus/fusion/bilder/v14_nock.png",
    "width": 380
   },
   {
    "type": "image",
-   "path": "/Users/hiro/code/buttercup/vaxthus/fusion/bilder/v12_han.png",
+   "path": "/Users/hiro/code/buttercup/vaxthus/fusion/bilder/v14_han.png",
    "width": 380
   },
   {
@@ -149,9 +149,14 @@
      "Not"
     ],
     [
-     "Plywood 12 × 2500 × 1200 K20/70",
-     "21 skivor",
-     "ca 9 000 kr"
+     "Plywood 15 × 2500 × 1200 K20/70",
+     "9 skivor",
+     "pris ej kollat"
+    ],
+    [
+     "Regel 45×95 (klossar)",
+     "45 m",
+     "pris ej kollat"
     ],
     [
      "120×120 tryckimpregnerat (syll)",
@@ -160,7 +165,7 @@
     ],
     [
      "45×120 C24 (hanbjälke, nock)",
-     "32 m",
+     "33 m",
      "ca 1 300 kr"
     ],
     [
@@ -188,7 +193,7 @@
   },
   {
    "type": "paragraph",
-   "text": "Plywood: 18 skivor till remsor och klossar, 1 till nocklaskar, 2 i reserv. Kontrollera att limningen är EN 314 klass 3 (utomhus). 429 kr/st hos Byggmax."
+   "text": "Plywood: 7 skivor till flänsremsor och skarvlaskar, 1 till nocklaskar, 1 i reserv. Kontrollera limning EN 314 klass 3 (utomhus)."
   },
   {
    "type": "heading",
@@ -286,9 +291,19 @@
      "Till"
     ],
     [
+     "Träskruv 5,0×60 C4",
+     "1270 st",
+     "fläns mot kloss"
+    ],
+    [
+     "Träskruv 4,5×25 C4",
+     "320 st",
+     "skarvlaskar"
+    ],
+    [
      "Träskruv 5,0×90 C4",
-     "990 st",
-     "klossar genom flänsar + dörrramar"
+     "36 st",
+     "dörrramar"
     ],
     [
      "Träskruv 4,5×40 C4",
@@ -347,8 +362,8 @@
     ],
     [
      "PU-lim utomhus D4",
-     "9 kg",
-     "lameller och klossar"
+     "2 kg",
+     "klossar och laskar"
     ]
    ],
    "header": true

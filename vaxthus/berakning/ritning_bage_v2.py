@@ -40,12 +40,13 @@ OVER, SKIVA_L, SKIVA_B, KERF = 25.0, 2500.0, 1200.0, 3.0
 FL = [('inner', ri, ri + PT, SKI), ('ytter', ro - PT, ro, SKY)]
 def flen(r0, r1): rm = (r0 + r1) / 2; return rm * th_end(rm)
 # hanbjälke: bultas genom den kloss som ligger närmast hanbjälkens höjd
-HanZ, HanH, HanX = P['HanZ'] - SyllH, P['HanH'], P['HanX']
+HanZ, HanH, HanX, HanXu = P['HanZ'] - SyllH, P['HanH'], P['HanX'], P['HanXu']
+def han_x(z): return HanXu + (HanX - HanXu) * (z - (HanZ - HanH / 2)) / HanH
 def s2z(s): return R * math.sin(s / R)
 kh = min([k for k in KLS if k[2] == 'kloss'], key=lambda k: abs(s2z(k[0] + k[1] / 2) - HanZ))
 kh_i = KLS.index(kh)
 BULT = [pt(R, (kh[0] + kh[1] / 2 + d) / R) for d in (-30, 30)]
-bult_ok = all(HanZ - HanH / 2 + 12 < z < HanZ + HanH / 2 - 12 and x < HanX - 12 for x, z in BULT)
+bult_ok = all(HanZ - HanH / 2 + 15 < z < HanZ + HanH / 2 - 15 and x < han_x(z) - 15 for x, z in BULT)
 # nocklask (raka snitt)
 NLT, LX, LAV = P['NockLaskT'], P['NockLaskL'] / 2, P['NockLaskAvdrag']
 rr = ro - LAV; sag = LX ** 2 / (8 * ri)
@@ -81,7 +82,8 @@ ux, uz = math.cos(thf), math.sin(thf); tx, tz = -math.sin(thf), math.cos(thf)
 S.p(T([(srx + ux * a + tx * b, srz + uz * a + tz * b) for a, b in ((-SRT / 2, -SRH / 2), (SRT / 2, -SRH / 2), (SRT / 2, SRH / 2), (-SRT / 2, SRH / 2))]), '#ffffff', RED, 0.25, dash='0.8 0.5')
 S.t(X(srx) + 4, Y(srz) + 1, 'sidoregel', 2.5, col=RED)
 # hanbjälke + bultar
-S.p(T([(HanX - 900, HanZ - HanH / 2), (HanX, HanZ - HanH / 2), (HanX, HanZ + HanH / 2), (HanX - 900, HanZ + HanH / 2)]), 'none', RED, 0.25, close=False, dash='1.2 0.6')
+S.p(T([(HanX - 900, HanZ - HanH / 2), (HanXu, HanZ - HanH / 2), (HanX, HanZ + HanH / 2), (HanX - 900, HanZ + HanH / 2)]), 'none', RED, 0.25, close=False, dash='1.2 0.6')
+for bx, bz in BULT: S.c(X(bx), Y(bz), 0.6, 'white', RED, 0.3)
 S.t(X(HanX - 880), Y(HanZ + HanH / 2) - 1.2, 'hanbjälke (monteras efter)', 2.5, col=RED)
 # nocklask
 S.p(T([(XN, zc(rr, XN) - (zc(rr, XN) - zc(rr, 0)) * 0), (LX, LASK[2][1]), (LX, LASK[3][1]), (XN, zc(ri, XN) + sag)]), 'none', RED, 0.3, dash='1.2 0.6')
@@ -135,17 +137,17 @@ hx0, hy0, s4 = 350, 200, 1 / 50
 S.t(hx0 - 50, hy0 - 86, 'HEL BÅGE (2 halvor) 1:50', 3.4, w='bold')
 for sd in (1, -1):
     S.p([(hx0 + sd * x * s4, hy0 - z * s4) for x, z in arcpts(ro, 0, th_end(ro))] + [(hx0 + sd * x * s4, hy0 - z * s4) for x, z in reversed(arcpts(ri, 0, th_end(ri)))], PLY, INK, 0.2)
-S.r(hx0 - HanX * s4, hy0 - (HanZ + HanH / 2) * s4, 2 * HanX * s4, HanH * s4, WOOD, INK, 0.2)
+S.p([(hx0 - HanXu * s4, hy0 - (HanZ - HanH / 2) * s4), (hx0 + HanXu * s4, hy0 - (HanZ - HanH / 2) * s4), (hx0 + HanX * s4, hy0 - (HanZ + HanH / 2) * s4), (hx0 - HanX * s4, hy0 - (HanZ + HanH / 2) * s4)], WOOD, INK, 0.2)
 S.dim((hx0 - Bredd / 2 * s4, hy0), (hx0 + Bredd / 2 * s4, hy0), -6, f'{Bredd:.0f} mittlinje fot')
 S.dim((hx0 - fo * s4, hy0), (hx0 + fo * s4, hy0), -11, f'{2 * fo:.0f} utsida')
 S.dim((hx0 + 55, hy0), (hx0 + 55, hy0 - zno * s4), -3, f'{zno:.0f}', 2.4)
 S.t(hx0 + 50, hy0 - zno * s4 - 3, f'+ syll {SyllH:.0f} = nock {zno + SyllH:.0f}', 2.4, 'end', col=GREY)
-S.t(hx0, hy0 - (HanZ + HanH) * s4 - 1.5, f'hanbjälke 45×120 × {2 * HanX:.0f}', 2.5, 'middle')
+S.t(hx0, hy0 - (HanZ + HanH) * s4 - 1.5, f'hanbjälke 45×120 × {2 * HanXu:.0f} (underkant)', 2.5, 'middle')
 S.t(hx0, hy0 - zno * s4 - 5, f'nockglipa {NockT:.0f} + nocklask {2 * LX:.0f} båda sidor', 2.5, 'middle')
 notes = ['ANMÄRKNINGAR',
          f'Foten kapas vågrätt, nocken lodrätt. Flänsarna kapas med {OVER:.0f} mm övermått i ändarna och putsas efter montering.',
-         f'Hanbjälke: bultas M10 genom kloss {kh_i + 1}. OBS med 15 mm fläns och lodrätt kapad ände överlappar',
-         f'  hanbjälken bara innerflänsen – förslag: kapa änden snett längs bågen och lägg den mitt på kloss {kh_i + 1} (se tråden).',
+         f'Hanbjälke mitt på kloss {kh_i + 1}: 2 bult M10×160, Ø11 genom klossen, ±30 från klossens mitt längs bågen' + ('.' if bult_ok else ' – KOLLA LÄGET.'),
+         f'  Änden kapas snett längs bågen: överkant x = {HanX:.0f}, underkant x = {HanXu:.0f} från husets mitt.',
          'Gavelbågar (4 halvor): ingen hanbjälke, nocklask bara på insidan.',
          'Röd streckad = monteras senare (sidoregel, hanbjälke, nocklask). Röd heldragen = skarvlask.',
          f'Kontroll: två halvor ihop = {Bredd:.0f} c/c fot (mittlinjen), utsida {2 * fo:.0f}.']

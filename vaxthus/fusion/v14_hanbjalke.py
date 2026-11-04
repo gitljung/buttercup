@@ -70,7 +70,7 @@ def run(_context: str):
     lg['Låsprofil nock'] = [round(ev('Langd + BagB'))]
     def pval(k):
         q = up.itemByName(k)
-        return round(q.value, 3) if q.unit == '' else round(ev(k), 1)
+        return round(q.value * 10, 1) if q.unit == 'mm' else round(q.value, 4)
     pv = {up.item(i).name: pval(up.item(i).name) for i in range(up.count)}
     gom(des)
     FLEXMODE = False
