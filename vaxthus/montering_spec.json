@@ -24,7 +24,7 @@
   },
   {
    "type": "paragraph",
-   "text": "Cirkelsåg med anslag (eller spårsåg med skena), kapsåg, skruvdragare + slagskruvdragare, borr Ø11 (lång), måttband, vinkelhake, vattenpass/laser, snöre, tvingar, kilar (görs själv), handskar. Limning vid minst 15 °C."
+   "text": "Cirkelsåg med anslag (eller spårsåg med skena), kapsåg, skruvdragare + slagskruvdragare, borr Ø11 (lång), måttband, vinkelhake, vattenpass/laser, snöre, tvingar, handskar. Limning vid minst 15 °C."
   },
   {
    "type": "heading",
@@ -37,26 +37,12 @@
   },
   {
    "type": "heading",
-   "text": "2. Bygg böjmallen",
+   "text": "2. Limma halvbågarna (18 st)",
    "level": 2
   },
   {
    "type": "paragraph",
-   "text": "<b>1.</b> Lägg 2 OSB 18 på reglar 45×95 på bockar eller plant golv.<br/><b>2.</b> Rita innerradien R 3808 med snöre + ordinater (tabell i skissen).<br/><b>3.</b> Skruva 15 formklossar med kanten på linjen och 15 motklossar utanför. Tejpa allt som rör limmet."
-  },
-  {
-   "type": "image",
-   "path": "/Users/hiro/code/buttercup/vaxthus/berakning/skiss_mall_2d.png",
-   "width": 480
-  },
-  {
-   "type": "heading",
-   "text": "3. Limma halvbågarna (18 st)",
-   "level": 2
-  },
-  {
-   "type": "paragraph",
-   "text": "<b>1.</b> Steg A: PU-lim mellan lager 1–3, lägg mot formklossarna, tryckbit utanför, slå in kilarna. Härdar 2–4 h.<br/><b>2.</b> Märk klossarnas lägen (tabell blad 1). Limma klossarna och sedan ytterflänsens lager 4–6, kila mot motklossarna.<br/><b>3.</b> Efter härdning: 2 skruv 5×90 per kloss utifrån (3 i fackklossarna).<br/><b>4.</b> Kapa foten vågrätt och nocken lodrätt efter kaplinjerna. Märk halvbågen H1–H18.<br/><b>5.</b> Borra 2 × Ø11 för hanbjälken (inte på de 4 gavelhalvorna)."
+   "text": "<b>1.</b> Böj och limma innerflänsen (lager 1–3, PU-lim) i en böjmall med innerradie R 3808 och pressa jämnt. Härdar 2–4 h.<br/><b>2.</b> Märk klossarnas lägen (tabell blad 1). Limma klossarna och sedan ytterflänsens lager 4–6, pressa.<br/><b>3.</b> Efter härdning: 2 skruv 5×90 per kloss utifrån (3 i fackklossarna).<br/><b>4.</b> Kapa foten vågrätt och nocken lodrätt efter kaplinjerna. Märk halvbågen H1–H18.<br/><b>5.</b> Borra 2 × Ø11 för hanbjälken (inte på de 4 gavelhalvorna)."
   },
   {
    "type": "image",
@@ -65,7 +51,7 @@
   },
   {
    "type": "heading",
-   "text": "4. Grund och syll",
+   "text": "3. Grund och syll",
    "level": 2
   },
   {
@@ -74,7 +60,7 @@
   },
   {
    "type": "heading",
-   "text": "5. Montera bågarna på marken och res dem",
+   "text": "4. Montera bågarna på marken och res dem",
    "level": 2
   },
   {
@@ -93,7 +79,7 @@
   },
   {
    "type": "heading",
-   "text": "6. Sidoreglar och vindkryss",
+   "text": "5. Sidoreglar och vindkryss",
    "level": 2
   },
   {
@@ -102,7 +88,7 @@
   },
   {
    "type": "heading",
-   "text": "7. Gavlar och dörrar",
+   "text": "6. Gavlar och dörrar",
    "level": 2
   },
   {
@@ -116,7 +102,7 @@
   },
   {
    "type": "heading",
-   "text": "8. Låsprofiler och film",
+   "text": "7. Låsprofiler och film",
    "level": 2
   },
   {
@@ -130,7 +116,7 @@
   },
   {
    "type": "heading",
-   "text": "9. Kontroll",
+   "text": "8. Kontroll",
    "level": 2
   },
   {
@@ -363,42 +349,6 @@
      "PU-lim utomhus D4",
      "9 kg",
      "lameller och klossar"
-    ],
-    [
-     "Plastfolie eller packtejp",
-     "1 rulle",
-     "skyddar mallen mot lim"
-    ]
-   ],
-   "header": true
-  },
-  {
-   "type": "heading",
-   "text": "Till böjmallen",
-   "level": 2
-  },
-  {
-   "type": "table",
-   "rows": [
-    [
-     "Vara",
-     "Antal",
-     "Not"
-    ],
-    [
-     "OSB 18 × 2500 × 1200",
-     "2 st",
-     "bordet"
-    ],
-    [
-     "Regel 45×95",
-     "ca 26 m",
-     "stomme, form- och motklossar, kilar"
-    ],
-    [
-     "Skruv 5×80 och 4,2×40",
-     "ca 150 st",
-     ""
     ]
    ],
    "header": true
