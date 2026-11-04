@@ -60,6 +60,13 @@ def run(_context: str):
     f0 = [f for f in nc.features.extrudeFeatures if f.name == 'Nockregel']
     sk = nc.sketches.itemByName('Nockregel')
     if f0: f0[0].deleteMe()
+    for ff in list(nc.features.extrudeFeatures):   # gamla hela nockregeln (oavsett featurenamn)
+        try:
+            for i in range(ff.bodies.count):
+                bb = ff.bodies.item(i).boundingBox
+                if (bb.maxPoint.y - bb.minPoint.y) * 10 > 3000 and abs((bb.maxPoint.x + bb.minPoint.x) * 5) < 1:
+                    log('tar bort gammal nockregel-feature', ff.name); ff.deleteMe(); break
+        except Exception as e: log('kollfel', str(e)[:80])
     for f in list(nc.features.rectangularPatternFeatures):
         if f.name == 'Nockregel bitar': f.deleteMe()
     prof = max([sk.profiles.item(i) for i in range(sk.profiles.count)], key=lambda p: p.areaProperties().area)

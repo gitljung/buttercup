@@ -40,6 +40,8 @@ bitar += [P['FackKlossL']] * int(round(fk_n * halv)) * kl_lager
 laskL = max([max(b['mått']) for b in KR if b['komp'] == 'Halvbåge' and b['kropp'].startswith('Lask')] or [0])
 lask_n = sum(v for k, v in per_halv.items() if k.startswith('Lask'))
 bitar += [laskL] * int(round(lask_n * halv)) * lam
+nlask = [b for b in KR if b['komp'] == 'Nocklask och hanbjälke' and b['kropp'].startswith('Nocklask')]
+nlask_m2 = sum(sorted(b['mått'])[1] * sorted(b['mått'])[2] for b in nlask) / 1e6
 # first-fit decreasing i 2500-remsor (sågsnitt 3 mm)
 remsor = []
 for L in sorted(bitar, reverse=True):
@@ -47,22 +49,22 @@ for L in sorted(bitar, reverse=True):
         if r + L + SAGSNITT <= SKIVA_L: remsor[i] = r + L + SAGSNITT; break
     else: remsor.append(L)
 per_skiva = int((SKIVA_B + SAGSNITT) // (BB + SAGSNITT))
-skivor = math.ceil(len(remsor) / per_skiva)
+skivor = math.ceil(len(remsor) / per_skiva + nlask_m2 * 1.3 / (SKIVA_L * SKIVA_B / 1e6))
 skivor_k = math.ceil(skivor * SPILL)
 rad('Plywood', f'Konstruktionsplywood 12×2500×1200: {skivor_k} skivor (netto {skivor} + 10 %). '
                f'Sågas till {len(remsor)} remsor 95 × 2500 ({per_skiva} per skiva). Innehåll: {len(RM) * lam * halv} flänsbitar '
                f'({lam} lager × {len(RM)} bitar × {halv} halvbågar, längder {", ".join(str(v) for v in RM.values())} mm), '
-               f'{int(round((kl_n + fk_n) * halv))} klossar à {kl_lager} lager, {int(round(lask_n * halv))} laskar à {lam} lager.',
+               f'{int(round((kl_n + fk_n) * halv))} klossar à {kl_lager} lager, {int(round(lask_n * halv))} laskar à {lam} lager, {len(nlask)} nocklaskar ≈ {nlask_m2:.1f} m² (+30 % för bågformen).',
     skivor_k * PRIS['ply12'][0])
 
 # ---------- 2. virke (gran / tryckimpregnerat) ----------
 virke = collections.defaultdict(list)
 for b in KR:
     k = b['komp']
-    if k not in ('Syllram', 'Nock och sidoreglar', 'Gavlar'): continue
+    if k not in ('Syllram', 'Nock och sidoreglar', 'Gavlar', 'Nocklask och hanbjälke') or bas(b['kropp']).startswith('Nocklask'): continue
     n = bas(b['kropp'])
     tvar = {'Syll': '120×120 tryckimpregnerat', 'Nockregel': '45×120 C24', 'Sidoregel': f"{P['SidoregelT']:g}×{P['SidoregelH']:g} (råspont/panel, gran)",
-            'Dörrstolpe': '95×95 tryckimpregnerat (stolpe)', 'Överliggare': '95×95 gran', 'Nockstolpe': '45×120 C24'}
+            'Dörrstolpe': '95×95 tryckimpregnerat (stolpe)', 'Överliggare': '95×95 gran', 'Nockstolpe': '45×120 C24', 'Hanbjälke': '45×120 C24'}
     key = next((v for kk, v in tvar.items() if n.startswith(kk)), n)
     virke[key].append(max(b['mått']) if n not in ('Sidoregel',) else P['Langd'] + P['BagB'])
 MAXL = 5400.0

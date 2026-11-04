@@ -17,6 +17,8 @@ S = {
     'T95':   'Träskruv 5,0×90 C4 (fläns + kloss genomgående)',
     'T50':   'Träskruv 4,0×50 C4 (fläns mot sidoregel 22×95)',
     'TS':    'Takskruv 4,8×50 med EPDM-bricka (nockplåt)',
+    'L45':   'Träskruv 4,5×40 C4 (nocklask mot båge, + PU-lim)',
+    'M10':   'Bult M10×160 vfz + 2 brickor + mutter (hanbjälke)',
     'T60':   'Träskruv 4,5×60 C4 (lask + remsa mot kloss)',
     'T25':   'Träskruv 4,0×25 C4 (lask mot remsa utanför klossen)',
     'T45':   'Träskruv 4,5×45 C4 (remsa mot sidoregel)',
@@ -70,6 +72,12 @@ else:
     R('Bågar: lask mot remsa utanför klossen (2 per ände)', 'T25', halv * lask * 4, 'lim också')
     nb = int(P['AntalBagar'])
     R('Sidoregel genom ytter- och innerremsa (2 + 2 per båge och sida)', 'T45', nb * 2 * 4, f'{nb} bågar × 2 sidor')
+
+# --- nock och hanbjälke (steg 12) ---
+nl = n('Nocklask och hanbjälke', 'Nocklask'); hj = n('Nocklask och hanbjälke', 'Hanbjälke'); nrb = n('Nock och sidoreglar', 'Nockregel bit')
+if nl: R('Nocklask mot båge (8 per lask, 4 i varje halvbåge, + PU-lim)', 'L45', nl * 8, f'{nl} laskar')
+if nrb: R('Nockregelbit mot lask/båge (2 snedskruv per ände)', 'K120', nrb * 4, f'{nrb} bitar')
+if hj: R('Hanbjälke genom båge (2 per ände)', 'M10', hj * 4, f'{hj} hanbjälkar')
 
 # --- beslag ---
 vink = n('Vinklar bågfot') + n('Vinklar nock') + n('Syllbeslag') + n('Gavelbeslag', 'Stolpfotsvinkel')
