@@ -55,3 +55,4 @@ Projekt `vaxthus`, master "Växthus - parametrar". Gammal DirectDesign-modell i 
 - 2026-11-04 Steg 13 KLAR (försök 2): 1x15x100, kloss 45 c/c 232/239 (6 nedre + 8 övre + fot 300 + 2 fack + nock = 18/halvbåge), djup 100. 599 kroppar, 0 fel/krock, flex 875 OK, återställt identiskt, sparad, STEP. Listor/ritning ej uppdaterade.
 - 2026-11-04 Victor: remsa 95, kloss 95x45 med Norhage-längd (foto: ca 130 längs bågen, 45 radiellt). v13b_kloss.py (BagB 95, KlossH 45, KlossL/FackKlossL 130, djup 75) KÖAD.
 - 2026-11-04 Steg 13b KLAR: remsa 95, kloss 45x95x130, c/c 264/258, 15 klossar/halvbåge, djup 75. 563 kroppar, 0 fel/krock, flex 849 OK, identiskt, sparad, STEP.
+- 2026-11-04 Victor: ja -> v14_hanbjalke.py (HanZ = mitt på övre kloss HanKloss=2, ändar snett längs ytterradien HanX/HanXu, NockLaskT = LamellT) KÖAD.
