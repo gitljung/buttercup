@@ -48,3 +48,4 @@ Projekt `vaxthus`, master "Växthus - parametrar". Gammal DirectDesign-modell i 
 - 2026-11-04 Victor: ja (hanbjälke 2,4 m + monteringsförslag). v12_nocklask_han.py (nocklask, nockregel i bitar, vinklar nock bort, hanbjälke HanZ 2400, sidoregel 19) KÖAD.
 - 2026-11-04 v12 försök 1: gamla hela nockregeln låg kvar (24 krockar). Rättat: tar bort extrude-feature med lång kropp i x=0. Försök 2.
 - 2026-11-04 Steg 12 KLAR (försök 2): nocklask 16 (gavelbågar bara insida), nockregel 8 bitar, vinklar nock borta, hanbjälke 7 st HanZ 2400, sidoregel 19. 473 kroppar, 0 fel/krock, flex OK (667), återställt identiskt, sparad, STEP uppdaterad. Listor väntar på ny kroppsdump (Fusion upptagen av Horno).
+- 2026-11-04 Skiss mall hel båge (skiss_mall_hel.py): båda halvorna + nockklots 45 + nocklaskar i ett limpass, hanbjälke bultas i mallen. OBS lameller kan ej gå över nocken (spetsbåge, 57,5° knäck). Skarvförskjutning max 400 med skiva 2500 och 3 lager.
