@@ -3,18 +3,18 @@
 Hus 4000×10000, nock 3500, 9 bågar c/c 1250. Båge: flänsar 3×12 × 95, djup 96, 11 klossar per halvbåge. Spill +10 %. Priser inkl. moms där inget annat står.
 
 ## Plywood
-- Konstruktionsplywood 12×2500×1200: 21 skivor (netto 19 + 10 %). Sågas till 224 remsor 95 × 2500 (12 per skiva). Innehåll: 216 flänsbitar (3 lager × 4 bitar × 18 halvbågar, längder 2041, 1662, 2103, 2384 mm), 198 klossar à 2 lager, 36 laskar à 3 lager. — **≈ 9 009 kr**
+- Konstruktionsplywood 12×2500×1200: 22 skivor (netto 20 + 10 %). Sågas till 224 remsor 95 × 2500 (12 per skiva). Innehåll: 216 flänsbitar (3 lager × 4 bitar × 18 halvbågar, längder 2041, 1662, 2103, 2384 mm), 198 klossar à 2 lager, 36 laskar à 3 lager, 16 nocklaskar ≈ 2.6 m² (+30 % för bågformen). — **≈ 9 438 kr**
 
 ## Virke
 - 120×120 tryckimpregnerat: 6 delar, 24.4 lpm (+10 % → 26.9 m). Längsta 10.34 m → skarvas, Byggmax säljer max 5,4 m (8 längder)
-- 45×120 C24: 3 delar, 12.5 lpm (+10 % → 13.8 m). Längsta 10.10 m → skarvas, Byggmax säljer max 5,4 m (4 längder) — **≈ 550 kr**
-- 22×95 (råspont/panel, gran): 2 delar, 20.2 lpm (+10 % → 22.2 m). Längsta 10.10 m → skarvas, Byggmax säljer max 5,4 m (4 längder)
+- 19×95 (råspont/panel, gran): 2 delar, 20.2 lpm (+10 % → 22.2 m). Längsta 10.10 m → skarvas, Byggmax säljer max 5,4 m (4 längder)
+- 45×120 C24: 17 delar, 29.2 lpm (+10 % → 32.2 m). Längsta 2.54 m — **≈ 1 284 kr**
 - 95×95 tryckimpregnerat (stolpe): 4 delar, 10.1 lpm (+10 % → 11.1 m). Längsta 2.52 m
 - 95×95 gran: 2 delar, 4.0 lpm (+10 % → 4.4 m). Längsta 2.00 m
 - Dörrblad: 4 blad 992×1990, ram 45×70 ≈ 23.9 lpm (+10 % → 26.2 m) — **≈ 629 kr**
 
 ## Beslag
-- Vinkelbeslag 90×90×65 vfz: 76 st (bågfot 32, nock 32, syllhörn 8, stolpfot 4). Jula 012856 14,90 kr/st (2026-11-03) — **≈ 1 132 kr**
+- Vinkelbeslag 90×90×65 vfz: 44 st (bågfot 32, nock 0, syllhörn 8, stolpfot 4). Jula 012856 14,90 kr/st (2026-11-03) — **≈ 656 kr**
 - Spikplåt 2×100×200 vfz: 8 st
 - GJ60 A2 100X100 (Gångjärn, rostfritt, 1,5 mm): 8 st à 43.70 kr ex moms (Wiberger, summan inkl. moms) — **≈ 437 kr**
 - GN425 A2 200-M5 (Bygelhandtag, rostfritt): 4 st à 130.50 kr ex moms (Wiberger, summan inkl. moms) — **≈ 652 kr**
@@ -36,11 +36,13 @@ Hus 4000×10000, nock 3500, 9 bågar c/c 1250. Båge: flänsar 3×12 × 95, djup
 - Träskruv 4,0×30 C4 eller klammer (presskruv när lamellerna limmas): 1966 st → 2163 st
 - Träskruv 5,0×90 C4 (fläns + kloss genomgående): 864 st → 951 st
 - Träskruv 4,0×25 C4 (lask mot remsa utanför klossen): 144 st → 159 st
-- Träskruv 4,0×50 C4 (fläns mot sidoregel 22×95): 72 st → 80 st
+- Träskruv 4,0×50 C4 (fläns mot sidoregel): 72 st → 80 st
 - Takskruv 4,8×50 med EPDM-bricka (nockplåt): 18 st → 20 st
-- Ankarspik/beslagsskruv 4,0×40 vfz (vinklar, spikplåtar): 920 st → 1013 st
+- Träskruv 4,5×40 C4 (nocklask mot båge, + PU-lim): 128 st → 141 st
+- Konstruktionsskruv 6×120 (stolpfot, snedskruv): 40 st → 44 st
+- Bult M10×160 vfz + 2 brickor + mutter (hanbjälke): 28 st → 31 st
+- Ankarspik/beslagsskruv 4,0×40 vfz (vinklar, spikplåtar): 600 st → 660 st
 - Konstruktionsskruv 6×160 helgängad (gavelstomme): 24 st → 27 st
-- Konstruktionsskruv 6×120 (stolpfot, snedskruv): 8 st → 9 st
 - Konstruktionsskruv 6×200 (syllhörn): 8 st → 9 st
 - Träskruv 5,0×90 C4 (dörrbladens ramhörn): 32 st → 36 st
 - Rostfri träskruv A2 4,0×30 (gångjärn GJ60): 48 st → 53 st
@@ -56,6 +58,6 @@ Hus 4000×10000, nock 3500, 9 bågar c/c 1250. Båge: flänsar 3×12 × 95, djup
 ## Rekommenderas (ej ritat)
 - Vindkryss: hålband 40×2 vfz diagonalt i de två ändfacken på båda långsidorna (8 band à ca 2,2 m) – stabiliserar i längsled mot gavelvind
 
-**Summa av de prissatta raderna: ≈ 15 157 kr** (virke 120×120, 95×95, 22×95, spikplåt, nockplåt, skruv, lim och låsprofil är inte prissatta; filmen har ni).
+**Summa av de prissatta raderna: ≈ 15 844 kr** (virke 120×120, 95×95, sidoregel, spikplåt, nockplåt, skruv, lim och låsprofil är inte prissatta; filmen har ni).
 
 Källor priser: Byggmax konstruktionsplywood 12×2500×1200 (Moelven K20/70), 429 kr/st, byggmax.se 2026-11-03; Byggmax regel 45×120 C24, 39,95 kr/m (kategorisidan) 2026-11-03; Byggmax regel 45×70, 23,95 kr/m (kategorisidan) 2026-11-03; Jula 012856; Wiberger (kopdelar.json); markskruv 119 kr.

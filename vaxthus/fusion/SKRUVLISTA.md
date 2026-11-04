@@ -7,9 +7,12 @@ Hus 4000×10000, nock 3500, 9 bågar c/c 1250. Spill +10 %.
 - Vanlig kloss: 2 genomgående från varje sida (+ PU-lim): 648 × Träskruv 5,0×90 C4 (fläns + kloss genomgående) (18 × 9 klossar)
 - Fackkloss: 3 genomgående från varje sida (+ PU-lim): 216 × Träskruv 5,0×90 C4 (fläns + kloss genomgående) (18 × 2 fackklossar)
 - Lask över skarv (4 per lask): 144 × Träskruv 4,0×25 C4 (lask mot remsa utanför klossen) (skarvarna förskjuts mellan lagren – lasken kan utgå)
-- Sidoregel 22×95 genom ytter- och innerfläns (2 + 2 per båge och sida): 72 × Träskruv 4,0×50 C4 (fläns mot sidoregel 22×95) (9 bågar × 2 sidor)
+- Sidoregel genom ytter- och innerfläns (2 + 2 per båge och sida): 72 × Träskruv 4,0×50 C4 (fläns mot sidoregel) (9 bågar × 2 sidor)
 - Nockplåt mot bågarna (1 per sida och båge): 18 × Takskruv 4,8×50 med EPDM-bricka (nockplåt) (9 bågar)
-- Vinklar 90×90×65 (5 per ben): 760 × Ankarspik/beslagsskruv 4,0×40 vfz (vinklar, spikplåtar) (76 vinklar)
+- Nocklask mot båge (8 per lask, 4 i varje halvbåge, + PU-lim): 128 × Träskruv 4,5×40 C4 (nocklask mot båge, + PU-lim) (16 laskar)
+- Nockregelbit mot lask/båge (2 snedskruv per ände): 32 × Konstruktionsskruv 6×120 (stolpfot, snedskruv) (8 bitar)
+- Hanbjälke genom båge (2 per ände): 28 × Bult M10×160 vfz + 2 brickor + mutter (hanbjälke) (7 hanbjälkar)
+- Vinklar 90×90×65 (5 per ben): 440 × Ankarspik/beslagsskruv 4,0×40 vfz (vinklar, spikplåtar) (44 vinklar)
 - Spikplåt 100×200 (10 per virke): 160 × Ankarspik/beslagsskruv 4,0×40 vfz (vinklar, spikplåtar) (8 plåtar)
 - Dörrstolpens topp mot bågen (2 snedskruv): 8 × Konstruktionsskruv 6×160 helgängad (gavelstomme) (4 stolpar)
 - Nockstolpe mot nockregel och överliggare (2 + 2): 8 × Konstruktionsskruv 6×160 helgängad (gavelstomme) (2 nockstolpar)
@@ -28,11 +31,13 @@ Hus 4000×10000, nock 3500, 9 bågar c/c 1250. Spill +10 %.
 - Träskruv 4,0×30 C4 eller klammer (presskruv när lamellerna limmas): 1966 st → 2163 st
 - Träskruv 5,0×90 C4 (fläns + kloss genomgående): 864 st → 951 st
 - Träskruv 4,0×25 C4 (lask mot remsa utanför klossen): 144 st → 159 st
-- Träskruv 4,0×50 C4 (fläns mot sidoregel 22×95): 72 st → 80 st
+- Träskruv 4,0×50 C4 (fläns mot sidoregel): 72 st → 80 st
 - Takskruv 4,8×50 med EPDM-bricka (nockplåt): 18 st → 20 st
-- Ankarspik/beslagsskruv 4,0×40 vfz (vinklar, spikplåtar): 920 st → 1013 st
+- Träskruv 4,5×40 C4 (nocklask mot båge, + PU-lim): 128 st → 141 st
+- Konstruktionsskruv 6×120 (stolpfot, snedskruv): 40 st → 44 st
+- Bult M10×160 vfz + 2 brickor + mutter (hanbjälke): 28 st → 31 st
+- Ankarspik/beslagsskruv 4,0×40 vfz (vinklar, spikplåtar): 600 st → 660 st
 - Konstruktionsskruv 6×160 helgängad (gavelstomme): 24 st → 27 st
-- Konstruktionsskruv 6×120 (stolpfot, snedskruv): 8 st → 9 st
 - Konstruktionsskruv 6×200 (syllhörn): 8 st → 9 st
 - Träskruv 5,0×90 C4 (dörrbladens ramhörn): 32 st → 36 st
 - Rostfri träskruv A2 4,0×30 (gångjärn GJ60): 48 st → 53 st

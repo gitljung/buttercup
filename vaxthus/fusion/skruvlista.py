@@ -15,7 +15,7 @@ S = {
     'T40':   'Träskruv 4,0×40 C4 (plywood mot kloss)',
     'T30L':  'Träskruv 4,0×30 C4 eller klammer (presskruv när lamellerna limmas)',
     'T95':   'Träskruv 5,0×90 C4 (fläns + kloss genomgående)',
-    'T50':   'Träskruv 4,0×50 C4 (fläns mot sidoregel 22×95)',
+    'T50':   'Träskruv 4,0×50 C4 (fläns mot sidoregel)',
     'TS':    'Takskruv 4,8×50 med EPDM-bricka (nockplåt)',
     'L45':   'Träskruv 4,5×40 C4 (nocklask mot båge, + PU-lim)',
     'M10':   'Bult M10×160 vfz + 2 brickor + mutter (hanbjälke)',
@@ -63,7 +63,7 @@ if lam > 1:
     R('Fackkloss: 3 genomgående från varje sida (+ PU-lim)', 'T95', halv * fack * 6, f'{halv} × {fack} fackklossar')
     R('Lask över skarv (4 per lask)', 'T25', halv * lask * 4, 'skarvarna förskjuts mellan lagren – lasken kan utgå')
     nb = int(P['AntalBagar'])
-    R('Sidoregel 22×95 genom ytter- och innerfläns (2 + 2 per båge och sida)', 'T50', nb * 2 * 4, f'{nb} bågar × 2 sidor')
+    R('Sidoregel genom ytter- och innerfläns (2 + 2 per båge och sida)', 'T50', nb * 2 * 4, f'{nb} bågar × 2 sidor')
     R('Nockplåt mot bågarna (1 per sida och båge)', 'TS', nb * 2, f'{nb} bågar')
 else:
     R('Bågar: remsa mot vanlig kloss (4/sida × 2 sidor)', 'T40', halv * vanl * 4 * 2, f'{halv} halvbågar × {vanl} klossar')

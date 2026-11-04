@@ -124,7 +124,7 @@ for g, rs in rader.items():
         out.append(f'- {t}' + (f' — **≈ {p:,.0f} kr**'.replace(',', ' ') if p else ''))
         tot += p or 0
     out.append('')
-out.append(f'**Summa av de prissatta raderna: ≈ {tot:,.0f} kr**'.replace(',', ' ') + ' (virke 120×120, 95×95, 22×95, spikplåt, nockplåt, skruv, lim och låsprofil är inte prissatta; filmen har ni).')
+out.append(f'**Summa av de prissatta raderna: ≈ {tot:,.0f} kr**'.replace(',', ' ') + ' (virke 120×120, 95×95, sidoregel, spikplåt, nockplåt, skruv, lim och låsprofil är inte prissatta; filmen har ni).')
 out.append('')
 out.append('Källor priser: ' + '; '.join(v[1] for v in PRIS.values()) + '; Jula 012856; Wiberger (kopdelar.json); markskruv 119 kr.')
 txt = '\n'.join(out)

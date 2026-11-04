@@ -441,36 +441,113 @@
  },
  {
   "komp": "Nock och sidoreglar",
-  "kropp": "Nockregel",
-  "mått": [
-   45.0,
-   120.0,
-   10095.0
-  ],
-  "vol_cm3": 54513.0,
-  "fysisk_area_cm2": 33421.5
- },
- {
-  "komp": "Nock och sidoreglar",
   "kropp": "Sidoregel höger",
   "mått": [
-   63.4,
-   94.4,
+   60.7,
+   93.0,
    10095.0
   ],
-  "vol_cm3": 21098.55,
-  "fysisk_area_cm2": 23664.1
+  "vol_cm3": 18221.48,
+  "fysisk_area_cm2": 23052.7
  },
  {
   "komp": "Nock och sidoreglar",
   "kropp": "Sidoregel vänster",
   "mått": [
-   63.4,
-   94.4,
+   60.7,
+   93.0,
    10095.0
   ],
-  "vol_cm3": 21098.55,
-  "fysisk_area_cm2": 23664.1
+  "vol_cm3": 18221.48,
+  "fysisk_area_cm2": 23052.7
+ },
+ {
+  "komp": "Nock och sidoreglar",
+  "kropp": "Nockregel bit",
+  "mått": [
+   45.0,
+   120.0,
+   1131.0
+  ],
+  "vol_cm3": 6107.4,
+  "fysisk_area_cm2": 3840.3
+ },
+ {
+  "komp": "Nock och sidoreglar",
+  "kropp": "Nockregel bit (1)",
+  "mått": [
+   45.0,
+   120.0,
+   1131.0
+  ],
+  "vol_cm3": 6107.4,
+  "fysisk_area_cm2": 3840.3
+ },
+ {
+  "komp": "Nock och sidoreglar",
+  "kropp": "Nockregel bit (2)",
+  "mått": [
+   45.0,
+   120.0,
+   1131.0
+  ],
+  "vol_cm3": 6107.4,
+  "fysisk_area_cm2": 3840.3
+ },
+ {
+  "komp": "Nock och sidoreglar",
+  "kropp": "Nockregel bit (3)",
+  "mått": [
+   45.0,
+   120.0,
+   1131.0
+  ],
+  "vol_cm3": 6107.4,
+  "fysisk_area_cm2": 3840.3
+ },
+ {
+  "komp": "Nock och sidoreglar",
+  "kropp": "Nockregel bit (4)",
+  "mått": [
+   45.0,
+   120.0,
+   1131.0
+  ],
+  "vol_cm3": 6107.4,
+  "fysisk_area_cm2": 3840.3
+ },
+ {
+  "komp": "Nock och sidoreglar",
+  "kropp": "Nockregel bit (5)",
+  "mått": [
+   45.0,
+   120.0,
+   1131.0
+  ],
+  "vol_cm3": 6107.4,
+  "fysisk_area_cm2": 3840.3
+ },
+ {
+  "komp": "Nock och sidoreglar",
+  "kropp": "Nockregel bit (6)",
+  "mått": [
+   45.0,
+   120.0,
+   1131.0
+  ],
+  "vol_cm3": 6107.4,
+  "fysisk_area_cm2": 3840.3
+ },
+ {
+  "komp": "Nock och sidoreglar",
+  "kropp": "Nockregel bit (7)",
+  "mått": [
+   45.0,
+   120.0,
+   1131.0
+  ],
+  "vol_cm3": 6107.4,
+  "fysisk_area_cm2": 3840.3
  },
  {
   "komp": "Vinklar bågfot",
@@ -816,358 +893,6 @@
  {
   "komp": "Vinklar bågfot",
   "kropp": "Vinkel bågfot båge 9 -y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 1 +y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 2 -y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 1 +y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 2 -y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 2 +y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 3 +y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 4 +y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 5 +y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 6 +y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 7 +y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 8 +y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 3 -y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 4 -y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 5 -y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 6 -y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 7 -y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 8 -y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 9 -y höger",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 2 +y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 3 +y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 4 +y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 5 +y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 6 +y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 7 +y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 8 +y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 3 -y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 4 -y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 5 -y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 6 -y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 7 -y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 8 -y vänster",
-  "mått": [
-   65.0,
-   90.0,
-   90.0
-  ],
-  "vol_cm3": 28.84,
-  "fysisk_area_cm2": 242.9
- },
- {
-  "komp": "Vinklar nock",
-  "kropp": "Vinkel nock båge 9 -y vänster",
   "mått": [
    65.0,
    90.0,
@@ -2231,6 +1956,259 @@
   ],
   "vol_cm3": 2088.48,
   "fysisk_area_cm2": 69761.0
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask (1)",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask (2)",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask (3)",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask (4)",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask (5)",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask (6)",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask (7)",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask (8)",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask (9)",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask (10)",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask (11)",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask (12)",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask (13)",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask (14)",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Nocklask (15)",
+  "mått": [
+   12.0,
+   269.6,
+   600.0
+  ],
+  "vol_cm3": 616.6,
+  "fysisk_area_cm2": 1217.8
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Hanbjälke",
+  "mått": [
+   45.0,
+   120.0,
+   2538.0
+  ],
+  "vol_cm3": 13705.45,
+  "fysisk_area_cm2": 8483.6
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Hanbjälke (1)",
+  "mått": [
+   45.0,
+   120.0,
+   2538.0
+  ],
+  "vol_cm3": 13705.45,
+  "fysisk_area_cm2": 8483.6
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Hanbjälke (2)",
+  "mått": [
+   45.0,
+   120.0,
+   2538.0
+  ],
+  "vol_cm3": 13705.45,
+  "fysisk_area_cm2": 8483.6
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Hanbjälke (3)",
+  "mått": [
+   45.0,
+   120.0,
+   2538.0
+  ],
+  "vol_cm3": 13705.45,
+  "fysisk_area_cm2": 8483.6
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Hanbjälke (4)",
+  "mått": [
+   45.0,
+   120.0,
+   2538.0
+  ],
+  "vol_cm3": 13705.45,
+  "fysisk_area_cm2": 8483.6
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Hanbjälke (5)",
+  "mått": [
+   45.0,
+   120.0,
+   2538.0
+  ],
+  "vol_cm3": 13705.45,
+  "fysisk_area_cm2": 8483.6
+ },
+ {
+  "komp": "Nocklask och hanbjälke",
+  "kropp": "Hanbjälke (6)",
+  "mått": [
+   45.0,
+   120.0,
+   2538.0
+  ],
+  "vol_cm3": 13705.45,
+  "fysisk_area_cm2": 8483.6
  },
  {
   "komp": "Halvbåge",
