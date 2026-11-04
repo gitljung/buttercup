@@ -51,3 +51,5 @@ Projekt `vaxthus`, master "Växthus - parametrar". Gammal DirectDesign-modell i 
 - 2026-11-04 Skiss mall hel båge (skiss_mall_hel.py): båda halvorna + nockklots 45 + nocklaskar i ett limpass, hanbjälke bultas i mallen. OBS lameller kan ej gå över nocken (spetsbåge, 57,5° knäck). Skarvförskjutning max 400 med skiva 2500 och 3 lager.
 - 2026-11-04 Victor: 1x15 + kloss 45 regel som Norhage. svep_1x15(b): c/c 1250 håller ej (1,4–3,2). Förslag: 15x95, djup 150, kloss 45x95 c/c<=200, 13 bågar c/c 833 -> 0,94. Skiss skiss_1x15.py. Ej i Fusion.
 - 2026-11-04 Victor: klossar som Norhage, fläns 100 bred, 15 mm plywood, vår bredd/nock. Ingen snölast; vind bara på begäran. v13_norhage.py (1x15x100, kloss 45 c/c 250, fotkloss 300 ny param FotKlossL, djup 100) KÖAD.
+- 2026-11-04 v13 försök 1: fotklossmåttet är vinkel '( KlossL ) / BagR * 1 rad' – matchade inte. Rättat. Försök 2.
+- 2026-11-04 Steg 13 KLAR (försök 2): 1x15x100, kloss 45 c/c 232/239 (6 nedre + 8 övre + fot 300 + 2 fack + nock = 18/halvbåge), djup 100. 599 kroppar, 0 fel/krock, flex 875 OK, återställt identiskt, sparad, STEP. Listor/ritning ej uppdaterade.

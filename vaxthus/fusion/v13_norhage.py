@@ -42,8 +42,9 @@ def run(_context: str):
         for sk in comp.sketches:
             for dm in sk.sketchDimensions:
                 try:
-                    if dm.parameter and dm.parameter.expression.replace(' ', '') == 'KlossL':
-                        dm.parameter.expression = 'FotKlossL'; nd += 1; log('fotklossmått', comp.name, sk.name)
+                    ex = dm.parameter.expression if dm.parameter else ''
+                    if '(KlossL)/BagR' in ex.replace(' ', ''):
+                        dm.parameter.expression = ex.replace('( KlossL )', '( FotKlossL )'); nd += 1; log('fotklossmått', comp.name, sk.name, dm.parameter.expression)
                 except Exception: pass
     log('fotklossmått ändrade', nd)
     if nd == 0: raise Exception('hittade inget fotklossmått')
