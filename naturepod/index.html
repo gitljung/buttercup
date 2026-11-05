@@ -92,19 +92,19 @@ const VAR = {
 };
 const VELUX = {'SK10 114×160':[1140,1600],'SK08 114×140':[1140,1400],'SK06 114×118':[1140,1180],'PK10 94×160':[940,1600],
                'MK10 78×160':[780,1600],'MK08 78×140':[780,1400],'UK08 134×140':[1340,1400],'Eget mått':null};
-const DEF = {variant:'ODLING', GolvL:3500, Djup:3000, toa:true, inred:true, TakV:45, HogV:80,
+const DEF = {variant:'ODLING', GolvL:3500, Djup:3000, toa:true, inred:true, klad:true, inner:true, PanelOr:'Liggande 1400×900', RibbB:45, RibbSpalt:10, TakV:45, HogV:80,
   fonster:true, velux:'SK10 114×160', KarmB:1140, KarmL:1600, FonsterS:1400,
   hyllor:true, HyllRader:4, HyllAvst:700, HyllDjup:200,
   vy:'Solid', fram:'Inget', fog:0.5, ghostOp:0.10, snitt:false, snittY:632,
-  grund:true, vagg:true, tak:true, hyll:true, kop:true, matt:true, person:false};
+  grund:true, vagg:true, tak:true, hyll:true, kop:true, matt:true, person:false, ljus:false};
 const P = {...DEF};
 try { const m = location.hash.match(/c=([^&]+)/); if (m) Object.assign(P, JSON.parse(decodeURIComponent(m[1]))); } catch(e) {}
 const RB = 45, DorrB = 700, DorrH = 1900, KT = 8, PanelT = 22, VB = 45;
 
 // ---------------------------------------------------------------- material
 const COL = {tra:'#d2a86e', impr:'#8c8150', skiva:'#dcbd8b', papp:'#34302c', panel:'#6e5237', glas:'#a8dcf2', plat:'#b4b9be',
-             stal:'#4b4f53', velux:'#4a5157', jord:'#4b3626', vaxt:'#6f9c3c', blom:'#e9b93a', hylla:'#a8783f', person:'#C8340A', porslin:'#f4f4f1', krom:'#c9ced3'};
-const DENS = {tra:470, impr:550, skiva:520, panel:450, papp:1100, plat:7850, stal:7850, hylla:470, jord:1100};
+             stal:'#4b4f53', velux:'#4a5157', jord:'#4b3626', vaxt:'#6f9c3c', blom:'#e9b93a', hylla:'#a8783f', person:'#C8340A', porslin:'#f4f4f1', krom:'#c9ced3', plywood:'#e8d6b4', ask:'#c99d66', filt:'#1d1a18'};
+const DENS = {plywood:680, ask:680, filt:150, tra:470, impr:550, skiva:520, panel:450, papp:1100, plat:7850, stal:7850, hylla:470, jord:1100};
 const ALLM = [], solidM = {}, ghostM = {}, edgeG = {};
 const white = new THREE.Color('#ffffff');
 for (const [k, c] of Object.entries(COL)) {
@@ -135,6 +135,7 @@ scene.add(new THREE.HemisphereLight('#fff6dc', '#6d6040', 1.15));
 const sun = new THREE.DirectionalLight('#ffffff', 2.1); sun.position.set(-6, 10, -7); sun.castShadow = true;
 sun.shadow.mapSize.set(2048, 2048); Object.assign(sun.shadow.camera, {left:-7, right:7, top:7, bottom:-7, near:1, far:40}); sun.shadow.bias = -0.0004;
 scene.add(sun, sun.target);
+const lampa = new THREE.PointLight('#fff1dc', 2.2, 7, 0); scene.add(lampa);
 const ground = new THREE.Mesh(new THREE.CircleGeometry(16, 72), new THREE.MeshStandardMaterial({color:'#a8b56c', roughness:1}));
 ground.rotation.x = -Math.PI/2; ground.position.y = -0.002; ground.receiveShadow = true; scene.add(ground);
 const grid = new THREE.GridHelper(20, 40, '#3c5670', '#223040'); scene.add(grid);
@@ -142,13 +143,13 @@ const root = new THREE.Group(); root.scale.setScalar(0.001); scene.add(root);
 const plane = new THREE.Plane(new THREE.Vector3(0, 0, -1), 0.6);
 
 // ---------------------------------------------------------------- hjälpare (mm; modell-x = längd, modell-y = djup, z = upp → three (x, z, y))
-let KG = {}, GLAS_M2 = 0, D = {};
+let KG = {}, GLAS_M2 = 0, D = {}, D_klad = null;
 const rad = d => d*Math.PI/180;
 const area = pts => { let a = 0; for (let i = 0; i < pts.length; i++) { const p = pts[i], q = pts[(i+1)%pts.length]; a += p[0]*q[1]-q[0]*p[1]; } return a/2; };
 function add(g, key, grp, name, vol) {
   const m = new THREE.Mesh(g, solidM[key]); m.userData = {key, grp, name};
   m.castShadow = m.receiveShadow = true;
-  if (!['vaxt','blom','person'].includes(key)) { const e = new THREE.LineSegments(new THREE.EdgesGeometry(g, 20), edgeS); e.raycast = () => {}; m.add(e); m.userData.edge = e; }
+  if (!['vaxt','blom','person','filt'].includes(key)) { const e = new THREE.LineSegments(new THREE.EdgesGeometry(g, 20), edgeS); e.raycast = () => {}; m.add(e); m.userData.edge = e; }
   root.add(m);
   if (DENS[key] && vol) KG[key] = (KG[key]||0) + vol*1e-9*DENS[key];
   return m;
@@ -183,7 +184,7 @@ let seed = 1; const rnd = () => { seed = (seed*16807) % 2147483647; return (seed
 // ---------------------------------------------------------------- bygg
 function build() {
   root.traverse(o => { if (o.isCSS2DObject) o.element.remove(); if (o.geometry) o.geometry.dispose(); });
-  root.clear(); LBL = []; KG = {}; GLAS_M2 = 0; seed = 7;
+  root.clear(); LBL = []; KG = {}; GLAS_M2 = 0; seed = 7; D_klad = null;
   const V = VAR[P.variant], W = [];
   const L2 = P.GolvL/2, Dj = P.Djup, MedH = V.MedH, BjH = V.BjalkH, GT = V.GolvT, VD = V.VaggD, TH = V.TakH, TT = V.TakT;
   const G = MedH + BjH + GT;
@@ -361,10 +362,55 @@ function build() {
     }
   }
 
+  // ---- INVÄNDIG KLÄDSEL: plywood 9 mm (ljus beige) på högvägg + bakgavel, ribbtak i mattoljad ask på svart filt
+  if (P.klad) {
+    const PT = 9, RT = 21, FT = 3, CT = FT + RT, J = 3;                          // plywood, ribba, filt, fog
+    const xin = z => L2 - VD/sh - (z - G)/th;
+    const [pw, ph] = P.PanelOr.startsWith('Liggande') ? [1400, 900] : [900, 1400];
+    const ytak = under(-CT), golv = p => G - p[1];
+    const yA = VD, yB = Dj - VD;
+    // högväggen: lutande skivor (inner yta på stolparnas insida)
+    for (let za = G; za < NT; za += ph) {
+      const zb = za + ph - J;
+      for (let ya = yA; ya < yB - 50; ya += pw) {
+        const yb2 = Math.min(ya + pw - J, yB);
+        const poly = clip([[xin(za), za], [xin(za) - PT/sh, za], [xin(zb) - PT/sh, zb], [xin(zb), zb]], ytak);
+        prismY(poly, ya, yb2, 'plywood', 'inner', 'Plywood 9 mm ' + pw + '×' + ph + ' (högvägg)');
+      }
+    }
+    // bakgaveln: skivor i rutnät, klippta mot takets undersida och högväggens skivor
+    for (let za = G; za < NT; za += ph) for (let xa = -L2; xa < L2; xa += pw) {
+      const poly = clip(clip(clip(rect(xa, xa + pw - J, za, za + ph - J), ytak), innanf(VD + PT)), golv);
+      if (poly.length > 2 && Math.abs(area(poly)) > 4e4) prismY(poly, Dj - VD - PT, Dj - VD, 'plywood', 'inner', 'Plywood 9 mm ' + pw + '×' + ph + ' (bakgavel)');
+    }
+    // innertak: svart filt + ribbor längs takfallet
+    const remsa = (q0, q1) => clip(clip([pt(-2000, q0), pt(9000, q0), pt(9000, q1), pt(-2000, q1)], golv), innanf(VD + PT));
+    const filt = remsa(-FT, 0);
+    const hal = fon ? [y1, y2] : null;
+    const sMin = Math.min(...filt.map(p => (p[0] + L2)*c + (p[1] - G)*S));
+    const sMax = Math.max(...filt.map(p => (p[0] + L2)*c + (p[1] - G)*S));
+    const sDel = (poly, s0, s1) => clip(clip(poly, p => s0 - ((p[0] + L2)*c + (p[1] - G)*S)), p => ((p[0] + L2)*c + (p[1] - G)*S) - s1);
+    const del = (poly, ya, yb, key, nm) => {
+      if (hal && yb > hal[0] && ya < hal[1]) {
+        prismY(sDel(poly, sMin - 50, S1), ya, yb, key, 'inner', nm); prismY(sDel(poly, S2, sMax + 50), ya, yb, key, 'inner', nm);
+        if (ya < hal[0]) prismY(sDel(poly, S1, S2), ya, hal[0], key, 'inner', nm);
+        if (yb > hal[1]) prismY(sDel(poly, S1, S2), hal[1], yb, key, 'inner', nm);
+      } else prismY(poly, ya, yb, key, 'inner', nm);
+    };
+    del(filt, yA, yB, 'filt', 'Svart akustikfilt');
+    const rib = remsa(-CT, -FT), cc = P.RibbB + P.RibbSpalt, nRib = Math.floor((yB - yA + P.RibbSpalt)/cc), y0r = yA + (yB - yA - (nRib*cc - P.RibbSpalt))/2;
+    for (let i = 0; i < nRib; i++) del(rib, y0r + i*cc, y0r + i*cc + P.RibbB, 'ask', 'Ribba ask ' + RT + '×' + P.RibbB + ' mattoljad');
+    if (fon) {                                                                     // smygar runt takfönstret
+      const sm = (sa, sb, ya, yb) => prismY([pt(sa, -CT), pt(sb, -CT), pt(sb, TH - 60), pt(sa, TH - 60)], ya, yb, 'ask', 'inner', 'Smyg ask 12');
+      sm(S1, S2, y1, y1 + 12); sm(S1, S2, y2 - 12, y2); sm(S1, S1 + 12, y1 + 12, y2 - 12); sm(S2 - 12, S2, y1 + 12, y2 - 12);
+    }
+    D_klad = {nRib, pw, ph};
+  }
+
   // ---- Ifö Spira 6260 (355 × 650 × 860, sitthöjd 420) i hörnet bakgavel/högvägg (bakgaveln har inget glas)
   let toa = null;
   if (P.toa) {
-    const xin = z => L2 - VD/sh - (z - G)/th, yb = Dj - VD - 10;
+    const xin = z => L2 - VD/sh - (z - G)/th - (P.klad ? 9/sh : 0), yb = Dj - VD - 10 - (P.klad ? 9 : 0);
     const cx = Math.min(xin(G + 1150) - 400, xin(G + 860) - 177 - 40);        // axel 400 från väggen i axelhöjd, cisternen fri från lutande väggen
     const rb = x => G + (x + L2)*Math.tan(t);                                    // takets undersida
     toa = {cx, fri: xin(G + 1150) - cx, front: yb - 650, takOverSits: rb(cx - 200) - G};
@@ -392,10 +438,12 @@ function build() {
 
   // ---- vikt + info
   const kgV = (KG.tra||0) + (KG.impr||0) + (KG.skiva||0) + (KG.panel||0);
+  const kgK = (KG.plywood||0) + (KG.ask||0) + (KG.filt||0);
   const kgG = GLAS_M2*V.GlasKg;
   const kgH = (KG.hylla||0) + (KG.jord||0) + (KG.stal && P.hyllor ? 0 : 0);
   D = {variant:P.variant, G, NH, NX, NT, TakV:P.TakV, sparrL:(sW(TH) - sF(TH)), takyta:(sTop - sF(TH) + 20)*Dj*1e-6,
-       sparrar: yS.length, kapade, fon, kg:{virke:kgV, glas:kgG, papp:KG.papp||0, plat:(KG.plat||0)+(KG.stal||0), velux:KG.velux||0, hyllor:kgH, toa:KG.toa||0},
+       sparrar: yS.length, kapade, fon, kg:{virke:kgV, glas:kgG, papp:KG.papp||0, plat:(KG.plat||0)+(KG.stal||0), velux:KG.velux||0, hyllor:kgH, toa:KG.toa||0, klad:kgK},
+       klad:D_klad,
        toa,
        nR, lmTot, jordL, warn:W, dorrRyms};
   D.kg.tot = Object.values(D.kg).reduce((a, b) => a + b, 0);
@@ -413,7 +461,7 @@ function applyMode() {
   scene.background = new THREE.Color(ghost ? '#11171f' : '#FCC222');
   scene.fog = ghost ? new THREE.Fog('#11171f', 5, 30) : null;
   ground.visible = !ghost && !wire; grid.visible = ghost;
-  const hl = {Inget:null, Grund:'grund', 'Vägg':'vagg', Tak:'tak', Hyllor:'hyll', 'Köpdelar':'kop', Inredning:'inred'}[P.fram];
+  const hl = {Inget:null, Grund:'grund', 'Vägg':'vagg', Tak:'tak', Hyllor:'hyll', 'Köpdelar':'kop', Inredning:'inred', 'Invändigt':'inner'}[P.fram];
   for (const k in ghostM) { ghostM[k].opacity = P.ghostOp; edgeG[k].opacity = Math.min(1, .22 + P.ghostOp*2.2); }
   root.traverse(o => {
     if (o.isCSS2DObject) { o.visible = P.matt && (!o.userData.g2 || P[o.userData.g2] !== false); return; }
@@ -425,6 +473,7 @@ function applyMode() {
     o.castShadow = !ghost && !wire;
     const e = o.userData.edge; if (e) e.material = wire ? edgeW : ghostIt ? edgeG[key] : edgeS;
   });
+  lampa.visible = P.ljus; lampa.position.set(-0.2, (D.G + 1100)/1000, P.Djup/2000);
   const cp = P.snitt ? [plane] : [];
   plane.constant = P.snittY/1000;
   for (const m of [...ALLM, ground.material]) { if (m === ground.material) continue; m.clippingPlanes = cp; m.needsUpdate = true; }
@@ -446,6 +495,7 @@ function info() {
   ${r('Takyta (långa fallet)', fmt(D.takyta, 1) + ' m²')}
   ${r('Takfönster', D.fon ? 'Velux ' + P.velux.split(' ')[0] + ' i växling' : 'inget')}
   ${r('Glas framgavel', V.glas)}
+  ${D.klad ? r('Väggar', 'plywood 9 mm, ' + D.klad.pw + '×' + D.klad.ph) + r('Innertak', D.klad.nRib + ' ribbor ask ' + P.RibbB + ' / spalt ' + P.RibbSpalt) : ''}
   ${D.toa ? r('Toalett', 'Ifö Spira 6260, axel ' + fmt(D.toa.fri) + ' från vägg') : ''}
   ${P.hyllor ? r('Hyllor', D.nR + ' rader, ' + fmt(D.lmTot, 1) + ' m låda, ~' + fmt(D.jordL) + ' l jord') : ''}
   <tr class="h"><td colspan="2">Vikt (uppskattning)</td></tr>
@@ -454,6 +504,7 @@ function info() {
   ${r('Dubbelpapp', fmt(k.papp) + ' kg')}
   ${r('Plåt, stål, beslag', fmt(k.plat) + ' kg')}
   ${k.velux ? r('Velux', fmt(k.velux) + ' kg') : ''}
+  ${k.klad ? r('Invändig klädsel', fmt(k.klad) + ' kg') : ''}
   ${k.toa ? r('Toalett (porslin)', fmt(k.toa) + ' kg') : ''}
   ${P.hyllor ? r('Hyllor med våt jord', fmt(k.hyllor) + ' kg') : ''}
   ${r('Totalt', '≈ ' + fmt(k.tot) + ' kg', 'tot')}
@@ -482,11 +533,13 @@ const views = {
   'Framgavel': () => [V3(0, 2.1, -10), V3(0, 1.9, P.Djup/2000)],
   'Högväggen': () => [V3(10, 2.3, P.Djup/2000 + 1.5), V3(0, 1.9, P.Djup/2000)],
   'Toaletten': () => { P.tak = false; P.hyll = false; P.kop = false; gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(-1.4, 3.7, 0.2), V3(0.9, 0.6, P.Djup/1000 - .55)]; },
+  'Interiör': () => { P.vagg = true; P.tak = true; P.ljus = true; P.snitt = false; gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(-0.45, 1.35, 0.25), V3(0.7, 1.55, P.Djup/1000 - .4)]; },
   'Uppifrån': () => [V3(0.01, 13, P.Djup/2000 + .01), V3(0, 0, P.Djup/2000)],
   'Snitt genom takstol': () => { P.snitt = true; P.snittY = Math.round(VAR[P.variant].VaggD + (P.Djup - 2*VAR[P.variant].VaggD)/(Math.ceil((P.Djup - 2*VAR[P.variant].VaggD)/600)) + 5); gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(0, 2.0, 9.5), V3(0, 1.9, 0)]; },
 };
 function go(name) {
-  const [p, tg] = views[name](); const f = fit();
+  const [p, tg] = views[name](); const f = name === 'Interiör' ? 1 : fit();
+  camera.fov = name === 'Interiör' ? 74 : 38; camera.updateProjectionMatrix(); if (name !== 'Interiör' && P.ljus) { P.ljus = false; applyMode(); }
   const off = p.clone().sub(tg).multiplyScalar(f); camera.position.copy(tg).add(off); controls.target.copy(tg); controls.update();
 }
 
@@ -508,6 +561,10 @@ fF.add(P, 'KarmL', 700, 2200, 10).name('Karm höjd mm').onChange(() => { P.velux
 fF.add(P, 'FonsterS', 500, 3000, 10).name('Från takfoten mm').onChange(nb);
 const fT = gui.addFolder('Inredning');
 fT.add(P, 'toa').name('Toalett Ifö Spira 6260').onChange(nb);
+fT.add(P, 'klad').name('Invändig klädsel').onChange(nb);
+fT.add(P, 'PanelOr', ['Liggande 1400×900', 'Stående 900×1400']).name('Plywoodskivor').onChange(nb);
+fT.add(P, 'RibbB', 25, 95, 1).name('Ribba bredd mm').onChange(nb);
+fT.add(P, 'RibbSpalt', 5, 30, 1).name('Spalt mm').onChange(nb);
 const fH = gui.addFolder('Hyllor på taket');
 fH.add(P, 'hyllor').name('Odlingshyllor').onChange(nb);
 fH.add(P, 'HyllRader', 1, 7, 1).name('Rader (max)').onChange(nb);
@@ -515,7 +572,7 @@ fH.add(P, 'HyllAvst', 450, 1000, 10).name('Höjd mellan rader mm').onChange(nb);
 fH.add(P, 'HyllDjup', 150, 350, 10).name('Lådans djup mm').onChange(nb);
 const fS = gui.addFolder('Visning');
 fS.add(P, 'vy', ['Solid', 'Wireframe', 'Ghost']).name('Läge').onChange(applyMode);
-fS.add(P, 'fram', ['Inget', 'Grund', 'Vägg', 'Tak', 'Hyllor', 'Köpdelar', 'Inredning']).name('Framhäv (ghost)').onChange(v => { if (v !== 'Inget' && P.vy !== 'Ghost') { P.vy = 'Ghost'; gui.controllersRecursive().forEach(c => c.updateDisplay()); } applyMode(); });
+fS.add(P, 'fram', ['Inget', 'Grund', 'Vägg', 'Tak', 'Hyllor', 'Köpdelar', 'Inredning', 'Invändigt']).name('Framhäv (ghost)').onChange(v => { if (v !== 'Inget' && P.vy !== 'Ghost') { P.vy = 'Ghost'; gui.controllersRecursive().forEach(c => c.updateDisplay()); } applyMode(); });
 fS.add(P, 'fog', 0, 1, .05).name('Dimma (ghost)').onChange(saveHash);
 fS.add(P, 'ghostOp', .03, .4, .01).name('Genomskinlighet (ghost)').onChange(applyMode);
 fS.add(P, 'snitt').name('Snitt').onChange(applyMode);
@@ -526,8 +583,10 @@ fS.add(P, 'tak').name('3 Tak').onChange(applyMode);
 fS.add(P, 'hyll').name('Hyllor').onChange(applyMode);
 fS.add(P, 'kop').name('Köpdelar').onChange(applyMode);
 fS.add(P, 'matt').name('Måttetiketter').onChange(applyMode);
+fS.add(P, 'inner').name('Invändig klädsel').onChange(applyMode);
 fS.add(P, 'inred').name('Inredning').onChange(applyMode);
 fS.add(P, 'person').name('Person 180 cm').onChange(applyMode);
+fS.add(P, 'ljus').name('Innerbelysning').onChange(applyMode);
 const fC = gui.addFolder('Kameravyer');
 for (const n of Object.keys(views)) fC.add({f: () => go(n)}, 'f').name(n);
 const fE = gui.addFolder('Dela / export');
