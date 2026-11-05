@@ -92,7 +92,7 @@ const VAR = {
 };
 const VELUX = {'SK10 114×160':[1140,1600],'SK08 114×140':[1140,1400],'SK06 114×118':[1140,1180],'PK10 94×160':[940,1600],
                'MK10 78×160':[780,1600],'MK08 78×140':[780,1400],'UK08 134×140':[1340,1400],'Eget mått':null};
-const DEF = {variant:'GRÄS', GrasT:80, skjut:true, GolvL:4600, Djup:3000, toa:true, seng:true, ForvH:400, inred:true, klad:true, inner:true, PanelOr:'Liggande 1400×900', RibbB:45, RibbSpalt:10, TakV:38, HogV:80,
+const DEF = {variant:'GRÄS', GrasT:80, skjut:true, GolvL:4000, Djup:3000, toa:true, handfat:true, nisch:true, NischD:600, NischB:1250, NischH:2100, seng:true, ForvH:400, inred:true, klad:true, inner:true, PanelOr:'Liggande 1400×900', RibbB:45, RibbSpalt:10, TakV:42, HogV:80,
   fonster:true, velux:'SK10 114×160', KarmB:1140, KarmL:1600, FonsterS:1400,
   vy:'Solid', fram:'Inget', fog:0.5, ghostOp:0.10, snitt:false, snittY:632,
   grund:true, vagg:true, tak:true, kop:true, matt:true, person:false, ljus:false};
@@ -103,7 +103,7 @@ const RB = 45, DorrB = 700, DorrH = 1900, KT = 8, PanelT = 22, VB = 45;
 
 // ---------------------------------------------------------------- material
 const COL = {tra:'#d2a86e', impr:'#8c8150', skiva:'#dcbd8b', papp:'#34302c', panel:'#6e5237', glas:'#a8dcf2', plat:'#b4b9be',
-             stal:'#4b4f53', velux:'#4a5157', jord:'#4b3626', vaxt:'#6f9c3c', blom:'#e9b93a', hylla:'#a8783f', person:'#C8340A', gras:'#4f6b2c', tuva:'#ffffff', grus:'#a9a397', porslin:'#f4f4f1', madrass:'#f1ece2', skap:'#e3cfaa', tacke:'#cfc6b2', kudde:'#fbf8f2', front:'#efe2c6', krom:'#c9ced3', plywood:'#e8d6b4', ask:'#c99d66', filt:'#1d1a18'};
+             stal:'#4b4f53', velux:'#4a5157', jord:'#4b3626', vaxt:'#6f9c3c', blom:'#e9b93a', hylla:'#a8783f', person:'#C8340A', gras:'#4f6b2c', tuva:'#ffffff', grus:'#a9a397', porslin:'#f4f4f1', spegel:'#bcd3dc', madrass:'#f1ece2', skap:'#e3cfaa', tacke:'#cfc6b2', kudde:'#fbf8f2', front:'#efe2c6', krom:'#c9ced3', plywood:'#e8d6b4', ask:'#c99d66', filt:'#1d1a18'};
 const DENS = {gras:1200, grus:1700, plywood:680, ask:680, filt:150, tra:470, impr:550, skiva:520, panel:450, papp:1100, plat:7850, stal:7850, hylla:470, jord:1100};
 const ALLM = [], solidM = {}, ghostM = {}, edgeG = {};
 const white = new THREE.Color('#ffffff');
@@ -207,8 +207,8 @@ function build() {
   const sTop = sW(Tt), NT = pt(sTop, Tt)[1];
 
   // ---- 1 GRUND OCH GOLV
-  const mx = L2 + 400;
-  const med = [[-mx+300, 0], [mx-300, 0], [mx, 100], [mx, MedH], [-mx, MedH], [-mx, 100]];
+  const mx = L2 + 400, mxR = L2 + (P.nisch ? Math.max(400, P.NischD + 150) : 400);
+  const med = [[-mx+300, 0], [mxR-300, 0], [mxR, 100], [mxR, MedH], [-mx, MedH], [-mx, 100]];
   prismY(med, 255, 345, 'impr', 'grund', 'Med 90×' + MedH);
   prismY(med, Dj-345, Dj-255, 'impr', 'grund', 'Med 90×' + MedH);
   box(-L2-90, -L2, 345, Dj-345, 100, MedH, 'impr', 'grund', 'Dragbalk 90×' + (MedH-100));
@@ -230,12 +230,54 @@ function build() {
   const ns = Math.ceil((Dj - 2*VD)/600) - 1, ccS = (Dj - 2*VD)/(ns + 1);
   const yS = []; for (let k = 1; k <= ns; k++) yS.push(VD + k*ccS);
   const z45 = G + 45;
-  prismY([[L2, G], [L2 - VD/sh, G], [xout(z45) - VD/sh, z45], [xout(z45), z45]], VD, Dj-VD, 'tra', 'vagg', 'Högväggssyll');
+  // NISCH (Hugo): en del av högväggen vid bakgaveln skjuts ut NischD – vrå för toalett + handfat
+  const NI = P.nisch, ND = P.NischD, NHn = Math.min(P.NischH, NH - 300);
+  const yN0 = NI ? Math.max(VD + 400, Dj - VD - P.NischB - VD) : Dj;            // nischens främre sidovägg (yttersida)
+  const zH = G + NHn;                                                             // nischens överkant / avväxling
+  const xN = z => L2 + ND - (z - G)/th;                                           // nischens yttre linje
+  const xinN = z => xN(z) - VD/sh - (P.klad ? 9/sh : 0);                         // nischens inre yta (efter klädsel)
+  const band = (x1, x2, za, zb) => [[x1(za), za], [x2(za), za], [x2(zb), zb], [x1(zb), zb]];
+  const ymax = NI ? yN0 : Dj - VD;
+  prismY([[L2, G], [L2 - VD/sh, G], [xout(z45) - VD/sh, z45], [xout(z45), z45]], VD, ymax, 'tra', 'vagg', 'Högväggssyll');
   const stolpe = [[xout(z45), z45], [xout(z45) - VD/sh, z45], pt(sW(0, VD), 0), pt(sW(0), 0)];
-  for (const y of yS) prismY(stolpe, y-22.5, y+22.5, 'tra', 'vagg', 'Högväggsstolpe 45×' + VD);
+  const stolpeOver = clip(stolpe, p => zH + 90 - p[1]);
+  for (const y of yS) {
+    if (NI && y + 22.5 > yN0 && y - 22.5 < Dj) prismY(stolpeOver, y-22.5, y+22.5, 'tra', 'vagg', 'Högväggsstolpe (avväxlad) 45×' + VD);
+    else prismY(stolpe, y-22.5, y+22.5, 'tra', 'vagg', 'Högväggsstolpe 45×' + VD);
+  }
   const horn = [[L2, G], [L2 - VD/sh, G], pt(sW(0, VD), 0), pt(sW(0), 0)];
-  prismY(horn, 0, VD, 'tra', 'vagg', 'Hörnstolpe 45×' + VD); prismY(horn, Dj-VD, Dj, 'tra', 'vagg', 'Hörnstolpe 45×' + VD);
-  prismY([[L2, G], [L2 + PanelT/sh, G], [xout(NT) + PanelT/sh, NT], [xout(NT), NT]], 0, Dj, 'panel', 'vagg', 'Högväggspanel 22');
+  prismY(horn, 0, VD, 'tra', 'vagg', 'Hörnstolpe 45×' + VD);
+  prismY(NI ? clip(horn, p => zH + 90 - p[1]) : horn, Dj-VD, Dj, 'tra', 'vagg', 'Hörnstolpe 45×' + VD);
+  const hp = [[L2, G], [L2 + PanelT/sh, G], [xout(NT) + PanelT/sh, NT], [xout(NT), NT]];
+  if (!NI) prismY(hp, 0, Dj, 'panel', 'vagg', 'Högväggspanel 22');
+  else {
+    prismY(hp, 0, yN0, 'panel', 'vagg', 'Högväggspanel 22');
+    prismY(clip(hp, p => zH + 160 - p[1]), yN0, Dj, 'panel', 'vagg', 'Högväggspanel 22');
+    const xo = z => xout(z), xi = z => xout(z) - VD/sh;
+    prismY(band(xi, xo, zH, zH + 90), yN0, Dj, 'tra', 'vagg', 'Avväxling 2×45×' + VD + ' över nischen');
+    // nischens stomme: syll, hammarband, stolpar, sidoväggar
+    const xNi = z => xN(z) - VD/sh;
+    prismY(band(xNi, xN, G, z45), yN0 + VD, Dj - VD, 'tra', 'vagg', 'Nisch – syll');
+    prismY(band(xNi, xN, zH - 45, zH), yN0 + VD, Dj - VD, 'tra', 'vagg', 'Nisch – hammarband');
+    const nst = Math.max(0, Math.ceil((Dj - VD - yN0 - VD)/600) - 1);
+    for (let i = 1; i <= nst; i++) { const y = yN0 + VD + i*(Dj - 2*VD - yN0)/(nst + 1); prismY(band(xNi, xN, z45, zH - 45), y - 22.5, y + 22.5, 'tra', 'vagg', 'Nisch – stolpe 45×' + VD); }
+    const sida = band(z => xout(z) - VD/sh, xN, G, zH);
+    prismY(sida, yN0, yN0 + VD, 'tra', 'vagg', 'Nisch – sidovägg (stomme)');
+    prismY(sida, Dj - VD, Dj, 'tra', 'vagg', 'Nisch – sidovägg mot bakgavel (stomme)');
+    // utvändigt: panel och litet papptak
+    prismY(band(xN, z => xN(z) + PanelT/sh, G - 30, zH + 20), yN0 - PanelT, Dj + PanelT, 'panel', 'vagg', 'Nisch – panel 22');
+    const sp = band(xout, xN, G - 30, zH + 20);
+    prismY(sp, yN0 - PanelT, yN0, 'panel', 'vagg', 'Nisch – sidopanel 22'); prismY(sp, Dj, Dj + PanelT, 'panel', 'vagg', 'Nisch – sidopanel 22');
+    const xr0 = xout(zH + 140), xr1 = xN(zH) + PanelT/sh + 60;
+    prismY([[xr0, zH], [xr1, zH - 30], [xr1, zH + 90], [xr0, zH + 120]], yN0 - PanelT - 40, Dj + PanelT + 40, 'tra', 'vagg', 'Nisch – takbjälklag (fall utåt)');
+    prismY([[xr0, zH + 120], [xr1, zH + 90], [xr1, zH + 110], [xr0, zH + 140]], yN0 - PanelT - 40, Dj + PanelT + 40, 'papp', 'vagg', 'Nisch – papptak');
+    // golv i nischen
+    box(L2 + ND - 45, L2 + ND, yN0, Dj, MedH, MedH + BjH, 'tra', 'grund', 'Nisch – kantbalk');
+    box(L2, L2 + ND - 45, yN0, yN0 + 45, MedH, MedH + BjH, 'tra', 'grund', 'Nisch – golvbjälke');
+    box(L2, L2 + ND - 45, Dj - 45, Dj, MedH, MedH + BjH, 'tra', 'grund', 'Nisch – golvbjälke');
+    box(L2, L2 + ND - 45, (yN0 + Dj)/2 - 22.5, (yN0 + Dj)/2 + 22.5, MedH, MedH + BjH, 'tra', 'grund', 'Nisch – golvbjälke');
+    box(L2, L2 + ND, yN0, Dj, MedH + BjH, G, 'skiva', 'grund', 'Nisch – golvskiva ' + GT);
+  }
 
   // ---- gavlar
   const DorrX = L2 - VD/sh - (2*RB + DorrH)/th, xd0 = DorrX - 2*RB - DorrB;
@@ -379,8 +421,20 @@ function build() {
       for (let ya = yA; ya < yB - 50; ya += pw) {
         const yb2 = Math.min(ya + pw - J, yB);
         const poly = clip([[xin(za), za], [xin(za) - PT/sh, za], [xin(zb) - PT/sh, zb], [xin(zb), zb]], ytak);
-        prismY(poly, ya, yb2, 'plywood', 'inner', 'Plywood 9 mm ' + pw + '×' + ph + ' (högvägg)');
+        const nm = 'Plywood 9 mm ' + pw + '×' + ph + ' (högvägg)';
+        if (NI && yb2 > yN0 + VD) {
+          if (ya < yN0 + VD) prismY(poly, ya, yN0 + VD, 'plywood', 'inner', nm);
+          prismY(clip(poly, p => zH + 90 - p[1]), Math.max(ya, yN0 + VD), yb2, 'plywood', 'inner', nm);
+        } else prismY(poly, ya, yb2, 'plywood', 'inner', nm);
       }
+    }
+    if (NI) {                                                                      // nischen invändigt
+      const xNi = z => xN(z) - VD/sh;
+      prismY(band(z => xNi(z) - PT/sh, xNi, G, zH), yN0 + VD, Dj - VD, 'plywood', 'inner', 'Plywood 9 mm (nisch)');
+      const sd = band(z => xin(z), z => xNi(z) - PT/sh, G, zH);
+      prismY(sd, yN0 + VD, yN0 + VD + PT, 'plywood', 'inner', 'Plywood 9 mm (nisch, sida)');
+      prismY(sd, Dj - VD - PT, Dj - VD, 'plywood', 'inner', 'Plywood 9 mm (nisch, sida)');
+      prismY(band(z => xin(z) - PT/sh, z => xNi(z), zH - PT, zH), yN0 + VD, Dj - VD, 'plywood', 'inner', 'Plywood 9 mm (nischens tak)');
     }
     // bakgaveln: skivor i rutnät, klippta mot takets undersida och högväggens skivor
     for (let za = G; za < NT; za += ph) for (let xa = -L2; xa < L2; xa += pw) {
@@ -417,7 +471,7 @@ function build() {
   // ---- Ifö Spira 6260 (355 × 650 × 860, sitthöjd 420) i hörnet bakgavel/högvägg (bakgaveln har inget glas)
   let toa = null;
   if (P.toa) {
-    const xin = z => L2 - VD/sh - (z - G)/th - (P.klad ? 9/sh : 0), yb = Dj - VD - 10 - (P.klad ? 9 : 0);
+    const xin = NI ? xinN : (z => L2 - VD/sh - (z - G)/th - (P.klad ? 9/sh : 0)), yb = Dj - VD - 10 - (P.klad ? 9 : 0);
     const cx = Math.min(xin(G + 1150) - 400, xin(G + 860) - 177 - 40);        // axel 400 från väggen i axelhöjd, cisternen fri från lutande väggen
     const rb = x => G + (x + L2)*Math.tan(t);                                    // takets undersida
     toa = {cx, fri: xin(G + 1150) - cx, front: yb - 650, takOverSits: rb(cx - 200) - G};
@@ -432,6 +486,18 @@ function build() {
     if (toa.fri < 380) W.push('Toaletten: för lite armbågsrum mot högväggen.');
     if (toa.takOverSits < 1250) W.push('Toaletten: lågt i tak framför stolen.');
     if (yb - 650 - VD < 900) W.push('Toaletten: kort fritt golv framför stolen – bredda poden.');
+  }
+
+  // ---- HANDFAT i nischen: litet väggmonterat handfat ~450×300 framför toaletten, spegel ovanför
+  if (P.handfat && NI) {
+    const yc = yN0 + VD + (P.klad ? 9 : 0) + 270, xw = xinN(G + 850);
+    let g = new THREE.CylinderGeometry(225, 190, 150, 32, 1, false, 0, Math.PI); g.scale(1, 1, 300/225); g.rotateY(-Math.PI/2); g.translate(xw, G + 775, yc);
+    add(g, 'porslin', 'inred', 'Handfat ca 450×300, väggmonterat (överkant 850)');
+    g = new THREE.CylinderGeometry(14, 14, 160, 12); g.translate(xw - 50, G + 930, yc); add(g, 'krom', 'inred', 'Blandare');
+    g = new THREE.BoxGeometry(150, 14, 14); g.translate(xw - 115, G + 1005, yc); add(g, 'krom', 'inred', 'Blandare');
+    prismY(band(z => xinN(z) - 6/sh, xinN, G + 1000, G + 1650), yc - 220, yc + 220, 'spegel', 'inred', 'Spegel');
+    KG.handfat = 15;
+    if (yc + 225 > (toa ? toa.front : 1e9) - 50) W.push('Handfatet krockar med toaletten – bredda nischen.');
   }
 
   // ---- SÄNG 180×200 på förvaringsskåp (ForvH) + två väggmonterade nattduksbord, huvudänden mot bakgaveln
@@ -479,7 +545,7 @@ function build() {
   const kgK = (KG.plywood||0) + (KG.ask||0) + (KG.filt||0);
   const kgG = GLAS_M2*V.GlasKg;
   D = {variant:P.variant, G, NH, NX, NT, TakV:P.TakV, sparrL:(sW(TH) - sF(TH)), takyta:(sTop - sF(TH) + 20)*Dj*1e-6,
-       sparrar: yS.length, kapade, fon, kg:{virke:kgV, glas:kgG, papp:KG.papp||0, plat:(KG.plat||0)+(KG.stal||0), velux:KG.velux||0, gras:KG.gras||0, toa:KG.toa||0, seng:KG.seng||0, klad:kgK},
+       sparrar: yS.length, kapade, fon, kg:{virke:kgV, glas:kgG, papp:KG.papp||0, plat:(KG.plat||0)+(KG.stal||0), velux:KG.velux||0, gras:KG.gras||0, toa:(KG.toa||0) + (KG.handfat||0), seng:KG.seng||0, klad:kgK},
        seng,
        klad:D_klad,
        toa,
@@ -517,6 +583,7 @@ function applyMode() {
   plane.constant = P.snittY/1000;
   for (const m of [...ALLM, ground.material]) { if (m === ground.material) continue; m.clippingPlanes = cp; m.needsUpdate = true; }
 }
+function NIr() { return P.nisch ? `<tr><td>Nisch (toa + handfat)</td><td>${fmt(P.NischB)} × ${fmt(P.NischD)} ut, h ${fmt(P.NischH)}</td></tr>` : ''; }
 function fmt(n, d = 0) { return n.toLocaleString('sv-SE', {minimumFractionDigits:d, maximumFractionDigits:d}); }
 function info() {
   const k = D.kg, V = VAR[P.variant];
@@ -536,6 +603,7 @@ function info() {
   ${r('Glas framgavel', V.glas)}
   ${D.klad ? r('Väggar', 'plywood 9 mm, ' + D.klad.pw + '×' + D.klad.ph) + r('Innertak', D.klad.nRib + ' ribbor ask ' + P.RibbB + ' / spalt ' + P.RibbSpalt) : ''}
   ${D.seng ? r('Säng', '180×200, ' + fmt(D.seng.takVidHuvud) + ' fritt över madrass') : ''}
+  ${NIr()}
   ${D.toa ? r('Toalett', 'Ifö Spira 6260, axel ' + fmt(D.toa.fri) + ' från vägg') : ''}
   <tr class="h"><td colspan="2">Vikt (uppskattning)</td></tr>
   ${r('Virke + skivor + panel', fmt(k.virke) + ' kg')}
@@ -546,7 +614,7 @@ function info() {
   ${k.klad ? r('Invändig klädsel', fmt(k.klad) + ' kg') : ''}
   ${k.gras ? r('Grästak, vattenmättat', fmt(k.gras) + ' kg') : ''}
   ${k.seng ? r('Säng + förvaring + nattduksbord', fmt(k.seng) + ' kg') : ''}
-  ${k.toa ? r('Toalett (porslin)', fmt(k.toa) + ' kg') : ''}
+  ${k.toa ? r('Toalett + handfat (porslin)', fmt(k.toa) + ' kg') : ''}
   ${r('Totalt', '≈ ' + fmt(k.tot) + ' kg', 'tot')}
   </table>
   ${D.warn.map(w => `<div class="warn">⚠ ${w}</div>`).join('')}
@@ -575,12 +643,13 @@ const views = {
   'Toaletten': () => { P.tak = false; P.kop = false; gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(-1.4, 3.7, 0.2), V3(0.9, 0.6, P.Djup/1000 - .55)]; },
   'Interiör': () => { P.vagg = true; P.tak = true; P.kop = true; P.inner = true; P.ljus = true; P.snitt = false; gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(P.GolvL/2000 - 0.75, 1.75, 0.35), V3(-0.25, 0.75, P.Djup/1000 - 1.0)]; },
   'Sovdelen': () => { P.tak = false; P.kop = false; gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(1.2, 5.6, P.Djup/1000 - 3.2), V3(0.1, 0.5, P.Djup/1000 - 1.1)]; },
+  'Nischen': () => { P.vagg = true; P.tak = true; P.inner = true; P.ljus = true; P.snitt = false; gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(P.GolvL/2000 - 0.75, 1.6, 0.45), V3(P.GolvL/2000 + 0.35, 0.95, P.Djup/1000 - 0.8)]; },
   'Uppifrån': () => [V3(0.01, 13, P.Djup/2000 + .01), V3(0, 0, P.Djup/2000)],
   'Snitt genom takstol': () => { P.snitt = true; P.snittY = Math.round(VAR[P.variant].VaggD + (P.Djup - 2*VAR[P.variant].VaggD)/(Math.ceil((P.Djup - 2*VAR[P.variant].VaggD)/600)) + 5); gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(0, 2.0, 9.5), V3(0, 1.9, 0)]; },
 };
 function go(name) {
-  const [p, tg] = views[name](); const f = name === 'Interiör' ? 1 : fit();
-  camera.fov = name === 'Interiör' ? 74 : 38; camera.updateProjectionMatrix(); if (name !== 'Interiör' && P.ljus) { P.ljus = false; applyMode(); }
+  const [p, tg] = views[name](); const f = ['Interiör', 'Nischen'].includes(name) ? 1 : fit();
+  camera.fov = ['Interiör', 'Nischen'].includes(name) ? 74 : 38; camera.updateProjectionMatrix(); if (!['Interiör', 'Nischen'].includes(name) && P.ljus) { P.ljus = false; applyMode(); }
   const off = p.clone().sub(tg).multiplyScalar(f); camera.position.copy(tg).add(off); controls.target.copy(tg); controls.update();
 }
 
@@ -604,6 +673,11 @@ fF.add(P, 'KarmL', 700, 2200, 10).name('Karm höjd mm').onChange(() => { P.velux
 fF.add(P, 'FonsterS', 500, 3000, 10).name('Från takfoten mm').onChange(nb);
 const fT = gui.addFolder('Inredning');
 fT.add(P, 'toa').name('Toalett Ifö Spira 6260').onChange(nb);
+fT.add(P, 'handfat').name('Handfat + spegel').onChange(nb);
+fT.add(P, 'nisch').name('Nisch i högväggen').onChange(nb);
+fT.add(P, 'NischD', 300, 900, 10).name('Nisch ut mm').onChange(nb);
+fT.add(P, 'NischB', 900, 1800, 10).name('Nisch bredd (inv.) mm').onChange(nb);
+fT.add(P, 'NischH', 1800, 2400, 10).name('Nisch höjd mm').onChange(nb);
 fT.add(P, 'seng').name('Säng 180 + nattduksbord').onChange(nb);
 fT.add(P, 'ForvH', 200, 600, 10).name('Förvaring under säng mm').onChange(nb);
 fT.add(P, 'klad').name('Invändig klädsel').onChange(nb);
