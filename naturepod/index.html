@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Naturepod – flyttbar hytt på medar</title>
+<!--OG-->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="buttercup.nu">
+<meta property="og:title" content="Naturepod – flyttbar hytt på medar">
+<meta property="og:description" content="Interaktiv 3D-modell: takvinkel, Velux-takfönster, odlingshyllor på taket. Solid, wireframe och ghost-läge.">
+<meta property="og:url" content="https://www.buttercup.nu/naturepod/">
+<meta property="og:image" content="https://www.buttercup.nu/naturepod/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.buttercup.nu/naturepod/og.jpg">
+<meta name="description" content="Interaktiv 3D-modell: takvinkel, Velux-takfönster, odlingshyllor på taket. Solid, wireframe och ghost-läge.">
+<!--/OG-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#FCC222;font-family:"Barlow",-apple-system,Helvetica,Arial,sans-serif;color:#2A1206}
+  canvas{display:block;touch-action:none}
+  #info{position:absolute;left:12px;top:50px;background:#FFF6DC;padding:12px 16px;border:3px solid #C8340A;border-radius:20px;
+        font-size:12.5px;line-height:1.45;width:300px;box-shadow:5px 5px 0 #C8340A;z-index:2000000;max-height:calc(100vh - 80px);overflow:auto;box-sizing:border-box}
+  #info h1{font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;color:#C8340A;font-size:24px;line-height:1;margin:0 0 2px}
+  #info .var{font-family:"Barlow Condensed",sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px;margin-bottom:6px}
+  #info table{border-collapse:collapse;width:100%}
+  #info td{padding:1px 0;vertical-align:top}
+  #info td:last-child{text-align:right;font-variant-numeric:tabular-nums;padding-left:8px}
+  #info tr.h td{font-family:"Barlow Condensed",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8F1A00;padding-top:7px;font-size:12px}
+  #info tr.tot td{border-top:1.5px solid #C8340A;font-weight:600}
+  #info .sub{color:#8F1A00;font-size:11px;margin-top:8px;line-height:1.35}
+  #info .warn{color:#C8340A;font-size:12px;font-weight:600;margin-top:6px}
+  #info .ok{color:#3d6b1f;font-weight:600}
+  #info .bad{color:#C8340A;font-weight:600}
+  #info .tgl{display:none}
+  .lbl{background:rgba(255,246,220,.92);border:1.5px solid #2A1206;border-radius:5px;padding:1px 6px;font-size:11.5px;color:#2A1206;white-space:nowrap;font-family:"Barlow",sans-serif;font-weight:500}
+  .lbl.red{border-color:#C8340A;color:#C8340A}
+  .ghost .lbl{background:rgba(18,24,32,.8);color:#cfe9ff;border-color:#5d7e9c}
+  .ghost .lbl.red{color:#ff8a70;border-color:#ff8a70}
+  #toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#2A1206;color:#FFF6DC;padding:7px 14px;border-radius:10px;font-size:13px;
+         z-index:2000002;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90vw;text-align:center}
+  #toast.on{opacity:1}
+  .lil-gui{--background-color:#FFF6DC;--text-color:#2A1206;--title-background-color:#C8340A;--title-text-color:#FFF6DC;
+    --widget-color:#f3e3b4;--hover-color:#ecd59a;--focus-color:#e6cc87;--number-color:#8F1A00;--string-color:#8F1A00;
+    --font-family:"Barlow",system-ui,sans-serif;--font-size:12px;--width:290px}
+  .lil-gui.root{border:3px solid #C8340A;border-radius:14px;overflow:hidden;margin-top:44px;max-height:calc(100vh - 56px);overflow-y:auto}
+  .lil-gui.root>.title{font-family:"Barlow Condensed",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+  .lil-gui .title{font-weight:600}
+  .bc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:#C8340A;color:#FFF6DC;font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px;position:fixed;top:0;left:0;right:0;z-index:2000001}
+  .bc-bar a{color:#FFF6DC;text-decoration:none}
+  .bc-bar a:hover{text-decoration:underline}
+  .bc-bar b{font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.04em;font-size:18px;color:#FCC222}
+  @media (max-width:700px){
+    .bc-bar{padding:6px 12px;font-size:12px;gap:8px}
+    .bc-bar span{display:none}
+    .bc-bar b{font-size:15px}
+    #info{position:fixed;top:auto;left:8px;bottom:calc(8px + env(safe-area-inset-bottom));width:min(280px,calc(100vw - 16px));
+          padding:8px 12px;font-size:11.5px;line-height:1.35;border-radius:14px;box-shadow:3px 3px 0 #C8340A;cursor:pointer;max-height:50vh}
+    #info h1{font-size:16px;margin:0;padding-right:18px}
+    #info .tgl{display:block;position:absolute;top:6px;right:9px;color:#C8340A;font-weight:700;font-size:13px}
+    #info:not(.open) table,#info:not(.open) .sub,#info:not(.open) .warn{display:none}
+    #info.open .tgl{transform:rotate(180deg)}
+    .lil-gui.root{margin-top:38px;--width:min(270px,calc(100vw - 30px));max-height:calc(100vh - 48px);border-width:2px;border-radius:12px}
+    .lil-gui{--font-size:11px;--widget-height:24px}
+    .lbl{font-size:10px;padding:1px 4px}
+    #toast{bottom:auto;top:46px}
+  }
+</style>
+<script type="importmap">{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/",
+  "lil-gui":"https://cdn.jsdelivr.net/npm/lil-gui@0.19.2/dist/lil-gui.esm.min.js"}}</script>
+</head>
+<body>
+<div class="bc-bar"><a href="/">← Buttercup.nu</a><span>Naturepod · flyttbar hytt på medar</span><b>Plan B(lommeröd)</b></div>
+<div id="info"></div>
+<div id="toast"></div>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {CSS2DRenderer, CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
+import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
+import GUI from 'lil-gui';
+
+// ---------------------------------------------------------------- parametrar (samma namn som Fusion-modellen naturepod/Naturepod)
+const VAR = {
+  ODLING: {MedH:225, BjalkH:195, GolvT:22, VaggD:120, TakH:170, TakT:18, GlasT:24, GlasKg:20, glas:'isolerglas 4-16-4'},
+  LIGHT:  {MedH:195, BjalkH:145, GolvT:18, VaggD:70,  TakH:120, TakT:12, GlasT:6,  GlasKg:15, glas:'enkelglas 6 mm'},
+};
+const VELUX = {'SK10 114×160':[1140,1600],'SK08 114×140':[1140,1400],'SK06 114×118':[1140,1180],'PK10 94×160':[940,1600],
+               'MK10 78×160':[780,1600],'MK08 78×140':[780,1400],'UK08 134×140':[1340,1400],'Eget mått':null};
+const DEF = {variant:'ODLING', GolvL:3500, Djup:2800, TakV:45, HogV:80,
+  fonster:true, velux:'SK10 114×160', KarmB:1140, KarmL:1600, FonsterS:1400,
+  hyllor:true, HyllRader:4, HyllAvst:700, HyllDjup:200,
+  vy:'Solid', fram:'Inget', fog:0.5, ghostOp:0.10, snitt:false, snittY:632,
+  grund:true, vagg:true, tak:true, hyll:true, kop:true, matt:true, person:false};
+const P = {...DEF};
+try { const m = location.hash.match(/c=([^&]+)/); if (m) Object.assign(P, JSON.parse(decodeURIComponent(m[1]))); } catch(e) {}
+const RB = 45, DorrB = 700, DorrH = 1900, KT = 8, PanelT = 22, VB = 45;
+
+// ---------------------------------------------------------------- material
+const COL = {tra:'#d2a86e', impr:'#8c8150', skiva:'#dcbd8b', papp:'#34302c', panel:'#6e5237', glas:'#a8dcf2', plat:'#b4b9be',
+             stal:'#4b4f53', velux:'#4a5157', jord:'#4b3626', vaxt:'#6f9c3c', blom:'#e9b93a', hylla:'#a8783f', person:'#C8340A'};
+const DENS = {tra:470, impr:550, skiva:520, panel:450, papp:1100, plat:7850, stal:7850, hylla:470, jord:1100};
+const ALLM = [], solidM = {}, ghostM = {}, edgeG = {};
+const white = new THREE.Color('#ffffff');
+for (const [k, c] of Object.entries(COL)) {
+  const glas = k === 'glas';
+  solidM[k] = new THREE.MeshStandardMaterial({color:c, roughness: glas ? .08 : (k==='plat'||k==='stal'||k==='velux') ? .45 : .85,
+      metalness: (k==='plat'||k==='stal') ? .3 : 0, transparent: glas, opacity: glas ? .32 : 1, depthWrite: !glas, side: THREE.DoubleSide});
+  const lc = new THREE.Color(c).lerp(new THREE.Color('#9fd8ff'), .45).multiplyScalar(.8);
+  ghostM[k] = new THREE.MeshBasicMaterial({color: lc, transparent:true, opacity:.1, depthWrite:false, blending:THREE.AdditiveBlending, side:THREE.DoubleSide});
+  edgeG[k] = new THREE.LineBasicMaterial({color: lc, transparent:true, opacity:.6, depthWrite:false, blending:THREE.AdditiveBlending});
+  ALLM.push(solidM[k], ghostM[k], edgeG[k]);
+}
+const edgeS = new THREE.LineBasicMaterial({color:'#2A1206', transparent:true, opacity:.3});
+const edgeW = new THREE.LineBasicMaterial({color:'#2A1206'});
+const NONE = new THREE.MeshBasicMaterial({visible:false});
+ALLM.push(edgeS, edgeW);
+
+// ---------------------------------------------------------------- scen
+const renderer = new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.localClippingEnabled = true;
+document.body.appendChild(renderer.domElement);
+const lr = new CSS2DRenderer(); lr.setSize(innerWidth, innerHeight);
+lr.domElement.style.cssText = 'position:absolute;top:0;left:0;pointer-events:none'; document.body.appendChild(lr.domElement);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(38, innerWidth/innerHeight, .05, 300);
+const controls = new OrbitControls(camera, renderer.domElement); controls.enableDamping = true; controls.maxDistance = 60;
+scene.add(new THREE.HemisphereLight('#fff6dc', '#6d6040', 1.15));
+const sun = new THREE.DirectionalLight('#ffffff', 2.1); sun.position.set(-6, 10, -7); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048); Object.assign(sun.shadow.camera, {left:-7, right:7, top:7, bottom:-7, near:1, far:40}); sun.shadow.bias = -0.0004;
+scene.add(sun, sun.target);
+const ground = new THREE.Mesh(new THREE.CircleGeometry(16, 72), new THREE.MeshStandardMaterial({color:'#a8b56c', roughness:1}));
+ground.rotation.x = -Math.PI/2; ground.position.y = -0.002; ground.receiveShadow = true; scene.add(ground);
+const grid = new THREE.GridHelper(20, 40, '#3c5670', '#223040'); scene.add(grid);
+const root = new THREE.Group(); root.scale.setScalar(0.001); scene.add(root);
+const plane = new THREE.Plane(new THREE.Vector3(0, 0, -1), 0.6);
+
+// ---------------------------------------------------------------- hjälpare (mm; modell-x = längd, modell-y = djup, z = upp → three (x, z, y))
+let KG = {}, GLAS_M2 = 0, D = {};
+const rad = d => d*Math.PI/180;
+const area = pts => { let a = 0; for (let i = 0; i < pts.length; i++) { const p = pts[i], q = pts[(i+1)%pts.length]; a += p[0]*q[1]-q[0]*p[1]; } return a/2; };
+function add(g, key, grp, name, vol) {
+  const m = new THREE.Mesh(g, solidM[key]); m.userData = {key, grp, name};
+  m.castShadow = m.receiveShadow = true;
+  if (!['vaxt','blom','person'].includes(key)) { const e = new THREE.LineSegments(new THREE.EdgesGeometry(g, 20), edgeS); e.raycast = () => {}; m.add(e); m.userData.edge = e; }
+  root.add(m);
+  if (DENS[key] && vol) KG[key] = (KG[key]||0) + vol*1e-9*DENS[key];
+  return m;
+}
+function prismY(pts, y0, y1, key, grp, name) {
+  if (!pts || pts.length < 3) return null; const a = Math.abs(area(pts)); if (a < 1) return null;
+  const g = new THREE.ExtrudeGeometry(new THREE.Shape(pts.map(p => new THREE.Vector2(p[0], p[1]))), {depth: y1-y0, bevelEnabled:false, curveSegments:1});
+  g.translate(0, 0, y0); return add(g, key, grp, name, a*(y1-y0));
+}
+function box(x0, x1, y0, y1, z0, z1, key, grp, name) {
+  if (x1-x0 < .5 || y1-y0 < .5 || z1-z0 < .5) return null;
+  const g = new THREE.BoxGeometry(x1-x0, z1-z0, y1-y0); g.translate((x0+x1)/2, (z0+z1)/2, (y0+y1)/2);
+  return add(g, key, grp, name, (x1-x0)*(y1-y0)*(z1-z0));
+}
+function clip(poly, f) {
+  const out = [];
+  for (let i = 0; i < poly.length; i++) {
+    const a = poly[i], b = poly[(i+1)%poly.length], fa = f(a), fb = f(b);
+    if (fa <= 0) out.push(a);
+    if ((fa < 0 && fb > 0) || (fa > 0 && fb < 0)) { const k = fa/(fa-fb); out.push([a[0]+(b[0]-a[0])*k, a[1]+(b[1]-a[1])*k]); }
+  }
+  return out;
+}
+const rect = (x0, x1, z0, z1) => [[x0, z0], [x1, z0], [x1, z1], [x0, z1]];
+let LBL = [];
+function label(text, x, y, z, red) {
+  const d = document.createElement('div'); d.className = 'lbl' + (red ? ' red' : ''); d.textContent = text;
+  const o = new CSS2DObject(d); o.position.set(x, z, y); o.userData.grp = 'matt'; root.add(o); LBL.push(o); return o;
+}
+let seed = 1; const rnd = () => { seed = (seed*16807) % 2147483647; return (seed-1)/2147483646; };
+
+// ---------------------------------------------------------------- bygg
+function build() {
+  root.traverse(o => { if (o.isCSS2DObject) o.element.remove(); if (o.geometry) o.geometry.dispose(); });
+  root.clear(); LBL = []; KG = {}; GLAS_M2 = 0; seed = 7;
+  const V = VAR[P.variant], W = [];
+  const L2 = P.GolvL/2, Dj = P.Djup, MedH = V.MedH, BjH = V.BjalkH, GT = V.GolvT, VD = V.VaggD, TH = V.TakH, TT = V.TakT;
+  const G = MedH + BjH + GT;
+  const t = rad(P.TakV), h = rad(P.HogV), c = Math.cos(t), S = Math.sin(t), th = Math.tan(h), sh = Math.sin(h);
+  const NH = P.GolvL/(1/Math.tan(t) + 1/th), NX = L2 - NH/th;
+  const pt = (s, q) => [-L2 + c*s - S*q, G + S*s + c*q];                       // s längs takfallet från golvkant A, q vinkelrätt ut
+  const sW = (q, off = 0) => (2*L2 - off/sh + S*q - c*q/th)/(c + S/th);          // där linjen q möter högväggen (yttre, eller off inåt)
+  const sF = q => -q*c/S;                                                         // fot: z = G
+  const tRel = p => -S*(p[0]+L2) + c*(p[1]-G);
+  const under = q => p => tRel(p) - q;                                            // behåll q-linjen och under
+  const innanf = off => p => p[0] + (p[1]-G)/th - (L2 - off/sh);
+  const xout = z => L2 - (z-G)/th;
+  const Tp = TH + TT + KT;
+  const sTop = sW(Tp), NT = pt(sTop, Tp)[1];
+
+  // ---- 1 GRUND OCH GOLV
+  const mx = L2 + 400;
+  const med = [[-mx+300, 0], [mx-300, 0], [mx, 100], [mx, MedH], [-mx, MedH], [-mx, 100]];
+  prismY(med, 255, 345, 'impr', 'grund', 'Med 90×' + MedH);
+  prismY(med, Dj-345, Dj-255, 'impr', 'grund', 'Med 90×' + MedH);
+  box(-L2-90, -L2, 345, Dj-345, 100, MedH, 'impr', 'grund', 'Dragbalk 90×' + (MedH-100));
+  box(L2, L2+90, 345, Dj-345, 100, MedH, 'impr', 'grund', 'Dragbalk 90×' + (MedH-100));
+  box(-L2, L2, 0, 45, MedH, MedH+BjH, 'tra', 'grund', 'Kantbalk 45×' + BjH);
+  box(-L2, L2, Dj-45, Dj, MedH, MedH+BjH, 'tra', 'grund', 'Kantbalk 45×' + BjH);
+  const nB = Math.ceil((P.GolvL-45)/600) + 1, ccB = (P.GolvL-45)/(nB-1);
+  for (let i = 0; i < nB; i++) box(-L2 + i*ccB, -L2 + i*ccB + 45, 45, Dj-45, MedH, MedH+BjH, 'tra', 'grund', 'Golvbjälke 45×' + BjH);
+  box(-L2, L2, 0, Dj, MedH+BjH, G, 'skiva', 'grund', 'Golvskiva plywood ' + GT);
+  box(-L2 - TH/S, -L2, 0, Dj, MedH, G, 'impr', 'grund', 'Takfotsbalk');
+  for (const sx of [-1, 1]) {                                                    // dragstänger M16 + muttrar
+    const x = sx*(L2 + 90 + 12), z = 100 + (MedH-100)/2;
+    const g = new THREE.CylinderGeometry(8, 8, Dj - 510 + 120, 12); g.rotateX(Math.PI/2); g.translate(x, z, Dj/2);
+    add(g, 'stal', 'kop', 'Gängstång M16 (DIN 976-1)', Math.PI*64*(Dj-390));
+    for (const y of [255-12, Dj-255+12]) { const m = new THREE.CylinderGeometry(14, 14, 13, 6); m.rotateX(Math.PI/2); m.translate(x, z, y + (y < Dj/2 ? -8 : 8)); add(m, 'stal', 'kop', 'Mutter M16 + bricka'); }
+  }
+
+  // ---- 2 VÄGG: högvägg
+  const ns = Math.ceil((Dj - 2*VD)/600) - 1, ccS = (Dj - 2*VD)/(ns + 1);
+  const yS = []; for (let k = 1; k <= ns; k++) yS.push(VD + k*ccS);
+  const z45 = G + 45;
+  prismY([[L2, G], [L2 - VD/sh, G], [xout(z45) - VD/sh, z45], [xout(z45), z45]], VD, Dj-VD, 'tra', 'vagg', 'Högväggssyll');
+  const stolpe = [[xout(z45), z45], [xout(z45) - VD/sh, z45], pt(sW(0, VD), 0), pt(sW(0), 0)];
+  for (const y of yS) prismY(stolpe, y-22.5, y+22.5, 'tra', 'vagg', 'Högväggsstolpe 45×' + VD);
+  const horn = [[L2, G], [L2 - VD/sh, G], pt(sW(0, VD), 0), pt(sW(0), 0)];
+  prismY(horn, 0, VD, 'tra', 'vagg', 'Hörnstolpe 45×' + VD); prismY(horn, Dj-VD, Dj, 'tra', 'vagg', 'Hörnstolpe 45×' + VD);
+  prismY([[L2, G], [L2 + PanelT/sh, G], [xout(NT) + PanelT/sh, NT], [xout(NT), NT]], 0, Dj, 'panel', 'vagg', 'Högväggspanel 22');
+
+  // ---- gavlar
+  const DorrX = L2 - VD/sh - (2*RB + DorrH)/th, xd0 = DorrX - 2*RB - DorrB;
+  const nP = Math.max(1, Math.ceil((xd0 + L2)/800)), posts = [];
+  for (let i = 1; i < nP; i++) posts.push(-L2 + i*(xd0 + L2)/nP);
+  const dorrRyms = xd0 > -L2 + 300 && tRel([xd0, z45 + DorrH + 45]) <= -45;
+  if (!dorrRyms) W.push('Dörren 70×190 ryms inte i framgaveln vid den här takvinkeln/längden.');
+  const gavel = (y0, y1, fram) => {
+    const nm = fram ? 'fram' : 'bak';
+    prismY(clip(rect(-L2, L2 - VD/sh, G, z45), under(0)), y0, y1, 'tra', 'vagg', 'Gavelsyll ' + nm);
+    const ram = clip(clip(clip(rect(-L2 - 2000, L2 + 2000, z45, 1e5), under(0)), innanf(VD)), p => -45 - tRel(p));
+    prismY(ram, y0, y1, 'tra', 'vagg', 'Överram ' + nm);
+    const stud = (x0, nmS) => prismY(clip(clip(rect(x0, x0 + 45, z45, 1e5), under(-45)), innanf(VD)), y0, y1, 'tra', 'vagg', nmS);
+    posts.forEach((x, i) => stud(x - 22.5, 'Glasstolpe ' + (i+1) + ' ' + nm));
+    if (dorrRyms) {
+      stud(xd0, 'Dörrstolpe ' + nm); stud(DorrX - RB, 'Dörrstolpe ' + nm);
+      box(xd0 + RB, DorrX - RB, y0, y1, z45 + DorrH, z45 + DorrH + 45, 'tra', 'vagg', fram ? 'Dörröverstycke' : 'Kortling');
+    }
+    if (fram) {
+      const gy0 = VD/2 - V.GlasT/2, gy1 = VD/2 + V.GlasT/2;
+      const pane = (x0, x1, zb) => { const p = clip(clip(rect(x0 + 8, x1 - 8, zb + 8, 1e5), under(-53)), innanf(VD + 8));
+        if (p.length > 2 && Math.abs(area(p)) > 2e4) { prismY(p, gy0, gy1, 'glas', 'vagg', 'Glas ' + V.glas); GLAS_M2 += Math.abs(area(p))*1e-6; } };
+      const edges = [-L2, ...posts.flatMap(x => [x - 22.5, x + 22.5]), xd0];
+      for (let i = 0; i < edges.length; i += 2) pane(edges[i], edges[i+1], z45);
+      if (dorrRyms) {
+        pane(xd0 + RB, DorrX - RB, z45 + DorrH + 45); pane(DorrX, L2, z45);
+        box(xd0 + RB + 4, DorrX - RB - 4, 0, 40, z45 + 4, z45 + DorrH - 4, 'panel', 'vagg', 'Dörrblad 70×190');
+      } else pane(xd0, L2, z45);
+    } else {
+      if (!dorrRyms) stud(xd0, 'Regel');
+      const pan = clip(clip(rect(-L2 - 30, L2 + 30, G - 30, 1e5), under(0)), innanf(0));
+      prismY(pan, Dj, Dj + PanelT, 'panel', 'vagg', 'Bakgavelpanel 22');
+    }
+  };
+  gavel(0, VD, true); gavel(Dj - VD, Dj, false);
+
+  // ---- 3 TAK
+  const sparre = [pt(0, 0), pt(sW(0), 0), pt(sW(TH), TH), pt(sF(TH), TH)];
+  const OB = P.KarmB + 40, OL = P.KarmL + 20, S1 = P.FonsterS, S2 = S1 + OL, y1 = Dj/2 - OB/2, y2 = Dj/2 + OB/2;
+  let fon = P.fonster, cLo = null, cHi = null;
+  if (fon) {
+    const C = [22.5, ...yS, Dj - 22.5];
+    for (const cc of C) if (cc + 67.5 <= y1 - 45) cLo = cc;
+    for (const cc of [...C].reverse()) if (cc - 67.5 >= y2 + 45) cHi = cc;
+    if (cLo === null || cHi === null) { W.push('Takfönstret är för brett för gaveln/djupet – inte ritat.'); fon = false; }
+    if (S1 < sF(TH) + 300) { W.push('Takfönstret ligger för nära takfoten – inte ritat.'); fon = false; }
+    if (S2 + VB > sW(TH) - 200) { W.push('Takfönstret når nocken – inte ritat. Minska höjden/avståndet.'); fon = false; }
+  }
+  prismY(sparre, 0, 45, 'tra', 'tak', 'Gavelsparre 45×' + TH); prismY(sparre, Dj-45, Dj, 'tra', 'tak', 'Gavelsparre 45×' + TH);
+  let kapade = 0;
+  for (const y of yS) {
+    if (fon && y > cLo && y < cHi) {
+      kapade++;
+      prismY([pt(0, 0), pt(S1 - VB, 0), pt(S1 - VB, TH), pt(sF(TH), TH)], y-22.5, y+22.5, 'tra', 'tak', 'Sparre (kapad) 45×' + TH);
+      prismY([pt(S2 + VB, 0), pt(sW(0), 0), pt(sW(TH), TH), pt(S2 + VB, TH)], y-22.5, y+22.5, 'tra', 'tak', 'Sparre (kapad) 45×' + TH);
+    } else prismY(sparre, y-22.5, y+22.5, 'tra', 'tak', 'Sparre 45×' + TH);
+  }
+  const slab = (ta, tb, s0, s1, y0, y1, key, name) => {           // s1 = null → till högväggen
+    const pts = s1 === null ? [pt(s0, ta), pt(sW(ta), ta), pt(sW(tb), tb), pt(s0, tb)] : [pt(s0, ta), pt(s1, ta), pt(s1, tb), pt(s0, tb)];
+    return prismY(pts, y0, y1, key, 'tak', name);
+  };
+  const lager = (ta, tb, s0, key, name) => {
+    if (!fon) return slab(ta, tb, s0, null, 0, Dj, key, name);
+    slab(ta, tb, s0, S1, 0, Dj, key, name); slab(ta, tb, S2, null, 0, Dj, key, name);
+    slab(ta, tb, S1, S2, 0, y1, key, name); slab(ta, tb, S1, S2, y2, Dj, key, name);
+  };
+  lager(TH, TH + TT, sF(TH), 'skiva', 'Takskiva plywood ' + TT);
+  lager(TH + TT, Tp, sF(TH) - 20, 'papp', 'Dubbelpapp (underlag + ytpapp)');
+  for (const [y0, y1v] of [[-PanelT, 0], [Dj, Dj + PanelT]])
+    prismY([pt(sF(TH) - 22, TH - 60), pt(sW(TH - 60), TH - 60), pt(sW(Tp + 20), Tp + 20), pt(sF(TH) - 22, Tp + 20)], y0, y1v, 'panel', 'tak', 'Vindskiva 22');
+  // nockplåt
+  const xp = xout(NT) + PanelT/sh, sXp = (xp + L2 + S*Tp)/c;
+  slab(Tp, Tp + 2, sTop - 150, sXp + 2, -PanelT, Dj + PanelT, 'plat', 'Nockplåt 0,7');
+  prismY([[xp, NT - 150], [xp + 2, NT - 150], [xp + 2, G + (xp + 2 + L2)*Math.tan(t) + (Tp + 2)/c], [xp, G + (xp + L2)*Math.tan(t) + Tp/c]], -PanelT, Dj + PanelT, 'plat', 'tak', 'Nockplåt 0,7');
+  // spikplåtar vid nocken (båda sidor av sparre + stolpe)
+  for (const y of yS) for (const yy of [y - 24, y + 22.5]) {
+    const s0 = sW(0) - 230;
+    prismY([pt(s0, 15), pt(sW(15) - 15, 15), pt(sW(15 + 100) - 15, 115), pt(s0, 115)], yy, yy + 1.5, 'stal', 'kop', 'Spikplåt 100×200×1,5 FZV');
+  }
+  if (fon) {
+    const yA = cLo + 22.5, yB = cHi - 22.5;
+    prismY([pt(0, 0), pt(sW(0), 0), pt(sW(TH), TH), pt(sF(TH), TH)], yA, yA + 45, 'tra', 'tak', 'Systersparre 45×' + TH);
+    prismY([pt(0, 0), pt(sW(0), 0), pt(sW(TH), TH), pt(sF(TH), TH)], yB - 45, yB, 'tra', 'tak', 'Systersparre 45×' + TH);
+    slab(0, TH, S1 - VB, S1, yA + 45, yB - 45, 'tra', 'Växel 45×' + TH);
+    slab(0, TH, S2, S2 + VB, yA + 45, yB - 45, 'tra', 'Växel 45×' + TH);
+    slab(0, TH, S1, S2, y1 - 45, y1, 'tra', 'Fönsterregel 45×' + TH);
+    slab(0, TH, S1, S2, y2, y2 + 45, 'tra', 'Fönsterregel 45×' + TH);
+    // Velux: karm (ring 60), glas, plåtkrage
+    const sc = (S1 + S2)/2, a0 = sc - P.KarmL/2, a1 = sc + P.KarmL/2, b0 = Dj/2 - P.KarmB/2, b1 = Dj/2 + P.KarmB/2, k0 = TH - 60, k1 = TH - 60 + 98;
+    const vn = 'Velux GGL ' + P.velux.split(' ')[0];
+    const vk = (sa, sb, ya, yb) => prismY([pt(sa, k0), pt(sb, k0), pt(sb, k1), pt(sa, k1)], ya, yb, 'velux', 'kop', vn);
+    vk(a0, a1, b0, b0 + 60); vk(a0, a1, b1 - 60, b1); vk(a0, a0 + 60, b0 + 60, b1 - 60); vk(a1 - 60, a1, b0 + 60, b1 - 60);
+    prismY([pt(a0 + 60, k1 - 30), pt(a1 - 60, k1 - 30), pt(a1 - 60, k1 - 26), pt(a0 + 60, k1 - 26)], b0 + 60, b1 - 60, 'glas', 'kop', vn + ' – glas');
+    const kr = (sa, sb, ya, yb) => slab(Tp, Tp + 2, sa, sb, ya, yb, 'plat', 'Plåtkrage Velux');
+    kr(S1 - 100, S1, y1 - 100, y2 + 100); kr(S2, S2 + 200, y1 - 100, y2 + 100); kr(S1, S2, y1 - 100, y1); kr(S1, S2, y2, y2 + 100);
+    KG.velux = P.KarmL*P.KarmB*1e-6*25;
+    label(vn + ' (öppning ' + OB + '×' + OL + ')', ...(() => { const p = pt(sc, Tp + 120); return [p[0], Dj/2, p[1]]; })());
+  }
+
+  // ---- HYLLOR på taket (förslag): vågräta odlingslådor på konsoler genom papp i sparrarna
+  let nR = 0, lmTot = 0, jordL = 0;
+  if (P.hyllor) {
+    const zTop = x => G + (x + L2)*Math.tan(t) + Tp/c;
+    for (let i = 0; i < P.HyllRader; i++) {
+      const z0 = G + 450 + i*P.HyllAvst, sb = (z0 - G - c*(Tp + 30))/S;
+      if (sb > sTop - 250) break;
+      const xb = pt(sb, Tp + 30)[0], xa = xb - P.HyllDjup;
+      if (xa < -L2 - TH/S) continue;
+      nR++;
+      const sa_ = (xa + L2 + S*Tp)/c, sb_ = (xb + L2 + S*Tp)/c;
+      let segs = [[60, Dj - 60]];
+      if (fon && sb_ + 150 > S1 - 100 && sa_ - 150 < S2 + 200) segs = [[60, y1 - 160], [y2 + 160, Dj - 60]].filter(s => s[1] - s[0] > 300);
+      for (const [ya, yb] of segs) {
+        lmTot += (yb - ya)/1000;
+        box(xa, xb, ya, yb, z0, z0 + 22, 'hylla', 'hyll', 'Odlingslåda – botten');
+        box(xa, xa + 22, ya, yb, z0 + 22, z0 + 150, 'hylla', 'hyll', 'Odlingslåda – fram');
+        box(xb - 22, xb, ya, yb, z0 + 22, z0 + 150, 'hylla', 'hyll', 'Odlingslåda – bak');
+        box(xa + 22, xb - 22, ya, ya + 22, z0 + 22, z0 + 150, 'hylla', 'hyll', 'Odlingslåda – gavel');
+        box(xa + 22, xb - 22, yb - 22, yb, z0 + 22, z0 + 150, 'hylla', 'hyll', 'Odlingslåda – gavel');
+        box(xa + 22, xb - 22, ya + 22, yb - 22, z0 + 22, z0 + 125, 'jord', 'hyll', 'Jord');
+        jordL += (xb - xa - 44)*(yb - ya - 44)*103*1e-6;
+        for (let y = ya + 70; y < yb - 50; y += 95 + rnd()*40) {
+          const r = 35 + rnd()*35, g = new THREE.IcosahedronGeometry(r, 1);
+          g.scale(1, .75, 1); g.translate(xa + 50 + rnd()*(xb - xa - 100), z0 + 125 + r*.45, y);
+          add(g, rnd() < .18 ? 'blom' : 'vaxt', 'hyll', 'Växt');
+        }
+        for (const y of [...yS, 22.5, Dj - 22.5]) if (y > ya + 30 && y < yb - 30 && !(fon && y > cLo && y < cHi && false))
+          prismY([[xb, zTop(xb)], [xb, z0], [xa + 25, z0], [xa + 25, zTop(xa + 25)]], y - 4, y + 4, 'stal', 'hyll', 'Konsol 8 mm (skruv genom papp i sparre)');
+      }
+    }
+  }
+
+  // ---- person 180 cm
+  const pg = new THREE.CapsuleGeometry(170, 1420, 6, 16); pg.translate(-300, G + 900, Dj/2 - 400);
+  add(pg, 'person', 'person', 'Person 180 cm');
+
+  // ---- mått
+  label('Nock ' + (NT/1000).toFixed(2).replace('.', ',') + ' m ö. mark', xout(NT) + 250, -150, NT + 120, NT > 4000);
+  label('Golv ' + (P.GolvL/1000).toFixed(2).replace('.', ',') + ' × ' + (Dj/1000).toFixed(2).replace('.', ',') + ' m', 0, -350, G);
+  label('Takfall ' + P.TakV + '°', ...(() => { const p = pt(sW(0)*.32, Tp + 150); return [p[0], -200, p[1]]; })());
+
+  // ---- vikt + info
+  const kgV = (KG.tra||0) + (KG.impr||0) + (KG.skiva||0) + (KG.panel||0);
+  const kgG = GLAS_M2*V.GlasKg;
+  const kgH = (KG.hylla||0) + (KG.jord||0) + (KG.stal && P.hyllor ? 0 : 0);
+  D = {variant:P.variant, G, NH, NX, NT, TakV:P.TakV, sparrL:(sW(TH) - sF(TH)), takyta:(sTop - sF(TH) + 20)*Dj*1e-6,
+       sparrar: yS.length, kapade, fon, kg:{virke:kgV, glas:kgG, papp:KG.papp||0, plat:(KG.plat||0)+(KG.stal||0), velux:KG.velux||0, hyllor:kgH},
+       nR, lmTot, jordL, warn:W, dorrRyms};
+  D.kg.tot = Object.values(D.kg).reduce((a, b) => a + b, 0);
+  if (NT > 4000) W.push('Nocken är ' + (NT/1000).toFixed(2).replace('.', ',') + ' m över mark – över attefallsgränsen 4,0 m.');
+  if (P.TakV < 14) W.push('Flackt för papp på råspont – kräver takduk/membran.');
+  // höj spelet efter bygg
+  const target = new THREE.Vector3(0, NT/2000 + .2, Dj/2000);
+  D.target = target;
+}
+
+// ---------------------------------------------------------------- visning
+function applyMode() {
+  const ghost = P.vy === 'Ghost', wire = P.vy === 'Wireframe';
+  document.body.classList.toggle('ghost', ghost);
+  scene.background = new THREE.Color(ghost ? '#11171f' : '#FCC222');
+  scene.fog = ghost ? new THREE.Fog('#11171f', 5, 30) : null;
+  ground.visible = !ghost && !wire; grid.visible = ghost;
+  const hl = {Inget:null, Grund:'grund', 'Vägg':'vagg', Tak:'tak', Hyllor:'hyll', 'Köpdelar':'kop'}[P.fram];
+  for (const k in ghostM) { ghostM[k].opacity = P.ghostOp; edgeG[k].opacity = Math.min(1, .22 + P.ghostOp*2.2); }
+  root.traverse(o => {
+    if (o.isCSS2DObject) { o.visible = P.matt; return; }
+    if (!o.isMesh || !o.userData.key) return;
+    const {key, grp} = o.userData;
+    o.visible = P[grp] !== false;
+    const ghostIt = ghost && hl !== grp;
+    o.material = wire ? NONE : ghostIt ? ghostM[key] : solidM[key];
+    o.castShadow = !ghost && !wire;
+    const e = o.userData.edge; if (e) e.material = wire ? edgeW : ghostIt ? edgeG[key] : edgeS;
+  });
+  const cp = P.snitt ? [plane] : [];
+  plane.constant = P.snittY/1000;
+  for (const m of [...ALLM, ground.material]) { if (m === ground.material) continue; m.clippingPlanes = cp; m.needsUpdate = true; }
+}
+function fmt(n, d = 0) { return n.toLocaleString('sv-SE', {minimumFractionDigits:d, maximumFractionDigits:d}); }
+function info() {
+  const k = D.kg, V = VAR[P.variant];
+  const r = (a, b, cls = '') => `<tr class="${cls}"><td>${a}</td><td>${b}</td></tr>`;
+  const nt = D.NT/1000;
+  document.getElementById('info').innerHTML = `<span class="tgl">▴</span><h1>Naturepod</h1>
+  <div class="var">${P.variant === 'ODLING' ? 'Odling – dubbelpapp + hyllor' : 'Light – dubbelpapp, så lätt som möjligt'}</div>
+  <table>
+  ${r('Golv (L × D)', fmt(P.GolvL) + ' × ' + fmt(P.Djup) + ' mm')}
+  ${r('Golvyta', fmt(P.GolvL*P.Djup/1e6, 1) + ' m²')}
+  ${r('Takfall / högvägg', P.TakV + '° / ' + P.HogV + '°')}
+  ${r('Golv → nock (inne)', fmt(D.NH) + ' mm')}
+  ${r('Nock över mark', `<span class="${nt > 4 ? 'bad' : 'ok'}">${fmt(nt, 2)} m</span> ${nt > 4 ? '> 4,0 attefall' : nt > 3 ? '≤ 4,0 attefall' : '≤ 3,0 friggebod'}`)}
+  ${r('Sparrar', D.sparrar + ' st 45×' + V.TakH + (D.kapade ? ', ' + D.kapade + ' kapade' : '') + ', ~' + fmt(D.sparrL) + ' mm')}
+  ${r('Takyta (långa fallet)', fmt(D.takyta, 1) + ' m²')}
+  ${r('Takfönster', D.fon ? 'Velux ' + P.velux.split(' ')[0] + ' i växling' : 'inget')}
+  ${r('Glas framgavel', V.glas)}
+  ${P.hyllor ? r('Hyllor', D.nR + ' rader, ' + fmt(D.lmTot, 1) + ' m låda, ~' + fmt(D.jordL) + ' l jord') : ''}
+  <tr class="h"><td colspan="2">Vikt (uppskattning)</td></tr>
+  ${r('Virke + skivor + panel', fmt(k.virke) + ' kg')}
+  ${r('Glas', fmt(k.glas) + ' kg')}
+  ${r('Dubbelpapp', fmt(k.papp) + ' kg')}
+  ${r('Plåt, stål, beslag', fmt(k.plat) + ' kg')}
+  ${k.velux ? r('Velux', fmt(k.velux) + ' kg') : ''}
+  ${P.hyllor ? r('Hyllor med våt jord', fmt(k.hyllor) + ' kg') : ''}
+  ${r('Totalt', '≈ ' + fmt(k.tot) + ' kg', 'tot')}
+  </table>
+  ${D.warn.map(w => `<div class="warn">⚠ ${w}</div>`).join('')}
+  <div class="sub">Dras på medar med traktor (kätting runt dragbalken). Mått i mm, samma parametrar som Fusion-modellen.
+  Hyllor och dubbelpapp är förslag – Fusion har ännu sedum. Velux-öppningen (karm +40/+20) är antagen. Ej bygghandling: hållfasthet inte räknad.
+  Klicka på en del för namn och mått.</div>`;
+}
+let saveT = 0;
+function saveHash() {
+  clearTimeout(saveT);
+  saveT = setTimeout(() => {
+    const diff = {}; for (const k in DEF) if (P[k] !== DEF[k]) diff[k] = P[k];
+    history.replaceState(null, '', Object.keys(diff).length ? '#c=' + encodeURIComponent(JSON.stringify(diff)) : location.pathname);
+  }, 300);
+}
+function nb() { build(); applyMode(); info(); saveHash(); }
+
+// ---------------------------------------------------------------- kameravyer
+const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
+function fit() { return Math.max(P.GolvL, P.Djup*1.1, 3200)/3500 * (innerWidth < innerHeight ? 1.55 : 1); }
+const views = {
+  'Långa takfallet': () => [V3(-8.2, 4.6, -4.6), V3(-.4, 1.8, P.Djup/2000)],
+  'Högvägg + framgavel': () => [V3(6.2, 4.4, -7.4), V3(0, 1.8, P.Djup/2000)],
+  'Framgavel': () => [V3(0, 2.1, -10), V3(0, 1.9, P.Djup/2000)],
+  'Högväggen': () => [V3(10, 2.3, P.Djup/2000 + 1.5), V3(0, 1.9, P.Djup/2000)],
+  'Uppifrån': () => [V3(0.01, 13, P.Djup/2000 + .01), V3(0, 0, P.Djup/2000)],
+  'Snitt genom takstol': () => { P.snitt = true; P.snittY = Math.round(VAR[P.variant].VaggD + (P.Djup - 2*VAR[P.variant].VaggD)/(Math.ceil((P.Djup - 2*VAR[P.variant].VaggD)/600)) + 5); gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(0, 2.0, 9.5), V3(0, 1.9, 0)]; },
+};
+function go(name) {
+  const [p, tg] = views[name](); const f = fit();
+  const off = p.clone().sub(tg).multiplyScalar(f); camera.position.copy(tg).add(off); controls.target.copy(tg); controls.update();
+}
+
+// ---------------------------------------------------------------- GUI
+const gui = new GUI({title:'Naturepod – reglage'});
+const ctl = [];
+const fV = gui.addFolder('Variant och tak');
+fV.add(P, 'variant', ['ODLING', 'LIGHT']).name('Variant').onChange(v => { P.hyllor = v === 'ODLING'; gui.controllersRecursive().forEach(c => c.updateDisplay()); nb(); });
+fV.add(P, 'TakV', 20, 60, .5).name('Takvinkel °').onChange(nb);
+fV.add(P, 'HogV', 70, 90, 1).name('Högväggens vinkel °').onChange(nb);
+const fM = gui.addFolder('Mått');
+fM.add(P, 'GolvL', 2800, 5000, 50).name('Golvlängd mm').onChange(nb);
+fM.add(P, 'Djup', 2200, 3600, 50).name('Golvdjup mm').onChange(nb);
+const fF = gui.addFolder('Takfönster (Velux)');
+fF.add(P, 'fonster').name('Takfönster').onChange(nb);
+fF.add(P, 'velux', Object.keys(VELUX)).name('Storlek').onChange(v => { if (VELUX[v]) [P.KarmB, P.KarmL] = VELUX[v]; gui.controllersRecursive().forEach(c => c.updateDisplay()); nb(); });
+fF.add(P, 'KarmB', 550, 1800, 10).name('Karm bredd mm').onChange(() => { P.velux = 'Eget mått'; gui.controllersRecursive().forEach(c => c.updateDisplay()); nb(); });
+fF.add(P, 'KarmL', 700, 2200, 10).name('Karm höjd mm').onChange(() => { P.velux = 'Eget mått'; gui.controllersRecursive().forEach(c => c.updateDisplay()); nb(); });
+fF.add(P, 'FonsterS', 500, 3000, 10).name('Från takfoten mm').onChange(nb);
+const fH = gui.addFolder('Hyllor på taket');
+fH.add(P, 'hyllor').name('Odlingshyllor').onChange(nb);
+fH.add(P, 'HyllRader', 1, 7, 1).name('Rader (max)').onChange(nb);
+fH.add(P, 'HyllAvst', 450, 1000, 10).name('Höjd mellan rader mm').onChange(nb);
+fH.add(P, 'HyllDjup', 150, 350, 10).name('Lådans djup mm').onChange(nb);
+const fS = gui.addFolder('Visning');
+fS.add(P, 'vy', ['Solid', 'Wireframe', 'Ghost']).name('Läge').onChange(applyMode);
+fS.add(P, 'fram', ['Inget', 'Grund', 'Vägg', 'Tak', 'Hyllor', 'Köpdelar']).name('Framhäv (ghost)').onChange(v => { if (v !== 'Inget' && P.vy !== 'Ghost') { P.vy = 'Ghost'; gui.controllersRecursive().forEach(c => c.updateDisplay()); } applyMode(); });
+fS.add(P, 'fog', 0, 1, .05).name('Dimma (ghost)').onChange(saveHash);
+fS.add(P, 'ghostOp', .03, .4, .01).name('Genomskinlighet (ghost)').onChange(applyMode);
+fS.add(P, 'snitt').name('Snitt').onChange(applyMode);
+fS.add(P, 'snittY', 0, 3600, 5).name('Snittläge (djup) mm').onChange(applyMode);
+fS.add(P, 'grund').name('1 Grund och golv').onChange(applyMode);
+fS.add(P, 'vagg').name('2 Vägg').onChange(applyMode);
+fS.add(P, 'tak').name('3 Tak').onChange(applyMode);
+fS.add(P, 'hyll').name('Hyllor').onChange(applyMode);
+fS.add(P, 'kop').name('Köpdelar').onChange(applyMode);
+fS.add(P, 'matt').name('Måttetiketter').onChange(applyMode);
+fS.add(P, 'person').name('Person 180 cm').onChange(applyMode);
+const fC = gui.addFolder('Kameravyer');
+for (const n of Object.keys(views)) fC.add({f: () => go(n)}, 'f').name(n);
+const fE = gui.addFolder('Dela / export');
+fE.add({f: async () => { saveHash(); await new Promise(r => setTimeout(r, 350)); try { await navigator.clipboard.writeText(location.href); toast('Länk kopierad – öppnar med samma inställningar'); } catch(e) { toast(location.href); } }}, 'f').name('Kopiera delningslänk');
+fE.add({f: () => { renderer.render(scene, camera); const a = document.createElement('a'); a.href = renderer.domElement.toDataURL('image/png'); a.download = 'naturepod.png'; a.click(); }}, 'f').name('Spara PNG');
+fE.add({f: () => new GLTFExporter().parse(root, g => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([g], {type:'model/gltf-binary'})); a.download = 'naturepod.glb'; a.click(); }, e => toast('GLB-fel'), {binary:true})}, 'f').name('Exportera GLB');
+fE.add({f: () => { Object.assign(P, DEF); gui.controllersRecursive().forEach(c => c.updateDisplay()); nb(); go('Långa takfallet'); }}, 'f').name('Återställ');
+[fM, fH, fE].forEach(f => f.close());
+const mobile = matchMedia('(max-width:700px)').matches;
+if (mobile) gui.close();
+document.getElementById('info').addEventListener('click', e => { if (mobile) e.currentTarget.classList.toggle('open'); });
+
+// ---------------------------------------------------------------- klick = namn + mått
+let tt = 0;
+function toast(s) { const t = document.getElementById('toast'); t.textContent = s; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 3200); }
+const ray = new THREE.Raycaster(); let down = null;
+renderer.domElement.addEventListener('pointerdown', e => down = [e.clientX, e.clientY]);
+renderer.domElement.addEventListener('pointerup', e => {
+  if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 5) return;
+  ray.setFromCamera(new THREE.Vector2(e.clientX/innerWidth*2 - 1, -e.clientY/innerHeight*2 + 1), camera);
+  const hit = ray.intersectObjects(root.children, false).find(i => i.object.visible && i.object.userData.name &&
+      (!P.snitt || i.point.z <= P.snittY/1000 + 1e-4));
+  if (!hit) return;
+  const g = hit.object.geometry; g.computeBoundingBox(); const s = new THREE.Vector3(); g.boundingBox.getSize(s);
+  const dm = [s.x, s.y, s.z].map(Math.round).sort((a, b) => b - a);
+  toast(hit.object.userData.name + ' — ' + dm.join(' × ') + ' mm (omskrivande låda)');
+});
+
+// ---------------------------------------------------------------- loop
+addEventListener('resize', () => { camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); lr.setSize(innerWidth, innerHeight); });
+function frame() {
+  controls.update();
+  if (scene.fog) { const d = camera.position.distanceTo(controls.target); scene.fog.near = d - 1.5 - (1 - P.fog)*4; scene.fog.far = d + 1 + (1 - P.fog)*14; }
+  renderer.render(scene, camera); lr.render(scene, camera);
+}
+renderer.setAnimationLoop(frame);
+nb(); go('Långa takfallet');
+window.__P = P; window.__rebuild = nb; window.__views = go; window.__D = () => D; window.__frame = frame; window.__apply = applyMode;
+window.__three = {THREE, scene, renderer, camera, controls, root, ground, gui};
+</script>
+</body>
+</html>
