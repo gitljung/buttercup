@@ -92,7 +92,7 @@ const VAR = {
 };
 const VELUX = {'SK10 114×160':[1140,1600],'SK08 114×140':[1140,1400],'SK06 114×118':[1140,1180],'PK10 94×160':[940,1600],
                'MK10 78×160':[780,1600],'MK08 78×140':[780,1400],'UK08 134×140':[1340,1400],'Eget mått':null};
-const DEF = {variant:'ODLING', GolvL:3500, Djup:2800, TakV:45, HogV:80,
+const DEF = {variant:'ODLING', GolvL:3500, Djup:3000, toa:true, inred:true, TakV:45, HogV:80,
   fonster:true, velux:'SK10 114×160', KarmB:1140, KarmL:1600, FonsterS:1400,
   hyllor:true, HyllRader:4, HyllAvst:700, HyllDjup:200,
   vy:'Solid', fram:'Inget', fog:0.5, ghostOp:0.10, snitt:false, snittY:632,
@@ -103,7 +103,7 @@ const RB = 45, DorrB = 700, DorrH = 1900, KT = 8, PanelT = 22, VB = 45;
 
 // ---------------------------------------------------------------- material
 const COL = {tra:'#d2a86e', impr:'#8c8150', skiva:'#dcbd8b', papp:'#34302c', panel:'#6e5237', glas:'#a8dcf2', plat:'#b4b9be',
-             stal:'#4b4f53', velux:'#4a5157', jord:'#4b3626', vaxt:'#6f9c3c', blom:'#e9b93a', hylla:'#a8783f', person:'#C8340A'};
+             stal:'#4b4f53', velux:'#4a5157', jord:'#4b3626', vaxt:'#6f9c3c', blom:'#e9b93a', hylla:'#a8783f', person:'#C8340A', porslin:'#f4f4f1', krom:'#c9ced3'};
 const DENS = {tra:470, impr:550, skiva:520, panel:450, papp:1100, plat:7850, stal:7850, hylla:470, jord:1100};
 const ALLM = [], solidM = {}, ghostM = {}, edgeG = {};
 const white = new THREE.Color('#ffffff');
@@ -325,7 +325,7 @@ function build() {
     const kr = (sa, sb, ya, yb) => slab(Tp, Tp + 2, sa, sb, ya, yb, 'plat', 'Plåtkrage Velux');
     kr(S1 - 100, S1, y1 - 100, y2 + 100); kr(S2, S2 + 200, y1 - 100, y2 + 100); kr(S1, S2, y1 - 100, y1); kr(S1, S2, y2, y2 + 100);
     KG.velux = P.KarmL*P.KarmB*1e-6*25;
-    label(vn + ' (öppning ' + OB + '×' + OL + ')', ...(() => { const p = pt(sc, Tp + 120); return [p[0], Dj/2, p[1]]; })());
+    label(vn + ' (öppning ' + OB + '×' + OL + ')', ...(() => { const p = pt(sc, Tp + 120); return [p[0], Dj/2, p[1]]; })()).userData.g2 = 'kop';
   }
 
   // ---- HYLLOR på taket (förslag): vågräta odlingslådor på konsoler genom papp i sparrarna
@@ -361,6 +361,26 @@ function build() {
     }
   }
 
+  // ---- Ifö Spira 6260 (355 × 650 × 860, sitthöjd 420) i hörnet bakgavel/högvägg (bakgaveln har inget glas)
+  let toa = null;
+  if (P.toa) {
+    const xin = z => L2 - VD/sh - (z - G)/th, yb = Dj - VD - 10;
+    const cx = Math.min(xin(G + 1150) - 400, xin(G + 860) - 177 - 40);        // axel 400 från väggen i axelhöjd, cisternen fri från lutande väggen
+    const rb = x => G + (x + L2)*Math.tan(t);                                    // takets undersida
+    toa = {cx, fri: xin(G + 1150) - cx, front: yb - 650, takOverSits: rb(cx - 200) - G};
+    const por = (g, n) => add(g, 'porslin', 'inred', n);
+    let g = new THREE.CylinderGeometry(178, 150, 380, 32); g.scale(1, 1, 1.22); g.translate(cx, G + 190, yb - 650 + 217); por(g, 'Ifö Spira 6260 – skål');
+    g = new THREE.BoxGeometry(300, 380, 260); g.translate(cx, G + 190, yb - 190 - 130 + 60); por(g, 'Ifö Spira 6260 – fot');
+    g = new THREE.CylinderGeometry(182, 182, 30, 32); g.scale(1, 1, 1.24); g.translate(cx, G + 405, yb - 650 + 222); por(g, 'Ifö Spira 6260 – sits och lock (sitthöjd 420)');
+    g = new THREE.BoxGeometry(355, 470, 190); g.translate(cx, G + 860 - 235, yb - 95); por(g, 'Ifö Spira 6260 – cisternkåpa (höjd 860)');
+    g = new THREE.CylinderGeometry(28, 28, 6, 20); g.translate(cx, G + 863, yb - 95); add(g, 'krom', 'inred', 'Spolknapp 4/2 l');
+    KG.toa = 30;
+    label('Ifö Spira 6260', cx, yb - 330, G + 1050).userData.g2 = 'inred';
+    if (toa.fri < 380) W.push('Toaletten: för lite armbågsrum mot högväggen.');
+    if (toa.takOverSits < 1250) W.push('Toaletten: lågt i tak framför stolen.');
+    if (yb - 650 - VD < 900) W.push('Toaletten: kort fritt golv framför stolen – bredda poden.');
+  }
+
   // ---- person 180 cm
   const pg = new THREE.CapsuleGeometry(170, 1420, 6, 16); pg.translate(-300, G + 900, Dj/2 - 400);
   add(pg, 'person', 'person', 'Person 180 cm');
@@ -375,7 +395,8 @@ function build() {
   const kgG = GLAS_M2*V.GlasKg;
   const kgH = (KG.hylla||0) + (KG.jord||0) + (KG.stal && P.hyllor ? 0 : 0);
   D = {variant:P.variant, G, NH, NX, NT, TakV:P.TakV, sparrL:(sW(TH) - sF(TH)), takyta:(sTop - sF(TH) + 20)*Dj*1e-6,
-       sparrar: yS.length, kapade, fon, kg:{virke:kgV, glas:kgG, papp:KG.papp||0, plat:(KG.plat||0)+(KG.stal||0), velux:KG.velux||0, hyllor:kgH},
+       sparrar: yS.length, kapade, fon, kg:{virke:kgV, glas:kgG, papp:KG.papp||0, plat:(KG.plat||0)+(KG.stal||0), velux:KG.velux||0, hyllor:kgH, toa:KG.toa||0},
+       toa,
        nR, lmTot, jordL, warn:W, dorrRyms};
   D.kg.tot = Object.values(D.kg).reduce((a, b) => a + b, 0);
   if (NT > 4000) W.push('Nocken är ' + (NT/1000).toFixed(2).replace('.', ',') + ' m över mark – över attefallsgränsen 4,0 m.');
@@ -392,10 +413,10 @@ function applyMode() {
   scene.background = new THREE.Color(ghost ? '#11171f' : '#FCC222');
   scene.fog = ghost ? new THREE.Fog('#11171f', 5, 30) : null;
   ground.visible = !ghost && !wire; grid.visible = ghost;
-  const hl = {Inget:null, Grund:'grund', 'Vägg':'vagg', Tak:'tak', Hyllor:'hyll', 'Köpdelar':'kop'}[P.fram];
+  const hl = {Inget:null, Grund:'grund', 'Vägg':'vagg', Tak:'tak', Hyllor:'hyll', 'Köpdelar':'kop', Inredning:'inred'}[P.fram];
   for (const k in ghostM) { ghostM[k].opacity = P.ghostOp; edgeG[k].opacity = Math.min(1, .22 + P.ghostOp*2.2); }
   root.traverse(o => {
-    if (o.isCSS2DObject) { o.visible = P.matt; return; }
+    if (o.isCSS2DObject) { o.visible = P.matt && (!o.userData.g2 || P[o.userData.g2] !== false); return; }
     if (!o.isMesh || !o.userData.key) return;
     const {key, grp} = o.userData;
     o.visible = P[grp] !== false;
@@ -425,6 +446,7 @@ function info() {
   ${r('Takyta (långa fallet)', fmt(D.takyta, 1) + ' m²')}
   ${r('Takfönster', D.fon ? 'Velux ' + P.velux.split(' ')[0] + ' i växling' : 'inget')}
   ${r('Glas framgavel', V.glas)}
+  ${D.toa ? r('Toalett', 'Ifö Spira 6260, axel ' + fmt(D.toa.fri) + ' från vägg') : ''}
   ${P.hyllor ? r('Hyllor', D.nR + ' rader, ' + fmt(D.lmTot, 1) + ' m låda, ~' + fmt(D.jordL) + ' l jord') : ''}
   <tr class="h"><td colspan="2">Vikt (uppskattning)</td></tr>
   ${r('Virke + skivor + panel', fmt(k.virke) + ' kg')}
@@ -432,12 +454,13 @@ function info() {
   ${r('Dubbelpapp', fmt(k.papp) + ' kg')}
   ${r('Plåt, stål, beslag', fmt(k.plat) + ' kg')}
   ${k.velux ? r('Velux', fmt(k.velux) + ' kg') : ''}
+  ${k.toa ? r('Toalett (porslin)', fmt(k.toa) + ' kg') : ''}
   ${P.hyllor ? r('Hyllor med våt jord', fmt(k.hyllor) + ' kg') : ''}
   ${r('Totalt', '≈ ' + fmt(k.tot) + ' kg', 'tot')}
   </table>
   ${D.warn.map(w => `<div class="warn">⚠ ${w}</div>`).join('')}
   <div class="sub">Dras på medar med traktor (kätting runt dragbalken). Mått i mm, samma parametrar som Fusion-modellen.
-  Hyllor och dubbelpapp är förslag – Fusion har ännu sedum. Velux-öppningen (karm +40/+20) är antagen. Ej bygghandling: hållfasthet inte räknad.
+  Hyllor och dubbelpapp är förslag – Fusion har ännu sedum. Velux-öppningen (karm +40/+20) är antagen. Ifö Spira 6260 är en vattentoalett (S-lås, 4/2 l) – kräver vatten och avlopp/sluten tank. Ej bygghandling: hållfasthet inte räknad.
   Klicka på en del för namn och mått.</div>`;
 }
 let saveT = 0;
@@ -458,6 +481,7 @@ const views = {
   'Högvägg + framgavel': () => [V3(6.2, 4.4, -7.4), V3(0, 1.8, P.Djup/2000)],
   'Framgavel': () => [V3(0, 2.1, -10), V3(0, 1.9, P.Djup/2000)],
   'Högväggen': () => [V3(10, 2.3, P.Djup/2000 + 1.5), V3(0, 1.9, P.Djup/2000)],
+  'Toaletten': () => { P.tak = false; P.hyll = false; P.kop = false; gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(-1.4, 3.7, 0.2), V3(0.9, 0.6, P.Djup/1000 - .55)]; },
   'Uppifrån': () => [V3(0.01, 13, P.Djup/2000 + .01), V3(0, 0, P.Djup/2000)],
   'Snitt genom takstol': () => { P.snitt = true; P.snittY = Math.round(VAR[P.variant].VaggD + (P.Djup - 2*VAR[P.variant].VaggD)/(Math.ceil((P.Djup - 2*VAR[P.variant].VaggD)/600)) + 5); gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(0, 2.0, 9.5), V3(0, 1.9, 0)]; },
 };
@@ -482,6 +506,8 @@ fF.add(P, 'velux', Object.keys(VELUX)).name('Storlek').onChange(v => { if (VELUX
 fF.add(P, 'KarmB', 550, 1800, 10).name('Karm bredd mm').onChange(() => { P.velux = 'Eget mått'; gui.controllersRecursive().forEach(c => c.updateDisplay()); nb(); });
 fF.add(P, 'KarmL', 700, 2200, 10).name('Karm höjd mm').onChange(() => { P.velux = 'Eget mått'; gui.controllersRecursive().forEach(c => c.updateDisplay()); nb(); });
 fF.add(P, 'FonsterS', 500, 3000, 10).name('Från takfoten mm').onChange(nb);
+const fT = gui.addFolder('Inredning');
+fT.add(P, 'toa').name('Toalett Ifö Spira 6260').onChange(nb);
 const fH = gui.addFolder('Hyllor på taket');
 fH.add(P, 'hyllor').name('Odlingshyllor').onChange(nb);
 fH.add(P, 'HyllRader', 1, 7, 1).name('Rader (max)').onChange(nb);
@@ -489,7 +515,7 @@ fH.add(P, 'HyllAvst', 450, 1000, 10).name('Höjd mellan rader mm').onChange(nb);
 fH.add(P, 'HyllDjup', 150, 350, 10).name('Lådans djup mm').onChange(nb);
 const fS = gui.addFolder('Visning');
 fS.add(P, 'vy', ['Solid', 'Wireframe', 'Ghost']).name('Läge').onChange(applyMode);
-fS.add(P, 'fram', ['Inget', 'Grund', 'Vägg', 'Tak', 'Hyllor', 'Köpdelar']).name('Framhäv (ghost)').onChange(v => { if (v !== 'Inget' && P.vy !== 'Ghost') { P.vy = 'Ghost'; gui.controllersRecursive().forEach(c => c.updateDisplay()); } applyMode(); });
+fS.add(P, 'fram', ['Inget', 'Grund', 'Vägg', 'Tak', 'Hyllor', 'Köpdelar', 'Inredning']).name('Framhäv (ghost)').onChange(v => { if (v !== 'Inget' && P.vy !== 'Ghost') { P.vy = 'Ghost'; gui.controllersRecursive().forEach(c => c.updateDisplay()); } applyMode(); });
 fS.add(P, 'fog', 0, 1, .05).name('Dimma (ghost)').onChange(saveHash);
 fS.add(P, 'ghostOp', .03, .4, .01).name('Genomskinlighet (ghost)').onChange(applyMode);
 fS.add(P, 'snitt').name('Snitt').onChange(applyMode);
@@ -500,6 +526,7 @@ fS.add(P, 'tak').name('3 Tak').onChange(applyMode);
 fS.add(P, 'hyll').name('Hyllor').onChange(applyMode);
 fS.add(P, 'kop').name('Köpdelar').onChange(applyMode);
 fS.add(P, 'matt').name('Måttetiketter').onChange(applyMode);
+fS.add(P, 'inred').name('Inredning').onChange(applyMode);
 fS.add(P, 'person').name('Person 180 cm').onChange(applyMode);
 const fC = gui.addFolder('Kameravyer');
 for (const n of Object.keys(views)) fC.add({f: () => go(n)}, 'f').name(n);
