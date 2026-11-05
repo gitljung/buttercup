@@ -92,7 +92,7 @@ const VAR = {
 };
 const VELUX = {'SK10 114×160':[1140,1600],'SK08 114×140':[1140,1400],'SK06 114×118':[1140,1180],'PK10 94×160':[940,1600],
                'MK10 78×160':[780,1600],'MK08 78×140':[780,1400],'UK08 134×140':[1340,1400],'Eget mått':null};
-const DEF = {variant:'GRÄS', GrasT:80, skjut:true, GolvL:3500, Djup:3000, toa:true, inred:true, klad:true, inner:true, PanelOr:'Liggande 1400×900', RibbB:45, RibbSpalt:10, TakV:45, HogV:80,
+const DEF = {variant:'GRÄS', GrasT:80, skjut:true, GolvL:4600, Djup:3000, toa:true, seng:true, ForvH:400, inred:true, klad:true, inner:true, PanelOr:'Liggande 1400×900', RibbB:45, RibbSpalt:10, TakV:38, HogV:80,
   fonster:true, velux:'SK10 114×160', KarmB:1140, KarmL:1600, FonsterS:1400,
   vy:'Solid', fram:'Inget', fog:0.5, ghostOp:0.10, snitt:false, snittY:632,
   grund:true, vagg:true, tak:true, kop:true, matt:true, person:false, ljus:false};
@@ -103,7 +103,7 @@ const RB = 45, DorrB = 700, DorrH = 1900, KT = 8, PanelT = 22, VB = 45;
 
 // ---------------------------------------------------------------- material
 const COL = {tra:'#d2a86e', impr:'#8c8150', skiva:'#dcbd8b', papp:'#34302c', panel:'#6e5237', glas:'#a8dcf2', plat:'#b4b9be',
-             stal:'#4b4f53', velux:'#4a5157', jord:'#4b3626', vaxt:'#6f9c3c', blom:'#e9b93a', hylla:'#a8783f', person:'#C8340A', gras:'#4f6b2c', tuva:'#ffffff', grus:'#a9a397', porslin:'#f4f4f1', krom:'#c9ced3', plywood:'#e8d6b4', ask:'#c99d66', filt:'#1d1a18'};
+             stal:'#4b4f53', velux:'#4a5157', jord:'#4b3626', vaxt:'#6f9c3c', blom:'#e9b93a', hylla:'#a8783f', person:'#C8340A', gras:'#4f6b2c', tuva:'#ffffff', grus:'#a9a397', porslin:'#f4f4f1', madrass:'#f1ece2', skap:'#e3cfaa', tacke:'#cfc6b2', kudde:'#fbf8f2', front:'#efe2c6', krom:'#c9ced3', plywood:'#e8d6b4', ask:'#c99d66', filt:'#1d1a18'};
 const DENS = {gras:1200, grus:1700, plywood:680, ask:680, filt:150, tra:470, impr:550, skiva:520, panel:450, papp:1100, plat:7850, stal:7850, hylla:470, jord:1100};
 const ALLM = [], solidM = {}, ghostM = {}, edgeG = {};
 const white = new THREE.Color('#ffffff');
@@ -202,6 +202,7 @@ function build() {
   const under = q => p => tRel(p) - q;                                            // behåll q-linjen och under
   const innanf = off => p => p[0] + (p[1]-G)/th - (L2 - off/sh);
   const xout = z => L2 - (z-G)/th;
+  const xin0 = z => L2 - VD/sh - (z - G)/th - (P.klad ? 9/sh : 0);
   const Tp = TH + TT + KT, GR = P.variant === 'GRÄS' ? P.GrasT : 0, Tt = Tp + GR;   // Tp = papp-ovansida, Tt = takets topp (gräs)
   const sTop = sW(Tt), NT = pt(sTop, Tt)[1];
 
@@ -401,12 +402,15 @@ function build() {
       } else prismY(poly, ya, yb, key, 'inner', nm);
     };
     del(filt, yA, yB, 'filt', 'Svart akustikfilt');
+    const n0 = root.children.length;
     const rib = remsa(-CT, -FT), cc = P.RibbB + P.RibbSpalt, nRib = Math.floor((yB - yA + P.RibbSpalt)/cc), y0r = yA + (yB - yA - (nRib*cc - P.RibbSpalt))/2;
     for (let i = 0; i < nRib; i++) del(rib, y0r + i*cc, y0r + i*cc + P.RibbB, 'ask', 'Ribba ask ' + RT + '×' + P.RibbB + ' mattoljad');
     if (fon) {                                                                     // smygar runt takfönstret
       const sm = (sa, sb, ya, yb) => prismY([pt(sa, -CT), pt(sb, -CT), pt(sb, TH - 60 + (GR ? Tt + 60 - (TH + 38) : 0)), pt(sa, TH - 60 + (GR ? Tt + 60 - (TH + 38) : 0))], ya, yb, 'ask', 'inner', 'Smyg ask 12');
       sm(S1, S2, y1, y1 + 12); sm(S1, S2, y2 - 12, y2); sm(S1, S1 + 12, y1 + 12, y2 - 12); sm(S2 - 12, S2, y1 + 12, y2 - 12);
     }
+    for (let i = n0; i < root.children.length; i++) root.children[i].userData.grp = 'innertak';
+    root.children[n0 - 1].userData.grp = 'innertak'; if (hal) for (let i = n0 - 4; i < n0; i++) if (root.children[i].userData.key === 'filt') root.children[i].userData.grp = 'innertak';
     D_klad = {nRib, pw, ph};
   }
 
@@ -430,8 +434,39 @@ function build() {
     if (yb - 650 - VD < 900) W.push('Toaletten: kort fritt golv framför stolen – bredda poden.');
   }
 
+  // ---- SÄNG 180×200 på förvaringsskåp (ForvH) + två väggmonterade nattduksbord, huvudänden mot bakgaveln
+  let seng = null;
+  if (P.seng) {
+    const MH = 200, top = P.ForvH + MH, NS = 400, NSD = 300, ybk = Dj - VD - (P.klad ? 9 : 0);
+    const ceil = x => (x + L2)*Math.tan(t) - (P.klad ? 24 : 0);                  // takhöjd över golv vid x
+    const xa = -L2 + (top + 150 + 24)/Math.tan(t) + NS;                         // vänster nattduksbord måste få plats under snedtaket
+    const xb = xa + 1800, ya = ybk - 2010, yb = ybk - 10;
+    const toaV = toa ? toa.cx - 178 : 1e9;
+    seng = {xa, xb, fri: toaV - (xb + NS), takVidHuvud: ceil((xa + xb)/2) - top, gang: xin0(G + 900) - Math.max(xb, -1e9)};
+    if (seng.fri < 20) W.push('Sängen + högra nattduksbordet krockar med toaletten – öka golvlängden (' + Math.round(-seng.fri + 20) + ' mm fattas).');
+    // förvaringsskåp: stomme + luckor mot fotänden och mot gången
+    box(xa, xb, ya, yb, G, G + P.ForvH - 20, 'skap', 'inred', 'Förvaringsskåp under säng, h ' + P.ForvH);
+    box(xa, xb, ya, yb, G + P.ForvH - 20, G + P.ForvH, 'skap', 'inred', 'Sängbotten plywood 20');
+    const nl = 3, lw = 1800/nl;
+    for (let i = 0; i < nl; i++) box(xa + i*lw + 4, xa + (i + 1)*lw - 4, ya - 18, ya, G + 70, G + P.ForvH - 26, 'front', 'inred', 'Låda fotände ' + Math.round(lw - 8) + '×' + (P.ForvH - 96));
+    const nr = 3, rw = 2000/nr;
+    for (let i = 0; i < nr; i++) box(xb, xb + 18, ya + i*rw + 4, ya + (i + 1)*rw - 4, G + 70, G + P.ForvH - 26, 'front', 'inred', 'Skåplucka sida ' + Math.round(rw - 8) + '×' + (P.ForvH - 96));
+    box(xa + 60, xb - 60, ya + 60, yb - 60, G, G + 70, 'impr', 'inred', 'Sockel (indragen 60)');
+    box(xa + 10, xb - 10, ya + 10, yb - 10, G + P.ForvH, G + top, 'madrass', 'inred', 'Madrass 180×200');
+    box(xa + 20, xb - 20, ya + 30, yb - 520, G + top, G + top + 60, 'tacke', 'inred', 'Täcke');
+    for (const xc of [xa + 450, xb - 450]) { const g = new THREE.CapsuleGeometry(60, 520, 4, 12); g.rotateZ(Math.PI/2); g.scale(1, .9, 2.8); g.translate(xc, G + top + 60, yb - 270); add(g, 'kudde', 'inred', 'Kudde'); }
+    // nattduksbord: väggmonterade lådor på bakgaveln, ovansida 50 över madrassen
+    for (const [x0, nm] of [[xa - NS - 30, 'vänster'], [xb + 30, 'höger']]) {
+      box(x0, x0 + NS, ybk - NSD, ybk, G + top - 130, G + top + 50, 'ask', 'inred', 'Nattduksbord ' + nm + ' ' + NS + '×' + NSD + ' (väggmonterat)');
+      box(x0 + 20, x0 + NS - 20, ybk - NSD - 3, ybk - NSD, G + top - 110, G + top + 30, 'front', 'inred', 'Låda');
+    }
+    KG.seng = 75 + 35 + 2*8;
+    label('Säng 180×200, förvaring ' + P.ForvH, (xa + xb)/2, ya - 200, G + top + 250).userData.g2 = 'inred';
+    if (seng.takVidHuvud < 900) W.push('Lågt över sängen: ' + Math.round(seng.takVidHuvud) + ' mm från madrass till tak mitt på sängen.');
+  }
+
   // ---- person 180 cm
-  const pg = new THREE.CapsuleGeometry(170, 1420, 6, 16); pg.translate(-300, G + 900, Dj/2 - 400);
+  const pg = new THREE.CapsuleGeometry(170, 1420, 6, 16); pg.translate(L2 - 900, G + 900, 700);
   add(pg, 'person', 'person', 'Person 180 cm');
 
   // ---- mått
@@ -444,7 +479,8 @@ function build() {
   const kgK = (KG.plywood||0) + (KG.ask||0) + (KG.filt||0);
   const kgG = GLAS_M2*V.GlasKg;
   D = {variant:P.variant, G, NH, NX, NT, TakV:P.TakV, sparrL:(sW(TH) - sF(TH)), takyta:(sTop - sF(TH) + 20)*Dj*1e-6,
-       sparrar: yS.length, kapade, fon, kg:{virke:kgV, glas:kgG, papp:KG.papp||0, plat:(KG.plat||0)+(KG.stal||0), velux:KG.velux||0, gras:KG.gras||0, toa:KG.toa||0, klad:kgK},
+       sparrar: yS.length, kapade, fon, kg:{virke:kgV, glas:kgG, papp:KG.papp||0, plat:(KG.plat||0)+(KG.stal||0), velux:KG.velux||0, gras:KG.gras||0, toa:KG.toa||0, seng:KG.seng||0, klad:kgK},
+       seng,
        klad:D_klad,
        toa,
        warn:W, dorrRyms, GR};
@@ -470,7 +506,7 @@ function applyMode() {
     if (o.isCSS2DObject) { o.visible = P.matt && (!o.userData.g2 || P[o.userData.g2] !== false) && !(o.userData.g2 === 'inred' && P.tak && P.vy === 'Solid'); return; }
     if (!o.isMesh || !o.userData.key) return;
     const {key, grp} = o.userData;
-    o.visible = P[grp] !== false;
+    o.visible = grp === 'innertak' ? (P.inner && P.tak) : P[grp] !== false;
     const ghostIt = ghost && hl !== grp;
     o.material = wire ? NONE : ghostIt ? ghostM[key] : solidM[key];
     o.castShadow = !ghost && !wire;
@@ -499,6 +535,7 @@ function info() {
   ${r('Takfönster', D.fon ? 'Velux ' + P.velux.split(' ')[0] + ' i växling' : 'inget')}
   ${r('Glas framgavel', V.glas)}
   ${D.klad ? r('Väggar', 'plywood 9 mm, ' + D.klad.pw + '×' + D.klad.ph) + r('Innertak', D.klad.nRib + ' ribbor ask ' + P.RibbB + ' / spalt ' + P.RibbSpalt) : ''}
+  ${D.seng ? r('Säng', '180×200, ' + fmt(D.seng.takVidHuvud) + ' fritt över madrass') : ''}
   ${D.toa ? r('Toalett', 'Ifö Spira 6260, axel ' + fmt(D.toa.fri) + ' från vägg') : ''}
   <tr class="h"><td colspan="2">Vikt (uppskattning)</td></tr>
   ${r('Virke + skivor + panel', fmt(k.virke) + ' kg')}
@@ -508,6 +545,7 @@ function info() {
   ${k.velux ? r('Velux', fmt(k.velux) + ' kg') : ''}
   ${k.klad ? r('Invändig klädsel', fmt(k.klad) + ' kg') : ''}
   ${k.gras ? r('Grästak, vattenmättat', fmt(k.gras) + ' kg') : ''}
+  ${k.seng ? r('Säng + förvaring + nattduksbord', fmt(k.seng) + ' kg') : ''}
   ${k.toa ? r('Toalett (porslin)', fmt(k.toa) + ' kg') : ''}
   ${r('Totalt', '≈ ' + fmt(k.tot) + ' kg', 'tot')}
   </table>
@@ -535,7 +573,8 @@ const views = {
   'Framgavel': () => [V3(0, 2.1, -10), V3(0, 1.9, P.Djup/2000)],
   'Högväggen': () => [V3(10, 2.3, P.Djup/2000 + 1.5), V3(0, 1.9, P.Djup/2000)],
   'Toaletten': () => { P.tak = false; P.kop = false; gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(-1.4, 3.7, 0.2), V3(0.9, 0.6, P.Djup/1000 - .55)]; },
-  'Interiör': () => { P.vagg = true; P.tak = true; P.ljus = true; P.snitt = false; gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(-0.45, 1.35, 0.25), V3(0.7, 1.55, P.Djup/1000 - .4)]; },
+  'Interiör': () => { P.vagg = true; P.tak = true; P.kop = true; P.inner = true; P.ljus = true; P.snitt = false; gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(P.GolvL/2000 - 0.75, 1.75, 0.35), V3(-0.25, 0.75, P.Djup/1000 - 1.0)]; },
+  'Sovdelen': () => { P.tak = false; P.kop = false; gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(1.2, 5.6, P.Djup/1000 - 3.2), V3(0.1, 0.5, P.Djup/1000 - 1.1)]; },
   'Uppifrån': () => [V3(0.01, 13, P.Djup/2000 + .01), V3(0, 0, P.Djup/2000)],
   'Snitt genom takstol': () => { P.snitt = true; P.snittY = Math.round(VAR[P.variant].VaggD + (P.Djup - 2*VAR[P.variant].VaggD)/(Math.ceil((P.Djup - 2*VAR[P.variant].VaggD)/600)) + 5); gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(0, 2.0, 9.5), V3(0, 1.9, 0)]; },
 };
@@ -565,6 +604,8 @@ fF.add(P, 'KarmL', 700, 2200, 10).name('Karm höjd mm').onChange(() => { P.velux
 fF.add(P, 'FonsterS', 500, 3000, 10).name('Från takfoten mm').onChange(nb);
 const fT = gui.addFolder('Inredning');
 fT.add(P, 'toa').name('Toalett Ifö Spira 6260').onChange(nb);
+fT.add(P, 'seng').name('Säng 180 + nattduksbord').onChange(nb);
+fT.add(P, 'ForvH', 200, 600, 10).name('Förvaring under säng mm').onChange(nb);
 fT.add(P, 'klad').name('Invändig klädsel').onChange(nb);
 fT.add(P, 'PanelOr', ['Liggande 1400×900', 'Stående 900×1400']).name('Plywoodskivor').onChange(nb);
 fT.add(P, 'RibbB', 25, 95, 1).name('Ribba bredd mm').onChange(nb);
