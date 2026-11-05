@@ -9,14 +9,14 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="buttercup.nu">
 <meta property="og:title" content="Naturepod – flyttbar hytt på medar">
-<meta property="og:description" content="Interaktiv 3D-modell: takvinkel, Velux-takfönster, odlingshyllor på taket. Solid, wireframe och ghost-läge.">
+<meta property="og:description" content="Interaktiv 3D-modell: takvinkel, Velux-takfönster, grästak. Solid, wireframe och ghost-läge.">
 <meta property="og:url" content="https://www.buttercup.nu/naturepod/">
 <meta property="og:image" content="https://www.buttercup.nu/naturepod/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.buttercup.nu/naturepod/og.jpg">
-<meta name="description" content="Interaktiv 3D-modell: takvinkel, Velux-takfönster, odlingshyllor på taket. Solid, wireframe och ghost-läge.">
+<meta name="description" content="Interaktiv 3D-modell: takvinkel, Velux-takfönster, grästak. Solid, wireframe och ghost-läge.">
 <!--/OG-->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@700&family=Barlow:wght@400;500;600&display=swap">
 <style>
@@ -87,24 +87,24 @@ import GUI from 'lil-gui';
 
 // ---------------------------------------------------------------- parametrar (samma namn som Fusion-modellen naturepod/Naturepod)
 const VAR = {
-  ODLING: {MedH:225, BjalkH:195, GolvT:22, VaggD:120, TakH:170, TakT:18, GlasT:24, GlasKg:20, glas:'isolerglas 4-16-4'},
+  'GRÄS': {MedH:225, BjalkH:195, GolvT:22, VaggD:120, TakH:170, TakT:18, GlasT:24, GlasKg:20, glas:'isolerglas 4-16-4'},
   LIGHT:  {MedH:195, BjalkH:145, GolvT:18, VaggD:70,  TakH:120, TakT:12, GlasT:6,  GlasKg:15, glas:'enkelglas 6 mm'},
 };
 const VELUX = {'SK10 114×160':[1140,1600],'SK08 114×140':[1140,1400],'SK06 114×118':[1140,1180],'PK10 94×160':[940,1600],
                'MK10 78×160':[780,1600],'MK08 78×140':[780,1400],'UK08 134×140':[1340,1400],'Eget mått':null};
-const DEF = {variant:'ODLING', GolvL:3500, Djup:3000, toa:true, inred:true, klad:true, inner:true, PanelOr:'Liggande 1400×900', RibbB:45, RibbSpalt:10, TakV:45, HogV:80,
+const DEF = {variant:'GRÄS', GrasT:80, skjut:true, GolvL:3500, Djup:3000, toa:true, inred:true, klad:true, inner:true, PanelOr:'Liggande 1400×900', RibbB:45, RibbSpalt:10, TakV:45, HogV:80,
   fonster:true, velux:'SK10 114×160', KarmB:1140, KarmL:1600, FonsterS:1400,
-  hyllor:true, HyllRader:4, HyllAvst:700, HyllDjup:200,
   vy:'Solid', fram:'Inget', fog:0.5, ghostOp:0.10, snitt:false, snittY:632,
-  grund:true, vagg:true, tak:true, hyll:true, kop:true, matt:true, person:false, ljus:false};
+  grund:true, vagg:true, tak:true, kop:true, matt:true, person:false, ljus:false};
 const P = {...DEF};
 try { const m = location.hash.match(/c=([^&]+)/); if (m) Object.assign(P, JSON.parse(decodeURIComponent(m[1]))); } catch(e) {}
+if (!VAR[P.variant]) P.variant = 'GRÄS';
 const RB = 45, DorrB = 700, DorrH = 1900, KT = 8, PanelT = 22, VB = 45;
 
 // ---------------------------------------------------------------- material
 const COL = {tra:'#d2a86e', impr:'#8c8150', skiva:'#dcbd8b', papp:'#34302c', panel:'#6e5237', glas:'#a8dcf2', plat:'#b4b9be',
-             stal:'#4b4f53', velux:'#4a5157', jord:'#4b3626', vaxt:'#6f9c3c', blom:'#e9b93a', hylla:'#a8783f', person:'#C8340A', porslin:'#f4f4f1', krom:'#c9ced3', plywood:'#e8d6b4', ask:'#c99d66', filt:'#1d1a18'};
-const DENS = {plywood:680, ask:680, filt:150, tra:470, impr:550, skiva:520, panel:450, papp:1100, plat:7850, stal:7850, hylla:470, jord:1100};
+             stal:'#4b4f53', velux:'#4a5157', jord:'#4b3626', vaxt:'#6f9c3c', blom:'#e9b93a', hylla:'#a8783f', person:'#C8340A', gras:'#4f6b2c', tuva:'#ffffff', grus:'#a9a397', porslin:'#f4f4f1', krom:'#c9ced3', plywood:'#e8d6b4', ask:'#c99d66', filt:'#1d1a18'};
+const DENS = {gras:1200, grus:1700, plywood:680, ask:680, filt:150, tra:470, impr:550, skiva:520, panel:450, papp:1100, plat:7850, stal:7850, hylla:470, jord:1100};
 const ALLM = [], solidM = {}, ghostM = {}, edgeG = {};
 const white = new THREE.Color('#ffffff');
 for (const [k, c] of Object.entries(COL)) {
@@ -116,6 +116,11 @@ for (const [k, c] of Object.entries(COL)) {
   edgeG[k] = new THREE.LineBasicMaterial({color: lc, transparent:true, opacity:.6, depthWrite:false, blending:THREE.AdditiveBlending});
   ALLM.push(solidM[k], ghostM[k], edgeG[k]);
 }
+{ const cv = document.createElement('canvas'); cv.width = cv.height = 256; const x = cv.getContext('2d');
+  x.fillStyle = '#56742f'; x.fillRect(0, 0, 256, 256);
+  for (let i = 0; i < 2600; i++) { x.fillStyle = ['#4a6a28', '#6b8f3a', '#3f5a22', '#7fa046', '#8a7d3c'][i % 5]; x.globalAlpha = .55; x.fillRect(Math.random()*256, Math.random()*256, 2 + Math.random()*3, 2 + Math.random()*5); }
+  const tx = new THREE.CanvasTexture(cv); tx.wrapS = tx.wrapT = THREE.RepeatWrapping; tx.repeat.set(1/450, 1/450); tx.colorSpace = THREE.SRGBColorSpace;
+  solidM.gras.map = tx; solidM.gras.color.set('#ffffff'); }
 const edgeS = new THREE.LineBasicMaterial({color:'#2A1206', transparent:true, opacity:.3});
 const edgeW = new THREE.LineBasicMaterial({color:'#2A1206'});
 const NONE = new THREE.MeshBasicMaterial({visible:false});
@@ -149,7 +154,7 @@ const area = pts => { let a = 0; for (let i = 0; i < pts.length; i++) { const p 
 function add(g, key, grp, name, vol) {
   const m = new THREE.Mesh(g, solidM[key]); m.userData = {key, grp, name};
   m.castShadow = m.receiveShadow = true;
-  if (!['vaxt','blom','person','filt'].includes(key)) { const e = new THREE.LineSegments(new THREE.EdgesGeometry(g, 20), edgeS); e.raycast = () => {}; m.add(e); m.userData.edge = e; }
+  if (!['vaxt','blom','person','filt','gras'].includes(key)) { const e = new THREE.LineSegments(new THREE.EdgesGeometry(g, 20), edgeS); e.raycast = () => {}; m.add(e); m.userData.edge = e; }
   root.add(m);
   if (DENS[key] && vol) KG[key] = (KG[key]||0) + vol*1e-9*DENS[key];
   return m;
@@ -197,8 +202,8 @@ function build() {
   const under = q => p => tRel(p) - q;                                            // behåll q-linjen och under
   const innanf = off => p => p[0] + (p[1]-G)/th - (L2 - off/sh);
   const xout = z => L2 - (z-G)/th;
-  const Tp = TH + TT + KT;
-  const sTop = sW(Tp), NT = pt(sTop, Tp)[1];
+  const Tp = TH + TT + KT, GR = P.variant === 'GRÄS' ? P.GrasT : 0, Tt = Tp + GR;   // Tp = papp-ovansida, Tt = takets topp (gräs)
+  const sTop = sW(Tt), NT = pt(sTop, Tt)[1];
 
   // ---- 1 GRUND OCH GOLV
   const mx = L2 + 400;
@@ -299,11 +304,11 @@ function build() {
   lager(TH, TH + TT, sF(TH), 'skiva', 'Takskiva plywood ' + TT);
   lager(TH + TT, Tp, sF(TH) - 20, 'papp', 'Dubbelpapp (underlag + ytpapp)');
   for (const [y0, y1v] of [[-PanelT, 0], [Dj, Dj + PanelT]])
-    prismY([pt(sF(TH) - 22, TH - 60), pt(sW(TH - 60), TH - 60), pt(sW(Tp + 20), Tp + 20), pt(sF(TH) - 22, Tp + 20)], y0, y1v, 'panel', 'tak', 'Vindskiva 22');
+    prismY([pt(sF(TH) - 22, TH - 60), pt(sW(TH - 60), TH - 60), pt(sW(Tt + 20), Tt + 20), pt(sF(TH) - 22, Tt + 20)], y0, y1v, 'panel', 'tak', GR ? 'Vindskiva 22 (håller gräset)' : 'Vindskiva 22');
   // nockplåt
-  const xp = xout(NT) + PanelT/sh, sXp = (xp + L2 + S*Tp)/c;
-  slab(Tp, Tp + 2, sTop - 150, sXp + 2, -PanelT, Dj + PanelT, 'plat', 'Nockplåt 0,7');
-  prismY([[xp, NT - 150], [xp + 2, NT - 150], [xp + 2, G + (xp + 2 + L2)*Math.tan(t) + (Tp + 2)/c], [xp, G + (xp + L2)*Math.tan(t) + Tp/c]], -PanelT, Dj + PanelT, 'plat', 'tak', 'Nockplåt 0,7');
+  const xp = xout(NT) + PanelT/sh, sXp = (xp + L2 + S*Tt)/c;
+  slab(Tt, Tt + 2, sTop - 150, sXp + 2, -PanelT, Dj + PanelT, 'plat', 'Nockplåt 0,7');
+  prismY([[xp, NT - 150], [xp + 2, NT - 150], [xp + 2, G + (xp + 2 + L2)*Math.tan(t) + (Tt + 2)/c], [xp, G + (xp + L2)*Math.tan(t) + Tt/c]], -PanelT, Dj + PanelT, 'plat', 'tak', 'Nockplåt 0,7');
   // spikplåtar vid nocken (båda sidor av sparre + stolpe)
   for (const y of yS) for (const yy of [y - 24, y + 22.5]) {
     const s0 = sW(0) - 230;
@@ -318,48 +323,46 @@ function build() {
     slab(0, TH, S1, S2, y1 - 45, y1, 'tra', 'Fönsterregel 45×' + TH);
     slab(0, TH, S1, S2, y2, y2 + 45, 'tra', 'Fönsterregel 45×' + TH);
     // Velux: karm (ring 60), glas, plåtkrage
-    const sc = (S1 + S2)/2, a0 = sc - P.KarmL/2, a1 = sc + P.KarmL/2, b0 = Dj/2 - P.KarmB/2, b1 = Dj/2 + P.KarmB/2, k0 = TH - 60, k1 = TH - 60 + 98;
+    const sc = (S1 + S2)/2, a0 = sc - P.KarmL/2, a1 = sc + P.KarmL/2, b0 = Dj/2 - P.KarmB/2, b1 = Dj/2 + P.KarmB/2, dk = GR ? Tt + 60 - (TH + 38) : 0, k0 = TH - 60 + dk, k1 = TH - 60 + 98 + dk;
     const vn = 'Velux GGL ' + P.velux.split(' ')[0];
     const vk = (sa, sb, ya, yb) => prismY([pt(sa, k0), pt(sb, k0), pt(sb, k1), pt(sa, k1)], ya, yb, 'velux', 'kop', vn);
     vk(a0, a1, b0, b0 + 60); vk(a0, a1, b1 - 60, b1); vk(a0, a0 + 60, b0 + 60, b1 - 60); vk(a1 - 60, a1, b0 + 60, b1 - 60);
     prismY([pt(a0 + 60, k1 - 30), pt(a1 - 60, k1 - 30), pt(a1 - 60, k1 - 26), pt(a0 + 60, k1 - 26)], b0 + 60, b1 - 60, 'glas', 'kop', vn + ' – glas');
     const kr = (sa, sb, ya, yb) => slab(Tp, Tp + 2, sa, sb, ya, yb, 'plat', 'Plåtkrage Velux');
+    if (GR) { const up = (sa, sb, ya, yb) => slab(Tp, k0 + 10, sa, sb, ya, yb, 'plat', 'Karmförhöjning plåt (över gräset)');
+      up(S1, S2, y1, y1 + 3); up(S1, S2, y2 - 3, y2); up(S1, S1 + 3, y1, y2); up(S2 - 3, S2, y1, y2); }
     kr(S1 - 100, S1, y1 - 100, y2 + 100); kr(S2, S2 + 200, y1 - 100, y2 + 100); kr(S1, S2, y1 - 100, y1); kr(S1, S2, y2, y2 + 100);
     KG.velux = P.KarmL*P.KarmB*1e-6*25;
-    label(vn + ' (öppning ' + OB + '×' + OL + ')', ...(() => { const p = pt(sc, Tp + 120); return [p[0], Dj/2, p[1]]; })()).userData.g2 = 'kop';
+    label(vn + ' (öppning ' + OB + '×' + OL + ')', ...(() => { const p = pt(sc, Tt + 140); return [p[0], Dj/2, p[1]]; })()).userData.g2 = 'kop';
   }
 
-  // ---- HYLLOR på taket (förslag): vågräta odlingslådor på konsoler genom papp i sparrarna
-  let nR = 0, lmTot = 0, jordL = 0;
-  if (P.hyllor) {
-    const zTop = x => G + (x + L2)*Math.tan(t) + Tp/c;
-    for (let i = 0; i < P.HyllRader; i++) {
-      const z0 = G + 450 + i*P.HyllAvst, sb = (z0 - G - c*(Tp + 30))/S;
-      if (sb > sTop - 250) break;
-      const xb = pt(sb, Tp + 30)[0], xa = xb - P.HyllDjup;
-      if (xa < -L2 - TH/S) continue;
-      nR++;
-      const sa_ = (xa + L2 + S*Tp)/c, sb_ = (xb + L2 + S*Tp)/c;
-      let segs = [[60, Dj - 60]];
-      if (fon && sb_ + 150 > S1 - 100 && sa_ - 150 < S2 + 200) segs = [[60, y1 - 160], [y2 + 160, Dj - 60]].filter(s => s[1] - s[0] > 300);
-      for (const [ya, yb] of segs) {
-        lmTot += (yb - ya)/1000;
-        box(xa, xb, ya, yb, z0, z0 + 22, 'hylla', 'hyll', 'Odlingslåda – botten');
-        box(xa, xa + 22, ya, yb, z0 + 22, z0 + 150, 'hylla', 'hyll', 'Odlingslåda – fram');
-        box(xb - 22, xb, ya, yb, z0 + 22, z0 + 150, 'hylla', 'hyll', 'Odlingslåda – bak');
-        box(xa + 22, xb - 22, ya, ya + 22, z0 + 22, z0 + 150, 'hylla', 'hyll', 'Odlingslåda – gavel');
-        box(xa + 22, xb - 22, yb - 22, yb, z0 + 22, z0 + 150, 'hylla', 'hyll', 'Odlingslåda – gavel');
-        box(xa + 22, xb - 22, ya + 22, yb - 22, z0 + 22, z0 + 125, 'jord', 'hyll', 'Jord');
-        jordL += (xb - xa - 44)*(yb - ya - 44)*103*1e-6;
-        for (let y = ya + 70; y < yb - 50; y += 95 + rnd()*40) {
-          const r = 35 + rnd()*35, g = new THREE.IcosahedronGeometry(r, 1);
-          g.scale(1, .75, 1); g.translate(xa + 50 + rnd()*(xb - xa - 100), z0 + 125 + r*.45, y);
-          add(g, rnd() < .18 ? 'blom' : 'vaxt', 'hyll', 'Växt');
-        }
-        for (const y of [...yS, 22.5, Dj - 22.5]) if (y > ya + 30 && y < yb - 30 && !(fon && y > cLo && y < cHi && false))
-          prismY([[xb, zTop(xb)], [xb, z0], [xa + 25, z0], [xa + 25, zTop(xa + 25)]], y - 4, y + 4, 'stal', 'hyll', 'Konsol 8 mm (skruv genom papp i sparre)');
-      }
+  // ---- GRÄSTAK (Hugo: trots lutningen) – dränmatta/substrat + gräs på dubbelpapp, skjutskydd och takfotslist
+  if (GR) {
+    const g0 = sF(TH) + 30, mg = 100;                                           // grusremsa 100 runt takfönstret
+    const gl = (s0, s1, ya, yb) => prismY([pt(s0, Tp), s1 === null ? pt(sW(Tp), Tp) : pt(s1, Tp), s1 === null ? pt(sW(Tt), Tt) : pt(s1, Tt), pt(s0, Tt)], ya, yb, 'gras', 'tak', 'Grästak ' + GR + ' mm (substrat + vegetation)');
+    if (!fon) gl(g0, null, 0, Dj);
+    else { gl(g0, S1 - mg, 0, Dj); gl(S2 + mg, null, 0, Dj); gl(S1 - mg, S2 + mg, 0, y1 - mg); gl(S1 - mg, S2 + mg, y2 + mg, Dj);
+      const gr = (s0, s1, ya, yb) => prismY([pt(s0, Tp + 2), pt(s1, Tp + 2), pt(s1, Tp + 32), pt(s0, Tp + 32)], ya, yb, 'grus', 'tak', 'Grusremsa');
+      gr(S1 - mg, S1, y1 - mg, y2 + mg); gr(S2, S2 + mg, y1 - mg, y2 + mg); gr(S1, S2, y1 - mg, y1); gr(S1, S2, y2, y2 + mg); }
+    prismY([pt(sF(TH) - 20, Tp), pt(sF(TH) + 30, Tp), pt(sF(TH) + 30, Tt + 20), pt(sF(TH) - 20, Tt + 20)], 0, Dj, 'impr', 'tak', 'Takfotslist 50 trä (håller gräset)');
+    if (P.skjut) for (let sL = g0 + 500; sL < sTop - 200; sL += 500) {
+      const lst = (ya, yb) => prismY([pt(sL, Tp + 2), pt(sL + 45, Tp + 2), pt(sL + 45, Tp + 2 + Math.min(50, GR - 10)), pt(sL, Tp + 2 + Math.min(50, GR - 10))], ya, yb, 'impr', 'tak', 'Skjutskydd läkt 45×50 c/c 500');
+      if (fon && sL + 45 > S1 - mg && sL < S2 + mg) { lst(0, y1 - mg); lst(y2 + mg, Dj); } else lst(0, Dj);
     }
+    // tuvor
+    const tuft = new THREE.ConeGeometry(16, 85, 5); tuft.translate(0, 38, 0);
+    const N = Math.round((sTop - g0)*Dj*1e-6*160), im = new THREE.InstancedMesh(tuft, solidM.tuva, N);
+    const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), col = new THREE.Color(); let n = 0;
+    for (let i = 0; i < N*1.4 && n < N; i++) {
+      const s_ = g0 + 40 + rnd()*(sTop - g0 - 120), y_ = 25 + rnd()*(Dj - 50);
+      if (fon && s_ > S1 - mg - 30 && s_ < S2 + mg + 30 && y_ > y1 - mg - 30 && y_ < y2 + mg + 30) continue;
+      const p = pt(s_, Tt - 10), k = .6 + rnd()*.9;
+      e.set((rnd() - .5)*.5, rnd()*6.3, (rnd() - .5)*.5); q.setFromEuler(e);
+      m4.compose(new THREE.Vector3(p[0], p[1], y_), q, new THREE.Vector3(k, k*(.7 + rnd()*.8), k)); im.setMatrixAt(n, m4);
+      im.setColorAt(n, col.set(rnd() < .08 ? '#c9b24a' : rnd() < .5 ? '#5f8f35' : '#7aa845').offsetHSL(0, 0, (rnd() - .5)*.08)); n++;
+    }
+    im.count = n; im.castShadow = true; im.userData = {key:'tuva', grp:'tak', name:'Gräs'}; root.add(im);
+    KG.gras = (KG.gras||0);
   }
 
   // ---- INVÄNDIG KLÄDSEL: plywood 9 mm (ljus beige) på högvägg + bakgavel, ribbtak i mattoljad ask på svart filt
@@ -401,7 +404,7 @@ function build() {
     const rib = remsa(-CT, -FT), cc = P.RibbB + P.RibbSpalt, nRib = Math.floor((yB - yA + P.RibbSpalt)/cc), y0r = yA + (yB - yA - (nRib*cc - P.RibbSpalt))/2;
     for (let i = 0; i < nRib; i++) del(rib, y0r + i*cc, y0r + i*cc + P.RibbB, 'ask', 'Ribba ask ' + RT + '×' + P.RibbB + ' mattoljad');
     if (fon) {                                                                     // smygar runt takfönstret
-      const sm = (sa, sb, ya, yb) => prismY([pt(sa, -CT), pt(sb, -CT), pt(sb, TH - 60), pt(sa, TH - 60)], ya, yb, 'ask', 'inner', 'Smyg ask 12');
+      const sm = (sa, sb, ya, yb) => prismY([pt(sa, -CT), pt(sb, -CT), pt(sb, TH - 60 + (GR ? Tt + 60 - (TH + 38) : 0)), pt(sa, TH - 60 + (GR ? Tt + 60 - (TH + 38) : 0))], ya, yb, 'ask', 'inner', 'Smyg ask 12');
       sm(S1, S2, y1, y1 + 12); sm(S1, S2, y2 - 12, y2); sm(S1, S1 + 12, y1 + 12, y2 - 12); sm(S2 - 12, S2, y1 + 12, y2 - 12);
     }
     D_klad = {nRib, pw, ph};
@@ -434,21 +437,21 @@ function build() {
   // ---- mått
   label('Nock ' + (NT/1000).toFixed(2).replace('.', ',') + ' m ö. mark', xout(NT) + 250, -150, NT + 120, NT > 4000);
   label('Golv ' + (P.GolvL/1000).toFixed(2).replace('.', ',') + ' × ' + (Dj/1000).toFixed(2).replace('.', ',') + ' m', 0, -350, G);
-  label('Takfall ' + P.TakV + '°', ...(() => { const p = pt(sW(0)*.32, Tp + 150); return [p[0], -200, p[1]]; })());
+  label('Takfall ' + P.TakV + '°', ...(() => { const p = pt(sW(0)*.32, Tt + 150); return [p[0], -200, p[1]]; })());
 
   // ---- vikt + info
   const kgV = (KG.tra||0) + (KG.impr||0) + (KG.skiva||0) + (KG.panel||0);
   const kgK = (KG.plywood||0) + (KG.ask||0) + (KG.filt||0);
   const kgG = GLAS_M2*V.GlasKg;
-  const kgH = (KG.hylla||0) + (KG.jord||0) + (KG.stal && P.hyllor ? 0 : 0);
   D = {variant:P.variant, G, NH, NX, NT, TakV:P.TakV, sparrL:(sW(TH) - sF(TH)), takyta:(sTop - sF(TH) + 20)*Dj*1e-6,
-       sparrar: yS.length, kapade, fon, kg:{virke:kgV, glas:kgG, papp:KG.papp||0, plat:(KG.plat||0)+(KG.stal||0), velux:KG.velux||0, hyllor:kgH, toa:KG.toa||0, klad:kgK},
+       sparrar: yS.length, kapade, fon, kg:{virke:kgV, glas:kgG, papp:KG.papp||0, plat:(KG.plat||0)+(KG.stal||0), velux:KG.velux||0, gras:KG.gras||0, toa:KG.toa||0, klad:kgK},
        klad:D_klad,
        toa,
-       nR, lmTot, jordL, warn:W, dorrRyms};
+       warn:W, dorrRyms, GR};
   D.kg.tot = Object.values(D.kg).reduce((a, b) => a + b, 0);
   if (NT > 4000) W.push('Nocken är ' + (NT/1000).toFixed(2).replace('.', ',') + ' m över mark – över attefallsgränsen 4,0 m.');
   if (P.TakV < 14) W.push('Flackt för papp på råspont – kräver takduk/membran.');
+  if (GR && P.TakV > 27) W.push('Grästak på ' + P.TakV + '° – brantare än leverantörernas rek. (VegTech max 27°). Kräver skjutskydd/nät och kan glida; vattnar ur snabbt.');
   // höj spelet efter bygg
   const target = new THREE.Vector3(0, NT/2000 + .2, Dj/2000);
   D.target = target;
@@ -461,10 +464,10 @@ function applyMode() {
   scene.background = new THREE.Color(ghost ? '#11171f' : '#FCC222');
   scene.fog = ghost ? new THREE.Fog('#11171f', 5, 30) : null;
   ground.visible = !ghost && !wire; grid.visible = ghost;
-  const hl = {Inget:null, Grund:'grund', 'Vägg':'vagg', Tak:'tak', Hyllor:'hyll', 'Köpdelar':'kop', Inredning:'inred', 'Invändigt':'inner'}[P.fram];
-  for (const k in ghostM) { ghostM[k].opacity = P.ghostOp; edgeG[k].opacity = Math.min(1, .22 + P.ghostOp*2.2); }
+  const hl = {Inget:null, Grund:'grund', 'Vägg':'vagg', Tak:'tak', 'Köpdelar':'kop', Inredning:'inred', 'Invändigt':'inner'}[P.fram];
+  for (const k in ghostM) { const f = ['ask', 'plywood', 'filt', 'tuva'].includes(k) ? .25 : 1; ghostM[k].opacity = P.ghostOp*f; edgeG[k].opacity = Math.min(1, .22 + P.ghostOp*2.2)*f; }
   root.traverse(o => {
-    if (o.isCSS2DObject) { o.visible = P.matt && (!o.userData.g2 || P[o.userData.g2] !== false); return; }
+    if (o.isCSS2DObject) { o.visible = P.matt && (!o.userData.g2 || P[o.userData.g2] !== false) && !(o.userData.g2 === 'inred' && P.tak && P.vy === 'Solid'); return; }
     if (!o.isMesh || !o.userData.key) return;
     const {key, grp} = o.userData;
     o.visible = P[grp] !== false;
@@ -484,7 +487,7 @@ function info() {
   const r = (a, b, cls = '') => `<tr class="${cls}"><td>${a}</td><td>${b}</td></tr>`;
   const nt = D.NT/1000;
   document.getElementById('info').innerHTML = `<span class="tgl">▴</span><h1>Naturepod</h1>
-  <div class="var">${P.variant === 'ODLING' ? 'Odling – dubbelpapp + hyllor' : 'Light – dubbelpapp, så lätt som möjligt'}</div>
+  <div class="var">${P.variant === 'GRÄS' ? 'Grästak på dubbelpapp' : 'Light – dubbelpapp, så lätt som möjligt'}</div>
   <table>
   ${r('Golv (L × D)', fmt(P.GolvL) + ' × ' + fmt(P.Djup) + ' mm')}
   ${r('Golvyta', fmt(P.GolvL*P.Djup/1e6, 1) + ' m²')}
@@ -497,7 +500,6 @@ function info() {
   ${r('Glas framgavel', V.glas)}
   ${D.klad ? r('Väggar', 'plywood 9 mm, ' + D.klad.pw + '×' + D.klad.ph) + r('Innertak', D.klad.nRib + ' ribbor ask ' + P.RibbB + ' / spalt ' + P.RibbSpalt) : ''}
   ${D.toa ? r('Toalett', 'Ifö Spira 6260, axel ' + fmt(D.toa.fri) + ' från vägg') : ''}
-  ${P.hyllor ? r('Hyllor', D.nR + ' rader, ' + fmt(D.lmTot, 1) + ' m låda, ~' + fmt(D.jordL) + ' l jord') : ''}
   <tr class="h"><td colspan="2">Vikt (uppskattning)</td></tr>
   ${r('Virke + skivor + panel', fmt(k.virke) + ' kg')}
   ${r('Glas', fmt(k.glas) + ' kg')}
@@ -505,13 +507,13 @@ function info() {
   ${r('Plåt, stål, beslag', fmt(k.plat) + ' kg')}
   ${k.velux ? r('Velux', fmt(k.velux) + ' kg') : ''}
   ${k.klad ? r('Invändig klädsel', fmt(k.klad) + ' kg') : ''}
+  ${k.gras ? r('Grästak, vattenmättat', fmt(k.gras) + ' kg') : ''}
   ${k.toa ? r('Toalett (porslin)', fmt(k.toa) + ' kg') : ''}
-  ${P.hyllor ? r('Hyllor med våt jord', fmt(k.hyllor) + ' kg') : ''}
   ${r('Totalt', '≈ ' + fmt(k.tot) + ' kg', 'tot')}
   </table>
   ${D.warn.map(w => `<div class="warn">⚠ ${w}</div>`).join('')}
   <div class="sub">Dras på medar med traktor (kätting runt dragbalken). Mått i mm, samma parametrar som Fusion-modellen.
-  Hyllor och dubbelpapp är förslag – Fusion har ännu sedum. Velux-öppningen (karm +40/+20) är antagen. Ifö Spira 6260 är en vattentoalett (S-lås, 4/2 l) – kräver vatten och avlopp/sluten tank. Ej bygghandling: hållfasthet inte räknad.
+  Grästak, dubbelpapp, toalett och invändig klädsel finns bara här – Fusion har ännu sedum. Velux-öppningen (karm +40/+20) är antagen. Ifö Spira 6260 är en vattentoalett (S-lås, 4/2 l) – kräver vatten och avlopp/sluten tank. Ej bygghandling: hållfasthet inte räknad.
   Klicka på en del för namn och mått.</div>`;
 }
 let saveT = 0;
@@ -532,7 +534,7 @@ const views = {
   'Högvägg + framgavel': () => [V3(6.2, 4.4, -7.4), V3(0, 1.8, P.Djup/2000)],
   'Framgavel': () => [V3(0, 2.1, -10), V3(0, 1.9, P.Djup/2000)],
   'Högväggen': () => [V3(10, 2.3, P.Djup/2000 + 1.5), V3(0, 1.9, P.Djup/2000)],
-  'Toaletten': () => { P.tak = false; P.hyll = false; P.kop = false; gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(-1.4, 3.7, 0.2), V3(0.9, 0.6, P.Djup/1000 - .55)]; },
+  'Toaletten': () => { P.tak = false; P.kop = false; gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(-1.4, 3.7, 0.2), V3(0.9, 0.6, P.Djup/1000 - .55)]; },
   'Interiör': () => { P.vagg = true; P.tak = true; P.ljus = true; P.snitt = false; gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(-0.45, 1.35, 0.25), V3(0.7, 1.55, P.Djup/1000 - .4)]; },
   'Uppifrån': () => [V3(0.01, 13, P.Djup/2000 + .01), V3(0, 0, P.Djup/2000)],
   'Snitt genom takstol': () => { P.snitt = true; P.snittY = Math.round(VAR[P.variant].VaggD + (P.Djup - 2*VAR[P.variant].VaggD)/(Math.ceil((P.Djup - 2*VAR[P.variant].VaggD)/600)) + 5); gui.controllersRecursive().forEach(c => c.updateDisplay()); applyMode(); return [V3(0, 2.0, 9.5), V3(0, 1.9, 0)]; },
@@ -547,7 +549,9 @@ function go(name) {
 const gui = new GUI({title:'Naturepod – reglage'});
 const ctl = [];
 const fV = gui.addFolder('Variant och tak');
-fV.add(P, 'variant', ['ODLING', 'LIGHT']).name('Variant').onChange(v => { P.hyllor = v === 'ODLING'; gui.controllersRecursive().forEach(c => c.updateDisplay()); nb(); });
+fV.add(P, 'variant', ['GRÄS', 'LIGHT']).name('Variant').onChange(nb);
+fV.add(P, 'GrasT', 40, 150, 5).name('Grästak tjocklek mm').onChange(nb);
+fV.add(P, 'skjut').name('Skjutskydd (läkt)').onChange(nb);
 fV.add(P, 'TakV', 20, 60, .5).name('Takvinkel °').onChange(nb);
 fV.add(P, 'HogV', 70, 90, 1).name('Högväggens vinkel °').onChange(nb);
 const fM = gui.addFolder('Mått');
@@ -565,14 +569,9 @@ fT.add(P, 'klad').name('Invändig klädsel').onChange(nb);
 fT.add(P, 'PanelOr', ['Liggande 1400×900', 'Stående 900×1400']).name('Plywoodskivor').onChange(nb);
 fT.add(P, 'RibbB', 25, 95, 1).name('Ribba bredd mm').onChange(nb);
 fT.add(P, 'RibbSpalt', 5, 30, 1).name('Spalt mm').onChange(nb);
-const fH = gui.addFolder('Hyllor på taket');
-fH.add(P, 'hyllor').name('Odlingshyllor').onChange(nb);
-fH.add(P, 'HyllRader', 1, 7, 1).name('Rader (max)').onChange(nb);
-fH.add(P, 'HyllAvst', 450, 1000, 10).name('Höjd mellan rader mm').onChange(nb);
-fH.add(P, 'HyllDjup', 150, 350, 10).name('Lådans djup mm').onChange(nb);
 const fS = gui.addFolder('Visning');
 fS.add(P, 'vy', ['Solid', 'Wireframe', 'Ghost']).name('Läge').onChange(applyMode);
-fS.add(P, 'fram', ['Inget', 'Grund', 'Vägg', 'Tak', 'Hyllor', 'Köpdelar', 'Inredning', 'Invändigt']).name('Framhäv (ghost)').onChange(v => { if (v !== 'Inget' && P.vy !== 'Ghost') { P.vy = 'Ghost'; gui.controllersRecursive().forEach(c => c.updateDisplay()); } applyMode(); });
+fS.add(P, 'fram', ['Inget', 'Grund', 'Vägg', 'Tak', 'Köpdelar', 'Inredning', 'Invändigt']).name('Framhäv (ghost)').onChange(v => { if (v !== 'Inget' && P.vy !== 'Ghost') { P.vy = 'Ghost'; gui.controllersRecursive().forEach(c => c.updateDisplay()); } applyMode(); });
 fS.add(P, 'fog', 0, 1, .05).name('Dimma (ghost)').onChange(saveHash);
 fS.add(P, 'ghostOp', .03, .4, .01).name('Genomskinlighet (ghost)').onChange(applyMode);
 fS.add(P, 'snitt').name('Snitt').onChange(applyMode);
@@ -580,7 +579,6 @@ fS.add(P, 'snittY', 0, 3600, 5).name('Snittläge (djup) mm').onChange(applyMode)
 fS.add(P, 'grund').name('1 Grund och golv').onChange(applyMode);
 fS.add(P, 'vagg').name('2 Vägg').onChange(applyMode);
 fS.add(P, 'tak').name('3 Tak').onChange(applyMode);
-fS.add(P, 'hyll').name('Hyllor').onChange(applyMode);
 fS.add(P, 'kop').name('Köpdelar').onChange(applyMode);
 fS.add(P, 'matt').name('Måttetiketter').onChange(applyMode);
 fS.add(P, 'inner').name('Invändig klädsel').onChange(applyMode);
@@ -594,7 +592,7 @@ fE.add({f: async () => { saveHash(); await new Promise(r => setTimeout(r, 350));
 fE.add({f: () => { renderer.render(scene, camera); const a = document.createElement('a'); a.href = renderer.domElement.toDataURL('image/png'); a.download = 'naturepod.png'; a.click(); }}, 'f').name('Spara PNG');
 fE.add({f: () => new GLTFExporter().parse(root, g => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([g], {type:'model/gltf-binary'})); a.download = 'naturepod.glb'; a.click(); }, e => toast('GLB-fel'), {binary:true})}, 'f').name('Exportera GLB');
 fE.add({f: () => { Object.assign(P, DEF); gui.controllersRecursive().forEach(c => c.updateDisplay()); nb(); go('Långa takfallet'); }}, 'f').name('Återställ');
-[fM, fH, fE].forEach(f => f.close());
+[fM, fE].forEach(f => f.close());
 const mobile = matchMedia('(max-width:700px)').matches;
 if (mobile) gui.close();
 document.getElementById('info').addEventListener('click', e => { if (mobile) e.currentTarget.classList.toggle('open'); });
