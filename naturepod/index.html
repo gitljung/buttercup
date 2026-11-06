@@ -254,12 +254,15 @@ function build() {
   else {
     prismY(hp, 0, yN0, 'panel', 'vagg', 'Högväggspanel 22');
     prismY(clip(hp, p => zC - p[1]), yN0, Dj, 'panel', 'vagg', 'Högväggspanel 22 (ovan nischen)');
-    prismY(clip(between(xNi, xN, G, zC + 5), under(0)), Dj - VD, Dj, 'tra', 'vagg', 'Nisch – hörnstolpe');
+    prismY(clip(between(xNi, xN, G, zC + 5), under(0)), Dj - 45, Dj, 'tra', 'vagg', 'Nisch – hörnstolpe');
     prismY(band(xNi, xN, G, z45), yN0 + VD, Dj - VD, 'tra', 'vagg', 'Nisch – syll');
     // nischens sidoväggar: triangel mellan högväggens insida och nischens utsida
-    const sida = clip(between(z => xout(z) - VD/sh, xN, G, zC), under(0));
-    prismY(sida, yN0, yN0 + VD, 'tra', 'vagg', 'Nisch – sidovägg (stomme)');
-    prismY(sida, Dj - VD, Dj, 'tra', 'vagg', 'Nisch – sidovägg mot bakgavel (stomme)');
+    // sidoväggarnas stomme: syll + stolpe i högväggens linje + stolpe i nischens linje (inte massiv)
+    for (const [y0, y1, nmS] of [[yN0, yN0 + 45, 'främre'], [Dj - 45, Dj, 'bakre']]) {
+      prismY(clip(between(z => xout(z) - VD/sh, xN, G, z45), under(0)), y0, y1, 'tra', 'vagg', 'Nisch – sidovägg syll ' + nmS);
+      prismY(stolpe, y0, y1, 'tra', 'vagg', 'Nisch – sidovägg stolpe ' + nmS);
+      if (nmS === 'främre') prismY(clip(between(xNi, xN, z45, zC + 5), under(0)), y0, y1, 'tra', 'vagg', 'Nisch – sidovägg stolpe ' + nmS);
+    }
     // utvändigt
     prismY(between(xN, z => xN(z) + PanelT/shN, G - 30, zC), yN0 - PanelT, Dj + PanelT, 'panel', 'vagg', 'Nisch – panel 22');
     const sp = between(xout, xN, G - 30, zC);
@@ -507,7 +510,8 @@ function build() {
     for (let i = 0; i < nl; i++) box(xa + i*lw + 4, xa + (i + 1)*lw - 4, ya - 18, ya, G + 70, G + P.ForvH - 26, 'front', 'inred', 'Låda fotände ' + Math.round(lw - 8) + '×' + (P.ForvH - 96));
     const nr = 3, rw = 2000/nr;
     for (let i = 0; i < nr; i++) box(xb, xb + 18, ya + i*rw + 4, ya + (i + 1)*rw - 4, G + 70, G + P.ForvH - 26, 'front', 'inred', 'Skåplucka sida ' + Math.round(rw - 8) + '×' + (P.ForvH - 96));
-    box(xa + 60, xb - 60, ya + 60, yb - 60, G, G + 70, 'impr', 'inred', 'Sockel (indragen 60)');
+    for (const [x0, x1, y0, y1] of [[xa + 60, xb - 60, ya + 60, ya + 105], [xa + 60, xb - 60, yb - 105, yb - 60], [xa + 60, xa + 105, ya + 105, yb - 105], [xb - 105, xb - 60, ya + 105, yb - 105]])
+      box(x0, x1, y0, y1, G, G + 70, 'tra', 'inred', 'Sockel 45×70 (indragen 60)');
     box(xa + 10, xb - 10, ya + 10, yb - 10, G + P.ForvH, G + top, 'madrass', 'inred', 'Madrass 180×200');
     box(xa + 20, xb - 20, ya + 30, yb - 520, G + top, G + top + 60, 'tacke', 'inred', 'Täcke');
     for (const xc of [xa + 450, xb - 450]) { const g = new THREE.CapsuleGeometry(60, 520, 4, 12); g.rotateZ(Math.PI/2); g.scale(1, .9, 2.8); g.translate(xc, G + top + 60, yb - 270); add(g, 'kudde', 'inred', 'Kudde'); }
