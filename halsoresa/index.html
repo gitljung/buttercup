@@ -233,7 +233,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 #tab .ring svg{position:absolute;inset:0;display:block;width:100%;height:100%;transform:rotate(-90deg)}
 #tab .ring .bgc{fill:#111}#tab .ring .arc{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke .3s}
 #tab .ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--body);font-weight:600;font-size:min(7.2vw,36px);letter-spacing:.02em;font-variant-numeric:tabular-nums}
-#tab.work .arc{stroke:#35E08A}#tab.work .ring b{color:#35E08A}#tab.rest .arc{stroke:#D63BE6}#tab.rest .ring b{color:#D63BE6}
+#tab.t-work .arc{stroke:#35E08A}#tab.t-work .ring b{color:#35E08A}#tab.t-rest .arc{stroke:#D63BE6}#tab.t-rest .ring b{color:#D63BE6}
 #tab .rnd{position:absolute;left:5vw;top:calc(env(safe-area-inset-top) + 4vh + min(30vw,150px) + 10px);font-style:italic;font-weight:800;font-size:min(8vw,40px);text-transform:uppercase;letter-spacing:.02em}
 #tab .rnd small{display:block;font-size:.42em;font-weight:700;opacity:.9;margin-top:2px}
 #tab .hs{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 30dvh);height:min(46dvh,88vw);transform:translateX(-50%);background-repeat:no-repeat;background-size:auto 100%;filter:drop-shadow(0 6px 0 rgba(42,18,6,.18))}
@@ -260,8 +260,8 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 #tab .done button{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 6vh);font-family:var(--display);font-size:22px;padding:12px 26px;border:3px solid #2A1206;border-radius:14px;background:#FCC222;color:#2A1206;box-shadow:4px 4px 0 #C8340A;cursor:pointer}
 @keyframes tbeat{0%{transform:scale(1.07)}35%{transform:scale(1)}}
 @keyframes tglow{0%{box-shadow:0 0 26px 6px var(--gl)}60%{box-shadow:0 0 8px 1px var(--gl)}100%{box-shadow:0 0 8px 1px var(--gl)}}
-#tab{--gl:#D63BE6}#tab.work{--gl:#35E08A}
-#tab .ring{border-radius:50%}#tab.beat .ring{animation:tglow .46875s ease-out infinite}#tab.beat.work .rnd{animation:tbeat .46875s ease-out infinite;transform-origin:left center}
+#tab{--gl:#D63BE6}#tab.t-work{--gl:#35E08A}
+#tab .ring{border-radius:50%}#tab.beat .ring{animation:tglow .46875s ease-out infinite}#tab.beat.t-work .rnd{animation:tbeat .46875s ease-out infinite;transform-origin:left center}
 #tab .rnd{color:#fff;text-shadow:0 0 10px var(--gl),0 2px 0 rgba(42,18,6,.6)}
 #tab .big{position:absolute;left:0;right:0;top:30dvh;text-align:center;font-family:var(--display);font-size:min(40vw,200px);line-height:1;color:#FCC222;
   -webkit-text-stroke:4px #2A1206;text-shadow:0 0 30px #FF3EC9,6px 6px 0 #C8340A;pointer-events:none;opacity:0}
@@ -438,7 +438,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 <main>
 
 <!-- ============ START ============ -->
-<div id="tab" class="rest intro-on" aria-live="polite">
+<div id="tab" class="t-rest intro-on" aria-live="polite">
   <div class="ring"><svg viewBox="0 0 100 100"><circle class="bgc" cx="50" cy="50" r="48"/><circle class="arc" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="100 100" stroke-dashoffset="0"/></svg><b>00:10</b></div>
   <div class="rnd tsh">Runda 1<small></small></div>
   <div class="ctl"><button class="tp" aria-label="Paus">❚❚</button><button class="tx" aria-label="Avsluta">✕</button></div>
@@ -2007,7 +2007,7 @@ let CX3T = null;
 // ---------- Hasses Tabata (pass 4): egen helskärm i reel-stil ----------
 const TAB = {ex:['goblet', 'highpull', 'gobletutfall', 'strictpress'], work:20, rest:10, prep:10,
   namn:{goblet:'Goblet-knäböj', highpull:'Högdrag', gobletutfall:'Goblet-utfall', strictpress:'Press stående'},
-  tempo:{goblet:2.5, highpull:2, gobletutfall:3, strictpress:2.5},
+  tempo:{goblet:2.5, highpull:2.6, gobletutfall:3, strictpress:2.5},
   flipVarv:{strictpress:1}};   // pressen: byt arm varje varv
 function tabNiv() { return Math.min(3, Math.max(1, +localStorage.getItem('bc_halsoresa_tabniv') || 2)); }
 function tabNivSel(n) { if (n) localStorage.setItem('bc_halsoresa_tabniv', n); const v = tabNiv();
@@ -2033,19 +2033,19 @@ function startTabata() {
   // faser: intro 3 s → [vila/förberedelse 10 s → kör 20 s] × N
   const ph = [{k:'intro', d:3000}];
   seq.forEach((x, j) => { ph.push({k:'rest', d:(j === 0 ? TAB.prep : TAB.rest) * 1000, x}); ph.push({k:'work', d:TAB.work * 1000, x}); });
-  el.className = 'rest intro-on on'; el.querySelector('.done i').textContent = '';
+  el.className = 't-rest intro-on on'; el.querySelector('.done i').textContent = '';
   setEx(seq[0].id); frame(0); num.textContent = mmss(TAB.prep * 1000); rnd.firstChild.textContent = 'Runda 1';
   tabStop(); wakeOn(); vibeOn('hasse/synth80.mp3', .42, true); el.classList.add('beat'); setTimeout(hallaGanget, 900);
   const big = el.querySelector('.big'), bigs = t => { big.textContent = t; big.classList.remove('go'); void big.offsetWidth; big.classList.add('go'); };
   const T = TT = {pi:0, t:0, last:performance.now(), paused:false};
   const enter = () => { const P = ph[T.pi], x = P.x; if (!x) return;
-    el.classList.remove('intro-on'); el.classList.toggle('work', P.k === 'work'); el.classList.toggle('rest', P.k === 'rest');
+    el.classList.remove('intro-on'); el.classList.toggle('t-work', P.k === 'work'); el.classList.toggle('t-rest', P.k === 'rest');
     rnd.firstChild.textContent = `Runda ${x.n}`; rnd.querySelector('small').textContent = V > 1 ? `Varv ${x.v} av ${V}` : '';
     lst.querySelectorAll('span').forEach((s, i) => s.classList.toggle('now', i === x.i));
     setEx(x.id, TAB.flipVarv[x.id] && x.v % 2 === 0); frame(0);
     if (P.k === 'work') { num.textContent = 'KÖR'; pop(num); beep(); flash('#35E08A'); bigs('KÖR!'); vibeVol(.6, 300); if (navigator.vibrate) navigator.vibrate(120); if (x.n === 1) korVi(); }
     else { num.textContent = T.pi === 1 ? mmss(P.d) : 'VILA'; pop(num); if (T.pi > 1) vibeVol(.3, 500); if (T.pi > 1) { blip(700, 350, .18); flash('#D63BE6'); } pop(rnd); } };
-  const finish = () => { tabStop(); wakeOff(); el.classList.add('fin'); vibeVol(.5, 400); setTimeout(() => vibeOff(2500), 6000); el.classList.remove('work'); el.classList.add('rest');
+  const finish = () => { tabStop(); wakeOff(); el.classList.add('fin'); vibeVol(.5, 400); setTimeout(() => vibeOff(2500), 6000); el.classList.remove('t-work'); el.classList.add('t-rest');
     lst.querySelectorAll('span').forEach(s => s.classList.remove('now')); setEx('goblet'); frame(0);
     el.querySelector('.done i').textContent = `${V} varv · ${seq.length} rundor · ${Math.round(seq.length * 30 / 60 * 10) / 10} min`; confetti(); hallaGanget(); };
   T.iv = setInterval(() => {
@@ -2128,7 +2128,7 @@ const WAMAP = {knaboj:'luftknaboj', knabojbank:'stolres', utfall0:'utfallkv', ha
 const EXDUR = [320, 200, 110, 110, 110, 110, 110, 240, 240, 240, 110, 110, 110, 110, 110, 200];
 const sprIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const d = en.target; d.vis = en.isIntersecting;
   if (d.vis && !d.style.backgroundImage) d.style.backgroundImage = `url(${d.dataset.src})`; if (d.vis && !RM) d.go(); }), {rootMargin:'200px'}) : null;
-const EXFILE = {hasse:{gorillaswing:'gorillaswing4', axelkast:'axelkast3', pullover:'pullover4', squatpressout:'squatpressout5', utfallhalo:'utfallhalo3'}};   // omgjorda ark får nytt filnamn (cache)
+const EXFILE = {hasse:{gorillaswing:'gorillaswing4', axelkast:'axelkast3', pullover:'pullover4', squatpressout:'squatpressout5', utfallhalo:'utfallhalo3', highpull:'highpull2'}};   // omgjorda ark får nytt filnamn (cache)
 function exFile(fid, id) { return (EXFILE[fid] && EXFILE[fid][id]) || id; }
 function exSprite(id, e) {
   const fid = SS && SS.cx && EXM.hasse && EXM.hasse[id] ? 'hasse' : localStorage.getItem('bc_halsoresa_fighter') || 'kent', v = EXM[fid] && EXM[fid][id], w = Array.isArray(v) ? v[0] : v, hh = Array.isArray(v) ? v[1] : (EXM.h || 256);
