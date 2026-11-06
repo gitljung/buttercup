@@ -229,6 +229,12 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 #tab{position:fixed;left:0;right:0;top:0;height:100vh;height:100dvh;z-index:300;display:none;overflow:hidden;background:#cfc6b6 url(ex/hasse/gymbg.webp) center 38%/cover no-repeat;color:#fff;
   font-family:var(--label);user-select:none;-webkit-user-select:none}
 #tab.on{display:block}
+#tab .sida{position:absolute;right:5vw;top:calc(env(safe-area-inset-top) + 3vh + 62px);max-width:52vw;padding:6px 12px;border:3px solid #2A1206;border-radius:10px;background:#FCC222;color:#2A1206;
+  font-family:var(--display);font-size:min(5.6vw,26px);line-height:1.05;letter-spacing:.03em;text-align:center;transform:rotate(2deg);box-shadow:4px 4px 0 #2A1206;opacity:0;transition:opacity .3s}
+#tab .sida.h{background:#FFF6DC;transform:rotate(-2deg)}#tab .sida.on{opacity:1}#tab.intro-on .sida,#tab.fin .sida{opacity:0}
+#tab.kust .lst{background:rgba(42,18,6,.62);border-color:#FCC222;box-shadow:0 0 14px rgba(252,194,34,.55),inset 0 0 12px rgba(255,246,220,.2)}
+#tab.kust .tsl{background:rgba(42,18,6,.62);border-color:#FFF6DC;box-shadow:0 0 12px rgba(255,246,220,.45)}
+#tab.kust .grid{opacity:0}#tab.kust .intro b{font-size:min(12.5vw,80px);letter-spacing:.04em;white-space:nowrap;padding-left:0}#tab.kust{background-position:center 62%}
 #tab .tsh{text-shadow:0 2px 0 rgba(42,18,6,.55),0 0 10px rgba(42,18,6,.35)}
 #tab .ring{position:absolute;left:5vw;top:calc(env(safe-area-inset-top) + 4vh);width:min(30vw,150px);height:min(30vw,150px)}
 #tab .ring svg{position:absolute;inset:0;display:block;width:100%;height:100%;transform:rotate(-90deg)}
@@ -470,7 +476,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
   <div class="ring"><svg viewBox="0 0 100 100"><circle class="bgc" cx="50" cy="50" r="48"/><circle class="arc" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="100 100" stroke-dashoffset="0"/></svg><b>00:10</b></div>
   <div class="rnd tsh">Runda 1<small></small></div>
   <div class="ctl"><button class="tp" aria-label="Paus">❚❚</button><button class="tx" aria-label="Avsluta">✕</button></div>
-  <div class="grid"></div><div class="speed"></div><div class="shadow"></div><div class="hs"></div><div class="big"></div>
+  <div class="grid"></div><div class="speed"></div><div class="shadow"></div><div class="hs"></div><div class="big"></div><div class="sida"></div>
   <div class="intro tsh"><b>TABATA</b><i>Helkroppspass med Hasse</i></div>
   <div class="done tsh"><b>KLART!</b><i></i><br><button class="tback">Tillbaka</button></div>
   <div class="vig"></div><div class="tsl tsh"><em>PIGGT</em><i>Snabbt</i><input type="range" min="0.6" max="1.6" step="0.05" value="1" aria-label="Tempo per repetition"><i>Lugnt</i><b>2,5 s</b></div>
@@ -518,7 +524,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
         <b>Calisthenics</b><small>Bara kroppen</small>
       </button>
     </div>
-    <div class="hsel" role="tablist" aria-label="Välj Hasses pass"><button data-p="1" role="tab">Pass 1 · Komplex</button><button data-p="2" role="tab">Pass 2 · 30/30</button><button data-p="3" role="tab">Pass 3 · AMRAP</button><button data-p="4" role="tab">Pass 4 · Tabata</button><button data-p="5" role="tab">Pass 5 · Bål</button></div>
+    <div class="hsel" role="tablist" aria-label="Välj Hasses pass"><button data-p="1" role="tab">Pass 1 · Komplex</button><button data-p="2" role="tab">Pass 2 · 30/30</button><button data-p="3" role="tab">Pass 3 · AMRAP</button><button data-p="4" role="tab">Pass 4 · Tabata</button><button data-p="5" role="tab">Pass 5 · Bål</button><button data-p="6" role="tab">Pass 6 · Kusten</button></div>
     <div class="tabniv" aria-label="Nivå"><button data-n="1">Lätt · 4 min</button><button data-n="2">Medel · 8 min</button><button data-n="3">Tung · 12 min</button></div>
     <button class="libbtn hasse inl" id="go-hasse"><img src="hasse.webp" alt="Hasse med sin kettlebell" width="600" height="626"><span class="hej">Hallå gänget!</span><span class="lbl" id="hp-lbl">Kom igång direkt · 1 kettlebell · ca 13 min</span><b>Hasses superpass</b>
     <small id="hp-txt">Rodd → swing → knäböj → press. 6 reps var, rakt igenom. 10 varv, 30 s vila. Timern räknar – du bara kör.</small></button>
@@ -1570,19 +1576,20 @@ function hasseDans(on) { const r = $('#rest'), d = $('#rdance .spr'); d.dataset.
 function pepp() { hallaGanget(); if (navigator.vibrate) navigator.vibrate([40, 40, 40]); }
 function hallaGanget() { let i; do i = Math.floor(Math.random() * HEJ.length); while (i === hejLast && HEJ.length > 1); hejLast = i;
   try { if (hejAu) hejAu.pause(); hejAu = new Audio(HEJ[i]); hejAu.volume = 1; hejAu.play().catch(() => {}); } catch (_) {} }
-const HPTXT = {5:['Bål & balans · 1 kettlebell · 20 min', 'AMRAP 20 min: runt kroppen, vedhuggning, halo på knä, knäindrag och ben över klockan. Så många varv du hinner.'],
+const HPTXT = {6:['Stående bål · 1 kettlebell · 4–12 min', 'Tabata vid havet: 20 s kör, 10 s vila. Knälyft, diagonallyft, dödgrävaren och runt kroppen – först vänster, sedan höger. 1, 2 eller 3 varv.'],
+  5:['Bål & balans · 1 kettlebell · 20 min', 'AMRAP 20 min: runt kroppen, vedhuggning, halo på knä, knäindrag och ben över klockan. Så många varv du hinner.'],
   4:['Helkropp · 1 kettlebell · 4–12 min', 'Tabata: 20 s kör, 10 s vila. Åtta övningar från knäböj till sit-ups. Välj 1, 2 eller 3 varv.'],
   3:['Kom igång direkt · 1 kettlebell · 20 min', 'Roterande thruster → marklyft + halo → utfall + utpress → pullover + rotation → korsutfall. Så många varv du hinner på 20 minuter.'],
   1:['Kom igång direkt · 1 kettlebell · ca 13 min', 'Rodd → swing → knäböj → press. 6 reps var, rakt igenom. 10 varv, 30 s vila. Timern räknar – du bara kör.'],
   2:['Kom igång direkt · 1 kettlebell · ca 15 min', 'Gorillaswing → axelsving → rotation + pullover → utpress → utfall + halo. 30 s jobb, 30 s vila. 3 varv.']};
 function hpSel(nr) { if (nr) localStorage.setItem('bc_traning_hpass', nr); const p = cxPassNr();
   document.querySelectorAll('.hsel button').forEach(b => { const on = +b.dataset.p === p; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
-  $('#hp-lbl').textContent = HPTXT[p][0]; $('#go-hasse b').textContent = ['', 'Hasses superpass', 'Hasses superpass 2', 'Hasses superpass 3', 'Hasses Tabata', 'Hasses bålpass'][p]; document.querySelector('.tabniv').classList.toggle('on', p === 4); $('#hp-txt').textContent = HPTXT[p][1]; }
+  $('#hp-lbl').textContent = HPTXT[p][0]; $('#go-hasse b').textContent = ['', 'Hasses superpass', 'Hasses superpass 2', 'Hasses superpass 3', 'Hasses Tabata', 'Hasses bålpass', 'Stå stadigt'][p]; document.querySelector('.tabniv').classList.toggle('on', p === 4 || p === 6); $('#hp-txt').textContent = HPTXT[p][1]; }
 document.querySelectorAll('.hsel button').forEach(b => b.onclick = () => { hpSel(b.dataset.p); $('#go-hasse').animate([{transform:'scale(.97)'}, {transform:'scale(1)'}], {duration:220}); });
 hpSel();
 if (window.HR) { $('#hr-slot').append($('.hsel'), $('#go-hasse')); document.title = 'Hasses Hälsoresa · Buttercup';
   const hb = document.querySelector('.bc-bar .hide-m'); if (hb) hb.textContent = 'Olistad · Hasses hälsoresa'; }
-$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); new Image().src = 'ex/hasse/dans3_x2.webp'; new Audio('hasse/vibe.mp3').load(); ({1:CX.ex, 2:CX2.ex, 3:CX3.ex, 4:TAB.ex, 5:CX5.ex}[cxPassNr()]).forEach(k => { new Image().src = `ex/hasse/${exFile('hasse', k)}.webp`; });
+$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); new Image().src = 'ex/hasse/dans3_x2.webp'; new Audio('hasse/vibe.mp3').load(); ({1:CX.ex, 2:CX2.ex, 3:CX3.ex, 4:TAB.ex, 5:CX5.ex, 6:STA.ex}[cxPassNr()]).forEach(k => { new Image().src = `ex/hasse/${exFile('hasse', k)}.webp`; });
   b.classList.add('talk'); setTimeout(() => { b.classList.remove('talk'); delete b.dataset.busy; useGear('kb'); if (!S) S = fresh(); startComplex(); }, 1500); }; $('#lib-go').onclick = () => startFree();
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#sheet').classList.remove('on'); });
 
@@ -1648,7 +1655,11 @@ function renderProg() {
     const b5 = document.createElement('button'); b5.className = 'passcard cxcard';
     b5.innerHTML = `<span class="ltr">⚡</span><span><h3>Hasses bålpass<span class="tag">Extra</span></h3>
       <p>Runt kroppen → Vedhuggning → Halo på knä → Knäindrag → Ben över klockan</p><p class="lbl" style="margin-top:4px">1 lätt klocka · så många varv du hinner · 20 min</p></span>`;
-    b5.onclick = () => { hpSel(5); startComplex(5); }; pl.appendChild(b5); }
+    b5.onclick = () => { hpSel(5); startComplex(5); }; pl.appendChild(b5);
+    const b6 = document.createElement('button'); b6.className = 'passcard cxcard';
+    b6.innerHTML = `<span class="ltr">⚡</span><span><h3>Stå stadigt<span class="tag">Extra</span></h3>
+      <p>Vriden knälyft · Diagonallyft · Dödgrävaren · Runt kroppen – vänster och höger</p><p class="lbl" style="margin-top:4px">1 klocka · 20 s kör / 10 s vila · 1–3 varv · 4–12 min</p></span>`;
+    b6.onclick = () => { hpSel(6); startComplex(6); }; pl.appendChild(b6); }
 }
 
 // ---------------- pass ----------------
@@ -1971,7 +1982,7 @@ const CX2 = {ex:['gorillaswing', 'axelkast', 'pullover', 'squatpressout', 'utfal
      pullover:{namn:'Rotation + pullover', tips:['Klockan i hornen mot bröstet','Vrid hela kroppen 90° åt sidan – snurra på framfoten, bakre hälen lyfts – och tillbaka','Klockan upp över huvudet och ner bakom nacken, armbågarna pekar upp. Nästa rep vrider du åt andra hållet']},
      squatpressout:{namn:'Knäböj + utpress', tips:['Klockan i hornen tätt mot bröstet','Sitt djupt och pressa klockan rakt fram – armarna raka, i brösthöjd','Dra tillbaka till bröstet och res dig']},
      utfallhalo:{namn:'Utfall + halo', tips:['Klockan i hornen mot bröstet','Kliv bakåt i ett djupt utfall – bakre knät nästan i golvet','Stanna nere och för klockan ett varv runt huvudet, res dig och byt ben']}}};
-function cxPassNr() { const v = +localStorage.getItem('bc_traning_hpass'); return v >= 2 && v <= 5 ? v : 1; }
+function cxPassNr() { const v = +localStorage.getItem('bc_traning_hpass'); return v >= 2 && v <= 6 ? v : 1; }
 function cx2Plan() { return CX2.ex.map(id => ({id, e:{...CX2.e[id], unit:'sek'}, sets:CX2.v, reps:CX2.work, work:CX2.work, bell:'l', kg:S.bells.l + ' kg',
   target:CX2.work + ' s jobb · ' + CX2.rest + ' s vila', rest:CX2.rest, g:'kb', cx:true})); }
 // Hasses pass 3 (Adrian Goldstein-reel): AMRAP 20 min – så många varv du hinner, reps enligt reelen, kort vila mellan varven
@@ -2057,23 +2068,33 @@ const TAB = {ex:['goblet', 'highpull', 'gobletutfall', 'gobletpress', 'tahav', '
   altRep:{gobletutfall:1},   // byt ben varje rep (spegling), som i reelen
   hk:{golvpress:.78, situp:.92},   // liggande övningar: lägre figur (och aldrig bredare än skärmen)
   flipVarv:{}};
+const STA = {ex:['kneedrive', 'kneedrive', 'rotdrive', 'rotdrive', 'grave', 'grave', 'atw', 'atw'], fl:[0, 1, 1, 0, 0, 1, 0, 1],
+  work:20, rest:10, prep:10, bg:'kustbg', titel:'STÅ STADIGT', under:'Bålpass på klipporna med Hasse',
+  lbl:['Vriden knälyft', 'Vriden knälyft', 'Diagonallyft', 'Diagonallyft', 'Dödgrävaren', 'Dödgrävaren', 'Runt kroppen', 'Runt kroppen'],
+  sida:['VÄNSTER KNÄ', 'HÖGER KNÄ', 'UPP MOT VÄNSTER AXEL', 'UPP MOT HÖGER AXEL', 'AXEL TILL AXEL', 'AXEL TILL AXEL', '↻ ÅT ENA HÅLLET', 'ANDRA HÅLLET ↺'],
+  namn:{kneedrive:'Vriden knälyft', rotdrive:'Diagonallyft', grave:'Dödgrävaren', atw:'Runt kroppen'},
+  tempo:{kneedrive:2.4, rotdrive:2.8, grave:5, atw:4.5},
+  altRep:{}, hk:{}, flipVarv:{}};
 function tabNiv() { return Math.min(3, Math.max(1, +localStorage.getItem('bc_traning_tabniv') || 2)); }
 function tabNivSel(n) { if (n) localStorage.setItem('bc_traning_tabniv', n); const v = tabNiv();
   document.querySelectorAll('.tabniv button').forEach(b => b.classList.toggle('on', +b.dataset.n === v)); }
 document.querySelectorAll('.tabniv button').forEach(b => b.onclick = () => tabNivSel(b.dataset.n)); tabNivSel();
 let TT = null;
 function tabStop() { if (TT) { clearInterval(TT.iv); TT = null; } }
-function startTabata() {
+function startTabata(C) {
+  C = C || TAB;
   if (!S) S = fresh();
   const el = $('#tab'), V = tabNiv(), seq = [];
-  for (let v = 1; v <= V; v++) TAB.ex.forEach((id, i) => seq.push({id, v, i, n:(v - 1) * TAB.ex.length + i + 1}));
+  for (let v = 1; v <= V; v++) C.ex.forEach((id, i) => seq.push({id, v, i, n:(v - 1) * C.ex.length + i + 1, fl:!!(C.fl && C.fl[i])}));
   const M = (EXM.hasse || {}), hs = el.querySelector('.hs'), arc = el.querySelector('.arc'), num = el.querySelector('.ring b'), rnd = el.querySelector('.rnd'),
         lst = el.querySelector('.lst');
-  lst.innerHTML = TAB.ex.map((id, i) => `<span>${i + 1}. ${TAB.namn[id]}</span>`).join('');
+  lst.innerHTML = C.ex.map((id, i) => `<span>${i + 1}. ${C.lbl ? C.lbl[i] : C.namn[id]}</span>`).join('');
+  el.style.backgroundImage = `url(ex/hasse/${C.bg || 'gymbg'}.webp)`; el.classList.toggle('kust', C === STA);
+  el.querySelector('.intro b').textContent = C.titel || 'TABATA'; el.querySelector('.intro i').textContent = C.under || 'Helkroppspass med Hasse';
   // två kolumner som i reelen: 1–2 vänster, 3–4 höger
-  lst.style.gridAutoFlow = 'column'; lst.style.gridTemplateRows = `repeat(${Math.ceil(TAB.ex.length / 2)}, auto)`;
+  lst.style.gridAutoFlow = 'column'; lst.style.gridTemplateRows = `repeat(${Math.ceil(C.ex.length / 2)}, auto)`;
   const setEx = (id, flip) => { const fw = M[id] || 300; hs.style.backgroundImage = `url(ex/hasse/${exFile('hasse', id)}.webp)`;
-    hs.style.aspectRatio = `${fw} / 480`; { const W = el.clientWidth, H = el.clientHeight; let h = Math.min(H * .44, W * .84) * (TAB.hk[id] || 1);
+    hs.style.aspectRatio = `${fw} / 480`; { const W = el.clientWidth, H = el.clientHeight; let h = Math.min(H * .44, W * .84) * (C.hk[id] || 1);
       if (h * fw / 480 > W * .94) h = W * .94 * 480 / fw; hs.style.height = Math.round(h) + 'px'; } hs.classList.toggle('flip', !!flip); hs.dataset.id = id; };
   const frame = f => { sprAt(hs, cxSub(f)); };
   const mmss = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return '00:' + String(s).padStart(2, '0'); };
@@ -2081,9 +2102,9 @@ function startTabata() {
   const flash = c => el.querySelector('.flash').animate([{background:c, opacity:.35}, {opacity:0}], {duration:450});
   // faser: intro 3 s → [vila/förberedelse 10 s → kör 20 s] × N
   const ph = [{k:'intro', d:3000}];
-  seq.forEach((x, j) => { ph.push({k:'rest', d:(j === 0 ? TAB.prep : TAB.rest) * 1000, x}); ph.push({k:'work', d:TAB.work * 1000, x}); });
-  el.className = 't-rest intro-on on'; el.querySelector('.done i').textContent = '';
-  setEx(seq[0].id); frame(0); num.textContent = mmss(TAB.prep * 1000); rnd.firstChild.textContent = 'Runda 1';
+  seq.forEach((x, j) => { ph.push({k:'rest', d:(j === 0 ? C.prep : C.rest) * 1000, x}); ph.push({k:'work', d:C.work * 1000, x}); });
+  el.className = 't-rest intro-on on' + (C === STA ? ' kust' : ''); el.querySelector('.done i').textContent = '';
+  setEx(seq[0].id); frame(0); num.textContent = mmss(C.prep * 1000); rnd.firstChild.textContent = 'Runda 1';
   tabStop(); wakeOn(); vibeOn('hasse/synth80.mp3', .42, true); el.classList.add('beat'); setTimeout(hallaGanget, 900);
   const big = el.querySelector('.big'), bigs = t => { big.textContent = t; big.classList.remove('go'); void big.offsetWidth; big.classList.add('go'); };
   const T = TT = {pi:0, t:0, last:performance.now(), paused:false};
@@ -2092,14 +2113,14 @@ function startTabata() {
   T.k = Math.min(1.6, Math.max(.6, +localStorage.getItem('bc_traning_tabk') || 1)); rg.value = T.k;
   const curId = () => (ph[T.pi] && ph[T.pi].x ? ph[T.pi].x.id : seq[0].id);
   const tset = () => { T.k = +rg.value; const st = Math.min(1, Math.max(0, (1.15 - T.k) / .55)); T.st = st;
-    tv.textContent = (TAB.tempo[curId()] * T.k).toFixed(1).replace('.', ',') + ' s';
+    tv.textContent = (C.tempo[curId()] * T.k).toFixed(1).replace('.', ',') + ' s';
     rg.style.setProperty('--p', ((T.k - .6) * 100) + '%'); el.style.setProperty('--st', st.toFixed(2));
     const lv = st < .15 ? 1 : st < .45 ? 2 : st < .8 ? 3 : 4; lab.textContent = ['', 'LUGNT', 'PIGGT', 'STRESS!', 'PANIK!!'][lv];
     el.classList.remove('s1', 's2', 's3', 's4'); el.classList.add('s' + lv);
     const rate = Math.min(1.14, Math.max(.9, 1 + (1 - T.k) * .32)); el.style.setProperty('--bt', (.46875 / rate).toFixed(3) + 's');
     if (VIBE) { try { VIBE.preservesPitch = false; VIBE.mozPreservesPitch = false; VIBE.webkitPreservesPitch = false; VIBE.playbackRate = rate; } catch (_) {} } };
-  rg.oninput = () => { const old = TAB.tempo[curId()] * 1000 * T.k; tset(); localStorage.setItem('bc_traning_tabk', T.k);
-    if (ph[T.pi] && ph[T.pi].k === 'work') { const np = TAB.tempo[curId()] * 1000 * T.k; T.ph0 = ((T.t - (T.ph0 || 0)) % old) / old; T.off = T.t - T.ph0 * np; } };
+  rg.oninput = () => { const old = C.tempo[curId()] * 1000 * T.k; tset(); localStorage.setItem('bc_traning_tabk', T.k);
+    if (ph[T.pi] && ph[T.pi].k === 'work') { const np = C.tempo[curId()] * 1000 * T.k; T.ph0 = ((T.t - (T.ph0 || 0)) % old) / old; T.off = T.t - T.ph0 * np; } };
   ['pointerdown', 'touchstart'].forEach(e => rg.addEventListener(e, ev => ev.stopPropagation(), {passive:true}));
   setTimeout(tset, 1600);   // efter att musiken startat
   tset();
@@ -2113,11 +2134,12 @@ function startTabata() {
     el.classList.remove('intro-on'); T.off = 0; T.ph0 = 0; el.style.setProperty('--wk', P.k === 'work' ? 1 : 0); tset(); el.classList.toggle('t-work', P.k === 'work'); el.classList.toggle('t-rest', P.k === 'rest');
     rnd.firstChild.textContent = `Runda ${x.n}`; rnd.querySelector('small').textContent = V > 1 ? `Varv ${x.v} av ${V}` : '';
     lst.querySelectorAll('span').forEach((s, i) => s.classList.toggle('now', i === x.i));
-    setEx(x.id, TAB.flipVarv[x.id] && x.v % 2 === 0); frame(0);
+    setEx(x.id, !!(C.flipVarv[x.id] && x.v % 2 === 0) !== x.fl); frame(0);
+    if (C.sida) { const sd = el.querySelector('.sida'); sd.textContent = C.sida[x.i] || ''; sd.classList.toggle('h', !!x.fl); sd.classList.toggle('on', !!C.sida[x.i]); pop(sd); }
     if (P.k === 'work') { num.textContent = 'KÖR'; pop(num); beep(); flash('#35E08A'); bigs('KÖR!'); vibeVol(.6, 300); if (navigator.vibrate) navigator.vibrate(120); if (x.n === 1) korVi(); }
     else { num.textContent = T.pi === 1 ? mmss(P.d) : 'VILA'; pop(num); if (T.pi > 1) vibeVol(.3, 500); if (T.pi > 1) { blip(700, 350, .18); flash('#D63BE6'); } pop(rnd); } };
   const finish = () => { tabStop(); wakeOff(); el.style.setProperty('--wk', 0); hs.style.translate = ''; if (VIBE) VIBE.playbackRate = 1; el.classList.add('fin'); vibeVol(.5, 400); setTimeout(() => vibeOff(2500), 6000); el.classList.remove('t-work'); el.classList.add('t-rest');
-    lst.querySelectorAll('span').forEach(s => s.classList.remove('now')); setEx('goblet'); frame(0);
+    lst.querySelectorAll('span').forEach(s => s.classList.remove('now')); setEx(C.ex[0]); frame(0); el.querySelector('.sida').classList.remove('on');
     el.querySelector('.done i').textContent = `${V} varv · ${seq.length} rundor · ${Math.round(seq.length * 30 / 60 * 10) / 10} min`; confetti(); hallaGanget(); };
   T.iv = setInterval(() => {
     const now = performance.now(), dt = now - T.last; T.last = now; if (T.paused || TT !== T) return;
@@ -2126,8 +2148,8 @@ function startTabata() {
       if (T.t > 600 || P.k === 'rest' && T.pi === 1) num.textContent = mmss(left);
       arc.setAttribute('stroke-dashoffset', String(100 * T.t / P.d));
       if (left < 3000 && Math.ceil((P.d - before) / 1000) !== Math.ceil(left / 1000) && left > 0) { blip(880, 880, .05); if (P.k === 'rest') bigs(String(Math.ceil(left / 1000))); }
-      if (P.k === 'work') { const per = TAB.tempo[P.x.id] * 1000 * T.k; frame((((T.t - (T.off || 0)) % per) + per) % per / per);
-        if (TAB.altRep[P.x.id]) hs.classList.toggle('flip', Math.floor(Math.max(0, T.t - (T.off || 0)) / per) % 2 === 1);
+      if (P.k === 'work') { const per = C.tempo[P.x.id] * 1000 * T.k; frame((((T.t - (T.off || 0)) % per) + per) % per / per);
+        if (C.altRep[P.x.id]) hs.classList.toggle('flip', (Math.floor(Math.max(0, T.t - (T.off || 0)) / per) % 2 === 1) !== P.x.fl);
         const st = T.st || 0, a = st * st * 7;   // skakning + svett när det går fort
         hs.style.translate = a > .3 ? `${(Math.random() * 2 - 1) * a}px ${(Math.random() * 2 - 1) * a * .6}px` : '';
         if (Math.random() < st * .22) drop(); }
@@ -2141,7 +2163,8 @@ function startTabata() {
 }
 function startComplex(nr) {
   if (!S) S = fresh();
-  if ((nr || cxPassNr()) === 4) { startTabata(); return; }
+  if ((nr || cxPassNr()) === 4) { startTabata(TAB); return; }
+  if ((nr || cxPassNr()) === 6) { startTabata(STA); return; }
   const pn = nr || cxPassNr();
   if (pn === 3 || pn === 5) { INT = 'normal'; const C = pn === 5 ? CX5 : CX3, plan = cxAPlan(C), steps = [];
     for (let v = 1; v <= C.v; v++) plan.forEach((x, xi) => steps.push({type:'set', x, xi, s:v, cx:true}));
@@ -2204,11 +2227,11 @@ const WAMAP = {knaboj:'luftknaboj', knabojbank:'stolres', utfall0:'utfallkv', ha
 const EXDUR = [320, 200, 110, 110, 110, 110, 110, 240, 240, 240, 110, 110, 110, 110, 110, 200];
 const sprIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const d = en.target; d.vis = en.isIntersecting;
   if (d.vis && !d.style.backgroundImage) d.style.backgroundImage = `url(${d.dataset.src})`; if (d.vis && !RM) d.go(); }), {rootMargin:'200px'}) : null;
-const EXFILE = {hasse:{gorillaswing:'gorillaswing4', axelkast:'axelkast3', pullover:'pullover4', squatpressout:'squatpressout5', utfallhalo:'utfallhalo3', highpull:'highpull2', rdl:'rdl2'}};   // omgjorda ark får nytt filnamn (cache)
+const EXFILE = {hasse:{grave:'grave2', gorillaswing:'gorillaswing4', axelkast:'axelkast3', pullover:'pullover4', squatpressout:'squatpressout5', utfallhalo:'utfallhalo3', highpull:'highpull2', rdl:'rdl2'}};   // omgjorda ark får nytt filnamn (cache)
 function exFile(fid, id) { const f = (EXFILE[fid] && EXFILE[fid][id]) || id; return fid === 'hasse' && X2.has(f) ? f + '_x2' : f; }
 // 32 rutor/rep: mellanrutor (RIFE) i rad 2-layout 16x2. sub = 0..31; jämn = originalruta, udda = mellanruta
 const X2 = new Set(['bojdrodd', 'swing', 'goblet', 'gobletpress', 'dans3', 'gorillaswing4', 'axelkast3', 'pullover4', 'squatpressout5', 'utfallhalo3',
-  'rotthruster', 'dlhalo', 'lungepress', 'pullrot', 'crosslunge', 'highpull2', 'gobletutfall', 'tahav', 'rdl2', 'golvpress', 'situp', 'atw', 'chop', 'halo', 'tuck', 'upover']);
+  'rotthruster', 'dlhalo', 'lungepress', 'pullrot', 'crosslunge', 'highpull2', 'gobletutfall', 'tahav', 'rdl2', 'golvpress', 'situp', 'atw', 'chop', 'halo', 'tuck', 'upover', 'kneedrive', 'rotdrive', 'grave2']);
 function isX2(el) { return /_x2\.webp/.test(el.style.backgroundImage || el.dataset.src || ''); }
 function sprAt(el, sub) {   // sub i 32-delar
   if (isX2(el)) { sub = ((sub % 32) + 32) % 32; el.style.backgroundSize = '1600% 200%'; el.style.backgroundPosition = `${(sub % 16) * 100 / 15}% ${sub >= 16 ? 100 : 0}%`; }
