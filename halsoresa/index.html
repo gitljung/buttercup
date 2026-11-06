@@ -236,14 +236,14 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 #tab.t-work .arc{stroke:#35E08A}#tab.t-work .ring b{color:#35E08A}#tab.t-rest .arc{stroke:#D63BE6}#tab.t-rest .ring b{color:#D63BE6}
 #tab .rnd{position:absolute;left:5vw;top:calc(env(safe-area-inset-top) + 4vh + min(30vw,150px) + 10px);font-style:italic;font-weight:800;font-size:min(8vw,40px);text-transform:uppercase;letter-spacing:.02em}
 #tab .rnd small{display:block;font-size:.42em;font-weight:700;opacity:.9;margin-top:2px}
-#tab .hs{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 2.5dvh + 5*min(5vw,22px) + 84px);height:min(44dvh,84vw);transform:translateX(-50%);background-repeat:no-repeat;background-size:auto 100%;filter:drop-shadow(0 6px 0 rgba(42,18,6,.18))}
+#tab .hs{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 2.5dvh + 5*min(3.9vw,17px) + 84px);height:min(44dvh,84vw);transform:translateX(-50%);background-repeat:no-repeat;background-size:auto 100%;filter:drop-shadow(0 6px 0 rgba(42,18,6,.18))}
 #tab .hs.flip{transform:translateX(-50%) scaleX(-1)}
-#tab .shadow{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 2.5dvh + 5*min(5vw,22px) + 74px);width:min(42vw,220px);height:22px;transform:translateX(-50%);border-radius:50%;background:rgba(42,18,6,.22)}
-#tab .lst{position:absolute;left:5vw;right:5vw;bottom:calc(env(safe-area-inset-bottom) + 2.5dvh);display:flex;flex-direction:column;gap:2px;
+#tab .shadow{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 2.5dvh + 5*min(3.9vw,17px) + 74px);width:min(42vw,220px);height:22px;transform:translateX(-50%);border-radius:50%;background:rgba(42,18,6,.22)}
+#tab .lst{position:absolute;left:4vw;right:4vw;bottom:calc(env(safe-area-inset-bottom) + 2.5dvh);display:grid;grid-template-columns:1fr 1fr;gap:2px 12px;
   padding:10px 14px;border-radius:16px;background:rgba(20,8,40,.62);border:2px solid #FF3EC9;box-shadow:0 0 14px rgba(255,62,201,.55),inset 0 0 12px rgba(0,229,255,.25);
-  font-style:italic;font-weight:800;font-size:min(5vw,22px);line-height:1.25;text-transform:uppercase;letter-spacing:.02em}
+  font-style:italic;font-weight:800;font-size:min(3.9vw,17px);line-height:1.25;text-transform:uppercase;letter-spacing:.01em}
 #tab .lst span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.75}
-#tab .tsl{position:absolute;left:5vw;right:5vw;bottom:calc(env(safe-area-inset-bottom) + 2.5dvh + 5*min(5vw,22px) + 34px);display:flex;align-items:center;gap:8px;
+#tab .tsl{position:absolute;left:5vw;right:5vw;bottom:calc(env(safe-area-inset-bottom) + 2.5dvh + 5*min(3.9vw,17px) + 34px);display:flex;align-items:center;gap:8px;
   padding:6px 12px;border-radius:14px;background:rgba(20,8,40,.62);border:2px solid #00E5FF;box-shadow:0 0 12px rgba(0,229,255,.5);
   font-style:italic;font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.03em;transition:opacity .5s,border-color .2s,box-shadow .2s;z-index:2}
 #tab .tsl i{font-style:italic;opacity:.8;font-size:12px}
@@ -517,7 +517,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
       </button>
     </div>
     <div class="hsel" role="tablist" aria-label="Välj Hasses pass"><button data-p="1" role="tab">Pass 1 · Komplex</button><button data-p="2" role="tab">Pass 2 · 30/30</button><button data-p="3" role="tab">Pass 3 · AMRAP</button><button data-p="4" role="tab">Pass 4 · Tabata</button></div>
-    <div class="tabniv" aria-label="Nivå"><button data-n="1">Lätt · 1 varv</button><button data-n="2">Medel · 2 varv</button><button data-n="3">Tung · 3 varv</button></div>
+    <div class="tabniv" aria-label="Nivå"><button data-n="1">Lätt · 4 min</button><button data-n="2">Medel · 8 min</button><button data-n="3">Tung · 12 min</button></div>
     <button class="libbtn hasse inl" id="go-hasse"><img src="hasse.webp" alt="Hasse med sin kettlebell" width="600" height="626"><span class="hej">Hallå gänget!</span><span class="lbl" id="hp-lbl">Kom igång direkt · 1 kettlebell · ca 13 min</span><b>Hasses superpass</b>
     <small id="hp-txt">Rodd → swing → knäböj → press. 6 reps var, rakt igenom. 10 varv, 30 s vila. Timern räknar – du bara kör.</small></button>
     <a class="hrlink" href="/halsoresa/">Hasses Hälsoresa – egen app ›</a>
@@ -1568,7 +1568,7 @@ function hasseDans(on) { const r = $('#rest'), d = $('#rdance .spr'); clearInter
 function pepp() { hallaGanget(); if (navigator.vibrate) navigator.vibrate([40, 40, 40]); }
 function hallaGanget() { let i; do i = Math.floor(Math.random() * HEJ.length); while (i === hejLast && HEJ.length > 1); hejLast = i;
   try { if (hejAu) hejAu.pause(); hejAu = new Audio(HEJ[i]); hejAu.volume = 1; hejAu.play().catch(() => {}); } catch (_) {} }
-const HPTXT = {4:['Kom igång direkt · 1 kettlebell · 2–6 min', 'Tabata: 20 s kör, 10 s vila. Goblet-knäböj → högdrag → goblet-utfall → press. Välj 1, 2 eller 3 varv.'],
+const HPTXT = {4:['Helkropp · 1 kettlebell · 4–12 min', 'Tabata: 20 s kör, 10 s vila. Åtta övningar från knäböj till sit-ups. Välj 1, 2 eller 3 varv.'],
   3:['Kom igång direkt · 1 kettlebell · 20 min', 'Roterande thruster → marklyft + halo → utfall + utpress → pullover + rotation → korsutfall. Så många varv du hinner på 20 minuter.'],
   1:['Kom igång direkt · 1 kettlebell · ca 13 min', 'Rodd → swing → knäböj → press. 6 reps var, rakt igenom. 10 varv, 30 s vila. Timern räknar – du bara kör.'],
   2:['Kom igång direkt · 1 kettlebell · ca 15 min', 'Gorillaswing → axelsving → rotation + pullover → utpress → utfall + halo. 30 s jobb, 30 s vila. 3 varv.']};
@@ -1640,7 +1640,7 @@ function renderProg() {
     b3.onclick = () => { hpSel(3); startComplex(3); }; pl.appendChild(b3);
     const b4 = document.createElement('button'); b4.className = 'passcard cxcard';
     b4.innerHTML = `<span class="ltr">⚡</span><span><h3>Hasses Tabata<span class="tag">Extra</span></h3>
-      <p>Goblet-knäböj → Högdrag → Goblet-utfall → Press stående</p><p class="lbl" style="margin-top:4px">1 klocka · 20 s kör / 10 s vila · 1–3 varv · 2–6 min</p></span>`;
+      <p>Knäböj · Högdrag · Utfall · Press · Tåhävningar · Marklyft · Golvpress · Sit-ups</p><p class="lbl" style="margin-top:4px">1 klocka · 20 s kör / 10 s vila · 1–3 varv · 4–12 min</p></span>`;
     b4.onclick = () => { hpSel(4); startComplex(4); }; pl.appendChild(b4); }
 }
 
@@ -2033,9 +2033,11 @@ function cxTimer(st, box) {
 }
 let CX3T = null;
 // ---------- Hasses Tabata (pass 4): egen helskärm i reel-stil ----------
-const TAB = {ex:['goblet', 'highpull', 'gobletutfall', 'strictpress'], work:20, rest:10, prep:10,
-  namn:{goblet:'Goblet-knäböj', highpull:'Högdrag', gobletutfall:'Goblet-utfall', strictpress:'Press stående'},
-  tempo:{goblet:2.5, highpull:2.6, gobletutfall:3, strictpress:2.5},
+const TAB = {ex:['goblet', 'highpull', 'gobletutfall', 'strictpress', 'tahav', 'rdl', 'golvpress', 'situp'], work:20, rest:10, prep:10,
+  namn:{goblet:'Goblet-knäböj', highpull:'Högdrag', gobletutfall:'Goblet-utfall', strictpress:'Press stående',
+        tahav:'Tåhävningar', rdl:'Rumänsk marklyft', golvpress:'Golvpress', situp:'Sit-up med klocka'},
+  tempo:{goblet:2.5, highpull:2.6, gobletutfall:3, strictpress:2.5, tahav:2.5, rdl:3, golvpress:2.5, situp:3.5},
+  hk:{golvpress:.78, situp:.92},   // liggande övningar: lägre figur (och aldrig bredare än skärmen)
   flipVarv:{strictpress:1}};   // pressen: byt arm varje varv
 function tabNiv() { return Math.min(3, Math.max(1, +localStorage.getItem('bc_halsoresa_tabniv') || 2)); }
 function tabNivSel(n) { if (n) localStorage.setItem('bc_halsoresa_tabniv', n); const v = tabNiv();
@@ -2053,7 +2055,8 @@ function startTabata() {
   // två kolumner som i reelen: 1–2 vänster, 3–4 höger
   lst.style.gridAutoFlow = 'column'; lst.style.gridTemplateRows = `repeat(${Math.ceil(TAB.ex.length / 2)}, auto)`;
   const setEx = (id, flip) => { const fw = M[id] || 300; hs.style.backgroundImage = `url(ex/hasse/${exFile('hasse', id)}.webp)`;
-    hs.style.aspectRatio = `${fw} / 480`; hs.classList.toggle('flip', !!flip); hs.dataset.id = id; };
+    hs.style.aspectRatio = `${fw} / 480`; { const W = el.clientWidth, H = el.clientHeight; let h = Math.min(H * .44, W * .84) * (TAB.hk[id] || 1);
+      if (h * fw / 480 > W * .94) h = W * .94 * 480 / fw; hs.style.height = Math.round(h) + 'px'; } hs.classList.toggle('flip', !!flip); hs.dataset.id = id; };
   const frame = f => { hs.style.backgroundPosition = `${cxFrame(f) * 100 / 15}% 0`; };
   const mmss = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return '00:' + String(s).padStart(2, '0'); };
   const pop = n => { n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop'); };
