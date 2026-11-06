@@ -25,7 +25,7 @@
 <meta name="apple-mobile-web-app-title" content="Hälsoresan">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:ital,wght@0,600;0,700;1,700;1,800&family=Barlow:wght@400;500;600&display=swap">
 <style>
 :root{--buttercup:#FCC222;--chili:#C8340A;--ox:#8F1A00;--cream:#FFF6DC;--ink:#2A1206;
   --display:"Anton","Impact",sans-serif;--label:"Barlow Condensed","Arial Narrow",sans-serif;--body:"Barlow",system-ui,sans-serif;
@@ -222,6 +222,40 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .fsheet .fsel{margin:0}
 .fsheet .fx{position:absolute;right:-8px;top:-14px;z-index:3;background:none;border:0;font-size:34px;line-height:1;color:var(--chili);cursor:pointer}
 .libbtn.hasse.inl{margin:10px 0 0}
+.hsel{flex-wrap:wrap}.hsel button{flex:1 1 calc(50% - 8px)}
+.tabniv{display:none;gap:6px;margin:10px 0 0}.tabniv.on{display:flex}.tabniv button{flex:1;font-family:var(--label);font-weight:700;font-size:13px;text-transform:uppercase;
+  padding:7px 4px;border:2px solid var(--ink);border-radius:9px;background:var(--cream);color:var(--ink);cursor:pointer}.tabniv button.on{background:var(--chili);color:var(--cream)}
+#tab{position:fixed;inset:0;z-index:300;display:none;overflow:hidden;background:#cfc6b6 url(ex/hasse/gymbg.webp) center 38%/cover no-repeat;color:#fff;
+  font-family:var(--label);user-select:none;-webkit-user-select:none}
+#tab.on{display:block}
+#tab .tsh{text-shadow:0 2px 0 rgba(42,18,6,.55),0 0 10px rgba(42,18,6,.35)}
+#tab .ring{position:absolute;left:5vw;top:calc(env(safe-area-inset-top) + 4vh);width:min(30vw,150px);height:min(30vw,150px)}
+#tab .ring svg{position:absolute;inset:0;display:block;width:100%;height:100%;transform:rotate(-90deg)}
+#tab .ring .bgc{fill:#111}#tab .ring .arc{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke .3s}
+#tab .ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--body);font-weight:600;font-size:min(7.2vw,36px);letter-spacing:.02em;font-variant-numeric:tabular-nums}
+#tab.work .arc{stroke:#35E08A}#tab.work .ring b{color:#35E08A}#tab.rest .arc{stroke:#D63BE6}#tab.rest .ring b{color:#D63BE6}
+#tab .rnd{position:absolute;left:5vw;top:calc(env(safe-area-inset-top) + 4vh + min(30vw,150px) + 10px);font-style:italic;font-weight:800;font-size:min(8vw,40px);text-transform:uppercase;letter-spacing:.02em}
+#tab .rnd small{display:block;font-size:.42em;font-weight:700;opacity:.9;margin-top:2px}
+#tab .hs{position:absolute;left:50%;bottom:24vh;height:min(50vh,92vw);transform:translateX(-50%);background-repeat:no-repeat;background-size:auto 100%;filter:drop-shadow(0 6px 0 rgba(42,18,6,.18))}
+#tab .hs.flip{transform:translateX(-50%) scaleX(-1)}
+#tab .shadow{position:absolute;left:50%;bottom:calc(24vh - 10px);width:min(42vw,220px);height:22px;transform:translateX(-50%);border-radius:50%;background:rgba(42,18,6,.22)}
+#tab .lst{position:absolute;left:6vw;right:6vw;bottom:calc(env(safe-area-inset-bottom) + 5vh);display:grid;grid-template-columns:1fr 1fr;gap:3px 18px;
+  font-style:italic;font-weight:700;font-size:min(4.6vw,22px);text-transform:uppercase;letter-spacing:.01em}
+#tab .lst span{transition:color .25s}#tab .lst span.now{color:#FCC222;text-decoration:underline;text-underline-offset:3px}
+#tab .intro{position:absolute;left:0;right:0;bottom:17vh;text-align:center;transition:opacity .5s}
+#tab .intro b{display:block;font-family:var(--display);font-weight:400;font-size:min(19vw,110px);letter-spacing:.14em;line-height:1;padding-left:.14em}
+#tab .intro i{display:block;font-style:italic;font-weight:800;color:#FCC222;font-size:min(6vw,30px);letter-spacing:.03em;margin-top:4px}
+#tab.intro-on .ring,#tab.intro-on .rnd,#tab.intro-on .lst{opacity:0}#tab:not(.intro-on) .intro{opacity:0;pointer-events:none}
+#tab .ring,#tab .rnd,#tab .lst{transition:opacity .5s}
+#tab .ctl{position:absolute;right:4vw;top:calc(env(safe-area-inset-top) + 3vh);display:flex;gap:8px}
+#tab .ctl button{width:44px;height:44px;border-radius:50%;border:2px solid #fff;background:rgba(42,18,6,.45);color:#fff;font-size:18px;cursor:pointer}
+#tab .flash{position:absolute;inset:0;pointer-events:none;opacity:0}
+#tab .done{position:absolute;left:0;right:0;top:calc(env(safe-area-inset-top) + 9vh);text-align:center;display:none}#tab.fin .done{display:block}#tab.fin .ring,#tab.fin .rnd,#tab.fin .lst{opacity:0}
+#tab .done b{display:block;font-family:var(--display);font-weight:400;font-size:min(16vw,96px);letter-spacing:.08em}
+#tab .done i{display:block;font-style:italic;font-weight:800;color:#FCC222;font-size:min(6vw,30px)}
+#tab .done button{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 6vh);font-family:var(--display);font-size:22px;padding:12px 26px;border:3px solid #2A1206;border-radius:14px;background:#FCC222;color:#2A1206;box-shadow:4px 4px 0 #C8340A;cursor:pointer}
+@keyframes tpop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+#tab .pop{animation:tpop .45s ease-out both}
 .hrstart{display:none}.hr .hrstart{display:block}.hr #s-start > :not(.hrstart){display:none}
 .hrlink{display:block;margin:12px 0 4px;text-align:right;font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:15px;color:var(--chili);text-decoration:none}
 .hrlink:hover{text-decoration:underline}
@@ -387,6 +421,15 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 <main>
 
 <!-- ============ START ============ -->
+<div id="tab" class="rest intro-on" aria-live="polite">
+  <div class="ring"><svg viewBox="0 0 100 100"><circle class="bgc" cx="50" cy="50" r="48"/><circle class="arc" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="100 100" stroke-dashoffset="0"/></svg><b>00:10</b></div>
+  <div class="rnd tsh">Runda 1<small></small></div>
+  <div class="ctl"><button class="tp" aria-label="Paus">❚❚</button><button class="tx" aria-label="Avsluta">✕</button></div>
+  <div class="shadow"></div><div class="hs"></div>
+  <div class="intro tsh"><b>TABATA</b><i>Helkroppspass med Hasse</i></div>
+  <div class="done tsh"><b>KLART!</b><i></i><br><button class="tback">Tillbaka</button></div>
+  <div class="lst tsh"></div><div class="flash"></div>
+</div>
 <section class="screen on" id="s-start">
   <div class="hrstart">
     <div class="hero hrhero">
@@ -428,7 +471,8 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
         <b>Calisthenics</b><small>Bara kroppen</small>
       </button>
     </div>
-    <div class="hsel" role="tablist" aria-label="Välj Hasses pass"><button data-p="1" role="tab">Pass 1 · Komplex</button><button data-p="2" role="tab">Pass 2 · 30/30</button><button data-p="3" role="tab">Pass 3 · AMRAP</button></div>
+    <div class="hsel" role="tablist" aria-label="Välj Hasses pass"><button data-p="1" role="tab">Pass 1 · Komplex</button><button data-p="2" role="tab">Pass 2 · 30/30</button><button data-p="3" role="tab">Pass 3 · AMRAP</button><button data-p="4" role="tab">Pass 4 · Tabata</button></div>
+    <div class="tabniv" aria-label="Nivå"><button data-n="1">Lätt · 1 varv</button><button data-n="2">Medel · 2 varv</button><button data-n="3">Tung · 3 varv</button></div>
     <button class="libbtn hasse inl" id="go-hasse"><img src="hasse.webp" alt="Hasse med sin kettlebell" width="600" height="626"><span class="hej">Hallå gänget!</span><span class="lbl" id="hp-lbl">Kom igång direkt · 1 kettlebell · ca 13 min</span><b>Hasses superpass</b>
     <small id="hp-txt">Rodd → swing → knäböj → press. 6 reps var, rakt igenom. 10 varv, 30 s vila. Timern räknar – du bara kör.</small></button>
     <a class="hrlink" href="/halsoresa/">Hasses Hälsoresa – egen app ›</a>
@@ -1479,17 +1523,18 @@ function hasseDans(on) { const r = $('#rest'), d = $('#rdance .spr'); clearInter
 function pepp() { hallaGanget(); if (navigator.vibrate) navigator.vibrate([40, 40, 40]); }
 function hallaGanget() { let i; do i = Math.floor(Math.random() * HEJ.length); while (i === hejLast && HEJ.length > 1); hejLast = i;
   try { if (hejAu) hejAu.pause(); hejAu = new Audio(HEJ[i]); hejAu.volume = 1; hejAu.play().catch(() => {}); } catch (_) {} }
-const HPTXT = {3:['Kom igång direkt · 1 kettlebell · 20 min', 'Roterande thruster → marklyft + halo → utfall + utpress → pullover + rotation → korsutfall. Så många varv du hinner på 20 minuter.'],
+const HPTXT = {4:['Kom igång direkt · 1 kettlebell · 2–6 min', 'Tabata: 20 s kör, 10 s vila. Goblet-knäböj → högdrag → goblet-utfall → press. Välj 1, 2 eller 3 varv.'],
+  3:['Kom igång direkt · 1 kettlebell · 20 min', 'Roterande thruster → marklyft + halo → utfall + utpress → pullover + rotation → korsutfall. Så många varv du hinner på 20 minuter.'],
   1:['Kom igång direkt · 1 kettlebell · ca 13 min', 'Rodd → swing → knäböj → press. 6 reps var, rakt igenom. 10 varv, 30 s vila. Timern räknar – du bara kör.'],
   2:['Kom igång direkt · 1 kettlebell · ca 15 min', 'Gorillaswing → axelsving → rotation + pullover → utpress → utfall + halo. 30 s jobb, 30 s vila. 3 varv.']};
 function hpSel(nr) { if (nr) localStorage.setItem('bc_halsoresa_hpass', nr); const p = cxPassNr();
   document.querySelectorAll('.hsel button').forEach(b => { const on = +b.dataset.p === p; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
-  $('#hp-lbl').textContent = HPTXT[p][0]; $('#go-hasse b').textContent = ['', 'Hasses superpass', 'Hasses superpass 2', 'Hasses superpass 3'][p]; $('#hp-txt').textContent = HPTXT[p][1]; }
+  $('#hp-lbl').textContent = HPTXT[p][0]; $('#go-hasse b').textContent = ['', 'Hasses superpass', 'Hasses superpass 2', 'Hasses superpass 3', 'Hasses Tabata'][p]; document.querySelector('.tabniv').classList.toggle('on', p === 4); $('#hp-txt').textContent = HPTXT[p][1]; }
 document.querySelectorAll('.hsel button').forEach(b => b.onclick = () => { hpSel(b.dataset.p); $('#go-hasse').animate([{transform:'scale(.97)'}, {transform:'scale(1)'}], {duration:220}); });
 hpSel();
 if (window.HR) { $('#hr-slot').append($('.hsel'), $('#go-hasse')); document.title = 'Hasses Hälsoresa · Buttercup';
   const hb = document.querySelector('.bc-bar .hide-m');  }
-$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); new Image().src = 'ex/hasse/dans3.webp'; new Audio('hasse/vibe.mp3').load(); ({1:CX.ex, 2:CX2.ex, 3:CX3.ex}[cxPassNr()]).forEach(k => { new Image().src = `ex/hasse/${exFile('hasse', k)}.webp`; });
+$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); new Image().src = 'ex/hasse/dans3.webp'; new Audio('hasse/vibe.mp3').load(); ({1:CX.ex, 2:CX2.ex, 3:CX3.ex, 4:TAB.ex}[cxPassNr()]).forEach(k => { new Image().src = `ex/hasse/${exFile('hasse', k)}.webp`; });
   b.classList.add('talk'); setTimeout(() => { b.classList.remove('talk'); delete b.dataset.busy; useGear('kb'); if (!S) S = fresh(); startComplex(); }, 1500); }; $('#lib-go').onclick = () => startFree();
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#sheet').classList.remove('on'); });
 
@@ -1547,7 +1592,11 @@ function renderProg() {
     const b3 = document.createElement('button'); b3.className = 'passcard cxcard';
     b3.innerHTML = `<span class="ltr">⚡</span><span><h3>Hasses superpass 3<span class="tag">Extra</span></h3>
       <p>Roterande thruster → Marklyft + halo → Utfall + utpress → Pullover + rotation → Korsutfall</p><p class="lbl" style="margin-top:4px">1 lätt klocka · så många varv du hinner · 20 min</p></span>`;
-    b3.onclick = () => { hpSel(3); startComplex(3); }; pl.appendChild(b3); }
+    b3.onclick = () => { hpSel(3); startComplex(3); }; pl.appendChild(b3);
+    const b4 = document.createElement('button'); b4.className = 'passcard cxcard';
+    b4.innerHTML = `<span class="ltr">⚡</span><span><h3>Hasses Tabata<span class="tag">Extra</span></h3>
+      <p>Goblet-knäböj → Högdrag → Goblet-utfall → Press stående</p><p class="lbl" style="margin-top:4px">1 klocka · 20 s kör / 10 s vila · 1–3 varv · 2–6 min</p></span>`;
+    b4.onclick = () => { hpSel(4); startComplex(4); }; pl.appendChild(b4); }
 }
 
 // ---------------- pass ----------------
@@ -1870,7 +1919,7 @@ const CX2 = {ex:['gorillaswing', 'axelkast', 'pullover', 'squatpressout', 'utfal
      pullover:{namn:'Rotation + pullover', tips:['Klockan i hornen mot bröstet','Vrid hela kroppen 90° åt sidan – snurra på framfoten, bakre hälen lyfts – och tillbaka','Klockan upp över huvudet och ner bakom nacken, armbågarna pekar upp. Nästa rep vrider du åt andra hållet']},
      squatpressout:{namn:'Knäböj + utpress', tips:['Klockan i hornen tätt mot bröstet','Sitt djupt och pressa klockan rakt fram – armarna raka, i brösthöjd','Dra tillbaka till bröstet och res dig']},
      utfallhalo:{namn:'Utfall + halo', tips:['Klockan i hornen mot bröstet','Kliv bakåt i ett djupt utfall – bakre knät nästan i golvet','Stanna nere och för klockan ett varv runt huvudet, res dig och byt ben']}}};
-function cxPassNr() { const v = +localStorage.getItem('bc_halsoresa_hpass'); return v === 2 || v === 3 ? v : 1; }
+function cxPassNr() { const v = +localStorage.getItem('bc_halsoresa_hpass'); return v >= 2 && v <= 4 ? v : 1; }
 function cx2Plan() { return CX2.ex.map(id => ({id, e:{...CX2.e[id], unit:'sek'}, sets:CX2.v, reps:CX2.work, work:CX2.work, bell:'l', kg:S.bells.l + ' kg',
   target:CX2.work + ' s jobb · ' + CX2.rest + ' s vila', rest:CX2.rest, g:'kb', cx:true})); }
 // Hasses pass 3 (Adrian Goldstein-reel): AMRAP 20 min – så många varv du hinner, reps enligt reelen, kort vila mellan varven
@@ -1938,8 +1987,68 @@ function cxTimer(st, box) {
   draw();
 }
 let CX3T = null;
+// ---------- Hasses Tabata (pass 4): egen helskärm i reel-stil ----------
+const TAB = {ex:['goblet', 'highpull', 'gobletutfall', 'strictpress'], work:20, rest:10, prep:10,
+  namn:{goblet:'Goblet-knäböj', highpull:'Högdrag', gobletutfall:'Goblet-utfall', strictpress:'Press stående'},
+  tempo:{goblet:2.5, highpull:2, gobletutfall:3, strictpress:2.5},
+  flipVarv:{strictpress:1}};   // pressen: byt arm varje varv
+function tabNiv() { return Math.min(3, Math.max(1, +localStorage.getItem('bc_halsoresa_tabniv') || 2)); }
+function tabNivSel(n) { if (n) localStorage.setItem('bc_halsoresa_tabniv', n); const v = tabNiv();
+  document.querySelectorAll('.tabniv button').forEach(b => b.classList.toggle('on', +b.dataset.n === v)); }
+document.querySelectorAll('.tabniv button').forEach(b => b.onclick = () => tabNivSel(b.dataset.n)); tabNivSel();
+let TT = null;
+function tabStop() { if (TT) { clearInterval(TT.iv); TT = null; } }
+function startTabata() {
+  if (!S) S = fresh();
+  const el = $('#tab'), V = tabNiv(), seq = [];
+  for (let v = 1; v <= V; v++) TAB.ex.forEach((id, i) => seq.push({id, v, i, n:(v - 1) * TAB.ex.length + i + 1}));
+  const M = (EXM.hasse || {}), hs = el.querySelector('.hs'), arc = el.querySelector('.arc'), num = el.querySelector('.ring b'), rnd = el.querySelector('.rnd'),
+        lst = el.querySelector('.lst');
+  lst.innerHTML = TAB.ex.map((id, i) => `<span>${i + 1}. ${TAB.namn[id]}</span>`).join('');
+  // två kolumner som i reelen: 1–2 vänster, 3–4 höger
+  lst.style.gridAutoFlow = 'column'; lst.style.gridTemplateRows = `repeat(${Math.ceil(TAB.ex.length / 2)}, auto)`;
+  const setEx = (id, flip) => { const fw = M[id] || 300; hs.style.backgroundImage = `url(ex/hasse/${exFile('hasse', id)}.webp)`;
+    hs.style.aspectRatio = `${fw} / 480`; hs.classList.toggle('flip', !!flip); hs.dataset.id = id; };
+  const frame = f => { hs.style.backgroundPosition = `${cxFrame(f) * 100 / 15}% 0`; };
+  const mmss = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return '00:' + String(s).padStart(2, '0'); };
+  const pop = n => { n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop'); };
+  const flash = c => el.querySelector('.flash').animate([{background:c, opacity:.35}, {opacity:0}], {duration:450});
+  // faser: intro 3 s → [vila/förberedelse 10 s → kör 20 s] × N
+  const ph = [{k:'intro', d:3000}];
+  seq.forEach((x, j) => { ph.push({k:'rest', d:(j === 0 ? TAB.prep : TAB.rest) * 1000, x}); ph.push({k:'work', d:TAB.work * 1000, x}); });
+  el.className = 'rest intro-on on'; el.querySelector('.done i').textContent = '';
+  setEx(seq[0].id); frame(0); num.textContent = mmss(TAB.prep * 1000); rnd.firstChild.textContent = 'Runda 1';
+  tabStop(); wakeOn(); hallaGanget();
+  const T = TT = {pi:0, t:0, last:performance.now(), paused:false};
+  const enter = () => { const P = ph[T.pi], x = P.x; if (!x) return;
+    el.classList.remove('intro-on'); el.classList.toggle('work', P.k === 'work'); el.classList.toggle('rest', P.k === 'rest');
+    rnd.firstChild.textContent = `Runda ${x.n}`; rnd.querySelector('small').textContent = V > 1 ? `Varv ${x.v} av ${V}` : '';
+    lst.querySelectorAll('span').forEach((s, i) => s.classList.toggle('now', i === x.i));
+    setEx(x.id, TAB.flipVarv[x.id] && x.v % 2 === 0); frame(0);
+    if (P.k === 'work') { num.textContent = 'KÖR'; pop(num); beep(); flash('#35E08A'); if (navigator.vibrate) navigator.vibrate(120); if (x.n === 1) korVi(); }
+    else { num.textContent = T.pi === 1 ? mmss(P.d) : 'VILA'; pop(num); if (T.pi > 1) { blip(700, 350, .18); flash('#D63BE6'); } pop(rnd); } };
+  const finish = () => { tabStop(); wakeOff(); el.classList.add('fin'); el.classList.remove('work'); el.classList.add('rest');
+    lst.querySelectorAll('span').forEach(s => s.classList.remove('now')); setEx('goblet'); frame(0);
+    el.querySelector('.done i').textContent = `${V} varv · ${seq.length} rundor · ${Math.round(seq.length * 30 / 60 * 10) / 10} min`; confetti(); hallaGanget(); };
+  T.iv = setInterval(() => {
+    const now = performance.now(), dt = now - T.last; T.last = now; if (T.paused || TT !== T) return;
+    const P = ph[T.pi], before = T.t; T.t += dt;
+    if (P.k !== 'intro') { const left = P.d - T.t;
+      if (T.t > 600 || P.k === 'rest' && T.pi === 1) num.textContent = mmss(left);
+      arc.setAttribute('stroke-dashoffset', String(100 * T.t / P.d));
+      if (left < 3000 && Math.ceil((P.d - before) / 1000) !== Math.ceil(left / 1000) && left > 0) blip(880, 880, .05);
+      if (P.k === 'work') { const per = TAB.tempo[P.x.id] * 1000; frame((T.t % per) / per); }
+      else if (P.d - T.t < 2500) frame(0); }
+    if (T.t >= P.d) { T.t = 0; T.pi++; arc.setAttribute('stroke-dashoffset', '0'); if (T.pi >= ph.length) { finish(); return; } enter(); }
+  }, 33);
+  el.querySelector('.tp').onclick = e => { T.paused = !T.paused; e.currentTarget.textContent = T.paused ? '▶' : '❚❚'; };
+  const close = () => { tabStop(); wakeOff(); el.classList.remove('on'); };
+  el.querySelector('.tx').onclick = () => { if (el.classList.contains('fin') || confirm('Avbryta passet?')) close(); };
+  el.querySelector('.tback').onclick = close;
+}
 function startComplex(nr) {
   if (!S) S = fresh();
+  if ((nr || cxPassNr()) === 4) { startTabata(); return; }
   if ((nr || cxPassNr()) === 3) { INT = 'normal'; const plan = cx3Plan(), steps = [];
     for (let v = 1; v <= CX3.v; v++) plan.forEach((x, xi) => steps.push({type:'set', x, xi, s:v, cx:true}));
     steps.push({type:'rpe'});
