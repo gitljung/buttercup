@@ -236,13 +236,40 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 #tab.t-work .arc{stroke:#35E08A}#tab.t-work .ring b{color:#35E08A}#tab.t-rest .arc{stroke:#D63BE6}#tab.t-rest .ring b{color:#D63BE6}
 #tab .rnd{position:absolute;left:5vw;top:calc(env(safe-area-inset-top) + 4vh + min(30vw,150px) + 10px);font-style:italic;font-weight:800;font-size:min(8vw,40px);text-transform:uppercase;letter-spacing:.02em}
 #tab .rnd small{display:block;font-size:.42em;font-weight:700;opacity:.9;margin-top:2px}
-#tab .hs{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 30dvh);height:min(46dvh,88vw);transform:translateX(-50%);background-repeat:no-repeat;background-size:auto 100%;filter:drop-shadow(0 6px 0 rgba(42,18,6,.18))}
+#tab .hs{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 2.5dvh + 5*min(5vw,22px) + 84px);height:min(44dvh,84vw);transform:translateX(-50%);background-repeat:no-repeat;background-size:auto 100%;filter:drop-shadow(0 6px 0 rgba(42,18,6,.18))}
 #tab .hs.flip{transform:translateX(-50%) scaleX(-1)}
-#tab .shadow{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 30dvh - 10px);width:min(42vw,220px);height:22px;transform:translateX(-50%);border-radius:50%;background:rgba(42,18,6,.22)}
+#tab .shadow{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 2.5dvh + 5*min(5vw,22px) + 74px);width:min(42vw,220px);height:22px;transform:translateX(-50%);border-radius:50%;background:rgba(42,18,6,.22)}
 #tab .lst{position:absolute;left:5vw;right:5vw;bottom:calc(env(safe-area-inset-bottom) + 2.5dvh);display:flex;flex-direction:column;gap:2px;
   padding:10px 14px;border-radius:16px;background:rgba(20,8,40,.62);border:2px solid #FF3EC9;box-shadow:0 0 14px rgba(255,62,201,.55),inset 0 0 12px rgba(0,229,255,.25);
   font-style:italic;font-weight:800;font-size:min(5vw,22px);line-height:1.25;text-transform:uppercase;letter-spacing:.02em}
 #tab .lst span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.75}
+#tab .tsl{position:absolute;left:5vw;right:5vw;bottom:calc(env(safe-area-inset-bottom) + 2.5dvh + 5*min(5vw,22px) + 34px);display:flex;align-items:center;gap:8px;
+  padding:6px 12px;border-radius:14px;background:rgba(20,8,40,.62);border:2px solid #00E5FF;box-shadow:0 0 12px rgba(0,229,255,.5);
+  font-style:italic;font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.03em;transition:opacity .5s,border-color .2s,box-shadow .2s;z-index:2}
+#tab .tsl i{font-style:italic;opacity:.8;font-size:12px}
+#tab .tsl input{-webkit-appearance:none;appearance:none;flex:1;min-width:60px;height:10px;border-radius:6px;border:2px solid #fff;margin:0;
+  background:linear-gradient(90deg,#FF3EC9 var(--p,40%),rgba(255,255,255,.18) var(--p,40%))}
+#tab .tsl input::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#FCC222;border:3px solid #2A1206;box-shadow:0 0 10px #FF3EC9;cursor:pointer}
+#tab .tsl input::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#FCC222;border:3px solid #2A1206;cursor:pointer}
+#tab .tsl b{min-width:58px;text-align:right;font-family:var(--display);font-style:normal;font-weight:400;font-size:16px;color:#FCC222;letter-spacing:.02em}
+#tab .tsl em{position:absolute;left:50%;top:-15px;transform:translateX(-50%) rotate(-3deg);font-family:var(--display);font-style:normal;font-weight:400;font-size:17px;letter-spacing:.08em;
+  padding:1px 10px;border-radius:8px;border:2px solid #2A1206;background:#35E08A;color:#2A1206;white-space:nowrap}
+#tab.s2 .tsl em{background:#FCC222}#tab.s3 .tsl em{background:#FF7A1A;animation:tjit .12s steps(2) infinite}#tab.s4 .tsl em{background:#FF2D2D;color:#fff;animation:tjit .07s steps(2) infinite}
+#tab.s3 .tsl,#tab.s4 .tsl{border-color:#FF2D2D;box-shadow:0 0 16px rgba(255,45,45,.8)}
+@keyframes tjit{0%{transform:translateX(-52%) rotate(-5deg)}100%{transform:translateX(-48%) rotate(-1deg)}}
+#tab.intro-on .tsl,#tab.fin .tsl{opacity:0;pointer-events:none}
+/* stress-effekter (styrs av --st 0..1 från JS) */
+#tab .speed{position:absolute;inset:-30%;pointer-events:none;opacity:calc(var(--st,0) * var(--wk,0) * .55);
+  background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.95) 0deg .8deg,transparent .8deg 7deg);
+  -webkit-mask-image:radial-gradient(circle at 50% 50%,transparent 26%,#000 60%);mask-image:radial-gradient(circle at 50% 50%,transparent 26%,#000 60%);
+  animation:tspin .5s steps(3) infinite;transition:opacity .3s}
+@keyframes tspin{to{transform:rotate(14deg)}}
+#tab .vig{position:absolute;inset:0;pointer-events:none;opacity:calc(var(--st,0) * var(--wk,0) * .9);transition:opacity .3s;
+  background:radial-gradient(ellipse at 50% 45%,transparent 45%,rgba(255,20,20,.55) 100%);animation:tvig var(--bt,.47s) ease-out infinite}
+@keyframes tvig{0%{filter:brightness(1.5)}50%{filter:brightness(.8)}100%{filter:brightness(1)}}
+#tab .drop{position:absolute;width:12px;height:17px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#8FE3FF;border:2px solid #2A1206;pointer-events:none;z-index:1}
+#tab.beat .ring{animation-duration:var(--bt,.46875s)}#tab.beat.t-work .rnd{animation-duration:var(--bt,.46875s)}
+#tab.beat .grid{animation-duration:calc(var(--bt,.46875s) * 4)}
 #tab .lst span.now{opacity:1;text-decoration:none;color:#FCC222;text-shadow:0 0 8px #FF3EC9,0 2px 0 rgba(42,18,6,.6)}
 #tab .lst span.now::before{content:'▶ ';color:#00E5FF}
 #tab .lst span{transition:color .25s}#tab .lst span.now{color:#FCC222;text-decoration:underline;text-underline-offset:3px}
@@ -442,9 +469,10 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
   <div class="ring"><svg viewBox="0 0 100 100"><circle class="bgc" cx="50" cy="50" r="48"/><circle class="arc" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="100 100" stroke-dashoffset="0"/></svg><b>00:10</b></div>
   <div class="rnd tsh">Runda 1<small></small></div>
   <div class="ctl"><button class="tp" aria-label="Paus">❚❚</button><button class="tx" aria-label="Avsluta">✕</button></div>
-  <div class="grid"></div><div class="shadow"></div><div class="hs"></div><div class="big"></div>
+  <div class="grid"></div><div class="speed"></div><div class="shadow"></div><div class="hs"></div><div class="big"></div>
   <div class="intro tsh"><b>TABATA</b><i>Helkroppspass med Hasse</i></div>
   <div class="done tsh"><b>KLART!</b><i></i><br><button class="tback">Tillbaka</button></div>
+  <div class="vig"></div><div class="tsl tsh"><em>PIGGT</em><i>Snabbt</i><input type="range" min="0.6" max="1.6" step="0.05" value="1" aria-label="Tempo per repetition"><i>Lugnt</i><b>2,5 s</b></div>
   <div class="lst tsh"></div><div class="flash"></div>
 </div>
 <section class="screen on" id="s-start">
@@ -2038,14 +2066,36 @@ function startTabata() {
   tabStop(); wakeOn(); vibeOn('hasse/synth80.mp3', .42, true); el.classList.add('beat'); setTimeout(hallaGanget, 900);
   const big = el.querySelector('.big'), bigs = t => { big.textContent = t; big.classList.remove('go'); void big.offsetWidth; big.classList.add('go'); };
   const T = TT = {pi:0, t:0, last:performance.now(), paused:false};
+  // temposlider: k = multiplikator på sekunder/rep (0,6 snabbt … 1,6 lugnt); snabbare = stressigare
+  const rg = el.querySelector('.tsl input'), tv = el.querySelector('.tsl b'), lab = el.querySelector('.tsl em');
+  T.k = Math.min(1.6, Math.max(.6, +localStorage.getItem('bc_halsoresa_tabk') || 1)); rg.value = T.k;
+  const curId = () => (ph[T.pi] && ph[T.pi].x ? ph[T.pi].x.id : seq[0].id);
+  const tset = () => { T.k = +rg.value; const st = Math.min(1, Math.max(0, (1.15 - T.k) / .55)); T.st = st;
+    tv.textContent = (TAB.tempo[curId()] * T.k).toFixed(1).replace('.', ',') + ' s';
+    rg.style.setProperty('--p', ((T.k - .6) * 100) + '%'); el.style.setProperty('--st', st.toFixed(2));
+    const lv = st < .15 ? 1 : st < .45 ? 2 : st < .8 ? 3 : 4; lab.textContent = ['', 'LUGNT', 'PIGGT', 'STRESS!', 'PANIK!!'][lv];
+    el.classList.remove('s1', 's2', 's3', 's4'); el.classList.add('s' + lv);
+    const rate = Math.min(1.14, Math.max(.9, 1 + (1 - T.k) * .32)); el.style.setProperty('--bt', (.46875 / rate).toFixed(3) + 's');
+    if (VIBE) { try { VIBE.preservesPitch = false; VIBE.mozPreservesPitch = false; VIBE.webkitPreservesPitch = false; VIBE.playbackRate = rate; } catch (_) {} } };
+  rg.oninput = () => { const old = TAB.tempo[curId()] * 1000 * T.k; tset(); localStorage.setItem('bc_halsoresa_tabk', T.k);
+    if (ph[T.pi] && ph[T.pi].k === 'work') { const np = TAB.tempo[curId()] * 1000 * T.k; T.ph0 = ((T.t - (T.ph0 || 0)) % old) / old; T.off = T.t - T.ph0 * np; } };
+  ['pointerdown', 'touchstart'].forEach(e => rg.addEventListener(e, ev => ev.stopPropagation(), {passive:true}));
+  setTimeout(tset, 1600);   // efter att musiken startat
+  tset();
+  const drop = () => { const r = hs.getBoundingClientRect(), d = document.createElement('div'); d.className = 'drop';
+    const side = Math.random() < .5 ? -1 : 1, x0 = r.left + r.width / 2 + side * r.width * (.08 + Math.random() * .12), y0 = r.top + r.height * (.08 + Math.random() * .1);
+    d.style.left = x0 + 'px'; d.style.top = y0 + 'px'; el.appendChild(d);
+    const dx = side * (40 + Math.random() * 70), up = 30 + Math.random() * 40;
+    d.animate([{transform:'translate(0,0) scale(.6)', opacity:1}, {transform:`translate(${dx * .6}px,${-up}px) scale(1)`, opacity:1, offset:.35},
+      {transform:`translate(${dx}px,${90 + Math.random() * 60}px) scale(.8)`, opacity:0}], {duration:700 + Math.random() * 300, easing:'ease-in'}).onfinish = () => d.remove(); };
   const enter = () => { const P = ph[T.pi], x = P.x; if (!x) return;
-    el.classList.remove('intro-on'); el.classList.toggle('t-work', P.k === 'work'); el.classList.toggle('t-rest', P.k === 'rest');
+    el.classList.remove('intro-on'); T.off = 0; T.ph0 = 0; el.style.setProperty('--wk', P.k === 'work' ? 1 : 0); tset(); el.classList.toggle('t-work', P.k === 'work'); el.classList.toggle('t-rest', P.k === 'rest');
     rnd.firstChild.textContent = `Runda ${x.n}`; rnd.querySelector('small').textContent = V > 1 ? `Varv ${x.v} av ${V}` : '';
     lst.querySelectorAll('span').forEach((s, i) => s.classList.toggle('now', i === x.i));
     setEx(x.id, TAB.flipVarv[x.id] && x.v % 2 === 0); frame(0);
     if (P.k === 'work') { num.textContent = 'KÖR'; pop(num); beep(); flash('#35E08A'); bigs('KÖR!'); vibeVol(.6, 300); if (navigator.vibrate) navigator.vibrate(120); if (x.n === 1) korVi(); }
     else { num.textContent = T.pi === 1 ? mmss(P.d) : 'VILA'; pop(num); if (T.pi > 1) vibeVol(.3, 500); if (T.pi > 1) { blip(700, 350, .18); flash('#D63BE6'); } pop(rnd); } };
-  const finish = () => { tabStop(); wakeOff(); el.classList.add('fin'); vibeVol(.5, 400); setTimeout(() => vibeOff(2500), 6000); el.classList.remove('t-work'); el.classList.add('t-rest');
+  const finish = () => { tabStop(); wakeOff(); el.style.setProperty('--wk', 0); hs.style.translate = ''; if (VIBE) VIBE.playbackRate = 1; el.classList.add('fin'); vibeVol(.5, 400); setTimeout(() => vibeOff(2500), 6000); el.classList.remove('t-work'); el.classList.add('t-rest');
     lst.querySelectorAll('span').forEach(s => s.classList.remove('now')); setEx('goblet'); frame(0);
     el.querySelector('.done i').textContent = `${V} varv · ${seq.length} rundor · ${Math.round(seq.length * 30 / 60 * 10) / 10} min`; confetti(); hallaGanget(); };
   T.iv = setInterval(() => {
@@ -2055,8 +2105,11 @@ function startTabata() {
       if (T.t > 600 || P.k === 'rest' && T.pi === 1) num.textContent = mmss(left);
       arc.setAttribute('stroke-dashoffset', String(100 * T.t / P.d));
       if (left < 3000 && Math.ceil((P.d - before) / 1000) !== Math.ceil(left / 1000) && left > 0) { blip(880, 880, .05); if (P.k === 'rest') bigs(String(Math.ceil(left / 1000))); }
-      if (P.k === 'work') { const per = TAB.tempo[P.x.id] * 1000; frame((T.t % per) / per); }
-      else if (P.d - T.t < 2500) frame(0); }
+      if (P.k === 'work') { const per = TAB.tempo[P.x.id] * 1000 * T.k; frame((((T.t - (T.off || 0)) % per) + per) % per / per);
+        const st = T.st || 0, a = st * st * 7;   // skakning + svett när det går fort
+        hs.style.translate = a > .3 ? `${(Math.random() * 2 - 1) * a}px ${(Math.random() * 2 - 1) * a * .6}px` : '';
+        if (Math.random() < st * .22) drop(); }
+      else { hs.style.translate = ''; if (P.d - T.t < 2500) frame(0); } }
     if (T.t >= P.d) { T.t = 0; T.pi++; arc.setAttribute('stroke-dashoffset', '0'); if (T.pi >= ph.length) { finish(); return; } enter(); }
   }, 33);
   el.querySelector('.tp').onclick = e => { T.paused = !T.paused; e.currentTarget.textContent = T.paused ? '▶' : '❚❚'; el.classList.toggle('beat', !T.paused); if (VIBE) T.paused ? VIBE.pause() : VIBE.play().catch(() => {}); };
