@@ -2033,12 +2033,13 @@ function cxTimer(st, box) {
 }
 let CX3T = null;
 // ---------- Hasses Tabata (pass 4): egen helskärm i reel-stil ----------
-const TAB = {ex:['goblet', 'highpull', 'gobletutfall', 'strictpress', 'tahav', 'rdl', 'golvpress', 'situp'], work:20, rest:10, prep:10,
-  namn:{goblet:'Goblet-knäböj', highpull:'Högdrag', gobletutfall:'Goblet-utfall', strictpress:'Press stående',
+const TAB = {ex:['goblet', 'highpull', 'gobletutfall', 'gobletpress', 'tahav', 'rdl', 'golvpress', 'situp'], work:20, rest:10, prep:10,
+  namn:{goblet:'Goblet-knäböj', highpull:'Högdrag', gobletutfall:'Utfall bakåt', gobletpress:'Press stående',
         tahav:'Tåhävningar', rdl:'Rumänsk marklyft', golvpress:'Golvpress', situp:'Sit-up med klocka'},
-  tempo:{goblet:2.5, highpull:2.6, gobletutfall:3, strictpress:2.5, tahav:2.5, rdl:3, golvpress:2.5, situp:3.5},
+  tempo:{goblet:2.5, highpull:2.6, gobletutfall:3, gobletpress:2.5, tahav:2.5, rdl:3, golvpress:2.5, situp:3.5},
+  altRep:{gobletutfall:1},   // byt ben varje rep (spegling), som i reelen
   hk:{golvpress:.78, situp:.92},   // liggande övningar: lägre figur (och aldrig bredare än skärmen)
-  flipVarv:{strictpress:1}};   // pressen: byt arm varje varv
+  flipVarv:{}};
 function tabNiv() { return Math.min(3, Math.max(1, +localStorage.getItem('bc_halsoresa_tabniv') || 2)); }
 function tabNivSel(n) { if (n) localStorage.setItem('bc_halsoresa_tabniv', n); const v = tabNiv();
   document.querySelectorAll('.tabniv button').forEach(b => b.classList.toggle('on', +b.dataset.n === v)); }
@@ -2109,6 +2110,7 @@ function startTabata() {
       arc.setAttribute('stroke-dashoffset', String(100 * T.t / P.d));
       if (left < 3000 && Math.ceil((P.d - before) / 1000) !== Math.ceil(left / 1000) && left > 0) { blip(880, 880, .05); if (P.k === 'rest') bigs(String(Math.ceil(left / 1000))); }
       if (P.k === 'work') { const per = TAB.tempo[P.x.id] * 1000 * T.k; frame((((T.t - (T.off || 0)) % per) + per) % per / per);
+        if (TAB.altRep[P.x.id]) hs.classList.toggle('flip', Math.floor(Math.max(0, T.t - (T.off || 0)) / per) % 2 === 1);
         const st = T.st || 0, a = st * st * 7;   // skakning + svett när det går fort
         hs.style.translate = a > .3 ? `${(Math.random() * 2 - 1) * a}px ${(Math.random() * 2 - 1) * a * .6}px` : '';
         if (Math.random() < st * .22) drop(); }
@@ -2184,7 +2186,7 @@ const WAMAP = {knaboj:'luftknaboj', knabojbank:'stolres', utfall0:'utfallkv', ha
 const EXDUR = [320, 200, 110, 110, 110, 110, 110, 240, 240, 240, 110, 110, 110, 110, 110, 200];
 const sprIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const d = en.target; d.vis = en.isIntersecting;
   if (d.vis && !d.style.backgroundImage) d.style.backgroundImage = `url(${d.dataset.src})`; if (d.vis && !RM) d.go(); }), {rootMargin:'200px'}) : null;
-const EXFILE = {hasse:{gorillaswing:'gorillaswing4', axelkast:'axelkast3', pullover:'pullover4', squatpressout:'squatpressout5', utfallhalo:'utfallhalo3', highpull:'highpull2'}};   // omgjorda ark får nytt filnamn (cache)
+const EXFILE = {hasse:{gorillaswing:'gorillaswing4', axelkast:'axelkast3', pullover:'pullover4', squatpressout:'squatpressout5', utfallhalo:'utfallhalo3', highpull:'highpull2', rdl:'rdl2'}};   // omgjorda ark får nytt filnamn (cache)
 function exFile(fid, id) { return (EXFILE[fid] && EXFILE[fid][id]) || id; }
 function exSprite(id, e) {
   const fid = SS && SS.cx && EXM.hasse && EXM.hasse[id] ? 'hasse' : localStorage.getItem('bc_halsoresa_fighter') || 'kent', v = EXM[fid] && EXM[fid][id], w = Array.isArray(v) ? v[0] : v, hh = Array.isArray(v) ? v[1] : (EXM.h || 256);
