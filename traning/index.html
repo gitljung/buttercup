@@ -226,7 +226,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .hsel{flex-wrap:wrap}.hsel button{flex:1 1 calc(50% - 8px)}
 .tabniv{display:none;gap:6px;margin:10px 0 0}.tabniv.on{display:flex}.tabniv button{flex:1;font-family:var(--label);font-weight:700;font-size:13px;text-transform:uppercase;
   padding:7px 4px;border:2px solid var(--ink);border-radius:9px;background:var(--cream);color:var(--ink);cursor:pointer}.tabniv button.on{background:var(--chili);color:var(--cream)}
-#tab{position:fixed;inset:0;z-index:300;display:none;overflow:hidden;background:#cfc6b6 url(ex/hasse/gymbg.webp) center 38%/cover no-repeat;color:#fff;
+#tab{position:fixed;left:0;right:0;top:0;height:100vh;height:100dvh;z-index:300;display:none;overflow:hidden;background:#cfc6b6 url(ex/hasse/gymbg.webp) center 38%/cover no-repeat;color:#fff;
   font-family:var(--label);user-select:none;-webkit-user-select:none}
 #tab.on{display:block}
 #tab .tsh{text-shadow:0 2px 0 rgba(42,18,6,.55),0 0 10px rgba(42,18,6,.35)}
@@ -237,13 +237,17 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 #tab.work .arc{stroke:#35E08A}#tab.work .ring b{color:#35E08A}#tab.rest .arc{stroke:#D63BE6}#tab.rest .ring b{color:#D63BE6}
 #tab .rnd{position:absolute;left:5vw;top:calc(env(safe-area-inset-top) + 4vh + min(30vw,150px) + 10px);font-style:italic;font-weight:800;font-size:min(8vw,40px);text-transform:uppercase;letter-spacing:.02em}
 #tab .rnd small{display:block;font-size:.42em;font-weight:700;opacity:.9;margin-top:2px}
-#tab .hs{position:absolute;left:50%;bottom:24vh;height:min(50vh,92vw);transform:translateX(-50%);background-repeat:no-repeat;background-size:auto 100%;filter:drop-shadow(0 6px 0 rgba(42,18,6,.18))}
+#tab .hs{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 30dvh);height:min(46dvh,88vw);transform:translateX(-50%);background-repeat:no-repeat;background-size:auto 100%;filter:drop-shadow(0 6px 0 rgba(42,18,6,.18))}
 #tab .hs.flip{transform:translateX(-50%) scaleX(-1)}
-#tab .shadow{position:absolute;left:50%;bottom:calc(24vh - 10px);width:min(42vw,220px);height:22px;transform:translateX(-50%);border-radius:50%;background:rgba(42,18,6,.22)}
-#tab .lst{position:absolute;left:6vw;right:6vw;bottom:calc(env(safe-area-inset-bottom) + 5vh);display:grid;grid-template-columns:1fr 1fr;gap:3px 18px;
-  font-style:italic;font-weight:700;font-size:min(4.6vw,22px);text-transform:uppercase;letter-spacing:.01em}
+#tab .shadow{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 30dvh - 10px);width:min(42vw,220px);height:22px;transform:translateX(-50%);border-radius:50%;background:rgba(42,18,6,.22)}
+#tab .lst{position:absolute;left:5vw;right:5vw;bottom:calc(env(safe-area-inset-bottom) + 2.5dvh);display:flex;flex-direction:column;gap:2px;
+  padding:10px 14px;border-radius:16px;background:rgba(20,8,40,.62);border:2px solid #FF3EC9;box-shadow:0 0 14px rgba(255,62,201,.55),inset 0 0 12px rgba(0,229,255,.25);
+  font-style:italic;font-weight:800;font-size:min(5vw,22px);line-height:1.25;text-transform:uppercase;letter-spacing:.02em}
+#tab .lst span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.75}
+#tab .lst span.now{opacity:1;text-decoration:none;color:#FCC222;text-shadow:0 0 8px #FF3EC9,0 2px 0 rgba(42,18,6,.6)}
+#tab .lst span.now::before{content:'▶ ';color:#00E5FF}
 #tab .lst span{transition:color .25s}#tab .lst span.now{color:#FCC222;text-decoration:underline;text-underline-offset:3px}
-#tab .intro{position:absolute;left:0;right:0;bottom:17vh;text-align:center;transition:opacity .5s}
+#tab .intro{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 30dvh);text-align:center;transition:opacity .5s}
 #tab .intro b{display:block;font-family:var(--display);font-weight:400;font-size:min(19vw,110px);letter-spacing:.14em;line-height:1;padding-left:.14em}
 #tab .intro i{display:block;font-style:italic;font-weight:800;color:#FCC222;font-size:min(6vw,30px);letter-spacing:.03em;margin-top:4px}
 #tab.intro-on .ring,#tab.intro-on .rnd,#tab.intro-on .lst{opacity:0}#tab:not(.intro-on) .intro{opacity:0;pointer-events:none}
@@ -255,6 +259,19 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 #tab .done b{display:block;font-family:var(--display);font-weight:400;font-size:min(16vw,96px);letter-spacing:.08em}
 #tab .done i{display:block;font-style:italic;font-weight:800;color:#FCC222;font-size:min(6vw,30px)}
 #tab .done button{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 6vh);font-family:var(--display);font-size:22px;padding:12px 26px;border:3px solid #2A1206;border-radius:14px;background:#FCC222;color:#2A1206;box-shadow:4px 4px 0 #C8340A;cursor:pointer}
+@keyframes tbeat{0%{transform:scale(1.07)}35%{transform:scale(1)}}
+@keyframes tglow{0%{box-shadow:0 0 26px 6px var(--gl)}60%{box-shadow:0 0 8px 1px var(--gl)}100%{box-shadow:0 0 8px 1px var(--gl)}}
+#tab{--gl:#D63BE6}#tab.work{--gl:#35E08A}
+#tab .ring{border-radius:50%}#tab.beat .ring{animation:tglow .46875s ease-out infinite}#tab.beat.work .rnd{animation:tbeat .46875s ease-out infinite;transform-origin:left center}
+#tab .rnd{color:#fff;text-shadow:0 0 10px var(--gl),0 2px 0 rgba(42,18,6,.6)}
+#tab .big{position:absolute;left:0;right:0;top:30dvh;text-align:center;font-family:var(--display);font-size:min(40vw,200px);line-height:1;color:#FCC222;
+  -webkit-text-stroke:4px #2A1206;text-shadow:0 0 30px #FF3EC9,6px 6px 0 #C8340A;pointer-events:none;opacity:0}
+#tab .big.go{animation:tbig .8s ease-out both}@keyframes tbig{0%{opacity:0;transform:scale(2.2) rotate(-6deg)}25%{opacity:1;transform:scale(1) rotate(-3deg)}75%{opacity:1}100%{opacity:0;transform:scale(.9) rotate(-3deg)}}
+#tab .grid{position:absolute;left:-20%;right:-20%;bottom:0;height:34dvh;pointer-events:none;opacity:.35;
+  background:linear-gradient(transparent 0,rgba(255,62,201,.0) 10%),repeating-linear-gradient(90deg,rgba(255,62,201,.9) 0 2px,transparent 2px 60px),repeating-linear-gradient(0deg,rgba(0,229,255,.9) 0 2px,transparent 2px 40px);
+  transform:perspective(300px) rotateX(58deg);transform-origin:bottom;mask-image:linear-gradient(transparent,#000 45%);-webkit-mask-image:linear-gradient(transparent,#000 45%);animation:tgrid 1.875s linear infinite}
+@keyframes tgrid{to{background-position:0 0,0 0,0 40px}}
+#tab:not(.beat) .grid{animation-play-state:paused;opacity:.15}
 @keyframes tpop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
 #tab .pop{animation:tpop .45s ease-out both}
 .hrstart{display:none}.hr .hrstart{display:block}.hr #s-start > :not(.hrstart){display:none}
@@ -426,7 +443,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
   <div class="ring"><svg viewBox="0 0 100 100"><circle class="bgc" cx="50" cy="50" r="48"/><circle class="arc" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="100 100" stroke-dashoffset="0"/></svg><b>00:10</b></div>
   <div class="rnd tsh">Runda 1<small></small></div>
   <div class="ctl"><button class="tp" aria-label="Paus">❚❚</button><button class="tx" aria-label="Avsluta">✕</button></div>
-  <div class="shadow"></div><div class="hs"></div>
+  <div class="grid"></div><div class="shadow"></div><div class="hs"></div><div class="big"></div>
   <div class="intro tsh"><b>TABATA</b><i>Helkroppspass med Hasse</i></div>
   <div class="done tsh"><b>KLART!</b><i></i><br><button class="tback">Tillbaka</button></div>
   <div class="lst tsh"></div><div class="flash"></div>
@@ -1512,7 +1529,7 @@ let hsLast = {src:'', t:0};
 let VIBE = null, VFT = null;
 function vibeVol(v, ms = 600) { if (!VIBE) return; clearInterval(VFT); const a = VIBE, v0 = a.volume, t0 = performance.now();
   VFT = setInterval(() => { const k = Math.min(1, (performance.now() - t0) / ms); a.volume = Math.max(0, Math.min(1, v0 + (v - v0) * k)); if (k >= 1) { clearInterval(VFT); if (v === 0) { a.pause(); if (VIBE === a) VIBE = null; } } }, 40); }
-function vibeOn() { vibeOff(0); try { VIBE = new Audio('hasse/vibe.mp3'); VIBE.volume = 0; VIBE.play().catch(() => {}); vibeVol(.5, 1500); } catch (_) {} }
+function vibeOn(src, vol = .5, loop = false) { vibeOff(0); try { VIBE = new Audio(src || 'hasse/vibe.mp3'); VIBE.loop = loop; VIBE.volume = 0; VIBE.play().catch(() => {}); vibeVol(vol, 1500); } catch (_) {} }
 function vibeOff(ms = 900) { if (!VIBE) return; VIBE.fading = true; if (!ms) { clearInterval(VFT); VIBE.pause(); VIBE = null; } else vibeVol(0, ms); }
 function hsay(src) { const now = Date.now(); if (hsLast.src === src && now - hsLast.t < 2000) return; hsLast = {src, t:now};
   try { if (hejAu) hejAu.pause(); hejAu = new Audio(src); if (VIBE) { vibeVol(.16, 250); const me = hejAu, up = () => { if (hejAu === me && VIBE && !VIBE.fading) vibeVol(.5, 800); }; me.onended = up; setTimeout(up, 3200); } hejAu.play().catch(() => {}); } catch (_) {} }
@@ -2020,16 +2037,17 @@ function startTabata() {
   seq.forEach((x, j) => { ph.push({k:'rest', d:(j === 0 ? TAB.prep : TAB.rest) * 1000, x}); ph.push({k:'work', d:TAB.work * 1000, x}); });
   el.className = 'rest intro-on on'; el.querySelector('.done i').textContent = '';
   setEx(seq[0].id); frame(0); num.textContent = mmss(TAB.prep * 1000); rnd.firstChild.textContent = 'Runda 1';
-  tabStop(); wakeOn(); hallaGanget();
+  tabStop(); wakeOn(); vibeOn('hasse/synth80.mp3', .42, true); el.classList.add('beat'); setTimeout(hallaGanget, 900);
+  const big = el.querySelector('.big'), bigs = t => { big.textContent = t; big.classList.remove('go'); void big.offsetWidth; big.classList.add('go'); };
   const T = TT = {pi:0, t:0, last:performance.now(), paused:false};
   const enter = () => { const P = ph[T.pi], x = P.x; if (!x) return;
     el.classList.remove('intro-on'); el.classList.toggle('work', P.k === 'work'); el.classList.toggle('rest', P.k === 'rest');
     rnd.firstChild.textContent = `Runda ${x.n}`; rnd.querySelector('small').textContent = V > 1 ? `Varv ${x.v} av ${V}` : '';
     lst.querySelectorAll('span').forEach((s, i) => s.classList.toggle('now', i === x.i));
     setEx(x.id, TAB.flipVarv[x.id] && x.v % 2 === 0); frame(0);
-    if (P.k === 'work') { num.textContent = 'KÖR'; pop(num); beep(); flash('#35E08A'); if (navigator.vibrate) navigator.vibrate(120); if (x.n === 1) korVi(); }
-    else { num.textContent = T.pi === 1 ? mmss(P.d) : 'VILA'; pop(num); if (T.pi > 1) { blip(700, 350, .18); flash('#D63BE6'); } pop(rnd); } };
-  const finish = () => { tabStop(); wakeOff(); el.classList.add('fin'); el.classList.remove('work'); el.classList.add('rest');
+    if (P.k === 'work') { num.textContent = 'KÖR'; pop(num); beep(); flash('#35E08A'); bigs('KÖR!'); vibeVol(.6, 300); if (navigator.vibrate) navigator.vibrate(120); if (x.n === 1) korVi(); }
+    else { num.textContent = T.pi === 1 ? mmss(P.d) : 'VILA'; pop(num); if (T.pi > 1) vibeVol(.3, 500); if (T.pi > 1) { blip(700, 350, .18); flash('#D63BE6'); } pop(rnd); } };
+  const finish = () => { tabStop(); wakeOff(); el.classList.add('fin'); vibeVol(.5, 400); setTimeout(() => vibeOff(2500), 6000); el.classList.remove('work'); el.classList.add('rest');
     lst.querySelectorAll('span').forEach(s => s.classList.remove('now')); setEx('goblet'); frame(0);
     el.querySelector('.done i').textContent = `${V} varv · ${seq.length} rundor · ${Math.round(seq.length * 30 / 60 * 10) / 10} min`; confetti(); hallaGanget(); };
   T.iv = setInterval(() => {
@@ -2038,13 +2056,13 @@ function startTabata() {
     if (P.k !== 'intro') { const left = P.d - T.t;
       if (T.t > 600 || P.k === 'rest' && T.pi === 1) num.textContent = mmss(left);
       arc.setAttribute('stroke-dashoffset', String(100 * T.t / P.d));
-      if (left < 3000 && Math.ceil((P.d - before) / 1000) !== Math.ceil(left / 1000) && left > 0) blip(880, 880, .05);
+      if (left < 3000 && Math.ceil((P.d - before) / 1000) !== Math.ceil(left / 1000) && left > 0) { blip(880, 880, .05); if (P.k === 'rest') bigs(String(Math.ceil(left / 1000))); }
       if (P.k === 'work') { const per = TAB.tempo[P.x.id] * 1000; frame((T.t % per) / per); }
       else if (P.d - T.t < 2500) frame(0); }
     if (T.t >= P.d) { T.t = 0; T.pi++; arc.setAttribute('stroke-dashoffset', '0'); if (T.pi >= ph.length) { finish(); return; } enter(); }
   }, 33);
-  el.querySelector('.tp').onclick = e => { T.paused = !T.paused; e.currentTarget.textContent = T.paused ? '▶' : '❚❚'; };
-  const close = () => { tabStop(); wakeOff(); el.classList.remove('on'); };
+  el.querySelector('.tp').onclick = e => { T.paused = !T.paused; e.currentTarget.textContent = T.paused ? '▶' : '❚❚'; el.classList.toggle('beat', !T.paused); if (VIBE) T.paused ? VIBE.pause() : VIBE.play().catch(() => {}); };
+  const close = () => { tabStop(); wakeOff(); vibeOff(600); el.classList.remove('on', 'beat'); };
   el.querySelector('.tx').onclick = () => { if (el.classList.contains('fin') || confirm('Avbryta passet?')) close(); };
   el.querySelector('.tback').onclick = close;
 }
