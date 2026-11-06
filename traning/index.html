@@ -287,7 +287,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 #tab .ring,#tab .rnd,#tab .lst{transition:opacity .5s}
 #tab .ctl{position:absolute;right:4vw;top:calc(env(safe-area-inset-top) + 3vh);display:flex;gap:8px}
 #tab .ctl button{width:44px;height:44px;border-radius:50%;border:2px solid #fff;background:rgba(42,18,6,.45);color:#fff;font-size:18px;cursor:pointer}
-#tab .flash{position:absolute;inset:0;pointer-events:none;opacity:0}
+#tab .t-flash{position:absolute;inset:0;pointer-events:none;opacity:0}
 #tab .done{position:absolute;left:0;right:0;top:calc(env(safe-area-inset-top) + 9vh);text-align:center;display:none}#tab.fin .done{display:block}#tab.fin .ring,#tab.fin .rnd,#tab.fin .lst{opacity:0}
 #tab .done b{display:block;font-family:var(--display);font-weight:400;font-size:min(16vw,96px);letter-spacing:.08em}
 #tab .done i{display:block;font-style:italic;font-weight:800;color:#FCC222;font-size:min(6vw,30px)}
@@ -480,7 +480,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
   <div class="intro tsh"><b>TABATA</b><i>Helkroppspass med Hasse</i></div>
   <div class="done tsh"><b>KLART!</b><i></i><br><button class="tback">Tillbaka</button></div>
   <div class="vig"></div><div class="tsl tsh"><em>PIGGT</em><i>Snabbt</i><input type="range" min="0.6" max="1.6" step="0.05" value="1" aria-label="Tempo per repetition"><i>Lugnt</i><b>2,5 s</b></div>
-  <div class="lst tsh"></div><div class="flash"></div>
+  <div class="lst tsh"></div><div class="t-flash"></div>
 </div>
 <section class="screen on" id="s-start">
   <div class="hrstart">
@@ -2099,7 +2099,7 @@ function startTabata(C) {
   const frame = f => { sprAt(hs, cxSub(f)); };
   const mmss = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return '00:' + String(s).padStart(2, '0'); };
   const pop = n => { n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop'); };
-  const flash = c => el.querySelector('.flash').animate([{background:c, opacity:.35}, {opacity:0}], {duration:450});
+  const flash = c => el.querySelector('.t-flash').animate([{background:c, opacity:.35}, {background:c, opacity:0}], {duration:450});
   // faser: intro 3 s → [vila/förberedelse 10 s → kör 20 s] × N
   const ph = [{k:'intro', d:3000}];
   seq.forEach((x, j) => { ph.push({k:'rest', d:(j === 0 ? C.prep : C.rest) * 1000, x}); ph.push({k:'work', d:C.work * 1000, x}); });
