@@ -163,7 +163,7 @@ details[open] summary::before{content:"– ";}
 .ring{width:min(70vw,300px);height:min(70vw,300px);display:block;margin:10px auto}
 .ring text{font-family:var(--display);fill:var(--chili)}
 .rdance{display:none;position:relative;height:0;overflow:visible}
-.rdance .spr{position:absolute;left:50%;bottom:-6px;height:min(250px,32vh);width:auto;aspect-ratio:334/480;background-image:url(ex/hasse/dans3.webp);transform:translateX(-50%);margin:0}
+.rdance .spr{position:absolute;left:50%;bottom:-6px;height:min(250px,32vh);width:auto;aspect-ratio:334/480;background-image:url(ex/hasse/dans3_x2.webp);transform:translateX(-50%);margin:0}
 .rest.dance .rdance{display:block;flex:none;height:min(250px,32vh);animation:rdin .45s var(--pop)}
 .rest.dance .ring{width:110px;height:110px}
 .rd-notes{position:absolute;right:12%;top:0;font-size:30px;color:var(--chili);animation:rdnote 1.2s ease-in-out infinite}
@@ -1562,9 +1562,9 @@ function hsay(src) { const now = Date.now(); if (hsLast.src === src && now - hsL
 function tempel(v) { hsay(`hasse/tempel${v % 2 ? 1 : 2}.mp3`); }
 function korVi() { hsay('hasse/korvi.mp3'); }
 let RDT = null;
-function hasseDans(on) { const r = $('#rest'), d = $('#rdance .spr'); clearInterval(RDT); RDT = null;
+function hasseDans(on) { const r = $('#rest'), d = $('#rdance .spr'); d.dataset.src = 'ex/hasse/dans3_x2.webp'; clearInterval(RDT); RDT = null;
   r.classList.toggle('dance', on); if (!on) return; let i = 0;
-  const f = () => { d.style.backgroundPosition = `${i * 100 / 15}% 0`; i = (i + 1) % 16; }; f(); if (!RM) RDT = setInterval(f, 190); }
+  const f = () => { const x2 = isX2(d); sprAt(d, x2 ? i % 32 : (i % 16) * 2); i = (i + 1) % (x2 ? 32 : 16); }; f(); if (!RM) RDT = setInterval(f, isX2(d) ? 95 : 190); }
 function pepp() { hallaGanget(); if (navigator.vibrate) navigator.vibrate([40, 40, 40]); }
 function hallaGanget() { let i; do i = Math.floor(Math.random() * HEJ.length); while (i === hejLast && HEJ.length > 1); hejLast = i;
   try { if (hejAu) hejAu.pause(); hejAu = new Audio(HEJ[i]); hejAu.volume = 1; hejAu.play().catch(() => {}); } catch (_) {} }
@@ -1579,7 +1579,7 @@ document.querySelectorAll('.hsel button').forEach(b => b.onclick = () => { hpSel
 hpSel();
 if (window.HR) { $('#hr-slot').append($('.hsel'), $('#go-hasse')); document.title = 'Hasses Hälsoresa · Buttercup';
   const hb = document.querySelector('.bc-bar .hide-m');  }
-$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); new Image().src = 'ex/hasse/dans3.webp'; new Audio('hasse/vibe.mp3').load(); ({1:CX.ex, 2:CX2.ex, 3:CX3.ex, 4:TAB.ex}[cxPassNr()]).forEach(k => { new Image().src = `ex/hasse/${exFile('hasse', k)}.webp`; });
+$('#go-hasse').onclick = () => { const b = $('#go-hasse'); if (b.dataset.busy) return; b.dataset.busy = 1; hallaGanget(); new Audio('hasse/korvi.mp3').load(); new Image().src = 'ex/hasse/dans3_x2.webp'; new Audio('hasse/vibe.mp3').load(); ({1:CX.ex, 2:CX2.ex, 3:CX3.ex, 4:TAB.ex}[cxPassNr()]).forEach(k => { new Image().src = `ex/hasse/${exFile('hasse', k)}.webp`; });
   b.classList.add('talk'); setTimeout(() => { b.classList.remove('talk'); delete b.dataset.busy; useGear('kb'); if (!S) S = fresh(); startComplex(); }, 1500); }; $('#lib-go').onclick = () => startFree();
 document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#sheet').classList.remove('on'); });
 
@@ -1993,8 +1993,8 @@ function cxTimer(st, box) {
   const pips = box.querySelectorAll('.cxpips i'), spr = box.closest('.cxwrap').querySelector('.stage .exspr');
   if (spr) spr.ext = true;
   const alt = (x.p3 ? CX3.alt : x.work ? CX2.alt : {})[x.id];
-  const frame = f => { if (!spr) return; const odd = alt && T.t > 0 && Math.floor(T.t / T.per) % 2, i = cxFrame(f);
-    spr.style.backgroundPosition = `${(odd && alt === 'rev' ? 15 - i : i) * 100 / 15}% 0`;
+  const frame = f => { if (!spr) return; const odd = alt && T.t > 0 && Math.floor(T.t / T.per) % 2;
+    sprAt(spr, cxSub(f, odd && alt === 'rev'));
     if (alt === 'mirror') spr.style.transform = odd ? 'scaleX(-1)' : ''; };
   const draw = () => {
     if (T.t < 0) { box.classList.add('prep'); big.textContent = Math.ceil(-T.t / 1000);
@@ -2058,7 +2058,7 @@ function startTabata() {
   const setEx = (id, flip) => { const fw = M[id] || 300; hs.style.backgroundImage = `url(ex/hasse/${exFile('hasse', id)}.webp)`;
     hs.style.aspectRatio = `${fw} / 480`; { const W = el.clientWidth, H = el.clientHeight; let h = Math.min(H * .44, W * .84) * (TAB.hk[id] || 1);
       if (h * fw / 480 > W * .94) h = W * .94 * 480 / fw; hs.style.height = Math.round(h) + 'px'; } hs.classList.toggle('flip', !!flip); hs.dataset.id = id; };
-  const frame = f => { hs.style.backgroundPosition = `${cxFrame(f) * 100 / 15}% 0`; };
+  const frame = f => { sprAt(hs, cxSub(f)); };
   const mmss = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return '00:' + String(s).padStart(2, '0'); };
   const pop = n => { n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop'); };
   const flash = c => el.querySelector('.flash').animate([{background:c, opacity:.35}, {opacity:0}], {duration:450});
@@ -2187,7 +2187,18 @@ const EXDUR = [320, 200, 110, 110, 110, 110, 110, 240, 240, 240, 110, 110, 110, 
 const sprIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const d = en.target; d.vis = en.isIntersecting;
   if (d.vis && !d.style.backgroundImage) d.style.backgroundImage = `url(${d.dataset.src})`; if (d.vis && !RM) d.go(); }), {rootMargin:'200px'}) : null;
 const EXFILE = {hasse:{gorillaswing:'gorillaswing4', axelkast:'axelkast3', pullover:'pullover4', squatpressout:'squatpressout5', utfallhalo:'utfallhalo3', highpull:'highpull2', rdl:'rdl2'}};   // omgjorda ark får nytt filnamn (cache)
-function exFile(fid, id) { return (EXFILE[fid] && EXFILE[fid][id]) || id; }
+function exFile(fid, id) { const f = (EXFILE[fid] && EXFILE[fid][id]) || id; return fid === 'hasse' && X2.has(f) ? f + '_x2' : f; }
+// 32 rutor/rep: mellanrutor (RIFE) i rad 2-layout 16x2. sub = 0..31; jämn = originalruta, udda = mellanruta
+const X2 = new Set(['bojdrodd', 'swing', 'goblet', 'gobletpress', 'dans3', 'gorillaswing4', 'axelkast3', 'pullover4', 'squatpressout5', 'utfallhalo3',
+  'rotthruster', 'dlhalo', 'lungepress', 'pullrot', 'crosslunge', 'highpull2', 'gobletutfall', 'tahav', 'rdl2', 'golvpress', 'situp']);
+function isX2(el) { return /_x2\.webp/.test(el.style.backgroundImage || el.dataset.src || ''); }
+function sprAt(el, sub) {   // sub i 32-delar
+  if (isX2(el)) { sub = ((sub % 32) + 32) % 32; el.style.backgroundSize = '1600% 200%'; el.style.backgroundPosition = `${(sub % 16) * 100 / 15}% ${sub >= 16 ? 100 : 0}%`; }
+  else { el.style.backgroundSize = ''; el.style.backgroundPosition = `${(Math.floor(sub / 2) % 16) * 100 / 15}% 0`; } }
+function cxSub(f, rev) {   // rep-fas 0..1 -> 32-delsindex med EXDUR-tajming
+  const C = cxCum(); let i = 0; while (i < 15 && f >= C[i]) i++;
+  const a = i ? C[i - 1] : 0, k = (f - a) / Math.max(1e-6, C[i] - a), h = k >= .5 ? 1 : 0;
+  if (!rev) return i * 2 + h; const r = 15 - i; return h ? (r * 2 + 31) % 32 : r * 2; }
 function exSprite(id, e) {
   const fid = SS && SS.cx && EXM.hasse && EXM.hasse[id] ? 'hasse' : localStorage.getItem('bc_halsoresa_fighter') || 'kent', v = EXM[fid] && EXM[fid][id], w = Array.isArray(v) ? v[0] : v, hh = Array.isArray(v) ? v[1] : (EXM.h || 256);
   if (!w) return null;
@@ -2195,7 +2206,7 @@ function exSprite(id, e) {
   d.dataset.src = `ex/${fid}/${exFile(fid, id)}.webp`; d.style.aspectRatio = `${w} / ${hh}`; d.style.backgroundPosition = '0 0';
   const flat = e && (e.walk || e.cycle);
   let i = 0, t = null;
-  const tick = () => { t = null; if (d.ext || !d.isConnected || (sprIO && !d.vis)) return; d.style.backgroundPosition = `${i * 100 / 15}% 0`; const ms = flat ? 115 : EXDUR[i]; i = (i + 1) % 16; t = setTimeout(tick, ms); };
+  const tick = () => { t = null; if (d.ext || !d.isConnected || (sprIO && !d.vis)) return; const x2 = isX2(d), n = x2 ? 32 : 16; i %= n; sprAt(d, x2 ? i : i * 2); const ms = (flat ? 115 : EXDUR[x2 ? i >> 1 : i]) / (x2 ? 2 : 1); i = (i + 1) % n; t = setTimeout(tick, ms); };
   d.go = () => { if (!t) t = setTimeout(tick, 30); };
   const near = () => { if (!d.isConnected || d.style.backgroundImage) return; const r = d.getBoundingClientRect();
     if (r.height && r.top < innerHeight + 200 && r.bottom > -200) { d.vis = true; d.style.backgroundImage = `url(${d.dataset.src})`; if (!RM) d.go(); } };

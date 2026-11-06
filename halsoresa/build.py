@@ -36,11 +36,15 @@ shutil.copy2(os.path.join(T, 'hasse.webp'), R)
 m = json.load(open(os.path.join(T, 'ex', 'manifest.json')))
 json.dump({'h': m['h'], 'hasse': m['hasse']}, open(os.path.join(R, 'ex', 'manifest.json'), 'w'), separators=(',', ':'))
 
+# förcacha bara ark som används: 32-rutorsark (_x2) + övriga som nämns i koden och saknar _x2
+X2 = set(re.findall(r"'([a-z0-9]+)'", re.search(r"const X2 = new Set\(\[(.*?)\]\)", s, re.S).group(1)))
+HFILES = sorted(os.path.basename(f) for f in glob.glob(os.path.join(R, 'ex', 'hasse', '*.webp'))
+                if f.endswith('_x2.webp') or (os.path.basename(f)[:-5] not in X2 and ("'" + os.path.basename(f)[:-5] + "'" in s or os.path.basename(f) in s)))
 # service worker: version = innehållshash, så varje bygge med ändringar ger ny cache
 import hashlib
 h = hashlib.sha1(s.encode()).hexdigest()[:8]
 core = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './hasse.webp', './ex/manifest.json'] + \
-       ['./ex/hasse/' + os.path.basename(f) for f in sorted(glob.glob(os.path.join(R, 'ex', 'hasse', '*.webp')))] + \
+       ['./ex/hasse/' + f for f in HFILES] + \
        ['./hasse/' + os.path.basename(f) for f in sorted(glob.glob(os.path.join(R, 'hasse', '*.mp3')))]
 sw = open(os.path.join(T, 'sw.js'), encoding='utf-8').read()
 sw = re.sub(r"const C = '[^']*';", f"const C = 'halsoresa-{h}';", sw)
