@@ -85,6 +85,9 @@
       const tv = (kat.tillval || {})[t];
       if (!tv) { fel.push(`Modul ${i + 1}: okänt tillval ${t}.`); return; }
       if (!tv.pa_typ.includes(p.m.typ)) { fel.push(`Modul ${i + 1}: ${tv.namn} kan bara stå på en bänkmodul.`); return; }
+      const G = grannar(L)[i];
+      for (const q of [G.v, G.h]) if (q && q.m.utstick && q.m.utstick_z && 900 + tv.hojd > q.m.utstick_z[0])
+        fel.push(`Modul ${i + 1}: ${tv.namn} (topp ${900 + tv.hojd} mm) krockar med ${q.m.namn}s rattar, som sticker ut ${q.m.utstick} mm över grannbänken på ${q.m.utstick_z[0]}–${q.m.utstick_z[1]} mm. Ställ den på en bänk som inte står bredvid Asado.`);
       if (tv.langd > p.m.bredd + 50) varn.push(`Modul ${i + 1}: ${tv.namn} (${tv.langd} mm) är bredare än modulen.`);
       else if (tv.langd > p.m.bredd) info.push(`Modul ${i + 1}: ${tv.namn} är ${tv.langd} mm och sticker ut ${(tv.langd - p.m.bredd) / 2} mm per sida över modulen.`);
       info.push(`Modul ${i + 1}: ${tv.namn} ${tv.anm}. Värmen mot skivan/EPDM under grillen är inte kontrollerad.`);
