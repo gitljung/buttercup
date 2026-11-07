@@ -163,9 +163,9 @@
     const G = grannar(L), out = [];
     L.forEach((p, i) => {
       const g = G[i];
-      if (!g.v && !(g.hornV && g.hornV.blind === 'slut')) out.push({ i, ande: 'start' });
+      if (i === 0) out.push({ i, ande: 'start' });                       // bara radens ändgavlar får sidopanel (vickesluring: inte gavlarna i hörnen)
       else if (g.v && S && tackt(g.v, S) < topp(p.m, S) - 1) out.push({ i, ande: 'start', fran: tackt(g.v, S) });   // lägre granne: stäng överdelen
-      if (!g.h && !(g.hornH && g.hornH.blind === 'start')) out.push({ i, ande: 'slut' });
+      if (i === L.length - 1) out.push({ i, ande: 'slut' });
       else if (g.h && S && tackt(g.h, S) < topp(p.m, S) - 1) out.push({ i, ande: 'slut', fran: tackt(g.h, S) });
     });
     return out;
