@@ -1,13 +1,5 @@
 [
  {
-  "slug": "asado-1500",
-  "name": "Yamay Asado 1500",
-  "doc": "Yamay Asado 1500 NY",
-  "version": 26,
-  "exported": "2026-11-07 11:43",
-  "channel": "yamay-asado"
- },
- {
   "slug": "horno",
   "name": "Yamay Horno",
   "doc": "Yamay Horno - ugn",
@@ -36,5 +28,13 @@
   "thread": "1568630790848520396",
   "fusion_project": "rat-stop",
   "pending": true
+ },
+ {
+  "slug": "asado-1500",
+  "name": "Yamay Asado 1500",
+  "doc": "Yamay Asado 1500",
+  "version": 30,
+  "exported": "2026-11-07 16:33",
+  "channel": "yamay-asado"
  }
 ]
