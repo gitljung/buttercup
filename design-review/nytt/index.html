@@ -1,0 +1,184 @@
+<!doctype html><html lang="sv"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Nytt konstruktionsprojekt</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;700&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--y:#fbc021;--chili:#c8321a;--ox:#5a1a14;--cream:#fff6dc;--paper:#fffaf0;--ink:#2a1a12;--mute:#9a8a70;--line:#e6d8bb}
+*{box-sizing:border-box}
+body{margin:0;font-family:Barlow,sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+header{background:var(--y);display:flex;align-items:center;gap:14px;padding:0 16px;height:56px;border-bottom:3px solid var(--ox)}
+header h1{font-family:Anton;font-weight:400;font-size:24px;margin:0;letter-spacing:.02em;color:var(--ox);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header a{margin-left:auto;font-family:'Barlow Condensed';font-weight:700;color:var(--ox);text-decoration:none;border:2px solid var(--ox);border-radius:6px;padding:4px 10px;background:var(--cream);white-space:nowrap}
+main{max-width:860px;margin:0 auto;padding:22px 16px 80px}
+.card{background:var(--paper);border:2px solid var(--ox);border-radius:10px;padding:16px 18px;margin-bottom:16px}
+h2{font-family:'Barlow Condensed';font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--chili);font-size:16px;margin:0 0 10px}
+label{display:block;font-family:'Barlow Condensed';font-weight:700;color:#8a7a60;text-transform:uppercase;font-size:13px;letter-spacing:.06em;margin:12px 0 4px}
+label:first-of-type{margin-top:0}
+.hint{font-size:13px;color:var(--mute);margin:3px 0 0}
+input[type=text],input[type=url],textarea,select{font:inherit;font-size:16px;border:2px solid var(--line);border-radius:6px;padding:8px 10px;background:#fff;width:100%;color:var(--ink)}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--y)}
+textarea{min-height:130px;resize:vertical;line-height:1.45}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.who{display:flex;gap:8px}.who button{flex:1}
+button{font-family:'Barlow Condensed';font-weight:700;font-size:16px;border:2px solid var(--ox);border-radius:6px;padding:7px 12px;background:var(--cream);color:var(--ink);cursor:pointer}
+button:hover{background:var(--y)}button.on{background:var(--chili);border-color:var(--chili);color:#fff}
+#drop{border:2.5px dashed var(--ox);border-radius:10px;padding:22px;text-align:center;background:#fff;cursor:pointer;color:var(--ox);font-family:'Barlow Condensed';font-size:18px}
+#drop.over{background:var(--y)}
+#drop small{display:block;font-family:Barlow;font-size:13px;color:var(--mute);margin-top:4px}
+#thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:12px}
+.th{position:relative;border:2px solid var(--line);border-radius:8px;background:#fff;overflow:hidden;aspect-ratio:1}
+.th img{width:100%;height:100%;object-fit:cover;display:block}
+.th .f{display:flex;align-items:center;justify-content:center;height:100%;padding:8px;text-align:center;font-size:13px;word-break:break-all;color:var(--ox)}
+.th .x{position:absolute;top:4px;right:4px;width:26px;height:26px;padding:0;border-radius:50%;font-size:15px;line-height:1;background:var(--chili);color:#fff;border-color:var(--ox)}
+.th .sz{position:absolute;left:0;right:0;bottom:0;background:rgba(255,250,240,.9);font-size:11px;padding:1px 5px;color:var(--ox)}
+.link{display:grid;grid-template-columns:1.4fr 1fr 40px;gap:8px;margin-bottom:8px}
+.link button{padding:0;font-size:18px}
+.send{width:100%;font-size:22px;padding:13px;background:var(--chili);color:#fff;border-color:var(--ox);font-family:Anton;font-weight:400;letter-spacing:.03em}
+.send:hover{background:var(--ox)}.send:disabled{opacity:.6;cursor:wait}
+#msg{margin-top:10px;font-size:15px;min-height:20px}#msg.bad{color:var(--chili);font-weight:600}#msg.ok{color:#2c7a2c;font-weight:600}
+#locked,#done{display:none}
+body.locked #form{display:none}body.locked #locked{display:block}
+body.done #form{display:none}body.done #done{display:block}
+.big{font-family:Anton;font-weight:400;font-size:30px;color:var(--ox);margin:0 0 8px}
+ul.steps{margin:8px 0 0;padding-left:20px;line-height:1.7}
+@media (max-width:640px){.row2{grid-template-columns:1fr}.link{grid-template-columns:1fr 40px}.link .note{grid-column:1}.link button{grid-row:1/3;grid-column:2}header h1{font-size:19px}}
+</style></head><body>
+<header><h1>NYTT KONSTRUKTIONSPROJEKT</h1><a href="../">Design Review →</a></header>
+<main>
+<div id="locked" class="card"><p class="big">Inte kopplad</p>
+<p>Sidan är bara för Vicke och Hugo. Öppna kopplingslänken du fått av Vickan en gång i den här webbläsaren, så kommer du in.</p></div>
+
+<div id="done" class="card"><p class="big">Skickat ✓</p>
+<p>Om ungefär en minut dyker projektet upp i Discord under <b>KONSTRUKTION</b>:</p>
+<ul class="steps"><li>en egen kanal <b id="dCh"></b></li><li>trådarna <b>Konstruktion</b>, <b>Montering</b>, <b>Fusion</b> och <b>Design Review</b></li>
+<li>Vickan läser bilderna och länkarna och skriver en första analys med frågor i Konstruktion-tråden</li></ul>
+<p><button onclick="location.reload()">Skapa ett till</button></p></div>
+
+<form id="form" autocomplete="off">
+<div class="card">
+<h2>Vem är du</h2>
+<div class="who"><button type="button" data-who="vicke">Vicke</button><button type="button" data-who="hugo">Hugo</button></div>
+</div>
+
+<div class="card">
+<h2>Projektet</h2>
+<label for="name">Projektnamn</label>
+<input type="text" id="name" maxlength="60" placeholder="t.ex. Tizón, Pizzaugn 60, Hönshus">
+<div class="row2" style="margin-top:4px">
+ <div><label for="prefix">Kanalnamn</label>
+ <select id="prefix"><option value="yamay-">yamay-…  (Yamay-produkt)</option><option value="">utan prefix</option></select></div>
+ <div><label>Blir</label><div id="chPrev" style="font-family:'Barlow Condensed';font-weight:700;font-size:20px;color:var(--ox);padding:8px 0">#yamay-…</div></div>
+</div>
+<label for="desc">Beskrivning</label>
+<textarea id="desc" placeholder="Vad ska byggas? Funktion, vem det är till, viktigaste kraven, det du redan bestämt."></textarea>
+<div class="row2">
+ <div><label for="dims">Mått & material <span style="text-transform:none;font-weight:500">(valfritt)</span></label>
+ <input type="text" id="dims" placeholder="ca 1500×600×900, Corten 3 mm…"></div>
+ <div><label for="when">Tidsplan / budget <span style="text-transform:none;font-weight:500">(valfritt)</span></label>
+ <input type="text" id="when" placeholder="prototyp till våren, < 15 000 kr…"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>Bilder & filer</h2>
+<div id="drop">Dra in bilder här, klistra in eller klicka<small>Foton, skisser, skärmdumpar, PDF, DXF… Bilder krymps automatiskt.</small></div>
+<input type="file" id="file" multiple accept="image/*,.pdf,.dxf,.dwg,.step,.stp,.f3d,.svg,.zip" hidden>
+<div id="thumbs"></div>
+</div>
+
+<div class="card">
+<h2>Inspiration</h2>
+<div id="links"></div>
+<button type="button" id="addLink">+ Lägg till länk</button>
+<p class="hint">Produktsidor, YouTube, Pinterest, Instagram… Skriv gärna vad som är bra med den.</p>
+</div>
+
+<button type="submit" class="send" id="send">SKAPA PROJEKT I DISCORD</button>
+<div id="msg"></div>
+</form>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const HK='dr_hooks';
+(function(){const m=location.hash.match(/dr=([A-Za-z0-9_\-]+)/);if(m){try{const j=JSON.parse(atob(m[1].replace(/-/g,'+').replace(/_/g,'/')));localStorage.setItem(HK,JSON.stringify(j));}catch(e){}
+ history.replaceState(null,'',location.pathname+location.search)}})();
+const hooks=()=>{try{return JSON.parse(localStorage.getItem(HK)||'null')}catch(e){return null}};
+if(!hooks()||!hooks()._intake)document.body.classList.add('locked');
+
+// vem
+let who=localStorage.getItem('np_who')||'';
+const setWho=w=>{who=w;localStorage.setItem('np_who',w);document.querySelectorAll('[data-who]').forEach(b=>b.classList.toggle('on',b.dataset.who===w))};
+document.querySelectorAll('[data-who]').forEach(b=>b.onclick=()=>setWho(b.dataset.who));if(who)setWho(who);
+
+// kanalnamn
+const slugify=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ø/g,'o').replace(/æ/g,'ae').replace(/ß/g,'ss')
+ .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);
+function chName(){let s=slugify($('#name').value);const pre=$('#prefix').value;if(pre&&s.startsWith(pre))s=s.slice(pre.length);return {slug:s,ch:(pre+s)||''}}
+const upd=()=>{const c=chName();$('#chPrev').textContent='#'+(c.slug?c.ch:($('#prefix').value+'…'))};
+$('#name').oninput=upd;$('#prefix').onchange=upd;upd();
+
+// filer
+const FILES=[];let fid=0;
+async function shrink(f){
+ if(!/^image\/(jpeg|png|webp|heic|heif)/.test(f.type))return f;
+ try{const bm=await createImageBitmap(f);const M=2400,k=Math.min(1,M/Math.max(bm.width,bm.height));
+  if(k===1&&f.size<2.5e6)return f;
+  const c=document.createElement('canvas');c.width=Math.round(bm.width*k);c.height=Math.round(bm.height*k);
+  const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(bm,0,0,c.width,c.height);
+  const b=await new Promise(ok=>c.toBlob(ok,'image/jpeg',.86));
+  return new File([b],f.name.replace(/\.[^.]+$/,'')+'.jpg',{type:'image/jpeg'})}catch(e){return f}}
+const kb=n=>n>1e6?(n/1e6).toFixed(1)+' MB':Math.round(n/1e3)+' kB';
+async function addFiles(list){for(const f0 of list){
+ const f=await shrink(f0);if(f.size>9.5e6){msg(`${f.name} är för stor (${kb(f.size)}, max 9,5 MB).`,'bad');continue}
+ const it={id:++fid,f};FILES.push(it);
+ const d=document.createElement('div');d.className='th';
+ d.innerHTML=(f.type.startsWith('image/')?`<img src="${URL.createObjectURL(f)}" alt="">`:`<div class="f">📎 ${f.name.replace(/</g,'&lt;')}</div>`)+`<span class="sz">${kb(f.size)}</span><button type="button" class="x" title="Ta bort">×</button>`;
+ d.querySelector('.x').onclick=()=>{FILES.splice(FILES.indexOf(it),1);d.remove()};$('#thumbs').appendChild(d)}}
+$('#drop').onclick=()=>$('#file').click();
+$('#file').onchange=e=>{addFiles([...e.target.files]);e.target.value=''};
+['dragenter','dragover'].forEach(t=>$('#drop').addEventListener(t,e=>{e.preventDefault();$('#drop').classList.add('over')}));
+['dragleave','drop'].forEach(t=>$('#drop').addEventListener(t,e=>{e.preventDefault();$('#drop').classList.remove('over')}));
+$('#drop').addEventListener('drop',e=>addFiles([...e.dataTransfer.files]));
+document.addEventListener('paste',e=>{const fs=[...(e.clipboardData?.files||[])];if(fs.length){e.preventDefault();addFiles(fs)}});
+
+// länkar
+function addLink(u='',n=''){const d=document.createElement('div');d.className='link';
+ d.innerHTML=`<input type="url" class="url" placeholder="https://…"><input type="text" class="note" placeholder="Vad är bra med den?"><button type="button" title="Ta bort">×</button>`;
+ d.querySelector('.url').value=u;d.querySelector('.note').value=n;d.querySelector('button').onclick=()=>d.remove();$('#links').appendChild(d);return d}
+$('#addLink').onclick=()=>addLink().querySelector('.url').focus();addLink();
+document.addEventListener('paste',e=>{const t=e.target;if(t.classList&&t.classList.contains('url'))setTimeout(()=>{const v=t.value.trim();const parts=v.split(/\s+/).filter(x=>/^https?:\/\//.test(x));
+ if(parts.length>1){t.value=parts[0];parts.slice(1).forEach(p=>addLink(p))}},0)});
+
+const msg=(t,c='')=>{$('#msg').textContent=t;$('#msg').className=c};
+
+// skicka
+$('#form').onsubmit=async e=>{e.preventDefault();
+ const h=hooks();const w=h&&h._intake;if(!w)return document.body.classList.add('locked');
+ const name=$('#name').value.trim(),desc=$('#desc').value.trim(),c=chName();
+ if(!who)return msg('Välj vem du är.','bad');
+ if(!name||!c.slug)return msg('Skriv ett projektnamn.','bad'),$('#name').focus();
+ if(desc.length<10)return msg('Beskriv projektet lite mer.','bad'),$('#desc').focus();
+ const links=[...document.querySelectorAll('.link')].map(d=>({url:d.querySelector('.url').value.trim(),note:d.querySelector('.note').value.trim()})).filter(l=>l.url);
+ for(const l of links)if(!/^https?:\/\/\S+$/.test(l.url))return msg('Länken ser konstig ut: '+l.url,'bad');
+ // dela upp filer i meddelanden: max 9 filer och ~9 MB per meddelande
+ const batches=[[]];let tot=0;for(const it of FILES){const b=batches[batches.length-1];if(b.length>=9||tot+it.f.size>9e6){batches.push([it]);tot=it.f.size}else{b.push(it);tot+=it.f.size}}
+ const id=Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+ const meta={v:1,id,name,slug:c.slug,prefix:$('#prefix').value,channel:c.ch,desc,dims:$('#dims').value.trim(),when:$('#when').value.trim(),links,by:who,
+  files:FILES.map(x=>x.f.name),parts:batches.length,sent:new Date().toISOString()};
+ $('#send').disabled=true;
+ try{for(let i=0;i<batches.length;i++){
+  msg(batches.length>1?`Skickar del ${i+1} av ${batches.length}…`:'Skickar…');
+  const fd=new FormData();const np=i===0?meta:{v:1,id,part:i+1,parts:batches.length};if(i===0)np.part=1;
+  const embeds=i===0?[{title:'📥 Nytt projekt: '+name.slice(0,200),description:(desc.slice(0,1500)+(links.length?'\n\n'+links.map(l=>'🔗 '+l.url).join('\n'):'')).slice(0,3900),
+   color:0xfbc021,footer:{text:`${who==='hugo'?'Hugo':'Vicke'} · #${c.ch} · ${FILES.length} filer`},timestamp:meta.sent}]:[];
+  fd.append('payload_json',JSON.stringify({username:'Nytt projekt · '+(who==='hugo'?'Hugo':'Vicke'),content:i===0?'':`(del ${i+1}/${batches.length} av ${name})`,embeds,allowed_mentions:{parse:[]}}));
+  fd.append('files[0]',new Blob([JSON.stringify(np)],{type:'application/json'}),'np.json');
+  batches[i].forEach((it,k)=>fd.append(`files[${k+1}]`,it.f,it.f.name));
+  const r=await fetch(`https://discord.com/api/webhooks/${w.id}/${w.token}?wait=true`,{method:'POST',body:fd});
+  if(!r.ok)throw new Error(r.status+' '+(await r.text()).slice(0,160));
+  window.__lastNP=(window.__lastNP||[]).concat((await r.json()).id)}
+  $('#dCh').textContent='#'+c.ch;document.body.classList.add('done');scrollTo(0,0)}
+ catch(err){msg('Kunde inte skicka: '+err.message,'bad');$('#send').disabled=false}};
+window.__np={addFiles,addLink,setWho,FILES};
+</script></body></html>
