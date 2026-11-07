@@ -389,7 +389,7 @@ $('#repSend').onclick=async e=>{e.preventDefault();const t=$('#repT').value.trim
   image:{url:'attachment://rapport.png'},footer:{text:`${sev} · ${name||'okänd'} · Design Review`},timestamp:new Date().toISOString()};
  const fd=new FormData();fd.append('payload_json',JSON.stringify({username:'Design Review'+(name?' · '+name:''),embeds:[embed],
   content:`[Öppna samma vy i Design Review](${viewLink()})`.slice(0,1900),allowed_mentions:{parse:[]}}));fd.append('files[0]',blob,'rapport.png');if(relay)fd.append('files[1]',new Blob([JSON.stringify({v:1,relay:slug})],{type:'application/json'}),'np.json');
- try{const r=await fetch(`https://discord.com/api/webhooks/${w.id}/${w.token}?wait=true`,{method:'POST',body:fd});
+ try{const r=await fetch(`https://discord.com/api/webhooks/${w.id}/${w.token}?wait=true`+(h[slug]&&PP.thread?'&thread_id='+PP.thread:''),{method:'POST',body:fd});
   if(!r.ok)throw new Error(r.status+' '+(await r.text()).slice(0,140));const j=await r.json();window.__lastReport=j.id;
   M.textContent='Skickat ✓';M.className='msg ok';setTimeout(()=>{$('#rep').classList.remove('on');$('#repT').value='';$('#repD').value='';$('#repSend').disabled=false},1200)}
  catch(err){M.textContent='Kunde inte skicka: '+err.message;M.className='msg bad';$('#repSend').disabled=false}};
