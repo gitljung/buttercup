@@ -37,6 +37,7 @@
   textarea { width:100%; height:120px; font:12px ui-monospace,monospace }
   .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap } select,input { padding:4px 6px }
   .grid2 { display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:14px }
+  button.tv { font-size:12px } button.tv.on { background:#c8321a !important; color:#fff !important; border-color:#c8321a !important }
 </style>
 </head>
 <body>
@@ -74,6 +75,7 @@
 let KAT, konf = { id: 'NY', namn: 'Mitt utekök', rad: ['bank500', 'asado1500', 'bank500', 'horno1000'], vagg: 'ingen' };
 const EX = {
   'K-0001 rak rad': { id: 'K-0001', namn: 'Startrad v0.4', rad: ['bank500','asado1500','bank500','horno1000'], vagg: 'obrannbar' },
+  'K-0006 rak rad + Yakitori': { id: 'K-0006', namn: 'Startrad + Yakitori', rad: [{typ:'bank500',tillval:'yakitori50'},'asado1500','bank500','horno1000'], vagg: 'obrannbar' },
   'K-0003 L-kök': { id: 'K-0003', namn: 'L-kök', rad: ['asado1500','bank500',{typ:'horn1000',blind:'slut'},'bank1000','horno1000'], vagg: 'obrannbar' },
   'K-0004 U-kök': { id: 'K-0004', namn: 'U-kök', rad: ['bank1000',{typ:'horn1000',blind:'slut'},'bank500','asado1500','bank500',{typ:'horn1000',blind:'slut'},'horno1000'], vagg: 'ingen' },
 };
@@ -97,9 +99,15 @@ function lista() {
   const O = $('#rad'); O.innerHTML = '';
   konf.rad.forEach((el, i) => {
     const li = document.createElement('li'); li.dataset.i = i;
-    li.innerHTML = `<span class="grip">⠿</span><span class="nr">${i + 1}</span><span class="n">${label(el)}</span><button title="ta bort">✕</button>`;
-    li.querySelector('button').onclick = ev => { ev.stopPropagation(); konf.rad.splice(i, 1); rita(); };
-    li.querySelector('button').onpointerdown = ev => ev.stopPropagation();
+    li.innerHTML = `<span class="grip">⠿</span><span class="nr">${i + 1}</span><span class="n">${label(el)}</span>${KAT.moduler[(typeof el === 'string' ? el : el.typ)].typ === 'bank' ? `<button class="tv${[].concat((typeof el === 'object' && el.tillval) || []).includes('yakitori50') ? ' on' : ''}" title="Yakitori 50 på bänken">🔥 Y50</button>` : ''}<button title="ta bort">✕</button>`;
+    const tvb = li.querySelector('button.tv');
+    if (tvb) { tvb.onpointerdown = ev => ev.stopPropagation(); tvb.onclick = ev => { ev.stopPropagation();
+      let e = typeof el === 'string' ? { typ: el } : el; const tv = [].concat(e.tillval || []);
+      e.tillval = tv.includes('yakitori50') ? tv.filter(t => t !== 'yakitori50') : tv.concat('yakitori50');
+      if (!e.tillval.length) delete e.tillval;
+      konf.rad[i] = (Object.keys(e).length === 1) ? e.typ : e; rita(); }; }
+    li.querySelector('button[title="ta bort"]').onclick = ev => { ev.stopPropagation(); konf.rad.splice(i, 1); rita(); };
+    li.querySelector('button[title="ta bort"]').onpointerdown = ev => ev.stopPropagation();
     li.onpointerdown = ev => dra(ev, li, i);
     O.appendChild(li);
   });
@@ -150,6 +158,8 @@ function plan(L, SV, SP) {
     el('polygon', { points: P(rect(p, 0, p.m.bredd, 600 - 60, 600)), fill: '#00000033' });                      // sockelindrag
     if (p.m.horn) { const b0 = p.blind === 'slut' ? p.m.bredd - p.m.blind : 0;
       el('polygon', { points: P(rect(p, b0, b0 + p.m.blind, 585, 600)), fill: '#3b2216' }); }                       // blindpanel
+    for (const t of p.tillval || []) { const tv = KAT.tillval[t]; const u0 = (p.m.bredd - tv.langd) / 2, v0 = 300 + tv.y_fram;
+      el('polygon', { points: P(rect(p, u0, u0 + tv.langd, 600 - v0 - tv.djup, 600 - v0)), fill: '#2f2f2f', stroke: '#c8321a', 'stroke-width': 5 }); }
     if (p.m.grill) { const g = p.m.grill, w = Math.min(g.bredd, p.m.bredd), u0 = (p.m.bredd - w) / 2;
       el('polygon', { points: P(rect(p, u0, u0 + w, 300 - g.y_bak, 300 - g.y_fram)), fill: '#2f2f2f', stroke: '#111', 'stroke-width': 4 }); }
     const c = loc(p, p.m.bredd / 2, 300);

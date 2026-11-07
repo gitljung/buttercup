@@ -83,7 +83,7 @@
   "horno1000": {
    "namn": "Horno-modul 1000",
    "bredd": 1000,
-   "stommehojd": 622,
+   "stommehojd": 689,
    "typ": "grill",
    "fusion": "Yamay Utekok - Horno-modul 1000",
    "grill": {
@@ -91,9 +91,9 @@
     "fusion": "Yamay Horno - ugn",
     "bredd": 676,
     "djup": 577,
-    "z0": 622,
+    "z0": 689,
     "hojd": 845,
-    "topp": 1467,
+    "topp": 1534,
     "fritt_sida": 165,
     "vikt_kg": 130,
     "brannbart_min": 300,
@@ -102,7 +102,7 @@
     "y_fram": -299,
     "glb": "export/grill_horno.glb",
     "glb_y_min": -299,
-    "glb_z_min": 622
+    "glb_z_min": 689
    },
    "utstick": 0,
    "vikt_kg": 70,
@@ -119,7 +119,7 @@
   "asado1500": {
    "namn": "Asado-modul 1500",
    "bredd": 1500,
-   "stommehojd": 697,
+   "stommehojd": 689,
    "typ": "grill",
    "fusion": "Yamay Utekok - Asado-modul 1500",
    "grill": {
@@ -127,20 +127,20 @@
     "fusion": "Yamay Asado 1500",
     "bredd": 1500,
     "djup": 506,
-    "z0": 697,
+    "z0": 689,
     "hojd": 203,
-    "topp": 1514,
+    "topp": 1506,
     "y_fram": -300,
     "vikt_kg": 175,
     "y_bak": 206,
     "glb": "export/grill_asado1500.glb",
     "glb_y_min": -303.3,
-    "glb_z_min": 697
+    "glb_z_min": 689
    },
    "utstick": 232,
    "utstick_z": [
-    1200,
-    1514
+    1192,
+    1506
    ],
    "vikt_kg": 96,
    "hyllor": 1,
@@ -161,8 +161,7 @@
    "typ": "bank",
    "horn": true,
    "blind": 600,
-   "status": "koncept – ej i Fusion",
-   "fusion": "Yamay Utekok - Hornbank 1000",
+   "fusion": "Yamay Utekok - Hornbank 1000 H",
    "bult_x": [
     -420,
     -166.67,
@@ -171,9 +170,31 @@
    ],
    "vikt_kg": 110,
    "hyllor": 2,
-   "beskrivning": "Bänk 1000 + blindpanel 600 (Corten 3) på ena fronthalvan; nästa ben skruvas mot blindpanelen. 400 mm öppet fram.",
+   "beskrivning": "Bänk 1000 + blindpanel 600 (Corten 3, plan) utanpå ena fronthalvan, 8 x M6 mot topplåtens/hyllornas framkant och gavelns frontflans. Nästa ben skruvas med M8-skarven genom blindpanelen. 400 mm öppet fram. H = blindpanel höger, V = vänster; samma detaljer i båda.",
    "glb": "export/bank1000.glb",
-   "glb_anm": "tillfälligt Bänk 1000 + ritad blindpanel"
+   "panel_t": 3,
+   "fusion_slut": "Yamay Utekok - Hornbank 1000 H",
+   "fusion_start": "Yamay Utekok - Hornbank 1000 V",
+   "glb_slut": "export/hornbank1000H.glb",
+   "glb_start": "export/hornbank1000V.glb"
+  }
+ },
+ "tillval": {
+  "yakitori50": {
+   "namn": "Yamay Yakitori 50",
+   "kort": "Y50",
+   "fusion": "Yakitori 50",
+   "fusion_proj": "yamay-yakitori50",
+   "langd": 514,
+   "djup": 259,
+   "hojd": 394,
+   "y_fram": -280,
+   "pa_typ": [
+    "bank"
+   ],
+   "glb": "export/grill_yakitori50.glb",
+   "vikt_kg": null,
+   "anm": "står löst på bänkskivan (egen produkt, ingen infällning)"
   }
  }
 }

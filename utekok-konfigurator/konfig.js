@@ -26,13 +26,13 @@
       const blind = m.horn ? (e.blind || 'slut') : null;
       if (blind === 'start') {                               // vrid före: föregående ben möter blindpanelen
         if (!out.length) throw new Error('hörnbänk med blind "start" kan inte stå först');
-        pos = add(pos, d, D); d = cw(d); ben++; s = 0;
+        pos = add(pos, d, D + (m.panel_t || 0)); d = cw(d); ben++; s = 0;
       }
       const n = cw(d), p0 = pos, p1 = add(pos, d, m.bredd);
       const c = add(add(p0, d, m.bredd / 2), n, D / 2);
-      out.push({ i, typ: e.typ, m, blind, ben, d, n, p0, p1, c, rot: r2(Math.atan2(d[1], d[0]) * 180 / Math.PI),
+      out.push({ i, typ: e.typ, m, blind, ben, tillval: e.tillval ? [].concat(e.tillval) : [], d, n, p0, p1, c, rot: r2(Math.atan2(d[1], d[0]) * 180 / Math.PI),
                  s0: s, s1: s + m.bredd, poly: [p0, p1, add(p1, n, D), add(p0, n, D)].map(q => q.map(r2)) });
-      if (blind === 'slut') { pos = add(p1, cw(d), D + fog); d = cw(d); ben++; s = 0; }
+      if (blind === 'slut') { pos = add(p1, cw(d), D + (m.panel_t || 0) + fog); d = cw(d); ben++; s = 0; }
       else { pos = add(p1, d, fog); s += m.bredd + fog; }
     });
     return out;
@@ -76,11 +76,19 @@
       }
     });
     const S = kat.gemensamt.skiva;
-    if (S.pa_grill) L.forEach((p, i) => { if (p.typ === 'asado1500') varn.push(`Modul ${i + 1} (Asado): med skiva under grillen hamnar lådans överkant på ${p.m.grill.z0 + p.m.grill.hojd + S.epdm + S.t} mm – Asado-modulen ska sänkas ${S.epdm + S.t} mm (ModH ${p.m.stommehojd} → ${p.m.stommehojd - S.epdm - S.t}) i Fusion.`); });
+    if (S.pa_grill) L.forEach((p, i) => { if (p.typ === 'asado1500' && Math.abs(p.m.grill.z0 + p.m.grill.hojd + S.epdm + S.t - kat.gemensamt.bankhojd) > 0.5) varn.push(`Modul ${i + 1} (Asado): med skiva under grillen hamnar lådans överkant på ${p.m.grill.z0 + p.m.grill.hojd + S.epdm + S.t} mm, inte ${kat.gemensamt.bankhojd} – ändra Asado-modulens ModH till ${kat.gemensamt.bankhojd - p.m.grill.hojd - S.epdm - S.t} i Fusion.`); });
     if (S.pa_grill && L.some(p => p.m.bult_anm)) info.push('Skivans bultraster på grillmodulerna är ett förslag – Ø9-hålen finns inte i grillmodulernas topplåt i Fusion än.');
     const ben = Math.max(...L.map(p => p.ben));
     if (L.length === 1 && L[0].m.typ === 'bank' && konf.vagg === 'ingen')
       varn.push('Ensam bänkmodul utan vägg tippar vid ca 155 N i bänkhöjd – skruva i vägg eller bygg ihop med fler moduler.');
+    L.forEach((p, i) => p.tillval.forEach(t => {
+      const tv = (kat.tillval || {})[t];
+      if (!tv) { fel.push(`Modul ${i + 1}: okänt tillval ${t}.`); return; }
+      if (!tv.pa_typ.includes(p.m.typ)) { fel.push(`Modul ${i + 1}: ${tv.namn} kan bara stå på en bänkmodul.`); return; }
+      if (tv.langd > p.m.bredd + 50) varn.push(`Modul ${i + 1}: ${tv.namn} (${tv.langd} mm) är bredare än modulen.`);
+      else if (tv.langd > p.m.bredd) info.push(`Modul ${i + 1}: ${tv.namn} är ${tv.langd} mm och sticker ut ${(tv.langd - p.m.bredd) / 2} mm per sida över modulen.`);
+      info.push(`Modul ${i + 1}: ${tv.namn} ${tv.anm}. Värmen mot skivan/EPDM under grillen är inte kontrollerad.`);
+    }));
     if (ben > 1) info.push(`${ben} ben (${ben === 2 ? 'L-kök' : 'U-kök'}).`);
     return { fel, varn, info };
   }
@@ -91,7 +99,7 @@
   function skivor(konf, kat) {
     konfSidor = konf.sidor !== false;
     const L = layout(konf, kat), S = kat.gemensamt.skiva, fog = kat.gemensamt.fog, out = [];
-    const kap = S.overhang_fram - fog;
+    const kap = S.overhang_fram - fog - ((Object.values(kat.moduler).find(x => x.horn) || {}).panel_t || 0);
     let lopp = [];
     const flush = () => {
       if (!lopp.length) return;
@@ -209,6 +217,7 @@
     SP.forEach(q => rader.push({ art: `Sidopanel ${q.nr} (modul ${q.modul}, ${q.ande === 'start' ? 'början' : 'slut'}${q.ovre ? ', överdel mot lägre granne' : ''}): rostfri ${q.t} × ${q.djup} × ${q.hojd} mm, ${q.bultar} pinnbultar M8`, antal: 1, kg: q.kg }));
     const nsb = SP.reduce((s, q) => s + q.bultar, 0);
     if (nsb) rader.push({ art: 'ISO 4032 M8 A4 + distans 6 mm + EPDM-bricka (sidopanelernas bultar)', antal: nsb });
+    for (const p of L) for (const t of p.tillval) { const tv = (kat.tillval || {})[t]; if (tv) rader.push({ art: tv.namn + ' (tillval, egen produkt)', fusion: tv.fusion, antal: 1, kg: tv.vikt_kg || 0 }); }
     for (const p of L) if (p.m.grill) rader.push({ art: p.m.grill.namn + ' (egen produkt)', fusion: p.m.grill.fusion, antal: 1, kg: p.m.grill.vikt_kg });
     const kg = rader.reduce((s, r) => s + (r.kg || 0), 0);
     const allp = L.flatMap(p => p.poly).concat(SP.flatMap(q => q.poly), SV.flatMap(q => q.poly));
@@ -218,7 +227,7 @@
 
   function kortnamn(konf, kat) {
     const k = { bank500: 'B500', bank1000: 'B1000', horno1000: 'H1000', asado1500: 'A1500', horn1000: 'HÖRN' };
-    return konf.rad.map(el => { const e = norm(el); return e.typ === 'horn1000' ? (e.blind === 'start' ? '⌐HÖRN' : 'HÖRN¬') : (k[e.typ] || e.typ); }).join(' | ');
+    return konf.rad.map(el => { const e = norm(el); const tv = e.tillval ? [].concat(e.tillval).map(t => '+' + (((kat.tillval || {})[t] || {}).kort || t)).join('') : ''; return (e.typ === 'horn1000' ? (e.blind === 'start' ? '⌐HÖRN' : 'HÖRN¬') : (k[e.typ] || e.typ)) + tv; }).join(' | ');
   }
 
   return { layout, validera, skivor, sidor, skarvar, stycklista, kortnamn };

@@ -40,8 +40,11 @@ window.rita3d = async function (L, SV, KAT, SP) {
   const jobb = L.map(async p => {
     const mg = new THREE.Group();
     mg.position.set(p.c[0], p.c[1], 0); mg.rotation.z = p.rot * Math.PI / 180;
-    try { mg.add(await glb(p.m.glb)); } catch (e) { console.warn('saknar', p.m.glb); }
-    if (p.m.horn) {   // blindpanel (koncept) på fronten
+    const egen = p.blind && p.m['glb_' + p.blind] ? p.m['glb_' + p.blind] : null;
+    let harEgen = false;
+    if (egen) { try { mg.add(await glb(egen)); harEgen = true; } catch (e) { console.warn('saknar', egen); } }
+    if (!harEgen) { try { mg.add(await glb(p.m.glb)); } catch (e) { console.warn('saknar', p.m.glb); } }
+    if (p.m.horn && !harEgen) {   // blindpanel (koncept) på fronten
       const b = new THREE.Mesh(new THREE.BoxGeometry(p.m.blind, 3, 892 - 100), COR);
       const x = p.blind === 'slut' ? p.m.bredd / 2 - p.m.blind / 2 : -p.m.bredd / 2 + p.m.blind / 2;
       b.position.set(x, -300 + 1.5, 100 + (892 - 100) / 2); b.castShadow = true; mg.add(b);
@@ -53,6 +56,17 @@ window.rita3d = async function (L, SV, KAT, SP) {
         gr.position.set(-(bx.min.x + bx.max.x) / 2, gg.glb_y_min - bx.min.y, gg.glb_z_min + lyft - bx.min.z);
         mg.add(gr);
       } catch (e) { console.warn('saknar', p.m.grill.glb); }
+    }
+    for (const t of p.tillval || []) {    // tillval (Yakitori 50) står löst på bänkskivan
+      const tv = KAT.tillval[t];
+      try {
+        const gr = await glb(tv.glb), bx = new THREE.Box3().setFromObject(gr), S = KAT.gemensamt.skiva;
+        gr.position.set(-(bx.min.x + bx.max.x) / 2, tv.y_fram - bx.min.y, p.m.stommehojd + S.epdm + S.t - bx.min.z);
+        mg.add(gr);
+      } catch (e) {
+        const b = new THREE.Mesh(new THREE.BoxGeometry(tv.langd, tv.djup, tv.hojd), COR);
+        b.position.set(0, tv.y_fram + tv.djup / 2, p.m.stommehojd + KAT.gemensamt.skiva.epdm + KAT.gemensamt.skiva.t + tv.hojd / 2); b.castShadow = true; mg.add(b);
+      }
     }
     return mg;
   });
