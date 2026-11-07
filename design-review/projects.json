@@ -1,16 +1,5 @@
 [
  {
-  "slug": "rat-stop",
-  "name": "rat stop",
-  "doc": null,
-  "version": null,
-  "exported": null,
-  "channel": "rat-stop",
-  "thread": "1568630790848520396",
-  "fusion_project": "rat-stop",
-  "pending": true
- },
- {
   "slug": "asado-1500",
   "name": "Yamay Asado 1500",
   "doc": "Yamay Asado 1500",
@@ -47,5 +36,15 @@
   "doc": "Yakitori 50",
   "version": 19,
   "exported": "2026-11-07 22:11"
+ },
+ {
+  "slug": "rat-stop",
+  "name": "rat stop",
+  "doc": "rat-stop",
+  "version": 2,
+  "exported": "2026-11-07 22:14",
+  "channel": "rat-stop",
+  "thread": "1568630790848520396",
+  "fusion_project": "rat-stop"
  }
 ]
