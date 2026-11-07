@@ -1,0 +1,259 @@
+<!doctype html><html lang="sv"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Design Review</title>
+<meta name="robots" content="noindex,nofollow">
+<!--OG-->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;700&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--y:#fbc021;--chili:#c8321a;--ox:#5a1a14;--cream:#fff6dc;--paper:#fffaf0;--ink:#2a1a12;--mute:#9a8a70;--line:#e6d8bb}
+*{box-sizing:border-box}html,body{height:100%}
+body{margin:0;display:grid;grid-template-rows:56px 1fr;grid-template-columns:var(--tw,340px) 1fr 290px;font-family:Barlow,sans-serif;background:var(--cream);color:var(--ink);overflow:hidden}
+header{grid-column:1/4;background:var(--y);display:flex;align-items:center;gap:14px;padding:0 16px;border-bottom:3px solid var(--ox);min-width:0}
+header h1{font-family:Anton;font-weight:400;font-size:24px;margin:0;letter-spacing:.02em;color:var(--ox);white-space:nowrap}
+select{font-family:'Barlow Condensed';font-weight:700;font-size:16px;background:var(--cream);border:2px solid var(--ox);border-radius:6px;padding:5px 8px;color:var(--ink);max-width:46vw}
+.meta{margin-left:auto;font-family:'Barlow Condensed';font-size:14px;color:var(--ox);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+aside{display:flex;flex-direction:column;min-height:0;background:var(--paper);border-right:2px dashed var(--ox)}
+h2{font-family:'Barlow Condensed';font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--chili);font-size:15px;margin:12px 14px 6px}
+#q{margin:0 12px 8px;border:2px solid var(--line);border-radius:6px;padding:6px 9px;font:inherit;font-size:14px;background:#fff;width:calc(100% - 24px)}
+.tools{display:flex;flex-wrap:wrap;gap:5px;margin:0 12px 8px}
+button{font-family:'Barlow Condensed';font-weight:700;font-size:13px;border:1.5px solid var(--ox);border-radius:4px;padding:3px 8px;background:var(--cream);color:var(--ink);cursor:pointer}
+button:hover{background:var(--y)}button.on{background:var(--chili);border-color:var(--chili);color:#fff}
+#tree{flex:1;overflow:auto;padding-bottom:30px;min-height:0}
+.row{display:flex;align-items:center;gap:5px;padding:2px 8px 2px 0;font-size:14px;white-space:nowrap;cursor:default;line-height:20px}
+.row:hover{background:#f5ead2}.row.sel{background:var(--y)}.row.hl{outline:2px solid var(--chili);outline-offset:-2px}
+.tw{width:14px;flex:none;color:#8a7a60;font-size:10px;text-align:center;cursor:pointer}
+.bulb{width:17px;height:17px;flex:none;cursor:pointer}
+.ic{width:14px;height:14px;flex:none}
+.row.dim>.nm{color:#b8aa8e}.row.dim .ic{opacity:.45}
+.nm{overflow:hidden;text-overflow:ellipsis}
+.cnt{color:var(--mute);font-size:12px}
+.tag{font-size:10px;font-weight:700;background:#e9dcc0;border-radius:3px;padding:0 4px;color:var(--ox);flex:none}
+.tag.err{background:var(--chili);color:#fff}
+main{position:relative;min-width:0;min-height:0;overflow:hidden}canvas{display:block;touch-action:none}
+.panel{position:absolute;background:rgba(255,250,240,.96);border:2px solid var(--ox);border-radius:8px;padding:9px 11px;font-family:'Barlow Condensed'}
+#sec{left:14px;top:14px;width:268px}
+#sec b{color:var(--chili);letter-spacing:.08em;text-transform:uppercase;font-size:14px}
+.srow{display:grid;grid-template-columns:34px 1fr 52px 30px;gap:6px;align-items:center;margin-top:7px;font-size:14px}
+.srow button{padding:2px 0}.srow .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--ox)}
+input[type=range]{width:100%;accent-color:var(--chili)}
+.sopts{display:flex;gap:10px;margin-top:8px;font-size:13px;align-items:center}.sopts label{display:flex;gap:4px;align-items:center}
+#views{right:14px;top:14px;display:flex;flex-direction:column;gap:5px;padding:7px}
+#views button{font-size:13px}
+#status{left:50%;top:45%;transform:translate(-50%,-50%);font-size:20px;color:var(--ox);text-align:center}
+#hint{position:absolute;left:14px;bottom:10px;font-size:12px;color:var(--mute)}
+#info{background:var(--paper);border-left:2px dashed var(--ox);overflow:auto;min-height:0}
+#info dl{margin:0 14px 14px;font-size:14px}#info dt{font-family:'Barlow Condensed';font-weight:700;color:#8a7a60;text-transform:uppercase;font-size:12px;letter-spacing:.06em;margin-top:9px}#info dd{margin:2px 0 0;word-break:break-word}
+#info .empty{margin:0 14px;color:var(--mute);font-size:14px}
+#info .acts{display:flex;flex-wrap:wrap;gap:5px;margin:4px 14px}
+.split{position:absolute;top:0;bottom:0;width:6px;cursor:col-resize;z-index:3}
+#tabs{display:none}
+@media (max-width:820px){
+ body{grid-template-columns:1fr;grid-template-rows:52px 1fr auto}
+ header{grid-column:1;gap:8px;padding:0 10px}header h1{font-size:19px}.meta{display:none}
+ main{grid-row:2}
+ aside,#info{grid-row:3;grid-column:1;border:0;border-top:2px solid var(--ox);height:42vh;display:none}
+ body.t-tree aside{display:flex}body.t-info #info{display:block}
+ #tabs{display:flex;grid-row:4;border-top:2px solid var(--ox);background:var(--y)}
+ #tabs button{flex:1;border:0;border-radius:0;padding:10px 0;font-size:15px;background:transparent}#tabs button.on{background:var(--chili);color:#fff}
+ body{grid-template-rows:52px 1fr auto auto}
+ #sec{left:8px;top:8px;width:230px;padding:7px 9px}#views{right:8px;left:auto;top:8px;flex-direction:column;padding:4px;gap:3px}#views button{font-size:12px;padding:2px 6px}#views button[data-v=right],#views button[data-v=front]{display:none}
+ #sec.min .srow,#sec.min .sopts{display:none}
+ .row{line-height:26px;font-size:15px}
+ #hint{display:none}
+}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+</head><body class="t-tree">
+<header><h1>DESIGN REVIEW</h1><select id="proj" aria-label="Projekt"></select><div class="meta" id="meta"></div></header>
+<aside id="side"><h2>Träd · kopia av Fusion</h2><input id="q" placeholder="Sök komponent eller kropp…" autocomplete="off">
+<div class="tools"><button id="bAll">Visa allt</button><button id="bReset" title="Tänt/släckt som i Fusion">Som i Fusion</button><button id="bIso">Isolera</button><button id="bCol">Fäll ihop</button></div>
+<div id="tree"></div></aside>
+<main id="vp">
+<div class="panel" id="sec"><div style="display:flex;justify-content:space-between;align-items:center"><b>✂ Snitt</b><button id="bSecMin" style="display:none">▾</button></div>
+<div class="srow" data-a="0"><button>X</button><input type="range" min="0" max="1000" value="500"><span class="v">–</span><button title="Vänd">⇄</button></div>
+<div class="srow" data-a="1"><button>Y</button><input type="range" min="0" max="1000" value="500"><span class="v">–</span><button title="Vänd">⇄</button></div>
+<div class="srow" data-a="2"><button>Z</button><input type="range" min="0" max="1000" value="500"><span class="v">–</span><button title="Vänd">⇄</button></div>
+<div class="sopts"><label><input type="checkbox" id="cCap" checked>Fyllda snittytor</label><label><input type="checkbox" id="cPl" checked>Visa plan</label></div></div>
+<div class="panel" id="views"><button data-v="home">⌂ Hem</button><button data-v="iso">ISO</button><button data-v="front">Fram</button><button data-v="right">Höger</button><button data-v="top">Topp</button><button data-v="fit">Zooma markerad</button></div>
+<div class="panel" id="status">Laddar…</div>
+<div id="hint">Klick = markera · dubbelklick = zooma · dra = rotera · högerdrag = panorera</div>
+</main>
+<section id="info"><h2>Markerad</h2><div id="infob"><p class="empty">Klicka på en del i modellen eller i trädet.</p></div></section>
+<nav id="tabs"><button data-t="tree" class="on">Träd</button><button data-t="info">Info</button></nav>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+window.__err=null;addEventListener('error',e=>{window.__err=String(e.message)});
+const $=s=>document.querySelector(s);
+const vp=$('#vp');
+const R=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});R.localClippingEnabled=true;R.setPixelRatio(Math.min(devicePixelRatio,2));vp.prepend(R.domElement);
+const S=new THREE.Scene();S.background=new THREE.Color('#f3ead3');
+S.environment=new THREE.PMREMGenerator(R).fromScene(new RoomEnvironment(),.04).texture;
+const C=new THREE.PerspectiveCamera(32,1,1,1e5);const O=new OrbitControls(C,R.domElement);O.enableDamping=true;O.dampingFactor=.15;
+const DL=new THREE.DirectionalLight('#fff',1.4);S.add(DL);S.add(new THREE.HemisphereLight('#fff','#a08060',.5));
+let dirty=true;O.addEventListener('change',()=>dirty=true);
+function rs(){const w=vp.clientWidth,h=vp.clientHeight;R.setSize(w,h);C.aspect=w/Math.max(h,1);C.updateProjectionMatrix();dirty=true}
+new ResizeObserver(rs).observe(vp);
+(function loop(){requestAnimationFrame(loop);O.update();if(dirty){DL.position.copy(C.position);R.render(S,C);dirty=false}})();
+
+// ---------- tillstånd ----------
+let model=null,N={},KIDS={},OBJ={},own={},fus={},open=new Set(),sel=null,box=null,size=new THREE.Vector3(),ctr=new THREE.Vector3();
+const AX=[new THREE.Vector3(1,0,0),new THREE.Vector3(0,0,-1),new THREE.Vector3(0,1,0)]; // Fusion X,Y,Z i three-världen
+const planes=[0,1,2].map(()=>new THREE.Plane());const sec=[0,1,2].map(()=>({on:false,t:.5,flip:false}));
+let active=[];const mats=new Set();let capOn=true;
+const capU={value:new THREE.Color('#c8321a')};
+const hlMat=new THREE.MeshStandardMaterial({color:'#fbc021',emissive:'#8a5a00',emissiveIntensity:.55,roughness:.5,metalness:.1,side:THREE.DoubleSide});
+function prep(m){m.side=THREE.DoubleSide;m.clippingPlanes=active;m.clipShadows=true;m.onBeforeCompile=sh=>{sh.uniforms.capColor=capU;sh.fragmentShader='uniform vec3 capColor;\n'+sh.fragmentShader.replace('#include <dithering_fragment>','#include <dithering_fragment>\n if(!gl_FrontFacing) gl_FragColor=vec4(capColor,1.0);')};m.customProgramCacheKey=()=>'cap';m.needsUpdate=true;mats.add(m)}
+prep(hlMat);
+
+// ---------- projekt ----------
+const qs=new URLSearchParams(location.search);let PROJ=[];
+fetch('projects.json?'+Date.now()).then(r=>r.json()).then(list=>{PROJ=list;const s=$('#proj');
+ s.innerHTML=list.map(p=>`<option value="${p.slug}">${p.name}</option>`).join('');
+ const want=qs.get('p')&&list.find(p=>p.slug===qs.get('p'))?qs.get('p'):list[0].slug;s.value=want;load(want)});
+$('#proj').onchange=e=>{const u=new URL(location);u.searchParams.set('p',e.target.value);history.replaceState(null,'',u);load(e.target.value)};
+
+function load(slug){
+ $('#status').style.display='';$('#status').textContent='Laddar modell…';
+ if(model){S.remove(model);model.traverse(o=>{if(o.isMesh)o.geometry.dispose()})}
+ model=null;N={};KIDS={};OBJ={};own={};fus={};open=new Set();sel=null;mats.forEach(m=>{if(m!==hlMat)mats.delete(m)});
+ Promise.all([fetch(slug+'/tree.json?'+Date.now()).then(r=>r.json()),new Promise((ok,no)=>new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load(slug+'/model.glb?'+(PROJ.find(p=>p.slug===slug)||{}).exported,ok,
+   x=>{if(x.total)$('#status').textContent='Laddar modell… '+Math.round(100*x.loaded/x.total)+' %'},no))]).then(([T,g])=>{
+  model=g.scene;S.add(model);
+  for(const n of T.nodes){N[n.id]=n;(KIDS[n.p]=KIDS[n.p]||[]).push(n.id);own[n.id]=n.vis!==false;fus[n.id]=own[n.id]}
+  model.traverse(o=>{if(N[o.name])OBJ[o.name]=o;if(o.isMesh){o.userData.mat=o.material;prep(o.material)}});
+  const m=T.meta;$('#meta').textContent=`${m.doc} · v${m.version} · exporterad ur Fusion ${m.exported}`;document.title='Design Review · '+m.doc;
+  const root=KIDS[null][0];open.add(root);(KIDS[root]||[]).forEach(k=>{});
+  applyVis();model.updateMatrixWorld(true);
+  box=new THREE.Box3();model.traverse(o=>{if(o.isMesh&&visEff(o.name.startsWith('b')?o.name:null)){o.geometry.computeBoundingBox();box.union(o.geometry.boundingBox.clone().applyMatrix4(o.matrixWorld))}});
+  if(box.isEmpty())box.setFromObject(model);
+  box.getSize(size);box.getCenter(ctr);
+  const d=size.length();C.near=d/200;C.far=d*30;C.updateProjectionMatrix();
+  sec.forEach((s,i)=>{s.on=false;s.t=.5;s.flip=false});updSec();
+  buildPlaneViz();view('home');renderTree();showInfo();
+  $('#status').style.display='none';window.__ready=slug;
+ }).catch(e=>{$('#status').textContent='Kunde inte ladda: '+e;window.__err=String(e)})}
+
+// ---------- synlighet ----------
+function visEff(id){while(id){if(!own[id])return false;id=N[id].p}return true}
+function applyVis(){for(const id in OBJ)OBJ[id].visible=own[id];dirty=true}
+function setOwn(id,v){own[id]=v;applyVis();renderTree()}
+function subtree(id,f){f(id);(KIDS[id]||[]).forEach(k=>subtree(k,f))}
+function ancestors(id){const a=[];let p=N[id].p;while(p){a.push(p);p=N[p].p}return a}
+$('#bAll').onclick=()=>{for(const id in own)own[id]=true;applyVis();renderTree()};
+$('#bReset').onclick=()=>{for(const id in own)own[id]=fus[id];applyVis();renderTree()};
+$('#bIso').onclick=()=>{if(!sel)return;const keep=new Set([sel,...ancestors(sel)]);subtree(sel,k=>keep.add(k));
+ for(const id in own){if(!keep.has(id)){const p=N[id].p;own[id]=!(p&&keep.has(p)&&!keep.has(id))?own[id]:false}}
+ for(const id of keep)own[id]=true;applyVis();renderTree();view('fit')};
+$('#bCol').onclick=()=>{const r=KIDS[null][0];open=new Set([r]);renderTree()};
+
+// ---------- träd ----------
+const ICON={occ:'<svg class="ic" viewBox="0 0 14 14"><path d="M7 1 13 4v6l-6 3-6-3V4z" fill="#fbe7a8" stroke="#5a1a14" stroke-width="1.2"/><path d="M1 4l6 3 6-3M7 7v6" fill="none" stroke="#5a1a14" stroke-width="1.2"/></svg>',
+ ref:'<svg class="ic" viewBox="0 0 14 14"><path d="M7 1 13 4v6l-6 3-6-3V4z" fill="#fbe7a8" stroke="#5a1a14" stroke-width="1.2"/><path d="M1 4l6 3 6-3M7 7v6" fill="none" stroke="#5a1a14" stroke-width="1.2"/><circle cx="11" cy="11" r="3" fill="#c8321a"/><path d="M9.6 11h2.8" stroke="#fff" stroke-width="1.2"/></svg>',
+ body:'<svg class="ic" viewBox="0 0 14 14"><rect x="2" y="2" width="10" height="10" rx="1.5" fill="#d7dade" stroke="#5a1a14" stroke-width="1.2"/></svg>',
+ folder:'<svg class="ic" viewBox="0 0 14 14"><path d="M1 3h4l1.5 1.5H13V12H1z" fill="#efe2c4" stroke="#5a1a14" stroke-width="1.1"/></svg>'};
+const bulb=(on,eff)=>`<svg class="bulb" viewBox="0 0 16 16"><path d="M8 1.5a4.6 4.6 0 0 0-2.7 8.3c.5.4.7.9.7 1.5h4c0-.6.2-1.1.7-1.5A4.6 4.6 0 0 0 8 1.5z" fill="${on?(eff?'#fbc021':'#f3e3b0'):'none'}" stroke="${on?'#5a1a14':'#b3a68c'}" stroke-width="1.3"/><rect x="6" y="12.3" width="4" height="2.2" rx=".6" fill="${on?'#5a1a14':'#b3a68c'}"/></svg>`;
+let query='',match=null;
+$('#q').oninput=e=>{query=e.target.value.trim().toLowerCase();if(!query){match=null;renderTree();return}
+ match=new Set();for(const id in N){const n=N[id];if((n.n+' '+(n.cn||'')+' '+(n.pn||'')).toLowerCase().includes(query)){match.add(id);ancestors(id).forEach(a=>match.add(a))}}renderTree()};
+function rowsOf(id,depth,out){const n=N[id];if(match&&!match.has(id))return;out.push([id,depth]);
+ const kids=KIDS[id]||[];if(!kids.length)return;
+ const isOpen=match?true:open.has(id);if(!isOpen)return;
+ // Fusion-ordning: kroppar (i mappen "Bodies") först, sedan occurrences
+ const bodies=kids.filter(k=>N[k].t==='body'),occs=kids.filter(k=>N[k].t==='occ');
+ if(bodies.length&&occs.length){const fid='F'+id;out.push([fid,depth+1,bodies.length]);if(match||open.has(fid))bodies.forEach(k=>rowsOf(k,depth+2,out))}
+ else bodies.forEach(k=>rowsOf(k,depth+1,out));
+ occs.forEach(k=>rowsOf(k,depth+1,out))}
+function renderTree(){const out=[];rowsOf(KIDS[null][0],0,out);const T=$('#tree');
+ T.innerHTML=out.map(([id,d,nb])=>{
+  if(id[0]==='F'){const p=id.slice(1),o=open.has(id)||match;return `<div class="row" data-f="${id}" style="padding-left:${6+d*14}px"><span class="tw">${o?'▼':'▶'}</span><span style="width:17px"></span>${ICON.folder}<span class="nm">Bodies</span><span class="cnt">(${nb})</span></div>`}
+  const n=N[id],kids=KIDS[id]||[],eff=visEff(id),hasK=kids.length>0,o=match?true:open.has(id);
+  const nocc=kids.filter(k=>N[k].t==='occ').length;
+  const tags=(n.kop?'<span class="tag">KÖP</span>':'')+(n.err?'<span class="tag err" title="'+n.err+'">FEL</span>':'')+(n.nomesh?'<span class="tag">tom</span>':'');
+  return `<div class="row${sel===id?' sel':''}${eff?'':' dim'}" data-id="${id}" style="padding-left:${6+d*14}px"><span class="tw">${hasK?(o?'▼':'▶'):''}</span><span data-b>${bulb(own[id],eff)}</span>${n.t==='body'?ICON.body:(n.ref?ICON.ref:ICON.occ)}<span class="nm" title="${(n.cn||n.n).replace(/"/g,'&quot;')}">${n.n}</span>${nocc?`<span class="cnt">(${nocc})</span>`:''}${tags}</div>`}).join('');
+ if(sel){const r=T.querySelector(`[data-id="${sel}"]`);if(r&&!r._seen){const tb=T.getBoundingClientRect(),rb=r.getBoundingClientRect();if(rb.top<tb.top||rb.bottom>tb.bottom)r.scrollIntoView({block:'center'})}}}
+$('#tree').addEventListener('click',e=>{const r=e.target.closest('.row');if(!r)return;
+ if(r.dataset.f){open.has(r.dataset.f)?open.delete(r.dataset.f):open.add(r.dataset.f);renderTree();return}
+ const id=r.dataset.id;
+ if(e.target.closest('[data-b]')){setOwn(id,!own[id]);return}
+ if(e.target.closest('.tw')){open.has(id)?open.delete(id):open.add(id);renderTree();return}
+ select(id,false)});
+$('#tree').addEventListener('dblclick',e=>{const r=e.target.closest('.row');if(r&&r.dataset.id){select(r.dataset.id,false);view('fit')}});
+
+// ---------- markering ----------
+function setHL(id,on){subtree(id,k=>{const o=OBJ[k];if(o&&o.isMesh)o.material=on?hlMat:o.userData.mat})}
+function select(id,fromView){if(sel)setHL(sel,false);sel=id;if(id){setHL(id,true);ancestors(id).forEach(a=>open.add(a));if(N[id].t==='body'){}}
+ dirty=true;renderTree();showInfo();if(fromView&&innerWidth<=820)tab('info')}
+function pathOf(id){return [...ancestors(id).reverse(),id].map(k=>N[k].n).join(' › ')}
+function bboxOf(id){const b=new THREE.Box3();subtree(id,k=>{const o=OBJ[k];if(o&&o.isMesh&&visEff(k)){o.geometry.computeBoundingBox();b.union(o.geometry.boundingBox.clone().applyMatrix4(o.matrixWorld))}});return b}
+function countParts(id){let occ=0,bod=0;subtree(id,k=>{if(k===id)return;N[k].t==='occ'?occ++:bod++});return [occ,bod]}
+function sameComp(n){if(!n.cn)return 0;let c=0;for(const k in N)if(N[k].t==='occ'&&N[k].cn===n.cn)c++;return c}
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function showInfo(){const B=$('#infob');if(!sel){B.innerHTML='<p class="empty">Klicka på en del i modellen eller i trädet.</p>';return}
+ const n=N[sel],b=bboxOf(sel),s=new THREE.Vector3();b.getSize(s);
+ const dim=b.isEmpty()?'–':`${s.x.toFixed(1)} × ${s.z.toFixed(1)} × ${s.y.toFixed(1)} mm`;
+ let h=`<div class="acts"><button id="iZ">Zooma</button><button id="iI">Isolera</button><button id="iH">${own[sel]?'Släck':'Tänd'}</button><button id="iP">Visa förälder</button></div><dl>`;
+ h+=`<dt>${n.t==='body'?'Kropp':'Occurrence'}</dt><dd>${esc(n.n)}</dd><dt>Sökväg i trädet</dt><dd>${esc(pathOf(sel))}</dd>`;
+ if(n.t==='occ'){h+=`<dt>Komponent</dt><dd>${esc(n.cn)}${n.ref?' <span class="tag">länkad fil</span>':''}</dd>`;if(n.pn)h+=`<dt>Art.nr</dt><dd>${esc(n.pn)}</dd>`;if(n.desc)h+=`<dt>Beskrivning</dt><dd>${esc(n.desc)}</dd>`;
+  h+=`<dt>Typ</dt><dd>${n.kop?'Köpdel':'Tillverkad / montage'}</dd>`;const [o,bd]=countParts(sel);if(o||bd)h+=`<dt>Innehåll</dt><dd>${o} occurrences · ${bd} kroppar</dd>`;
+  const sc=sameComp(n);if(sc>1)h+=`<dt>Samma komponent i projektet</dt><dd>${sc} st</dd>`}
+ else{if(n.ap)h+=`<dt>Utseende</dt><dd>${esc(n.ap)}</dd>`;if(n.mat)h+=`<dt>Material</dt><dd>${esc(n.mat)}</dd>`;if(n.tri)h+=`<dt>Trianglar</dt><dd>${n.tri}</dd>`}
+ h+=`<dt>Mått (X × Y × Z, synligt)</dt><dd>${dim}</dd>`;if(n.err)h+=`<dt>Exportfel</dt><dd>${esc(n.err)}</dd>`;B.innerHTML=h+'</dl>';
+ $('#iZ').onclick=()=>view('fit');$('#iI').onclick=()=>$('#bIso').click();$('#iH').onclick=()=>{setOwn(sel,!own[sel]);showInfo()};$('#iP').onclick=()=>{const p=N[sel].p;if(p)select(p)}}
+
+// ---------- plock i 3D ----------
+const rc=new THREE.Raycaster();let down=null;
+R.domElement.addEventListener('pointerdown',e=>{down=[e.clientX,e.clientY]});
+R.domElement.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>5||e.button!==0)return;const id=pick(e);
+ if(e.detail>=2&&id){select(id,true);view('fit');return}select(id,true)});
+function pick(e){if(!model)return null;const r=R.domElement.getBoundingClientRect();
+ rc.setFromCamera(new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1),C);
+ const hits=rc.intersectObject(model,true);
+ for(const h of hits){if(!h.object.isMesh||!visEff(h.object.name))continue;if(active.some(p=>p.distanceToPoint(h.point)<0))continue;
+  const bid=h.object.name;const p=N[bid].p;
+  // klick på redan markerad occurrence -> gå ner till kroppen; annars välj occurrence (som Fusion)
+  if(sel===p&&(KIDS[p]||[]).filter(k=>N[k].t==='body').length>1)return bid;
+  if(sel===bid)return p;
+  return N[p]&&N[p].p?p:bid}
+ return null}
+
+// ---------- snitt ----------
+const pv=new THREE.Group();S.add(pv);
+function buildPlaneViz(){pv.clear();[0,1,2].forEach(i=>{const g=new THREE.Group();const w=[size.z,size.x,size.x][i]*1.15,h=[size.y,size.y,size.z][i]*1.15;
+ const geo=new THREE.PlaneGeometry(w,h);g.add(new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:'#c8321a',transparent:true,opacity:.06,side:THREE.DoubleSide,depthWrite:false})));
+ g.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo),new THREE.LineBasicMaterial({color:'#c8321a'})));
+ if(i===0)g.rotation.y=Math.PI/2;if(i===2)g.rotation.x=-Math.PI/2;g.userData.i=i;pv.add(g)});updSec()}
+function lo(i){return [box.min.x,-box.max.z,box.min.y][i]}function hi(i){return [box.max.x,-box.min.z,box.max.y][i]}
+function updSec(){active.length=0;
+ document.querySelectorAll('.srow').forEach(r=>{const i=+r.dataset.a,s=sec[i];r.children[0].classList.toggle('on',s.on);r.children[3].classList.toggle('on',s.flip);r.children[1].value=Math.round(s.t*1000);
+  if(!box){r.children[2].textContent='–';return}
+  const v=lo(i)+(hi(i)-lo(i))*s.t;r.children[2].textContent=v.toFixed(0)+' mm';
+  // world-koordinat: Fusion-värde v längs AX[i]
+  const n=AX[i].clone().multiplyScalar(s.flip?1:-1);planes[i].set(n,s.flip?-v:v);if(s.on)active.push(planes[i]);
+  const g=pv.children[i];if(g){g.visible=s.on&&$('#cPl').checked;g.position.copy(ctr).addScaledVector(AX[i],v-[ctr.x,-ctr.z,ctr.y][i])}});
+ mats.forEach(m=>{m.clippingPlanes=active.length?active:null;});capU.value.set(capOn?'#c8321a':'#8b8f94');dirty=true;window.__sec=sec.map(s=>({...s}))}
+document.querySelectorAll('.srow').forEach(r=>{const i=+r.dataset.a;
+ r.children[0].onclick=()=>{sec[i].on=!sec[i].on;updSec()};
+ r.children[1].oninput=e=>{sec[i].t=e.target.value/1000;sec[i].on=true;updSec()};
+ r.children[3].onclick=()=>{sec[i].flip=!sec[i].flip;sec[i].on=true;updSec()}});
+$('#cCap').onchange=e=>{capOn=e.target.checked;updSec()};$('#cPl').onchange=updSec;
+$('#bSecMin').onclick=()=>$('#sec').classList.toggle('min');
+
+// ---------- vyer ----------
+function fitTo(b,dir){const s=new THREE.Vector3(),c=new THREE.Vector3();b.getSize(s);b.getCenter(c);const r=s.length()/2||100;
+ const dist=r/Math.sin(THREE.MathUtils.degToRad(C.fov/2))*(C.aspect<1?1.25/C.aspect:1)*.95;O.target.copy(c);C.position.copy(c).addScaledVector(dir.normalize(),dist);C.up.set(0,1,0);O.update();dirty=true}
+function view(v){if(!box)return;const D={home:[1.1,.75,1.35],iso:[1,.82,1],front:[0,0,1],right:[1,0,0],top:[0,1,.0001]};
+ if(v==='fit'){const b=sel?bboxOf(sel):box;fitTo(b.isEmpty()?box:b,C.position.clone().sub(O.target));return}
+ fitTo(box,new THREE.Vector3(...D[v]))}
+document.querySelectorAll('#views button').forEach(b=>b.onclick=()=>view(b.dataset.v));
+addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.key==='Escape')select(null);if(e.key==='f')view('fit');if(e.key==='h'&&sel)setOwn(sel,!own[sel])});
+
+// ---------- mobil ----------
+function tab(t){document.body.classList.remove('t-tree','t-info');document.body.classList.add('t-'+t);document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));setTimeout(rs,0)}
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>tab(b.dataset.t));
+if(innerWidth<=820){$('#bSecMin').style.display='';$('#sec').classList.add('min')}
+window.__dr={get N(){return N},get KIDS(){return KIDS},get sel(){return sel},select,setOwn,own:()=>own,sec,updSec,view,visEff,OBJ:()=>OBJ,pickAt:(x,y)=>pick({clientX:x,clientY:y})};
+</script></body></html>
