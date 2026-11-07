@@ -14,5 +14,16 @@
   "version": 26,
   "exported": "2026-11-07 11:48",
   "channel": "yamay-horno"
+ },
+ {
+  "slug": "testprojekt",
+  "name": "testprojekt",
+  "doc": null,
+  "version": null,
+  "exported": null,
+  "channel": "yamay-testprojekt",
+  "thread": "1568627268362965133",
+  "fusion_project": "yamay-testprojekt",
+  "pending": true
  }
 ]
