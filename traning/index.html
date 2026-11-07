@@ -2256,7 +2256,7 @@ const WAMAP = {knaboj:'luftknaboj', knabojbank:'stolres', utfall0:'utfallkv', ha
 const EXDUR = [320, 200, 110, 110, 110, 110, 110, 240, 240, 240, 110, 110, 110, 110, 110, 200];
 const sprIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const d = en.target; d.vis = en.isIntersecting;
   if (d.vis && !d.style.backgroundImage) d.style.backgroundImage = `url(${d.dataset.src})`; if (d.vis && !RM) d.go(); }), {rootMargin:'200px'}) : null;
-const EXFILE = {hasse:{grave:'grave2', gorillaswing:'gorillaswing4', axelkast:'axelkast3', pullover:'pullover4', squatpressout:'squatpressout5', utfallhalo:'utfallhalo3', highpull:'highpull2', rdl:'rdl2'}};   // omgjorda ark får nytt filnamn (cache)
+const EXFILE = {hasse:{n_curlpress:'n_curlpressf', n_hpull:'n_hpullf', grave:'grave2', gorillaswing:'gorillaswing4', axelkast:'axelkast3', pullover:'pullover4', squatpressout:'squatpressout5', utfallhalo:'utfallhalo3', highpull:'highpull2', rdl:'rdl2'}};   // omgjorda ark får nytt filnamn (cache)
 function exFile(fid, id) { const f = (EXFILE[fid] && EXFILE[fid][id]) || id; return fid === 'hasse' && X2.has(f) ? f + '_x2' : f; }
 // 32 rutor/rep: mellanrutor (RIFE) i rad 2-layout 16x2. sub = 0..31; jämn = originalruta, udda = mellanruta
 const X2 = new Set(['bojdrodd', 'swing', 'goblet', 'gobletpress', 'dans3', 'gorillaswing4', 'axelkast3', 'pullover4', 'squatpressout5', 'utfallhalo3',
