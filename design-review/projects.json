@@ -25,5 +25,16 @@
   "thread": "1568627268362965133",
   "fusion_project": "yamay-testprojekt",
   "pending": true
+ },
+ {
+  "slug": "rat-stop",
+  "name": "rat stop",
+  "doc": null,
+  "version": null,
+  "exported": null,
+  "channel": "rat-stop",
+  "thread": "1568630790848520396",
+  "fusion_project": "rat-stop",
+  "pending": true
  }
 ]
