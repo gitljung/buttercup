@@ -92,7 +92,7 @@ input[type=range]{width:100%;accent-color:var(--chili)}
 </head><body class="t-tree">
 <header><h1>DESIGN REVIEW</h1><select id="proj" aria-label="Projekt"></select><div class="meta" id="meta"></div><button id="rep-btn" title="Ta skärmdump, ring in och rapportera till Discord">📸<span class="lt"> Rapportera problem</span></button><a id="new-btn" href="nytt/" title="Skapa nytt konstruktionsprojekt">＋<span class="lt"> Nytt projekt</span></a></header>
 <aside id="side"><h2>Träd · kopia av Fusion</h2><input id="q" placeholder="Sök komponent eller kropp…" autocomplete="off">
-<div class="tools"><button id="bAll">Visa allt</button><button id="bReset" title="Tänt/släckt som i Fusion">Som i Fusion</button><button id="bIso">Isolera</button><button id="bCol">Fäll ihop</button></div>
+<div class="tools"><button id="bAll">Visa allt</button><button id="bReset" title="Tänt/släckt som i Fusion">Som i Fusion</button><button id="bIso">Isolera</button><button id="bCol">Fäll ihop</button><button id="bFast" title="Tänd/släck alla fästelement i modellen">🔩 Fästelement</button></div>
 <div id="tree"></div></aside>
 <main id="vp">
 <div class="panel" id="sec"><div style="display:flex;justify-content:space-between;align-items:center"><b>✂ Snitt</b><button id="bSecMin" style="display:none">▾</button></div>
@@ -192,6 +192,7 @@ $('#bReset').onclick=()=>{for(const id in own)own[id]=fus[id];applyVis();renderT
 $('#bIso').onclick=()=>{if(!sel)return;const keep=new Set([sel,...ancestors(sel)]);subtree(sel,k=>keep.add(k));
  for(const id in own){if(!keep.has(id)){const p=N[id].p;own[id]=!(p&&keep.has(p)&&!keep.has(id))?own[id]:false}}
  for(const id of keep)own[id]=true;applyVis();renderTree();view('fit')};
+$('#bFast').onclick=()=>{const fs=allFast(),on=!fs.some(k=>own[k]);fs.forEach(k=>own[k]=on);applyVis();renderTree();$('#bFast').classList.toggle('on',!on)};
 $('#bCol').onclick=()=>{const r=KIDS[null][0];open=new Set([r]);renderTree()};
 
 // ---------- träd ----------
@@ -201,6 +202,13 @@ const ICON={occ:'<svg class="ic" viewBox="0 0 14 14"><path d="M7 1 13 4v6l-6 3-6
  folder:'<svg class="ic" viewBox="0 0 14 14"><path d="M1 3h4l1.5 1.5H13V12H1z" fill="#efe2c4" stroke="#5a1a14" stroke-width="1.1"/></svg>'};
 const bulb=(on,eff)=>`<svg class="bulb" viewBox="0 0 16 16"><path d="M8 1.5a4.6 4.6 0 0 0-2.7 8.3c.5.4.7.9.7 1.5h4c0-.6.2-1.1.7-1.5A4.6 4.6 0 0 0 8 1.5z" fill="${on?(eff?'#fbc021':'#f3e3b0'):'none'}" stroke="${on?'#5a1a14':'#b3a68c'}" stroke-width="1.3"/><rect x="6" y="12.3" width="4" height="2.2" rx=".6" fill="${on?'#5a1a14':'#b3a68c'}"/></svg>`;
 let query='',match=null;
+// fästelement: skruvar, muttrar, brickor, stift, distanser m.m. (DIN/ISO/EN-normdelar utom rattar DIN 98/950)
+const FRE=/(^|[\s-])(DIN|ISO|EN)\s?\d|^(\S*skruv|mutter|bricka|lasbricka|låsbricka|nit|popnit|distans|gängins|insert|presshylsa|stift|sprint|pinne)/i;
+const FEX=/\bDIN\s?(98|950)\b/i;
+function isFast(id){const n=N[id];if(!n||n.t!=='occ')return false;if(n._f!==undefined)return n._f;
+ const nm=(n.cn||n.n).replace(/^.*? - /,'');const k=(KIDS[id]||[]).some(c=>N[c].t==='occ');n._f=!k&&FRE.test(nm)&&!FEX.test(nm);return n._f}
+function fastOf(id){return (KIDS[id]||[]).filter(isFast)}
+function allFast(){return Object.keys(N).filter(isFast)}
 $('#q').oninput=e=>{query=e.target.value.trim().toLowerCase();if(!query){match=null;renderTree();return}
  match=new Set();for(const id in N){const n=N[id];if((n.n+' '+(n.cn||'')+' '+(n.pn||'')).toLowerCase().includes(query)){match.add(id);ancestors(id).forEach(a=>match.add(a))}}renderTree()};
 function rowsOf(id,depth,out){const n=N[id];if(match&&!match.has(id))return;out.push([id,depth]);
@@ -210,16 +218,20 @@ function rowsOf(id,depth,out){const n=N[id];if(match&&!match.has(id))return;out.
  const bodies=kids.filter(k=>N[k].t==='body'),occs=kids.filter(k=>N[k].t==='occ');
  if(bodies.length&&occs.length){const fid='F'+id;out.push([fid,depth+1,bodies.length]);if(match||open.has(fid))bodies.forEach(k=>rowsOf(k,depth+2,out))}
  else bodies.forEach(k=>rowsOf(k,depth+1,out));
- occs.forEach(k=>rowsOf(k,depth+1,out))}
+ const fs=occs.filter(isFast),rest=occs.filter(k=>!isFast(k));
+ rest.forEach(k=>rowsOf(k,depth+1,out));
+ if(fs.length){const vis=fs.filter(k=>!match||match.has(k));if(vis.length){const sid='S'+id;out.push([sid,depth+1,fs.length]);if(match||open.has(sid))vis.forEach(k=>rowsOf(k,depth+2,out))}}}
 function renderTree(){const out=[];rowsOf(KIDS[null][0],0,out);const T=$('#tree');
  T.innerHTML=out.map(([id,d,nb])=>{
   if(id[0]==='F'){const p=id.slice(1),o=open.has(id)||match;return `<div class="row" data-f="${id}" style="padding-left:${6+d*14}px"><span class="tw">${o?'▼':'▶'}</span><span style="width:17px"></span>${ICON.folder}<span class="nm">Bodies</span><span class="cnt">(${nb})</span></div>`}
+  if(id[0]==='S'){const p=id.slice(1),o=open.has(id)||match,fs=fastOf(p),on=fs.some(k=>own[k]);return `<div class="row${visEff(p)?'':' dim'}" data-f="${id}" style="padding-left:${6+d*14}px"><span class="tw">${o?'▼':'▶'}</span><span data-sb>${bulb(on,visEff(p))}</span>${ICON.folder}<span class="nm">Fästelement</span><span class="cnt">(${nb})</span></div>`}
   const n=N[id],kids=KIDS[id]||[],eff=visEff(id),hasK=kids.length>0,o=match?true:open.has(id);
   const nocc=kids.filter(k=>N[k].t==='occ').length;
   const tags=(n.kop?'<span class="tag">KÖP</span>':'')+(n.err?'<span class="tag err" title="'+n.err+'">FEL</span>':'')+(n.nomesh?'<span class="tag">tom</span>':'');
   return `<div class="row${sel===id?' sel':''}${eff?'':' dim'}" data-id="${id}" style="padding-left:${6+d*14}px"><span class="tw">${hasK?(o?'▼':'▶'):''}</span><span data-b>${bulb(own[id],eff)}</span>${n.t==='body'?ICON.body:(n.ref?ICON.ref:ICON.occ)}<span class="nm" title="${(n.cn||n.n).replace(/"/g,'&quot;')}">${n.n}</span>${nocc?`<span class="cnt">(${nocc})</span>`:''}${tags}</div>`}).join('');
  if(sel){const r=T.querySelector(`[data-id="${sel}"]`);if(r&&!r._seen){const tb=T.getBoundingClientRect(),rb=r.getBoundingClientRect();if(rb.top<tb.top||rb.bottom>tb.bottom)r.scrollIntoView({block:'center'})}}}
 $('#tree').addEventListener('click',e=>{const r=e.target.closest('.row');if(!r)return;
+ if(r.dataset.f&&e.target.closest('[data-sb]')){const fs=fastOf(r.dataset.f.slice(1)),on=!fs.some(k=>own[k]);fs.forEach(k=>own[k]=on);applyVis();renderTree();return}
  if(r.dataset.f){open.has(r.dataset.f)?open.delete(r.dataset.f):open.add(r.dataset.f);renderTree();return}
  const id=r.dataset.id;
  if(e.target.closest('[data-b]')){setOwn(id,!own[id]);return}
