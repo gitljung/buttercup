@@ -96,7 +96,7 @@ details[open]>summary::after{content:'－'}
     <div class="row"><label>Galler höger</label><div class="seg" id="galH"><button data-g="v" class="on">V-galler</button><button data-g="s">Sträckmetall</button></div></div>
     <div class="row"><label>Galler vänster</label><div class="seg" id="galV"><button data-g="v" class="on">V-galler</button><button data-g="s">Sträckmetall</button></div></div>
     <div class="row"><label>Corten</label><div class="seg" id="mat"><button data-m="ny" class="on">Grå</button><button data-m="rost">Rost</button><button data-m="rf">Rostfritt</button></div></div>
-    <p class="mini">Gallerhöjd i mm från grundläget, inom lyftets gränser. Rattarna och spärrhjulen snurrar med och spärrhaken klickar över kuggarna – eller rulla direkt på ratten med fingret/musen. Håll in spärrhaken (spaken) så släpper den och gallret sjunker.</p>
+    <p class="mini">Gallerhöjd i mm från grundläget, inom lyftets gränser. Rattarna och spärrhjulen snurrar med och spärrhaken klickar över kuggarna – eller rulla direkt på ratten med fingret/musen. Uppåt följer spärrhjulet med och klickar; nedåt står spärrhjulet still och axeln slirar i bromsen, så gallret går aldrig fortare än man vevar.</p>
   </details>
   <details open><summary>Visa</summary>
     <div class="tg" id="grp"></div>
@@ -211,7 +211,7 @@ function setup(root) {
     n.userData.base = n.position.clone();
     parts.push(n);
     n.traverse(m => { if (m.isMesh) { m.userData.part = n; m.material = matFor(ex.ap, ex.name); } });
-    if (/handwheel|ratt gn ?228/i.test(ex.name)) wheels.push(n);
+    if (/handwheel|ratt gn ?228|^gn 228/i.test(ex.name)) wheels.push(n);
   }
   // explodera: riktning fran modellens centrum (fusion-koordinater i gruppens rum)
   const c = new THREE.Box3().setFromObject(model).getCenter(new THREE.Vector3());
@@ -233,7 +233,7 @@ function setup(root) {
   for (const w of wheels) {
     const wb = new THREE.Box3().setFromObject(w).expandByScalar(0.03);
     for (const n of parts) {
-      if (n === w || !/handtag|din98|din934 a4 m10/i.test(n.userData.name || '')) continue;
+      if (n === w || !/handtag|din ?98|din ?934 (a4 )?m10/i.test(n.userData.name || '')) continue;
       if (!wb.intersectsBox(new THREE.Box3().setFromObject(n))) continue;
       w.attach(n); n.userData.base = n.position.clone(); n.userData.exp = new THREE.Vector3();
     }
@@ -262,7 +262,7 @@ function setupRatchets() {
     const hc = new THREE.Box3().setFromObject(hjul).getCenter(new THREE.Vector3());
     // hakens led = ansatsskruven ISO7379 10x40 som gar genom haken
     const kb = new THREE.Box3().setFromObject(hake);
-    const led = parts.find(n => /iso7379 a2 10x40/i.test(n.userData.name || '') && kb.intersectsBox(new THREE.Box3().setFromObject(n)));
+    const led = parts.find(n => /iso ?7379.*10x[45]0/i.test(n.userData.name || '') && kb.intersectsBox(new THREE.Box3().setFromObject(n)));
     const pc = led ? new THREE.Box3().setFromObject(led).getCenter(new THREE.Vector3()) : kb.getCenter(new THREE.Vector3());
     // hakens punkter i hjulets plan; lyftvinkel = den vridning kring leden dar narmaste punkten gar fri kuggtoppen (+TOOTH_H)
     const pts = [], v = new THREE.Vector3();
@@ -292,12 +292,16 @@ function klick() {   // kort metalliskt klick (WebAudio, kraver en anvandargest 
 }
 let lastKlick = 0;
 function applyRatchets() {
+  // broms alt 1 (slirkoppling): spärrhjulet följer axeln bara uppåt; nedåt håller haken hjulet och axeln slirar
   for (const R of ratchets) {
-    const a = -(R.side === 'h' ? lifts.h : -lifts.v) / 30;   // lyft = vridning kring -x (vajern pa -y-sidan av trumman)      // samma vinkel som ratten (samma axel)
+    const L = lifts[R.side];
+    if (R.last === undefined) { R.last = L; R.acc = L; }
+    if (L > R.last) R.acc += L - R.last;          // lyft: hjulet vrids med
+    R.last = L;
+    const a = -(R.side === 'h' ? R.acc : -R.acc) / 30;   // lyft = vridning kring -x (vajern på -y-sidan av trumman)
     rotAbout(R.hjul, R.axH, R.cH, a);
     const ph = Math.abs(a) / (2 * Math.PI / TEETH), tooth = Math.floor(ph), f = ph - tooth;
-    rotAbout(R.hake, R.axK, R.cK, R.rel ? R.lyft * 1.15 : R.lyft * Math.pow(f, 0.8));   // rider upp langs flanken, faller ner i nasta lucka (hallen spak = fri)
-    if (R.rel) { R.tooth = tooth; continue; }
+    rotAbout(R.hake, R.axK, R.cK, R.lyft * Math.pow(f, 0.8));   // rider upp längs flanken, faller ner i nästa lucka
     if (tooth !== R.tooth) { R.tooth = tooth; const now = performance.now(); if (now - lastKlick > 25) { lastKlick = now; klick(); } }
   }
 }
@@ -430,7 +434,7 @@ $('#pick .x').onclick = clearHi;
 const ray = new THREE.Raycaster(), ptr = new THREE.Vector2(); let down = null;
 canvas.addEventListener('pointerdown', e => down = [e.clientX, e.clientY]);
 canvas.addEventListener('pointerup', e => {
-  if (!down || ld || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6 || !model) return;
+  if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6 || !model) return;
   ptr.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(ptr, camera);
   const hit = ray.intersectObject(model, true).find(h => h.object.visible && h.object.userData.part && (!cut || clipPlane.distanceToPoint(h.point) >= 0) && isVis(h.object));
   if (!hit) { clearHi(); return; }
@@ -469,32 +473,11 @@ addEventListener('pointermove', e => {
   setLift(side, lifts[side] - (side === 'h' ? da : -da) * 30);
   e.preventDefault();
 }, {passive: false});
-// ---------- spaken: hall inne sparrhaken -> haken slapper kuggarna och gallret sjunker av egen vikt ----------
-let ld = null, ldT = 0;
-const SINK = 90;   // mm/s
-function hakeOf(o) { while (o) { const R = ratchets.find(r => r.hake === o); if (R) return R; o = o.parent; } return null; }
-addEventListener('pointerdown', e => {
-  if (e.target !== canvas || !model || wd || ld) return;
-  ptr.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(ptr, camera);
-  const hit = ray.intersectObject(model, true).find(h => h.object.visible && isVis(h.object) && (!cut || clipPlane.distanceToPoint(h.point) >= 0));
-  const R = hit && hakeOf(hit.object); if (!R) return;
-  ld = {id: e.pointerId, R}; R.rel = true; klick(); controls.enabled = false; canvas.style.cursor = 'grabbing'; down = null;
-  try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
-  ldT = performance.now(); requestAnimationFrame(sink);
-}, true);
-function sink(t) {
-  if (!ld) return;
-  const dt = Math.min(0.05, Math.max(0, t - ldT) / 1000); ldT = t; const side = ld.R.side;
-  if (lifts[side] > LIM[side][0]) setLift(side, lifts[side] - SINK * dt); else applyLift();
-  requestAnimationFrame(sink);
-}
-function leverEnd(e) { if (!ld || e.pointerId !== ld.id) return; ld.R.rel = false; ld = null; applyLift(); klick(); controls.enabled = true; canvas.style.cursor = ''; }
-addEventListener('pointerup', leverEnd); addEventListener('pointercancel', leverEnd);
 canvas.addEventListener('pointermove', e => {
-  if (wd || ld || !model || e.buttons) return;
+  if (wd || !model || e.buttons) return;
   ptr.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(ptr, camera);
   const hit = ray.intersectObject(model, true).find(h => h.object.visible && isVis(h.object));
-  canvas.style.cursor = hit && (hakeOf(hit.object) || wheelOf(hit.object)) ? 'grab' : '';
+  canvas.style.cursor = hit && wheelOf(hit.object) ? 'grab' : '';
 });
 function wheelEnd(e) { if (!wd || e.pointerId !== wd.id) return; wd = null; controls.enabled = true; canvas.style.cursor = ''; }
 addEventListener('pointerup', wheelEnd); addEventListener('pointercancel', wheelEnd);
