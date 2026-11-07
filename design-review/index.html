@@ -64,6 +64,13 @@ input[type=range]{width:100%;accent-color:var(--chili)}
 #rep-btn{margin-left:8px;background:var(--chili);color:#fff;border:2px solid var(--ox);font-size:15px;padding:5px 12px;border-radius:6px;white-space:nowrap}
 #rep-btn:hover{background:var(--ox)}
 #new-btn{margin-left:6px;font-family:'Barlow Condensed';font-weight:700;font-size:15px;color:var(--ox);background:var(--cream);border:2px solid var(--ox);border-radius:6px;padding:5px 12px;text-decoration:none;white-space:nowrap}#new-btn:hover{background:var(--paper)}
+#del-btn{margin-left:6px;font-size:15px;padding:5px 9px;border:2px solid var(--ox);border-radius:6px;background:var(--cream)}#del-btn:hover{background:var(--chili);color:#fff}
+#delD{border:3px solid var(--ox);border-radius:10px;background:var(--paper);padding:16px 18px;max-width:420px;font-family:Barlow,sans-serif;color:var(--ink)}
+#delD::backdrop{background:rgba(42,26,18,.6)}#delD h3{font-family:Anton;font-weight:400;color:var(--chili);margin:0 0 8px;font-size:22px}
+#delD p{font-size:14px;margin:6px 0}#delD input[type=text]{font:inherit;width:100%;border:2px solid var(--line);border-radius:6px;padding:6px 8px;margin:4px 0 8px}
+#delD .who{display:flex;gap:6px;margin:4px 0 10px}#delD .row2{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
+#delD .go{background:var(--chili);color:#fff;font-size:15px;padding:6px 12px}#delD .go:disabled{opacity:.45}#delMsg{font-size:13px;min-height:18px}
+@media (max-width:820px){#del-btn{font-size:13px;padding:4px 7px;margin-left:4px}}
 @media (max-width:820px){#new-btn{font-size:13px;padding:4px 8px;margin-left:4px}#new-btn .lt{display:none}}
 #rep{position:fixed;inset:0;z-index:50;background:rgba(42,26,18,.72);display:none;align-items:center;justify-content:center;padding:14px}
 #rep.on{display:flex}
@@ -90,7 +97,7 @@ input[type=range]{width:100%;accent-color:var(--chili)}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
 </head><body class="t-tree">
-<header><h1>DESIGN REVIEW</h1><select id="proj" aria-label="Projekt"></select><div class="meta" id="meta"></div><button id="rep-btn" title="Ta skärmdump, ring in och rapportera till Discord">📸<span class="lt"> Rapportera problem</span></button><a id="new-btn" href="nytt/" title="Skapa nytt konstruktionsprojekt">＋<span class="lt"> Nytt projekt</span></a></header>
+<header><h1>DESIGN REVIEW</h1><select id="proj" aria-label="Projekt"></select><div class="meta" id="meta"></div><button id="rep-btn" title="Ta skärmdump, ring in och rapportera till Discord">📸<span class="lt"> Rapportera problem</span></button><a id="new-btn" href="nytt/" title="Skapa nytt konstruktionsprojekt">＋<span class="lt"> Nytt projekt</span></a><button id="del-btn" title="Ta bort projektet ur Design Review" style="display:none">🗑</button></header>
 <aside id="side"><h2>Träd · kopia av Fusion</h2><input id="q" placeholder="Sök komponent eller kropp…" autocomplete="off">
 <div class="tools"><button id="bAll">Visa allt</button><button id="bReset" title="Tänt/släckt som i Fusion">Som i Fusion</button><button id="bIso">Isolera</button><button id="bCol">Fäll ihop</button><button id="bFast" title="Tänd/släck alla fästelement i modellen">🔩 Fästelement</button></div>
 <div id="tree"></div></aside>
@@ -120,6 +127,11 @@ input[type=range]{width:100%;accent-color:var(--chili)}
 <label>Bifogas automatiskt</label><div class="ctx" id="repCtx"></div>
 <div class="ctx" id="repTo"></div>
 <button class="send" id="repSend">Skicka till Discord</button><button type="button" id="repDl">Ladda ner bilden</button><div class="msg" id="repMsg"></div></form></div></div>
+<dialog id="delD"><h3>TA BORT PROJEKT</h3>
+<p>Tar bort <b id="delName"></b> ur Design Review-webben. Fusion-projektet och Discord-kanalen påverkas inte, och modellen sparas så att den kan återställas.</p>
+<p>Skriv projektnamnet för att bekräfta:</p><input type="text" id="delIn" autocomplete="off">
+<div class="who"><span style="font-size:13px;align-self:center">Vem är du?</span><button type="button" data-dw="vicke">Vicke</button><button type="button" data-dw="hugo">Hugo</button></div>
+<div id="delMsg"></div><div class="row2"><button type="button" id="delNo">Avbryt</button><button type="button" class="go" id="delGo" disabled>🗑 Ta bort</button></div></dialog>
 <nav id="tabs"><button data-t="tree" class="on">Träd</button><button data-t="info">Info</button></nav>
 <script type="module">
 import * as THREE from 'three';
@@ -405,6 +417,21 @@ $('#repSend').onclick=async e=>{e.preventDefault();const t=$('#repT').value.trim
   if(!r.ok)throw new Error(r.status+' '+(await r.text()).slice(0,140));const j=await r.json();window.__lastReport=j.id;
   M.textContent='Skickat ✓';M.className='msg ok';setTimeout(()=>{$('#rep').classList.remove('on');$('#repT').value='';$('#repD').value='';$('#repSend').disabled=false},1200)}
  catch(err){M.textContent='Kunde inte skicka: '+err.message;M.className='msg bad';$('#repSend').disabled=false}};
+
+// ---------- ta bort projekt (via _intake -> np_router -> dr_remove.py) ----------
+(function(){const H=hooks();if(!H||!H._intake)return;$('#del-btn').style.display='';
+ let dw=localStorage.getItem('np_who')||'';const setDw=w=>{dw=w;localStorage.setItem('np_who',w);document.querySelectorAll('[data-dw]').forEach(b=>b.classList.toggle('on',b.dataset.dw===w));chk()};
+ const cur=()=>PROJ.find(p=>p.slug===$('#proj').value)||{};
+ const chk=()=>{$('#delGo').disabled=!(dw&&$('#delIn').value.trim().toLowerCase()===(cur().name||'').trim().toLowerCase())};
+ document.querySelectorAll('[data-dw]').forEach(b=>b.onclick=()=>setDw(b.dataset.dw));setDw(dw);
+ $('#delIn').oninput=chk;$('#delNo').onclick=()=>$('#delD').close();
+ $('#del-btn').onclick=()=>{$('#delName').textContent=cur().name+' ('+cur().slug+')';$('#delIn').value='';$('#delIn').placeholder=cur().name;$('#delMsg').textContent='';chk();$('#delD').showModal()};
+ $('#delGo').onclick=async()=>{const p=cur();$('#delGo').disabled=true;$('#delMsg').textContent='Skickar…';
+  const fd=new FormData();fd.append('payload_json',JSON.stringify({username:'Design Review',content:`🗑️ Ta bort **${p.name}** (\`${p.slug}\`) ur Design Review – begärt av ${dw==='hugo'?'Hugo':'Vicke'}`,allowed_mentions:{parse:[]}}));
+  fd.append('files[0]',new Blob([JSON.stringify({v:1,remove:p.slug,name:p.name,by:dw})],{type:'application/json'}),'np.json');
+  try{const r=await fetch(`https://discord.com/api/webhooks/${H._intake.id}/${H._intake.token}?wait=true`,{method:'POST',body:fd});if(!r.ok)throw new Error(r.status);
+   $('#delMsg').innerHTML='✓ Skickat. Projektet försvinner ur listan inom ett par minuter (bekräftelse i #nya-projekt).';setTimeout(()=>$('#delD').close(),3500)}
+  catch(e){$('#delMsg').textContent='Kunde inte skicka: '+e.message;$('#delGo').disabled=false}}})();
 
 window.__dr={get EXP(){return EXP},prepExplode,applyExplode,viewLink,openRep,get N(){return N},get KIDS(){return KIDS},get sel(){return sel},select,setOwn,own:()=>own,sec,updSec,view,visEff,OBJ:()=>OBJ,pickAt:(x,y)=>pick({clientX:x,clientY:y})};
 </script></body></html>
