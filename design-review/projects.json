@@ -48,5 +48,15 @@
   "exported": "2026-11-07 20:01",
   "channel": "yamay-asado",
   "thread": "1568653342975074445"
+ },
+ {
+  "slug": "yakitori-50",
+  "name": "Yamay Yakitori 50",
+  "channel": "yamay-grill",
+  "thread": "1565091505507410073",
+  "fusion_project": "yamay-yakitori50",
+  "doc": "Yakitori 50",
+  "version": 17,
+  "exported": "2026-11-07 20:28"
  }
 ]
