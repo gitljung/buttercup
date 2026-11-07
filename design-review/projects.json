@@ -4,13 +4,15 @@
   "name": "Yamay Asado 1500",
   "doc": "Yamay Asado 1500 NY",
   "version": 26,
-  "exported": "2026-11-07 11:43"
+  "exported": "2026-11-07 11:43",
+  "channel": "yamay-asado"
  },
  {
   "slug": "horno",
   "name": "Yamay Horno",
   "doc": "Yamay Horno - ugn",
   "version": 26,
-  "exported": "2026-11-07 11:48"
+  "exported": "2026-11-07 11:48",
+  "channel": "yamay-horno"
  }
 ]
