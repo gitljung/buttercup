@@ -1,0 +1,155 @@
+{
+ "version": "2026-11-07",
+ "kalla": "Fusion-projekt yamay-utekok, masters 'Yamay Utekok - parametrar*' + detaljfilernas vikter (kedja_g). Vikter utan skiva och grill.",
+ "gemensamt": {
+  "djup": 600,
+  "fog": 6,
+  "bankhojd": 900,
+  "skarv": {
+   "dim": "M8",
+   "y": [
+    -200,
+    200
+   ],
+   "z_alla": [
+    150,
+    450
+   ],
+   "z_bank_bank": [
+    750
+   ],
+   "hal": 9,
+   "distans": 6
+  },
+  "skiva": {
+   "material": "rostfri EN 1.4404",
+   "t": 6,
+   "epdm": 2,
+   "overhang_fram": 20,
+   "max_langd": 3000,
+   "dropp_fran_kant": 10,
+   "bult": "CD-pinnbult M6x16 A4 (ISO 13918 PT)",
+   "bult_y": [
+    -210,
+    210
+   ],
+   "topplat_hal": 9
+  },
+  "sockel": {
+   "indrag": 60,
+   "hojd_tarum": 94
+  }
+ },
+ "moduler": {
+  "bank500": {
+   "namn": "Bänk 500",
+   "bredd": 500,
+   "stommehojd": 892,
+   "typ": "bank",
+   "fusion": "Yamay Utekok - Bankmodul 500",
+   "bult_x": [
+    -170,
+    170
+   ],
+   "vikt_kg": 62,
+   "hyllor": 2,
+   "glb": "export/bank500.glb"
+  },
+  "bank1000": {
+   "namn": "Bänk 1000",
+   "bredd": 1000,
+   "stommehojd": 892,
+   "typ": "bank",
+   "fusion": "Yamay Utekok - Bankmodul 1000",
+   "bult_x": [
+    -420,
+    -166.67,
+    166.67,
+    420
+   ],
+   "vikt_kg": 99,
+   "hyllor": 2,
+   "glb": "export/bank1000.glb"
+  },
+  "horno1000": {
+   "namn": "Horno-modul 1000",
+   "bredd": 1000,
+   "stommehojd": 622,
+   "typ": "grill",
+   "fusion": "Yamay Utekok - Horno-modul 1000",
+   "grill": {
+    "namn": "Yamay Horno",
+    "fusion": "Yamay Horno - ugn",
+    "bredd": 676,
+    "djup": 577,
+    "z0": 622,
+    "hojd": 845,
+    "topp": 1467,
+    "fritt_sida": 165,
+    "vikt_kg": 130,
+    "brannbart_min": 300,
+    "obrannbart_min": 100,
+    "y_bak": 278,
+    "y_fram": -299,
+    "glb": "export/grill_horno.glb",
+    "glb_y_min": -299,
+    "glb_z_min": 622
+   },
+   "utstick": 0,
+   "vikt_kg": 70,
+   "hyllor": 1,
+   "glb": "export/horno1000.glb"
+  },
+  "asado1500": {
+   "namn": "Asado-modul 1500",
+   "bredd": 1500,
+   "stommehojd": 697,
+   "typ": "grill",
+   "fusion": "Yamay Utekok - Asado-modul 1500",
+   "grill": {
+    "namn": "Yamay Asado 1500",
+    "fusion": "Yamay Asado 1500",
+    "bredd": 1500,
+    "djup": 506,
+    "z0": 697,
+    "hojd": 203,
+    "topp": 1514,
+    "y_fram": -300,
+    "vikt_kg": 175,
+    "y_bak": 206,
+    "glb": "export/grill_asado1500.glb",
+    "glb_y_min": -303.3,
+    "glb_z_min": 697
+   },
+   "utstick": 232,
+   "utstick_z": [
+    1200,
+    1514
+   ],
+   "vikt_kg": 96,
+   "hyllor": 1,
+   "glb": "export/asado1500.glb"
+  },
+  "horn1000": {
+   "namn": "Hörnbänk 1000",
+   "bredd": 1000,
+   "stommehojd": 892,
+   "typ": "bank",
+   "horn": true,
+   "blind": 600,
+   "status": "koncept – ej i Fusion",
+   "fusion": "Yamay Utekok - Hornbank 1000",
+   "bult_x": [
+    -420,
+    -166.67,
+    166.67,
+    420
+   ],
+   "vikt_kg": 110,
+   "hyllor": 2,
+   "beskrivning": "Bänk 1000 + blindpanel 600 (Corten 3) på ena fronthalvan; nästa ben skruvas mot blindpanelen. 400 mm öppet fram.",
+   "glb": "export/bank1000.glb",
+   "glb_anm": "tillfälligt Bänk 1000 + ritad blindpanel"
+  }
+ }
+}

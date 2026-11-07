@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Yamay Utekök – konfigurator: välj moduler, se köket i 3D, bänkskivan genereras.">
+<meta property="og:type" content="website"><meta property="og:site_name" content="buttercup.nu">
+<meta property="og:title" content="Yamay Utekök – konfigurator">
+<meta property="og:description" content="Bänk, Asado, Horno, hörn – se köket i 3D med genererad rostfri bänkskiva.">
+<meta property="og:url" content="https://www.buttercup.nu/utekok-konfigurator/"><meta property="og:image" content="https://www.buttercup.nu/utekok-konfigurator/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>.bc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;background:#C8340A;color:#FFF6DC;font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px}
+.bc-bar a{color:#FFF6DC;text-decoration:none}.bc-bar b{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:18px;color:#FCC222}
+@media (max-width:900px){main{grid-template-columns:1fr!important} #vy3d{height:420px!important}}</style>
+<title>Yamay Utekök – konfigurator (prototyp)</title>
+<style>
+  :root { --cor:#8a4b2a; --cor2:#6e3a20; --ss:#c9ced4; --bg:#f4f1ec; --ink:#222; --red:#c8321a; --amb:#b7791f; }
+  * { box-sizing:border-box } body { margin:0; font:14px/1.4 system-ui,-apple-system,Segoe UI,sans-serif; color:var(--ink); background:var(--bg) }
+  header { padding:12px 18px; background:#2b2420; color:#f4f1ec; display:flex; gap:16px; align-items:baseline }
+  header h1 { margin:0; font-size:18px } header span { opacity:.7 }
+  main { display:grid; grid-template-columns: 320px 1fr; gap:14px; padding:14px }
+  .card { background:#fff; border-radius:10px; padding:12px; box-shadow:0 1px 3px #0002 }
+  h2 { font-size:13px; text-transform:uppercase; letter-spacing:.06em; margin:0 0 8px; color:#555 }
+  .pal button { display:block; width:100%; text-align:left; margin:0 0 6px; padding:8px 10px; border:1px solid #ddd; border-radius:8px; background:#faf8f5; cursor:pointer }
+  .pal button:hover { background:#f0e8de } .pal small { color:#777 }
+  ol#rad { padding-left:22px; margin:0 } ol#rad li { margin:4px 0; display:flex; gap:6px; align-items:center }
+  ol#rad li .n { flex:1 } ol#rad button { border:1px solid #ccc; background:#fff; border-radius:6px; cursor:pointer; padding:1px 7px }
+  #plan { width:100%; height:520px; background:#fff; border-radius:10px }
+  .msg { margin:3px 0; padding:4px 8px; border-radius:6px } .fel { background:#fde3df; color:var(--red) } .varn { background:#fdf0d8; color:var(--amb) } .info { background:#eef2f6; color:#456 }
+  table { border-collapse:collapse; width:100% } td { padding:3px 6px; border-bottom:1px solid #eee; vertical-align:top } td.a { text-align:right; white-space:nowrap }
+  textarea { width:100%; height:120px; font:12px ui-monospace,monospace }
+  .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap } select,input { padding:4px 6px }
+  .grid2 { display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:14px }
+</style>
+</head>
+<body>
+<div class="bc-bar"><a href="/">← <b>buttercup</b></a><span>Yamay Utekök · prototyp</span></div>
+<header><h1>Yamay Utekök – konfigurator</h1><span>prototyp · moduler ur Fusion-projektet yamay-utekok · planvy</span></header>
+<main>
+  <div>
+    <div class="card pal"><h2>Lägg till modul</h2><div id="pal"></div></div>
+    <div class="card" style="margin-top:14px"><h2>Raden (gångriktning, fronten till höger)</h2><ol id="rad"></ol>
+      <div class="row" style="margin-top:10px">Vägg bakom:
+        <select id="vagg"><option value="ingen">ingen (fristående)</option><option value="obrannbar">obrännbar</option><option value="brannbar">brännbar</option></select></div>
+      <div class="row" style="margin-top:8px">Namn: <input id="namn" value="Mitt utekök" style="flex:1"></div>
+    </div>
+  </div>
+  <div>
+    <div class="card"><div class="row" style="margin-bottom:6px"><button id="v3d">3D</button><button id="v2d">Plan</button>
+      <span style="color:#777">3D: moduler ur Fusion-exporter, bänkskivan genereras här</span></div>
+      <div id="vy3d" style="width:100%;height:560px;border-radius:10px;overflow:hidden;background:#e9e4dc"></div><svg id="plan" style="display:none"></svg></div>
+    <div class="grid2">
+      <div class="card"><h2>Kontroll</h2><div id="regler"></div></div>
+      <div class="card"><h2>Stycklista</h2><div id="bom"></div></div>
+    </div>
+    <div class="card" style="margin-top:14px"><h2>Konfiguration (JSON → pipeline: Fusion-sammanställning + Discord-tråd)</h2>
+      <div class="row" style="margin-bottom:6px"><button id="kopiera">Kopiera</button><button id="ladda">Läs in från rutan</button>
+        <select id="exempel"><option value="">Exempel…</option></select></div>
+      <textarea id="json"></textarea></div>
+  </div>
+</main>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+<script src="konfig.js"></script>
+<script type="module" src="vy3d.js"></script>
+<script>
+let KAT, konf = { id: 'NY', namn: 'Mitt utekök', rad: ['bank500', 'asado1500', 'bank500', 'horno1000'], vagg: 'ingen' };
+const EX = {
+  'K-0001 rak rad': { id: 'K-0001', namn: 'Startrad v0.4', rad: ['bank500','asado1500','bank500','horno1000'], vagg: 'obrannbar' },
+  'K-0003 L-kök': { id: 'K-0003', namn: 'L-kök', rad: ['asado1500','bank500',{typ:'horn1000',blind:'slut'},'bank1000','horno1000'], vagg: 'obrannbar' },
+  'K-0004 U-kök': { id: 'K-0004', namn: 'U-kök', rad: ['bank1000',{typ:'horn1000',blind:'slut'},'bank500','asado1500','bank500',{typ:'horn1000',blind:'slut'},'horno1000'], vagg: 'ingen' },
+};
+const $ = s => document.querySelector(s);
+const label = el => { const e = typeof el === 'string' ? {typ: el} : el, m = KAT.moduler[e.typ]; return m.namn + (m.horn ? (e.blind === 'start' ? ' – blindpanel mot föregående ben' : ' – nästa ben mot blindpanelen') : ''); };
+const FARG = { bank: '#b06a3f', grill: '#7a4128' };
+
+function pal() {
+  const P = $('#pal'); P.innerHTML = '';
+  const add = (el, txt, sub) => { const b = document.createElement('button'); b.innerHTML = `${txt}<br><small>${sub}</small>`; b.onclick = () => { konf.rad.push(el); rita(); }; P.appendChild(b); };
+  for (const [k, m] of Object.entries(KAT.moduler)) {
+    if (m.horn) { add({typ:k, blind:'slut'}, m.namn + ' ↱', 'raden svänger efter hörnet' + (m.status ? ' · ' + m.status : ''));
+                  add({typ:k, blind:'start'}, m.namn + ' ↳', 'raden svänger före hörnet' + (m.status ? ' · ' + m.status : '')); }
+    else add(k, m.namn, `${m.bredd} mm · ${m.typ === 'grill' ? m.grill.namn : m.hyllor + ' hyllplan'}`);
+  }
+  const S = $('#exempel'); for (const k of Object.keys(EX)) S.add(new Option(k, k));
+  S.onchange = () => { if (EX[S.value]) { konf = JSON.parse(JSON.stringify(EX[S.value])); if (window.centrera3d) window.centrera3d(); rita(); } S.value = ''; };
+}
+
+function lista() {
+  const O = $('#rad'); O.innerHTML = '';
+  konf.rad.forEach((el, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="n">${label(el)}</span><button title="flytta upp">↑</button><button title="flytta ned">↓</button><button title="ta bort">✕</button>`;
+    const [u, d, x] = li.querySelectorAll('button');
+    u.onclick = () => { if (i) { [konf.rad[i-1], konf.rad[i]] = [konf.rad[i], konf.rad[i-1]]; rita(); } };
+    d.onclick = () => { if (i < konf.rad.length - 1) { [konf.rad[i+1], konf.rad[i]] = [konf.rad[i], konf.rad[i+1]]; rita(); } };
+    x.onclick = () => { konf.rad.splice(i, 1); rita(); };
+    O.appendChild(li);
+  });
+}
+
+function plan(L, SV) {
+  const svg = $('#plan'); svg.innerHTML = '';
+  if (!L.length) return;
+  const pts = L.flatMap(p => p.poly).concat(SV.flatMap(s => s.poly));
+  let x0 = Math.min(...pts.map(q => q[0])) - 450, x1 = Math.max(...pts.map(q => q[0])) + 450;
+  let y0 = Math.min(...pts.map(q => q[1])) - 450, y1 = Math.max(...pts.map(q => q[1])) + 350;
+  svg.setAttribute('viewBox', `${x0} ${-y1} ${x1 - x0} ${y1 - y0}`);
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (t, a, txt) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (txt) e.textContent = txt; svg.appendChild(e); return e; };
+  const P = poly => poly.map(q => `${q[0]},${-q[1]}`).join(' ');
+  const loc = (p, u, v) => [p.p0[0] + p.d[0] * u + p.n[0] * v, p.p0[1] + p.d[1] * u + p.n[1] * v];   // u längs, v mot fronten (0 = bak)
+  const rect = (p, u0, u1, v0, v1) => [loc(p,u0,v0), loc(p,u1,v0), loc(p,u1,v1), loc(p,u0,v1)];
+  for (const p of L) {
+    el('polygon', { points: P(p.poly), fill: FARG[p.m.typ], stroke: '#3b2216', 'stroke-width': 6 });
+    el('polygon', { points: P(rect(p, 0, p.m.bredd, 600 - 60, 600)), fill: '#00000033' });                      // sockelindrag
+    if (p.m.horn) { const b0 = p.blind === 'slut' ? p.m.bredd - p.m.blind : 0;
+      el('polygon', { points: P(rect(p, b0, b0 + p.m.blind, 585, 600)), fill: '#3b2216' }); }                       // blindpanel
+    if (p.m.grill) { const g = p.m.grill, w = Math.min(g.bredd, p.m.bredd), u0 = (p.m.bredd - w) / 2;
+      el('polygon', { points: P(rect(p, u0, u0 + w, 300 - g.y_bak, 300 - g.y_fram)), fill: '#2f2f2f', stroke: '#111', 'stroke-width': 4 }); }
+    const c = loc(p, p.m.bredd / 2, 300);
+    el('text', { x: c[0], y: -c[1], 'text-anchor': 'middle', 'dominant-baseline': 'middle', 'font-size': 70, fill: '#fff', 'font-weight': 700 }, `${p.i + 1}`);
+    const c2 = loc(p, p.m.bredd / 2, 760);
+    el('text', { x: c2[0], y: -c2[1], 'text-anchor': 'middle', 'font-size': 52, fill: '#555' }, `${p.m.bredd}`);
+  }
+  for (const p of L) if (p.m.utstick) for (const u of [-p.m.utstick, p.m.bredd])
+    el('polygon', { points: P(rect(p, u, u + p.m.utstick, 150, 450)), fill: '#c8321a44', stroke: '#c8321a', 'stroke-dasharray': '20 12', 'stroke-width': 4 });
+  for (const s of SV) el('polygon', { points: P(s.poly), fill: '#c9ced455', stroke: '#8a939c', 'stroke-width': 5 });
+  for (const s of SV) for (const b of s.bultar) {
+    const a = L.find(p => p.i + 1 === s.moduler[0]);
+    const q = loc(a, s.s0 - a.s0 + b.x, 300 - b.y);
+    el('circle', { cx: q[0], cy: -q[1], r: b.fast ? 18 : 11, fill: b.fast ? '#c8321a' : '#555' });
+  }
+  for (const p of L) if (p.i === 0 || L[p.i - 1].ben !== p.ben) { const q = loc(p, 0, 980);
+    el('text', { x: q[0], y: -q[1], 'font-size': 50, fill: '#333' }, `ben ${p.ben}: FRAM här, gångriktning →`)
+      .setAttribute('transform', `rotate(${-p.rot} ${q[0]} ${-q[1]})`); }
+}
+
+function rita() {
+  $('#vagg').value = konf.vagg || 'ingen'; $('#namn').value = konf.namn || '';
+  lista();
+  const v = YamayKonfig.validera(konf, KAT);
+  $('#regler').innerHTML = (v.fel.map(t => `<div class="msg fel">✖ ${t}</div>`).join('') + v.varn.map(t => `<div class="msg varn">⚠ ${t}</div>`).join('') +
+    v.info.map(t => `<div class="msg info">ℹ ${t}</div>`).join('')) || '<div class="msg info">Inga anmärkningar.</div>';
+  let L = [], SV = [];
+  try { L = YamayKonfig.layout(konf, KAT); SV = v.fel.length ? [] : YamayKonfig.skivor(konf, KAT); } catch (e) {}
+  plan(L, SV);
+  if (window.rita3d) window.rita3d(L, SV, KAT);
+  if (!v.fel.length && konf.rad.length) {
+    const sl = YamayKonfig.stycklista(konf, KAT);
+    $('#bom').innerHTML = `<p><b>${YamayKonfig.kortnamn(konf, KAT)}</b><br>Yttermått ${sl.matt[0]} × ${sl.matt[1]} mm · ca ${sl.kg} kg inkl. grillar</p><table>` +
+      sl.rader.map(r => `<tr><td class="a">${r.antal} ×</td><td>${r.art}${r.status ? ' <i style="color:#b7791f">(' + r.status + ')</i>' : ''}</td><td class="a">${r.kg ? Math.round(r.kg) + ' kg' : ''}</td></tr>`).join('') + '</table>';
+  } else $('#bom').innerHTML = '<p>Rätta felen först.</p>';
+  $('#json').value = JSON.stringify(konf, null, 1);
+}
+
+document.querySelector('#v3d').onclick = () => { document.querySelector('#vy3d').style.display = ''; document.querySelector('#plan').style.display = 'none'; };
+document.querySelector('#v2d').onclick = () => { document.querySelector('#vy3d').style.display = 'none'; document.querySelector('#plan').style.display = ''; };
+fetch('katalog.json').then(r => r.json()).then(k => {
+  KAT = k; pal();
+  $('#vagg').onchange = () => { konf.vagg = $('#vagg').value; rita(); }; $('#namn').oninput = () => { konf.namn = $('#namn').value; $('#json').value = JSON.stringify(konf, null, 1); };
+  $('#kopiera').onclick = () => navigator.clipboard.writeText($('#json').value);
+  $('#ladda').onclick = () => { try { konf = JSON.parse($('#json').value); rita(); } catch (e) { alert('Ogiltig JSON: ' + e.message); } };
+  window.YK_rita = rita; rita();
+});
+</script>
+</body>
+</html>
