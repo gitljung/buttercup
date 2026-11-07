@@ -75,6 +75,9 @@
         if (!mot) varn.push(`Modul ${i + 1}: hörnbänken har inget ben mot blindpanelen.`);
       }
     });
+    const S = kat.gemensamt.skiva;
+    if (S.pa_grill) L.forEach((p, i) => { if (p.typ === 'asado1500') varn.push(`Modul ${i + 1} (Asado): med skiva under grillen hamnar lådans överkant på ${p.m.grill.z0 + p.m.grill.hojd + S.epdm + S.t} mm – Asado-modulen ska sänkas ${S.epdm + S.t} mm (ModH ${p.m.stommehojd} → ${p.m.stommehojd - S.epdm - S.t}) i Fusion.`); });
+    if (S.pa_grill && L.some(p => p.m.bult_anm)) info.push('Skivans bultraster på grillmodulerna är ett förslag – Ø9-hålen finns inte i grillmodulernas topplåt i Fusion än.');
     const ben = Math.max(...L.map(p => p.ben));
     if (L.length === 1 && L[0].m.typ === 'bank' && konf.vagg === 'ingen')
       varn.push('Ensam bänkmodul utan vägg tippar vid ca 155 N i bänkhöjd – skruva i vägg eller bygg ihop med fler moduler.');
@@ -86,13 +89,14 @@
   // En skiva per sammanhängande bänklopp i ett ben; delas i modulfogar så att varje del <= max_langd.
   // Där ett ben möter en blindpanel kapas skivan (overhang - fog) så den stöter mot hörnskivans framkant.
   function skivor(konf, kat) {
+    konfSidor = konf.sidor !== false;
     const L = layout(konf, kat), S = kat.gemensamt.skiva, fog = kat.gemensamt.fog, out = [];
     const kap = S.overhang_fram - fog;
     let lopp = [];
     const flush = () => {
       if (!lopp.length) return;
       let del = [];
-      const ut = () => { if (del.length) out.push(skivaAv(del, L, S, kap, out.length + 1)); del = []; };
+      const ut = () => { if (del.length) out.push(skivaAv(del, L, S, kap, out.length + 1, fog)); del = []; };
       for (const p of lopp) {
         if (p.m.bredd > S.max_langd) throw new Error('modul bredare än max skivlängd');
         if (del.length && p.s1 - del[0].s0 > S.max_langd) ut();
@@ -100,19 +104,24 @@
       }
       ut(); lopp = [];
     };
+    // bänklopp bryts av ben, hörnsväng och grillmoduler; varje grillmodul får en egen skiva på sin (lägre) topplåt
     L.forEach((p, i) => {
-      if (lopp.length && lopp[lopp.length - 1].ben !== p.ben) flush();
-      if (p.m.typ === 'bank') lopp.push(p); else flush();
+      const sist = lopp[lopp.length - 1];
+      if (sist && (sist.ben !== p.ben || sist.m.typ !== 'bank' || p.m.typ !== 'bank')) flush();
+      if (p.m.typ === 'bank' || S.pa_grill) lopp.push(p);
     });
     flush();
     return out;
   }
-  function skivaAv(del, L, S, kap, nr) {
+  function skivaAv(del, L, S, kap, nr, fog) {
     const a = del[0], b = del[del.length - 1];
     const fore = L[a.i - 1], efter = L[b.i + 1];
     const kapStart = fore && fore.ben !== a.ben && fore.blind === 'slut' ? kap : 0;      // benet börjar mot blindpanel
     const kapSlut = efter && efter.ben !== b.ben && efter.blind === 'start' ? kap : 0;   // benet slutar mot blindpanel
-    const s0 = a.s0 + kapStart, s1 = b.s1 - kapSlut, mitt = (s0 + s1) / 2;
+    const SP = sidorAv(L, konfSidor, S).filter(q => !q.fran);                                                               // fri gavel med sidopanel -> skivan går in till panelens insida
+    const panStart = SP.some(q => q.i === a.i && q.ande === 'start') ? fog : 0;
+    const panSlut = SP.some(q => q.i === b.i && q.ande === 'slut') ? fog : 0;
+    const s0 = a.s0 + kapStart - panStart, s1 = b.s1 - kapSlut + panSlut, mitt = (s0 + s1) / 2;
     const bultar = [];
     for (const p of del) for (const bx of p.m.bult_x) for (const by of S.bult_y) bultar.push({ x: r2(p.s0 + p.m.bredd / 2 + bx - s0), y: by });
     let best = 0; const k = q => Math.abs(q.x - (mitt - s0)) + (q.y < 0 ? 0.1 : 0);
@@ -120,10 +129,50 @@
     bultar.forEach((q, i) => q.fast = i === best);
     const langd = r2(s1 - s0), djup = D + S.overhang_fram;
     const p0 = add(add(a.p0, a.d, s0 - a.s0), a.n, 0);
-    return { nr, ben: a.ben, moduler: del.map(p => p.i + 1), s0, s1, langd, djup, t: S.t, kapStart, kapSlut,
+    return { nr, ben: a.ben, moduler: del.map(p => p.i + 1), s0, s1, langd, djup, t: S.t, kapStart, kapSlut, z: a.m.stommehojd + S.epdm,
+             grill: a.m.typ === 'grill', bult_anm: a.m.bult_anm,
              kg: r2(langd * djup * S.t * 8.0e-6), bultar,
              poly: [p0, add(p0, a.d, langd), add(add(p0, a.d, langd), a.n, djup), add(p0, a.n, djup)].map(q => q.map(r2)) };
   }
+
+  // ---- sidopaneler i bänkmaterial ---------------------------------------------------------
+  // Fri gavel = ingen granne i samma ben på den sidan och inte den gavel som skruvas mot en hörnbänks blindpanel.
+  // (Hörnbänkens ytterhörn är alltså en fri gavel.) konf.sidor === false stänger av.
+  let konfSidor = true;
+  const topp = (m, S) => m.stommehojd + (m.typ === 'bank' || S.pa_grill ? S.epdm + S.t : 0);   // skivans ovansida
+  // Grannens höjd som täcker vår gavel: dess skiva, eller grillen om den är lika bred som modulen (Asado-lådan).
+  function tackt(q, S) {
+    let h = topp(q.m, S);
+    const g = q.m.grill;
+    if (g && g.bredd >= q.m.bredd - 10) h = Math.max(h, g.z0 + (S.pa_grill ? S.epdm + S.t : 0) + g.hojd);
+    return h;
+  }
+  function sidorAv(L, pa, S) {
+    if (pa === false) return [];
+    const G = grannar(L), out = [];
+    L.forEach((p, i) => {
+      const g = G[i];
+      if (!g.v && !(g.hornV && g.hornV.blind === 'slut')) out.push({ i, ande: 'start' });
+      else if (g.v && S && tackt(g.v, S) < topp(p.m, S) - 1) out.push({ i, ande: 'start', fran: tackt(g.v, S) });   // lägre granne: stäng överdelen
+      if (!g.h && !(g.hornH && g.hornH.blind === 'start')) out.push({ i, ande: 'slut' });
+      else if (g.h && S && tackt(g.h, S) < topp(p.m, S) - 1) out.push({ i, ande: 'slut', fran: tackt(g.h, S) });
+    });
+    return out;
+  }
+  function sidor(konf, kat) {
+    const L = layout(konf, kat), P = kat.gemensamt.sidopanel, S = kat.gemensamt.skiva, fog = kat.gemensamt.fog;
+    return sidorAv(L, konf.sidor !== false, S).map((q, k) => {
+      const p = L[q.i], harSkiva = p.m.typ === 'bank' || S.pa_grill;
+      const djup = harSkiva ? D + S.overhang_fram : D, z0 = q.fran || P.golvspel, z1 = topp(p.m, S);
+      const u0 = q.ande === 'start' ? -fog - P.t : p.m.bredd + fog, u1 = u0 + P.t;   // längs modulens d
+      const loc = (u, v) => add(add(p.p0, p.d, u), p.n, v).map(r2);
+      const zb = K_skarvZ(kat, p.m.typ === 'bank').filter(z => z > z0 + 40 && z < z1 - 40);
+      return { nr: k + 1, modul: q.i + 1, ande: q.ande, ovre: !!q.fran, t: P.t, djup, z0, z1, hojd: r2(z1 - z0),
+               kg: r2(djup * (z1 - z0) * P.t * 8.0e-6), bultar: zb.length * kat.gemensamt.skarv.y.length, bult_z: zb,
+               poly: [loc(u0, 0), loc(u1, 0), loc(u1, djup), loc(u0, djup)] };
+    });
+  }
+  const K_skarvZ = (kat, bank) => kat.gemensamt.skarv.z_alla.concat(bank ? kat.gemensamt.skarv.z_bank_bank : []);
 
   // ---- skarvar + stycklista -----------------------------------------------------------------
   function skarvar(konf, kat) {
@@ -156,9 +205,14 @@
       rader.push({ art: 'ISO 4032 M6 A4 + isolerbricka (skivans bultar)', antal: nbult });
       rader.push({ art: 'Fixbricka M6 (fast punkt, en per skiva)', antal: SV.length });
     }
+    const SP = sidor(konf, kat);
+    SP.forEach(q => rader.push({ art: `Sidopanel ${q.nr} (modul ${q.modul}, ${q.ande === 'start' ? 'början' : 'slut'}${q.ovre ? ', överdel mot lägre granne' : ''}): rostfri ${q.t} × ${q.djup} × ${q.hojd} mm, ${q.bultar} pinnbultar M8`, antal: 1, kg: q.kg }));
+    const nsb = SP.reduce((s, q) => s + q.bultar, 0);
+    if (nsb) rader.push({ art: 'ISO 4032 M8 A4 + distans 6 mm + EPDM-bricka (sidopanelernas bultar)', antal: nsb });
     for (const p of L) if (p.m.grill) rader.push({ art: p.m.grill.namn + ' (egen produkt)', fusion: p.m.grill.fusion, antal: 1, kg: p.m.grill.vikt_kg });
     const kg = rader.reduce((s, r) => s + (r.kg || 0), 0);
-    const xs = L.flatMap(p => p.poly.map(q => q[0])), ys = L.flatMap(p => p.poly.map(q => q[1]));
+    const allp = L.flatMap(p => p.poly).concat(SP.flatMap(q => q.poly), SV.flatMap(q => q.poly));
+    const xs = allp.map(q => q[0]), ys = allp.map(q => q[1]);
     return { rader, kg: Math.round(kg), matt: [r2(Math.max(...xs) - Math.min(...xs)), r2(Math.max(...ys) - Math.min(...ys))] };
   }
 
@@ -167,5 +221,5 @@
     return konf.rad.map(el => { const e = norm(el); return e.typ === 'horn1000' ? (e.blind === 'start' ? '⌐HÖRN' : 'HÖRN¬') : (k[e.typ] || e.typ); }).join(' | ');
   }
 
-  return { layout, validera, skivor, skarvar, stycklista, kortnamn };
+  return { layout, validera, skivor, sidor, skarvar, stycklista, kortnamn };
 });

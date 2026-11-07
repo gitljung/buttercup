@@ -25,8 +25,12 @@
   h2 { font-size:13px; text-transform:uppercase; letter-spacing:.06em; margin:0 0 8px; color:#555 }
   .pal button { display:block; width:100%; text-align:left; margin:0 0 6px; padding:8px 10px; border:1px solid #ddd; border-radius:8px; background:#faf8f5; cursor:pointer }
   .pal button:hover { background:#f0e8de } .pal small { color:#777 }
-  ol#rad { padding-left:22px; margin:0 } ol#rad li { margin:4px 0; display:flex; gap:6px; align-items:center }
+  ol#rad { list-style:none; padding:0; margin:0 } ol#rad li { margin:4px 0; display:flex; gap:8px; align-items:center; padding:7px 8px;
+    border:1px solid #ddd; border-radius:8px; background:#faf8f5; cursor:grab; touch-action:none; user-select:none; -webkit-user-select:none }
+  ol#rad li .nr { width:20px; color:#888; font-weight:700 } ol#rad li .grip { color:#aaa; font-size:16px; line-height:1 }
   ol#rad li .n { flex:1 } ol#rad button { border:1px solid #ccc; background:#fff; border-radius:6px; cursor:pointer; padding:1px 7px }
+  ol#rad li.drar { cursor:grabbing; background:#f0e8de; box-shadow:0 4px 14px #0003; position:relative; z-index:2; transition:none }
+  ol#rad li.plats { border-style:dashed; background:#fff; color:transparent } ol#rad li.plats * { visibility:hidden }
   #plan { width:100%; height:520px; background:#fff; border-radius:10px }
   .msg { margin:3px 0; padding:4px 8px; border-radius:6px } .fel { background:#fde3df; color:var(--red) } .varn { background:#fdf0d8; color:var(--amb) } .info { background:#eef2f6; color:#456 }
   table { border-collapse:collapse; width:100% } td { padding:3px 6px; border-bottom:1px solid #eee; vertical-align:top } td.a { text-align:right; white-space:nowrap }
@@ -41,9 +45,10 @@
 <main>
   <div>
     <div class="card pal"><h2>Lägg till modul</h2><div id="pal"></div></div>
-    <div class="card" style="margin-top:14px"><h2>Raden (gångriktning, fronten till höger)</h2><ol id="rad"></ol>
+    <div class="card" style="margin-top:14px"><h2>Raden (gångriktning, fronten till höger)</h2><div style="color:#777;font-size:12px;margin:-4px 0 6px">Dra en modul upp eller ned för att flytta den.</div><ol id="rad"></ol>
       <div class="row" style="margin-top:10px">Vägg bakom:
         <select id="vagg"><option value="ingen">ingen (fristående)</option><option value="obrannbar">obrännbar</option><option value="brannbar">brännbar</option></select></div>
+      <div class="row" style="margin-top:8px"><label><input type="checkbox" id="sidor" checked> Fria sidor stängs med bänkmaterial (rostfri 6 mm)</label></div>
       <div class="row" style="margin-top:8px">Namn: <input id="namn" value="Mitt utekök" style="flex:1"></div>
     </div>
   </div>
@@ -91,20 +96,47 @@ function pal() {
 function lista() {
   const O = $('#rad'); O.innerHTML = '';
   konf.rad.forEach((el, i) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<span class="n">${label(el)}</span><button title="flytta upp">↑</button><button title="flytta ned">↓</button><button title="ta bort">✕</button>`;
-    const [u, d, x] = li.querySelectorAll('button');
-    u.onclick = () => { if (i) { [konf.rad[i-1], konf.rad[i]] = [konf.rad[i], konf.rad[i-1]]; rita(); } };
-    d.onclick = () => { if (i < konf.rad.length - 1) { [konf.rad[i+1], konf.rad[i]] = [konf.rad[i], konf.rad[i+1]]; rita(); } };
-    x.onclick = () => { konf.rad.splice(i, 1); rita(); };
+    const li = document.createElement('li'); li.dataset.i = i;
+    li.innerHTML = `<span class="grip">⠿</span><span class="nr">${i + 1}</span><span class="n">${label(el)}</span><button title="ta bort">✕</button>`;
+    li.querySelector('button').onclick = ev => { ev.stopPropagation(); konf.rad.splice(i, 1); rita(); };
+    li.querySelector('button').onpointerdown = ev => ev.stopPropagation();
+    li.onpointerdown = ev => dra(ev, li, i);
     O.appendChild(li);
   });
 }
 
-function plan(L, SV) {
+// Dra-och-släpp i raden (mus + touch via pointer events). Platshållaren flyttas medan man drar; släpp = ny ordning.
+function dra(ev, li, fran) {
+  if (ev.button > 0) return;
+  ev.preventDefault();
+  const O = $('#rad'), r0 = li.getBoundingClientRect(), y0 = ev.clientY;
+  let startat = false, till = fran, plats;
+  const flytta = e => {
+    const dy = e.clientY - y0;
+    if (!startat) { if (Math.abs(dy) < 5) return; startat = true;
+      plats = li.cloneNode(true); plats.classList.add('plats'); plats.style.height = r0.height + 'px';
+      O.insertBefore(plats, li); li.classList.add('drar'); li.style.width = r0.width + 'px';
+      li.style.position = 'fixed'; li.style.left = r0.left + 'px'; li.style.margin = 0; }
+    li.style.top = (r0.top + dy) + 'px';
+    const andra = [...O.children].filter(x => x !== li && x !== plats);
+    let k = andra.findIndex(x => { const b = x.getBoundingClientRect(); return e.clientY < b.top + b.height / 2; });
+    if (k < 0) k = andra.length;
+    till = k;
+    O.insertBefore(plats, andra[k] || null);
+  };
+  const slapp = () => {
+    removeEventListener('pointermove', flytta); removeEventListener('pointerup', slapp); removeEventListener('pointercancel', slapp);
+    if (!startat) return;
+    const [el] = konf.rad.splice(fran, 1); konf.rad.splice(till, 0, el);
+    rita();
+  };
+  addEventListener('pointermove', flytta); addEventListener('pointerup', slapp); addEventListener('pointercancel', slapp);
+}
+
+function plan(L, SV, SP) {
   const svg = $('#plan'); svg.innerHTML = '';
   if (!L.length) return;
-  const pts = L.flatMap(p => p.poly).concat(SV.flatMap(s => s.poly));
+  const pts = L.flatMap(p => p.poly).concat(SV.flatMap(s => s.poly), SP.flatMap(s => s.poly));
   let x0 = Math.min(...pts.map(q => q[0])) - 450, x1 = Math.max(...pts.map(q => q[0])) + 450;
   let y0 = Math.min(...pts.map(q => q[1])) - 450, y1 = Math.max(...pts.map(q => q[1])) + 350;
   svg.setAttribute('viewBox', `${x0} ${-y1} ${x1 - x0} ${y1 - y0}`);
@@ -128,6 +160,7 @@ function plan(L, SV) {
   for (const p of L) if (p.m.utstick) for (const u of [-p.m.utstick, p.m.bredd])
     el('polygon', { points: P(rect(p, u, u + p.m.utstick, 150, 450)), fill: '#c8321a44', stroke: '#c8321a', 'stroke-dasharray': '20 12', 'stroke-width': 4 });
   for (const s of SV) el('polygon', { points: P(s.poly), fill: '#c9ced455', stroke: '#8a939c', 'stroke-width': 5 });
+  for (const s of SP) el('polygon', { points: P(s.poly), fill: '#8a939c', stroke: '#5a636c', 'stroke-width': 4 });
   for (const s of SV) for (const b of s.bultar) {
     const a = L.find(p => p.i + 1 === s.moduler[0]);
     const q = loc(a, s.s0 - a.s0 + b.x, 300 - b.y);
@@ -139,15 +172,15 @@ function plan(L, SV) {
 }
 
 function rita() {
-  $('#vagg').value = konf.vagg || 'ingen'; $('#namn').value = konf.namn || '';
+  $('#vagg').value = konf.vagg || 'ingen'; $('#namn').value = konf.namn || ''; $('#sidor').checked = konf.sidor !== false;
   lista();
   const v = YamayKonfig.validera(konf, KAT);
   $('#regler').innerHTML = (v.fel.map(t => `<div class="msg fel">✖ ${t}</div>`).join('') + v.varn.map(t => `<div class="msg varn">⚠ ${t}</div>`).join('') +
     v.info.map(t => `<div class="msg info">ℹ ${t}</div>`).join('')) || '<div class="msg info">Inga anmärkningar.</div>';
-  let L = [], SV = [];
-  try { L = YamayKonfig.layout(konf, KAT); SV = v.fel.length ? [] : YamayKonfig.skivor(konf, KAT); } catch (e) {}
-  plan(L, SV);
-  if (window.rita3d) window.rita3d(L, SV, KAT);
+  let L = [], SV = [], SP = [];
+  try { L = YamayKonfig.layout(konf, KAT); if (!v.fel.length) { SV = YamayKonfig.skivor(konf, KAT); SP = YamayKonfig.sidor(konf, KAT); } } catch (e) {}
+  plan(L, SV, SP);
+  if (window.rita3d) window.rita3d(L, SV, KAT, SP);
   if (!v.fel.length && konf.rad.length) {
     const sl = YamayKonfig.stycklista(konf, KAT);
     $('#bom').innerHTML = `<p><b>${YamayKonfig.kortnamn(konf, KAT)}</b><br>Yttermått ${sl.matt[0]} × ${sl.matt[1]} mm · ca ${sl.kg} kg inkl. grillar</p><table>` +
@@ -160,7 +193,8 @@ document.querySelector('#v3d').onclick = () => { document.querySelector('#vy3d')
 document.querySelector('#v2d').onclick = () => { document.querySelector('#vy3d').style.display = 'none'; document.querySelector('#plan').style.display = ''; };
 fetch('katalog.json').then(r => r.json()).then(k => {
   KAT = k; pal();
-  $('#vagg').onchange = () => { konf.vagg = $('#vagg').value; rita(); }; $('#namn').oninput = () => { konf.namn = $('#namn').value; $('#json').value = JSON.stringify(konf, null, 1); };
+  $('#vagg').onchange = () => { konf.vagg = $('#vagg').value; rita(); };
+  $('#sidor').onchange = () => { if ($('#sidor').checked) delete konf.sidor; else konf.sidor = false; rita(); }; $('#namn').oninput = () => { konf.namn = $('#namn').value; $('#json').value = JSON.stringify(konf, null, 1); };
   $('#kopiera').onclick = () => navigator.clipboard.writeText($('#json').value);
   $('#ladda').onclick = () => { try { konf = JSON.parse($('#json').value); rita(); } catch (e) { alert('Ogiltig JSON: ' + e.message); } };
   window.YK_rita = rita; rita();

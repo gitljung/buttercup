@@ -33,11 +33,20 @@
     -210,
     210
    ],
-   "topplat_hal": 9
+   "topplat_hal": 9,
+   "pa_grill": true,
+   "pa_grill_anm": "Skiva även på grillmodulernas topplåt (vickesluring 2026-11-07); grillen står på skivan → +8 mm (EPDM 2 + skiva 6). Asado: sänk ModH 697 → 689 i Fusion för att lådan ska stanna på 900."
   },
   "sockel": {
    "indrag": 60,
    "hojd_tarum": 94
+  },
+  "sidopanel": {
+   "material": "rostfri EN 1.4404 (samma som skivan)",
+   "t": 6,
+   "golvspel": 10,
+   "fastning": "CD-pinnbultar M8 A4 på baksidan genom gavelns skarvhål Ø9 (150/450, bänk även 750), 6 mm distans + EPDM mot Corten, mutter inifrån – inga genomgående hål",
+   "anm": "Fria gavlar i radens ändar och hörnets ytterhörn stängs. Bänk: panelen går upp till skivans ovansida (900) och täcker skivans ände; djup = skivans djup. Grillmodul: upp till modulens topplåt, djup 600."
   }
  },
  "moduler": {
@@ -98,7 +107,14 @@
    "utstick": 0,
    "vikt_kg": 70,
    "hyllor": 1,
-   "glb": "export/horno1000.glb"
+   "glb": "export/horno1000.glb",
+   "bult_x": [
+    -420,
+    -166.67,
+    166.67,
+    420
+   ],
+   "bult_anm": "förslag – Ø9-raster saknas i grillmodulens topplåt i Fusion"
   },
   "asado1500": {
    "namn": "Asado-modul 1500",
@@ -128,7 +144,15 @@
    ],
    "vikt_kg": 96,
    "hyllor": 1,
-   "glb": "export/asado1500.glb"
+   "glb": "export/asado1500.glb",
+   "bult_x": [
+    -670,
+    -335,
+    0,
+    335,
+    670
+   ],
+   "bult_anm": "förslag – Ø9-raster saknas i grillmodulens topplåt i Fusion"
   },
   "horn1000": {
    "namn": "Hörnbänk 1000",

@@ -34,7 +34,7 @@ const RF = new THREE.MeshStandardMaterial({ color: 0xc9ced4, metalness: 0.75, ro
 const COR = new THREE.MeshStandardMaterial({ color: 0x6e381e, metalness: 0.2, roughness: 0.85 });
 let gen = 0, forstaGang = true;
 
-window.rita3d = async function (L, SV, KAT) {
+window.rita3d = async function (L, SV, KAT, SP) {
   const g = ++gen;
   const ny = new THREE.Group();
   const jobb = L.map(async p => {
@@ -49,7 +49,8 @@ window.rita3d = async function (L, SV, KAT) {
     if (p.m.grill && p.m.grill.glb) {
       try {
         const gr = await glb(p.m.grill.glb), bx = new THREE.Box3().setFromObject(gr), gg = p.m.grill;
-        gr.position.set(-(bx.min.x + bx.max.x) / 2, gg.glb_y_min - bx.min.y, gg.glb_z_min - bx.min.z);
+        const lyft = KAT.gemensamt.skiva.pa_grill ? KAT.gemensamt.skiva.epdm + KAT.gemensamt.skiva.t : 0;   // grillen står på skivan
+        gr.position.set(-(bx.min.x + bx.max.x) / 2, gg.glb_y_min - bx.min.y, gg.glb_z_min + lyft - bx.min.z);
         mg.add(gr);
       } catch (e) { console.warn('saknar', p.m.grill.glb); }
     }
@@ -58,10 +59,15 @@ window.rita3d = async function (L, SV, KAT) {
   const grupper = await Promise.all(jobb);
   if (g !== gen) return;
   grupper.forEach(x => ny.add(x));
-  for (const s of SV) {          // bänkskivan genereras här: polygon ur skivgeneratorn, 6 mm, på 894
+  for (const s of SV) {          // bänkskivan genereras här: polygon ur skivgeneratorn, 6 mm, på modulens topplåt + EPDM
     const sh = new THREE.Shape(s.poly.map(q => new THREE.Vector2(q[0], q[1])));
     const m = new THREE.Mesh(new THREE.ExtrudeGeometry(sh, { depth: 6, bevelEnabled: false }), RF);
-    m.position.z = 894; m.castShadow = true; m.receiveShadow = true; ny.add(m);
+    m.position.z = s.z; m.castShadow = true; m.receiveShadow = true; ny.add(m);
+  }
+  for (const q of SP || []) {    // sidopaneler i bänkmaterial: fri gavel, golvspel -> 900 (bänk) / topplåt (grill)
+    const sh = new THREE.Shape(q.poly.map(c => new THREE.Vector2(c[0], c[1])));
+    const m = new THREE.Mesh(new THREE.ExtrudeGeometry(sh, { depth: q.hojd, bevelEnabled: false }), RF);
+    m.position.z = q.z0; m.castShadow = true; m.receiveShadow = true; ny.add(m);
   }
   W.clear(); W.add(ny);
   if (forstaGang || window._centrera) {
