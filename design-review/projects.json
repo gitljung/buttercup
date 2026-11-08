@@ -10,8 +10,8 @@
  },
  {
   "slug": "utekok",
-  "name": "Yamay Utekök – alla moduler (K-0007)",
-  "doc": "Yamay Utekok - Kok K-0007",
+  "name": "Yamay Utekök – alla moduler (K-0010)",
+  "doc": "Yamay Utekok - Kok K-0010",
   "version": 2,
   "exported": "2026-11-07 22:10",
   "channel": "utekök-utveckling",
@@ -68,17 +68,6 @@
   "fusion_project": "rat-stop"
  },
  {
-  "slug": "tizon",
-  "name": "Tizón",
-  "doc": null,
-  "version": null,
-  "exported": null,
-  "channel": "yamay-tizon",
-  "thread": "1568925737023569940",
-  "fusion_project": "yamay-tizon",
-  "pending": true
- },
- {
   "slug": "fire-table",
   "name": "Fire table",
   "doc": null,
@@ -88,5 +77,15 @@
   "thread": "1568926239748526121",
   "fusion_project": "yamay-fire-table",
   "pending": true
+ },
+ {
+  "slug": "tizon",
+  "name": "Yamay Tizón",
+  "doc": "Yamay Tizon",
+  "version": 4,
+  "exported": "2026-11-08 18:51",
+  "channel": "yamay-tizon",
+  "thread": "1568925737023569940",
+  "fusion_project": "yamay-tizon"
  }
 ]
