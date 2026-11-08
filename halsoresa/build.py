@@ -42,7 +42,10 @@ HFILES = sorted(os.path.basename(f) for f in glob.glob(os.path.join(R, 'ex', 'ha
                 if f.endswith('_x2.webp') or (os.path.basename(f)[:-5] not in X2 and ("'" + os.path.basename(f)[:-5] + "'" in s or os.path.basename(f) in s)))
 # service worker: version = innehållshash, så varje bygge med ändringar ger ny cache
 import hashlib
-h = hashlib.sha1(s.encode()).hexdigest()[:8]
+_hh = hashlib.sha1(s.encode())
+for f in HFILES: _hh.update(open(os.path.join(R, 'ex', 'hasse', f), 'rb').read())   # bildändringar ska också ge ny cache
+for f in sorted(glob.glob(os.path.join(R, 'hasse', '*.mp3'))): _hh.update(open(f, 'rb').read())
+h = _hh.hexdigest()[:8]
 core = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './hasse.webp', './ex/manifest.json'] + \
        ['./ex/hasse/' + f for f in HFILES] + \
        ['./hasse/' + os.path.basename(f) for f in sorted(glob.glob(os.path.join(R, 'hasse', '*.mp3')))]
