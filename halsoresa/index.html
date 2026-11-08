@@ -2094,8 +2094,8 @@ const VBR = {ex:['n_curlpress', 'n_uprow', 'n_hpull', 'n_kchop', 'n_hornpush'], 
 STA.cls = 'kust';
 const CAY = {ex:['trident', 'kgpress', 'ksidebend', 'kbrow', 'hkchop'], emom:true, varv:4, prep:10, rest:0, work:0,
   reps:{trident:12, kgpress:12, ksidebend:24, kbrow:24, hkchop:12}, sideAt:{ksidebend:12, hkchop:6},
-  sideTxt:{ksidebend:['KLOCKAN I VÄNSTER HAND', 'KLOCKAN I HÖGER HAND'], hkchop:['HÖGER KNÄ I GOLVET', 'VÄNSTER KNÄ I GOLVET']},
-  tempo:{trident:4, kgpress:2.8, ksidebend:1.9, kbrow:1.8, hkchop:3},
+  sideTxt:{ksidebend:['KLOCKAN I HÖGER HAND', 'KLOCKAN I VÄNSTER HAND'], hkchop:['HÖGER KNÄ I GOLVET', 'VÄNSTER KNÄ I GOLVET']},
+  tempo:{trident:4.5, kgpress:2.8, ksidebend:2.2, kbrow:1.8, hkchop:3},
   lbl:['12 Trident', '12 Gobletpress', '12+12 Sidböj', '24 Rodd hand–hand', '6+6 Vedhugg'],
   namn:{trident:'Trident', kgpress:'Gobletpress', ksidebend:'Sidböj', kbrow:'Rodd hand till hand', hkchop:'Vedhugg'},
   bg:'cayennebg', cls:'kust cay', titel:'MINUT FÖR MINUT', under:'Bålpass · 20 min EMOM', music:'hasse/techno.mp3', beat:60 / 142, noVoice:true, lin:true,
@@ -2274,7 +2274,7 @@ const WAMAP = {knaboj:'luftknaboj', knabojbank:'stolres', utfall0:'utfallkv', ha
 const EXDUR = [320, 200, 110, 110, 110, 110, 110, 240, 240, 240, 110, 110, 110, 110, 110, 200];
 const sprIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const d = en.target; d.vis = en.isIntersecting;
   if (d.vis && !d.style.backgroundImage) d.style.backgroundImage = `url(${d.dataset.src})`; if (d.vis && !RM) d.go(); }), {rootMargin:'200px'}) : null;
-const EXFILE = {hasse:{n_curlpress:'n_curlpressf', n_hpull:'n_hpullf', grave:'grave2', gorillaswing:'gorillaswing4', axelkast:'axelkast3', pullover:'pullover4', squatpressout:'squatpressout5', utfallhalo:'utfallhalo3', highpull:'highpull2', rdl:'rdl2'}};   // omgjorda ark får nytt filnamn (cache)
+const EXFILE = {hasse:{trident:'trident3', ksidebend:'ksidebend4', n_curlpress:'n_curlpressf', n_hpull:'n_hpullf', grave:'grave2', gorillaswing:'gorillaswing4', axelkast:'axelkast3', pullover:'pullover4', squatpressout:'squatpressout5', utfallhalo:'utfallhalo3', highpull:'highpull2', rdl:'rdl2'}};   // omgjorda ark får nytt filnamn (cache)
 function exFile(fid, id) { const f = (EXFILE[fid] && EXFILE[fid][id]) || id; return fid === 'hasse' && X2.has(f) ? f + '_x2' : f; }
 // 32 rutor/rep: mellanrutor (RIFE) i rad 2-layout 16x2. sub = 0..31; jämn = originalruta, udda = mellanruta
 const X2 = new Set(['bojdrodd', 'swing', 'goblet', 'gobletpress', 'dans3', 'gorillaswing4', 'axelkast3', 'pullover4', 'squatpressout5', 'utfallhalo3',
