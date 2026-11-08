@@ -32,6 +32,7 @@ function glb(url) {
   return cache[url].then(z => z.clone(true));
 }
 const RF = new THREE.MeshStandardMaterial({ color: 0xc9ced4, metalness: 0.75, roughness: 0.3 });
+const TRA = new THREE.MeshStandardMaterial({ color: 0x9a6a3e, metalness: 0, roughness: 0.75 });   // oljat trä
 // Corten-utseende: 'ny' = levererad plåt med valshud (grå), 'patina' = färdigrostad
 const CORTEN = { ny: { color: 0x5d6166, metalness: 0.55, roughness: 0.5 }, patina: { color: 0x6e381e, metalness: 0.2, roughness: 0.85 } };
 const COR = new THREE.MeshStandardMaterial(Object.assign({ name: 'corten' }, CORTEN.ny));
@@ -79,12 +80,12 @@ window.rita3d = async function (L, SV, KAT, SP) {
   grupper.forEach(x => ny.add(x));
   for (const s of SV) {          // bänkskivan genereras här: polygon ur skivgeneratorn, 6 mm, på modulens topplåt + EPDM
     const sh = new THREE.Shape(s.poly.map(q => new THREE.Vector2(q[0], q[1])));
-    const m = new THREE.Mesh(new THREE.ExtrudeGeometry(sh, { depth: 6, bevelEnabled: false }), RF);
+    const m = new THREE.Mesh(new THREE.ExtrudeGeometry(sh, { depth: s.t || 6, bevelEnabled: false }), s.mat === 'tra' ? TRA : RF);
     m.position.z = s.z; m.castShadow = true; m.receiveShadow = true; ny.add(m);
   }
   for (const q of SP || []) {    // sidopaneler i bänkmaterial: fri gavel, golvspel -> 900 (bänk) / topplåt (grill)
     const sh = new THREE.Shape(q.poly.map(c => new THREE.Vector2(c[0], c[1])));
-    const m = new THREE.Mesh(new THREE.ExtrudeGeometry(sh, { depth: q.hojd, bevelEnabled: false }), RF);
+    const m = new THREE.Mesh(new THREE.ExtrudeGeometry(sh, { depth: q.hojd, bevelEnabled: false }), q.mat === 'tra' ? TRA : RF);
     m.position.z = q.z0; m.castShadow = true; m.receiveShadow = true; ny.add(m);
   }
   W.clear(); W.add(ny);

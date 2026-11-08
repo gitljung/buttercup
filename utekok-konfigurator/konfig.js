@@ -92,16 +92,44 @@
       else if (tv.langd > p.m.bredd) info.push(`Modul ${i + 1}: ${tv.namn} är ${tv.langd} mm och sticker ut ${(tv.langd - p.m.bredd) / 2} mm per sida över modulen.`);
       info.push(`Modul ${i + 1}: ${tv.namn} ${tv.anm}. Värmen mot skivan/EPDM under grillen är inte kontrollerad.`);
     }));
+    if (konf.skiva === 'tra') {
+      const M = materialer(L, konf, kat), ST = kat.gemensamt.skiva.tra;
+      M.forEach((x, i) => { if (x.varfor) info.push(`Modul ${i + 1}: rostfri skiva i stället för trä (${x.varfor}).`); });
+      const hb = Math.max(...L.filter((p, i) => M[i].mat === 'tra').map(p => p.m.stommehojd + ST.epdm + ST.t), 0);
+      if (hb) varn.push(`Träskivan (${ST.t} mm) gör bänkytan ${hb} mm hög, ${hb - kat.gemensamt.bankhojd} mm över de rostfria skivorna och Asado-lådan. Samma höjd kräver bänkmoduler med ModH ${kat.gemensamt.bankhojd - ST.epdm - ST.t} (ny variant i Fusion).`);
+      if (!M.some(x => x.mat === 'tra')) varn.push('Ingen bänk får träskiva – alla bänkar står intill en grill.');
+    }
     if (ben > 1) info.push(`${ben} ben (${ben === 2 ? 'L-kök' : 'U-kök'}).`);
     return { fel, varn, info };
   }
+
+  // ---- skivmaterial: konf.skiva = 'rostfri' (standard) | 'tra' ----------------------------
+  // Trä bara på bänkar. En bänk intill en grill blir rostfri om träets avstånd till grillen < grillens brannbart_min,
+  // eller om avståndet är okänt (ingen brannbart_min i katalogen) – försiktig standard.
+  let konfMat = [];
+  function materialer(L, konf, kat) {
+    const fog = kat.gemensamt.fog, G = grannar(L);
+    return L.map((p, i) => {
+      if (konf.skiva !== 'tra' || p.m.typ !== 'bank') return { mat: 'rostfri' };
+      for (const q of [G[i].v, G[i].h]) if (q && q.m.grill) {
+        const g = q.m.grill, avst = g.bredd < q.m.bredd - 10 && g.fritt_sida != null ? g.fritt_sida + fog : fog;
+        if (g.brannbart_min == null) return { mat: 'rostfri', varfor: `intill ${q.m.namn} – avstånd till brännbart okänt, träet hade legat ${avst} mm från grillen` };
+        if (avst < g.brannbart_min) return { mat: 'rostfri', varfor: `intill ${q.m.namn} – träet hade legat ${avst} mm från grillen, krav ${g.brannbart_min} mm` };
+      }
+      return { mat: 'tra' };
+    });
+  }
+  const skT = (S, mat) => mat === 'tra' ? S.tra.t : S.t;
+  const skE = (S, mat) => mat === 'tra' ? S.tra.epdm : S.epdm;
 
   // ---- skivor -------------------------------------------------------------------------------
   // En skiva per sammanhängande bänklopp i ett ben; delas i modulfogar så att varje del <= max_langd.
   // Där ett ben möter en blindpanel kapas skivan (overhang - fog) så den stöter mot hörnskivans framkant.
   function skivor(konf, kat) {
     konfSidor = konf.sidor !== false;
-    const L = layout(konf, kat), S = kat.gemensamt.skiva, fog = kat.gemensamt.fog, out = [];
+    const L = layout(konf, kat);
+    konfMat = materialer(L, konf, kat);
+    const S = kat.gemensamt.skiva, fog = kat.gemensamt.fog, out = [];
     const kap = S.overhang_fram - fog - ((Object.values(kat.moduler).find(x => x.horn) || {}).panel_t || 0);
     let lopp = [];
     const flush = () => {
@@ -118,7 +146,7 @@
     // bänklopp bryts av ben, hörnsväng och grillmoduler; varje grillmodul får en egen skiva på sin (lägre) topplåt
     L.forEach((p, i) => {
       const sist = lopp[lopp.length - 1];
-      if (sist && (sist.ben !== p.ben || sist.m.typ !== 'bank' || p.m.typ !== 'bank')) flush();
+      if (sist && (sist.ben !== p.ben || sist.m.typ !== 'bank' || p.m.typ !== 'bank' || konfMat[sist.i].mat !== konfMat[p.i].mat)) flush();
       if (p.m.typ === 'bank' || S.pa_grill) lopp.push(p);
     });
     flush();
@@ -138,11 +166,11 @@
     let best = 0; const k = q => Math.abs(q.x - (mitt - s0)) + (q.y < 0 ? 0.1 : 0);
     bultar.forEach((q, i) => { if (k(q) < k(bultar[best])) best = i; });
     bultar.forEach((q, i) => q.fast = i === best);
-    const langd = r2(s1 - s0), djup = D + S.overhang_fram;
+    const langd = r2(s1 - s0), djup = D + S.overhang_fram, mat = (konfMat[a.i] || {}).mat || 'rostfri', t = skT(S, mat);
     const p0 = add(add(a.p0, a.d, s0 - a.s0), a.n, 0);
-    return { nr, ben: a.ben, moduler: del.map(p => p.i + 1), s0, s1, langd, djup, t: S.t, kapStart, kapSlut, z: a.m.stommehojd + S.epdm,
+    return { nr, ben: a.ben, moduler: del.map(p => p.i + 1), s0, s1, langd, djup, t, mat, kapStart, kapSlut, z: a.m.stommehojd + skE(S, mat),
              grill: a.m.typ === 'grill', bult_anm: a.m.bult_anm,
-             kg: r2(langd * djup * S.t * 8.0e-6), bultar,
+             kg: r2(langd * djup * t * (mat === 'tra' ? S.tra.densitet : 8.0e-6)), bultar,
              poly: [p0, add(p0, a.d, langd), add(add(p0, a.d, langd), a.n, djup), add(p0, a.n, djup)].map(q => q.map(r2)) };
   }
 
@@ -150,10 +178,10 @@
   // Fri gavel = ingen granne i samma ben på den sidan och inte den gavel som skruvas mot en hörnbänks blindpanel.
   // (Hörnbänkens ytterhörn är alltså en fri gavel.) konf.sidor === false stänger av.
   let konfSidor = true;
-  const topp = (m, S) => m.stommehojd + (m.typ === 'bank' || S.pa_grill ? S.epdm + S.t : 0);   // skivans ovansida
+  const topp = (m, S, mat) => m.stommehojd + (m.typ === 'bank' || S.pa_grill ? skE(S, mat) + skT(S, mat) : 0);   // skivans ovansida
   // Grannens höjd som täcker vår gavel: dess skiva, eller grillen om den är lika bred som modulen (Asado-lådan).
   function tackt(q, S) {
-    let h = topp(q.m, S);
+    let h = topp(q.m, S, (konfMat[q.i] || {}).mat);
     const g = q.m.grill;
     if (g && g.bredd >= q.m.bredd - 10) h = Math.max(h, g.z0 + (S.pa_grill ? S.epdm + S.t : 0) + g.hojd);
     return h;
@@ -164,22 +192,24 @@
     L.forEach((p, i) => {
       const g = G[i];
       if (i === 0) out.push({ i, ande: 'start' });                       // bara radens ändgavlar får sidopanel (vickesluring: inte gavlarna i hörnen)
-      else if (g.v && S && tackt(g.v, S) < topp(p.m, S) - 1) out.push({ i, ande: 'start', fran: tackt(g.v, S) });   // lägre granne: stäng överdelen
+      const tp = topp(p.m, S, (konfMat[i] || {}).mat);   // nivåskillnad < 40 mm mot grannen: ingen överdelspanel
+      if (i === 0) {} else if (g.v && S && tackt(g.v, S) < tp - 40) out.push({ i, ande: 'start', fran: tackt(g.v, S) });   // lägre granne: stäng överdelen
       if (i === L.length - 1) out.push({ i, ande: 'slut' });
-      else if (g.h && S && tackt(g.h, S) < topp(p.m, S) - 1) out.push({ i, ande: 'slut', fran: tackt(g.h, S) });
+      else if (g.h && S && tackt(g.h, S) < tp - 40) out.push({ i, ande: 'slut', fran: tackt(g.h, S) });
     });
     return out;
   }
   function sidor(konf, kat) {
     const L = layout(konf, kat), P = kat.gemensamt.sidopanel, S = kat.gemensamt.skiva, fog = kat.gemensamt.fog;
+    konfMat = materialer(L, konf, kat);
     return sidorAv(L, konf.sidor !== false, S).map((q, k) => {
-      const p = L[q.i], harSkiva = p.m.typ === 'bank' || S.pa_grill;
-      const djup = harSkiva ? D + S.overhang_fram : D, z0 = q.fran || P.golvspel, z1 = topp(p.m, S);
-      const u0 = q.ande === 'start' ? -fog - P.t : p.m.bredd + fog, u1 = u0 + P.t;   // längs modulens d
+      const p = L[q.i], harSkiva = p.m.typ === 'bank' || S.pa_grill, mat = konfMat[q.i].mat, t = mat === 'tra' ? S.tra.t : P.t;
+      const djup = harSkiva ? D + S.overhang_fram : D, z0 = q.fran || (mat === 'tra' ? S.tra.golvspel_sida : P.golvspel), z1 = topp(p.m, S, mat);
+      const u0 = q.ande === 'start' ? -fog - t : p.m.bredd + fog, u1 = u0 + t;   // längs modulens d
       const loc = (u, v) => add(add(p.p0, p.d, u), p.n, v).map(r2);
       const zb = K_skarvZ(kat, p.m.typ === 'bank').filter(z => z > z0 + 40 && z < z1 - 40);
-      return { nr: k + 1, modul: q.i + 1, ande: q.ande, ovre: !!q.fran, t: P.t, djup, z0, z1, hojd: r2(z1 - z0),
-               kg: r2(djup * (z1 - z0) * P.t * 8.0e-6), bultar: zb.length * kat.gemensamt.skarv.y.length, bult_z: zb,
+      return { nr: k + 1, modul: q.i + 1, ande: q.ande, ovre: !!q.fran, t, mat, djup, z0, z1, hojd: r2(z1 - z0),
+               kg: r2(djup * (z1 - z0) * t * (mat === 'tra' ? S.tra.densitet : 8.0e-6)), bultar: zb.length * kat.gemensamt.skarv.y.length, bult_z: zb,
                poly: [loc(u0, 0), loc(u1, 0), loc(u1, djup), loc(u0, djup)] };
     });
   }
@@ -210,14 +240,16 @@
       rader.push({ art: 'Distanshylsa 6 mm M8 (skuggfog)', antal: nb });
     }
     const SV = skivor(konf, kat);
-    SV.forEach(s => rader.push({ art: `Skiva ${s.nr}: rostfri 6 × ${s.djup} × ${s.langd} mm, ${s.bultar.length} svetsbultar`, antal: 1, kg: s.kg }));
-    const nbult = SV.reduce((s, k) => s + k.bultar.length, 0);
+    SV.forEach(s => rader.push({ art: s.mat === 'tra' ? `Skiva ${s.nr}: trä ${s.t} × ${s.djup} × ${s.langd} mm, ${s.bultar.length} insatsmuttrar M6` : `Skiva ${s.nr}: rostfri ${s.t} × ${s.djup} × ${s.langd} mm, ${s.bultar.length} svetsbultar`, antal: 1, kg: s.kg }));
+    const SVr = SV.filter(s => s.mat !== 'tra'), SVt = SV.filter(s => s.mat === 'tra');
+    const nbult = SVr.reduce((s, k) => s + k.bultar.length, 0), ntb = SVt.reduce((s, k) => s + k.bultar.length, 0);
     if (nbult) {
       rader.push({ art: 'ISO 4032 M6 A4 + isolerbricka (skivans bultar)', antal: nbult });
-      rader.push({ art: 'Fixbricka M6 (fast punkt, en per skiva)', antal: SV.length });
+      rader.push({ art: 'Fixbricka M6 (fast punkt, en per skiva)', antal: SVr.length });
     }
+    if (ntb) rader.push({ art: 'Insatsmutter M6 A4 + ISO 7380 M6x16 A4 + bricka (träskivans skruvar underifrån)', antal: ntb });
     const SP = sidor(konf, kat);
-    SP.forEach(q => rader.push({ art: `Sidopanel ${q.nr} (modul ${q.modul}, ${q.ande === 'start' ? 'början' : 'slut'}${q.ovre ? ', överdel mot lägre granne' : ''}): rostfri ${q.t} × ${q.djup} × ${q.hojd} mm, ${q.bultar} pinnbultar M8`, antal: 1, kg: q.kg }));
+    SP.forEach(q => rader.push({ art: `Sidopanel ${q.nr} (modul ${q.modul}, ${q.ande === 'start' ? 'början' : 'slut'}${q.ovre ? ', överdel mot lägre granne' : ''}): ${q.mat === 'tra' ? 'trä' : 'rostfri'} ${q.t} × ${q.djup} × ${q.hojd} mm, ${q.bultar} ${q.mat === 'tra' ? 'insatsmuttrar M8' : 'pinnbultar M8'}`, antal: 1, kg: q.kg }));
     const nsb = SP.reduce((s, q) => s + q.bultar, 0);
     if (nsb) rader.push({ art: 'ISO 4032 M8 A4 + distans 6 mm + EPDM-bricka (sidopanelernas bultar)', antal: nsb });
     for (const p of L) for (const t of p.tillval) { const tv = (kat.tillval || {})[t]; if (tv) rader.push({ art: tv.namn + ' (tillval, egen produkt)', fusion: tv.fusion, antal: 1, kg: tv.vikt_kg || 0 }); }

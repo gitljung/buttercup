@@ -49,7 +49,9 @@
     <div class="card" style="margin-top:14px"><h2>Raden (gångriktning, fronten till höger)</h2><div style="color:#777;font-size:12px;margin:-4px 0 6px">Dra en modul upp eller ned för att flytta den.</div><ol id="rad"></ol>
       <div class="row" style="margin-top:10px">Vägg bakom:
         <select id="vagg"><option value="ingen">ingen (fristående)</option><option value="obrannbar">obrännbar</option><option value="brannbar">brännbar</option></select></div>
-      <div class="row" style="margin-top:8px"><label><input type="checkbox" id="sidor" checked> Fria sidor stängs med bänkmaterial (rostfri 6 mm)</label></div>
+      <div class="row" style="margin-top:8px">Bänkskiva:
+        <select id="skiva"><option value="rostfri">rostfri 6 mm</option><option value="tra">trä 30 mm (bänkar)</option></select></div>
+      <div class="row" style="margin-top:8px"><label><input type="checkbox" id="sidor" checked> Fria sidor stängs med bänkmaterial</label></div>
       <div class="row" style="margin-top:8px">Namn: <input id="namn" value="Mitt utekök" style="flex:1"></div>
     </div>
   </div>
@@ -79,6 +81,7 @@ const EX = {
   'K-0006 rad + Yakitori': { id: 'K-0006', namn: 'Rad + Yakitori', rad: ['bank500','asado1500','bank500',{typ:'bank1000',tillval:'yakitori50'},'horno1000'], vagg: 'obrannbar' },
   'K-0003 L-kök': { id: 'K-0003', namn: 'L-kök', rad: ['asado1500','bank500',{typ:'horn1000',blind:'slut'},'bank1000','horno1000'], vagg: 'obrannbar' },
   'K-0004 U-kök': { id: 'K-0004', namn: 'U-kök', rad: ['bank1000',{typ:'horn1000',blind:'slut'},'bank500','asado1500','bank500',{typ:'horn1000',blind:'slut'},'horno1000'], vagg: 'ingen' },
+  'K-0007 träskiva': { id: 'K-0007', namn: 'Rak rad med träskiva', rad: ['bank1000','bank500','asado1500','bank500','bank1000','horno1000'], vagg: 'obrannbar', skiva: 'tra' },
 };
 const $ = s => document.querySelector(s);
 const label = el => { const e = typeof el === 'string' ? {typ: el} : el, m = KAT.moduler[e.typ]; return m.namn + (m.horn ? (e.blind === 'start' ? ' – blindpanel mot föregående ben' : ' – nästa ben mot blindpanelen') : ''); };
@@ -183,7 +186,7 @@ function plan(L, SV, SP) {
 }
 
 function rita() {
-  $('#vagg').value = konf.vagg || 'ingen'; $('#namn').value = konf.namn || ''; $('#sidor').checked = konf.sidor !== false;
+  $('#vagg').value = konf.vagg || 'ingen'; $('#namn').value = konf.namn || ''; $('#sidor').checked = konf.sidor !== false; $('#skiva').value = konf.skiva || 'rostfri';
   lista();
   const v = YamayKonfig.validera(konf, KAT);
   $('#regler').innerHTML = (v.fel.map(t => `<div class="msg fel">✖ ${t}</div>`).join('') + v.varn.map(t => `<div class="msg varn">⚠ ${t}</div>`).join('') +
@@ -206,6 +209,7 @@ document.querySelector('#v2d').onclick = () => { document.querySelector('#vy3d')
 fetch('katalog.json').then(r => r.json()).then(k => {
   KAT = k; pal();
   $('#vagg').onchange = () => { konf.vagg = $('#vagg').value; rita(); };
+  $('#skiva').onchange = () => { if ($('#skiva').value === 'tra') konf.skiva = 'tra'; else delete konf.skiva; rita(); };
   $('#sidor').onchange = () => { if ($('#sidor').checked) delete konf.sidor; else konf.sidor = false; rita(); }; $('#namn').oninput = () => { konf.namn = $('#namn').value; $('#json').value = JSON.stringify(konf, null, 1); };
   $('#kopiera').onclick = () => navigator.clipboard.writeText($('#json').value);
   $('#ladda').onclick = () => { try { konf = JSON.parse($('#json').value); rita(); } catch (e) { alert('Ogiltig JSON: ' + e.message); } };

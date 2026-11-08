@@ -35,7 +35,16 @@
    ],
    "topplat_hal": 9,
    "pa_grill": true,
-   "pa_grill_anm": "Skiva även på grillmodulernas topplåt (vickesluring 2026-11-07); grillen står på skivan → +8 mm (EPDM 2 + skiva 6). Asado: sänk ModH 697 → 689 i Fusion för att lådan ska stanna på 900."
+   "pa_grill_anm": "Skiva även på grillmodulernas topplåt (vickesluring 2026-11-07); grillen står på skivan → +8 mm (EPDM 2 + skiva 6). Asado: sänk ModH 697 → 689 i Fusion för att lådan ska stanna på 900.",
+   "tra": {
+    "material": "massivt trä, utomhus (t.ex. termoask, ek eller teak) – förslag",
+    "t": 30,
+    "epdm": 2,
+    "densitet": 7e-07,
+    "golvspel_sida": 20,
+    "fastning": "M6 A4 underifrån genom topplåtens Ø9 in i insatsmuttrar M6 i träet – inga genomgående hål. Främre raden fast, bakre glider (trä rör sig ±2–3 mm över 620 djup).",
+    "anm": "Bara på bänkar. Grillmoduler behåller rostfri skiva. Bänk intill grill blir rostfri om träet hamnar närmare än grillens brannbart_min (Horno 300) eller om avståndet är okänt (Asado)."
+   }
   },
   "sockel": {
    "indrag": 60,
@@ -106,7 +115,7 @@
    },
    "utstick": 0,
    "vikt_kg": 70,
-   "hyllor": 1,
+   "hyllor": 2,
    "glb": "export/horno1000.glb",
    "bult_x": [
     -420,
@@ -143,7 +152,7 @@
     1506
    ],
    "vikt_kg": 96,
-   "hyllor": 1,
+   "hyllor": 2,
    "glb": "export/asado1500.glb",
    "bult_x": [
     -670,
