@@ -55,6 +55,7 @@
   </div>
   <div>
     <div class="card"><div class="row" style="margin-bottom:6px"><button id="v3d">3D</button><button id="v2d">Plan</button>
+      <select id="corten" title="Cortens utseende"><option value="ny">Corten: ny (grå)</option><option value="patina">Corten: rostpatina</option></select>
       <span style="color:#777">3D: moduler ur Fusion-exporter, bänkskivan genereras här</span></div>
       <div id="vy3d" style="width:100%;height:560px;border-radius:10px;overflow:hidden;background:#e9e4dc"></div><svg id="plan" style="display:none"></svg></div>
     <div class="grid2">
@@ -199,6 +200,7 @@ function rita() {
   $('#json').value = JSON.stringify(konf, null, 1);
 }
 
+document.querySelector('#corten').onchange = e => window.cortenUtseende && window.cortenUtseende(e.target.value);
 document.querySelector('#v3d').onclick = () => { document.querySelector('#vy3d').style.display = ''; document.querySelector('#plan').style.display = 'none'; };
 document.querySelector('#v2d').onclick = () => { document.querySelector('#vy3d').style.display = 'none'; document.querySelector('#plan').style.display = ''; };
 fetch('katalog.json').then(r => r.json()).then(k => {

@@ -25,13 +25,17 @@ function glb(url) {
   if (!cache[url]) cache[url] = new Promise((ok, nej) => loader.load(url, g => {
     const z = new THREE.Group(); g.scene.rotation.x = Math.PI / 2;           // ångra GLB:ns Z->Y-rotation
     z.add(g.scene); z.scale.setScalar(1000);                                  // m -> mm
-    z.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+    z.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true;
+      if (/corten/i.test(o.material && o.material.name || '')) o.material = COR; } });   // all Corten (moduler + grillar) delar ett material
     z.updateMatrixWorld(true); ok(z);
   }, undefined, nej));
   return cache[url].then(z => z.clone(true));
 }
 const RF = new THREE.MeshStandardMaterial({ color: 0xc9ced4, metalness: 0.75, roughness: 0.3 });
-const COR = new THREE.MeshStandardMaterial({ color: 0x6e381e, metalness: 0.2, roughness: 0.85 });
+// Corten-utseende: 'ny' = levererad plåt med valshud (grå), 'patina' = färdigrostad
+const CORTEN = { ny: { color: 0x5d6166, metalness: 0.55, roughness: 0.5 }, patina: { color: 0x6e381e, metalness: 0.2, roughness: 0.85 } };
+const COR = new THREE.MeshStandardMaterial(Object.assign({ name: 'corten' }, CORTEN.ny));
+window.cortenUtseende = typ => { const c = CORTEN[typ] || CORTEN.ny; COR.color.setHex(c.color); COR.metalness = c.metalness; COR.roughness = c.roughness; COR.needsUpdate = true; };
 let gen = 0, forstaGang = true;
 
 window.rita3d = async function (L, SV, KAT, SP) {
