@@ -1,0 +1,1109 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f4e7e2">
+<title>Lillö – Försvara Garibaldi</title>
+<meta name="description" content="Försvara Garibaldistallet på Lillö mot vildsvinen. Ett litet Buttercup-spel i pixel-diorama.">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Buttercup">
+<meta property="og:title" content="Lillö – Försvara Garibaldi">
+<meta property="og:description" content="Led jaktgänget uppför allén, gångra med ×50 och stoppa vildsvinen innan de når stallet.">
+<meta property="og:url" content="https://www.buttercup.nu/lillo/">
+<meta property="og:image" content="https://www.buttercup.nu/lillo/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<style>
+html,body{margin:0;height:100%;background:#f4e7e2;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;font-family:Anton,Impact,"Haettenschweiler","Arial Narrow Bold",sans-serif}
+#c{position:fixed;left:0;top:0;width:100vw;height:100vh;image-rendering:pixelated;image-rendering:crisp-edges;display:block;touch-action:none}
+.hb{position:fixed;z-index:5;border:3px solid #241e22;background:#fbc021;color:#241e22;font:inherit;font-size:18px;line-height:1;border-radius:6px;box-shadow:0 3px 0 #241e22;cursor:pointer;padding:6px 10px;touch-action:manipulation}
+.hb:active{transform:translateY(2px);box-shadow:0 1px 0 #241e22}
+.hb[disabled]{background:#d2c8bd;color:#6f5a50;cursor:default}
+#bPaus{top:calc(10px + env(safe-area-inset-top));right:10px;width:42px;height:42px;padding:0}
+#bOm{top:calc(10px + env(safe-area-inset-top));right:58px;width:42px;height:42px;padding:0}
+#bKanon{bottom:calc(14px + env(safe-area-inset-bottom));left:10px;font-size:16px;padding:8px 10px}
+#bKanon small{display:block;font-size:11px;letter-spacing:.5px;opacity:.85}
+#ov{position:fixed;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;background:rgba(244,231,226,.55)}
+#ov.hide{display:none}
+.card{background:#f6f1e7;border:4px solid #241e22;border-radius:10px;box-shadow:0 6px 0 #241e22;padding:18px 20px;max-width:300px;text-align:center;color:#241e22}
+.card h1{margin:0 0 4px;font-size:44px;line-height:.95;letter-spacing:1px;color:#241e22;font-weight:400}
+.card h1 span{color:#c4622f}
+.card p{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.35;margin:10px 0}
+.card .big{font-size:20px;padding:10px 26px;position:static;margin-top:6px}
+.card .sub{font-family:system-ui,sans-serif;font-size:12px;opacity:.7}
+#log{position:fixed;left:4px;bottom:70px;z-index:9;max-width:94vw;font:11px monospace;color:#d7352b;white-space:pre-wrap;pointer-events:none}
+#ts{display:none}
+</style>
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+}}
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<button class="hb" id="bOm" aria-label="Börja om">↻</button>
+<button class="hb" id="bPaus" aria-label="Paus">II</button>
+<button class="hb" id="bKanon" aria-label="Bygg kanon">KANON<small>−10 gubbar</small></button>
+<div id="ov"><div class="card" id="card">
+  <h1>LILLÖ<br><span>FÖRSVARA GARIBALDI</span></h1>
+  <p>Vildsvinen väller ner längs allén mot Garibaldistallet. Dra i sidled för att styra jaktgänget genom portarna: <b>+1</b>, gula <b>×50</b> eller slå sönder muren för <b>+99</b>.</p>
+  <p class="sub">Bygg kanoner på terrassen (10 gubbar). Klara 3 vågor.</p>
+  <button class="hb big" id="bStart">FÖRSVARA!</button>
+</div></div>
+<pre id="log"></pre>
+<pre id="ts"></pre>
+<script>
+// Fel loggas till DOM (synligt vid ?test=) så headless-test kan läsa dem med --dump-dom
+window.__err=[];
+(function(){const L=m=>{window.__err.push(String(m));const el=document.getElementById('log');if(el&&location.search.includes('test'))el.textContent=window.__err.join('\n');};
+addEventListener('error',e=>L('FEL: '+e.message+' @'+(e.filename||'').split('/').pop()+':'+e.lineno));
+addEventListener('unhandledrejection',e=>L('LÖFTE: '+(e.reason&&e.reason.message||e.reason)));
+const ce=console.error.bind(console);console.error=(...a)=>{L('console.error: '+a.join(' '));ce(...a)};})();
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+
+const Q = new URLSearchParams(location.search);
+const TEST = Q.get('test');              // 'autoplay' | 'lose' | null
+const FF = +(Q.get('ff') || 0);          // snabbspola N sekunder simulering före första bilden
+const D2R = Math.PI / 180;
+
+// =====================================================================
+// CONFIG – all balans på ett ställe
+// =====================================================================
+const CONFIG = {
+  startGubbar: 14,
+  spawnPerSek: 4.2,            // nya jägare ur stallet per sekund
+  gubbeFart: 1.75, gubbeSidFart: 2.2,
+  svinFart: 0.95,
+  stallLiv: 30,
+  plusVarde: 1,                // varje +1-port
+  gangerVarde: 50, gangerLaddning: 6.5,   // ×50-porten laddar om (s)
+  murLiv: [45, 80, 130], murBonus: 99,
+  kanonPris: 10, kanonMax: 4, kanonTakt: 1.35, kanonRackvidd: 15.5, kanonRadie: 0.8, kanonFlygtid: 0.85, kanonMaxDod: 14,
+  vagor: [ { svin: 150, tid: 22 }, { svin: 480, tid: 28 }, { svin: 1400, tid: 36 } ],
+  vagPaus: 4.5,
+  maxGubbar: 4500, maxSvin: 3500,
+  modellSkala: 0.21,           // Garibaldi: meter -> modellenheter
+  stridRadie: 0.32,
+};
+
+// =====================================================================
+// PALETT – Blommeröd (index 0 = papper/bakgrund)
+// =====================================================================
+const PAL = {
+  papper: 0xf4e7e2, dimrosa: 0xe6b9ae, kalk: 0xf6f1e7, puts: 0xcdc3b6, svart: 0x241e22,
+  tak: 0x786860, takLjus: 0x9f8c80, glas: 0x3d4d5f, grus: 0xdcc59f, grusMork: 0xb3966f,
+  ang: 0xa5c262, angMork: 0x638b40, granMork: 0x3f5c30, asp: 0xf2c14e, rost: 0xc4622f,
+  stam: 0x5e3c2b, tra: 0x8f5d3b, sjo: 0x5b97bd, sjoLjus: 0xa7d6e3, bla: 0x2f5ed6,
+  blaLjus: 0x8db0f6, svin: 0x47291f, svinLjus: 0x7d5241, rod: 0xd7352b, gul: 0xfbc021, hud: 0xeab48e,
+};
+const PAL_LIST = Object.values(PAL);
+const css = h => '#' + h.toString(16).padStart(6, '0');
+
+// =====================================================================
+// PLATTOR – Lillö som kedja av diorama-plattor (lokal z: norr = −z)
+// Lägg till fler plattor här (Fastlandet, Allén söder, Udden …)
+// =====================================================================
+const PLATTOR = [
+  { id: 'garibaldi',  namn: 'Garibaldistallet', z0: 8.2,   z1: -6.0, halv: 6.2, bygg: byggGaribaldi },
+  { id: 'allen-norr', namn: 'Allén norr',       z0: -6.16, z1: -26.0, halv: 5.5, bygg: byggAllen },
+];
+const KEDJA = { z0: PLATTOR[0].z0, z1: PLATTOR[PLATTOR.length - 1].z1, halv: Math.max(...PLATTOR.map(p => p.halv)) };
+
+// Bana
+const VAG = { halv: 3.0 };                      // grusvägens halva bredd
+const FILER = { v: [-3.0, -1.1], m: [-0.9, 0.9], h: [1.1, 3.0] };
+const HALL_Z = -25.0;                           // jägarna håller linjen här
+const SVIN_Z = -26.3;                           // svinen kliver in över plattkanten
+
+// =====================================================================
+// RNG (seedad så test blir reproducerbara)
+// =====================================================================
+let seed = (+(Q.get('seed') || 1337)) >>> 0;
+function rnd(a = 0, b = 1) { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return a + (b - a) * (((t ^ (t >>> 14)) >>> 0) / 4294967296); }
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+
+// =====================================================================
+// Renderer, låg upplösning + pixel-postprocess
+// =====================================================================
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: 'high-performance' });
+renderer.setPixelRatio(1);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFShadowMap;
+renderer.localClippingEnabled = true;
+renderer.setClearColor(0x000000, 0);
+
+const scene = new THREE.Scene();
+const world = new THREE.Group();
+world.rotation.y = 45 * D2R;           // kedjan längs diagonalen => kameran ser den rakt uppåt i stående läge
+scene.add(world);
+world.updateMatrixWorld(true);
+
+const camera = new THREE.PerspectiveCamera(20, 1, 10, 400);
+const CAM = { az: 45 * D2R, el: 33 * D2R, fov: 20, vy: +(Q.get('zoom') || 11), vyMin: 5.5, vyMax: 19, tx: 0, tz: -9, shake: 0 };
+
+let rt = new THREE.WebGLRenderTarget(4, 4, { minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter, depthBuffer: true });
+const postMat = new THREE.ShaderMaterial({
+  uniforms: {
+    tScene: { value: rt.texture }, uRes: { value: new THREE.Vector2(4, 4) },
+    uPal: { value: PAL_LIST.map(h => new THREE.Vector3(((h >> 16) & 255) / 255, ((h >> 8) & 255) / 255, (h & 255) / 255)) },
+    uDither: { value: 1.0 }, uInk: { value: 1.0 },
+  },
+  vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position.xy,0.,1.); }`,
+  fragmentShader: `
+    precision highp float;
+    #define NPAL ${PAL_LIST.length}
+    uniform sampler2D tScene; uniform vec2 uRes; uniform vec3 uPal[NPAL]; uniform float uDither; uniform float uInk;
+    varying vec2 vUv;
+    float L(vec3 c){ return dot(c, vec3(.299,.587,.114)); }
+    float bayer2(vec2 a){ a=floor(a); return fract(a.x/2. + a.y*a.y*.75); }
+    float bayer4(vec2 a){ return bayer2(.5*a)*.25 + bayer2(a); }
+    void main(){
+      vec2 px = 1./uRes;
+      vec4 c0 = texture2D(tScene, vUv);
+      if(c0.a < .5){ gl_FragColor = vec4(uPal[0],1.); return; }      // papper
+      vec4 n1 = texture2D(tScene, vUv+vec2(px.x,0.)), n2 = texture2D(tScene, vUv-vec2(px.x,0.));
+      vec4 n3 = texture2D(tScene, vUv+vec2(0.,px.y)), n4 = texture2D(tScene, vUv-vec2(0.,px.y));
+      float l0 = L(c0.rgb), e = 0.;
+      // kantsuppression mot pappret: ingen bläckhalo runt plattan
+      if(n1.a>.5) e=max(e,abs(l0-L(n1.rgb))); if(n2.a>.5) e=max(e,abs(l0-L(n2.rgb)));
+      if(n3.a>.5) e=max(e,abs(l0-L(n3.rgb))); if(n4.a>.5) e=max(e,abs(l0-L(n4.rgb)));
+      e = pow(e, .4545);
+      float platt = c0.a < .9 ? 0. : 1.;                                // skyltar/siffror: ingen kontur inuti
+      vec3 c = pow(max(c0.rgb,0.), vec3(1./2.2));                       // gamma
+      float g = L(c); c = mix(vec3(g), c, 1.08); c = (c-.5)*1.03+.5;    // grade före snäpp
+      float ink = smoothstep(.13,.34,e) * uInk * platt;
+      c = mix(c, vec3(.085,.082,.076), ink*.62);                        // bläckkontur
+      float d = bayer4(gl_FragCoord.xy) - .5;
+      float gate = smoothstep(.004,.055,e);
+      c += d*(.010 + .045*gate)*uDither*platt;                                // svag Bayer, mest där toner rör sig
+      vec3 w = vec3(1.,1.12,.93);
+      float b1=1e9, b2=1e9; vec3 c1=uPal[1], c2=uPal[1];
+      for(int i=1;i<NPAL;i++){ vec3 dd=(c-uPal[i])*w; float dist=dot(dd,dd);
+        if(dist<b1){ b2=b1; c2=c1; b1=dist; c1=uPal[i]; } else if(dist<b2){ b2=dist; c2=uPal[i]; } }
+      if(b2-b1 < .0012 && L(c2) > L(c1)) c1 = c2;                       // bryt nära-lika mot ljusare
+      gl_FragColor = vec4(c1,1.);
+    }`,
+  depthTest: false, depthWrite: false,
+});
+const postScene = new THREE.Scene();
+const postCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+postScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), postMat));
+
+let LOW = { w: 4, h: 4, css: 1.5, cw: 1, ch: 1 };
+function resize() {
+  const cw = Math.max(2, innerWidth), ch = Math.max(2, innerHeight);
+  const pxs = Math.max(1.5, cw / 360);               // css-px per spelpixel (≈1/4 av skärmen på iPhone)
+  LOW = { w: Math.round(cw / pxs), h: Math.round(ch / pxs), css: pxs, cw, ch };
+  renderer.setSize(LOW.w, LOW.h, false);
+  rt.setSize(LOW.w, LOW.h);
+  postMat.uniforms.uRes.value.set(LOW.w, LOW.h);
+  camera.aspect = LOW.w / LOW.h;
+  updateCamera(0);
+}
+
+// klipp-plan per platta (rena kanter, inga jordsidor)
+function klippPlan(x0, x1, z0, z1) {
+  const P = [
+    new THREE.Plane(new THREE.Vector3(1, 0, 0), -x0), new THREE.Plane(new THREE.Vector3(-1, 0, 0), x1),
+    new THREE.Plane(new THREE.Vector3(0, 0, 1), -z1), new THREE.Plane(new THREE.Vector3(0, 0, -1), z0),
+  ];
+  P.forEach(p => p.applyMatrix4(world.matrixWorld));
+  return P;
+}
+const KLIPP_KEDJA = klippPlan(-KEDJA.halv, KEDJA.halv, KEDJA.z0, KEDJA.z1);
+
+// =====================================================================
+// Ljus
+// =====================================================================
+scene.add(new THREE.HemisphereLight(0xfff4ec, 0xc9b6aa, 1.35));
+const sol = new THREE.DirectionalLight(0xfff1e0, 1.25);
+{
+  const c = new THREE.Vector3(0, 0, -9).applyMatrix4(world.matrixWorld);
+  const dir = new THREE.Vector3(-0.45, 1.1, 0.75).applyMatrix4(new THREE.Matrix4().makeRotationY(world.rotation.y)).normalize();
+  sol.position.copy(c).addScaledVector(dir, 40); sol.target.position.copy(c);
+  sol.castShadow = true; sol.shadow.mapSize.set(2048, 2048);
+  Object.assign(sol.shadow.camera, { left: -21, right: 21, top: 21, bottom: -21, near: 5, far: 90 });
+  sol.shadow.bias = -0.0006; sol.shadow.normalBias = 0.02; sol.shadow.intensity = 0.65;
+  scene.add(sol, sol.target);
+}
+
+// =====================================================================
+// Voxel-hjälpare (allt statiskt slås ihop till få meshar med vertexfärg)
+// =====================================================================
+const _col = new THREE.Color();
+function paint(g, hex) {
+  _col.set(hex); const n = g.attributes.position.count, a = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { a[i * 3] = _col.r; a[i * 3 + 1] = _col.g; a[i * 3 + 2] = _col.b; }
+  g.setAttribute('color', new THREE.BufferAttribute(a, 3)); return g;
+}
+const _eu = new THREE.Euler(), _m4 = new THREE.Matrix4();
+function box(L, w, h, d, x, y, z, hex, rx = 0, ry = 0, rz = 0) {
+  const g = new THREE.BoxGeometry(w, h, d).toNonIndexed(); g.deleteAttribute('uv');
+  if (rx || ry || rz) g.applyMatrix4(_m4.makeRotationFromEuler(_eu.set(rx, ry, rz)));
+  g.translate(x, y, z); paint(g, hex); L.push(g); return g;
+}
+function tris(L, triList, hex, center) {
+  const pos = [];
+  const a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3(), n = new THREE.Vector3(), m = new THREE.Vector3();
+  for (const [A, B, C] of triList) {
+    a.fromArray(A); b.fromArray(B); c.fromArray(C);
+    n.subVectors(b, a).cross(m.subVectors(c, a));
+    const cen = a.clone().add(b).add(c).multiplyScalar(1 / 3).sub(center);
+    if (n.dot(cen) < 0) pos.push(...A, ...C, ...B); else pos.push(...A, ...B, ...C);
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.computeVertexNormals(); paint(g, hex); L.push(g); return g;
+}
+// valmat tak (hip roof) ~33°
+function valmTak(L, w, d, x, y0, z, hex, lut = 33) {
+  const hw = w / 2, hd = d / 2, h = Math.min(hw, hd) * Math.tan(lut * D2R);
+  const A = [x - hw, y0, z - hd], B = [x + hw, y0, z - hd], C = [x + hw, y0, z + hd], D = [x - hw, y0, z + hd];
+  let T;
+  if (w >= d) { const r = hw - hd, R1 = [x - r, y0 + h, z], R2 = [x + r, y0 + h, z]; T = [[A, B, R2], [A, R2, R1], [C, D, R1], [C, R1, R2], [B, C, R2], [D, A, R1]]; }
+  else { const r = hd - hw, R1 = [x, y0 + h, z - r], R2 = [x, y0 + h, z + r]; T = [[D, A, R1], [D, R1, R2], [B, C, R2], [B, R2, R1], [A, B, R1], [C, D, R2]]; }
+  tris(L, T, hex, new THREE.Vector3(x, y0 - 1, z));
+  return h;
+}
+function mats(planes) {
+  return {
+    v: new THREE.MeshLambertMaterial({ vertexColors: true, clippingPlanes: planes }),
+    vatten: new THREE.MeshLambertMaterial({ color: PAL.sjo, flatShading: true, clippingPlanes: planes }),
+  };
+}
+function slaIhop(L, mat, skugga = true) {
+  const m = new THREE.Mesh(mergeGeometries(L), mat);
+  m.castShadow = skugga; m.receiveShadow = true; return m;
+}
+const vattenYtor = [];
+function vatten(grp, mat, x0, x1, z0, z1) {
+  const g = new THREE.PlaneGeometry(x1 - x0, z0 - z1, Math.ceil((x1 - x0) / 0.55), Math.ceil((z0 - z1) / 0.55));
+  g.rotateX(-Math.PI / 2); g.translate((x0 + x1) / 2, -0.06, (z0 + z1) / 2);
+  const m = new THREE.Mesh(g, mat); m.receiveShadow = true; grp.add(m);
+  vattenYtor.push({ g, bas: Float32Array.from(g.attributes.position.array) });
+}
+
+// =====================================================================
+// Pixelfont 3×5 (egen, skarp i låg upplösning)
+// =====================================================================
+const FONT = {
+  '0': '111101101101111', '1': '010110010010111', '2': '111001111100111', '3': '111001011001111', '4': '101101111001001',
+  '5': '111100111001111', '6': '111100111101111', '7': '111001010010010', '8': '111101111101111', '9': '111101111001111',
+  A: '010101111101101', B: '110101110101110', C: '011100100100011', D: '110101101101110', E: '111100110100111', F: '111100110100100',
+  G: '011100101101011', H: '101101111101101', I: '111010010010111', J: '001001001101010', K: '101101110101101', L: '100100100100111',
+  M: '101111111101101', N: '110101101101101', O: '010101101101010', P: '110101110100100', Q: '010101101110011', R: '110101110101101',
+  S: '011100010001110', T: '111010010010010', U: '101101101101111', V: '101101101101010', W: '101101111111101', X: '101101010101101',
+  Y: '101101010010010', Z: '111001010100111', 'Å': '010010101111101', 'Ä': '101010101111101', 'Ö': '101010101101010',
+  '+': '000010111010000', '×': '000101010101000', '-': '000000111000000', '/': '001001010100100', '!': '010010010000010',
+  ':': '000010000010000', '.': '000000000000010', '?': '111001011000010', ' ': '000000000000000',
+  '♥': '0101011111111110111000100', '@': '010111010101101',
+};
+const glyf = ch => FONT[ch] || FONT[ch.toUpperCase()] || FONT['?'];
+function textW(s, k) { let w = 0; for (const ch of s) w += (glyf(ch).length / 5) * k + k; return Math.max(0, w - k); }
+function drawText(ctx, s, cx, y, k, col, outline) {
+  const x0 = Math.round(cx - textW(s, k) / 2);
+  const pass = (c, o) => {
+    ctx.fillStyle = c; let x = x0;
+    for (const ch of s) {
+      const g = glyf(ch), gw = g.length / 5;
+      for (let r = 0; r < 5; r++) for (let q = 0; q < gw; q++) if (g[r * gw + q] === '1') ctx.fillRect(x + q * k - o, y + r * k - o, k + 2 * o, k + 2 * o);
+      x += gw * k + k;
+    }
+  };
+  if (outline) pass(outline, Math.max(1, (k / 2) | 0));
+  pass(col, 0);
+}
+const TPU = 24; // texlar per världsenhet ≈ spelpixlar vid standardzoom
+// skylt-/sifferytor skrivs med alfa 0.75 i render-targeten => posten hoppar över bläck/dither där (annars äter konturen pixeltexten)
+const PLATT = { blending: THREE.CustomBlending, blendSrc: THREE.OneFactor, blendDst: THREE.ZeroFactor, blendSrcAlpha: THREE.OneFactor, blendDstAlpha: THREE.ZeroFactor, opacity: 0.75, alphaTest: 0.5 };
+const skyltMat = o => new THREE.MeshBasicMaterial({ ...PLATT, ...o });
+function canvasTex(w, h) {
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+  tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.NearestFilter; tex.generateMipmaps = false;
+  return { cv, ctx: cv.getContext('2d'), tex };
+}
+// skylt = plan med canvas-textur, lutad mot kameran
+function skylt(grp, w, h, x, y, z, ritare, mat) {
+  const ct = canvasTex(Math.round(w * TPU), Math.round(h * TPU));
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), skyltMat({ map: ct.tex, clippingPlanes: mat ? mat.clippingPlanes : null }));
+  m.position.set(x, y, z); m.rotation.x = -0.42; grp.add(m);
+  const s = { m, ct, ritare, last: '' };
+  s.rita = (...a) => { const key = JSON.stringify(a); if (key === s.last) return; s.last = key; const { ctx, cv } = ct; ctx.clearRect(0, 0, cv.width, cv.height); ritare(ctx, cv.width, cv.height, ...a); ct.tex.needsUpdate = true; };
+  return s;
+}
+function ram(ctx, w, h, bg, kant = PAL.svart) { ctx.fillStyle = css(kant); ctx.fillRect(0, 0, w, h); ctx.fillStyle = css(bg); ctx.fillRect(1, 1, w - 2, h - 2); }
+
+// =====================================================================
+// Modeller
+// =====================================================================
+function trad(L, x, z, stor = 1, seedOff = 0) {
+  const h = 0.95 * stor; const pa = Math.abs(x) < VAG.halv ? PAL.grusMork : PAL.angMork;
+  box(L, 0.55 * stor, 0.01, 0.42 * stor, x + 0.06, 0.026, z + 0.06, pa);   // kontaktskugga
+  box(L, 0.13 * stor, h, 0.13 * stor, x, h / 2, z, PAL.stam);
+  const fargs = [0xffd257, 0xffd257, PAL.rost, 0xffd257, PAL.ang, 0xe8823e];
+  const n = 6;
+  for (let i = 0; i < n; i++) {
+    const a = i / n * Math.PI * 2 + seedOff, r = (0.18 + 0.1 * ((i * 7 + seedOff * 3) % 3) / 2) * stor;
+    const s = (0.32 + 0.08 * (i % 2)) * stor;
+    box(L, s, s * 0.9, s, x + Math.cos(a) * r, h + 0.12 * stor + (i % 3) * 0.1 * stor, z + Math.sin(a) * r * 0.8, fargs[(i + Math.round(seedOff * 5)) % fargs.length]);
+  }
+  box(L, 0.42 * stor, 0.36 * stor, 0.42 * stor, x, h + 0.42 * stor, z, (Math.round(seedOff * 10) % 2) ? 0xffd257 : 0xe8823e);
+}
+function buske(L, x, z, s = 1, f = PAL.angMork) { box(L, 0.36 * s, 0.24 * s, 0.3 * s, x, 0.12 * s, z, f); box(L, 0.22 * s, 0.16 * s, 0.2 * s, x + 0.08 * s, 0.3 * s, z - 0.02, PAL.ang); }
+function vass(L, x, z) { for (let i = 0; i < 3; i++) box(L, 0.035, 0.22 + i * 0.06, 0.035, x + i * 0.05 - 0.05, 0.08 + i * 0.03, z + (i % 2) * 0.04, i === 1 ? PAL.angMork : PAL.ang); }
+function rådjur(L, x, z) {
+  box(L, 0.16, 0.14, 0.36, x, 0.3, z, PAL.tra); box(L, 0.07, 0.18, 0.07, x, 0.43, z - 0.17, PAL.tra);
+  box(L, 0.1, 0.09, 0.14, x, 0.52, z - 0.22, PAL.tra); box(L, 0.1, 0.06, 0.04, x, 0.31, z + 0.19, PAL.kalk);
+  for (const [a, b] of [[-0.05, -0.13], [0.05, -0.13], [-0.05, 0.13], [0.05, 0.13]]) box(L, 0.04, 0.24, 0.04, x + a, 0.12, z + b, PAL.stam);
+}
+function jagareGeo() { // facing −z, fötter i y=0
+  const B = [];
+  box(B, 0.24, 0.2, 0.15, 0, 0.27, 0, PAL.bla);            // jacka
+  box(B, 0.07, 0.17, 0.08, -0.155, 0.26, 0, PAL.bla); box(B, 0.07, 0.17, 0.08, 0.155, 0.26, 0, PAL.bla);
+  box(B, 0.06, 0.05, 0.07, -0.155, 0.16, 0, PAL.hud); box(B, 0.06, 0.05, 0.07, 0.155, 0.16, 0, PAL.hud);
+  box(B, 0.18, 0.16, 0.16, 0, 0.45, 0, PAL.hud);           // huvud
+  box(B, 0.03, 0.04, 0.01, -0.045, 0.46, -0.085, PAL.svart); box(B, 0.03, 0.04, 0.01, 0.045, 0.46, -0.085, PAL.svart);
+  box(B, 0.2, 0.06, 0.18, 0, 0.555, 0.005, PAL.bla);       // blå keps
+  box(B, 0.2, 0.025, 0.07, 0, 0.53, -0.11, PAL.blaLjus);
+  box(B, 0.26, 0.04, 0.17, 0, 0.36, 0, PAL.rost);          // orange jaktväst-rand
+  box(B, 0.035, 0.035, 0.3, 0.1, 0.32, 0.1, PAL.stam, 0.5); // bössa på ryggen
+  const ben = []; box(ben, 0.09, 0.17, 0.1, 0, 0.085, 0, PAL.svart);
+  return { kropp: mergeGeometries(B), ben: mergeGeometries(ben), benX: 0.06 };
+}
+function svinGeo() { // facing +z (söderut)
+  const B = [];
+  box(B, 0.3, 0.24, 0.44, 0, 0.24, 0, PAL.svin);
+  box(B, 0.12, 0.06, 0.38, 0, 0.38, -0.02, PAL.svart);       // borst
+  box(B, 0.26, 0.22, 0.18, 0, 0.27, 0.29, PAL.svin);         // huvud
+  box(B, 0.14, 0.1, 0.07, 0, 0.22, 0.41, PAL.dimrosa);       // tryne
+  box(B, 0.03, 0.03, 0.01, -0.03, 0.22, 0.447, PAL.svart); box(B, 0.03, 0.03, 0.01, 0.03, 0.22, 0.447, PAL.svart);
+  box(B, 0.03, 0.07, 0.03, -0.085, 0.27, 0.43, PAL.kalk); box(B, 0.03, 0.07, 0.03, 0.085, 0.27, 0.43, PAL.kalk); // betar
+  box(B, 0.05, 0.05, 0.02, -0.065, 0.31, 0.385, PAL.rod); box(B, 0.05, 0.05, 0.02, 0.065, 0.31, 0.385, PAL.rod); // arga ögon
+  box(B, 0.08, 0.025, 0.02, -0.065, 0.35, 0.39, PAL.svart, 0, 0, -0.45); box(B, 0.08, 0.025, 0.02, 0.065, 0.35, 0.39, PAL.svart, 0, 0, 0.45);
+  box(B, 0.06, 0.08, 0.04, -0.1, 0.4, 0.24, PAL.svart); box(B, 0.06, 0.08, 0.04, 0.1, 0.4, 0.24, PAL.svart); // öron
+  box(B, 0.03, 0.08, 0.03, 0, 0.3, -0.24, PAL.svart, -0.6);
+  const ben = []; box(ben, 0.075, 0.13, 0.075, 0, 0.065, 0, PAL.svart);
+  return { kropp: mergeGeometries(B), ben: mergeGeometries(ben) };
+}
+function kanonModell(mat) {
+  const L = [];
+  box(L, 0.07, 0.17, 0.17, -0.12, 0.085, 0, PAL.svart); box(L, 0.07, 0.17, 0.17, 0.12, 0.085, 0, PAL.svart);
+  box(L, 0.18, 0.09, 0.28, 0, 0.13, 0.03, PAL.tra);
+  const pipa = []; box(pipa, 0.11, 0.11, 0.38, 0, 0, -0.1, PAL.svart); box(pipa, 0.13, 0.13, 0.05, 0, 0, -0.28, PAL.svart);
+  box(pipa, 0.05, 0.05, 0.05, 0, 0.04, 0.1, PAL.gul);
+  const g = new THREE.Group(); const bas = slaIhop(L, mat); const p = slaIhop(pipa, mat);
+  p.position.set(0, 0.22, 0); p.rotation.x = 0.38; g.add(bas, p); g.userData.pipa = p; return g;
+}
+
+// ---------------------------------------------------------------------
+// Garibaldistallet (förenklat ur plan.json / walls.json / SPEC)
+// x österut, z söderut, meter -> modell via lx/lz
+// ---------------------------------------------------------------------
+const S = CONFIG.modellSkala;
+const lx = X => (X - 18.45) * S, lz = Z => (Z - 7.85) * S;
+const HV = 3.0 * S;                        // vägghöjd (takfot 2,99 m)
+const STALL = { x: -0.1, z: 2.65, rot: 0.44 };   // vridet ~25° så terrass + gavel syns
+function stallTillPlatta(bx, bz) { const c = Math.cos(STALL.rot), s = Math.sin(STALL.rot); return [STALL.x + c * bx + s * bz, STALL.z - s * bx + c * bz]; }
+function plattaTillStall(x, z) { const dx = x - STALL.x, dz = z - STALL.z, c = Math.cos(STALL.rot), s = Math.sin(STALL.rot); return [c * dx - s * dz, s * dx + c * dz]; }
+const STALL_RECT = [[lx(-5.13), lx(42.04), lz(0), lz(15.7)], [lx(8.35), lx(18.19), lz(-3.38), lz(19.08)]];
+function iStallet(x, z) { const [bx, bz] = plattaTillStall(x, z); for (const r of STALL_RECT) if (bx > r[0] - 0.05 && bx < r[1] + 0.05 && bz > r[2] - 0.05 && bz < r[3] + 0.05) return true; return false; }
+const SPAWN = (() => { const [x, z] = stallTillPlatta(lx(13.27), lz(-3.38) - 0.2); return { x, z }; })();
+const KANON_PLATS = [-1.3, -0.45, 0.45, 1.3].map(bz => { const [x, z] = stallTillPlatta(lx(-4.2), bz); return { x, z, bz }; });
+
+// fasad: paneler mellan svarta korsvirkesstolpar
+function fasad(L, f, panels) {
+  // f: {ax:'z'|'x', at, sgn, u0, u1}
+  const dep = 0.03;
+  const wb = (a, b, y0, y1, hex, d = dep) => {
+    const um = (a + b) / 2, uw = Math.abs(b - a), ym = (y0 + y1) / 2, yh = y1 - y0;
+    if (f.ax === 'z') box(L, uw, yh, d, um, ym, f.at + f.sgn * d / 2, hex);
+    else box(L, d, yh, uw, f.at + f.sgn * d / 2, ym, um, hex);
+  };
+  const båge = (uc, w, y0, h, hex) => {
+    wb(uc - w / 2, uc + w / 2, y0, y0 + h, hex, 0.02);
+    wb(uc - w * 0.36, uc + w * 0.36, y0 + h, y0 + h + w * 0.18, hex, 0.02);
+    wb(uc - w * 0.16, uc + w * 0.16, y0 + h + w * 0.18, y0 + h + w * 0.3, hex, 0.02);
+  };
+  const n = panels.length, pw = (f.u1 - f.u0) / n;
+  wb(f.u0, f.u1, 0, 0.03, PAL.puts, 0.03);                  // sockel
+  wb(f.u0, f.u1, HV - 0.055, HV, PAL.svart, 0.04);          // hammarband
+  for (let i = 0; i <= n; i++) { if (i % 2 && i < n && panels[i] === 'w' && panels[i - 1] === 'w') continue; const u = f.u0 + i * pw; wb(u - 0.024, u + 0.024, 0, HV, PAL.svart, 0.04); }
+  for (let i = 0; i < n; i++) {
+    const a = f.u0 + i * pw, b = a + pw, c = (a + b) / 2, k = panels[i];
+    if (k === 'w') { båge(c, 0.2, 0.2, 0.2, PAL.glas); }
+    else if (k === 'd') { båge(c, 0.36, 0.05, 0.38, PAL.glas); wb(c - 0.01, c + 0.01, 0.05, 0.43, PAL.kalk, 0.025); wb(c - 0.18, c + 0.18, 0.05, 0.11, PAL.tra, 0.025); }
+    else if (k === 'g') { båge(c, pw * 0.78, 0.06, 0.34, PAL.glas); wb(c - 0.012, c + 0.012, 0.06, 0.40, PAL.kalk, 0.025); }
+    else if (k === 'p') { båge(c, 0.62, 0.0, 0.36, PAL.svart); båge(c, 0.56, 0.0, 0.34, 0x3d7a4c); for (let j = 1; j < 4; j++) wb(c - 0.28 + j * 0.14 - 0.008, c - 0.28 + j * 0.14 + 0.008, 0, 0.38, PAL.svart, 0.03); wb(c - 0.28, c + 0.28, 0.17, 0.19, PAL.svart, 0.03); }
+    else if (k === 'b') { // snedsträva
+      const len = Math.hypot(pw, HV * 0.6), ang = Math.atan2(HV * 0.6, pw) * (i % 2 ? 1 : -1);
+      if (f.ax === 'z') box(L, len, 0.05, 0.035, c, HV * 0.5, f.at + f.sgn * 0.02, PAL.svart, 0, 0, ang);
+      else box(L, 0.035, 0.05, len, f.at + f.sgn * 0.02, HV * 0.5, c, PAL.svart, ang, 0, 0);
+      wb(a, b, HV * 0.5 - 0.025, HV * 0.5 + 0.025, PAL.svart, 0.035);
+    }
+  }
+}
+function byggStall(mat) {
+  const L = [];
+  const mX0 = lx(-0.11), mX1 = lx(42.04), mZ0 = lz(0), mZ1 = lz(15.7);
+  const fX0 = lx(8.35), fX1 = lx(18.19), fZ0 = lz(-3.38), fZ1 = lz(19.08);
+  // grusplan + sockel
+  box(L, mX1 - lx(-5.6) + 0.4, 0.02, fZ1 - fZ0 + 0.5, (lx(-5.6) + mX1) / 2, 0.01, (fZ0 + fZ1) / 2, PAL.grus);
+  box(L, mX1 - mX0, HV, mZ1 - mZ0, (mX0 + mX1) / 2, HV / 2, (mZ0 + mZ1) / 2, PAL.kalk);
+  box(L, fX1 - fX0, HV, fZ1 - fZ0, (fX0 + fX1) / 2, HV / 2, (fZ0 + fZ1) / 2, PAL.kalk);
+  // tak: valmat ~33°, betongpannor
+  const ov = 0.09;
+  valmTak(L, mX1 - mX0 + ov * 2, mZ1 - mZ0 + ov * 2, (mX0 + mX1) / 2, HV - 0.01, (mZ0 + mZ1) / 2, PAL.tak);
+  valmTak(L, fX1 - fX0 + ov * 2, fZ1 - fZ0 + ov * 2, (fX0 + fX1) / 2, HV - 0.005, (fZ0 + fZ1) / 2, PAL.tak);
+  box(L, mX1 - mX0 + ov * 2, 0.04, mZ1 - mZ0 + ov * 2, (mX0 + mX1) / 2, HV - 0.02, (mZ0 + mZ1) / 2, PAL.svart);
+  // pannrader + nock på södra takfallet (bryter den stora ytan)
+  {
+    const hw = (mX1 - mX0) / 2 + ov, hd = (mZ1 - mZ0) / 2 + ov, h = hd * Math.tan(33 * D2R), xc = (mX0 + mX1) / 2, zc = (mZ0 + mZ1) / 2;
+    const ang = Math.atan2(h, hd);
+    for (const f of [0.22, 0.44, 0.66, 0.86]) {
+      const half = hw - f * hd;
+      box(L, half * 2, 0.022, 0.05, xc, HV - 0.01 + f * h + 0.012, zc + hd * (1 - f), PAL.takLjus, ang);
+    }
+    box(L, (hw - hd) * 2 + 0.06, 0.05, 0.07, xc, HV - 0.01 + h + 0.01, zc, PAL.svart);
+  }
+  // takkupa väst (6 fönster, platt tak) på södra takfallet
+  const kx0 = lx(1.0), kx1 = lx(8.0), kz = mZ1 - 0.42;
+  box(L, kx1 - kx0, 0.26, 0.42, (kx0 + kx1) / 2, HV + 0.2, kz, PAL.kalk);
+  box(L, kx1 - kx0 + 0.08, 0.05, 0.52, (kx0 + kx1) / 2, HV + 0.35, kz - 0.02, PAL.svart);
+  for (let i = 0; i < 6; i++) { const u = kx0 + (i + 0.5) * (kx1 - kx0) / 6; box(L, 0.14, 0.15, 0.02, u, HV + 0.19, kz + 0.215, PAL.glas); }
+  // skorstenar
+  box(L, 0.16, 0.42, 0.16, lx(30), HV + 0.75, lz(6), PAL.puts); box(L, 0.2, 0.05, 0.2, lx(30), HV + 0.97, lz(6), PAL.svart);
+  box(L, 0.16, 0.4, 0.16, lx(4), HV + 0.72, lz(9), PAL.puts); box(L, 0.2, 0.05, 0.2, lx(4), HV + 0.93, lz(9), PAL.svart);
+  // fasader som syns från kameran: söder (+z) och väster (−x)
+  fasad(L, { ax: 'z', at: mZ1, sgn: 1, u0: fX1, u1: mX1 }, ['w', 'w', 'w', 'd', 'w', 'w', 'w', 'w']);   // matsal söder: 7 fönster + pardörr
+  fasad(L, { ax: 'z', at: mZ1, sgn: 1, u0: mX0, u1: fX0 }, ['b', 'w', 'b']);
+  fasad(L, { ax: 'z', at: fZ1, sgn: 1, u0: fX0, u1: fX1 }, ['b', 'p', 'b']);                      // grön körport
+  fasad(L, { ax: 'x', at: mX0, sgn: -1, u0: mZ0, u1: mZ1 }, ['b', 'g', 'g', 'g', 'g', 'g', 'b']);   // glasparti väst, 5 bågar
+  fasad(L, { ax: 'x', at: fX0, sgn: -1, u0: mZ1, u1: fZ1 }, ['w', 'b']);
+  fasad(L, { ax: 'x', at: fX0, sgn: -1, u0: fZ0, u1: mZ0 }, ['b', 'w']);
+  fasad(L, { ax: 'z', at: fZ0, sgn: -1, u0: fX0, u1: fX1 }, ['b', 'p', 'b']);                     // norrgavel: där gänget springer ut
+  // terrass väst: 3 steg + pelare 0,4×0,4 + bjälkar
+  const tX0 = lx(-5.13);
+  box(L, mX0 - tX0, 0.07, mZ1 - mZ0, (tX0 + mX0) / 2, 0.035, (mZ0 + mZ1) / 2, PAL.tra);
+  box(L, 0.07, 0.035, mZ1 - mZ0, tX0 - 0.035, 0.018, (mZ0 + mZ1) / 2, PAL.tra);
+  for (const Z of [0.2, 2.9, 12.8, 15.5]) box(L, 0.4 * S, 3.06 * S, 0.4 * S, lx(-2.34), 3.06 * S / 2, lz(Z), PAL.kalk);
+  box(L, 0.06, 0.06, mZ1 - mZ0, lx(-2.34), 3.06 * S - 0.03, (mZ0 + mZ1) / 2, PAL.svart);
+  for (const Z of [0.2, 2.9, 12.8, 15.5]) box(L, mX0 - lx(-2.34), 0.05, 0.05, (mX0 + lx(-2.34)) / 2, 3.06 * S - 0.03, lz(Z), PAL.svart);
+  // bord på terrassen
+  for (const Z of [5.5, 10.2]) { box(L, 0.16, 0.03, 0.16, lx(-1.2), 0.2, lz(Z), PAL.tra); box(L, 0.03, 0.13, 0.03, lx(-1.2), 0.13, lz(Z), PAL.svart); }
+  const g = new THREE.Group(); g.add(slaIhop(L, mat));
+  g.position.set(STALL.x, 0, STALL.z); g.rotation.y = STALL.rot;
+  return g;
+}
+
+// ---------------------------------------------------------------------
+// Platta A: Garibaldistallet + sjön bakom
+// ---------------------------------------------------------------------
+const SKYLTAR = {};
+function byggGaribaldi(P, grp, M) {
+  const L = [];
+  const X = P.halv + 0.4;
+  box(L, X * 2, 0.12, 6.4 - P.z1 + 0.4, 0, -0.06, (6.4 + P.z1 - 0.4) / 2, PAL.ang);             // gräs
+  box(L, VAG.halv * 2 + 0.4, 0.02, 7.2, 0, 0.01, -2.7, PAL.grus);                                  // gårdsplan/allé-start
+  box(L, 2.0, 0.02, 2.4, SPAWN.x + 0.4, 0.011, SPAWN.z - 0.6, PAL.grus);
+  for (const z of [-2.4, -4.4]) { trad(L, -3.4, z, 1.05, z); trad(L, 3.4, z, 1.05, -z); }
+  trad(L, 5.4, 5.3, 1.35, 2.2); trad(L, -5.5, -1.2, 1.2, 0.7); trad(L, 5.3, -3.5, 1.1, 1.4);
+  buske(L, -5.0, 5.6); buske(L, 4.6, 6.0, 1.2); buske(L, -2.6, 6.1, 0.8); buske(L, 1.9, 6.0);
+  // strand + brygga
+  for (let x = -5.8; x < 6; x += 0.7) box(L, 0.22 + (Math.abs(x * 7) % 3) * 0.05, 0.06, 0.16, x, 0.0, 6.42 + (Math.abs(x * 3) % 2) * 0.05, PAL.puts);
+  box(L, 0.5, 0.05, 1.7, -1.6, 0.03, 7.25, PAL.tra);
+  for (const z of [6.6, 7.3, 8.0]) { box(L, 0.05, 0.25, 0.05, -1.85, -0.05, z, PAL.stam); box(L, 0.05, 0.25, 0.05, -1.35, -0.05, z, PAL.stam); }
+  for (const x of [-5.2, -4.4, 3.2, 4.9, 5.6]) vass(L, x, 6.9);
+  // eka vid bryggan
+  box(L, 0.3, 0.08, 0.75, -0.95, -0.03, 7.4, PAL.kalk); box(L, 0.22, 0.04, 0.62, -0.95, 0.01, 7.4, PAL.tra);
+  // kanonplatser (träplintar på terrassen)
+  grp.add(slaIhop(L, M.v, false));   // träd kastar inga skuggor på vägen (gav bläck-ovaler); kontaktskugga i stället
+  vatten(grp, M.vatten, -P.halv - 0.5, P.halv + 0.5, P.z0 + 0.5, 6.0);
+  grp.add(byggStall(M.v));
+  // anslagstavla: stallets liv + gängets storlek
+  const T = [];
+  box(T, 0.07, 1.0, 0.07, 2.35, 0.5, 5.55, PAL.stam); box(T, 0.07, 1.0, 0.07, 4.25, 0.5, 5.55, PAL.stam);
+  box(T, 2.1, 0.08, 0.1, 3.3, 1.47, 5.5, PAL.svart, -0.42);
+  grp.add(slaIhop(T, M.v));
+  SKYLTAR.stall = skylt(grp, 2.0, 0.95, 3.3, 1.0, 5.62, (ctx, w, h, liv, max, gang) => {
+    ram(ctx, w, h, PAL.kalk);
+    ctx.fillStyle = css(PAL.tra); ctx.fillRect(1, 1, w - 2, 2); ctx.fillRect(1, h - 3, w - 2, 2);
+    drawText(ctx, 'GARIBALDI', w / 2, 4, 1, css(PAL.svart));
+    drawText(ctx, '♥' + liv, w / 2, 11, 2, css(liv <= max * 0.3 ? PAL.rod : PAL.rost));
+  }, M.v);
+}
+
+// ---------------------------------------------------------------------
+// Platta B: Allén norr – grusväg, 4 trädrader, ängar, sjö
+// ---------------------------------------------------------------------
+const PORTAR = [];
+let MUR = null;
+function byggAllen(P, grp, M) {
+  const L = [];
+  const len = P.z0 - P.z1;
+  box(L, 4.7 * 2, 0.12, len + 0.8, 0, -0.06, (P.z0 + P.z1) / 2, PAL.ang);
+  box(L, VAG.halv * 2 + 0.1, 0.02, len + 0.8, 0, 0.01, (P.z0 + P.z1) / 2, PAL.grus);
+  for (const s of [-1, 1]) box(L, 0.08, 0.025, len + 0.8, s * (VAG.halv + 0.02), 0.012, (P.z0 + P.z1) / 2, PAL.grusMork);
+  // hjulspår
+  for (const x of [-1.95, 2.05]) box(L, 0.08, 0.022, len + 0.8, x, 0.013, (P.z0 + P.z1) / 2, PAL.grusMork);
+  // yttre allérader (höga träd)
+  let i = 0;
+  for (let z = -6.9; z > -24.0; z -= 1.75, i++) { trad(L, -3.42, z, 1.12, i * 0.37); trad(L, 3.42, z - 0.4, 1.12, i * 0.53 + 1); }
+  // inre rader (unga träd) – naturliga spårgränser, glesa vid portraden
+  i = 0;
+  for (let z = -7.0; z > -25.2; z -= 2.3, i++) { if (z < -8.6 && z > -14.4) continue; trad(L, -1.0, z, 0.62, i * 0.71); trad(L, 1.0, z - 1.1, 0.62, i * 0.29 + 2); }
+  // ängar: blommor, löv, rådjur
+  for (let k = 0; k < 70; k++) {
+    const s = k % 2 ? 1 : -1, x = s * rnd(3.65, 4.6), z = rnd(P.z1 + 0.3, P.z0 - 0.3);
+    box(L, 0.07, 0.03, 0.07, x, 0.015, z, [PAL.asp, PAL.kalk, PAL.dimrosa, PAL.rost][k % 4]);
+  }
+  for (let k = 0; k < 60; k++) box(L, 0.08, 0.015, 0.06, rnd(-2.9, 2.9), 0.022, rnd(P.z1 + 0.3, P.z0 - 0.3), k % 3 ? PAL.asp : PAL.rost, 0, rnd(0, 3), 0);
+  for (let k = 0; k < 14; k++) buske(L, (k % 2 ? 1 : -1) * rnd(3.8, 4.5), rnd(P.z1 + 1, P.z0 - 1), rnd(0.6, 1.0), k % 3 ? PAL.angMork : PAL.granMork);
+  rådjur(L, 4.15, -17.5); rådjur(L, 4.35, -18.3); rådjur(L, -4.2, -9.2);
+  for (let k = 0; k < 12; k++) vass(L, (k % 2 ? 1 : -1) * rnd(4.72, 4.95), rnd(P.z1 + 0.5, P.z0 - 0.5));
+  // strandkant
+  for (const s of [-1, 1]) box(L, 0.1, 0.05, len + 0.8, s * 4.72, -0.01, (P.z0 + P.z1) / 2, PAL.angMork);
+  grp.add(slaIhop(L, M.v, false));
+  vatten(grp, M.vatten, -P.halv - 0.5, P.halv + 0.5, P.z0 + 0.5, P.z1 - 0.5);
+
+  // ---- portrad ----
+  const portBit = { v: 0 };
+  const mkPort = (typ, x0, x1, z, värde) => {
+    const G = [], xc = (x0 + x1) / 2, w = x1 - x0;
+    const stolpe = typ === 'ganger' ? PAL.svart : PAL.tra;
+    box(G, 0.09, 1.08, 0.09, x0 + 0.05, 0.54, z, stolpe); box(G, 0.09, 1.08, 0.09, x1 - 0.05, 0.54, z, stolpe);
+    box(G, w, 0.025, 0.12, xc, 0.014, z, typ === 'ganger' ? PAL.gul : PAL.blaLjus);
+    grp.add(slaIhop(G, M.v));
+    const bit = 1 << (portBit.v++);
+    const text = typ === 'plus' ? '+' + värde : '×' + värde;
+    const sk = skylt(grp, w - 0.08, 0.48, xc, 0.98, z + 0.02, (ctx, cw, ch, redo) => {
+      if (typ === 'plus') { ram(ctx, cw, ch, PAL.bla); drawText(ctx, text, cw / 2, 2, 2, css(PAL.kalk)); }
+      else {
+        ram(ctx, cw, ch, redo >= 1 ? PAL.gul : PAL.puts);
+        if (redo < 1) { ctx.fillStyle = css(PAL.gul); ctx.fillRect(1, ch - 3, Math.round((cw - 2) * redo), 2); }
+        drawText(ctx, text, cw / 2, 1, 2, css(redo >= 1 ? PAL.svart : PAL.tak));
+      }
+    }, M.v);
+    const p = { typ, x0, x1, z, värde, bit, sk, redo: 1, popT: 0 };
+    sk.rita(1); PORTAR.push(p); return p;
+  };
+  for (const z of [-9.4, -11.4, -13.4]) mkPort('plus', FILER.v[0], FILER.v[1], z, CONFIG.plusVarde);
+  mkPort('ganger', FILER.m[0], FILER.m[1], -11.4, CONFIG.gangerVarde);
+  // ---- +99-mur med liv-räknare ----
+  const mz = -11.4, mx0 = FILER.h[0], mx1 = FILER.h[1], mxc = (mx0 + mx1) / 2;
+  const W = [];
+  for (let r = 0; r < 3; r++) for (let x = mx0 + (r % 2 ? 0.16 : 0); x < mx1 - 0.05; x += 0.32) {
+    const w = Math.min(0.3, mx1 - x);
+    box(W, w, 0.17, 0.34, x + w / 2, 0.09 + r * 0.18, mz, (r + Math.round(x * 3)) % 3 ? PAL.puts : PAL.takLjus);
+  }
+  box(W, 0.07, 0.75, 0.07, mxc - 0.45, 0.85, mz - 0.05, PAL.tra); box(W, 0.07, 0.75, 0.07, mxc + 0.45, 0.85, mz - 0.05, PAL.tra);
+  const murMesh = slaIhop(W, M.v); grp.add(murMesh);
+  const R = []; for (let k = 0; k < 16; k++) box(R, rnd(0.1, 0.22), rnd(0.06, 0.12), rnd(0.1, 0.2), rnd(mx0 + 0.1, mx1 - 0.1), 0.04, mz + rnd(-0.35, 0.35), k % 3 ? PAL.puts : PAL.takLjus, 0, rnd(0, 3), 0);
+  const rasMesh = slaIhop(R, M.v); rasMesh.visible = false; grp.add(rasMesh);
+  const bonus = skylt(grp, 1.25, 0.46, mxc, 1.25, mz - 0.02, ctx => { const w = ctx.canvas.width, h = ctx.canvas.height; ram(ctx, w, h, PAL.bla); drawText(ctx, '+99', w / 2, 1, 2, css(PAL.gul)); }, M.v);
+  bonus.rita(1);
+  const hp = skylt(grp, 0.7, 0.3, mxc, 0.3, mz + 0.2, (ctx, w, h, v) => { ram(ctx, w, h, PAL.svart, PAL.svart); drawText(ctx, String(v), w / 2, 1, 1, css(PAL.kalk)); }, M.v);
+  hp.m.scale.set(1, 1, 1); hp.m.rotation.x = -0.15;
+  MUR = { x0: mx0, x1: mx1, z: mz, hp: 0, max: 0, murMesh, rasMesh, bonus, hpSk: hp };
+
+  // ---- anslagstavla högst upp: våg + svin kvar ----
+  const T = [];
+  box(T, 0.07, 1.1, 0.07, -5.0, 0.55, -24.9, PAL.stam); box(T, 0.07, 1.1, 0.07, -2.9, 0.55, -24.9, PAL.stam);
+  grp.add(slaIhop(T, M.v));
+  SKYLTAR.vag = skylt(grp, 2.5, 1.2, -3.95, 1.15, -24.85, (ctx, w, h, vag, kvar, paus) => {
+    ram(ctx, w, h, PAL.kalk);
+    ctx.fillStyle = css(PAL.tra); ctx.fillRect(1, 1, w - 2, 2);
+    drawText(ctx, paus ? 'PAUS' : 'VÅG ' + vag + '/' + CONFIG.vagor.length, w / 2, 4, 2, css(paus ? PAL.rost : PAL.svart));
+    drawText(ctx, String(kvar), w / 2 + 6, 16, 2, css(PAL.svin));
+    // litet svin-ikon
+    ctx.fillStyle = css(PAL.svin); const x = Math.round(w / 2 + 6 - textW(String(kvar), 2) / 2 - 12);
+    ctx.fillRect(x, 18, 8, 5); ctx.fillRect(x + 7, 17, 3, 5); ctx.fillStyle = css(PAL.dimrosa); ctx.fillRect(x + 10, 19, 1, 2);
+    ctx.fillStyle = css(PAL.svart); ctx.fillRect(x, 23, 2, 2); ctx.fillRect(x + 6, 23, 2, 2); ctx.fillStyle = css(PAL.rod); ctx.fillRect(x + 8, 18, 1, 1);
+  }, M.v);
+}
+
+// bygg kedjan
+const PLATT_GRUPPER = [];
+for (const P of PLATTOR) {
+  const grp = new THREE.Group(); grp.name = P.id;
+  const M = mats(klippPlan(-P.halv, P.halv, P.z0, P.z1));
+  P.bygg(P, grp, M);
+  world.add(grp); PLATT_GRUPPER.push(grp);
+}
+
+// =====================================================================
+// Enheter – InstancedMesh (2000+ samtidigt)
+// =====================================================================
+const MAT_ENH = new THREE.MeshLambertMaterial({ vertexColors: true });
+const JG = jagareGeo(), SG = svinGeo();
+function inst(geo, n, mat = MAT_ENH) { const m = new THREE.InstancedMesh(geo, mat, n); m.frustumCulled = false; m.count = 0; m.castShadow = false; m.receiveShadow = false; m.instanceMatrix.setUsage(THREE.DynamicDrawUsage); world.add(m); return m; }
+const NG = CONFIG.maxGubbar, NS = CONFIG.maxSvin;
+const mJ = inst(JG.kropp, NG), mJbA = inst(JG.ben, NG), mJbB = inst(JG.ben, NG);
+const mS = inst(SG.kropp, NS), mSbA = inst(SG.ben, NS * 2), mSbB = inst(SG.ben, NS * 2);
+const blobGeo = new THREE.CircleGeometry(0.5, 10); blobGeo.rotateX(-Math.PI / 2);
+const mBlob = inst(blobGeo, NG + NS, new THREE.MeshBasicMaterial({ color: 0x241e22, transparent: true, opacity: 0.32, depthWrite: false }));
+mBlob.renderOrder = 1;
+
+// jägare (packade arrayer, swap-remove)
+const J = { n: 0, x: new Float32Array(NG), z: new Float32Array(NG), off: new Float32Array(NG), spr: new Float32Array(NG), ph: new Float32Array(NG), vx: new Float32Array(NG), fart: new Float32Array(NG), mask: new Uint8Array(NG), hall: new Uint8Array(NG) };
+const SV = { n: 0, x: new Float32Array(NS), z: new Float32Array(NS), ph: new Float32Array(NS), fart: new Float32Array(NS), dod: new Uint8Array(NS) };
+function nyJagare(x, z, mask = 0) {
+  if (J.n >= NG) return -1; const i = J.n++;
+  J.x[i] = x; J.z[i] = z; J.off[i] = rnd(-0.38, 0.38); J.spr[i] = rnd(-2.85, 2.85); J.ph[i] = rnd(0, 6.28); J.vx[i] = 0;
+  J.fart[i] = rnd(0.88, 1.12); J.mask[i] = mask; J.hall[i] = 0; return i;
+}
+function taBortJagare(i) { const l = --J.n; if (i !== l) for (const k of ['x', 'z', 'off', 'spr', 'ph', 'vx', 'fart', 'mask', 'hall']) J[k][i] = J[k][l]; }
+function nyttSvin(x, z) { if (SV.n >= NS) return; const i = SV.n++; SV.x[i] = x; SV.z[i] = z; SV.ph[i] = rnd(0, 6.28); SV.fart[i] = rnd(0.85, 1.18); SV.dod[i] = 0; }
+function packaSvin() { let w = 0; for (let i = 0; i < SV.n; i++) if (!SV.dod[i]) { if (w !== i) { SV.x[w] = SV.x[i]; SV.z[w] = SV.z[i]; SV.ph[w] = SV.ph[i]; SV.fart[w] = SV.fart[i]; } SV.dod[w] = 0; w++; } SV.n = w; }
+
+// spatial hash för striden
+const GR = { cs: 0.5, x0: -4, z0: -28, nx: 16, nz: 76 };
+const grHead = new Int32Array(GR.nx * GR.nz), grNext = new Int32Array(NS);
+function cell(x, z) { const cx = clamp(((x - GR.x0) / GR.cs) | 0, 0, GR.nx - 1), cz = clamp(((z - GR.z0) / GR.cs) | 0, 0, GR.nz - 1); return cz * GR.nx + cx; }
+
+// =====================================================================
+// FX: voxelpartiklar, projektiler, pop-siffror
+// =====================================================================
+const NP = 1400;
+const mP = new THREE.InstancedMesh(new THREE.BoxGeometry(0.075, 0.075, 0.075), new THREE.MeshLambertMaterial({ color: 0xffffff }), NP);
+mP.frustumCulled = false; mP.instanceMatrix.setUsage(THREE.DynamicDrawUsage); world.add(mP);
+mP.setColorAt(0, new THREE.Color(1, 1, 1));
+const PT = { i: 0, x: new Float32Array(NP), y: new Float32Array(NP), z: new Float32Array(NP), vx: new Float32Array(NP), vy: new Float32Array(NP), vz: new Float32Array(NP), liv: new Float32Array(NP), s: new Float32Array(NP) };
+function puff(x, y, z, hexes, n = 6, kraft = 1.4, storlek = 1) {
+  for (let k = 0; k < n; k++) {
+    const i = PT.i; PT.i = (PT.i + 1) % NP;
+    PT.x[i] = x + rnd(-0.08, 0.08); PT.y[i] = y + rnd(0, 0.15); PT.z[i] = z + rnd(-0.08, 0.08);
+    const a = rnd(0, 6.28), v = rnd(0.3, 1) * kraft; PT.vx[i] = Math.cos(a) * v; PT.vz[i] = Math.sin(a) * v; PT.vy[i] = rnd(1.2, 2.6) * kraft;
+    PT.liv[i] = rnd(0.45, 0.8); PT.s[i] = storlek * rnd(0.8, 1.3);
+    mP.setColorAt(i, _col.set(hexes[k % hexes.length]));
+  }
+  mP.instanceColor.needsUpdate = true;
+}
+const NK = 24;
+const mK = new THREE.InstancedMesh(new THREE.BoxGeometry(0.14, 0.14, 0.14), new THREE.MeshLambertMaterial({ color: PAL.svart }), NK);
+mK.frustumCulled = false; mK.count = 0; world.add(mK);
+const KULOR = [];
+// pop-siffror (sprites)
+const texCache = new Map();
+function popTex(text, fg, k, outline = css(PAL.svart)) {
+  const key = text + fg + k; if (texCache.has(key)) return texCache.get(key);
+  const w = textW(text, k) + k * 2 + 2, h = 5 * k + k * 2 + 2;
+  const ct = canvasTex(w, h); drawText(ct.ctx, text, w / 2, k + 1, k, fg, outline);
+  const r = { tex: ct.tex, w, h }; texCache.set(key, r); return r;
+}
+const POPS = [];
+for (let i = 0; i < 28; i++) {
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ ...PLATT, depthTest: false, depthWrite: false }));
+  s.renderOrder = 10; s.visible = false; world.add(s); POPS.push({ s, liv: 0, y0: 0, k: 1 });
+}
+let popI = 0;
+function pop(text, x, z, fg = css(PAL.kalk), k = 2, y = 1.0, liv = 0.9) {
+  const p = POPS[popI]; popI = (popI + 1) % POPS.length;
+  const t = popTex(text, fg, k); p.s.material.map = t.tex; p.s.material.needsUpdate = true;
+  p.w = t.w / TPU; p.h = t.h / TPU; p.s.position.set(x, y, z); p.y0 = y; p.liv = liv; p.max = liv; p.s.visible = true;
+}
+// flockens antal (stor siffra ovanför flocken)
+const flockCT = canvasTex(40, 14);
+const flock = new THREE.Sprite(new THREE.SpriteMaterial({ ...PLATT, map: flockCT.tex, depthTest: false, depthWrite: false }));
+flock.renderOrder = 9; world.add(flock); let flockLast = -1;
+// utsläppspunkt: blå pil på marken
+const markör = (() => {
+  const L = [];
+  box(L, 0.5, 0.02, 0.1, 0, 0.02, 0, PAL.bla); box(L, 0.1, 0.02, 0.36, 0, 0.02, -0.12, PAL.bla);
+  box(L, 0.3, 0.02, 0.1, 0, 0.02, -0.34, PAL.blaLjus); box(L, 0.14, 0.02, 0.1, 0, 0.02, -0.44, PAL.blaLjus);
+  box(L, 0.035, 0.7, 0.035, 0.28, 0.35, 0, PAL.svart); box(L, 0.24, 0.15, 0.02, 0.4, 0.62, 0, PAL.bla);
+  const m = new THREE.Mesh(mergeGeometries(L), MAT_ENH); world.add(m); return m;
+})();
+
+// =====================================================================
+// Spelläge
+// =====================================================================
+const G = {};
+const KANONER = [];
+function nyttSpel() {
+  seed = (+(Q.get('seed') || 1337)) >>> 0;
+  Object.assign(G, { t: 0, state: 'spel', liv: CONFIG.stallLiv, ctrlX: SPAWN.x, spawnAcc: 0, vag: 0, vagState: 'paus', vagT: 2.5, kvar: 0, vagAcc: 0, vagRate: 0, paus: false, slutT: 0, dodS: 0, dodJ: 0 });
+  J.n = 0; SV.n = 0; KULOR.length = 0;
+  for (const k of KANONER) k.g.parent.remove(k.g); KANONER.length = 0;
+  for (let i = 0; i < CONFIG.startGubbar; i++) nyJagare(SPAWN.x + rnd(-0.4, 0.4), SPAWN.z - rnd(0, 1.5));
+  for (const p of PORTAR) { p.redo = 1; p.sk.rita(1); }
+  murÅterställ(0);
+  for (const p of POPS) { p.liv = 0; p.s.visible = false; }
+  PT.liv.fill(0);
+  pop('VÅG 1', 0, -18, css(PAL.gul), 3, 2.0, 2.0);
+  document.getElementById('ov').classList.add('hide');
+  uiUppdatera();
+}
+function murÅterställ(v) {
+  MUR.max = MUR.hp = CONFIG.murLiv[Math.min(v, CONFIG.murLiv.length - 1)];
+  MUR.murMesh.visible = true; MUR.rasMesh.visible = false; MUR.bonus.m.visible = true; MUR.hpSk.m.visible = true; MUR.hpSk.rita(MUR.hp);
+}
+function murRas() {
+  MUR.murMesh.visible = false; MUR.rasMesh.visible = true; MUR.bonus.m.visible = false; MUR.hpSk.m.visible = false;
+  const xc = (MUR.x0 + MUR.x1) / 2;
+  for (let k = 0; k < CONFIG.murBonus; k++) nyJagare(xc + rnd(-0.8, 0.8), MUR.z - rnd(0.2, 1.4), 0xff);
+  puff(xc, 0.3, MUR.z, [PAL.puts, PAL.takLjus, PAL.kalk], 40, 2.2, 1.5);
+  pop('+' + CONFIG.murBonus, xc, MUR.z - 0.5, css(PAL.gul), 3, 1.5, 1.4);
+  CAM.shake = 0.35; ljud('ras');
+}
+function byggKanon() {
+  if (G.state !== 'spel' || KANONER.length >= CONFIG.kanonMax || J.n < CONFIG.kanonPris) return false;
+  // de 10 närmast stallet går in och bygger
+  for (let k = 0; k < CONFIG.kanonPris; k++) { let bi = 0, bz = -1e9; for (let i = 0; i < J.n; i++) if (J.z[i] > bz) { bz = J.z[i]; bi = i; } taBortJagare(bi); }
+  const plats = KANON_PLATS[KANONER.length];
+  const g = kanonModell(MAT_ENH_K); g.position.set(plats.x, 0.07, plats.z); world.add(g);
+  KANONER.push({ g, x: plats.x, z: plats.z, cd: 0.6, rek: 0 });
+  puff(plats.x, 0.3, plats.z, [PAL.tra, PAL.kalk, PAL.svart], 14, 1.2);
+  pop('KANON!', plats.x, plats.z, css(PAL.gul), 2, 1.0);
+  ljud('bygg'); uiUppdatera(); return true;
+}
+const MAT_ENH_K = new THREE.MeshLambertMaterial({ vertexColors: true });
+
+// =====================================================================
+// Simulering – fast tidssteg, 2D (x,z)
+// =====================================================================
+const STEG = 1 / 60;
+function steg(dt) {
+  if (G.state !== 'spel') return;
+  G.t += dt;
+  if (TEST) autopilot(dt);
+  // nya jägare ur stallet
+  G.spawnAcc += dt * CONFIG.spawnPerSek * (TEST === 'lose' ? 0 : 1);
+  while (G.spawnAcc >= 1) { G.spawnAcc -= 1; nyJagare(SPAWN.x + rnd(-0.25, 0.25), SPAWN.z + rnd(-0.1, 0.1)); }
+  // vågor
+  if (G.vagState === 'paus') {
+    G.vagT -= dt;
+    if (G.vagT <= 0) { const V = CONFIG.vagor[G.vag]; G.vagState = 'vag'; G.kvar = V.svin; G.vagRate = V.svin / V.tid; G.vagAcc = 2; murÅterställ(G.vag); ljud('vag'); }
+  } else {
+    G.vagAcc += dt * G.vagRate * (0.6 + 0.8 * Math.max(0, Math.sin(G.t * 1.3)));   // pulser = "svarta vågor"
+    while (G.vagAcc >= 1 && G.kvar > 0) { G.vagAcc -= 1; G.kvar--; nyttSvin(rnd(-2.9, 2.9), SVIN_Z - rnd(0, 0.4)); }
+    if (G.kvar === 0 && SV.n === 0) {
+      G.vag++;
+      if (G.vag >= CONFIG.vagor.length) { slut(true); return; }
+      G.vagState = 'paus'; G.vagT = CONFIG.vagPaus;
+      pop('VÅG ' + (G.vag + 1), 0, -18, css(PAL.gul), 3, 2.0, 2.0);
+    }
+  }
+  // portar laddar
+  for (const p of PORTAR) if (p.typ === 'ganger' && p.redo < 1) { p.redo = Math.min(1, p.redo + dt / CONFIG.gangerLaddning); p.sk.rita(Math.floor(p.redo * 12) / 12); }
+  // svin rör sig
+  const murUppe = MUR.hp > 0;
+  for (let i = 0; i < SV.n; i++) {
+    let x = SV.x[i], z = SV.z[i];
+    z += CONFIG.svinFart * SV.fart[i] * dt;
+    x += Math.sin(G.t * 2.2 + SV.ph[i]) * 0.25 * dt;
+    if (murUppe && x > FILER.h[0] - 0.15 && z > MUR.z - 1.6 && z < MUR.z) { x -= 1.4 * dt; if (z > MUR.z - 0.25) z = MUR.z - 0.25; }
+    x = clamp(x, -VAG.halv + 0.1, VAG.halv - 0.1);
+    SV.x[i] = x; SV.z[i] = z;
+    if (z > -3.5 && (iStallet(x, z) || z > 6.0)) {
+      SV.dod[i] = 1; G.liv--; CAM.shake = Math.max(CAM.shake, 0.22);
+      puff(x, 0.4, z, [PAL.kalk, PAL.rod, PAL.svin], 10, 1.5); ljud('aj');
+      if (G.liv <= 0) { G.liv = 0; slut(false); }
+    }
+  }
+  packaSvin();
+  // rutnät
+  grHead.fill(-1);
+  for (let i = 0; i < SV.n; i++) { const c = cell(SV.x[i], SV.z[i]); grNext[i] = grHead[c]; grHead[c] = i; }
+  // jägare rör sig + portar + mur + strid
+  const R2 = CONFIG.stridRadie * CONFIG.stridRadie;
+  for (let i = J.n - 1; i >= 0; i--) {
+    let x = J.x[i], z = J.z[i]; const pz = z;
+    if (J.hall[i]) {
+      x += clamp(J.spr[i] - x, -0.6 * dt, 0.6 * dt);
+    } else {
+      const tx = clamp(G.ctrlX + J.off[i], -VAG.halv + 0.12, VAG.halv - 0.12);
+      const dx = clamp(tx - x, -CONFIG.gubbeSidFart * dt, CONFIG.gubbeSidFart * dt);
+      x += dx; J.vx[i] = dx / dt;
+      z -= CONFIG.gubbeFart * J.fart[i] * dt;
+      if (z <= HALL_Z + J.off[i] * 0.8) { J.hall[i] = 1; }
+    }
+    x = clamp(x, -VAG.halv + 0.08, VAG.halv - 0.08);
+    // portar
+    for (const p of PORTAR) {
+      if (pz > p.z && z <= p.z && x >= p.x0 && x <= p.x1 && !(J.mask[i] & p.bit)) {
+        J.mask[i] |= p.bit;
+        if (p.typ === 'plus') {
+          for (let k = 0; k < p.värde; k++) nyJagare(x + rnd(-0.15, 0.15), z - rnd(0.05, 0.25), 0xff);
+          if (G.t - p.popT > 1.1) { p.popT = G.t; pop('+' + p.värde, x, z - 1.1, css(PAL.kalk), 2, 0.55, 0.45); ljud('plus'); }
+        } else if (p.redo >= 1) {
+          p.redo = 0; p.sk.rita(0);
+          for (let k = 0; k < p.värde - 1; k++) { const a = rnd(0, 6.28), r = Math.sqrt(rnd(0, 1)) * 0.7; nyJagare(clamp(x + Math.cos(a) * r, p.x0 - 0.3, p.x1 + 0.3), z - 0.4 + Math.sin(a) * r, 0xff); }
+          pop('×' + p.värde, (p.x0 + p.x1) / 2, p.z - 0.4, css(PAL.gul), 3, 1.5, 1.2);
+          puff((p.x0 + p.x1) / 2, 0.9, p.z, [PAL.gul, PAL.kalk], 18, 1.6); CAM.shake = Math.max(CAM.shake, 0.12); ljud('ganger');
+        }
+      }
+    }
+    // mur
+    if (MUR.hp > 0 && x > MUR.x0 && x < MUR.x1 && z <= MUR.z + 0.24 && pz > MUR.z - 0.3) {
+      MUR.hp--; MUR.hpSk.rita(MUR.hp);
+      puff(x, 0.35, MUR.z + 0.2, [PAL.puts, PAL.takLjus], 2, 0.9, 0.8);
+      taBortJagare(i);
+      if (MUR.hp <= 0) murRas(); else if ((MUR.hp & 7) === 0) ljud('knack');
+      continue;
+    }
+    J.x[i] = x; J.z[i] = z;
+    // strid 1-mot-1
+    let träff = -1;
+    const cx = clamp(((x - GR.x0) / GR.cs) | 0, 0, GR.nx - 1), cz = clamp(((z - GR.z0) / GR.cs) | 0, 0, GR.nz - 1);
+    for (let oz = -1; oz <= 1 && träff < 0; oz++) {
+      const rz = cz + oz; if (rz < 0 || rz >= GR.nz) continue;
+      for (let ox = -1; ox <= 1 && träff < 0; ox++) {
+        const rx = cx + ox; if (rx < 0 || rx >= GR.nx) continue;
+        for (let j = grHead[rz * GR.nx + rx]; j >= 0; j = grNext[j]) {
+          if (SV.dod[j]) continue; const ddx = SV.x[j] - x, ddz = SV.z[j] - z;
+          if (ddx * ddx + ddz * ddz < R2) { träff = j; break; }
+        }
+      }
+    }
+    if (träff >= 0) {
+      SV.dod[träff] = 1; G.dodS++;
+      puff((x + SV.x[träff]) / 2, 0.25, (z + SV.z[träff]) / 2, [PAL.kalk, PAL.svin, PAL.bla, PAL.dimrosa], 5, 1.1);
+      taBortJagare(i); G.dodJ++;
+      if ((G.dodS & 3) === 0) ljud('puff');
+    }
+  }
+  packaSvin();
+  // kanoner
+  for (const k of KANONER) {
+    k.cd -= dt; k.rek = Math.max(0, k.rek - dt * 3);
+    if (k.cd > 0 || SV.n === 0) continue;
+    let best = -1, bz = -1e9; const R = CONFIG.kanonRackvidd;
+    for (let i = 0; i < SV.n; i++) { const dx = SV.x[i] - k.x, dz = SV.z[i] - k.z; if (dx * dx + dz * dz < R * R && SV.z[i] > bz) { bz = SV.z[i]; best = i; } }
+    if (best < 0) continue;
+    const T = CONFIG.kanonFlygtid, tx = SV.x[best], tz = SV.z[best] + CONFIG.svinFart * T;
+    KULOR.push({ x0: k.x, z0: k.z, x1: tx, z1: tz, t: 0, T });
+    k.cd = CONFIG.kanonTakt; k.rek = 1; k.g.rotation.y = Math.atan2(-(tx - k.x), -(tz - k.z));
+    puff(k.x + (tx - k.x) * 0.03, 0.4, k.z + (tz - k.z) * 0.03, [PAL.kalk, PAL.puts, PAL.gul], 5, 0.6);
+    ljud('pang');
+  }
+  for (let q = KULOR.length - 1; q >= 0; q--) {
+    const b = KULOR[q]; b.t += dt;
+    if (b.t >= b.T) {
+      KULOR.splice(q, 1); let n = 0; const R2k = CONFIG.kanonRadie * CONFIG.kanonRadie;
+      for (let i = 0; i < SV.n && n < CONFIG.kanonMaxDod; i++) { const dx = SV.x[i] - b.x1, dz = SV.z[i] - b.z1; if (dx * dx + dz * dz < R2k) { SV.dod[i] = 1; n++; G.dodS++; } }
+      packaSvin();
+      puff(b.x1, 0.15, b.z1, [PAL.rost, PAL.gul, PAL.svart, PAL.kalk], 16, 1.9, 1.3);
+      CAM.shake = Math.max(CAM.shake, 0.1); ljud('bom');
+    }
+  }
+}
+function slut(vinst) {
+  G.state = 'slut';
+  const card = document.getElementById('card');
+  card.innerHTML = vinst
+    ? `<h1>LILLÖ ÄR<br><span>RÄDDAT!</span></h1><p>Jaktgänget höll allén i ${CONFIG.vagor.length} vågor. Garibaldistallet står kvar med <b>${G.liv} av ${CONFIG.stallLiv}</b> liv.</p><button class="hb big" id="bIgen">SPELA IGEN</button>`
+    : `<h1>GARIBALDI<br><span>FÖLL</span></h1><p>Svinen tog stallet i våg ${G.vag + 1}. Gänget fällde ${G.dodS} svin – styr genom ×50-porten och bygg kanoner nästa gång.</p><button class="hb big" id="bIgen">SPELA IGEN</button>`;
+  document.getElementById('bIgen').onclick = () => nyttSpel();
+  document.getElementById('ov').classList.remove('hide');
+  ljud(vinst ? 'vinst' : 'forlust'); uiUppdatera();
+}
+// autopilot för ?test=autoplay: simulerar drag mellan spåren + bygger kanoner
+function autopilot(dt) {
+  if (TEST !== 'autoplay') return;   // 'idle'/'lose': ingen styrning
+  const fas = Math.floor(G.t / 6) % 4, mal = [0, -2.05, 2.1, -2.05][fas];
+  G.ctrlX += clamp(mal - G.ctrlX, -2.5 * dt, 2.5 * dt);
+  if (G.t > 10 && J.n > 40 && KANONER.length < CONFIG.kanonMax) byggKanon();
+}
+
+// =====================================================================
+// Ljud (pyttesmå 8-bit-blipp, genererade)
+// =====================================================================
+let AC = null, ljudPa = !TEST; const ljudT = {};
+function ljud(typ) {
+  if (!ljudPa || !AC) return; const now = AC.currentTime; if (ljudT[typ] && now - ljudT[typ] < 0.06) return; ljudT[typ] = now;
+  const D = { plus: [880, 1320, 0.06, 'square', 0.04], ganger: [440, 1760, 0.25, 'square', 0.07], puff: [220, 90, 0.06, 'triangle', 0.05], pang: [160, 50, 0.12, 'sawtooth', 0.06], bom: [120, 30, 0.2, 'triangle', 0.09], knack: [300, 200, 0.04, 'square', 0.03], ras: [200, 40, 0.5, 'sawtooth', 0.09], aj: [500, 120, 0.2, 'square', 0.06], bygg: [520, 780, 0.15, 'square', 0.05], vag: [330, 660, 0.3, 'square', 0.05], vinst: [523, 1046, 0.6, 'square', 0.07], forlust: [330, 82, 0.8, 'sawtooth', 0.07] }[typ];
+  if (!D) return; const o = AC.createOscillator(), g = AC.createGain();
+  o.type = D[3]; o.frequency.setValueAtTime(D[0], now); o.frequency.exponentialRampToValueAtTime(D[1], now + D[2]);
+  g.gain.setValueAtTime(D[4], now); g.gain.exponentialRampToValueAtTime(0.0001, now + D[2]);
+  o.connect(g).connect(AC.destination); o.start(now); o.stop(now + D[2] + 0.02);
+}
+
+// =====================================================================
+// Input: dra i sidled, nyp/scroll-zoom
+// =====================================================================
+const pekare = new Map(); let nypD = 0;
+canvas.addEventListener('pointerdown', e => { canvas.setPointerCapture(e.pointerId); pekare.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (pekare.size === 2) { const [a, b] = [...pekare.values()]; nypD = Math.hypot(a.x - b.x, a.y - b.y); } if (!AC && !TEST) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (_) {} } });
+canvas.addEventListener('pointermove', e => {
+  const p = pekare.get(e.pointerId); if (!p) return;
+  const dx = e.clientX - p.x; p.x = e.clientX; p.y = e.clientY;
+  if (pekare.size === 1) { G.ctrlX = clamp(G.ctrlX + dx * (CAM.vy * camera.aspect / LOW.cw) * 1.25, -VAG.halv + 0.15, VAG.halv - 0.15); }
+  else if (pekare.size === 2) { const [a, b] = [...pekare.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y); if (nypD > 0) CAM.vy = clamp(CAM.vy * nypD / d, CAM.vyMin, CAM.vyMax); nypD = d; }
+});
+const släpp = e => { pekare.delete(e.pointerId); nypD = 0; };
+canvas.addEventListener('pointerup', släpp); canvas.addEventListener('pointercancel', släpp);
+addEventListener('wheel', e => { CAM.vy = clamp(CAM.vy * Math.exp(e.deltaY * 0.0012), CAM.vyMin, CAM.vyMax); }, { passive: true });
+addEventListener('keydown', e => { if (e.key === 'ArrowLeft') G.ctrlX = clamp(G.ctrlX - 0.5, -2.85, 2.85); if (e.key === 'ArrowRight') G.ctrlX = clamp(G.ctrlX + 0.5, -2.85, 2.85); if (e.key === 'k') byggKanon(); if (e.key === 'p') togglePaus(); });
+const bK = document.getElementById('bKanon'), bP = document.getElementById('bPaus');
+bK.onclick = () => byggKanon();
+function togglePaus() { if (G.state !== 'spel') return; G.paus = !G.paus; bP.textContent = G.paus ? '▶' : 'II'; }
+bP.onclick = togglePaus;
+document.getElementById('bOm').onclick = () => { G.paus = false; bP.textContent = 'II'; nyttSpel(); };
+document.getElementById('bStart').onclick = () => { if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (_) {} } nyttSpel(); };
+function uiUppdatera() {
+  const ok = G.state === 'spel' && J.n >= CONFIG.kanonPris && KANONER.length < CONFIG.kanonMax;
+  bK.disabled = !ok;
+  bK.innerHTML = KANONER.length >= CONFIG.kanonMax ? 'KANON<small>terrassen full</small>' : `KANON ${KANONER.length}/${CONFIG.kanonMax}<small>−${CONFIG.kanonPris} gubbar</small>`;
+}
+
+// =====================================================================
+// Kamera: låst vinkel, bara target glider längs kedjan
+// =====================================================================
+const _tv = new THREE.Vector3();
+function updateCamera(dt) {
+  // fokus = där striden står
+  let fz = (KEDJA.z0 + KEDJA.z1) / 2;
+  if (G.state === 'spel') {
+    let sz = 0, n = 0;
+    for (let i = 0; i < SV.n; i += 4) { sz += SV.z[i]; n++; }
+    let jz = 0, m = 0; for (let i = 0; i < J.n; i += 8) { jz += J.z[i]; m++; }
+    if (n) fz = clamp(sz / n * 0.7 + (m ? jz / m : -10) * 0.3, -19, -3); else if (m) fz = clamp(jz / m, -19, -3);
+  }
+  if (Q.has('fz')) fz = +Q.get('fz');            // test: lås fokus
+  const zoomUt = clamp((CAM.vy - 8) / (CAM.vyMax - 8), 0, 1);
+  const mitt = (KEDJA.z0 + KEDJA.z1) / 2;
+  const mal = fz + (mitt - fz) * zoomUt;
+  const k = dt ? 1 - Math.exp(-dt * 1.4) : 1;
+  CAM.tz += (mal - CAM.tz) * k;
+  CAM.tx += ((G.ctrlX || 0) * 0.15 - CAM.tx) * k;
+  const asp = Math.min(camera.aspect, 0.75);
+  const dist = CAM.vy / (2 * Math.tan(CAM.fov / 2 * D2R) * asp);
+  let sx = 0, sz2 = 0;
+  if (CAM.shake > 0) { sx = (Math.random() - 0.5) * CAM.shake * 0.5; sz2 = (Math.random() - 0.5) * CAM.shake * 0.5; CAM.shake = Math.max(0, CAM.shake - (dt || 0) * 1.6); }
+  _tv.set(CAM.tx + sx, 0, CAM.tz + sz2).applyMatrix4(world.matrixWorld);
+  camera.fov = CAM.fov;
+  camera.position.set(_tv.x + Math.sin(CAM.az) * Math.cos(CAM.el) * dist, _tv.y + Math.sin(CAM.el) * dist, _tv.z + Math.cos(CAM.az) * Math.cos(CAM.el) * dist);
+  camera.near = dist * 0.4; camera.far = dist * 2.2;
+  camera.lookAt(_tv); camera.updateProjectionMatrix();
+}
+
+// =====================================================================
+// Visuell uppdatering av instanser
+// =====================================================================
+function setM(arr, i, x, y, z, rot, sx, sy = sx, sz = sx) {
+  const c = Math.cos(rot), s = Math.sin(rot), o = i * 16;
+  arr[o] = c * sx; arr[o + 1] = 0; arr[o + 2] = -s * sx; arr[o + 3] = 0;
+  arr[o + 4] = 0; arr[o + 5] = sy; arr[o + 6] = 0; arr[o + 7] = 0;
+  arr[o + 8] = s * sz; arr[o + 9] = 0; arr[o + 10] = c * sz; arr[o + 11] = 0;
+  arr[o + 12] = x; arr[o + 13] = y; arr[o + 14] = z; arr[o + 15] = 1;
+}
+let animT = 0;
+function visuellt(dt) {
+  animT += dt;
+  const A = mJ.instanceMatrix.array, BA = mJbA.instanceMatrix.array, BB = mJbB.instanceMatrix.array, BL = mBlob.instanceMatrix.array;
+  const paus = G.paus || G.state !== 'spel';
+  for (let i = 0; i < J.n; i++) {
+    const ph = J.ph[i] + animT * (J.hall[i] ? 3 : 14) * (paus ? 0 : 1);
+    const bob = J.hall[i] ? Math.abs(Math.sin(ph)) * 0.02 : Math.abs(Math.sin(ph)) * 0.05;
+    const rot = J.hall[i] ? 0 : clamp(-J.vx[i] * 0.35, -0.6, 0.6);
+    const x = J.x[i], z = J.z[i], sw = J.hall[i] ? 0 : Math.sin(ph) * 0.06;
+    setM(A, i, x, bob, z, rot, 1);
+    const c = Math.cos(rot), s = Math.sin(rot), bx = JG.benX;
+    setM(BA, i, x - c * bx + s * sw, 0, z - (-s) * bx - c * sw * 1 + 0, rot, 1);
+    setM(BB, i, x + c * bx - s * sw, 0, z + (-s) * bx + c * sw, rot, 1);
+    setM(BL, i, x, 0.015, z, 0, 0.36, 1, 0.3);
+  }
+  mJ.count = mJbA.count = mJbB.count = J.n;
+  const SA = mS.instanceMatrix.array, SBA = mSbA.instanceMatrix.array, SBB = mSbB.instanceMatrix.array;
+  for (let i = 0; i < SV.n; i++) {
+    const ph = SV.ph[i] + animT * 11 * (paus ? 0 : 1), x = SV.x[i], z = SV.z[i];
+    const bob = Math.abs(Math.sin(ph)) * 0.035, sw = Math.sin(ph) * 0.05, rot = Math.sin(animT * 2.2 + SV.ph[i]) * 0.25;
+    setM(SA, i, x, bob, z, rot, 1);
+    setM(SBA, i * 2, x - 0.09, 0, z + 0.15 + sw, 0, 1); setM(SBA, i * 2 + 1, x + 0.09, 0, z - 0.15 + sw, 0, 1);
+    setM(SBB, i * 2, x + 0.09, 0, z + 0.15 - sw, 0, 1); setM(SBB, i * 2 + 1, x - 0.09, 0, z - 0.15 - sw, 0, 1);
+    setM(BL, J.n + i, x, 0.016, z + 0.05, 0, 0.42, 1, 0.62);
+  }
+  mS.count = SV.n; mSbA.count = mSbB.count = SV.n * 2; mBlob.count = J.n + SV.n;
+  for (const m of [mJ, mJbA, mJbB, mS, mSbA, mSbB, mBlob]) m.instanceMatrix.needsUpdate = true;
+  // partiklar
+  const PA = mP.instanceMatrix.array;
+  for (let i = 0; i < NP; i++) {
+    if (PT.liv[i] > 0) {
+      if (!paus) { PT.liv[i] -= dt; PT.vy[i] -= 7 * dt; PT.x[i] += PT.vx[i] * dt; PT.y[i] += PT.vy[i] * dt; PT.z[i] += PT.vz[i] * dt; if (PT.y[i] < 0.03) { PT.y[i] = 0.03; PT.vy[i] *= -0.3; PT.vx[i] *= 0.6; PT.vz[i] *= 0.6; } }
+      setM(PA, i, PT.x[i], PT.y[i], PT.z[i], 0, PT.s[i] * Math.min(1, PT.liv[i] * 3));
+    } else setM(PA, i, 0, -10, 0, 0, 0);
+  }
+  mP.instanceMatrix.needsUpdate = true;
+  // kanonkulor
+  mK.count = KULOR.length; const KA = mK.instanceMatrix.array;
+  KULOR.forEach((b, q) => { const u = b.t / b.T; setM(KA, q, b.x0 + (b.x1 - b.x0) * u, 0.45 + Math.sin(u * Math.PI) * 2.4 * (b.T), b.z0 + (b.z1 - b.z0) * u, 0, 1); });
+  mK.instanceMatrix.needsUpdate = true;
+  for (const k of KANONER) { const p = k.g.userData.pipa; p.position.z = k.rek * 0.08; }
+  // pop
+  for (const p of POPS) {
+    if (p.liv <= 0) { p.s.visible = false; continue; }
+    if (!paus) p.liv -= dt;
+    const u = 1 - p.liv / p.max, sk = u < 0.15 ? 0.6 + u / 0.15 * 0.6 : 1.2 - Math.min(0.2, (u - 0.15) * 0.5);
+    const zf = CAM.vy / 11;
+    p.s.scale.set(p.w * sk * zf, p.h * sk * zf, 1); p.s.position.y = p.y0 + u * 0.5;
+  }
+  // flockräknare
+  if (J.n > 0) {
+    let sx = 0, sz = 0, n = 0; for (let i = 0; i < J.n; i += 3) if (!J.hall[i]) { sx += J.x[i]; sz += J.z[i]; n++; }
+    if (!n) for (let i = 0; i < J.n; i += 3) { sx += J.x[i]; sz += J.z[i]; n++; }
+    flock.visible = true; flock.position.set(sx / n, 1.05, sz / n);
+    if (J.n !== flockLast) {
+      flockLast = J.n; const t = String(J.n), { ctx, cv } = flockCT;
+      ctx.clearRect(0, 0, cv.width, cv.height); const w = textW(t, 2) + 8;
+      ctx.fillStyle = css(PAL.svart); ctx.fillRect((cv.width - w) / 2 - 1, 0, w + 2, 14);
+      ctx.fillStyle = css(PAL.bla); ctx.fillRect((cv.width - w) / 2, 1, w, 12);
+      drawText(ctx, t, cv.width / 2, 2, 2, css(PAL.kalk)); flockCT.tex.needsUpdate = true;
+    }
+    const zf = CAM.vy / 11; flock.scale.set(40 / TPU * zf, 14 / TPU * zf, 1);
+  } else flock.visible = false;
+  markör.position.set(G.ctrlX || 0, 0, -5.0);
+  // vatten
+  for (const v of vattenYtor) {
+    const a = v.g.attributes.position.array, b = v.bas;
+    for (let i = 0; i < a.length; i += 3) a[i + 1] = b[i + 1] + Math.sin(b[i] * 2.1 + animT * 1.6) * 0.025 + Math.sin(b[i + 2] * 1.7 - animT * 1.2) * 0.025;
+    v.g.attributes.position.needsUpdate = true;
+  }
+  // skyltar
+  if (SKYLTAR.stall) SKYLTAR.stall.rita(G.liv, CONFIG.stallLiv);
+  if (SKYLTAR.vag) SKYLTAR.vag.rita(Math.min(G.vag + 1, CONFIG.vagor.length), G.vagState === 'paus' ? (CONFIG.vagor[G.vag] || { svin: 0 }).svin : G.kvar + SV.n, G.vagState === 'paus');
+}
+
+// =====================================================================
+// Huvudloop
+// =====================================================================
+let last = performance.now(), acc = 0, fpsN = 0, fpsT = 0, FPS = 0, uiT = 0;
+const FART = TEST ? 2 : 1;
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.1, (now - last) / 1000); last = now;
+  if (G.state === 'spel' && !G.paus) { acc += dt * FART; let n = 0; while (acc >= STEG && n < 10) { steg(STEG); acc -= STEG; n++; } if (n >= 10) acc = 0; }
+  visuellt(dt); updateCamera(dt);
+  renderer.clippingPlanes = KLIPP_KEDJA;
+  renderer.setRenderTarget(rt); renderer.clear(); renderer.render(scene, camera);
+  renderer.clippingPlanes = [];
+  renderer.setRenderTarget(null); renderer.render(postScene, postCam);
+  fpsN++; fpsT += dt; if (fpsT >= 1) { FPS = Math.round(fpsN / fpsT); fpsN = 0; fpsT = 0; }
+  uiT += dt; if (uiT > 0.25) { uiT = 0; uiUppdatera(); if (TEST) testState(); }
+}
+function testState() {
+  document.getElementById('ts').textContent = JSON.stringify({ t: +G.t.toFixed(1), state: G.state, vag: Math.min(G.vag + 1, CONFIG.vagor.length), gubbar: J.n, svin: SV.n, kvar: G.kvar, liv: G.liv, kanoner: KANONER.length, mur: MUR.hp, dodS: G.dodS, fps: FPS, low: [LOW.w, LOW.h], fel: window.__err });
+}
+addEventListener('resize', resize); addEventListener('orientationchange', () => setTimeout(resize, 200));
+resize();
+// startläge: visa bana med lite liv bakom titelkortet
+Object.assign(G, { t: 0, state: 'meny', liv: CONFIG.stallLiv, ctrlX: SPAWN.x, vag: 0, vagState: 'paus', kvar: 0 });
+murÅterställ(0);
+for (let i = 0; i < 40; i++) nyJagare(SPAWN.x + rnd(-1.5, 1.5) + 1, rnd(-8, -1));
+for (let i = 0; i < 30; i++) nyttSvin(rnd(-2.8, 2.8), rnd(-25, -17));
+if (TEST) {
+  nyttSpel();
+  if (TEST === 'lose') { J.n = 0; G.liv = 4; }
+  for (let t = 0; t < FF && G.state === 'spel'; t += STEG) steg(STEG);
+  testState();
+}
+window.__lillo = { G, J, SV, CONFIG, byggKanon, nyttSpel };
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
