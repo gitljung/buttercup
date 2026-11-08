@@ -77,5 +77,16 @@
   "thread": "1568925737023569940",
   "fusion_project": "yamay-tizon",
   "pending": true
+ },
+ {
+  "slug": "fire-table",
+  "name": "Fire table",
+  "doc": null,
+  "version": null,
+  "exported": null,
+  "channel": "yamay-fire-table",
+  "thread": "1568926239748526121",
+  "fusion_project": "yamay-fire-table",
+  "pending": true
  }
 ]
