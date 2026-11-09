@@ -68,16 +68,6 @@
   "fusion_project": "rat-stop"
  },
  {
-  "slug": "tizon",
-  "name": "Yamay Tizón",
-  "doc": "Yamay Tizon",
-  "version": 15,
-  "exported": "2026-11-09 23:32",
-  "channel": "yamay-tizon",
-  "thread": "1568925737023569940",
-  "fusion_project": "yamay-tizon"
- },
- {
   "slug": "fire-table",
   "name": "Yamay Fire Table 1500",
   "doc": "Yamay Fire Table 1500",
@@ -86,5 +76,15 @@
   "channel": "yamay-fire-table",
   "thread": "1568926239748526121",
   "fusion_project": "yamay-fire-table"
+ },
+ {
+  "slug": "tizon",
+  "name": "Yamay Tizón",
+  "doc": "Yamay Tizon",
+  "version": 17,
+  "exported": "2026-11-10 00:17",
+  "channel": "yamay-tizon",
+  "thread": "1568925737023569940",
+  "fusion_project": "yamay-tizon"
  }
 ]
