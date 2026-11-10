@@ -69,16 +69,6 @@
   "fusion_project": "yamay-fire-table"
  },
  {
-  "slug": "tizon",
-  "name": "Yamay Tizón",
-  "doc": "Yamay Tizon",
-  "version": 24,
-  "exported": "2026-11-10 14:29",
-  "channel": "yamay-tizon",
-  "thread": "1568925737023569940",
-  "fusion_project": "yamay-tizon"
- },
- {
   "slug": "horno",
   "name": "Yamay Horno",
   "doc": "Yamay Horno - ugn",
@@ -86,5 +76,15 @@
   "exported": "2026-11-10 16:10",
   "channel": "yamay-horno",
   "thread": "1568654411973263520"
+ },
+ {
+  "slug": "tizon",
+  "name": "Yamay Tizón",
+  "doc": "Yamay Tizon",
+  "version": 25,
+  "exported": "2026-11-10 16:33",
+  "channel": "yamay-tizon",
+  "thread": "1568925737023569940",
+  "fusion_project": "yamay-tizon"
  }
 ]
