@@ -39,15 +39,6 @@
   "fusion_project": "rat-stop"
  },
  {
-  "slug": "horno",
-  "name": "Yamay Horno",
-  "doc": "Yamay Horno - ugn",
-  "version": 31,
-  "exported": "2026-11-07 22:22",
-  "channel": "yamay-horno",
-  "thread": "1568654411973263520"
- },
- {
   "slug": "rat-stop-b",
   "name": "rat stop B (M8 i Wavin-lock)",
   "doc": "rat-stop B",
@@ -86,5 +77,14 @@
   "channel": "yamay-tizon",
   "thread": "1568925737023569940",
   "fusion_project": "yamay-tizon"
+ },
+ {
+  "slug": "horno",
+  "name": "Yamay Horno",
+  "doc": "Yamay Horno - ugn",
+  "version": 32,
+  "exported": "2026-11-10 16:10",
+  "channel": "yamay-horno",
+  "thread": "1568654411973263520"
  }
 ]
