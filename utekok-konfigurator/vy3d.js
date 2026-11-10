@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 
 const el = document.querySelector('#vy3d');
 const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
@@ -20,16 +21,30 @@ mark.rotation.x = -Math.PI / 2; mark.receiveShadow = true; scene.add(mark);
 // världen i Fusion-koordinater (mm, Z upp) -> three (m, Y upp)
 const W = new THREE.Group(); W.rotation.x = -Math.PI / 2; W.scale.setScalar(0.001); scene.add(W);
 
-const loader = new GLTFLoader(), cache = {};
-function glb(url) {
-  if (!cache[url]) cache[url] = new Promise((ok, nej) => loader.load(url, g => {
+const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder), cache = {};
+// Grillar: senaste versionen ur Design Review (/design-review/<slug>/model.glb); lokal kopia som reserv.
+window.grillKalla = {};
+function grillGlb(o, KAT) {
+  if (!o.dr) return glb(o.glb);
+  const reserv = () => o.glb ? glb(o.glb) : Promise.reject(new Error('ingen modell'));
+  const url = KAT.gemensamt.dr_url.replace('{slug}', o.dr);
+  return glb(url, 1).then(g => { window.grillKalla[o.dr] = 'design-review';
+      if (o.dr_dolj) {   // DR-sammanställningen kan innehålla vår egen modul (Fire Table står på Asado-modulen) – ta bort den, konfiguratorn ritar modulen
+        g = g.clone(true); const bort = []; g.traverse(n => { if (o.dr_dolj.includes(n.name)) bort.push(n); }); bort.forEach(n => n.parent && n.parent.remove(n));
+      }
+      return g; })
+    .catch(() => { window.grillKalla[o.dr] = o.glb ? 'lokal kopia' : 'förenklad (ingen export)'; console.warn('Design Review saknas för', o.dr); return reserv(); });
+}
+function glb(url, skala = 1000) {
+  const nyckel = url + '@' + skala;
+  if (!cache[nyckel]) cache[nyckel] = new Promise((ok, nej) => loader.load(url, g => {
     const z = new THREE.Group(); g.scene.rotation.x = Math.PI / 2;           // ångra GLB:ns Z->Y-rotation
-    z.add(g.scene); z.scale.setScalar(1000);                                  // m -> mm
+    z.add(g.scene); z.scale.setScalar(skala);                                  // m -> mm
     z.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true;
       if (/corten/i.test(o.material && o.material.name || '')) o.material = COR; } });   // all Corten (moduler + grillar) delar ett material
     z.updateMatrixWorld(true); ok(z);
   }, undefined, nej));
-  return cache[url].then(z => z.clone(true));
+  return cache[nyckel].then(z => z.clone(true));
 }
 const RF = new THREE.MeshStandardMaterial({ color: 0xc9ced4, metalness: 0.75, roughness: 0.3 });
 const TRA = new THREE.MeshStandardMaterial({ color: 0x9a6a3e, metalness: 0, roughness: 0.75 });   // oljat trä
@@ -48,24 +63,41 @@ window.rita3d = async function (L, SV, KAT, SP) {
     const egen = p.blind && p.m['glb_' + p.blind] ? p.m['glb_' + p.blind] : null;
     let harEgen = false;
     if (egen) { try { mg.add(await glb(egen)); harEgen = true; } catch (e) { console.warn('saknar', egen); } }
-    if (!harEgen) { try { mg.add(await glb(p.m.glb)); } catch (e) { console.warn('saknar', p.m.glb); } }
+    if (!harEgen && p.m.glb) { try { mg.add(await glb(p.m.glb)); } catch (e) { console.warn('saknar', p.m.glb); } }
+    else if (!harEgen) {   // modul utan Fusion-export (koncept, t.ex. Tizón-modul): enkel stomme + indragen sockel
+      const H = p.m.stommehojd, so = 120;
+      const kropp = new THREE.Mesh(new THREE.BoxGeometry(p.m.bredd, 600, H - so), COR);
+      kropp.position.set(0, 0, so + (H - so) / 2); kropp.castShadow = true; mg.add(kropp);
+      const sockel = new THREE.Mesh(new THREE.BoxGeometry(p.m.bredd - 6, 540, so), COR);
+      sockel.position.set(0, 30, so / 2); mg.add(sockel);
+    }
     if (p.m.horn && !harEgen) {   // blindpanel (koncept) på fronten
       const b = new THREE.Mesh(new THREE.BoxGeometry(p.m.blind, 3, 892 - 100), COR);
       const x = p.blind === 'slut' ? p.m.bredd / 2 - p.m.blind / 2 : -p.m.bredd / 2 + p.m.blind / 2;
       b.position.set(x, -300 + 1.5, 100 + (892 - 100) / 2); b.castShadow = true; mg.add(b);
     }
-    if (p.m.grill && p.m.grill.glb) {
+    const block = () => {   // grill utan modell (koncept / ingen export ännu): låda + ev. bakvägg som enkla block
+      const gg = p.m.grill, S = KAT.gemensamt.skiva, z0 = gg.z0 + (S.pa_grill ? S.epdm + S.t : 0) + (gg.fotspel || 0);
+      const lada = new THREE.Mesh(new THREE.BoxGeometry(gg.bredd, gg.djup, gg.hojd), COR);
+      lada.position.set(0, gg.y_fram + gg.djup / 2, z0 + gg.hojd / 2); lada.castShadow = true; mg.add(lada);
+      if (gg.vagg_hojd) {
+        const w = new THREE.Mesh(new THREE.BoxGeometry(gg.bredd, gg.vagg_t || 80, gg.vagg_hojd), COR);
+        w.position.set(0, gg.y_fram + gg.djup - (gg.vagg_t || 80) / 2 + (gg.utstick_bak || 0), z0 + gg.hojd + gg.vagg_hojd / 2); w.castShadow = true; mg.add(w);
+      }
+    };
+    if (p.m.grill && (p.m.grill.glb || p.m.grill.dr)) {
       try {
-        const gr = await glb(p.m.grill.glb), bx = new THREE.Box3().setFromObject(gr), gg = p.m.grill;
+        const gr = await grillGlb(p.m.grill, KAT), bx = new THREE.Box3().setFromObject(gr), gg = p.m.grill;
         const lyft = KAT.gemensamt.skiva.pa_grill ? KAT.gemensamt.skiva.epdm + KAT.gemensamt.skiva.t : 0;   // grillen står på skivan
-        gr.position.set(-(bx.min.x + bx.max.x) / 2, gg.glb_y_min - bx.min.y, gg.glb_z_min + lyft - bx.min.z);
+        const ymin = gg.glb_y_min != null ? gg.glb_y_min : gg.y_fram;
+        gr.position.set(-(bx.min.x + bx.max.x) / 2, ymin - bx.min.y, (gg.glb_z_min != null ? gg.glb_z_min : gg.z0) + lyft - bx.min.z);
         mg.add(gr);
-      } catch (e) { console.warn('saknar', p.m.grill.glb); }
-    }
+      } catch (e) { console.warn('saknar modell för', p.m.grill.namn); if (p.m.grill.hojd) block(); }
+    } else if (p.m.grill && p.m.grill.hojd) block();
     for (const t of p.tillval || []) {    // tillval (Yakitori 50) står löst på bänkskivan
       const tv = KAT.tillval[t];
       try {
-        const gr = await glb(tv.glb), bx = new THREE.Box3().setFromObject(gr), S = KAT.gemensamt.skiva;
+        const gr = await grillGlb(tv, KAT), bx = new THREE.Box3().setFromObject(gr), S = KAT.gemensamt.skiva;
         gr.position.set(-(bx.min.x + bx.max.x) / 2, tv.y_fram - bx.min.y, p.m.stommehojd + S.epdm + S.t - bx.min.z);
         mg.add(gr);
       } catch (e) {

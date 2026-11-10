@@ -56,7 +56,8 @@
    "golvspel": 10,
    "fastning": "CD-pinnbultar M8 A4 på baksidan genom gavelns skarvhål Ø9 (150/450, bänk även 750), 6 mm distans + EPDM mot Corten, mutter inifrån – inga genomgående hål",
    "anm": "Fria gavlar i radens ändar och hörnets ytterhörn stängs. Bänk: panelen går upp till skivans ovansida (900) och täcker skivans ände; djup = skivans djup. Grillmodul: upp till modulens topplåt, djup 600."
-  }
+  },
+  "dr_url": "/design-review/{slug}/model.glb"
  },
  "moduler": {
   "bank500": {
@@ -111,7 +112,8 @@
     "y_fram": -299,
     "glb": "export/grill_horno.glb",
     "glb_y_min": -299,
-    "glb_z_min": 689
+    "glb_z_min": 689,
+    "dr": "horno"
    },
    "utstick": 0,
    "vikt_kg": 70,
@@ -144,7 +146,8 @@
     "y_bak": 206,
     "glb": "export/grill_asado1500.glb",
     "glb_y_min": -303.3,
-    "glb_z_min": 689
+    "glb_z_min": 689,
+    "dr": "asado-1500"
    },
    "utstick": 232,
    "utstick_z": [
@@ -162,6 +165,46 @@
     670
    ],
    "bult_anm": "förslag – Ø9-raster saknas i grillmodulens topplåt i Fusion"
+  },
+  "tizon500": {
+   "namn": "Tizón-modul 500",
+   "bredd": 500,
+   "stommehojd": 470,
+   "typ": "grill",
+   "fusion": "Yamay Utekok - Tizon-modul 500",
+   "grill": {
+    "namn": "Yamay Tizón",
+    "fusion": "Yamay Tizon (#yamay-tizon)",
+    "dr": "tizon",
+    "bredd": 440,
+    "djup": 528,
+    "z0": 470,
+    "hojd": 513,
+    "topp": 991,
+    "y_fram": -264,
+    "vikt_kg": 70,
+    "brannbart_min": null,
+    "oppen_eld": false,
+    "skorsten": {
+     "riktning": "bak",
+     "dim": 120,
+     "bak_om_modul": 167,
+     "anm": "Ø120 (Tizón-tråden): rörets framkant 47 mm bakom modulens bakkant, bakkant ca 167 mm bakom."
+    },
+    "glb_y_min": -345,
+    "glb_z_min": 470,
+    "hojd_anm": "HallGolv 513,3 (Tizóns t91) över skivan, fötter +0–20"
+   },
+   "utstick": 0,
+   "vikt_kg": null,
+   "hyllor": 1,
+   "bult_x": [
+    -170,
+    170
+   ],
+   "bult_anm": "förslag – Ø9-raster saknas i grillmodulens topplåt i Fusion",
+   "status": "ritad i Fusion med ModH 470 (vickesluring 2026-11-10 \"ta den höga för tillfället\"): skarv 150/450 som övriga moduler, hällen 991 mm (91 över bänken); spisen hämtas ur Design Review",
+   "glb": "export/tizon500.glb"
   },
   "horn1000": {
    "namn": "Hörnbänk 1000",
@@ -186,6 +229,47 @@
    "fusion_start": "Yamay Utekok - Hornbank 1000 V",
    "glb_slut": "export/hornbank1000H.glb",
    "glb_start": "export/hornbank1000V.glb"
+  },
+  "firetable1500": {
+   "namn": "Fire Table-modul 1500",
+   "bredd": 1500,
+   "stommehojd": 689,
+   "typ": "grill",
+   "fusion": "Yamay Utekok - Asado-modul 1500",
+   "grill": {
+    "namn": "Yamay Fire Table 1500",
+    "fusion": "Yamay Fire Table 1500 (koncept, #yamay-fire-table)",
+    "bredd": 1500,
+    "djup": 600,
+    "z0": 689,
+    "fotspel": 3,
+    "hojd": 200,
+    "vagg_hojd": 600,
+    "vagg_t": 80,
+    "topp": 1504,
+    "utstick_bak": 6,
+    "y_fram": -300,
+    "vikt_kg": 250,
+    "brannbart_min": null,
+    "oppen_eld": true,
+    "dr": "fire-table",
+    "dr_dolj": [
+     "o1"
+    ],
+    "dr_anm": "DR 'fire-table' = sammanställningen Yamay Fire Table 1500 inkl. Asado-modul 1500 (nod o1) – o1 tas bort i 3D"
+   },
+   "vikt_kg": 96,
+   "hyllor": 2,
+   "glb": "export/asado1500.glb",
+   "bult_x": [
+    -670,
+    -335,
+    0,
+    335,
+    670
+   ],
+   "bult_anm": "förslag – Ø9-raster saknas i grillmodulens topplåt i Fusion",
+   "status": "ritad i #yamay-fire-table (Design Review v4 2026-11-09: låda, bakvägg, stänger, kokplattor, galler, brasero); värmeskyddet under lådan är inte löst"
   }
  },
  "tillval": {
@@ -203,7 +287,8 @@
    ],
    "glb": "export/grill_yakitori50.glb",
    "vikt_kg": null,
-   "anm": "står löst på bänkskivan (egen produkt, ingen infällning)"
+   "anm": "står löst på bänkskivan (egen produkt, ingen infällning)",
+   "dr": "yakitori-50"
   }
  }
 }

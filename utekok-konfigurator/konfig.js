@@ -1,6 +1,6 @@
 // Yamay Utekök – konfigurationsmotor (samma kod i webben och i node-pipelinen).
 // Konfiguration: { id, namn, rad: [...], vagg: "ingen"|"obrannbar"|"brannbar", anm }
-//   rad-element: "bank500" | "bank1000" | "horno1000" | "asado1500" | { typ: "horn1000", blind: "slut" | "start" }
+//   rad-element: "bank500" | "bank1000" | "horno1000" | "asado1500" | "firetable1500" | "tizon500" | { typ: "horn1000", blind: "slut" | "start" }
 //   Raden läses i gångriktningen med fronten på HÖGER hand. En hörnbänk vrider raden 90° mot fronten (innerhörn):
 //   blind "slut" = nästa ben skruvas mot hörnbänkens blindpanel (hörnet avslutar benet),
 //   blind "start" = föregående ben skruvas mot blindpanelen (hörnet inleder nästa ben).
@@ -67,6 +67,26 @@
         info.push(`Modul ${i + 1} (Horno): ${gr.fritt_sida} mm fritt till grannens gavel (krav ≥ ${gr.obrannbart_min} mm till obrännbart).`);
         if (konf.vagg === 'brannbar') varn.push(`Modul ${i + 1} (Horno): brännbar vägg – minst ${gr.brannbart_min} mm från ugnen till väggen.`);
         if (konf.vagg && konf.vagg !== 'ingen') info.push(`Modul ${i + 1} (Horno): minst 50 mm luft bakom till vägg (kylslitsar).`);
+      }
+      if (p.typ === 'tizon500') {   // Tizón (vedspis) på låg modul, hällen i bänkhöjd (koncept 2026-11-09)
+        const gr = p.m.grill, sk = gr.skorsten;
+        if (p.m.status) varn.push(`Modul ${i + 1}: ${p.m.namn} är ${p.m.status}.`);
+        if (p.m.skarv_anm) varn.push(`Modul ${i + 1} (Tizón): ${p.m.skarv_anm}.`);
+        if (sk && sk.riktning === 'bak') {
+          if (konf.vagg === 'brannbar') fel.push(`Modul ${i + 1} (Tizón): vedspis – får inte stå mot brännbar vägg.`);
+          else if (konf.vagg && konf.vagg !== 'ingen') varn.push(`Modul ${i + 1} (Tizón): skorstenen ska gå bakom modulen (ca ${sk.bak_om_modul} mm, beslut 2026-11-09) – mot vägg krävs plats för röret och brandavstånd, inte utrett.`);
+          else info.push(`Modul ${i + 1} (Tizón): skorsten Ø${sk.dim} bakåt, vertikalt rör ca ${sk.bak_om_modul} mm bakom modulen (fristående kök).`);
+        }
+        info.push(`Modul ${i + 1} (Tizón): hällen på ${gr.topp} mm${gr.topp !== kat.gemensamt.bankhojd ? ` (${gr.topp - kat.gemensamt.bankhojd} mm över bänken)` : ''}; brandavstånd till trä okänt → grannarna får rostfri skiva.`);
+        info.push(`Modul ${i + 1} (Tizón): spisen kan låsas med 2 × M8 A4 + bricka underifrån genom topplåten (rekommenderas vid fast installation, offentlig miljö och barn).`);
+      }
+      if (p.typ === 'firetable1500') {   // Fire Table (vickesluring 2026-11-09): öppen eld på Asado-modulen
+        const gr = p.m.grill;
+        varn.push(`Modul ${i + 1}: ${p.m.status}.`);
+        if (konf.vagg === 'brannbar') fel.push(`Modul ${i + 1} (Fire Table): öppen eld – får inte stå mot brännbar vägg. Välj vägg "ingen" eller "obrännbar".`);
+        else if (konf.vagg === 'obrannbar') info.push(`Modul ${i + 1} (Fire Table): bakväggens rygg och bultskallar sticker ut ${gr.utstick_bak} mm bakom modulen – lämna minst ${gr.utstick_bak} mm till väggen.`);
+        info.push(`Modul ${i + 1} (Fire Table): ca ${gr.vikt_kg} kg på 4 fötter nära gavlarna – handräknat OK för modulen (inte kontrollerat i Fusion).`);
+        info.push(`Modul ${i + 1} (Fire Table): bara ${gr.fotspel} mm luft mellan lådans botten och skivan – värmeskydd/luftspalt (≥ 25 mm) är inte löst; EPDM under skivan tål ca 120–150 °C.`);
       }
       if (p.m.horn) {
         if (p.m.status) varn.push(`Modul ${i + 1}: ${p.m.namn} är ${p.m.status}.`);
@@ -261,7 +281,7 @@
   }
 
   function kortnamn(konf, kat) {
-    const k = { bank500: 'B500', bank1000: 'B1000', horno1000: 'H1000', asado1500: 'A1500', horn1000: 'HÖRN' };
+    const k = { bank500: 'B500', bank1000: 'B1000', horno1000: 'H1000', asado1500: 'A1500', firetable1500: 'FT1500', tizon500: 'T500', horn1000: 'HÖRN' };
     return konf.rad.map(el => { const e = norm(el); const tv = e.tillval ? [].concat(e.tillval).map(t => '+' + (((kat.tillval || {})[t] || {}).kort || t)).join('') : ''; return (e.typ === 'horn1000' ? (e.blind === 'start' ? '⌐HÖRN' : 'HÖRN¬') : (k[e.typ] || e.typ)) + tv; }).join(' | ');
   }
 
