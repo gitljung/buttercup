@@ -123,7 +123,7 @@
    "url": "https://www.buttercup.nu/design-review/?p=fire-table&cam=376%2C2612%2C3308%2C0%2C752%2C-3",
    "sel": "",
    "created": "2026-11-11T07:18:26.093000+00:00",
-   "status": "pagar",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-11T07:21:53.136000+00:00",
@@ -134,13 +134,19 @@
      "2026-11-11T07:34:38.700000+00:00",
      "pagar",
      "Nonsens: ”1 vi börjar med 20. 2 behåll som de är, kanske en invikning ”"
+    ],
+    [
+     "2026-11-11T10:27:09.256000+00:00",
+     "atgardad",
+     "Vickan: Klart. Alt C är inbyggt: stångbärarens främre kub sitter nu bakom kinden"
     ]
    ],
-   "replies": 18,
-   "last": "2026-11-11T09:51:31.468000+00:00",
+   "replies": 20,
+   "last": "2026-11-11T10:27:47.275000+00:00",
    "analyzed": "2026-11-11T07:21:53.136000+00:00",
    "choice": "2026-11-11T07:34:38.700000+00:00",
    "choice_txt": "1 vi börjar med 20. 2 behåll som de är, kanske en invikning på 20 där med?",
+   "done": "2026-11-11T10:27:09.256000+00:00",
    "thread": "1568926239748526121",
    "link": "https://discord.com/channels/1114447465203109918/1568926239748526121/1569974644159553586",
    "nr": 1,
@@ -185,5 +191,5 @@
    "pname": "Yamay Tizón"
   }
  ],
- "updated": "2026-11-11 10:52"
+ "updated": "2026-11-11 11:28"
 }
