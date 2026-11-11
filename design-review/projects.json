@@ -68,16 +68,6 @@
   "thread": "1568654411973263520"
  },
  {
-  "slug": "tizon",
-  "name": "Yamay Tizón",
-  "doc": "Yamay Tizon",
-  "version": 29,
-  "exported": "2026-11-11 10:27",
-  "channel": "yamay-tizon",
-  "thread": "1568925737023569940",
-  "fusion_project": "yamay-tizon"
- },
- {
   "slug": "fire-table",
   "name": "Yamay Fire Table 1500",
   "doc": "Yamay Fire Table 1500",
@@ -124,5 +114,15 @@
   "doc": "Växthus",
   "version": 26,
   "exported": "2026-11-11 18:34"
+ },
+ {
+  "slug": "tizon",
+  "name": "Yamay Tizon",
+  "doc": "Yamay Tizon",
+  "version": 29,
+  "exported": "2026-11-11 23:57",
+  "channel": "yamay-tizon",
+  "thread": "1568925737023569940",
+  "fusion_project": "yamay-tizon"
  }
 ]
