@@ -91,8 +91,8 @@
   "slug": "manual-till-wallpocket",
   "name": "Manual till wallpocket",
   "doc": "Wallpocket monterad",
-  "version": 4,
-  "exported": "2026-11-11 12:21",
+  "version": 5,
+  "exported": "2026-11-11 12:26",
   "channel": "manual-till-wallpocket",
   "thread": "1570003849165668392",
   "fusion_project": "manual-till-wallpocket"
