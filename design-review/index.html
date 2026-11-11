@@ -200,7 +200,7 @@ prep(hlMat);
 const qs=new URLSearchParams(location.search);let stateApplied=false;let PROJ=[];
 fetch('projects.json?'+Date.now()).then(r=>r.json()).then(list=>{PROJ=list;const s=$('#proj');
  s.innerHTML=list.map(p=>`<option value="${p.slug}">${p.name}</option>`).join('');
- const want=qs.get('p')&&list.find(p=>p.slug===qs.get('p'))?qs.get('p'):list[0].slug;s.value=want;load(want)});
+ const want=qs.get('p')&&list.find(p=>p.slug===qs.get('p'))?qs.get('p'):list[0].slug;s.value=want;load(want);renderIss()});
 $('#proj').onchange=e=>{const u=new URL(location);u.searchParams.set('p',e.target.value);history.replaceState(null,'',u);load(e.target.value);renderIss()};
 
 function load(slug){
@@ -224,7 +224,7 @@ function load(slug){
   sec.forEach((s,i)=>{s.on=false;s.t=.5;s.flip=false});updSec();
   buildPlaneViz();view('home');renderTree();showInfo();
   rs();EXP.f=0;$('#expS').value=0;prepExplode();applyExplode();if(!stateApplied){stateApplied=true;const qp=new URLSearchParams(location.search).get('p');if(qp===slug||!qp)window.__applyState()}
-  $('#status').style.display='none';window.__ready=slug;pinCache();
+  $('#status').style.display='none';window.__ready=slug;renderIss();
  }).catch(e=>{$('#status').textContent='Kunde inte ladda: '+e;window.__err=String(e)})}
 
 // ---------- synlighet ----------
