@@ -78,16 +78,6 @@
   "fusion_project": "yamay-tizon"
  },
  {
-  "slug": "manual-till-wallpocket",
-  "name": "Manual till wallpocket",
-  "doc": "Wallpocket monterad",
-  "version": 1,
-  "exported": "2026-11-11 10:54",
-  "channel": "manual-till-wallpocket",
-  "thread": "1570003849165668392",
-  "fusion_project": "manual-till-wallpocket"
- },
- {
   "slug": "fire-table",
   "name": "Yamay Fire Table 1500",
   "doc": "Yamay Fire Table 1500",
@@ -96,5 +86,15 @@
   "channel": "yamay-fire-table",
   "thread": "1568926239748526121",
   "fusion_project": "yamay-fire-table"
+ },
+ {
+  "slug": "manual-till-wallpocket",
+  "name": "Manual till wallpocket",
+  "doc": "Wallpocket monterad",
+  "version": 2,
+  "exported": "2026-11-11 11:20",
+  "channel": "manual-till-wallpocket",
+  "thread": "1570003849165668392",
+  "fusion_project": "manual-till-wallpocket"
  }
 ]
