@@ -1,0 +1,189 @@
+{
+ "issues": [
+  {
+   "id": "1568654437386424360",
+   "slug": "asado-1500",
+   "title": "hack i plåten",
+   "sev": "Måste fixas",
+   "sevemo": "🔴",
+   "by": "okänd",
+   "desc": "Fel i geometrin här",
+   "part": "Yamay Asado 1500 › Yamay Asado - mekanik:1 › Yamay Asado - Lagerplat 5 mm hoger:1 · art.nr Lagerplat 5 mm hoger",
+   "ver": "Yamay Asado 1500 · Yamay Asado 1500 v30 (export 2026-11-07 16:33)",
+   "url": "https://www.buttercup.nu/design-review/?p=asado-1500&cam=944%2C850%2C389%2C298%2C354%2C-563&sel=o418&vis=-o418",
+   "sel": "o418",
+   "created": "2026-11-07T15:43:52.609000+00:00",
+   "status": "atgardad",
+   "log": [
+    [
+     "2026-11-07T15:56:23.240000+00:00",
+     "analyserad",
+     "Vickan"
+    ],
+    [
+     "2026-11-07T16:01:16.386000+00:00",
+     "pagar",
+     "Nonsens: ”alt 2”"
+    ],
+    [
+     "2026-11-07T19:03:49.353000+00:00",
+     "atgardad",
+     "Vickan: Klart. Båda lagerplåtarna har en ny, ren kontur, och den syns nu i Design Review. Hacken i"
+    ]
+   ],
+   "replies": 18,
+   "last": "2026-11-07T19:03:49.353000+00:00",
+   "analyzed": "2026-11-07T15:56:23.240000+00:00",
+   "choice": "2026-11-07T16:01:16.386000+00:00",
+   "choice_txt": "alt 2",
+   "done": "2026-11-07T19:03:49.353000+00:00",
+   "thread": "1568653342975074445",
+   "link": "https://discord.com/channels/1114447465203109918/1568653342975074445/1568654437386424360",
+   "nr": 1,
+   "img": "issues/1568654437386424360.jpg",
+   "pname": "Yamay Asado 1500"
+  },
+  {
+   "id": "1568654452636778670",
+   "slug": "horno",
+   "title": "slits här",
+   "sev": "Fråga",
+   "sevemo": "🔵",
+   "by": "Victor",
+   "desc": "Varför slits här?",
+   "part": "",
+   "ver": "Yamay Horno · Yamay Horno - ugn v26 (export 2026-11-07 11:48)",
+   "url": "https://www.buttercup.nu/design-review/?p=horno&cam=628%2C362%2C2072%2C0%2C395%2C55",
+   "sel": "",
+   "created": "2026-11-07T15:52:04.491000+00:00",
+   "status": "pagar",
+   "log": [
+    [
+     "2026-11-07T15:56:43.626000+00:00",
+     "analyserad",
+     "Vickan"
+    ],
+    [
+     "2026-11-07T16:02:27.351000+00:00",
+     "pagar",
+     "Nonsens: ”1”"
+    ]
+   ],
+   "replies": 6,
+   "last": "2026-11-11T07:26:40.412000+00:00",
+   "analyzed": "2026-11-07T15:56:43.626000+00:00",
+   "choice": "2026-11-07T16:02:27.351000+00:00",
+   "choice_txt": "1",
+   "thread": "1568654411973263520",
+   "link": "https://discord.com/channels/1114447465203109918/1568654411973263520/1568654452636778670",
+   "nr": 1,
+   "img": "issues/1568654452636778670.jpg",
+   "pname": "Yamay Horno"
+  },
+  {
+   "id": "1569789422210121899",
+   "slug": "tizon",
+   "title": "centrera logo",
+   "sev": "Mindre",
+   "sevemo": "🟡",
+   "by": "hugo",
+   "desc": "centrera yamay logon på luckan även om den hamnar lite bakom handtaget",
+   "part": "",
+   "ver": "Yamay Tizón · Yamay Tizon v28 (export 2026-11-10 18:19)",
+   "url": "https://www.buttercup.nu/design-review/?p=tizon&cam=-13%2C240%2C2522%2C0%2C531%2C-81",
+   "sel": "",
+   "created": "2026-11-10T19:00:49.698000+00:00",
+   "status": "analyserad",
+   "log": [
+    [
+     "2026-11-10T19:05:45.603000+00:00",
+     "analyserad",
+     "Vickan"
+    ]
+   ],
+   "replies": 2,
+   "last": "2026-11-10T19:05:45.966000+00:00",
+   "analyzed": "2026-11-10T19:05:45.603000+00:00",
+   "thread": "1568925737023569940",
+   "link": "https://discord.com/channels/1114447465203109918/1568925737023569940/1569789422210121899",
+   "nr": 1,
+   "img": "issues/1569789422210121899.jpg",
+   "pname": "Yamay Tizón"
+  },
+  {
+   "id": "1569974644159553586",
+   "slug": "fire-table",
+   "title": "Ta bort front",
+   "sev": "Mindre",
+   "sevemo": "🟡",
+   "by": "Victor",
+   "desc": "Det är bättre att ta bort fronten så man kommer åt att lägga kol under. Gör lösning likt asado",
+   "part": "",
+   "ver": "Yamay Fire Table 1500 · Yamay Fire Table 1500 v4 (export 2026-11-09 23:43)",
+   "url": "https://www.buttercup.nu/design-review/?p=fire-table&cam=376%2C2612%2C3308%2C0%2C752%2C-3",
+   "sel": "",
+   "created": "2026-11-11T07:18:26.093000+00:00",
+   "status": "pagar",
+   "log": [
+    [
+     "2026-11-11T07:21:53.136000+00:00",
+     "analyserad",
+     "Vickan"
+    ],
+    [
+     "2026-11-11T07:34:38.700000+00:00",
+     "pagar",
+     "Nonsens: ”1 vi börjar med 20. 2 behåll som de är, kanske en invikning ”"
+    ]
+   ],
+   "replies": 13,
+   "last": "2026-11-11T09:12:00.374000+00:00",
+   "analyzed": "2026-11-11T07:21:53.136000+00:00",
+   "choice": "2026-11-11T07:34:38.700000+00:00",
+   "choice_txt": "1 vi börjar med 20. 2 behåll som de är, kanske en invikning på 20 där med?",
+   "thread": "1568926239748526121",
+   "link": "https://discord.com/channels/1114447465203109918/1568926239748526121/1569974644159553586",
+   "nr": 1,
+   "img": "issues/1569974644159553586.jpg",
+   "pname": "Yamay Fire Table 1500"
+  },
+  {
+   "id": "1569975146360340510",
+   "slug": "tizon",
+   "title": "Frontplåt skall gå över här",
+   "sev": "Måste fixas",
+   "sevemo": "🔴",
+   "by": "Victor",
+   "desc": "Täck stenen med frontplåt här",
+   "part": "",
+   "ver": "Yamay Tizón · Yamay Tizon v28 (export 2026-11-10 18:19)",
+   "url": "https://www.buttercup.nu/design-review/?p=tizon&cam=1406%2C723%2C2121%2C0%2C531%2C-81&vis=-o296",
+   "sel": "",
+   "created": "2026-11-11T07:20:32.766000+00:00",
+   "status": "pagar",
+   "log": [
+    [
+     "2026-11-11T07:24:23.218000+00:00",
+     "analyserad",
+     "Vickan"
+    ],
+    [
+     "2026-11-11T07:37:12.859000+00:00",
+     "pagar",
+     "Nonsens: ”gör det du tycker är bäst”"
+    ]
+   ],
+   "replies": 8,
+   "last": "2026-11-11T08:15:56.395000+00:00",
+   "analyzed": "2026-11-11T07:24:23.218000+00:00",
+   "choice": "2026-11-11T07:37:12.859000+00:00",
+   "choice_txt": "gör det du tycker är bäst",
+   "thread": "1568925737023569940",
+   "link": "https://discord.com/channels/1114447465203109918/1568925737023569940/1569975146360340510",
+   "nr": 2,
+   "img": "issues/1569975146360340510.jpg",
+   "pname": "Yamay Tizón"
+  }
+ ],
+ "updated": "2026-11-11 10:24"
+}
