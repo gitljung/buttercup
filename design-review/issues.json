@@ -943,7 +943,317 @@
    "img": "",
    "ver": "hittad v32",
    "pname": "Yamay Horno"
+  },
+  {
+   "id": "av-UTE-1",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "utekok",
+   "nr": "UTE-1",
+   "title": "Hörnbänkens blindpanel 400 bred i stället för 600 (H och V)",
+   "sev": "Före prototyp",
+   "sevemo": "🔴",
+   "by": "Fable",
+   "desc": "Modellen: Blindpanel 600: x 100…500 (V speglad), 400×890×3, 8,37 kg; 6 av panelens 8 M6x12+mutter (x ±60, z 107/487/872) sitter utanför panelen, bara 2 st (x 475, z 300/650) håller den. M8-skarven mot nästa ben får bara hålkolumnen x 400.\nFörväntat: HornBl = 600: panel x −100…500, alla 8 M6 i plåt, båda M8-kolumnerna (x 0 och x 400) i plåt\nFörslag: Skissmåttet ModB/2 − HornBl blir −100 och Fusion lägger +100: mät som positivt avstånd + bbox-kontroll på x i u12 (rättning köad i Fusion 2026-11-12, kedja_bl)\nVerifierat: Modulexport hornbank1000H (11-09): bbox x 100…500, 8,37 kg; mina fästelement-koordinater: 6 M6x12 utanför panelen. Fusion-loggen bl__rb_hn_12 16:10 visar före = [100…500], efter = [−100…500] 12,55 kg. Hörnbänken ingår inte i DR-köket K-0001, därför ingen del-länk.",
+   "part": "",
+   "sel": "",
+   "url": "?p=utekok",
+   "created": "2026-11-12T16:13:54+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-12T16:13:54+01:00",
+     "oppen",
+     "Vickan verifierade: Modulexport hornbank1000H (11-09): bbox x 100…500, 8,37 kg; mina fästelement-koordinater: 6 M6x12 utanför panelen. Fusion-loggen bl__rb_hn_12 16:10 visar före ="
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:13:54+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
+   "img": "",
+   "ver": "hittad v2",
+   "pname": "Yamay Utekök – alla moduler (K-0010)"
+  },
+  {
+   "id": "av-UTE-2",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "utekok",
+   "nr": "UTE-2",
+   "title": "Corten-kant 2 mm över mark, sockel 5 mm",
+   "sev": "Före prototyp",
+   "sevemo": "🔴",
+   "by": "Fable",
+   "desc": "Modellen: U-ryggens underkant z 2 mm och sockeln z 5 mm över mark i lägsta fotläget, i alla moduler (bank 500/1000, Horno 1000, Asado 1500)\nFörväntat: Ingen Corten i ständig markfukt (projektets research §3): plåtkant ≥ 20–30 mm över mark\nFörslag: Höj gavlarnas/sockelns underkant till ~25 mm över mark i lägsta läget, EPDM-läpp på sockeln; ModH och bänkhöjd oförändrade. Köket ska stå i Höör (inland) – kustregeln gäller inte, markfukten gör det.\nVerifierat: delar.json ur modulexporterna: lägsta z U-rygg 2,0 / Sockel 5,0 / Fotbeslag 11,0 i alla fyra stommarna. Plats: Vicke 2026-11-12 'Höör'.",
+   "part": "Yamay Utekok - Asado-modul 1500:1 › Yamay Utekok - Sockel 1500:1",
+   "sel": "o349",
+   "url": "?p=utekok&sel=o349",
+   "created": "2026-11-12T16:13:54+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-12T16:13:54+01:00",
+     "oppen",
+     "Vickan verifierade: delar.json ur modulexporterna: lägsta z U-rygg 2,0 / Sockel 5,0 / Fotbeslag 11,0 i alla fyra stommarna. Plats: Vicke 2026-11-12 'Höör'."
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:13:54+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
+   "img": "",
+   "ver": "hittad v2",
+   "pname": "Yamay Utekök – alla moduler (K-0010)"
+  },
+  {
+   "id": "av-UTE-3",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "utekok",
+   "nr": "UTE-3",
+   "title": "Justermån 21 mm räcker inte för fall på uteplats",
+   "sev": "Före prototyp",
+   "sevemo": "🔴",
+   "by": "Fable",
+   "desc": "Modellen: Fot GN 343.6-40-M10-50, modulen kan höjas 0–21 mm\nFörväntat: Fall 1:100 längs K-0001 (3,5 m) = 35 mm, 1:50 = 70 mm\nFörslag: Längre gänga (t.ex. M10×80, ca 0–50 mm) eller högre fotbeslag, ihop med A2-höjningen; kontrollera att Ganter har längden\nVerifierat: Fotens artikel i exporten: GN 343.6-40-M10-50-KR. Räknat: 3500/100 = 35 mm, 3500/50 = 70 mm; 21 mm räcker för 2,10 m (1:100) resp. 1,05 m (1:50).",
+   "part": "Yamay Utekok - Bankmodul 500:1 › Yamay Utekok - Fotpaket:1 › Yamay Utekok - Fotbeslag:1",
+   "sel": "o116",
+   "url": "?p=utekok&sel=o116",
+   "created": "2026-11-12T16:13:54+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-12T16:13:54+01:00",
+     "oppen",
+     "Vickan verifierade: Fotens artikel i exporten: GN 343.6-40-M10-50-KR. Räknat: 3500/100 = 35 mm, 3500/50 = 70 mm; 21 mm räcker för 2,10 m (1:100) resp. 1,05 m (1:50)."
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:13:54+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
+   "img": "",
+   "ver": "hittad v2",
+   "pname": "Yamay Utekök – alla moduler (K-0010)"
+  },
+  {
+   "id": "av-UTE-4",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "utekok",
+   "nr": "UTE-4",
+   "title": "Skarvar, skivor, EPDM och sidopaneler saknas i Fusion",
+   "sev": "Före prototyp",
+   "sevemo": "🔴",
+   "by": "Fable",
+   "desc": "Modellen: K-0001 innehåller bara moduler + grillar: 0 noder för skarvset, bänkskiva, EPDM eller sidopanel; grillmodulernas topplåt saknar Ø9-raster för skivan. Lös 6 mm-distans ska sitta 150/450 mm ned i 6 mm spalt.\nFörväntat: Allt som binder ihop köket ritat, krock- och åtkomstkontrollerat före beställning\nFörslag: Bygg ett komplett provkök i Fusion med skarv, skiva, EPDM och sidopanel; distansen fast på skruven/i ena modulen (hylsa eller clinch), inte lös i spalten\nVerifierat: Namnsökning i site/ och export/utekok/tree.json: 'karv' 0, 'EPDM' 0, 'idopanel' 0, inga skivdelar (bara Asados trumskivor).",
+   "part": "",
+   "sel": "",
+   "url": "?p=utekok",
+   "created": "2026-11-12T16:13:54+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-12T16:13:54+01:00",
+     "oppen",
+     "Vickan verifierade: Namnsökning i site/ och export/utekok/tree.json: 'karv' 0, 'EPDM' 0, 'idopanel' 0, inga skivdelar (bara Asados trumskivor)."
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:13:54+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
+   "img": "",
+   "ver": "hittad v2",
+   "pname": "Yamay Utekök – alla moduler (K-0010)"
+  },
+  {
+   "id": "av-UTE-5",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "utekok",
+   "nr": "UTE-5",
+   "title": "Hyllkant 1500 vek: flyter vid ~66 kg punktlast",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: Plan 3 mm hylla med 26 mm läpp, bär mellan hörnkubarna, spann 1464 mm; 5–6 mm nedböjning med 80 kg ved\nFörväntat: Bottenhyllan (120 över mark) tål en person på framkanten\nFörslag: Returbock 15 mm på läppen (C-kant, ca 1600 N) eller läpp 40\nVerifierat: Bbox Bottenhylla/Mellanhylla 1500: x ±746,5, kubar bara y ±282 i hörnen. Egen räkning (L 45×3 + läpp 26×3, fy 355, fritt upplagd): flyter vid ~520 N (53 kg) – ännu lägre än Fables 650–720 N.",
+   "part": "Yamay Utekok - Asado-modul 1500:1 › Yamay Utekok - Asado-modul 1500 stomme:1 › Yamay Utekok - Bottenhylla 1500:1",
+   "sel": "o195",
+   "url": "?p=utekok&sel=o195",
+   "created": "2026-11-12T16:13:54+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-12T16:13:54+01:00",
+     "oppen",
+     "Vickan verifierade: Bbox Bottenhylla/Mellanhylla 1500: x ±746,5, kubar bara y ±282 i hörnen. Egen räkning (L 45×3 + läpp 26×3, fy 355, fritt upplagd): flyter vid ~520 N (53 kg) – ä"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:13:54+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
+   "img": "",
+   "ver": "hittad v2",
+   "pname": "Yamay Utekök – alla moduler (K-0010)"
+  },
+  {
+   "id": "av-UTE-6",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "utekok",
+   "nr": "UTE-6",
+   "title": "Värme under Asado: EPDM under skivan har för liten marginal",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: Vermilite 20 mm i lådan → skiva/topplåt under grillen ca 95–117 °C (1D-räkning); EPDM under skivan\nFörväntat: Tätning som tål temperaturen med marginal (EPDM ca 120–130 °C kontinuerligt)\nFörslag: Silikon i stället för EPDM under grillmodulerna; mät lådans undersida med IR på prototypen\nVerifierat: Fables 1D-räkning g02 (§9): 247–282 °C lådbotten → 94–117 °C under. Bedömning, inte mätt; ingen EPDM finns modellerad (se A4).",
+   "part": "Yamay Utekok - Asado-modul 1500:1 › Yamay Utekok - Asado-modul 1500 stomme:1 › Yamay Utekok - Topplat 1500:1",
+   "sel": "o193",
+   "url": "?p=utekok&sel=o193",
+   "created": "2026-11-12T16:13:54+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-12T16:13:54+01:00",
+     "oppen",
+     "Vickan verifierade: Fables 1D-räkning g02 (§9): 247–282 °C lådbotten → 94–117 °C under. Bedömning, inte mätt; ingen EPDM finns modellerad (se A4)."
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:13:54+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
+   "img": "",
+   "ver": "hittad v2",
+   "pname": "Yamay Utekök – alla moduler (K-0010)"
+  },
+  {
+   "id": "av-UTE-7",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "utekok",
+   "nr": "UTE-7",
+   "title": "Många delar: 68 kubar och 284 skruv/mutter i K-0001",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: K-0001 stommar: 68 modulkubar (204 flytborrade gängor), 284 skruvar/muttrar\nFörväntat: Färre lösa delar och flytborrningar där kuberna inte är diafragma\nFörslag: Ersätt kuberna under hyllorna med nedbockade, flytborrade flikar 30 bred (behåll hörnkuberna under topplåten)\nVerifierat: Räknat ur modulexporterna: bank500 14/64, asado1500 18/72, horno1000 22/84 → 2·14+18+22 = 68 kubar, 2·64+72+84 = 284 skruv/mutter.",
+   "part": "",
+   "sel": "",
+   "url": "?p=utekok",
+   "created": "2026-11-12T16:13:54+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-12T16:13:54+01:00",
+     "oppen",
+     "Vickan verifierade: Räknat ur modulexporterna: bank500 14/64, asado1500 18/72, horno1000 22/84 → 2·14+18+22 = 68 kubar, 2·64+72+84 = 284 skruv/mutter."
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:13:54+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
+   "img": "",
+   "ver": "hittad v2",
+   "pname": "Yamay Utekök – alla moduler (K-0010)"
+  },
+  {
+   "id": "av-UTE-8",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "utekok",
+   "nr": "UTE-8",
+   "title": "Corten-överlapp bryter 42 mm-regeln (mittregel, blindpanel)",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: Mittregel 1000: fläns 40×587 plant mot topplåten, skruv bara i ändarna (y ±282, c/c 564). Blindpanel plant mot gavelns frontfläns 40×890, 2 M6 c/c 350.\nFörväntat: Skruvavstånd ≤ 14t = 42 mm i täta Corten-överlapp, annars spalt som torkar\nFörslag: Mittregeln på distanser eller tätmassa; blindpanelen med fler skruvar/distans; EPDM som hel ram under skivan\nVerifierat: Bbox Mittregel 1000 x −18,5…21,5, y ±293,5; fästelement i fönstret bara vid y ±282–297. Blindpanelens fästen x 475 z 300/650.",
+   "part": "",
+   "sel": "",
+   "url": "?p=utekok",
+   "created": "2026-11-12T16:13:54+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-12T16:13:54+01:00",
+     "oppen",
+     "Vickan verifierade: Bbox Mittregel 1000 x −18,5…21,5, y ±293,5; fästelement i fönstret bara vid y ±282–297. Blindpanelens fästen x 475 z 300/650."
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:13:54+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
+   "img": "",
+   "ver": "hittad v2",
+   "pname": "Yamay Utekök – alla moduler (K-0010)"
+  },
+  {
+   "id": "av-UTE-9",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "utekok",
+   "nr": "UTE-9",
+   "title": "Rostfri sidopanel 6 mm onödigt tung",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: Sidopanel 620×890×6 rostfritt = 26,5 kg, bär ingenting; skiva 6 mm ≈ 30 kg/m\nFörväntat: Sidopanel dimensionerad efter funktion\nFörslag: Sidopanel 3 mm (13,2 kg)\nVerifierat: Räknat 8,0 kg/dm³: 620·890·6 → 26,5 kg, 3 mm → 13,2 kg; skiva 1000·620·6 → 29,8 kg.",
+   "part": "",
+   "sel": "",
+   "url": "?p=utekok",
+   "created": "2026-11-12T16:13:54+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-12T16:13:54+01:00",
+     "oppen",
+     "Vickan verifierade: Räknat 8,0 kg/dm³: 620·890·6 → 26,5 kg, 3 mm → 13,2 kg; skiva 1000·620·6 → 29,8 kg."
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:13:54+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
+   "img": "",
+   "ver": "hittad v2",
+   "pname": "Yamay Utekök – alla moduler (K-0010)"
+  },
+  {
+   "id": "av-UTE-10",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "utekok",
+   "nr": "UTE-10",
+   "title": "Katalogvikter och DR-export stämmer inte med modellen",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: katalog.json: Bänk 500 62 kg, Bänk 1000 99, Hörnbänk 110; Design Review utekok är från 2026-11-07 22:10\nFörväntat: Katalogvikt = modellvikt; DR visar senaste modulerna\nFörslag: Skriv modellvikterna i katalogen och exportera om K-0001 till Design Review\nVerifierat: Mina summor ur modulexporterna (stål 7,85): Bänk 500 48,9 kg, Bänk 1000 80,4, Hörnbänk 88,9, Horno-modul 87,2, Asado-modul 116,4. site/utekok/tree.json meta.exported 2026-11-07 22:10.",
+   "part": "",
+   "sel": "",
+   "url": "?p=utekok",
+   "created": "2026-11-12T16:13:54+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-12T16:13:54+01:00",
+     "oppen",
+     "Vickan verifierade: Mina summor ur modulexporterna (stål 7,85): Bänk 500 48,9 kg, Bänk 1000 80,4, Hörnbänk 88,9, Horno-modul 87,2, Asado-modul 116,4. site/utekok/tree.json meta.exp"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:13:54+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
+   "img": "",
+   "ver": "hittad v2",
+   "pname": "Yamay Utekök – alla moduler (K-0010)"
   }
  ],
- "updated": "2026-11-12 16:00"
+ "updated": "2026-11-12 16:14"
 }
