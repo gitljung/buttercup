@@ -86,7 +86,7 @@
         if (konf.vagg === 'brannbar') fel.push(`Modul ${i + 1} (Fire Table): öppen eld – får inte stå mot brännbar vägg. Välj vägg "ingen" eller "obrännbar".`);
         else if (konf.vagg === 'obrannbar') info.push(`Modul ${i + 1} (Fire Table): bakväggens rygg och bultskallar sticker ut ${gr.utstick_bak} mm bakom modulen – lämna minst ${gr.utstick_bak} mm till väggen.`);
         info.push(`Modul ${i + 1} (Fire Table): ca ${gr.vikt_kg} kg på 4 fötter nära gavlarna – handräknat OK för modulen (inte kontrollerat i Fusion).`);
-        info.push(`Modul ${i + 1} (Fire Table): bara ${gr.fotspel} mm luft mellan lådans botten och skivan – värmeskydd/luftspalt (≥ 25 mm) är inte löst; EPDM under skivan tål ca 120–150 °C.`);
+        info.push(`Modul ${i + 1} (Fire Table): bara ${gr.fotspel} mm luft mellan lådans botten och skivan – värmeskydd/luftspalt (≥ 25 mm) är inte löst; silikonlisten under skivan tål ca 200 °C.`);
       }
       if (p.m.horn) {
         if (p.m.status) varn.push(`Modul ${i + 1}: ${p.m.namn} är ${p.m.status}.`);
@@ -110,7 +110,7 @@
         fel.push(`Modul ${i + 1}: ${tv.namn} (topp ${900 + tv.hojd} mm) krockar med ${q.m.namn}s rattar, som sticker ut ${q.m.utstick} mm över grannbänken på ${q.m.utstick_z[0]}–${q.m.utstick_z[1]} mm. Ställ den på en bänk som inte står bredvid Asado.`);
       if (tv.langd > p.m.bredd + 50) varn.push(`Modul ${i + 1}: ${tv.namn} (${tv.langd} mm) är bredare än modulen.`);
       else if (tv.langd > p.m.bredd) info.push(`Modul ${i + 1}: ${tv.namn} är ${tv.langd} mm och sticker ut ${(tv.langd - p.m.bredd) / 2} mm per sida över modulen.`);
-      info.push(`Modul ${i + 1}: ${tv.namn} ${tv.anm}. Värmen mot skivan/EPDM under grillen är inte kontrollerad.`);
+      info.push(`Modul ${i + 1}: ${tv.namn} ${tv.anm}. Värmen mot skivan under grillen är inte kontrollerad (EPDM under bänkskivan tål ca 120–130 °C).`);
     }));
     if (konf.skiva === 'tra') {
       const M = materialer(L, konf, kat), ST = kat.gemensamt.skiva.tra;

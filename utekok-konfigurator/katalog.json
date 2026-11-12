@@ -1,6 +1,6 @@
 {
  "version": "2026-11-07",
- "kalla": "Fusion-projekt yamay-utekok, masters 'Yamay Utekok - parametrar*' + detaljfilernas vikter (kedja_g). Vikter utan skiva och grill.",
+ "kalla": "Fusion-projekt yamay-utekok, masters 'Yamay Utekok - parametrar*' + detaljfilernas vikter (kedja_g). Vikter utan skiva och grill. Vikter ur Fusion 2026-11-12 (m05, stål 7,85, inkl. kubar/skruvar/fötter, utan skiva och grill).",
  "gemensamt": {
   "djup": 600,
   "fog": 6,
@@ -44,6 +44,11 @@
     "golvspel_sida": 20,
     "fastning": "M6 A4 underifrån genom topplåtens Ø9 in i insatsmuttrar M6 i träet – inga genomgående hål. Främre raden fast, bakre glider (trä rör sig ±2–3 mm över 620 djup).",
     "anm": "Bara på bänkar. Grillmoduler behåller rostfri skiva. Bänk intill grill blir rostfri om träet hamnar närmare än grillens brannbart_min (Horno 300) eller om avståndet är okänt (Asado)."
+   },
+   "mellanlagg": {
+    "bank": "EPDM 2 mm",
+    "grill": "silikon (VMQ) 2 mm, tål ca 200 °C",
+    "anm": "granskning 2026-11-12 B: skivan under Asado ca 95–115 °C med Vermilite 20, EPDM tål ca 120–130 °C – silikon under alla grillmoduler; mät på prototypen"
    }
   },
   "sockel": {
@@ -52,10 +57,11 @@
   },
   "sidopanel": {
    "material": "rostfri EN 1.4404 (samma som skivan)",
-   "t": 6,
+   "t": 3,
    "golvspel": 10,
    "fastning": "CD-pinnbultar M8 A4 på baksidan genom gavelns skarvhål Ø9 (150/450, bänk även 750), 6 mm distans + EPDM mot Corten, mutter inifrån – inga genomgående hål",
-   "anm": "Fria gavlar i radens ändar och hörnets ytterhörn stängs. Bänk: panelen går upp till skivans ovansida (900) och täcker skivans ände; djup = skivans djup. Grillmodul: upp till modulens topplåt, djup 600."
+   "anm": "Fria gavlar i radens ändar och hörnets ytterhörn stängs. Bänk: panelen går upp till skivans ovansida (900) och täcker skivans ände; djup = skivans djup. Grillmodul: upp till modulens topplåt, djup 600.",
+   "anm_t": "3 mm (granskning 2026-11-12 B6: panelen bär ingenting, 6 mm gav 26,5 kg) – CD-pinnbult M8 svetsas på 3 mm"
   },
   "dr_url": "/design-review/{slug}/model.glb"
  },
@@ -70,7 +76,7 @@
     -170,
     170
    ],
-   "vikt_kg": 62,
+   "vikt_kg": 48.9,
    "hyllor": 2,
    "glb": "export/bank500.glb"
   },
@@ -86,7 +92,7 @@
     166.67,
     420
    ],
-   "vikt_kg": 99,
+   "vikt_kg": 80.5,
    "hyllor": 2,
    "glb": "export/bank1000.glb"
   },
@@ -116,7 +122,7 @@
     "dr": "horno"
    },
    "utstick": 0,
-   "vikt_kg": 70,
+   "vikt_kg": 87.3,
    "hyllor": 2,
    "glb": "export/horno1000.glb",
    "bult_x": [
@@ -154,7 +160,7 @@
     1192,
     1506
    ],
-   "vikt_kg": 96,
+   "vikt_kg": 116.4,
    "hyllor": 2,
    "glb": "export/asado1500.glb",
    "bult_x": [
@@ -196,7 +202,7 @@
     "hojd_anm": "HallGolv 513,3 (Tizóns t91) över skivan, fötter +0–20"
    },
    "utstick": 0,
-   "vikt_kg": null,
+   "vikt_kg": 29.8,
    "hyllor": 1,
    "bult_x": [
     -170,
@@ -220,7 +226,7 @@
     166.67,
     420
    ],
-   "vikt_kg": 110,
+   "vikt_kg": 93.2,
    "hyllor": 2,
    "beskrivning": "Bänk 1000 + blindpanel 600 (Corten 3, plan) utanpå ena fronthalvan, 8 x M6 mot topplåtens/hyllornas framkant och gavelns frontflans. Nästa ben skruvas med M8-skarven genom blindpanelen. 400 mm öppet fram. H = blindpanel höger, V = vänster; samma detaljer i båda.",
    "glb": "export/bank1000.glb",
@@ -258,7 +264,7 @@
     ],
     "dr_anm": "DR 'fire-table' = sammanställningen Yamay Fire Table 1500 inkl. Asado-modul 1500 (nod o1) – o1 tas bort i 3D"
    },
-   "vikt_kg": 96,
+   "vikt_kg": 116.4,
    "hyllor": 2,
    "glb": "export/asado1500.glb",
    "bult_x": [
