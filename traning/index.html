@@ -2164,8 +2164,10 @@ function startTabata(C) {
     const rate = Math.min(1.14, Math.max(.9, 1 + (1 - T.k) * .32)); el.style.setProperty('--bt', ((C.beat || .46875) / rate).toFixed(3) + 's');
     if (VIBE) { try { VIBE.preservesPitch = false; VIBE.mozPreservesPitch = false; VIBE.webkitPreservesPitch = false; VIBE.playbackRate = rate; } catch (_) {} } };
   rg.oninput = () => { const old = C.tempo[curId()] * 1000 * T.k; tset(); localStorage.setItem('bc_traning_tabk', T.k);
-    if (ph[T.pi] && ph[T.pi].k === 'work') { const np = C.tempo[curId()] * 1000 * T.k; T.ph0 = ((T.t - (T.ph0 || 0)) % old) / old; T.off = T.t - T.ph0 * np;
-      if (REP) { const P = ph[T.pi]; P.d = T.t + (P.d - T.t) * np / old; } } };
+    if (ph[T.pi] && ph[T.pi].k === 'work' && !T.vila) { const np = C.tempo[curId()] * 1000 * T.k, el0 = Math.max(0, T.t - (T.off || 0)) / old;   // behåll rep-nummer + läge i repen
+      T.off = T.t - el0 * np;
+      if (REP) { const P = ph[T.pi]; P.d = T.t + (P.d - T.t) * np / old; } }
+    else if (T.prev) { const np = C.tempo[T.prev.id] * 1000 * T.k, op = C.tempo[T.prev.id] * 1000 * old / (C.tempo[curId()] * 1000); T.pt = T.t - Math.max(0, T.t - T.pt) / op * np; } };
   ['pointerdown', 'touchstart'].forEach(e => rg.addEventListener(e, ev => ev.stopPropagation(), {passive:true}));
   setTimeout(tset, 1600);   // efter att musiken startat
   tset();
