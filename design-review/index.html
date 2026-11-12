@@ -536,5 +536,40 @@ window.__placePins=function(){const w=vp.clientWidth,h=vp.clientHeight;for(const
  const on=p.z<1&&Math.abs(p.x)<1.05&&Math.abs(p.y)<1.05;el.style.display=on?'':'none';if(on){el.style.left=((p.x+1)/2*w)+'px';el.style.top=((1-p.y)/2*h)+'px'}}};
 loadIss();setInterval(loadIss,60000);
 
+// ---------- avvikelsebild: __drShot(id,{key,title,sub}) -> JPEG dataURL (två paneler: placering + detalj, delen röd och inringad) ----------
+window.__drShot=function(id,o={}){if(!N[id]||!box)return null;
+ const W0=1600,H0=900,PW=W0/2,PH=H0-70;const keep={w:vp.clientWidth,h:vp.clientHeight,pos:C.position.clone(),tg:O.target.clone(),sel};
+ select(null);sec.forEach(x=>x.on=false);updSec();if(EXP.f>0){EXP.f=0;applyExplode()}
+ R.setPixelRatio(1);R.setSize(PW,PH,false);C.aspect=PW/PH;C.updateProjectionMatrix();
+ const part=[];subtree(id,k=>{const m=OBJ[k];if(m&&m.isMesh&&visEff(k))part.push(m)});if(!part.length)return null;
+ const pset=new Set(part),all=[];S.traverse(m=>{if(m.isMesh&&m.visible)all.push(m)});
+ const red=new THREE.MeshStandardMaterial({color:'#d8321a',emissive:'#6a0d00',emissiveIntensity:.45,roughness:.55,side:THREE.DoubleSide});
+ const ghost=new THREE.MeshStandardMaterial({color:'#9b9184',transparent:true,opacity:.13,depthWrite:false,roughness:.9,side:THREE.DoubleSide});
+ const orig=new Map(all.map(m=>[m,m.material]));
+ const b=new THREE.Box3();part.forEach(m=>{m.geometry.computeBoundingBox();b.union(m.geometry.boundingBox.clone().applyMatrix4(m.matrixWorld))});
+ const c=b.getCenter(new THREE.Vector3()),sz=b.getSize(new THREE.Vector3()),diag=box.getSize(new THREE.Vector3()).length();
+ // välj riktning där delen syns bäst (raycast mot provpunkter)
+ const dirs=[[1.1,.75,1.35],[-1.1,.75,1.35],[1.1,.75,-1.35],[-1.1,.75,-1.35],[0,.35,1],[1,.35,0],[-1,.35,0],[0,1,.0001]].map(d=>new THREE.Vector3(...d).normalize());
+ const rc=new THREE.Raycaster(),pts=[c.clone()];for(const fx of[-.35,.35])for(const fy of[-.35,.35])for(const fz of[-.35,.35])pts.push(new THREE.Vector3(c.x+fx*sz.x,c.y+fy*sz.y,c.z+fz*sz.z));
+ const vis=all.filter(m=>!m.material.transparent||pset.has(m));
+ let best=dirs[0],bs=-1;dirs.forEach((d,i)=>{let n=0;pts.forEach(p=>{const from=p.clone().addScaledVector(d,diag*2);rc.set(from,d.clone().negate());const h=rc.intersectObjects(vis,false)[0];if(h&&pset.has(h.object))n++});const sc=n-(i>=4?.5:0);if(sc>bs){bs=sc;best=d}});
+ const ring=(ctx,ox)=>{const v=new THREE.Vector3();let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;for(const fx of[0,1])for(const fy of[0,1])for(const fz of[0,1]){v.set(fx?b.max.x:b.min.x,fy?b.max.y:b.min.y,fz?b.max.z:b.min.z).project(C);const x=(v.x+1)/2*PW,y=(1-v.y)/2*PH;x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)}
+  const cx=ox+(x0+x1)/2,cy=70+(y0+y1)/2,rx=Math.max((x1-x0)/2*1.25+16,34),ry=Math.max((y1-y0)/2*1.25+16,34);
+  ctx.save();ctx.beginPath();ctx.rect(ox,70,PW,PH);ctx.clip();for(const [w,col] of[[11,'#fff'],[5,'#c8321a']]){ctx.lineWidth=w;ctx.strokeStyle=col;ctx.beginPath();ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);ctx.stroke()}ctx.restore()};
+ const out=document.createElement('canvas');out.width=W0;out.height=H0;const x=out.getContext('2d');x.fillStyle='#f3ead3';x.fillRect(0,0,W0,H0);
+ const shotPanel=(ox,ghosted,fitBox,label)=>{all.forEach(m=>{m.material=pset.has(m)?red:(ghosted?ghost:orig.get(m))});fitTo(fitBox,best.clone());O.update();DL.position.copy(C.position);R.render(S,C);
+  x.drawImage(R.domElement,ox,70,PW,PH);ring(x,ox);x.fillStyle='rgba(42,26,18,.75)';x.fillRect(ox+10,80,x.measureText(label).width+24,30);x.fillStyle='#fff';x.font='bold 18px Barlow, sans-serif';x.fillText(label,ox+22,101)};
+ x.font='bold 18px Barlow, sans-serif';
+ shotPanel(0,false,box,'1  Placering');
+ const near=b.clone().expandByVector(sz.clone().multiplyScalar(.3)).expandByScalar(Math.max(diag*.04,30));
+ shotPanel(PW,true,near,'2  Detalj (övrigt genomskinligt)');
+ x.fillStyle='#2a1a12';x.fillRect(PW-1,70,2,PH);x.fillStyle='#2a1a12';x.fillRect(0,0,W0,70);
+ x.fillStyle='#fbc021';x.font='28px Anton, Impact, sans-serif';x.fillText((o.key||'')+'  ',20,46);const kw=x.measureText((o.key||'')+'  ').width;
+ x.fillStyle='#fff';x.font='bold 24px Barlow, sans-serif';x.fillText((o.title||N[id].n).slice(0,95),20+kw,45);
+ x.fillStyle='#e9dcc0';x.font='15px Barlow, sans-serif';x.fillText((o.sub||pathOf(id)).slice(0,190),20,H0-14>0?66:66);
+ all.forEach(m=>m.material=orig.get(m));red.dispose();ghost.dispose();
+ R.setPixelRatio(Math.min(devicePixelRatio,2));rs();C.position.copy(keep.pos);O.target.copy(keep.tg);O.update();if(keep.sel)select(keep.sel);dirty=true;
+ return out.toDataURL('image/jpeg',.86)};
+
 window.__dr={get EXP(){return EXP},prepExplode,applyExplode,viewLink,openRep,get N(){return N},get KIDS(){return KIDS},get sel(){return sel},select,setOwn,own:()=>own,sec,updSec,view,visEff,OBJ:()=>OBJ,pickAt:(x,y)=>pick({clientX:x,clientY:y})};
 </script></body></html>
