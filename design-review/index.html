@@ -107,7 +107,11 @@ input[type=range]{width:100%;accent-color:var(--chili)}
 .ik .h{display:flex;gap:6px;align-items:baseline}.ik .h .nr{font-family:'Barlow Condensed';font-weight:700;color:var(--mute)}.ik .h b{font-family:'Barlow Condensed';font-size:17px;line-height:1.15}
 .ik .m{font-size:12px;color:#6a5a40;margin:3px 0 6px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .chip{font-family:'Barlow Condensed';font-weight:700;font-size:12px;border-radius:10px;padding:0 7px;background:#eee;color:var(--ink);white-space:nowrap}
-.chip.s-ny,.chip.s-oppen{background:var(--chili);color:#fff}.chip.s-delvis{background:#e08a00;color:#fff}.chip.src{background:#efe2f7;color:#4b2a63}
+.chip.s-ny,.chip.s-oppen{background:var(--chili);color:#fff}.chip.s-delvis{background:#e08a00;color:#fff}.chip.src{background:#efe2f7;color:#4b2a63}.chip.s-stangd{background:#8a7a60;color:#fff}
+.ik .cm{font-size:13px;background:#f8f1e1;border-radius:6px;padding:6px 8px;margin-bottom:6px;white-space:pre-wrap;word-break:break-word}.ik .cm>div+div{margin-top:6px;border-top:1px dashed var(--line);padding-top:5px}.ik .cm span{color:var(--mute);font-size:11px}
+.ik .ed{border-top:1px dashed var(--line);padding-top:7px;margin-bottom:7px}.ik .sts{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}.ik .sts button{font-size:12px}.ik .sts button.cur{outline:2px solid var(--ox)}.ik .sts button.pick{background:var(--chili);color:#fff;border-color:var(--chili)}
+.ik .ed textarea{width:100%;min-height:64px;font:inherit;font-size:13px;border:2px solid var(--line);border-radius:6px;padding:5px 7px;resize:vertical}.ik .ed label{font-size:12px;display:flex;gap:4px;align-items:center;margin:3px 0}
+.ik .row3{display:flex;gap:8px;align-items:center}.ik .ed .go{background:var(--chili);color:#fff}.ik .em{font-size:12px;color:#2d7a2d}
 .ik.s-oppen{border-left-color:var(--chili)}.ik.s-delvis{border-left-color:#e08a00}.pin.s-delvis{background:#e08a00}.chip.s-analyserad{background:#3a7bd5;color:#fff}.chip.s-pagar{background:var(--y)}.chip.s-atgardad{background:#2d8a3a;color:#fff}
 .ik img{width:100%;border-radius:5px;border:1px solid var(--line);display:block;cursor:zoom-in;margin-bottom:6px}
 .ik p{margin:0 0 6px;white-space:pre-wrap;word-break:break-word}.ik .pt{font-size:12px;color:#6a5a40;margin-bottom:6px;word-break:break-word}
@@ -167,7 +171,7 @@ input[type=range]{width:100%;accent-color:var(--chili)}
 <div class="it"><button data-src="all" class="on">Alla</button><button data-src="rep">📸 Rapporter</button><button data-src="avv">🧐 Avvikelser</button></div>
 <div class="it"><label><input type="checkbox" id="issPin" checked>📍 Visa öppna i modellen</label><span id="issUpd"></span></div>
 <div id="issL"></div>
-<p class="foot">Status följer projektets Design Review-tråd i Discord automatiskt: 🆕 ny → 🔍 analyserad → 🛠 pågår (val gjort) → ✅ åtgärdad. Reagera med ✅ eller ❌ på rapporten i Discord för att stänga eller avvisa. 🧐 Avvikelser (Fable-granskningar) verifieras av Vickan innan de läggs upp: 🟠 öppen → ⚠️ delvis → ✅ åtgärdad (stängs först när en ny modellversion visar åtgärden).</p></div>
+<p class="foot">Status följer projektets Design Review-tråd i Discord automatiskt: 🆕 ny → 🔍 analyserad → 🛠 pågår (val gjort) → ✅ åtgärdad. Reagera med ✅ eller ❌ på rapporten i Discord för att stänga eller avvisa. 🧐 Avvikelser (Fable-granskningar) verifieras av Vickan innan de läggs upp: 🟠 öppen → ⚠️ delvis → ✅ åtgärdad (Vickan stänger bara när en ny modellversion visar åtgärden). Vicke/Hugo: ✏️ Status / feedback på varje avvikelse – ✔ Stängd = stängd av er utan modellbevis.</p></div>
 <nav id="tabs"><button data-t="tree" class="on">Träd</button><button data-t="info">Info</button></nav>
 <script type="module">
 import * as THREE from 'three';
@@ -471,7 +475,7 @@ $('#repSend').onclick=async e=>{e.preventDefault();const t=$('#repT').value.trim
 
 // ---------- ärenden (site/issues.json, skrivs av ~/.hermes/scripts/dr_issues.py ur Discord-trådarna) ----------
 let ISS=[],issScope='proj',hot=null;const PINS={};
-const ST={oppen:['🟠','Öppen'],delvis:['⚠️','Delvis'],ny:['🆕','Ny'],analyserad:['🔍','Analyserad'],pagar:['🛠','Pågår'],atgardad:['✅','Åtgärdad'],stangd:['✔','Stängd'],avvisad:['❌','Avvisad']};
+const ST={kommentar:['💬','Kommentar'],oppen:['🟠','Öppen'],delvis:['⚠️','Delvis'],ny:['🆕','Ny'],analyserad:['🔍','Analyserad'],pagar:['🛠','Pågår'],atgardad:['✅','Åtgärdad'],stangd:['✔','Stängd'],avvisad:['❌','Avvisad']};
 const isOpenSt=s=>s==='ny'||s==='analyserad'||s==='pagar'||s==='oppen'||s==='delvis';
 let issSrc='all';const srcOk=i=>issSrc==='all'||(issSrc==='rep'?i.kind!=='avv':i.kind==='avv');
 const fmtD=t=>{const d=new Date(t);return d.toLocaleDateString('sv-SE',{day:'numeric',month:'short'})+' '+d.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'})};
@@ -486,19 +490,39 @@ function renderIss(){const slug=$('#proj').value,mine=ISS.filter(i=>i.slug===slu
   return `<div class="ik s-${i.status}${hot===i.id?' hot':''}" data-i="${i.id}"><div class="h"><span class="nr">#${i.nr}</span><span>${i.sevemo||''}</span><b>${esc(i.title)}</b></div>
   <div class="m"><span class="chip s-${i.status}">${e} ${l}</span>${issScope==='all'?`<span><b>${esc(i.pname)}</b></span>`:''}${i.kind==='avv'?`<span class="chip src">${esc(i.srcl)}</span>`:''}<span>${esc(i.sev)}</span><span>· ${esc(i.by)}</span><span>· ${fmtD(i.created)}</span>${i.kind==='avv'&&i.ver?`<span>· ${esc(i.ver)}</span>`:''}</div>
   ${i.img?`<img src="${i.img}" loading="lazy" alt="" data-full="${i.img}">`:''}${i.desc?`<p>${esc(i.desc)}</p>`:''}${i.part?`<div class="pt">📍 ${esc(i.part)}</div>`:''}
+  ${(i.comments||[]).length?`<div class="cm">${i.comments.map(([t,w,x])=>`<div><b>💬 ${esc(w)}</b> <span>${fmtD(t)}</span><br>${esc(x)}</div>`).join('')}</div>`:''}
   ${(i.log||[]).length?`<details><summary>Historik (${i.log.length})</summary><ul>${i.log.map(([t,s,w])=>`<li>${fmtD(t)} · ${(ST[s]||[''])[0]} ${esc(w)}</li>`).join('')}</ul></details>`:''}
-  <div class="a"><button data-go>Visa i 3D</button>${i.link?`<a href="${i.link}" target="_blank" rel="noopener">${i.kind==='avv'?'Rapporten':'Tråden'} i Discord ↗</a>`:''}${i.replies?`<span style="font-size:12px;color:var(--mute)">${i.replies} svar · senast ${fmtD(i.last)}</span>`:''}</div></div>`}).join('')
+  ${i.kind==='avv'&&canEdit()?`<div class="ed" ${edOpen===i.id?'':'hidden'}><div class="sts">${['oppen','delvis','atgardad','stangd','avvisad'].map(k=>`<button type="button" data-st="${k}" class="${k===i.status?'cur':''}">${ST[k][0]} ${ST[k][1]}</button>`).join('')}</div>
+  <textarea placeholder="Feedback / motivering (valfritt vid statusbyte)"></textarea><label><input type="checkbox" data-ask checked> Be Vickan svara på feedbacken</label>
+  <div class="row3"><button type="button" data-send class="go">Skicka</button><span class="em"></span></div></div>`:''}
+  <div class="a"><button data-go>Visa i 3D</button>${i.kind==='avv'&&canEdit()?`<button data-ed>✏️ Status / feedback</button>`:''}${i.link?`<a href="${i.link}" target="_blank" rel="noopener">${i.kind==='avv'?'Rapporten':'Tråden'} i Discord ↗</a>`:''}${i.replies?`<span style="font-size:12px;color:var(--mute)">${i.replies} svar · senast ${fmtD(i.last)}</span>`:''}</div></div>`}).join('')
   :`<p class="empty">${$('#issO').checked?'Inga öppna ärenden'+(issScope==='proj'?' i det här projektet':'')+'. Bocka ur ”Bara öppna” för att se alla.':'Inga ärenden ännu. Skapa ett med 📸 Rapportera problem.'}</p>`;
  pinCache()}
 function goIssue(i){hot=i.id;const u=new URL(i.url||('?p='+i.slug),location.href);history.replaceState(null,'',location.pathname+u.search);
  if($('#proj').value!==i.slug){$('#proj').value=i.slug;stateApplied=false;load(i.slug);renderIss()}
  else if(model){for(const id in own)own[id]=fus[id];sec.forEach(s=>{s.on=false;s.t=.5;s.flip=false});EXP.f=0;$('#expS').value=0;select(null);applyExplode();window.__applyState();renderIss()}
  if(innerWidth<=820)toggleIss(false)}
+let edOpen=null;const canEdit=()=>{const h=hooks();return !!(h&&h._intake)};
+async function sendAvv(c,i){const H=hooks(),em=c.querySelector('.em'),pk=c.querySelector('[data-st].pick'),st=pk&&pk.dataset.st!==i.status?pk.dataset.st:null,txt=c.querySelector('textarea').value.trim(),ask=c.querySelector('[data-ask]').checked;
+ if(!st&&!txt){em.textContent='Välj en ny status eller skriv feedback.';return}
+ let who=localStorage.getItem('np_who');if(!who){who=confirm('Är du Vicke? (Avbryt = Hugo)')?'vicke':'hugo';localStorage.setItem('np_who',who)}
+ const key=i.nr,fd=new FormData();
+ fd.append('payload_json',JSON.stringify({username:'Design Review',content:`🧐 ${key}: ${st?'status → '+st:'feedback'} (${who==='hugo'?'Hugo':'Vicke'})`,allowed_mentions:{parse:[]}}));
+ fd.append('files[0]',new Blob([JSON.stringify({v:1,by:who,avv:{key,slug:i.slug,title:i.title,status:st,text:txt,ask}})],{type:'application/json'}),'np.json');
+ c.querySelector('[data-send]').disabled=true;em.textContent='Skickar…';
+ try{const r=await fetch(`https://discord.com/api/webhooks/${H._intake.id}/${H._intake.token}?wait=true`,{method:'POST',body:fd});if(!r.ok)throw new Error(r.status);
+  const nm=who==='hugo'?'Hugo':'Vicke',t=new Date().toISOString();if(st){i.status=st;(i.log=i.log||[]).push([t,st,nm+(txt?': '+txt.slice(0,120):'')])}
+  if(txt){(i.comments=i.comments||[]).push([t,nm,txt]);if(!st)(i.log=i.log||[]).push([t,'kommentar',nm+': '+txt.slice(0,120)])}
+  edOpen=null;renderIss();const k=$(`#issL [data-i="${i.id}"] .a`);if(k)k.insertAdjacentHTML('beforeend','<span class="em">✓ Skickat – syns i tråden'+(ask&&txt?', Vickan svarar där':'')+'</span>')}
+ catch(err){em.textContent='Kunde inte skicka: '+err.message;c.querySelector('[data-send]').disabled=false}}
 function toggleIss(on){$('#iss').classList.toggle('on',on);$('#iss-btn').classList.toggle('on',on)}
 $('#iss-btn').onclick=()=>toggleIss(!$('#iss').classList.contains('on'));$('#issX').onclick=()=>toggleIss(false);
 document.querySelectorAll('#iss [data-sc]').forEach(b=>b.onclick=()=>{issScope=b.dataset.sc;renderIss()});
 $('#issO').onchange=renderIss;document.querySelectorAll('#iss [data-src]').forEach(b=>b.onclick=()=>{issSrc=b.dataset.src;renderIss()});$('#issPin').onchange=()=>{pinCache();dirty=true};
 $('#issL').addEventListener('click',e=>{const c=e.target.closest('.ik');if(!c)return;const i=ISS.find(x=>x.id===c.dataset.i);if(!i)return;
+ if(e.target.closest('[data-ed]')){const ed=c.querySelector('.ed');ed.hidden=!ed.hidden;edOpen=ed.hidden?null:i.id;if(!ed.hidden)ed.querySelector('textarea').focus();return}
+ const sb=e.target.closest('[data-st]');if(sb){const was=sb.classList.contains('pick');c.querySelectorAll('[data-st]').forEach(b=>b.classList.remove('pick'));if(!was)sb.classList.add('pick');return}
+ if(e.target.closest('[data-send]')){sendAvv(c,i);return}
  if(e.target.closest('[data-go]'))goIssue(i);else if(e.target.tagName==='IMG')window.open(e.target.dataset.full,'_blank')});
 // 📍-markörer: öppna ärenden i aktuellt projekt med markerad del
 function pinCache(){const box2=$('#pins');for(const k in PINS)delete PINS[k];box2.innerHTML='';
