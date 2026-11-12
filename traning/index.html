@@ -229,6 +229,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 #tab{position:fixed;left:0;right:0;top:0;height:100vh;height:100dvh;z-index:300;display:none;overflow:hidden;background:#cfc6b6 url(ex/hasse/gymbg.webp) center 38%/cover no-repeat;color:#fff;
   font-family:var(--label);user-select:none;-webkit-user-select:none}
 #tab.on{display:block}
+#tab .t-nx{position:absolute;left:50%;transform:translateX(-50%) scale(.9);bottom:calc(env(safe-area-inset-bottom) + 2.5dvh + 5*min(3.9vw,17px) + 84px + min(44dvh,84vw) + 6px);padding:5px 14px;border:3px solid #2A1206;border-radius:999px;background:#FFF6DC;color:#2A1206;font:400 clamp(15px,4.4vw,20px)/1.1 Anton,sans-serif;letter-spacing:.04em;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:3}#tab .t-nx.on{opacity:1;transform:translateX(-50%) scale(1)}#tab .t-nx em{font-style:normal;color:#C8340A}
 #tab .sida{position:absolute;right:5vw;top:calc(env(safe-area-inset-top) + 3vh + 62px);max-width:52vw;padding:6px 12px;border:3px solid #2A1206;border-radius:10px;background:#FCC222;color:#2A1206;
   font-family:var(--display);font-size:min(5.6vw,26px);line-height:1.05;letter-spacing:.03em;text-align:center;transform:rotate(2deg);box-shadow:4px 4px 0 #2A1206;opacity:0;transition:opacity .3s}
 #tab .sida.h{background:#FFF6DC;transform:rotate(-2deg)}#tab .sida.on{opacity:1}#tab.intro-on .sida,#tab.fin .sida{opacity:0}
@@ -476,7 +477,7 @@ button,.btn{touch-action:manipulation;user-select:none;-webkit-user-select:none}
   <div class="ring"><svg viewBox="0 0 100 100"><circle class="bgc" cx="50" cy="50" r="48"/><circle class="arc" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="100 100" stroke-dashoffset="0"/></svg><b>00:10</b></div>
   <div class="rnd tsh">Runda 1<small></small></div>
   <div class="ctl"><button class="tp" aria-label="Paus">❚❚</button><button class="tx" aria-label="Avsluta">✕</button></div>
-  <div class="grid"></div><div class="speed"></div><div class="shadow"></div><div class="hs"></div><div class="big"></div><div class="sida"></div>
+  <div class="grid"></div><div class="speed"></div><div class="shadow"></div><div class="hs"></div><div class="t-nx"></div><div class="big"></div><div class="sida"></div>
   <div class="intro tsh"><b>TABATA</b><i>Helkroppspass med Hasse</i></div>
   <div class="done tsh"><b>KLART!</b><i></i><br><button class="tback">Tillbaka</button></div>
   <div class="vig"></div><div class="tsl tsh"><em>PIGGT</em><i>Snabbt</i><input type="range" min="0.6" max="1.6" step="0.05" value="1" aria-label="Tempo per repetition"><i>Lugnt</i><b>2,5 s</b></div>
@@ -2174,6 +2175,9 @@ function startTabata(C) {
     const dx = side * (40 + Math.random() * 70), up = 30 + Math.random() * 40;
     d.animate([{transform:'translate(0,0) scale(.6)', opacity:1}, {transform:`translate(${dx * .6}px,${-up}px) scale(1)`, opacity:1, offset:.35},
       {transform:`translate(${dx}px,${90 + Math.random() * 60}px) scale(.8)`, opacity:0}], {duration:700 + Math.random() * 300, easing:'ease-in'}).onfinish = () => d.remove(); };
+  const nxEl = el.querySelector('.t-nx'), nxOn = x => { if (x) nxEl.innerHTML = `<em>NÄSTA:</em> ${C.namn[x.id] || lb(x)}`; nxEl.classList.toggle('on', !!x); T.prev = x || null; };
+  const prevFrame = () => { const x = T.prev; if (!x) return; const per = C.tempo[x.id] * 1000 * (T.k || 1), P = ph[T.pi], left = P.d - T.t;
+    if (left < 2500) { frame(0); return; } frame((Math.max(0, T.t - T.pt) % per) / per); };   // förhandsvisning: nästa övning i normaltempo, stannar i startläget sista 2,5 s
   const enter = () => { const P = ph[T.pi], x = P.x; if (!x) return;
     el.classList.remove('intro-on'); T.off = 0; T.ph0 = 0; el.style.setProperty('--wk', P.k === 'work' ? 1 : 0); tset(); el.classList.toggle('t-work', P.k === 'work'); el.classList.toggle('t-rest', P.k === 'rest');
     if (RD) { if (P.k === 'work') P.d = C.reps[x.id] * C.tempo[x.id] * 1000 * T.k;
@@ -2186,12 +2190,12 @@ function startTabata(C) {
     else if (EM) { rnd.firstChild.textContent = `Minut ${x.n} av ${seq.length}`; rnd.querySelector('small').textContent = P.k === 'work' ? lb(x) : 'Först: ' + lb(x); T.vila = false; }
     else { rnd.firstChild.textContent = `Runda ${x.n}`; rnd.querySelector('small').textContent = V > 1 ? `Varv ${x.v} av ${V}` : ''; }
     lst.querySelectorAll('span').forEach((s, i) => s.classList.toggle('now', i === x.i));
-    setEx(x.id, !!(C.flipVarv[x.id] && x.v % 2 === 0) !== x.fl); frame(0);
+    setEx(x.id, !!(C.flipVarv[x.id] && x.v % 2 === 0) !== x.fl); frame(0); T.pt = 0; nxOn(P.k === 'rest' ? x : null);
     T.sw = false; if (C.sideTxt) { const sd = el.querySelector('.sida'), st = C.sideTxt[x.id]; sd.classList.toggle('on', !!st); if (st) { sd.textContent = st[0]; sd.classList.remove('h'); pop(sd); } }
     if (C.sida) { const sd = el.querySelector('.sida'); sd.textContent = C.sida[x.i] || ''; sd.classList.toggle('h', !!x.fl); sd.classList.toggle('on', !!C.sida[x.i]); pop(sd); }
     if (P.k === 'work') { num.textContent = 'KÖR'; pop(num); beep(); flash('#35E08A'); bigs('KÖR!'); vibeVol(.6, 300); if (navigator.vibrate) navigator.vibrate(120); if (x.n === 1 && !C.noVoice) korVi(); }
     else { num.textContent = T.pi === 1 ? mmss(P.d) : AM ? mm2(TOT - T.g) : 'VILA'; pop(num); if (T.pi > 1) vibeVol(.3, 500); if (T.pi > 1) { blip(700, 350, .18); flash('#D63BE6'); } pop(rnd); } };
-  const finish = () => { tabStop(); wakeOff(); el.style.setProperty('--wk', 0); hs.style.translate = ''; if (VIBE) VIBE.playbackRate = 1; el.classList.add('fin'); vibeVol(.5, 400); setTimeout(() => vibeOff(2500), 6000); el.classList.remove('t-work'); el.classList.add('t-rest');
+  const finish = () => { nxOn(null); tabStop(); wakeOff(); el.style.setProperty('--wk', 0); hs.style.translate = ''; if (VIBE) VIBE.playbackRate = 1; el.classList.add('fin'); vibeVol(.5, 400); setTimeout(() => vibeOff(2500), 6000); el.classList.remove('t-work'); el.classList.add('t-rest');
     lst.querySelectorAll('span').forEach(s => s.classList.remove('now')); setEx(C.ex[0]); frame(0); el.querySelector('.sida').classList.remove('on');
     el.querySelector('.done i').textContent = RD ? `2 block × ${V} varv · ${Math.max(1, Math.round(T.g / 60000))} min` : AM ? `${Math.floor(T.done / C.ex.length)} hela varv` + (T.done % C.ex.length ? ` + ${T.done % C.ex.length} övningar` : '') + ` · ${C.min} min`
       : EM ? `${V} varv · ${seq.length} minuter · varje minut avklarad` : `${V} varv · ${seq.length} rundor · ${Math.round(seq.length * 30 / 60 * 10) / 10} min`; confetti(); if (!C.noVoice) hallaGanget(); };
@@ -2208,8 +2212,9 @@ function startTabata(C) {
       if (P.k === 'work' && EM && Math.floor(Math.max(0, T.t - (T.off || 0)) / (C.tempo[P.x.id] * 1000 * T.k)) >= C.reps[P.x.id]) {
         if (!T.vila) { T.vila = true; frame(0); hs.style.translate = ''; el.classList.remove('t-work'); el.classList.add('t-rest'); el.style.setProperty('--wk', 0);
           num.textContent = 'VILA'; pop(num); blip(700, 350, .18); flash('#D63BE6'); bigs('VILA!'); vibeVol(.3, 500); hs.classList.toggle('flip', !!P.x.fl);
-          const nx = ph[T.pi + 1]; rnd.querySelector('small').textContent = nx ? 'Nästa: ' + lb(nx.x) : 'Sista minuten klar!'; pop(rnd); }
-        if (left < 2500) frame(0); }
+          const nx = ph[T.pi + 1]; rnd.querySelector('small').textContent = nx ? 'Nästa: ' + lb(nx.x) : 'Sista minuten klar!'; pop(rnd);
+          if (nx) { setEx(nx.x.id, !!nx.x.fl); T.pt = T.t; nxOn(nx.x); } }
+        if (T.prev) prevFrame(); else if (left < 2500) frame(0); }
       else if (P.k === 'work') { const per = C.tempo[P.x.id] * 1000 * T.k; frame((((T.t - (T.off || 0)) % per) + per) % per / per);
         if (C.altRep[P.x.id]) hs.classList.toggle('flip', (Math.floor(Math.max(0, T.t - (T.off || 0)) / per) % 2 === 1) !== P.x.fl);
         if (AM || EM || RD) { const r = Math.floor(Math.max(0, T.t - (T.off || 0)) / per), R = C.reps[P.x.id];
@@ -2219,7 +2224,7 @@ function startTabata(C) {
         const st = T.st || 0, a = st * st * 7;   // skakning + svett när det går fort
         hs.style.translate = a > .3 ? `${(Math.random() * 2 - 1) * a}px ${(Math.random() * 2 - 1) * a * .6}px` : '';
         if (Math.random() < st * .22) drop(); }
-      else { hs.style.translate = ''; if (P.d - T.t < 2500) frame(0); } }
+      else { hs.style.translate = ''; if (T.prev) prevFrame(); else if (P.d - T.t < 2500) frame(0); } }
     if (T.t >= P.d) { if (P.k === 'work') T.done++; T.t = 0; T.pi++; arc.setAttribute('stroke-dashoffset', '0'); if (T.pi >= ph.length) { finish(); return; } enter(); }
   }, 33);
   el.querySelector('.tp').onclick = e => { T.paused = !T.paused; e.currentTarget.textContent = T.paused ? '▶' : '❚❚'; el.classList.toggle('beat', !T.paused); if (VIBE) T.paused ? VIBE.pause() : VIBE.play().catch(() => {}); };
