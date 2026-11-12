@@ -1286,49 +1286,6 @@
    "ver": "hittad v2",
    "pname": "Yamay Utekök – alla moduler (K-0010)",
    "comments": []
-  },
-  {
-   "id": "av-ZZT-1",
-   "kind": "avv",
-   "src": "fable",
-   "srcl": "🧐 Fable",
-   "slug": "zztest",
-   "nr": "ZZT-1",
-   "title": "TEST feedback – ignorera",
-   "sev": "Bör åtgärdas",
-   "sevemo": "🟡",
-   "by": "Fable",
-   "desc": "Modellen: x\nVerifierat: x",
-   "part": "",
-   "sel": "",
-   "url": "?p=zztest",
-   "created": "2026-11-12T16:23:48+01:00",
-   "status": "stangd",
-   "log": [
-    [
-     "2026-11-12T16:23:48+01:00",
-     "oppen",
-     "Vickan verifierade: x"
-    ],
-    [
-     "2026-11-12T16:24:14+01:00",
-     "stangd",
-     "Vicke: Test från Vickan – stängs, ignorera"
-    ]
-   ],
-   "replies": 0,
-   "last": "2026-11-12T16:24:14+01:00",
-   "link": "",
-   "img": "",
-   "ver": "hittad v1",
-   "pname": "zztest",
-   "comments": [
-    [
-     "2026-11-12T16:24:14+01:00",
-     "Vicke",
-     "Test från Vickan – stängs, ignorera"
-    ]
-   ]
   }
  ],
  "updated": "2026-11-12 16:24"
