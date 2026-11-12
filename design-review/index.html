@@ -107,7 +107,8 @@ input[type=range]{width:100%;accent-color:var(--chili)}
 .ik .h{display:flex;gap:6px;align-items:baseline}.ik .h .nr{font-family:'Barlow Condensed';font-weight:700;color:var(--mute)}.ik .h b{font-family:'Barlow Condensed';font-size:17px;line-height:1.15}
 .ik .m{font-size:12px;color:#6a5a40;margin:3px 0 6px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .chip{font-family:'Barlow Condensed';font-weight:700;font-size:12px;border-radius:10px;padding:0 7px;background:#eee;color:var(--ink);white-space:nowrap}
-.chip.s-ny{background:var(--chili);color:#fff}.chip.s-analyserad{background:#3a7bd5;color:#fff}.chip.s-pagar{background:var(--y)}.chip.s-atgardad{background:#2d8a3a;color:#fff}
+.chip.s-ny,.chip.s-oppen{background:var(--chili);color:#fff}.chip.s-delvis{background:#e08a00;color:#fff}.chip.src{background:#efe2f7;color:#4b2a63}
+.ik.s-oppen{border-left-color:var(--chili)}.ik.s-delvis{border-left-color:#e08a00}.pin.s-delvis{background:#e08a00}.chip.s-analyserad{background:#3a7bd5;color:#fff}.chip.s-pagar{background:var(--y)}.chip.s-atgardad{background:#2d8a3a;color:#fff}
 .ik img{width:100%;border-radius:5px;border:1px solid var(--line);display:block;cursor:zoom-in;margin-bottom:6px}
 .ik p{margin:0 0 6px;white-space:pre-wrap;word-break:break-word}.ik .pt{font-size:12px;color:#6a5a40;margin-bottom:6px;word-break:break-word}
 .ik details{font-size:12px;color:#6a5a40;margin-bottom:6px}.ik details li{margin:2px 0}
@@ -125,7 +126,7 @@ input[type=range]{width:100%;accent-color:var(--chili)}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
 </head><body class="t-tree">
-<header><h1>DESIGN REVIEW</h1><select id="proj" aria-label="Projekt"></select><div class="meta" id="meta"></div><button id="iss-btn" title="Följ skapade ärenden (📸-rapporter) och deras status">📋<span class="lt"> Ärenden</span><span id="issN" style="display:none"></span></button><button id="rep-btn" title="Ta skärmdump, ring in och rapportera till Discord">📸<span class="lt"> Rapportera problem</span></button><a id="new-btn" href="nytt/" title="Skapa nytt konstruktionsprojekt">＋<span class="lt"> Nytt projekt</span></a><button id="del-btn" title="Ta bort projektet ur Design Review" style="display:none">🗑</button></header>
+<header><h1>DESIGN REVIEW</h1><select id="proj" aria-label="Projekt"></select><div class="meta" id="meta"></div><button id="iss-btn" title="Följ ärenden (📸-rapporter) och avvikelser (Fable-granskningar) och deras status">📋<span class="lt"> Ärenden</span><span id="issN" style="display:none"></span></button><button id="rep-btn" title="Ta skärmdump, ring in och rapportera till Discord">📸<span class="lt"> Rapportera problem</span></button><a id="new-btn" href="nytt/" title="Skapa nytt konstruktionsprojekt">＋<span class="lt"> Nytt projekt</span></a><button id="del-btn" title="Ta bort projektet ur Design Review" style="display:none">🗑</button></header>
 <aside id="side"><h2>Träd · kopia av Fusion</h2><input id="q" placeholder="Sök komponent eller kropp…" autocomplete="off">
 <div class="tools"><button id="bAll">Visa allt</button><button id="bReset" title="Tänt/släckt som i Fusion">Som i Fusion</button><button id="bIso">Isolera</button><button id="bCol">Fäll ihop</button><button id="bFast" title="Tänd/släck alla fästelement i modellen">🔩 Fästelement</button></div>
 <div id="tree"></div></aside>
@@ -163,9 +164,10 @@ input[type=range]{width:100%;accent-color:var(--chili)}
 <div id="delMsg"></div><div class="row2"><button type="button" id="delNo">Avbryt</button><button type="button" class="go" id="delGo" disabled>🗑 Ta bort</button></div></dialog>
 <div id="iss"><div class="ih"><b>📋 ÄRENDEN</b><button id="issX">✕ Stäng</button></div>
 <div class="it"><button data-sc="proj" class="on">Detta projekt <span class="cnt2" id="issCP"></span></button><button data-sc="all">Alla projekt <span class="cnt2" id="issCA"></span></button><span style="flex:1"></span><label><input type="checkbox" id="issO" checked>Bara öppna</label></div>
+<div class="it"><button data-src="all" class="on">Alla</button><button data-src="rep">📸 Rapporter</button><button data-src="avv">🧐 Avvikelser</button></div>
 <div class="it"><label><input type="checkbox" id="issPin" checked>📍 Visa öppna i modellen</label><span id="issUpd"></span></div>
 <div id="issL"></div>
-<p class="foot">Status följer projektets Design Review-tråd i Discord automatiskt: 🆕 ny → 🔍 analyserad → 🛠 pågår (val gjort) → ✅ åtgärdad. Reagera med ✅ eller ❌ på rapporten i Discord för att stänga eller avvisa.</p></div>
+<p class="foot">Status följer projektets Design Review-tråd i Discord automatiskt: 🆕 ny → 🔍 analyserad → 🛠 pågår (val gjort) → ✅ åtgärdad. Reagera med ✅ eller ❌ på rapporten i Discord för att stänga eller avvisa. 🧐 Avvikelser (Fable-granskningar) verifieras av Vickan innan de läggs upp: 🟠 öppen → ⚠️ delvis → ✅ åtgärdad (stängs först när en ny modellversion visar åtgärden).</p></div>
 <nav id="tabs"><button data-t="tree" class="on">Träd</button><button data-t="info">Info</button></nav>
 <script type="module">
 import * as THREE from 'three';
@@ -469,21 +471,23 @@ $('#repSend').onclick=async e=>{e.preventDefault();const t=$('#repT').value.trim
 
 // ---------- ärenden (site/issues.json, skrivs av ~/.hermes/scripts/dr_issues.py ur Discord-trådarna) ----------
 let ISS=[],issScope='proj',hot=null;const PINS={};
-const ST={ny:['🆕','Ny'],analyserad:['🔍','Analyserad'],pagar:['🛠','Pågår'],atgardad:['✅','Åtgärdad'],stangd:['✔','Stängd'],avvisad:['❌','Avvisad']};
-const isOpenSt=s=>s==='ny'||s==='analyserad'||s==='pagar';
+const ST={oppen:['🟠','Öppen'],delvis:['⚠️','Delvis'],ny:['🆕','Ny'],analyserad:['🔍','Analyserad'],pagar:['🛠','Pågår'],atgardad:['✅','Åtgärdad'],stangd:['✔','Stängd'],avvisad:['❌','Avvisad']};
+const isOpenSt=s=>s==='ny'||s==='analyserad'||s==='pagar'||s==='oppen'||s==='delvis';
+let issSrc='all';const srcOk=i=>issSrc==='all'||(issSrc==='rep'?i.kind!=='avv':i.kind==='avv');
 const fmtD=t=>{const d=new Date(t);return d.toLocaleDateString('sv-SE',{day:'numeric',month:'short'})+' '+d.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'})};
 function loadIss(){return fetch('issues.json?'+Date.now()).then(r=>r.ok?r.json():{issues:[]}).then(j=>{ISS=j.issues||[];$('#issUpd').textContent=j.updated?'uppdaterad '+j.updated:'';renderIss()}).catch(()=>{})}
 function renderIss(){const slug=$('#proj').value,mine=ISS.filter(i=>i.slug===slug),op=a=>a.filter(i=>isOpenSt(i.status)).length;
  const n=op(mine);$('#issN').textContent=n;$('#issN').style.display=n?'':'none';
  $('#issCP').textContent=`(${op(mine)}/${mine.length})`;$('#issCA').textContent=`(${op(ISS)}/${ISS.length})`;
  document.querySelectorAll('#iss [data-sc]').forEach(b=>b.classList.toggle('on',b.dataset.sc===issScope));
- const L=(issScope==='all'?ISS:mine).filter(i=>!$('#issO').checked||isOpenSt(i.status)).slice().reverse();
+ document.querySelectorAll('#iss [data-src]').forEach(b=>b.classList.toggle('on',b.dataset.src===issSrc));
+ const L=(issScope==='all'?ISS:mine).filter(i=>srcOk(i)&&(!$('#issO').checked||isOpenSt(i.status))).slice().reverse();
  $('#issL').innerHTML=L.length?L.map(i=>{const [e,l]=ST[i.status]||['',i.status];
   return `<div class="ik s-${i.status}${hot===i.id?' hot':''}" data-i="${i.id}"><div class="h"><span class="nr">#${i.nr}</span><span>${i.sevemo||''}</span><b>${esc(i.title)}</b></div>
-  <div class="m"><span class="chip s-${i.status}">${e} ${l}</span>${issScope==='all'?`<span><b>${esc(i.pname)}</b></span>`:''}<span>${esc(i.sev)}</span><span>· ${esc(i.by)}</span><span>· ${fmtD(i.created)}</span></div>
+  <div class="m"><span class="chip s-${i.status}">${e} ${l}</span>${issScope==='all'?`<span><b>${esc(i.pname)}</b></span>`:''}${i.kind==='avv'?`<span class="chip src">${esc(i.srcl)}</span>`:''}<span>${esc(i.sev)}</span><span>· ${esc(i.by)}</span><span>· ${fmtD(i.created)}</span>${i.kind==='avv'&&i.ver?`<span>· ${esc(i.ver)}</span>`:''}</div>
   ${i.img?`<img src="${i.img}" loading="lazy" alt="" data-full="${i.img}">`:''}${i.desc?`<p>${esc(i.desc)}</p>`:''}${i.part?`<div class="pt">📍 ${esc(i.part)}</div>`:''}
   ${(i.log||[]).length?`<details><summary>Historik (${i.log.length})</summary><ul>${i.log.map(([t,s,w])=>`<li>${fmtD(t)} · ${(ST[s]||[''])[0]} ${esc(w)}</li>`).join('')}</ul></details>`:''}
-  <div class="a"><button data-go>Visa i 3D</button><a href="${i.link}" target="_blank" rel="noopener">Tråden i Discord ↗</a>${i.replies?`<span style="font-size:12px;color:var(--mute)">${i.replies} svar · senast ${fmtD(i.last)}</span>`:''}</div></div>`}).join('')
+  <div class="a"><button data-go>Visa i 3D</button>${i.link?`<a href="${i.link}" target="_blank" rel="noopener">${i.kind==='avv'?'Rapporten':'Tråden'} i Discord ↗</a>`:''}${i.replies?`<span style="font-size:12px;color:var(--mute)">${i.replies} svar · senast ${fmtD(i.last)}</span>`:''}</div></div>`}).join('')
   :`<p class="empty">${$('#issO').checked?'Inga öppna ärenden'+(issScope==='proj'?' i det här projektet':'')+'. Bocka ur ”Bara öppna” för att se alla.':'Inga ärenden ännu. Skapa ett med 📸 Rapportera problem.'}</p>`;
  pinCache()}
 function goIssue(i){hot=i.id;const u=new URL(i.url||('?p='+i.slug),location.href);history.replaceState(null,'',location.pathname+u.search);
@@ -493,7 +497,7 @@ function goIssue(i){hot=i.id;const u=new URL(i.url||('?p='+i.slug),location.href
 function toggleIss(on){$('#iss').classList.toggle('on',on);$('#iss-btn').classList.toggle('on',on)}
 $('#iss-btn').onclick=()=>toggleIss(!$('#iss').classList.contains('on'));$('#issX').onclick=()=>toggleIss(false);
 document.querySelectorAll('#iss [data-sc]').forEach(b=>b.onclick=()=>{issScope=b.dataset.sc;renderIss()});
-$('#issO').onchange=renderIss;$('#issPin').onchange=()=>{pinCache();dirty=true};
+$('#issO').onchange=renderIss;document.querySelectorAll('#iss [data-src]').forEach(b=>b.onclick=()=>{issSrc=b.dataset.src;renderIss()});$('#issPin').onchange=()=>{pinCache();dirty=true};
 $('#issL').addEventListener('click',e=>{const c=e.target.closest('.ik');if(!c)return;const i=ISS.find(x=>x.id===c.dataset.i);if(!i)return;
  if(e.target.closest('[data-go]'))goIssue(i);else if(e.target.tagName==='IMG')window.open(e.target.dataset.full,'_blank')});
 // 📍-markörer: öppna ärenden i aktuellt projekt med markerad del
