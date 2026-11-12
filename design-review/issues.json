@@ -166,7 +166,7 @@
    "url": "https://www.buttercup.nu/design-review/?p=tizon&cam=1406%2C723%2C2121%2C0%2C531%2C-81&vis=-o296",
    "sel": "",
    "created": "2026-11-11T07:20:32.766000+00:00",
-   "status": "pagar",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-11T07:24:23.218000+00:00",
@@ -177,13 +177,19 @@
      "2026-11-11T07:37:12.859000+00:00",
      "pagar",
      "Nonsens: ”gör det du tycker är bäst”"
+    ],
+    [
+     "2026-11-12T10:46:06.065000+00:00",
+     "atgardad",
+     "Vickan: ✅ Klart. Fronten täcker nu stenen här, eftersom asköppningen i fronten är igenslagen (steg"
     ]
    ],
-   "replies": 10,
-   "last": "2026-11-11T09:29:29.935000+00:00",
+   "replies": 11,
+   "last": "2026-11-12T10:46:06.065000+00:00",
    "analyzed": "2026-11-11T07:24:23.218000+00:00",
    "choice": "2026-11-11T07:37:12.859000+00:00",
    "choice_txt": "gör det du tycker är bäst",
+   "done": "2026-11-12T10:46:06.065000+00:00",
    "thread": "1568925737023569940",
    "link": "https://discord.com/channels/1114447465203109918/1568925737023569940/1569975146360340510",
    "nr": 2,
@@ -191,5 +197,5 @@
    "pname": "Yamay Tizon"
   }
  ],
- "updated": "2026-11-12 00:00"
+ "updated": "2026-11-12 11:46"
 }
