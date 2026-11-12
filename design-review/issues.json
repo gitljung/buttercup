@@ -195,7 +195,352 @@
    "nr": 2,
    "img": "issues/1569975146360340510.jpg",
    "pname": "Yamay Tizón"
+  },
+  {
+   "id": "av-TIZ-1",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "tizon",
+   "nr": "TIZ-1",
+   "title": "Luckan och askskenorna saknar förband",
+   "sev": "Före prototyp",
+   "sevemo": "🔴",
+   "by": "Fable",
+   "desc": "Modellen: v29: gångjärnsbockarna har hål i Front men inga skruvar/muttrar; askskenor och luckans rf-insida utan infästning; ledtappar (Axel Ø8 h9x22) utan låsbrickor\nFörväntat: Varje del fäst med köpdelar i modellen och stycklistan\nFörslag: M6 + mutter i gångjärnsbockarna, M6 + hylsa genom Vermilite för askskenorna, M6 i flytborr för luckans insida, ledtapp med spår + DIN 6799\nVerifierat: Instansräkning i DR-exporten v29 mot v32: ISO 7380-1 M6x16 10.9 8->12 och ISO 4032 M6 8 8->12 (nya i toppen), M6x35 A4 4->8, Distanshylsa Ø12 4->8, M6x25 A4 0->6 (Lucka), DIN 6799 0->4, Axel Ø8 ersatt av Ledtapp med 2 spår\nKommentar: Steg 29: 4 × M6x16 10.9 + mutter i gångjärnsbockarna, ledtappar med 2 × DIN 6799, askskenor M6x35 A4 + hylsa, luckans insida 6 × M6x25 A4",
+   "part": "Yamay Tizon - Gangjarnsbock:1",
+   "sel": "o417",
+   "url": "?p=tizon&sel=o417",
+   "created": "2026-11-12T16:00:16+01:00",
+   "status": "atgardad",
+   "log": [
+    [
+     "2026-11-12T16:00:16+01:00",
+     "oppen",
+     "Vickan verifierade: Instansräkning i DR-exporten v29 mot v32: ISO 7380-1 M6x16 10.9 8->12 och ISO 4032 M6 8 8->12 (nya i toppen), M6x35 A4 4->8, Distanshylsa Ø12 4->8, M6x25 A4 0->"
+    ],
+    [
+     "2026-11-12T16:00:22+01:00",
+     "atgardad",
+     "Vickan: v32 · Steg 29: 4 × M6x16 10.9 + mutter i gångjärnsbockarna, ledtappar med 2 × DIN 6799, askskenor M6x35 A4 + hylsa, luckans insida 6 × M6x25 A4"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:00:22+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
+   "img": "",
+   "ver": "hittad v29 · stängd v32",
+   "pname": "Yamay Tizón"
+  },
+  {
+   "id": "av-TIZ-2",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "tizon",
+   "nr": "TIZ-2",
+   "title": "Luftintaget stryper draget (1 800 mm²)",
+   "sev": "Före prototyp",
+   "sevemo": "🔴",
+   "by": "Fable",
+   "desc": "Modellen: v29: askfrontens slitsar 1 800 mm² = 15,9 % av rörets 11 310 mm² (Ø120); dragräkningen tog bara med rökkanalen\nFörväntat: Intaget tar högst ~2 Pa av ~4,5 Pa brutto så att 6 g/s nås med stängd lucka\nFörslag: Dubbla slitsarean (10 × 8 × 45 = 3 600 mm²) med spjäll som fortfarande stänger helt; räkna om draget med intaget\nVerifierat: Räknat om: 6 g/s luft (ρ 1,2) genom 1 800 mm² ger Δp 7,2 Pa (Cd 0,8) – 12,9 Pa (Cd 0,6) mot netto 3,5 Pa = stämmer. Med 3 600 mm² 1,8–3,2 Pa. v32: Spjäll bb z 74–143 (förr 76–124), desc 10 slitsar 8×45; termisk/drag_med_intag.py ger 6–9 kW\nKommentar: Spjäll 10 slitsar 8 × 45 = 3 600 mm², stänger helt; dragräkning med intaget 6–9 kW (mäts på prototypen)",
+   "part": "Yamay Tizon - Asklada:1 › Yamay Tizon - Spjall:1",
+   "sel": "o351",
+   "url": "?p=tizon&sel=o351",
+   "created": "2026-11-12T16:00:16+01:00",
+   "status": "atgardad",
+   "log": [
+    [
+     "2026-11-12T16:00:16+01:00",
+     "oppen",
+     "Vickan verifierade: Räknat om: 6 g/s luft (ρ 1,2) genom 1 800 mm² ger Δp 7,2 Pa (Cd 0,8) – 12,9 Pa (Cd 0,6) mot netto 3,5 Pa = stämmer. Med 3 600 mm² 1,8–3,2 Pa. v32: Spjäll bb z 7"
+    ],
+    [
+     "2026-11-12T16:00:22+01:00",
+     "atgardad",
+     "Vickan: v32 · Spjäll 10 slitsar 8 × 45 = 3 600 mm², stänger helt; dragräkning med intaget 6–9 kW (mäts på prototypen)"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:00:22+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
+   "img": "",
+   "ver": "hittad v29 · stängd v32",
+   "pname": "Yamay Tizón"
+  },
+  {
+   "id": "av-TIZ-3",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "tizon",
+   "nr": "TIZ-3",
+   "title": "Toppram + häll inte värmeräknade",
+   "sev": "Före prototyp",
+   "sevemo": "🔴",
+   "by": "Fable",
+   "desc": "Modellen: Hällen (svartstål 10) ligger direkt på Toppram 3 mm (440 × 528), fäst med 8 × ISO 10642 M6x12 10.9 utan spel i hålen\nFörväntat: Ramen ska kunna växa när den blir varmare än sidorna utan att buckla eller få hällen att vicka\nFörslag: Termoelement på ram + skruvar vid första eldningen; avlånga försänkningar/långhål bara om ramen rör sig\nVerifierat: Räknat: α 12e-6 × 200 K × 440/528 mm = 1,06 / 1,27 mm. Exporten v32: Toppram bb 440×528×3, 8 × ISO 10642 M6x12 10.9 i Ytterskal, ingen ändring i steg 29 (GRANSKNING ⏳ punkt 3)",
+   "part": "Yamay Tizon - Ytterskal:1 › Yamay Tizon - Toppram:1",
+   "sel": "o8",
+   "url": "?p=tizon&sel=o8",
+   "created": "2026-11-12T16:00:16+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-12T16:00:16+01:00",
+     "oppen",
+     "Vickan verifierade: Räknat: α 12e-6 × 200 K × 440/528 mm = 1,06 / 1,27 mm. Exporten v32: Toppram bb 440×528×3, 8 × ISO 10642 M6x12 10.9 i Ytterskal, ingen ändring i steg 29 (GRANSK"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:00:16+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
+   "img": "",
+   "ver": "hittad v29",
+   "pname": "Yamay Tizón"
+  },
+  {
+   "id": "av-TIZ-4",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "tizon",
+   "nr": "TIZ-4",
+   "title": "Rökstosen har noll spel i böjen",
+   "sev": "Före prototyp",
+   "sevemo": "🔴",
+   "by": "Fable",
+   "desc": "Modellen: v29: stos Ø120,0 rf i böjens hona ID 120 (svart stål)\nFörväntat: Hane med spel och styrfas (standardhane Ø119,4)\nFörslag: Stos Ø119,4 × 2 med styrfas 3 × 1\nVerifierat: Räknat: (17,3−12)e-6 × 400 K × 120 = 0,25 mm interferens på diametern = stämmer. v32 desc: Ø119,4 × 2, radiellt spel 0,3, styrfas 3 × 1 (t486)\nKommentar: Stos Ø119,4 × 2 med styrfas 3 × 1, radiellt spel 0,3",
+   "part": "Yamay Tizon - Rok bak:1 › Yamay Tizon - Rokstos bak:1",
+   "sel": "o490",
+   "url": "?p=tizon&sel=o490",
+   "created": "2026-11-12T16:00:16+01:00",
+   "status": "atgardad",
+   "log": [
+    [
+     "2026-11-12T16:00:16+01:00",
+     "oppen",
+     "Vickan verifierade: Räknat: (17,3−12)e-6 × 400 K × 120 = 0,25 mm interferens på diametern = stämmer. v32 desc: Ø119,4 × 2, radiellt spel 0,3, styrfas 3 × 1 (t486)"
+    ],
+    [
+     "2026-11-12T16:00:22+01:00",
+     "atgardad",
+     "Vickan: v32 · Stos Ø119,4 × 2 med styrfas 3 × 1, radiellt spel 0,3"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:00:22+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
+   "img": "",
+   "ver": "hittad v29 · stängd v32",
+   "pname": "Yamay Tizón"
+  },
+  {
+   "id": "av-TIZ-5",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "tizon",
+   "nr": "TIZ-5",
+   "title": "Rökutsläpp i ansiktshöjd",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: Rörtopp z 983 och hatt z 1 093 i exporten (häll z 483) → på modul med häll 900: rörtopp 1 400, hatt 1 510 över golv\nFörväntat: Utsläpp över ansiktshöjd för en stående person, särskilt med svagt drag\nFörslag: Egen fråga: längre rör/förlängning eller rör bakom modulen; avgör tillsammans med dragmätningen på prototypen\nVerifierat: bbox ur tree.json v32: Rokror vertikal z 753–983, Hatt O120 z 1 068–1 093, Hall hel topp z 483; 900 + 500 = 1 400, 900 + 610 = 1 510",
+   "part": "Yamay Tizon - Rok bak:1 › Yamay Tizon - Hatt O120:1",
+   "sel": "o500",
+   "url": "?p=tizon&sel=o500",
+   "created": "2026-11-12T16:00:16+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-12T16:00:16+01:00",
+     "oppen",
+     "Vickan verifierade: bbox ur tree.json v32: Rokror vertikal z 753–983, Hatt O120 z 1 068–1 093, Hall hel topp z 483; 900 + 500 = 1 400, 900 + 610 = 1 510"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:00:16+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
+   "img": "",
+   "ver": "hittad v29",
+   "pname": "Yamay Tizón"
+  },
+  {
+   "id": "av-TIZ-6",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "tizon",
+   "nr": "TIZ-6",
+   "title": "Vikten underskattad (73 kg i STATUS)",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: STATUS angav 73 kg (bara stål)\nFörväntat: Driftklar vikt med Vermilite och gjutgods: lyft och modullast räknas på den\nFörslag: Räkna lyft/modullast på ~100 kg tills kolrost/ringsats har riktiga vikter\nVerifierat: v32 med rätt material (GRANSKNING punkt 6): stål 69,6 + Vermilite 9,7 + gjutgods 20,0 (massiva platshållare) = 99,3 kg\nKommentar: Vikten ur Fusion ≈ 99 kg; lyft/modullast inte omräknade",
+   "part": "",
+   "sel": "",
+   "url": "?p=tizon",
+   "created": "2026-11-12T16:00:16+01:00",
+   "status": "delvis",
+   "log": [
+    [
+     "2026-11-12T16:00:16+01:00",
+     "oppen",
+     "Vickan verifierade: v32 med rätt material (GRANSKNING punkt 6): stål 69,6 + Vermilite 9,7 + gjutgods 20,0 (massiva platshållare) = 99,3 kg"
+    ],
+    [
+     "2026-11-12T16:00:22+01:00",
+     "delvis",
+     "Vickan: v32 · Vikten ur Fusion ≈ 99 kg; lyft/modullast inte omräknade"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:00:22+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
+   "img": "",
+   "ver": "hittad v29 · v32",
+   "pname": "Yamay Tizón"
+  },
+  {
+   "id": "av-TIZ-7",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "tizon",
+   "nr": "TIZ-7",
+   "title": "Inaktuella beskrivningar i Fusion (stycklista)",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: v29: Fotbeslag 'Corten 5/M10', Spjäll '2 mm glider 20', Rökstos 'Ø150', Rökrör 'Ø150 682', Rörklämma 'z 831–861', Vred hake 'bock 30°', hylsa 'längd 35', Asklåda U '8 × M6', Askfront '6 slitsar spjäll bakom', Lucka Vermilite '25 mm'\nFörväntat: Beskrivning = geometri (går till stycklista/ritning)\nFörslag: Rätta resterande sex beskrivningar för hand i Properties (API återställer dem vid sparning)\nVerifierat: Jämfört desc v29/v32 i tree.json: rättade i v32 = Fotbeslag, Spjäll, Rökstos, Rökrör, Rörklämma, Vred hake/hylsa, Asklåda U, Vermilite front. Kvar v32: Askfront '6 luftslitsar, spjäll bakom' och Lucka Vermilite '25 mm' (bbox y −288…−268 = 20 mm); enligt GRANSKNING även Innerlåda U, Lucka front, Lucka insida, Vermilite sida\nKommentar: 9 beskrivningar rättade; kvar Askfront, Lucka Vermilite, Innerlåda U, Lucka front, Lucka insida, Vermilite sida",
+   "part": "Yamay Tizon - Asklada:1 › Yamay Tizon - Askfront:1",
+   "sel": "o349",
+   "url": "?p=tizon&sel=o349",
+   "created": "2026-11-12T16:00:16+01:00",
+   "status": "delvis",
+   "log": [
+    [
+     "2026-11-12T16:00:16+01:00",
+     "oppen",
+     "Vickan verifierade: Jämfört desc v29/v32 i tree.json: rättade i v32 = Fotbeslag, Spjäll, Rökstos, Rökrör, Rörklämma, Vred hake/hylsa, Asklåda U, Vermilite front. Kvar v32: Askfront"
+    ],
+    [
+     "2026-11-12T16:00:23+01:00",
+     "delvis",
+     "Vickan: v32 · 9 beskrivningar rättade; kvar Askfront, Lucka Vermilite, Innerlåda U, Lucka front, Lucka insida, Vermilite sida"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:00:23+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
+   "img": "",
+   "ver": "hittad v29 · v32",
+   "pname": "Yamay Tizón"
+  },
+  {
+   "id": "av-TIZ-8",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "tizon",
+   "nr": "TIZ-8",
+   "title": "Fel fysiskt material (Steel) – fel vikt",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: v29: Vermilite, fiberlist, tätningsband m.fl. = 'Steel'; kolrost och ringsats inte köpdelar\nFörväntat: Rätt material per del; köpdelar märkta\nFörslag: Sätt rf-material på återstående rostfria delar för hand i Properties\nVerifierat: mat i tree.json v32: Vermilite 600, Keramisk fiber 250, Glasfiberband 500, Kolrost/Ringsats Iron Cast + kop=true. Kvar 'Steel': Rokstos bak (rf 1.4301), och även Rörklämma, Stag skorsten, Gnistkopp, Hatt (alla rf 1.4301 enligt desc)\nKommentar: Vermilite/fiber/band/gjutgods rätt + köpdelsmärkta; Rökstos, Rörklämma, Stag, Gnistkopp, Hatt kvar på Steel",
+   "part": "Yamay Tizon - Rok bak:1 › Yamay Tizon - Rokstos bak:1",
+   "sel": "o490",
+   "url": "?p=tizon&sel=o490",
+   "created": "2026-11-12T16:00:16+01:00",
+   "status": "delvis",
+   "log": [
+    [
+     "2026-11-12T16:00:16+01:00",
+     "oppen",
+     "Vickan verifierade: mat i tree.json v32: Vermilite 600, Keramisk fiber 250, Glasfiberband 500, Kolrost/Ringsats Iron Cast + kop=true. Kvar 'Steel': Rokstos bak (rf 1.4301), och äve"
+    ],
+    [
+     "2026-11-12T16:00:23+01:00",
+     "delvis",
+     "Vickan: v32 · Vermilite/fiber/band/gjutgods rätt + köpdelsmärkta; Rökstos, Rörklämma, Stag, Gnistkopp, Hatt kvar på Steel"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:00:23+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
+   "img": "",
+   "ver": "hittad v29 · v32",
+   "pname": "Yamay Tizón"
+  },
+  {
+   "id": "av-TIZ-9",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "tizon",
+   "nr": "TIZ-9",
+   "title": "Gamla _Ref-värden (parameterlänk)",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: v29: gamla _Ref i 17 filer, aldrig kvitterade\nFörväntat: t12 = 0 avvikelser i alla filer före DXF/nästa masterändring\nFörslag: Gör om Derive-länken i Eldstad och toppen innan nästa måttändring\nVerifierat: Kan inte ses i exporten; STATUS NULÄGE v32: t12 0 avvikelser i 53/55 filer, Eldstad (RbYf_Ref) + toppen (16 _Ref) har Derive utan dokumentreferens\nKommentar: 53/55 filer OK; Eldstad + toppen kvar",
+   "part": "Yamay Tizon - Eldstad:1",
+   "sel": "o188",
+   "url": "?p=tizon&sel=o188",
+   "created": "2026-11-12T16:00:16+01:00",
+   "status": "delvis",
+   "log": [
+    [
+     "2026-11-12T16:00:16+01:00",
+     "oppen",
+     "Vickan verifierade: Kan inte ses i exporten; STATUS NULÄGE v32: t12 0 avvikelser i 53/55 filer, Eldstad (RbYf_Ref) + toppen (16 _Ref) har Derive utan dokumentreferens"
+    ],
+    [
+     "2026-11-12T16:00:23+01:00",
+     "delvis",
+     "Vickan: v32 · 53/55 filer OK; Eldstad + toppen kvar"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:00:23+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
+   "img": "",
+   "ver": "hittad v29 · v32",
+   "pname": "Yamay Tizón"
+  },
+  {
+   "id": "av-TIZ-10",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "tizon",
+   "nr": "TIZ-10",
+   "title": "Platshållare och oritade delar",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: Kolrost (3 st) och ringsats är massiva platshållare; Vermilite-skarvar, tätning stos–böj och Tizón-modulen saknas\nFörväntat: Riktig geometri för köpdelar och den modul som hällhöjd 900 och 'röret bakom modulen' bygger på\nFörslag: Välj ringsats/rost och ersätt platshållarna; rita modulen före prototypbeställning\nVerifierat: tree.json v32: Kolrost 'Förenklad platshållare' bb 290×135×20, Ringsats '(platshallare) = skiva' bb 240×240×10; ingen modulkomponent i trädet; Vermilite sida/bak desc 'delas i 2' utan skarv",
+   "part": "Yamay Tizon - Eldstad:1 › Yamay Tizon - Kolrost Kirami 135x290x20:1",
+   "sel": "o207",
+   "url": "?p=tizon&sel=o207",
+   "created": "2026-11-12T16:00:16+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-12T16:00:16+01:00",
+     "oppen",
+     "Vickan verifierade: tree.json v32: Kolrost 'Förenklad platshållare' bb 290×135×20, Ringsats '(platshallare) = skiva' bb 240×240×10; ingen modulkomponent i trädet; Vermilite sida/ba"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-12T16:00:16+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
+   "img": "",
+   "ver": "hittad v29",
+   "pname": "Yamay Tizón"
   }
  ],
- "updated": "2026-11-12 15:24"
+ "updated": "2026-11-12 16:00"
 }
