@@ -382,8 +382,11 @@ function uppdatera(raden = true, snabb = false) {
   $('regler').innerHTML = SU.regler.map(r => { const o = /OSÄKER|EGEN/.test(r.status); return `<div class="${o ? 'osak' : ''}">${o ? '⚠' : '✓'} ${r.text} <small>(${r.status})</small></div>`; }).join('');
   history.replaceState(null, '', (LAGE === 'kok' ? '#kok=' : '#k=') + btoa(unescape(encodeURIComponent(JSON.stringify(K)))));
 }
+// Kök-fliken är pausad (Vicke 2026-11-13: "ta bort kökskonfiguratorn för tillfället"). Sätt true för att slå på igen.
+const KOK_PA = false;
+if (!KOK_PA) document.querySelector('.flikar').style.display = 'none';
 function satt(k) {
-  if (k.rader) return sattKok(k);
+  if (k.rader) return KOK_PA ? sattKok(k) : satt(System.EXEMPEL);
   lage('garderob'); K = KG = System.franEnkel(kopia(k)); VALD = 0; tillRum(K); ritaPalett(); uppdatera();
 }
 function ladda(namn, blob) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = namn; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
@@ -424,7 +427,7 @@ function bytFlik(l) {
   if (l === 'kok') sattKok(KK || Kok.KOK1); else satt(KG || System.EXEMPEL);
 }
 $('flikG').onclick = () => bytFlik('garderob');
-$('flikK').onclick = () => bytFlik('kok');
+$('flikK').onclick = () => KOK_PA && bytFlik('kok');
 function sattKok(k) { lage('kok'); K = KK = kopia(k); RAD = 0; VALD = 0; ritaPalett(); tillRumKok(true); uppdatera(); }
 $('kok1').onclick = () => sattKok(Kok.KOK1);
 $('kokRak').onclick = () => sattKok(Kok.RAK);
