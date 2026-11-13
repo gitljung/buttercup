@@ -89,8 +89,8 @@
      "Vicke (webb)"
     ]
    ],
-   "replies": 57,
-   "last": "2026-11-13T11:29:59.169000+00:00",
+   "replies": 58,
+   "last": "2026-11-13T11:31:44.702000+00:00",
    "analyzed": "2026-11-07T15:56:43.626000+00:00",
    "forslag": [
     {
@@ -1242,10 +1242,15 @@
      "2026-11-13T11:48:24+01:00",
      "kommentar",
      "Vickan: Alternativ (handräkning): lagerfjädern RZ-130K-04I 1.4310 (Gutekunst katalog, ~5 d) går i öppet läge på 79 N = 75 % av Fn 105 N, tau ≈ 490 MPa = 'hög last' -> gräns ~160 °C (1.4310"
+    ],
+    [
+     "2026-11-13T12:31:44+01:00",
+     "kommentar",
+     "Vickan: Utfört (h135): lagerfjäder RZ-130K-04I 1.4310 i modellen v41 (2026-11-13 12:28); mätprotokoll + 17-7PH-offertutkast i yamay_josper/termisk/"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:48:24+01:00",
+   "last": "2026-11-13T12:31:44+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-13.jpg",
    "ver": "hittad v32",
@@ -1260,6 +1265,11 @@
      "2026-11-13T11:48:24+01:00",
      "Vickan",
      "Alternativ (handräkning): lagerfjädern RZ-130K-04I 1.4310 (Gutekunst katalog, ~5 d) går i öppet läge på 79 N = 75 % av Fn 105 N, tau ≈ 490 MPa = 'hög last' -> gräns ~160 °C (1.4310), ~200 °C (17-7PH), ~160 °C (316). Fjädern beräknad 180–250 °C med skärm -> även 17-7PH-specialen är marginell. Spakarna: (1) lagerfjäder 1.4310 till prototypen + termoelement/kraftmätning, 17-7PH-offert parallellt; (2) lägre spänning: d 2,0 -> ~350 MPa (~54 %) = 'låg last' 250 °C (1.4310)/300 °C (316, Sodemann lager) men ~75 varv, L0 ~170–180 (utrymme ej kontrollerat); (3) fjädern ut ur kylspalten. Rek (1). Status lämnad stängd (Vicke)."
+    ],
+    [
+     "2026-11-13T12:31:44+01:00",
+     "Vickan",
+     "Utfört (h135): lagerfjäder RZ-130K-04I 1.4310 i modellen v41 (2026-11-13 12:28); mätprotokoll + 17-7PH-offertutkast i yamay_josper/termisk/"
     ]
    ]
   },
@@ -2076,5 +2086,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-13 12:30"
+ "updated": "2026-11-13 12:32"
 }
