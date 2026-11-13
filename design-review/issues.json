@@ -1625,15 +1625,26 @@
      "2026-11-13T11:51:16+01:00",
      "oppen",
      "Vickan verifierade: Lägen ur h12_dm.log + tree.json: pivå→axel 120 mm, 24,6° nere/−4,8° uppe; normalkraften lutar 4,8° → kräver µ > tan 4,8° = 0,084; ingen stoppdel i trädet."
+    ],
+    [
+     "2026-11-13T12:56:41+01:00",
+     "kommentar",
+     "Vicke: Beslut 2026-11-13: anslaget blir en klack 14×8 mm, laserskuren på spakens överkant (inte stoppinne). Ingår i Fusion-jobbet H16."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:51:16+01:00",
+   "last": "2026-11-13T12:56:41+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1570057458125250643/1570750632711946287",
    "img": "avvikelser/VAX-1.jpg",
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
-   "comments": []
+   "comments": [
+    [
+     "2026-11-13T12:56:41+01:00",
+     "Vicke",
+     "Beslut 2026-11-13: anslaget blir en klack 14×8 mm, laserskuren på spakens överkant (inte stoppinne). Ingår i Fusion-jobbet H16."
+    ]
+   ]
   },
   {
    "id": "av-VAX-2",
