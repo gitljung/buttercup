@@ -5,12 +5,18 @@ const SCHEMA = `Svara ENDAST med JSON:
 {"konfig":{"namn":str,"jobb":"Garderob","nisch":{"bredd":mm,"hojd":mm}|null,"nischAuto":bool,"passbit":mm,"sockel":mm,"galler":mm,
  "hojder":[nedre_mm, ovre_mm],   // ovre 0 = bara en skåphöjd
  "djup":[nedre_mm, ovre_mm],
- "moduler":[{"typ":"lada"|"hang"|"hylla","bredd":mm|null,"hel":bool,"lador":0-3,"hyllorNed":antal,"hyllorOvr":antal,
-             "dorrar":0|1|2,"hand":"v"|"h","ovr":{"bak":"ingen"}?}]},
+ "moduler":[{"typ":"lada"|"hang"|"hylla"|"bank","bredd":mm|null,"hel":bool,"lador":0-3,"hyllorNed":antal,"hyllorOvr":antal,
+            "dorrar":0|1|2,"hand":"v"|"h","ovr":{"bak":"ingen"}?,"utvLador":[fronthöjd_mm nerifrån]?,"utvStart":mm?,
+            "hojdNed":mm?,"djup":mm?,"mellan":mm?}]},
  "lasat":[str], "antaget":[str], "kontrollera":[str]}`;
 const REGLER = `Du är snickare och läser underlag (arkitektritning, foto, handskiss) för platsbyggda garderober.
 Bygg ett modulsystem: moduler från vänster till höger, varje modul 300–1200 bred (dela bredare partier).
-typ: "lada" = innerlådor + fast hylla + hyllor, "hang" = klädstång (hängdel), "hylla" = bara hyllor.
+typ: "lada" = innerlådor + fast hylla + hyllor, "hang" = klädstång (hängdel), "hylla" = bara hyllor,
+"bank" = sittbänk (en låg stomme, hojdNed = stommens höjd, utvändig låda, ingen dörr).
+utvLador = utvändiga lådor (synliga lådfronter, ingen dörr) i nedre stommen: fronthöjder nerifrån; dörrarna sitter då bara
+på övre stommen (t.ex. byrådel 3 lådor under en hängdel med klädstång i ÖVRE skåpet: ovr {"stang", "fast"}).
+mellan = synlig panel till vänster om modulen (t.ex. TYP VP2 90). Höjdkedjan: sockel + nedre + övre + galler/passbit ovan
+= nisch; "30" i kedjan är ofta ram runt fronterna och hör till stommen. Mått med "ca" är osäkra – lägg dem i kontrollera.
 hel=true om stommen är odelad i full höjd, annars delad i nedre+övre skåp (hojder).
 Standard om inget anges: sockel 100, galler 0, passbit 30, nedre 1500, djup 488 (stommens djup, ritningsdjup − 10),
 dörrar 2 per modul över 650 bredd annars 1. Kylmaskin/AC bakom övre skåp => ovr.bak="ingen".
