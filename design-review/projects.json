@@ -114,17 +114,6 @@
   "pending": true
  },
  {
-  "slug": "snickeri-tcn-3d",
-  "name": "Snickeri-tcn-3d",
-  "doc": null,
-  "version": null,
-  "exported": null,
-  "channel": "snickeri-tcn-3d",
-  "thread": "1570770795943428138",
-  "fusion_project": "snickeri-tcn-3d",
-  "pending": true
- },
- {
   "slug": "horno",
   "name": "Yamay Horno",
   "doc": "Yamay Horno - ugn",
@@ -146,5 +135,15 @@
   "doc": "Växthus - hjulsystem",
   "version": 1,
   "exported": "2026-11-13 13:40"
+ },
+ {
+  "slug": "snickeri-tcn-3d",
+  "name": "Snickeri-tcn-3d",
+  "doc": "Acaciagatan B108 - dorrar",
+  "version": 1,
+  "exported": "2026-11-13 14:17",
+  "channel": "snickeri-tcn-3d",
+  "thread": "1570770795943428138",
+  "fusion_project": "snickeri-tcn-3d"
  }
 ]
