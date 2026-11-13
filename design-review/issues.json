@@ -720,8 +720,8 @@
    "by": "Fable",
    "desc": "Modellen: 20 mm Vermilite + ventilerad spalt mellan Corten-innerlåda och ytterskal.\nFörväntat: Utsida som inte ger brännskada (~60–65 °C) – eller ett medvetet beslut om skalets temperatur före prototyp.\nFörslag: Välj väg: 40 mm Vermilite i sidor/bak (skal ~122 °C, innerlåda ~220 °C) eller strålskärm/filt (kräver rostfri innerlåda).\nVerifierat: Projektets egen termik/RAPPORT_luft_109.md: ytterskal 155–175 °C vid 550 °C; Fables 1D-räkning 143–196 °C. Två oberoende räkningar samstämmiga.",
    "part": "Yamay Horno - delmontage Eldstad:1",
-   "sel": "o249",
-   "url": "?p=horno&sel=o249",
+   "sel": "o277",
+   "url": "?p=horno&sel=o277",
    "created": "2026-11-12T16:00:35+01:00",
    "status": "oppen",
    "log": [
@@ -755,7 +755,7 @@
    "sel": "o206",
    "url": "?p=horno&sel=o206",
    "created": "2026-11-12T16:00:35+01:00",
-   "status": "stangd",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-12T16:00:35+01:00",
@@ -776,13 +776,18 @@
      "2026-11-13T11:54:14+01:00",
      "stangd",
      "Vicke: "
+    ],
+    [
+     "2026-11-13T12:53:45+01:00",
+     "atgardad",
+     "Vickan: v43 · Vridspjäll Ø108 i stosen (axel z 670) + Ø8-axel över taket till handtag framför fronten, bock med fjäderfriktion på taket; registret 40 cm² kvar (h135)"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:54:14+01:00",
+   "last": "2026-11-13T12:53:45+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-3.jpg",
-   "ver": "hittad v32",
+   "ver": "hittad v32 · stängd v43",
    "pname": "Yamay Horno",
    "comments": [
     [
@@ -805,8 +810,8 @@
    "by": "Fable",
    "desc": "Modellen: Rostvinkel H/V: \"Corten 5 mm vattenskuren + 1 bock\", z 125–165, bär kolrosten (z 165–173) direkt under glödbädden.\nFörväntat: Material för glödzonen (projektregel: Corten oxiderar snabbt > ~450 °C) – 1.4828 som kolrosten.\nFörslag: Bocka in hyllan i gallerhållarens sidoplåt (1.4828), eller gör vinkeln i 1.4828.\nVerifierat: tree.json v32: desc + ap Corten, bbox z 125–165; kolrost laser z 165–173 vilar på den.",
    "part": "Yamay Horno - delmontage Eldstad:1 › Yamay Horno - Rostvinkel hoger:1",
-   "sel": "o258",
-   "url": "?p=horno&sel=o258",
+   "sel": "o286",
+   "url": "?p=horno&sel=o286",
    "created": "2026-11-12T16:00:35+01:00",
    "status": "atgardad",
    "log": [
@@ -901,8 +906,8 @@
    "by": "Fable",
    "desc": "Modellen: Vermilite botten 540×400×20, Vermilite front 540×137×20, Lucka Vermilite 585×276×25.\nFörväntat: Delar som går ur inköpt skiva (KONCEPT: Vermilite 600 500×300×20, art 2776220).\nFörslag: Dela med skarv, eller köp storformat (1000×1250 finns i 20/25/30 mm).\nVerifierat: bbox ur export v32: botten x −270..270, y −227..173; front z 437..574; lucka 585×276, y-tjocklek 25. Alla tre > 500×300.",
    "part": "Yamay Horno - delmontage Eldstad:1 › Yamay Horno - Vermilite botten:1",
-   "sel": "o275",
-   "url": "?p=horno&sel=o275",
+   "sel": "o303",
+   "url": "?p=horno&sel=o303",
    "created": "2026-11-12T16:00:36+01:00",
    "status": "atgardad",
    "log": [
@@ -964,8 +969,8 @@
    "by": "Fable",
    "desc": "Modellen: Kolrostens topp z 173, lucköppningens underkant z 195 → 22 mm tröskel mot 50–80 mm glödbädd.\nFörväntat: Glöd ska stanna i eldstaden när luckan öppnas.\nFörslag: Löstagbart kolstopp ~60 mm i 1.4828 i slitsar i sidoplåtarna.\nVerifierat: Kolrost bbox z 165–173 (v32); STATUS h41 OppZ0 = 195.",
    "part": "Yamay Horno - delmontage Eldstad:1 › Yamay Horno - Kolrost laser:1",
-   "sel": "o262",
-   "url": "?p=horno&sel=o262",
+   "sel": "o290",
+   "url": "?p=horno&sel=o290",
    "created": "2026-11-12T16:00:36+01:00",
    "status": "avvisad",
    "log": [
@@ -1127,8 +1132,8 @@
    "by": "Fable",
    "desc": "Modellen: Lagerbock H/V \"Corten 3 mm, vattenskuren + 1 bock\", bär ledtapp Ø12 rostfri.\nFörväntat: Lagerbana som inte rostar/glappar; marginal vid last på öppen lucka.\nFörslag: Rostfri 1.4301 4–5 mm.\nVerifierat: desc + ap Corten i v32; Fables grova spänning ~200 MPa vid 30 kg (marginal ~1,7) ej omräknad.",
    "part": "Yamay Horno - delmontage Stomme:1 › Yamay Horno - Lagerbock hoger:1",
-   "sel": "o505",
-   "url": "?p=horno&sel=o505",
+   "sel": "o533",
+   "url": "?p=horno&sel=o533",
    "created": "2026-11-12T16:00:36+01:00",
    "status": "oppen",
    "log": [
@@ -1191,8 +1196,8 @@
    "by": "Fable",
    "desc": "Modellen: Gallerhållare \"Rostfritt 304 3 mm\"; Gallerhylla \"3 st/sida\" men 2 per sida; Spjäll \"304 2 mm\"; Askskena \"ISO 7380 M6x6\" men M6x25 i modellen; Fotbeslag med uteköktext (\"4 st per modul\", u06c).\nFörväntat: Gallerhållare 1.4828 (STATUS h84 rad 205), 2 hyllor/sida, spjäll 5 mm (STATUS h125), askskena M6x25, Horno-text på fotbeslaget.\nFörslag: Rätta description i respektive detaljfil.\nVerifierat: desc i tree.json v32 jämfört med instansantal, skruvar i Stomme (ISO 7380-1 M6x25 A4 ×6 under skenorna) och STATUS.md; spjällets 1,12 kg motsvarar 5 mm, inte 2.",
    "part": "Yamay Horno - delmontage Eldstad:1 › Yamay Horno - delmontage Gallerstall hoger:1 › Yamay Horno - Gallerhallare hoger:1",
-   "sel": "o279",
-   "url": "?p=horno&sel=o279",
+   "sel": "o307",
+   "url": "?p=horno&sel=o307",
    "created": "2026-11-12T16:00:36+01:00",
    "status": "oppen",
    "log": [
@@ -2091,5 +2096,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-13 12:48"
+ "updated": "2026-11-13 12:53"
 }
