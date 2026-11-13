@@ -502,7 +502,7 @@
    "sel": "o349",
    "url": "?p=tizon&sel=o349",
    "created": "2026-11-12T16:00:16+01:00",
-   "status": "stangd",
+   "status": "delvis",
    "log": [
     [
      "2026-11-12T16:00:16+01:00",
@@ -523,13 +523,18 @@
      "2026-11-13T13:06:25+01:00",
      "stangd",
      "Vicke: "
+    ],
+    [
+     "2026-11-13T13:33:32+01:00",
+     "delvis",
+     "Vickan: 34 · Försök 2026-11-13 (t570/t571): Fusion-API:t avvisar description på de 6 delarna (läses tillbaka gammal direkt, ingen ny version). Kvar: Innerlåda U, Lucka front, Lucka insida, Askf"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T13:06:25+01:00",
+   "last": "2026-11-13T13:33:32+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
    "img": "avvikelser/TIZ-7.jpg",
-   "ver": "hittad v29 · v32",
+   "ver": "hittad v29 · 34",
    "pname": "Yamay Tizón",
    "comments": [
     [
@@ -2485,5 +2490,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-13 13:26"
+ "updated": "2026-11-13 13:33"
 }
