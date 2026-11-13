@@ -68,7 +68,8 @@ function bygg(ut) {
   const maxD = Math.max(...mods.flatMap(m => m.ut.konfig.skap.map(s => s.djup)));
   const hojd = Math.max(...mods.map(m => m.ut.konfig.hojd));
   if (sock) box(rot, x0, x1, 40, maxD, 0, sock, M.sockel, 'Sockel');
-  mods.forEach(m => byggModul(m.ut, m.x0, sock, mods.length > 1 ? `M${m.nr} ` : ''));
+  modGrupper = mods.map(m => byggModul(m.ut, m.x0, sock, mods.length > 1 ? `M${m.nr} ` : '', m.nr));
+  markera(window.__valdModul || valdModul);
   if (gal) box(rot, x0, x1, 0, maxD, sock + hojd, sock + hojd + gal, M.galler, 'Galler');
   if (sys.nisch && sys.nisch.bredd) {
     const nb = sys.nisch.bredd, nh = sys.nisch.hojd || sock + hojd + gal;
@@ -81,9 +82,24 @@ function bygg(ut) {
 }
 let senast = '';
 
-function byggModul(ut, ox, sock, pre) {
+let modGrupper = [], valdModul = 0, markor = null;
+const markMat = new THREE.MeshBasicMaterial({ color: 0xfbc021, transparent: true, opacity: 0.22, depthWrite: false });
+function markera(nr) {
+  valdModul = nr;
+  if (markor) { markor.parent && markor.parent.remove(markor); markor = null; }
+  const g = modGrupper[nr - 1]; if (!g || !rot) return;
+  const k = g.userData.konfig, sock = g.userData.sock;
+  const D = Math.max(...k.skap.map(s => s.djup));
+  const geo = new THREE.BoxGeometry(k.bredd + 16, D + 40, k.hojd + 16);
+  markor = new THREE.Mesh(geo, markMat); markor.position.set(k.bredd / 2, D / 2 - 20, sock + k.hojd / 2);
+  markor.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: 0xe0a000 })));
+  markor.raycast = () => {};
+  g.add(markor);
+}
+function byggModul(ut, ox, sock, pre, nr) {
   const k = ut.konfig, T = k.T, W = k.bredd, med = !!k.dorrar;
   const g0 = new THREE.Group(); g0.position.x = ox; rot.add(g0);
+  g0.userData = { nr, konfig: k, sock };
   let z = sock;
   k.skap.forEach(s => {
     const H = s.hojd, D = s.djup, rygg = s.bak === 'spar', ys = D - 25.5;
@@ -139,6 +155,7 @@ function byggModul(ut, ox, sock, pre) {
       piv.userData.hoger = hoger; dorrGrupp.push(piv);
     });
   }
+  return g0;
 }
 
 function satDorrar() {
@@ -173,9 +190,11 @@ renderer.domElement.addEventListener('pointerup', e => {
   ray.setFromCamera(new THREE.Vector2((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1), cam);
   const hit = ray.intersectObjects(rot ? rot.children : [], true).find(h => h.object.userData.namn && h.object.visible);
   if (etikett) etikett.textContent = hit ? hit.object.userData.namn : '';
+  if (hit) { let o = hit.object; while (o && !(o.userData && o.userData.nr)) o = o.parent; if (o) window.dispatchEvent(new CustomEvent('modulklick', { detail: o.userData.nr })); }
 });
 
 window.Vy3d = {
+  markera,
   bygg, ram: () => { forstaGang = true; window.__ut && bygg(window.__ut); },
   satt(o) { Object.assign(lage, o); if ('hal' in o && window.__ut) bygg(window.__ut); else satDorrar(); },
 };
