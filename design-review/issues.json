@@ -79,13 +79,18 @@
      "Nonsens: ”1”"
     ],
     [
+     "2026-11-13T11:14:48.791000+00:00",
+     "atgardad",
+     "Vickan: ✅ Klart. Urtaget i benhörnen borttaget på Front och Bak, benen går hela vägen ut till sida"
+    ],
+    [
      "2026-11-13T11:44:37+0100",
      "stangd",
      "Vicke (webb)"
     ]
    ],
-   "replies": 49,
-   "last": "2026-11-13T10:57:02.464000+00:00",
+   "replies": 53,
+   "last": "2026-11-13T11:16:15.266000+00:00",
    "analyzed": "2026-11-07T15:56:43.626000+00:00",
    "forslag": [
     {
@@ -103,6 +108,7 @@
    ],
    "choice": "2026-11-07T16:02:27.351000+00:00",
    "choice_txt": "1",
+   "done": "2026-11-13T11:14:48.791000+00:00",
    "thread": "1568654411973263520",
    "link": "https://discord.com/channels/1114447465203109918/1568654411973263520/1568654452636778670",
    "nr": 1,
@@ -2060,5 +2066,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-13 12:05"
+ "updated": "2026-11-13 12:16"
 }
