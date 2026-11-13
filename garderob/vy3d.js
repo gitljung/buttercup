@@ -14,7 +14,7 @@ const cam = new THREE.PerspectiveCamera(32, 1, 0.05, 100);
 const ctl = new OrbitControls(cam, renderer.domElement); ctl.enableDamping = true;
 scene.add(new THREE.HemisphereLight(0xffffff, 0x9a8a70, 1.2));
 const sol = new THREE.DirectionalLight(0xffffff, 2.0); sol.position.set(-2.5, 4, 4); sol.castShadow = true;
-sol.shadow.mapSize.set(2048, 2048); Object.assign(sol.shadow.camera, { left: -3, right: 3, top: 4, bottom: -1 }); sol.shadow.bias = -0.0005;
+sol.shadow.mapSize.set(2048, 2048); Object.assign(sol.shadow.camera, { left: -5, right: 5, top: 5, bottom: -2 }); sol.shadow.bias = -0.0005;
 scene.add(sol);
 const fyll = new THREE.DirectionalLight(0xfff4e0, 0.9); fyll.position.set(1.5, 1.6, 5); scene.add(fyll);
 const golv = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.MeshStandardMaterial({ color: 0xd9cfbd, roughness: 1 }));
@@ -29,6 +29,7 @@ const M = {
   dorr: new THREE.MeshStandardMaterial({ color: 0xa8774a, roughness: 0.6, transparent: true, opacity: 1 }),
   rygg: new THREE.MeshStandardMaterial({ color: 0xc9a46c, roughness: 0.9 }),
   regel: new THREE.MeshStandardMaterial({ color: 0xa9a49a, roughness: 0.8 }),
+  stang: new THREE.MeshStandardMaterial({ color: 0x9a9a9a, metalness: 0.8, roughness: 0.3 }),
   klots: new THREE.MeshStandardMaterial({ color: 0x8fa3b8, roughness: 0.8 }),
   sockel: new THREE.MeshStandardMaterial({ color: 0xc8c2b6, roughness: 0.9 }),
   galler: new THREE.MeshStandardMaterial({ color: 0x777777, roughness: 0.6, wireframe: true }),
@@ -59,38 +60,62 @@ let rot = null, dorrGrupp = [], lage = { dorrar: 'oppna', hal: true }, forstaGan
 function bygg(ut) {
   if (rot) { V.remove(rot); rot.traverse(o => o.geometry && o.geometry !== cyl && o.geometry.dispose()); }
   rot = new THREE.Group(); V.add(rot); dorrGrupp = [];
-  const k = ut.konfig, T = k.T, W = k.bredd, sock = k.sockel || 0, gal = k.galler || 0, med = !!k.dorrar;
-  const maxD = Math.max(...k.skap.map(s => s.djup));
-  if (sock) box(rot, 0, W, 40, maxD, 0, sock, M.sockel, 'sockel');
+  const sys = ut.moduler ? ut.sys : ut.konfig;
+  const mods = ut.moduler ? ut.moduler.map(m => ({ ut: m.ut, x0: m.x0, nr: m.nr }))
+    : [{ ut, x0: ut.konfig.nisch ? (ut.konfig.nisch.bredd - ut.konfig.bredd) / 2 : 0, nr: 1 }];
+  const sock = sys.sockel || 0, gal = sys.galler || 0;
+  const x0 = Math.min(...mods.map(m => m.x0)), x1 = Math.max(...mods.map(m => m.x0 + m.ut.konfig.bredd));
+  const maxD = Math.max(...mods.flatMap(m => m.ut.konfig.skap.map(s => s.djup)));
+  const hojd = Math.max(...mods.map(m => m.ut.konfig.hojd));
+  if (sock) box(rot, x0, x1, 40, maxD, 0, sock, M.sockel, 'Sockel');
+  mods.forEach(m => byggModul(m.ut, m.x0, sock, mods.length > 1 ? `M${m.nr} ` : ''));
+  if (gal) box(rot, x0, x1, 0, maxD, sock + hojd, sock + hojd + gal, M.galler, 'Galler');
+  if (sys.nisch && sys.nisch.bredd) {
+    const nb = sys.nisch.bredd, nh = sys.nisch.hojd || sock + hojd + gal;
+    box(rot, -60, 0, -30, maxD + 120, 0, nh, M.vagg, 'Nischvägg');
+    box(rot, nb, nb + 60, -30, maxD + 120, 0, nh, M.vagg, 'Nischvägg');
+  }
+  satDorrar();
+  const nyckel = mods.length + ':' + (x1 - x0);
+  if (forstaGang || nyckel !== senast) { ram(x0, x1, sock + hojd + gal); forstaGang = false; senast = nyckel; }
+}
+let senast = '';
+
+function byggModul(ut, ox, sock, pre) {
+  const k = ut.konfig, T = k.T, W = k.bredd, med = !!k.dorrar;
+  const g0 = new THREE.Group(); g0.position.x = ox; rot.add(g0);
   let z = sock;
   k.skap.forEach(s => {
     const H = s.hojd, D = s.djup, rygg = s.bak === 'spar', ys = D - 25.5;
-    const djHy = (rygg ? ys : D) - 2, g = new THREE.Group(); rot.add(g);
-    box(g, 0, T, 0, D, z, z + H, M.stomme, `Skåp ${s.nr} sida vänster`);
-    box(g, W - T, W, 0, D, z, z + H, M.stomme, `Skåp ${s.nr} sida höger`);
-    box(g, T, W - T, 2, D, z, z + T, M.stomme, `Skåp ${s.nr} botten`);
-    box(g, T, W - T, 2, D, z + H - T, z + H, M.stomme, `Skåp ${s.nr} topp`);
-    if (s.fast != null) box(g, T, W - T, 0, rygg ? ys : D, z + s.fast - T / 2, z + s.fast + T / 2, M.stomme, 'Fast hylla');
-    s.hyllor.forEach(m => box(g, T + 1, W - T - 1, 2, 2 + djHy, z + m + 4, z + m + 4 + T, M.hylla, `Ställbar hylla ${m}`));
+    const djHy = (rygg ? ys : D) - 2, g = g0, n = `${pre}Skåp ${s.nr}`;
+    box(g, 0, T, 0, D, z, z + H, M.stomme, `${n} sida vänster`);
+    box(g, W - T, W, 0, D, z, z + H, M.stomme, `${n} sida höger`);
+    box(g, T, W - T, 2, D, z, z + T, M.stomme, `${n} botten`);
+    box(g, T, W - T, 2, D, z + H - T, z + H, M.stomme, `${n} topp`);
+    if (s.fast != null) box(g, T, W - T, 0, rygg ? ys : D, z + s.fast - T / 2, z + s.fast + T / 2, M.stomme, `${pre}Fast hylla`);
+    s.hyllor.forEach(m => box(g, T + 1, W - T - 1, 2, 2 + djHy, z + m + 4, z + m + 4 + T, M.hylla, `${pre}Ställbar hylla ${m}`));
+    if (s.stang) {
+      const st = new THREE.Mesh(new THREE.CylinderGeometry(12.5, 12.5, W - 2 * T, 20), M.stang);
+      st.rotation.z = Math.PI / 2; st.position.set(W / 2, (rygg ? ys : D) / 2, z + s.stang); st.castShadow = true; st.userData.namn = `${pre}Klädstång`; g.add(st);
+    }
     if (rygg) {
-      box(g, T - 7, W - T + 7, ys, ys + 6.5, z + 13, z + H - 13, M.rygg, 'Rygg 6,5');
-      [[T, T + 80], [H / 2 - 40, H / 2 + 40], [H - T - 80, H - T]].forEach(([a, b]) => box(g, T, W - T, D - 19, D, z + a, z + b, M.regel, 'Regel bak'));
+      box(g, T - 7, W - T + 7, ys, ys + 6.5, z + 13, z + H - 13, M.rygg, `${pre}Rygg 6,5`);
+      [[T, T + 80], [H / 2 - 40, H / 2 + 40], [H - T - 80, H - T]].forEach(([a, b]) => box(g, T, W - T, D - 19, D, z + a, z + b, M.regel, `${pre}Regel bak`));
     }
     const inv = med ? 20 : 0;
     if (med && s.lador) {
       const KL = 200 + 260 * (s.lador - 1);
-      box(g, T, T + 20, 10, 435, z + 75, z + 75 + KL, M.klots, 'Distansklots');
-      box(g, W - T - 20, W - T, 10, 435, z + 75, z + 75 + KL, M.klots, 'Distansklots');
+      box(g, T, T + 20, 10, 435, z + 75, z + 75 + KL, M.klots, `${pre}Distansklots`);
+      box(g, W - T - 20, W - T, 10, 435, z + 75, z + 75 + KL, M.klots, `${pre}Distansklots`);
     }
     for (let i = 0; i < s.lador; i++) {
-      const x0 = T + 4 + inv, x1 = W - T - 4 - inv, zb = z + T + 260 * i + 2, d0 = 4;
-      box(g, x0, x1, d0, d0 + 15, zb, zb + 220, M.lada, `Låda ${i + 1} front`);
-      box(g, x0 + 2, x0 + 17, d0 + 15, d0 + 15 + 410, zb + 15, zb + 215, M.lada, 'Lådsida');
-      box(g, x1 - 17, x1 - 2, d0 + 15, d0 + 15 + 410, zb + 15, zb + 215, M.lada, 'Lådsida');
-      box(g, x0 + 17, x1 - 17, d0 + 425 - 15, d0 + 425, zb + 35, zb + 215, M.lada, 'Lådbak');
-      box(g, x0 + 11, x1 - 11, d0 + 15, d0 + 418, zb + 18, zb + 24, M.rygg, 'Lådbotten');
+      const xa = T + 4 + inv, xb = W - T - 4 - inv, zb = z + T + 260 * i + 2, d0 = 4;
+      box(g, xa, xb, d0, d0 + 15, zb, zb + 220, M.lada, `${pre}Låda ${i + 1} front`);
+      box(g, xa + 2, xa + 17, d0 + 15, d0 + 15 + 410, zb + 15, zb + 215, M.lada, `${pre}Lådsida`);
+      box(g, xb - 17, xb - 2, d0 + 15, d0 + 15 + 410, zb + 15, zb + 215, M.lada, `${pre}Lådsida`);
+      box(g, xa + 17, xb - 17, d0 + 425 - 15, d0 + 425, zb + 35, zb + 215, M.lada, `${pre}Lådbak`);
+      box(g, xa + 11, xb - 11, d0 + 15, d0 + 418, zb + 18, zb + 24, M.rygg, `${pre}Lådbotten`);
     }
-    // hål på sidornas insidor (ur TCN-delarna)
     if (lage.hal) ut.delar.filter(d => d.skap === s.nr && /^SideLeft|^SideRight/.test(d.namn)).forEach(d => {
       const v = /^SideLeft/.test(d.namn), X = v ? T + 0.6 : W - T - 0.6;
       const Z = x => z + (v ? H - x : x);
@@ -101,27 +126,19 @@ function bygg(ut) {
     });
     z += H;
   });
-  if (gal) box(rot, 0, W, 0, maxD, z, z + gal, M.galler, 'Galler');
-  if (k.nisch) {
-    const nb = k.nisch.bredd, x0 = -(nb - W) / 2;
-    box(rot, x0 - 60, x0, -30, maxD + 120, 0, k.nisch.hojd, M.vagg, 'Nischvägg');
-    box(rot, x0 + nb, x0 + nb + 60, -30, maxD + 120, 0, k.nisch.hojd, M.vagg, 'Nischvägg');
-  }
   if (med) {
     const d = k.dorrar, DH = d.hojd || (k.hojd + (d.under || 0)), DB = d.bredd || (d.antal === 2 ? (W - 6) / 2 : W - 4);
     const zb = sock - (d.under || 0);
-    const xs = d.antal === 2 ? [1, W - 1 - DB] : [2];
-    xs.forEach((x, i) => {
-      const hoger = i === 1, px = hoger ? x + DB : x;          // gångjärnskant
-      const piv = new THREE.Group(); piv.position.set(px, -2, 0); rot.add(piv);
+    const xs = d.antal === 2 ? [[1, false], [W - 1 - DB, true]] : [[2, d.hand === 'h']];
+    xs.forEach(([x, hoger]) => {
+      const px = hoger ? x + DB : x;
+      const piv = new THREE.Group(); piv.position.set(px, -2, 0); g0.add(piv);
       const dg = new THREE.Group(); dg.position.set(-px, 2, 0); piv.add(dg);
-      box(dg, x, x + DB, -19, -2, zb, zb + DH, M.dorr, `Dörr ${hoger ? 'höger' : 'vänster'}`);
+      box(dg, x, x + DB, -19, -2, zb, zb + DH, M.dorr, `${pre}Dörr ${hoger ? 'höger' : 'vänster'}`);
       d.gangjarn.forEach(c => hal(dg, hoger ? x + DB - 21.5 : x + 21.5, -1.4, zb + c, 35, 'y', M.kopp));
       piv.userData.hoger = hoger; dorrGrupp.push(piv);
     });
   }
-  satDorrar();
-  if (forstaGang) { ram(k); forstaGang = false; }
 }
 
 function satDorrar() {
@@ -131,9 +148,9 @@ function satDorrar() {
   });
 }
 
-function ram(k) {
-  const H = (k.sockel || 0) + k.hojd + (k.galler || 0), W = k.bredd;
-  const c = new THREE.Vector3(W / 2000, H / 2000, -0.25);
+function ram(x0, x1, H) {
+  const W = x1 - x0;
+  const c = new THREE.Vector3((x0 + x1) / 2000, H / 2000, -0.25);
   ctl.target.copy(c);
   const avst = Math.max(H, W) / 1000 * 1.9;
   cam.position.set(c.x + avst * 0.55, c.y + avst * 0.15, c.z + avst);
@@ -159,7 +176,7 @@ renderer.domElement.addEventListener('pointerup', e => {
 });
 
 window.Vy3d = {
-  bygg, ram: () => window.__ut && ram(window.__ut.konfig),
+  bygg, ram: () => { forstaGang = true; window.__ut && bygg(window.__ut); },
   satt(o) { Object.assign(lage, o); if ('hal' in o && window.__ut) bygg(window.__ut); else satDorrar(); },
 };
 if (window.__ut) bygg(window.__ut);

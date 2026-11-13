@@ -11,15 +11,9 @@
   const FARG = { stomme: '#d8b98a', lada: '#c9c9c9', dorr: '#b98a55', rygg: '#e9dcc0', regel: '#bdbdbd', hal8: '#1f4e8c', hal5: '#c8321a', kopp: '#2f7d32', spar: '#7a3fa0' };
 
   // ---------- frontvy ----------
-  function front(ut, opt = {}) {
-    const k = ut.konfig, T = k.T, W = k.bredd, P = [];
-    const sock = k.sockel || 0, gal = k.galler || 0;
-    const nb = k.nisch ? k.nisch.bredd : W, x0 = (nb - W) / 2;
-    if (k.nisch) {
-      P.push({ t: 'rect', x: 0, y: 0, w: nb, h: k.nisch.hojd, stroke: '#999', dash: [8, 6], lw: 0.6 });
-      P.push({ t: 'text', x: nb / 2, y: k.nisch.hojd + 25, s: `nisch ${nb} × ${k.nisch.hojd}`, anchor: 'middle', size: 9, color: '#666' });
-    }
-    if (sock) { P.push({ t: 'rect', x: x0, y: 0, w: W, h: sock, fill: '#eee', stroke: '#888' }); P.push({ t: 'text', x: x0 + W / 2, y: sock / 2 - 12, s: `sockel ${sock}`, anchor: 'middle', size: 8, color: '#666' }); }
+  // kropp: en moduls skåp (+ ev. dörrar) med vänster kant i x0, golv till sockelns överkant = sock
+  function kropp(P, k, x0, sock, opt) {
+    const T = k.T, W = k.bredd;
     let z = sock;
     k.skap.forEach(s => {
       const H = s.hojd;
@@ -30,8 +24,12 @@
       if (s.fast != null) P.push({ t: 'rect', x: x0 + T, y: z + s.fast - T / 2, w: W - 2 * T, h: T, fill: FARG.stomme, stroke: '#333' });
       s.hyllor.forEach(m => {
         P.push({ t: 'rect', x: x0 + T + 1, y: z + m + 6, w: W - 2 * T - 2, h: T, fill: '#ead7b5', stroke: '#555' });
-        P.push({ t: 'text', x: x0 + W + 12, y: z + m, s: `hylla ${m}`, size: 7, color: '#555' });
+        if (opt.etiketter) P.push({ t: 'text', x: x0 + W + 12, y: z + m, s: `hylla ${m}`, size: 7, color: '#555' });
       });
+      if (s.stang) {
+        P.push({ t: 'rect', x: x0 + T, y: z + s.stang - 12.5, w: W - 2 * T, h: 25, fill: '#777', stroke: '#333' });
+        for (let i = 0; i < 5; i++) { const hx = x0 + T + 60 + i * (W - 2 * T - 120) / 4; P.push({ t: 'line', x1: hx, y1: z + s.stang, x2: hx, y2: z + s.stang - 900, stroke: '#bbb', lw: 0.5, dash: [6, 6] }); }
+      }
       const med = !!k.dorrar, inv = med ? 20 : 0;
       for (let i = 0; i < s.lador; i++) {
         const lb = z + T + 260 * i;
@@ -40,30 +38,54 @@
       }
       if (med && s.lador) [x0 + T, x0 + W - T - 20].forEach(x => P.push({ t: 'rect', x, y: z + 75, w: 20, h: 200 + 260 * (s.lador - 1), fill: '#a9b7c6', stroke: '#444' }));
       if (s.bak !== 'spar') P.push({ t: 'text', x: x0 + W / 2, y: z + H - 70, s: 'ingen rygg', anchor: 'middle', size: 7, color: '#888' });
-      P.push({ t: 'text', x: x0 - 12, y: z + H / 2, s: `skåp ${s.nr}: ${H}`, anchor: 'end', size: 8 });
       z += H;
     });
-    if (gal) { P.push({ t: 'rect', x: x0, y: z, w: W, h: gal, fill: '#f4f4f4', stroke: '#888', dash: [4, 3] }); P.push({ t: 'text', x: x0 + W / 2, y: z + gal / 2 - 4, s: `galler ${gal}`, anchor: 'middle', size: 8, color: '#666' }); }
     if (opt.dorrar && k.dorrar) {
       const d = k.dorrar, DH = d.hojd || (k.hojd + (d.under || 0)), DB = d.bredd || (d.antal === 2 ? (W - 6) / 2 : W - 4);
       const yb = sock - (d.under || 0);
-      const xs = d.antal === 2 ? [x0 + 1, x0 + W - 1 - DB] : [x0 + 2];
-      xs.forEach((x, i) => {
+      const xs = d.antal === 2 ? [[x0 + 1, false], [x0 + W - 1 - DB, true]] : [[x0 + 2, d.hand === 'h']];
+      xs.forEach(([x, hoger]) => {
         P.push({ t: 'rect', x, y: yb, w: DB, h: DH, fill: 'rgba(185,138,85,0.55)', stroke: '#5b3b17', lw: 1 });
-        const kant = (i === 0) ? x + 21.5 : x + DB - 21.5;
+        const kant = hoger ? x + DB - 21.5 : x + 21.5;
         d.gangjarn.forEach(c => P.push({ t: 'circle', x: kant, y: yb + c, r: 17.5, stroke: FARG.kopp, fill: 'none' }));
       });
     }
-    // mått
-    const top = sock + k.hojd;
-    P.push({ t: 'text', x: x0 + W / 2, y: -40, s: `bredd ${W}`, anchor: 'middle', size: 9 });
-    P.push({ t: 'text', x: x0 + W + 12, y: top + 10, s: `total ${k.hojd}`, size: 8 });
-    return { prim: P, box: [-190, -70, nb + 380, Math.max(k.nisch ? k.nisch.hojd : 0, top + gal) + 160] };
+  }
+
+  // ram: nisch, sockel, galler, mått. moduler: [{konfig, x0, nr, etikett}]
+  function frontAlla(moduler, ram, opt = {}) {
+    const P = [], sock = ram.sockel || 0, gal = ram.galler || 0;
+    const xs = moduler.map(m => m.x0), x0 = Math.min(...xs), x1 = Math.max(...moduler.map(m => m.x0 + m.konfig.bredd));
+    const hojd = Math.max(...moduler.map(m => m.konfig.hojd));
+    const nb = ram.nisch && ram.nisch.bredd ? ram.nisch.bredd : x1 - x0;
+    if (ram.nisch && ram.nisch.bredd) {
+      P.push({ t: 'rect', x: 0, y: 0, w: nb, h: ram.nisch.hojd, stroke: '#999', dash: [8, 6], lw: 0.6 });
+      P.push({ t: 'text', x: nb / 2, y: ram.nisch.hojd + 25, s: `nisch ${nb} × ${ram.nisch.hojd}`, anchor: 'middle', size: 9, color: '#666' });
+    }
+    if (sock) { P.push({ t: 'rect', x: x0, y: 0, w: x1 - x0, h: sock, fill: '#eee', stroke: '#888' }); P.push({ t: 'text', x: x1 + 12, y: sock / 2 - 12, s: `sockel ${sock}`, anchor: 'middle', size: 8, color: '#666' }); }
+    moduler.forEach(m => {
+      kropp(P, m.konfig, m.x0, sock, Object.assign({ etiketter: moduler.length === 1 }, opt));
+      P.push({ t: 'text', x: m.x0 + m.konfig.bredd / 2, y: -55, s: (moduler.length > 1 ? `M${m.nr} · ` : 'bredd ') + m.konfig.bredd, anchor: 'middle', size: 9 });
+    });
+    const top = sock + hojd;
+    if (gal) { P.push({ t: 'rect', x: x0, y: top, w: x1 - x0, h: gal, fill: '#f4f4f4', stroke: '#888', dash: [4, 3] }); P.push({ t: 'text', x: (x0 + x1) / 2, y: top + gal / 2 - 4, s: `galler ${gal}`, anchor: 'middle', size: 8, color: '#666' }); }
+    let z = sock;
+    moduler[0].konfig.skap.forEach(s => { P.push({ t: 'text', x: x0 - 12, y: z + s.hojd / 2, s: `${s.hojd}`, anchor: 'end', size: 8 }); z += s.hojd; });
+    const hogst = Math.max(ram.nisch && ram.nisch.hojd ? ram.nisch.hojd : 0, top + gal);
+    const marg = Math.max(nb, hogst) * 0.07;
+    return { prim: P, box: [-marg - 60, -70, nb + 2 * marg + 120, hogst + 160] };
+  }
+  function front(ut, opt = {}) {
+    const k = ut.konfig, x0 = k.nisch ? (k.nisch.bredd - k.bredd) / 2 : 0;
+    return frontAlla([{ konfig: k, x0, nr: 1 }], k, opt);
+  }
+  function frontSystem(su, opt = {}) {
+    return frontAlla(su.moduler.map(m => ({ konfig: m.konfig, x0: m.x0, nr: m.nr })), su.sys, opt);
   }
 
   // ---------- sidosnitt ----------
   function sida(ut) {
-    const k = ut.konfig, P = [];
+    const k = ut.moduler ? Object.assign({}, ut.moduler[0].konfig, { sockel: ut.sys.sockel }) : ut.konfig, P = [];
     let z = k.sockel || 0, maxD = 0;
     k.skap.forEach(s => {
       maxD = Math.max(maxD, s.djup);
@@ -152,5 +174,5 @@
     return s;
   }
 
-  return { front, sida, delbild, svg, pdf, lat, FARG };
+  return { front, frontSystem, sida, delbild, svg, pdf, lat, FARG };
 });

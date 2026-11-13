@@ -29,6 +29,7 @@
     { id: 'dorr', text: 'Dörr: kopp Ø35 21,5 från kant, skruv Ø8 ±22,5 / 31; montageplatta Ø5 y 23/55 vid kopp−underhäng', status: 'säker' },
     { id: 'distans', text: 'Med dörrar: distansklossar 20 mm per sida, lådan 40 mm smalare', status: 'säker' },
     { id: 'skena', text: 'Lådskena: hål y 64/96 + 288/320, linje 96,5 + 260·i från botten; låda 410 djup', status: 'OSÄKER (1 skåpdjup)' },
+    { id: 'stang', text: 'Klädstång: fäste 2×Ø5 c/c 32 vertikalt, mitt i användbart djup', status: 'EGEN (ej i TCN-underlag)' },
     { id: 'klots', text: 'Distansklots 460×425: tappar 100/L−100, start 75 från botten', status: 'OSÄKER (2 lådor)' },
   ];
 
@@ -140,9 +141,11 @@
       function bygg(vanster) {
         const X = x => vanster ? H - x : x;
         const ops = [kontur(H, D, T)];
-        if (vanster || (med && k.dorrar.antal === 2)) gj.forEach(x => ops.push(ytaØ5(X(x), 23), ytaØ5(X(x), 55)));
+        const hand = med && k.dorrar.antal === 1 ? (k.dorrar.hand || 'v') : null;
+        if (med && (!hand || (hand === 'v') === vanster)) gj.forEach(x => ops.push(ytaØ5(X(x), 23), ytaØ5(X(x), 55)));
         s.hyllor.forEach(m => [41, 2 + djHy - 37].forEach(y =>
           ops.push(hylltapp(y, vanster ? H - (m - 32) : m - 32, vanster ? -2 : 2))));
+        if (s.stang) { const yc = r2((rygg ? ys : D) / 2); [16, -16].forEach(dx => ops.push(ytaØ5(X(s.stang + dx), yc))); }
         sidaLada.forEach(o => ops.push(Object.assign({}, o, { x: X(o.x) })));
         radTopp.forEach(([x, y]) => ops.push(ytaØ8(X(x), y)));
         radBott.forEach(([x, y]) => ops.push(ytaØ8(X(x), y)));
@@ -196,7 +199,10 @@
           return ops;
         };
         const iV = nr(); cups.forEach(() => nr());
-        push(del({ fil: fil(iV, 'left door', 1), mapp: MAT.dorr.mapp, typ: 'Dörr vänster', namn: nm('left door', DH, DB, DT), L: DH, B: DB, T: DT, ops: dorr('v', false) }));
+        if (dd.antal === 1 && dd.hand === 'h')
+          push(del({ fil: fil(iV, 'right door', 1), mapp: MAT.dorr.mapp, typ: 'Dörr höger', namn: nm('right door', DH, DB, DT), L: DH, B: DB, T: DT, ops: dorr('h', true) }));
+        else
+          push(del({ fil: fil(iV, 'left door', 1), mapp: MAT.dorr.mapp, typ: 'Dörr vänster', namn: nm('left door', DH, DB, DT), L: DH, B: DB, T: DT, ops: dorr('v', false) }));
         if (dd.antal === 2) {
           const iH = nr(); cups.forEach(() => nr());
           push(del({ fil: fil(iH, 'right door', 1), mapp: MAT.dorr.mapp, typ: 'Dörr höger', namn: nm('right door', DH, DB, DT), L: DH, B: DB, T: DT, ops: dorr('h', true) }));
@@ -218,6 +224,7 @@
         push(del({ fil: fil(nr(), 'Adjustable_Shelf', 2), mapp: MAT.stomme.mapp, typ: 'Ställbar hylla', namn: nm('Adjustable_Shelf', Bi, djHy, T), L: Bi, B: djHy, T, ops }));
       });
       if (s.hyllor.length) ut.beslag.push({ namn: 'Hylltapp Ø5', antal: 4 * s.hyllor.length });
+      if (s.stang) { ut.beslag.push({ namn: 'Klädstång + 2 fästen', antal: 1 }); ut.saglista.push({ namn: `Klädstång skåp ${s.nr}`, L: Bi - 2, B: 25, T: 25, material: 'Stång (köpdel, kapas)' }); }
 
       // lådor
       if (nL) {

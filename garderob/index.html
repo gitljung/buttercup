@@ -13,72 +13,81 @@ body{margin:0;font-family:Barlow,Helvetica,sans-serif;background:var(--cream);co
 header{background:var(--gul);padding:10px 18px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
 header h1{font-family:Anton,sans-serif;font-weight:400;margin:0;font-size:28px;letter-spacing:.5px}
 header span{font-family:'Barlow Condensed';font-size:15px}
-main{display:grid;grid-template-columns:340px 1fr 340px;gap:14px;padding:14px}
-@media(max-width:1100px){main{grid-template-columns:1fr}}
+#topp{position:relative;margin:14px 14px 0}
+#vy3d{position:relative;height:58vh;min-height:380px;border-radius:10px;overflow:hidden;border:2px dashed #d9c38f;background:#f3ecdb}
+#vy3d canvas{display:block}
+#vy3d-namn{position:absolute;left:12px;top:10px;font-family:'Barlow Condensed';font-weight:700;font-size:18px;color:var(--ox);pointer-events:none}
+.ctl3d{position:absolute;right:12px;top:10px;background:rgba(255,255,255,.88);border-radius:8px;padding:6px 10px;font-size:14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:2}
+.ctl3d input{width:auto}
+.ctl3d label{margin:0;gap:3px}
+#sum3d{position:absolute;left:12px;bottom:10px;background:rgba(255,255,255,.88);border-radius:8px;padding:5px 10px;font-family:'Barlow Condensed';font-size:16px;z-index:2}
+#hjalp{position:absolute;right:12px;bottom:10px;font-size:12px;color:#555;z-index:2}
+main{display:grid;grid-template-columns:380px 1fr 360px;gap:14px;padding:14px}
+@media(max-width:1150px){main{grid-template-columns:1fr}}
 .kort{background:#fff;border:2px dashed #d9c38f;border-radius:10px;padding:12px}
 h2{font-family:'Barlow Condensed';font-weight:700;font-size:19px;margin:4px 0 8px;text-transform:uppercase;letter-spacing:.5px}
-label{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;margin:5px 0}
-input,select{font:inherit;padding:3px 6px;border:1px solid #bbb;border-radius:5px;width:120px}
-input[type=checkbox]{width:auto}
-.skap{border:1px solid #e5d6ae;border-radius:8px;padding:8px;margin:8px 0;background:#fffbef}
-.skap h3{margin:0 0 4px;font-family:'Barlow Condensed';font-size:16px;display:flex;justify-content:space-between}
+label{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;margin:4px 0}
+input,select{font:inherit;padding:3px 6px;border:1px solid #bbb;border-radius:5px;width:110px}
+.par input{width:62px}
+.modul{border:1px solid #e5d6ae;border-radius:8px;padding:8px;margin:8px 0;background:#fffbef}
+.modul h3{margin:0 0 4px;font-family:'Barlow Condensed';font-size:17px;display:flex;justify-content:space-between;align-items:center;gap:4px}
+.modul h3 span{flex:1}
+.modul .auto{color:#777;font-size:12px}
 button{font-family:'Barlow Condensed';font-weight:700;font-size:16px;border:0;border-radius:6px;padding:7px 12px;cursor:pointer;background:var(--ox);color:#fff;margin:3px 3px 3px 0}
 button.sek{background:#fff;color:var(--ox);border:2px solid var(--ox)}
-button.liten{font-size:13px;padding:2px 8px}
+button.liten{font-size:13px;padding:1px 7px;margin:0}
 .vyer{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
-.vyer>div{flex:1;min-width:240px}
-.varn{color:var(--chili);font-weight:600;font-size:14px}
-.info{font-size:13px;color:#555}
+.vyer>div{flex:1;min-width:260px}
+.varn{color:var(--chili);font-weight:600;font-size:14px;margin:4px 0}
+.info{font-size:13px;color:#555;margin:3px 0}
 table{border-collapse:collapse;width:100%;font-size:12.5px}
 td,th{padding:2px 4px;border-bottom:1px solid #eee;text-align:left}
-th{font-family:'Barlow Condensed';font-size:14px}
 .mapp{background:#f7eccd;font-weight:600}
 .osak{color:var(--chili)}
-#vy3d{position:relative;height:560px;border-radius:8px;overflow:hidden;border:1px solid #e5d6ae;margin:6px 0}
-#vy3d canvas{display:block}
-#vy3d-namn{position:absolute;left:10px;top:8px;font-family:'Barlow Condensed';font-weight:700;font-size:17px;color:var(--ox);pointer-events:none}
-.ctl3d{font-size:14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-label.r{display:inline-flex;margin:0;gap:3px}
-.ctl3d input{width:auto}
 small{color:#666}
 </style>
 </head>
 <body>
-<header><h1>GARDEROBSKONFIGURATOR</h1><span>snickeri-tcn-3d · v1 · regler ur skåpprogrammets TCN · export TCN + PDF</span></header>
+<header><h1>GARDEROBSKONFIGURATOR</h1><span>snickeri-tcn-3d · modulsystem · regler ur skåpprogrammets TCN · export TCN + PDF</span></header>
+
+<div id="topp">
+  <div id="vy3d"><div id="vy3d-namn"></div></div>
+  <div class="ctl3d">
+    Dörrar: <label><input type="radio" name="d3" value="stangda"> stängda</label>
+    <label><input type="radio" name="d3" value="oppna" checked> öppna</label>
+    <label><input type="radio" name="d3" value="dolda"> dolda</label>
+    · <label><input type="checkbox" id="h3" checked> hål</label>
+    <button class="sek liten" id="ram3">centrera</button>
+  </div>
+  <div id="sum3d"></div>
+  <div id="hjalp">dra = rotera · scroll = zoom · högerdra = panorera · klick = delnamn</div>
+</div>
+
 <main>
 <section class="kort" id="form">
-  <h2>Garderob</h2>
-  <label>Namn <input id="namn" style="width:180px"></label>
-  <label>Jobbnamn (i TCN) <input id="jobb" style="width:180px"></label>
-  <label>Bredd (utv.) <input id="bredd" type="number" step="1"></label>
-  <label>Nisch bredd × höjd <span><input id="nb" type="number" style="width:70px"> × <input id="nh" type="number" style="width:70px"></span></label>
-  <label>Sockel / galler <span><input id="sockel" type="number" style="width:70px"> / <input id="galler" type="number" style="width:70px"></span></label>
-  <h2>Skåp <small>(nerifrån)</small></h2>
-  <div id="skaplista"></div>
-  <button class="sek liten" id="nyttskap">+ skåp ovanpå</button>
-  <h2>Dörrar</h2>
-  <label>Antal <select id="dantal"><option value="0">inga</option><option value="1">1</option><option value="2">2</option></select></label>
-  <label>Under skåpet (mm) <input id="dunder" type="number"></label>
-  <label>Gångjärn (från dörrens underkant) <input id="dgj" style="width:140px"></label>
+  <h2>System</h2>
+  <label>Namn <input id="namn" style="width:200px"></label>
+  <label>Jobbnamn (i TCN) <input id="jobb" style="width:200px"></label>
+  <label class="par">Nisch bredd × höjd <span><input id="nb" type="number"> × <input id="nh" type="number"></span></label>
+  <label class="par">Passbit per sida <input id="pass" type="number"></label>
+  <label class="par">Sockel / galler <span><input id="sockel" type="number"> / <input id="galler" type="number"></span></label>
+  <label class="par">Höjd nedre / övre <span><input id="hn" type="number"> / <input id="ho" type="number"></span></label>
+  <label class="par">Djup nedre / övre <span><input id="dn" type="number"> / <input id="do" type="number"></span></label>
+  <h2>Moduler <small>(vänster → höger)</small></h2>
+  <div id="moduler"></div>
+  <button class="sek liten" data-ny="lada">+ Lådor+hyllor</button>
+  <button class="sek liten" data-ny="hang">+ Hängdel</button>
+  <button class="sek liten" data-ny="hylla">+ Hyllor</button>
   <hr>
-  <button class="sek" id="exempel">Exempel: Acaciagatan</button>
+  <button class="sek" id="exempel">Exempel 2,4 m</button>
+  <button class="sek" id="acacia">Acaciagatan</button>
   <button class="sek" id="ladda">Ladda konfig…</button><input type="file" id="fil" accept=".json" hidden>
 </section>
 
 <section class="kort">
-  <h2>Vyer</h2>
-  <div class="vyer"><div id="vyFront"></div><div id="vyDorr"></div><div id="vySida" style="max-width:180px"></div></div>
+  <h2>Front</h2>
+  <div class="vyer"><div id="vyFront"></div><div id="vyDorr"></div></div>
   <div id="varn"></div>
-  <h2>3D</h2>
-  <div class="ctl3d">
-    Dörrar: <label class="r"><input type="radio" name="d3" value="stangda"> stängda</label>
-    <label class="r"><input type="radio" name="d3" value="oppna" checked> öppna</label>
-    <label class="r"><input type="radio" name="d3" value="dolda"> dolda</label>
-    · <label class="r"><input type="checkbox" id="h3" checked> hål i sidorna</label>
-    <button class="sek liten" id="ram3">centrera</button>
-  </div>
-  <div id="vy3d"><div id="vy3d-namn"></div></div>
-  <small>Dra = rotera · scroll = zoom · högerdra = panorera · klicka på en del = namn</small>
   <h2>Export</h2>
   <button id="tcn">⬇ TCN-filer (zip)</button>
   <button id="pdf">⬇ PDF-sammanställning</button>
@@ -89,7 +98,7 @@ small{color:#666}
 
 <section class="kort">
   <h2>Delar <small id="antal"></small></h2>
-  <div id="delar"></div>
+  <div id="delar" style="max-height:520px;overflow:auto"></div>
   <h2>Beslag</h2><div id="beslag" class="info"></div>
   <h2>Regelbok</h2><div id="regler" class="info"></div>
 </section>
@@ -100,87 +109,114 @@ small{color:#666}
 <script src="vendor/jszip.min.js"></script>
 <script src="vendor/jspdf.umd.min.js"></script>
 <script src="garderob.js"></script>
+<script src="system.js"></script>
 <script src="ritning.js"></script>
 <script src="export.js"></script>
 <script>
 const $ = id => document.getElementById(id);
-let K = null, UT = null;
+let K = null, SU = null;
+const TYP = System.TYPER;
 
-function tal(v, def = 0) { const n = parseFloat(String(v).replace(',', '.')); return isNaN(n) ? def : n; }
-function lista(v) { return String(v || '').split(/[ ,;\/]+/).map(x => tal(x, NaN)).filter(x => !isNaN(x)); }
+function tal(v, def = null) { const n = parseFloat(String(v).replace(',', '.')); return isNaN(n) ? def : n; }
+const val = v => v == null ? '' : v;
 
 function tillForm(k) {
-  $('namn').value = k.namn || ''; $('jobb').value = k.jobb || ''; $('bredd').value = k.bredd;
-  $('nb').value = k.nisch ? k.nisch.bredd : ''; $('nh').value = k.nisch ? k.nisch.hojd : '';
-  $('sockel').value = k.sockel || 0; $('galler').value = k.galler || 0;
-  $('dantal').value = k.dorrar ? k.dorrar.antal : 0;
-  $('dunder').value = k.dorrar ? (k.dorrar.under || 0) : 50;
-  $('dgj').value = k.dorrar ? k.dorrar.gangjarn.join(', ') : '90, 780, 1420';
-  const L = $('skaplista'); L.innerHTML = '';
-  k.skap.forEach((s, i) => {
-    const d = document.createElement('div'); d.className = 'skap'; d.dataset.i = i;
-    d.innerHTML = `<h3>Skåp ${i + 1} <button class="sek liten" data-bort>ta bort</button></h3>
-      <label>Höjd <input data-f="hojd" type="number" value="${s.hojd}"></label>
-      <label>Djup <input data-f="djup" type="number" value="${s.djup}"></label>
-      <label>Rygg <select data-f="bak"><option value="spar"${s.bak !== 'ingen' ? ' selected' : ''}>i spår (6,5)</option><option value="ingen"${s.bak === 'ingen' ? ' selected' : ''}>ingen (löstagbar)</option></select></label>
-      <label>Fast hylla, mitt <input data-f="fast" type="number" placeholder="ingen" value="${s.fast ?? ''}"></label>
-      <label>Ställbara hyllor <input data-f="hyllor" value="${(s.hyllor || []).join(', ')}" placeholder="t.ex. 880, 1180"></label>
-      <label>Innerlådor <select data-f="lador">${[0, 1, 2, 3].map(n => `<option${n === (s.lador || 0) ? ' selected' : ''}>${n}</option>`).join('')}</select></label>`;
+  $('namn').value = k.namn || ''; $('jobb').value = k.jobb || '';
+  $('nb').value = k.nisch ? val(k.nisch.bredd) : ''; $('nh').value = k.nisch ? val(k.nisch.hojd) : '';
+  $('pass').value = val(k.passbit); $('sockel').value = val(k.sockel); $('galler').value = val(k.galler);
+  $('hn').value = k.hojder[0]; $('ho').value = k.hojder[1]; $('dn').value = k.djup[0]; $('do').value = k.djup[1];
+  const L = $('moduler'); L.innerHTML = '';
+  k.moduler.forEach((m, i) => {
+    const d = document.createElement('div'); d.className = 'modul'; d.dataset.i = i;
+    const dval = m.dorrar == null ? 'auto' : String(m.dorrar);
+    d.innerHTML = `<h3><span>M${i + 1} · <select data-f="typ" style="width:auto">${Object.entries(TYP).map(([t, x]) => `<option value="${t}"${t === m.typ ? ' selected' : ''}>${x.namn}</option>`).join('')}</select></span>
+        <button class="sek liten" data-flytta="-1" title="flytta vänster">◀</button><button class="sek liten" data-flytta="1" title="flytta höger">▶</button><button class="sek liten" data-bort title="ta bort">✕</button></h3>
+      <label>Bredd <span><input data-f="bredd" type="number" placeholder="auto" value="${val(m.bredd)}" style="width:80px"> <span class="auto" data-auto></span></span></label>
+      <label>Dörrar <span><select data-f="dorrar" style="width:70px">${['auto', '0', '1', '2'].map(o => `<option${o === dval ? ' selected' : ''}>${o}</option>`).join('')}</select>
+        <select data-f="hand" style="width:80px" title="gångjärnssida vid 1 dörr"><option value="v"${m.hand !== 'h' ? ' selected' : ''}>vänster</option><option value="h"${m.hand === 'h' ? ' selected' : ''}>höger</option></select></span></label>
+      ${m.typ === 'lada' ? `<label>Innerlådor / fast hylla <span><select data-f="lador" style="width:55px">${[0, 1, 2, 3].map(n => `<option${n === (m.lador != null ? m.lador : 2) ? ' selected' : ''}>${n}</option>`).join('')}</select>
+        <input data-f="fast" type="number" placeholder="auto" value="${val(m.fast)}" style="width:70px"></span></label>` : ''}
+      ${m.typ !== 'hang' ? `<label>Hyllor nedre (antal) <input data-f="hyllorNed" type="number" min="0" max="8" placeholder="auto" value="${val(m.hyllorNed)}" style="width:70px"></label>` : ''}
+      <label>Hyllor övre (antal) <input data-f="hyllorOvr" type="number" min="0" max="6" placeholder="auto" value="${val(m.hyllorOvr)}" style="width:70px"></label>
+      <label>Rygg övre <select data-f="ovrbak" style="width:150px"><option value="spar">i spår</option><option value="ingen"${m.ovr && m.ovr.bak === 'ingen' ? ' selected' : ''}>ingen (löstagbar)</option></select></label>`;
     L.appendChild(d);
   });
 }
 function franForm() {
-  const k = { namn: $('namn').value, jobb: $('jobb').value || 'Garderob', bredd: tal($('bredd').value, 910),
-    sockel: tal($('sockel').value), galler: tal($('galler').value), skap: [] };
+  const k = { namn: $('namn').value || 'Garderob', jobb: $('jobb').value || 'Garderob',
+    passbit: tal($('pass').value, 0), sockel: tal($('sockel').value, 0), galler: tal($('galler').value, 0),
+    hojder: [tal($('hn').value, 1500), tal($('ho').value, 0)], djup: [tal($('dn').value, 488), tal($('do').value, 340)], moduler: [] };
   if ($('nb').value) k.nisch = { bredd: tal($('nb').value), hojd: tal($('nh').value) };
-  document.querySelectorAll('.skap').forEach(d => {
-    const v = f => d.querySelector(`[data-f=${f}]`).value;
-    k.skap.push({ hojd: tal(v('hojd'), 1000), djup: tal(v('djup'), 488), bak: v('bak'),
-      fast: v('fast') === '' ? null : tal(v('fast')), hyllor: lista(v('hyllor')), lador: +v('lador') });
+  document.querySelectorAll('.modul').forEach(d => {
+    const v = f => { const e = d.querySelector(`[data-f=${f}]`); return e ? e.value : ''; };
+    const gammal = (K && K.moduler[+d.dataset.i]) || {};
+    const m = { typ: v('typ') };
+    if (tal(v('bredd')) != null) m.bredd = tal(v('bredd'));
+    if (v('dorrar') !== 'auto') m.dorrar = +v('dorrar');
+    if (v('hand') === 'h') m.hand = 'h';
+    if (m.typ === 'lada') { m.lador = +(v('lador') || 2); if (tal(v('fast')) != null) m.fast = tal(v('fast')); }
+    if (tal(v('hyllorNed')) != null) m.hyllorNed = tal(v('hyllorNed'));
+    if (tal(v('hyllorOvr')) != null) m.hyllorOvr = tal(v('hyllorOvr'));
+    // behåll explicita hyllägen (t.ex. Acaciagatan) så länge typen inte byts och inget antal anges
+    if (gammal.typ === m.typ) {
+      if (gammal.ned && m.hyllorNed == null) m.ned = Object.assign({}, gammal.ned);
+      if (gammal.ovr && m.hyllorOvr == null) m.ovr = Object.assign({}, gammal.ovr);
+      if (gammal.jobb) m.jobb = gammal.jobb;
+      if (gammal.dorrinst) m.dorrinst = gammal.dorrinst;
+    }
+    if (v('ovrbak') === 'ingen') m.ovr = Object.assign(m.ovr || {}, { bak: 'ingen' });
+    else if (m.ovr) delete m.ovr.bak;
+    k.moduler.push(m);
   });
-  const n = +$('dantal').value;
-  k.dorrar = n ? { antal: n, under: tal($('dunder').value), gangjarn: lista($('dgj').value) } : null;
   return k;
 }
 function rita() {
-  try { UT = Garderob.generera(K); } catch (e) { $('varn').innerHTML = `<p class="varn">Fel: ${e.message}</p>`; return; }
-  $('vyFront').innerHTML = Ritning.svg(Ritning.front(UT), 340, { fit: true });
-  $('vyDorr').innerHTML = K.dorrar ? Ritning.svg(Ritning.front(UT, { dorrar: true }), 340, { fit: true }) : '';
-  $('vySida').innerHTML = Ritning.svg(Ritning.sida(UT), 160, { fit: true });
-  $('varn').innerHTML = UT.varningar.map(v => `<p class="varn">⚠ ${v}</p>`).join('') + UT.info.map(v => `<p class="info">${v}</p>`).join('');
-  $('antal').textContent = `(${UT.delar.length} TCN-filer)`;
-  const s = UT.delar.slice().sort((a, b) => a.mapp.localeCompare(b.mapp) || a.fil.localeCompare(b.fil, 'sv', { numeric: true }));
-  let m = null, h = '<table><tr><th>Fil</th><th>Del</th><th>L×B×T</th></tr>';
-  s.forEach(d => { if (d.mapp !== m) { m = d.mapp; h += `<tr><td colspan=3 class="mapp">${m}</td></tr>`; }
+  try { SU = System.generera(K); } catch (e) { console.error(e); $('varn').innerHTML = `<p class="varn">Fel: ${e.message}</p>`; return; }
+  window.__ut = SU; window.dispatchEvent(new CustomEvent('garderob', { detail: SU }));
+  document.querySelectorAll('.modul').forEach((d, i) => { const m = SU.moduler[i]; if (m) d.querySelector('[data-auto]').textContent = K.moduler[i].bredd ? '' : `= ${m.bredd}`; });
+  $('vyFront').innerHTML = Ritning.svg(Ritning.frontSystem(SU), 420, { fit: true });
+  const harD = SU.moduler.some(m => m.konfig.dorrar);
+  $('vyDorr').innerHTML = harD ? Ritning.svg(Ritning.frontSystem(SU, { dorrar: true }), 420, { fit: true }) : '';
+  $('varn').innerHTML = SU.varningar.map(v => `<p class="varn">⚠ ${v}</p>`).join('') + SU.info.map(v => `<p class="info">${v}</p>`).join('');
+  $('sum3d').textContent = `${SU.moduler.length} moduler · ${SU.bredd} × ${SU.hojd} · ${SU.delar.length} TCN-filer` + (SU.varningar.length ? ` · ⚠ ${SU.varningar.length}` : '');
+  $('antal').textContent = `(${SU.delar.length} TCN-filer)`;
+  const s = SU.delar.slice().sort((a, b) => (a.modul - b.modul) || a.mapp.localeCompare(b.mapp) || a.fil.localeCompare(b.fil, 'sv', { numeric: true }));
+  let m = null, h = '<table>';
+  s.forEach(d => { const g = (SU.moduler.length > 1 ? `M${d.modul} · ` : '') + d.mapp; if (g !== m) { m = g; h += `<tr><td colspan=3 class="mapp">${m}</td></tr>`; }
     h += `<tr><td>${d.fil.replace('.tcn', '')}</td><td>${d.typ}</td><td>${Garderob.fmt(d.L)}×${Garderob.fmt(d.B)}×${Garderob.fmt(d.T)}</td></tr>`; });
-  $('delar').innerHTML = h + '</table>' + (UT.saglista.length ? '<p class="info"><b>Sågas:</b> ' + UT.saglista.map(x => `${x.namn} ${x.L}×${x.B}×${x.T}`).join(' · ') + '</p>' : '');
-  $('beslag').innerHTML = UT.beslag.map(b => `${b.antal} × ${b.namn}`).join('<br>');
-  $('regler').innerHTML = UT.regler.map(r => `<div class="${/OSÄKER/.test(r.status) ? 'osak' : ''}">${/OSÄKER/.test(r.status) ? '⚠' : '✓'} ${r.text} <small>(${r.status})</small></div>`).join('');
-  window.__ut = UT; window.dispatchEvent(new CustomEvent('garderob', { detail: UT }));
+  $('delar').innerHTML = h + '</table>' + (SU.saglista.length ? '<p class="info"><b>Sågas/kapas:</b> ' + SU.saglista.map(x => `${x.namn} ${Garderob.fmt(x.L)}×${x.B}×${x.T}`).join(' · ') + '</p>' : '');
+  $('beslag').innerHTML = SU.beslag.map(b => `${b.antal} × ${b.namn}`).join('<br>');
+  $('regler').innerHTML = SU.regler.map(r => { const o = /OSÄKER|EGEN/.test(r.status); return `<div class="${o ? 'osak' : ''}">${o ? '⚠' : '✓'} ${r.text} <small>(${r.status})</small></div>`; }).join('');
   history.replaceState(null, '', '#k=' + btoa(unescape(encodeURIComponent(JSON.stringify(K)))));
 }
-function satt(k) { K = k; tillForm(K); rita(); }
+function satt(k) { K = System.franEnkel(k); tillForm(K); rita(); }
 function ladda(namn, blob) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = namn; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
+const kopia = o => JSON.parse(JSON.stringify(o));
 
-$('form').addEventListener('input', () => { K = franForm(); rita(); });
-$('form').addEventListener('change', () => { K = franForm(); rita(); });
-$('skaplista').addEventListener('click', e => { if (e.target.dataset.bort !== undefined) { e.target.closest('.skap').remove(); K = franForm(); satt(K); } });
-$('nyttskap').onclick = () => { K = franForm(); K.skap.push({ hojd: 900, djup: 340, bak: 'ingen', fast: null, hyllor: [], lador: 0 }); satt(K); };
-$('exempel').onclick = () => satt(JSON.parse(JSON.stringify(Garderob.ACACIA)));
+$('form').addEventListener('change', e => { const typbyte = e.target.dataset.f === 'typ'; K = franForm(); typbyte ? satt(K) : rita(); });
+$('form').addEventListener('input', e => { if (e.target.tagName === 'INPUT') { K = franForm(); rita(); } });
+$('moduler').addEventListener('click', e => {
+  const d = e.target.closest('.modul'); if (!d) return; const i = +d.dataset.i;
+  if (e.target.dataset.bort !== undefined) { K.moduler.splice(i, 1); satt(K); }
+  else if (e.target.dataset.flytta) { const j = i + +e.target.dataset.flytta; if (j >= 0 && j < K.moduler.length) { [K.moduler[i], K.moduler[j]] = [K.moduler[j], K.moduler[i]]; satt(K); } }
+});
+document.querySelectorAll('[data-ny]').forEach(b => b.onclick = () => { K = franForm(); K.moduler.push({ typ: b.dataset.ny }); satt(K); });
+$('exempel').onclick = () => satt(kopia(System.EXEMPEL));
+$('acacia').onclick = () => satt(kopia(System.ACACIA));
 $('ladda').onclick = () => $('fil').click();
 $('fil').onchange = async e => { const f = e.target.files[0]; if (f) satt(JSON.parse(await f.text())); };
-$('tcn').onclick = async () => ladda(Export.rot(UT) + '.zip', await Export.tcnZip(UT, JSZip, 'blob'));
-$('pdf').onclick = () => ladda(Export.rot(UT) + '.pdf', Export.pdfRapport(UT, window.jspdf.jsPDF).output('blob'));
-$('json').onclick = () => ladda(Export.rot(UT) + '.json', new Blob([JSON.stringify(K, null, 2)], { type: 'application/json' }));
+$('tcn').onclick = async () => ladda(Export.rot(SU) + '.zip', await Export.tcnZip(SU, JSZip, 'blob'));
+$('pdf').onclick = () => ladda(Export.rot(SU) + '.pdf', Export.pdfRapport(SU, window.jspdf.jsPDF).output('blob'));
+$('json').onclick = () => ladda(Export.rot(SU) + '.json', new Blob([JSON.stringify(K, null, 2)], { type: 'application/json' }));
 $('lank').onclick = () => { navigator.clipboard.writeText(location.href); $('lank').textContent = '✓ kopierad'; setTimeout(() => $('lank').textContent = '🔗 Kopiera länk', 1500); };
-
 document.querySelectorAll('input[name=d3]').forEach(r => r.onchange = () => window.Vy3d && Vy3d.satt({ dorrar: r.value }));
 $('h3').onchange = () => window.Vy3d && Vy3d.satt({ hal: $('h3').checked });
 $('ram3').onclick = () => window.Vy3d && Vy3d.ram();
-let start = JSON.parse(JSON.stringify(Garderob.ACACIA));
-const m = /#k=([^&]+)/.exec(location.hash);
-if (m) { try { start = JSON.parse(decodeURIComponent(escape(atob(m[1])))); } catch (e) { console.warn(e); } }
-window.__app = { get k() { return K; }, get ut() { return UT; }, satt };
+
+let start = kopia(System.EXEMPEL);
+const mm = /#k=([^&]+)/.exec(location.hash);
+if (mm) { try { start = JSON.parse(decodeURIComponent(escape(atob(mm[1])))); } catch (e) { console.warn(e); } }
+window.__app = { get k() { return K; }, get ut() { return SU; }, satt };
 satt(start);
 </script>
 </body>
