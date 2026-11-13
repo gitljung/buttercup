@@ -1621,15 +1621,26 @@
      "2026-11-13T11:51:16+01:00",
      "oppen",
      "Vickan verifierade: T = 1,5–2,0 kN × 82 mm = 123–164 Nm; τ = T/(0,30·b·t²) = 128–171 MPa mot ca 205."
+    ],
+    [
+     "2026-11-13T12:02:49+01:00",
+     "kommentar",
+     "Vickan: Vicke 2026-11-13: bara rakt drag → sidokraft i sväng utgår. Vridningen från hjulets 82 mm excentricitet (123–164 Nm) finns kvar, så 12 mm spak gäller fortfarande."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:51:16+01:00",
+   "last": "2026-11-13T12:02:49+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1570057458125250643/1570750632711946287",
    "img": "avvikelser/VAX-2.jpg",
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
-   "comments": []
+   "comments": [
+    [
+     "2026-11-13T12:02:49+01:00",
+     "Vickan",
+     "Vicke 2026-11-13: bara rakt drag → sidokraft i sväng utgår. Vridningen från hjulets 82 mm excentricitet (123–164 Nm) finns kvar, så 12 mm spak gäller fortfarande."
+    ]
+   ]
   },
   {
    "id": "av-VAX-3",
@@ -1781,15 +1792,26 @@
      "2026-11-13T11:51:16+01:00",
      "oppen",
      "Vickan verifierade: Pcr = π²·E·(80·8³/12)/2241² = 1,41 kN per stång; vinkel ur bbox 60,2°, stångkraft ≈ hela dragkraften."
+    ],
+    [
+     "2026-11-13T12:02:49+01:00",
+     "kommentar",
+     "Vickan: Vicke 2026-11-13: bara rakt drag, ingen sväng. Stången får bara dra framåt – backa/skjut aldrig med den. Kvarstår för inbromsning; dimensioneras om om backning ska tillåtas."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:51:16+01:00",
+   "last": "2026-11-13T12:02:49+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1570057458125250643/1570750632711946287",
    "img": "avvikelser/VAX-7.jpg",
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
-   "comments": []
+   "comments": [
+    [
+     "2026-11-13T12:02:49+01:00",
+     "Vickan",
+     "Vicke 2026-11-13: bara rakt drag, ingen sväng. Stången får bara dra framåt – backa/skjut aldrig med den. Kvarstår för inbromsning; dimensioneras om om backning ska tillåtas."
+    ]
+   ]
   },
   {
    "id": "av-VAX-8",
@@ -1877,15 +1899,26 @@
      "2026-11-13T11:51:16+01:00",
      "oppen",
      "Vickan verifierade: 100 N vid 650 mm: δ = FL³/(3EI) = 20,4 mm, σ = 122 MPa (I = 50·8³/12)."
+    ],
+    [
+     "2026-11-13T12:02:49+01:00",
+     "kommentar",
+     "Vickan: Bara rakt drag (Vicke 2026-11-13) minskar sidolasten, men pedalens sidokraft vid trampning finns kvar – löses med VAX-2."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:51:16+01:00",
+   "last": "2026-11-13T12:02:49+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1570057458125250643/1570750632711946287",
    "img": "avvikelser/VAX-10.jpg",
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
-   "comments": []
+   "comments": [
+    [
+     "2026-11-13T12:02:49+01:00",
+     "Vickan",
+     "Bara rakt drag (Vicke 2026-11-13) minskar sidolasten, men pedalens sidokraft vid trampning finns kvar – löses med VAX-2."
+    ]
+   ]
   },
   {
    "id": "av-VAX-11",
@@ -2016,5 +2049,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-13 11:58"
+ "updated": "2026-11-13 12:03"
 }
