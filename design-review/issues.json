@@ -808,7 +808,7 @@
    "sel": "o258",
    "url": "?p=horno&sel=o258",
    "created": "2026-11-12T16:00:35+01:00",
-   "status": "stangd",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-12T16:00:35+01:00",
@@ -824,13 +824,18 @@
      "2026-11-13T11:46:29+01:00",
      "stangd",
      "Vicke: "
+    ],
+    [
+     "2026-11-13T12:24:39+01:00",
+     "atgardad",
+     "Vickan: v40 · Rostvinkel hoger/vanster i 1.4828 5 mm (som kolrosten), samma geometri; material AISI 309 + beskrivning i detaljfilerna (h134), Eldstad + topp uppdaterade, export v40 (2026-11-13 1"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:46:29+01:00",
+   "last": "2026-11-13T12:24:39+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-4.jpg",
-   "ver": "hittad v32",
+   "ver": "hittad v32 · stängd v40",
    "pname": "Yamay Horno",
    "comments": [
     [
