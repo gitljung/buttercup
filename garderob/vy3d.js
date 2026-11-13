@@ -143,18 +143,17 @@ function byggModul(ut, ox, sock, pre, nr) {
     z += H;
   });
   if (med) {
-    const d = k.dorrar, DH = d.hojd || (k.hojd + (d.under || 0)), DB = d.bredd || (d.antal === 2 ? (W - 6) / 2 : W - 4);
-    const zb = sock - (d.under || 0);
+    const d = k.dorrar, DB = d.bredd || (d.antal === 2 ? (W - 6) / 2 : W - 4);
     const xs = d.antal === 2 ? [[1, false], [W - 1 - DB, true]] : [[2, d.hand === 'h']];
-    xs.forEach(([x, hoger]) => {
+    d.seg.forEach(sg => { const zb = sock + sg.zb, DH = sg.DH; xs.forEach(([x, hoger]) => {
       const px = hoger ? x + DB : x;
       // vrids kring dörrens yttre framkant (fullt anliggande gångjärn): dörren går inte utanför skåpkanten
       const piv = new THREE.Group(); piv.position.set(px, -19, 0); g0.add(piv);
       const dg = new THREE.Group(); dg.position.set(-px, 19, 0); piv.add(dg);
       box(dg, x, x + DB, -19, -2, zb, zb + DH, M.dorr, `${pre}Dörr ${hoger ? 'höger' : 'vänster'}`);
-      d.gangjarn.forEach(c => hal(dg, hoger ? x + DB - 21.5 : x + 21.5, -1.4, zb + c, 35, 'y', M.kopp));
+      sg.cups.forEach(c => hal(dg, hoger ? x + DB - 21.5 : x + 21.5, -1.4, zb + c, 35, 'y', M.kopp));
       piv.userData.hoger = hoger; dorrGrupp.push(piv);
-    });
+    }); });
   }
   return g0;
 }

@@ -41,14 +41,13 @@
       z += H;
     });
     if (opt.dorrar && k.dorrar) {
-      const d = k.dorrar, DH = d.hojd || (k.hojd + (d.under || 0)), DB = d.bredd || (d.antal === 2 ? (W - 6) / 2 : W - 4);
-      const yb = sock - (d.under || 0);
+      const d = k.dorrar, DB = d.bredd || (d.antal === 2 ? (W - 6) / 2 : W - 4);
       const xs = d.antal === 2 ? [[x0 + 1, false], [x0 + W - 1 - DB, true]] : [[x0 + 2, d.hand === 'h']];
-      xs.forEach(([x, hoger]) => {
+      d.seg.forEach(sg => { const yb = sock + sg.zb, DH = sg.DH; xs.forEach(([x, hoger]) => {
         P.push({ t: 'rect', x, y: yb, w: DB, h: DH, fill: 'rgba(185,138,85,0.55)', stroke: '#5b3b17', lw: 1 });
         const kant = hoger ? x + DB - 21.5 : x + 21.5;
-        d.gangjarn.forEach(c => P.push({ t: 'circle', x: kant, y: yb + c, r: 17.5, stroke: FARG.kopp, fill: 'none' }));
-      });
+        sg.cups.forEach(c => P.push({ t: 'circle', x: kant, y: yb + c, r: 17.5, stroke: FARG.kopp, fill: 'none' }));
+      }); });
     }
   }
 

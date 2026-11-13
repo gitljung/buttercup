@@ -31,6 +31,7 @@
     { id: 'skena', text: 'Lådskena: hål y 64/96 + 288/320, linje 96,5 + 260·i från botten; låda 410 djup', status: 'OSÄKER (1 skåpdjup)' },
     { id: 'stang', text: 'Klädstång: fäste 2×Ø5 c/c 32 vertikalt, mitt i användbart djup', status: 'EGEN (ej i TCN-underlag)' },
     { id: 'hel', text: 'Hel garderob: en stomme i full höjd, fast hylla (lådor: ovanför lådorna, hängdel: hatthylla H−600 med stång 70 under, hyllor: i delningshöjd), 4 gångjärn (översta DH−90)', status: 'EGEN (ej i TCN-underlag)' },
+    { id: 'dorrdel', text: 'Delad modul (nedre + övre stomme): en dörr per stomme, fog 3 mitt på delningen; nedre dörren går ner under-mått, övre slutar i överkant. Gångjärn per dörr efter höjd (Blum): ≤900 → 2, ≤1600 → 3, ≤2000 → 4, ≤2400 → 5, annars 6; 90 från ändarna, jämnt mellan; montageplattor i respektive stommes sidor', status: 'EGEN (Vicke 2026-11-13; Acaciagatan-facit har odelad dörr)' },
     { id: 'passbit', text: 'Passbit mot nischvägg på gångjärnssidan ≥ 30 så att dörren (17) går fri vid öppning', status: 'OSÄKER (Acaciagatan har 30)' },
     { id: 'klots', text: 'Distansklots 460×425: tappar 100/L−100, start 75 från botten', status: 'OSÄKER (2 lådor)' },
   ];
@@ -76,6 +77,14 @@
 
   function del(o) { return Object.assign({ overmatt: 2.5, ops: [] }, o); }
 
+  // gångjärn per dörr efter dörrhöjd (Blum-tabell), 90 från ändarna, jämnt mellan
+  function gjAuto(DH) {
+    const n = DH <= 900 ? 2 : DH <= 1600 ? 3 : DH <= 2000 ? 4 : DH <= 2400 ? 5 : 6;
+    const u = [];
+    for (let i = 0; i < n; i++) u.push(Math.round((90 + i * (DH - 180) / (n - 1)) * 2) / 2);
+    return u;
+  }
+
   // ---------- normalisera konfig ----------
   function normalisera(k) {
     k = JSON.parse(JSON.stringify(k));
@@ -92,6 +101,19 @@
       s.fast = s.fast == null ? null : s.fast; // mitt på fasta hyllan, från skåpets botten
     });
     k.hojd = z;
+    if (k.dorrar) {
+      const d = k.dorrar, under = d.under || 0, sist = k.skap.length - 1, FOG = 3;
+      if (d.delad && k.skap.length > 1) {
+        d.seg = k.skap.map((s, i) => {
+          const zb = i === 0 ? -under : s.z0 + FOG / 2, zt = i === sist ? k.hojd : s.z0 + s.hojd - FOG / 2;
+          return { skap: s.nr, zb, DH: zt - zb, cups: gjAuto(zt - zb) };
+        });
+      } else {
+        const DH = d.hojd || (k.hojd + under);
+        d.seg = [{ skap: 1, zb: -under, DH, cups: d.gangjarn || gjAuto(DH) }];
+      }
+      d.gangjarn = d.seg[0].cups;
+    }
     return k;
   }
 
@@ -116,7 +138,7 @@
       // --- sidor i "från botten"-koordinater ---
       const sida = [];   // ops med x från botten
       // gångjärnsplattor (bara skåp med gångjärn)
-      const gj = med ? (k.dorrar.gangjarn || []).map(c => c - (k.dorrar.under || 0) - s.z0).filter(x => x > 0 && x < H) : [];
+      const gj = med ? k.dorrar.seg.flatMap(sg => sg.cups.map(c => sg.zb + c - s.z0)).filter(x => x > 0 && x < H) : [];
       gj.forEach(x => { sida.push(ytaØ5(x, 23), ytaØ5(x, 55)); });
       // hylltappsrader: 3 hål, start = mitt − 32
       const hylltappar = [];
@@ -188,12 +210,12 @@
         }
       }
 
-      // dörrar (numreras i första skåpet)
-      if (med && s.nr === 1) {
+      // dörrar (numreras i det skåp de hör till; odelad dörr = skåp 1)
+      if (med) k.dorrar.seg.filter(sg => sg.skap === s.nr).forEach(sg => {
         const dd = k.dorrar, DT = MAT.dorr.T;
-        const DH = dd.hojd || (k.hojd + (dd.under || 0));
+        const DH = sg.DH;
         const DB = dd.bredd || (dd.antal === 2 ? (W - 6) / 2 : W - 4);
-        const cups = dd.gangjarn;
+        const cups = sg.cups;
         const dorr = (typ, ytt) => {
           const ops = [kontur(DH, DB, DT)];
           cups.forEach(c => { const yk = ytt ? DB - 21.5 : 21.5, ys2 = ytt ? DB - 31 : 31;
@@ -210,7 +232,7 @@
           push(del({ fil: fil(iH, 'right door', 1), mapp: MAT.dorr.mapp, typ: 'Dörr höger', namn: nm('right door', DH, DB, DT), L: DH, B: DB, T: DT, ops: dorr('h', true) }));
         }
         ut.beslag.push({ namn: 'Gångjärn Blum 45/9,5 + montageplatta', antal: cups.length * dd.antal });
-      }
+      });
 
       // fast hylla
       if (s.fast != null) {
@@ -290,6 +312,11 @@
     }
     k.skap.forEach(s => {
       s.hyllor.forEach(m => { if (m - 32 < k.T + 30 || m + 32 > s.hojd - k.T - 30) ut.varningar.push(`Skåp ${s.nr}: hylla ${m} för nära topp/botten.`); });
+      if (k.dorrar) {   // montageplatta (framkant 23–55) får inte krocka med hylla/fast hylla
+        const pl = k.dorrar.seg.flatMap(sg => sg.cups.map(c => sg.zb + c - s.z0)).filter(x => x > 0 && x < s.hojd);
+        [...s.hyllor, ...(s.fast != null ? [s.fast] : [])].forEach(h => pl.forEach(p => {
+          if (Math.abs(p - h) < 40) ut.varningar.push(`Skåp ${s.nr}: hylla ${h} krockar med montageplatta ${fmt(p)}.`); }));
+      }
       if (s.bak === 'spar' && s.hojd - 2 * k.T + 14 > 2440) ut.varningar.push(`Skåp ${s.nr}: ryggen ${s.hojd - 2 * k.T + 14} är längre än en MDF-skiva (2440), kontrollera skivformatet.`);
       if (s.lador && s.djup < 440) ut.varningar.push(`Skåp ${s.nr}: lådor 410 kräver djup ≥ 440.`);
       if (s.lador && s.fast != null && 96.5 + 260 * (s.lador - 1) + 220 > s.fast - 10) ut.varningar.push(`Skåp ${s.nr}: lådorna når upp till fasta hyllan.`);
@@ -340,5 +367,5 @@
     dorrar: { antal: 2, under: 50, gangjarn: [90, 780, 1420] },
   };
 
-  return { generera, skrivTcn, tillBytes, fmt, REGLER, MAT, ACACIA };
+  return { gjAuto, generera, skrivTcn, tillBytes, fmt, REGLER, MAT, ACACIA };
 });

@@ -79,8 +79,9 @@
     }
     const antalD = m.dorrar != null ? m.dorrar : (W > 650 ? 2 : 1);
     const DH = H + (sys.sockel ? 50 : 0);
-    const gj = m.hel ? [90, 780, 1420, DH - 90] : [90, 780, 1420];
-    const dorrar = antalD ? Object.assign({ antal: antalD, under: sys.sockel ? 50 : 0, gangjarn: gj }, antalD === 1 ? { hand: m.hand || 'v' } : {}, m.dorrinst || {}) : null;
+    // delad modul: en dörr per stomme med egna gångjärn (Vicke 2026-11-13); hel: en dörr, 4 gångjärn
+    const gj = m.hel ? { gangjarn: [90, 780, 1420, DH - 90] } : { delad: skap.length > 1 };
+    const dorrar = antalD ? Object.assign({ antal: antalD, under: sys.sockel ? 50 : 0 }, gj, antalD === 1 ? { hand: m.hand || 'v' } : {}, m.dorrinst || {}) : null;
     return {
       namn: n === 1 ? sys.namn : `${sys.namn} M${i + 1}`,
       jobb: m.jobb || (n === 1 ? sys.jobb : `${sys.jobb} M${i + 1}`),
@@ -148,8 +149,12 @@
     namn: 'Acaciagatan 12.32 B.1.08 Sovrum 1 – SN.B.1.08-A', jobb: 'Hurts 2 L + inlåda',
     nisch: { bredd: 970, hojd: 2680 }, passbit: 30, sockel: 100, galler: 100,
     hojder: [1500, 980], djup: [488, 340],
-    moduler: [{ typ: 'lada', lador: 2, fast: 590, ned: { hyllor: [880, 1180] }, ovr: { bak: 'ingen', hyllor: [320, 640] }, dorrar: 2 }],
+    moduler: [{ typ: 'lada', lador: 2, fast: 590, ned: { hyllor: [880, 1180] }, ovr: { bak: 'ingen', hyllor: [320, 640] }, dorrar: 2,
+    // facit = skåpprogrammets original: odelad dörr 2530 med 3 gångjärn i skåp 1 (ny standard delar dörren)
+    dorrinst: { delad: false, gangjarn: [90, 780, 1420] } }],
   };
+  const ACACIA_DELAD = JSON.parse(JSON.stringify(ACACIA));
+  ACACIA_DELAD.namn += ' (delad dörr)'; delete ACACIA_DELAD.moduler[0].dorrinst;
   const EXEMPEL = {
     namn: 'Exempel system', jobb: 'Garderob', nischAuto: true,
     passbit: 30, sockel: 100, galler: 100,
@@ -168,5 +173,5 @@
     };
   }
 
-  return { STD, generera, bredder, modulKonfig, TYPER, ACACIA, EXEMPEL, franEnkel, jamn };
+  return { STD, generera, bredder, modulKonfig, TYPER, ACACIA, ACACIA_DELAD, EXEMPEL, franEnkel, jamn };
 });
