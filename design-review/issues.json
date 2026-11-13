@@ -84,8 +84,8 @@
      "Vicke (webb)"
     ]
    ],
-   "replies": 40,
-   "last": "2026-11-13T10:52:32.408000+00:00",
+   "replies": 41,
+   "last": "2026-11-13T10:54:20.857000+00:00",
    "analyzed": "2026-11-07T15:56:43.626000+00:00",
    "forslag": [
     {
@@ -645,15 +645,26 @@
      "2026-11-12T16:00:35+01:00",
      "oppen",
      "Vickan verifierade: Mesh-volymer ur export v32 (7900 kg/m³): tom låda 7,8 kg, tp y −97 → passerar framrullen vid 98 mm utdrag (full med 13,8 l aska: 132 mm), långt före stoppet ~29"
+    ],
+    [
+     "2026-11-13T11:54:21+01:00",
+     "kommentar",
+     "Vicke: Godkänt: åtgärda enligt förslaget."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-12T16:00:35+01:00",
+   "last": "2026-11-13T11:54:21+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-1.jpg",
    "ver": "hittad v32",
    "pname": "Yamay Horno",
-   "comments": []
+   "comments": [
+    [
+     "2026-11-13T11:54:21+01:00",
+     "Vicke",
+     "Godkänt: åtgärda enligt förslaget."
+    ]
+   ]
   },
   {
    "id": "av-HOR-2",
