@@ -25,10 +25,11 @@
     dott: { namn: 'Dött hörn', kort: 'Dotthorn', std: 640, txt: 'ingen stomme, passbit mot grannradens front' },
     hog: { namn: 'Högskåp', kort: 'Hogskap', std: 600, txt: '200 hög, front 800 + 1200' },
     pass: { namn: 'Passbit', kort: 'Passbit', std: 50, txt: 'utfyllnad mot vägg (sågas)' },
+    hylla: { namn: 'Öppen hylla', kort: 'Oppenhylla', std: 600, txt: 'stomme utan dörr och rygg, 2 hyllor (ö-baksida)' },
     oppen: { namn: 'Bänk utan skåp', kort: 'Oppen', std: 600, txt: 'bara bänkskiva' },
   };
   const LADOR = { 3: [400, 200, 200], 4: [400, 200, 100, 100] };   // METOD-fronter nerifrån (nominellt)
-  const STOMME = { lada: 1, bank: 1, disk: 1, spis: 1, horn: 1, hog: 1 };
+  const STOMME = { lada: 1, bank: 1, disk: 1, spis: 1, horn: 1, hog: 1, hylla: 1 };
 
   const REGLER_KOK = [
     { id: 'k_matt', text: 'METOD-mått: stomme 18, bänkskåp B×59(+skena 1)×80, ben/sockel 8, väggskåp B×37×H, högskåp B×59×200, bredder 20/30/40/60/80', status: 'IKEA METOD (ikea.com 2026-11-13)' },
@@ -46,6 +47,7 @@
     { id: 'k_dott', text: 'Dött hörn (Vicke 2026-11-13, Kök 1): ingen stomme i hörnrutan; passbit (B − 600) i frontplanet mot grannradens front, bänkskivan går över; passbit sågas med 20 övermått', status: 'EGEN (Vicke 2026-11-13)' },
     { id: 'k_dm', text: 'Diskmaskin: bara front 597×797, inga beslagshål (maskinens mall)', status: OS },
     { id: 'k_vagg', text: 'Väggskåp: djup 370, överkant = sockel + högskåp (linjerar), varning om bänk–väggskåp < 450 (rek. 500–600)', status: OS },
+    { id: 'k_o', text: 'Köksö (Vicke alt 3): lådskåp 59 + öppna hyllor 300 (ingen rygg, 2 hyllor) rygg mot rygg, skiva 900; bänkdel 650 = skivförlängning utan stomme', status: OS },
     { id: 'k_rad', text: 'Rader: en per vägg/ö, start + rotation i rummets plan; hörn = blindhörnsmodul 640', status: 'EGEN (v0)' },
   ];
   const ANV = ['kant5', 'bak5', 'spar', 'rygg', 'hylla', 'dorr'];
@@ -93,6 +95,8 @@
         : oppen >= 150 ? Object.assign(dorrar(W, { dorrar: 1, hand: m.blind === 'h' ? 'v' : 'h' }, [{ zb: 0, nom: H }]), { bredd: oppen - METOD.fog }) : null;
       const hy = m.typ === 'disk' ? [] : undvik(jamn(T, H - T, m.hyllor != null ? m.hyllor : 1), plattor(d));
       ut.push({ konfig: bas({ hojd: H, bak: m.typ === 'disk' ? 'ingen' : 'spar', hyllor: hy }, d), rad: 'bank', z0: sock });
+    } else if (m.typ === 'hylla') {   // öppen hylla (köksöns baksida): ingen dörr, ingen egen rygg (lådskåpens rygg delas)
+      ut.push({ konfig: bas({ hojd: H, bak: 'ingen', hyllor: jamn(T, H - T, m.hyllor != null ? m.hyllor : 2) }, null), rad: 'bank', z0: sock });
     } else if (m.typ === 'lada') {
       const fr = LADOR[m.lador === 4 ? 4 : 3];
       let z = 0; const lador = fr.map(nom => { const o = { zb: z, nom }; z += nom; return o; });
@@ -293,18 +297,20 @@
     namn: 'Kök 1 (Vickes plan)', jobb: 'Kok1', sockel: 80, skiva: 38, hogH: 2000, rum: { bredd: 5400, djup: 3590 },
     rader: [
       { id: 'A', namn: 'Nedre väggen (bänk)', start: [5400, 0], rot: 180, moduler: [
-        { typ: 'horn', bredd: 640, blind: 'v' }, { typ: 'lada', bredd: 600 }, { typ: 'disk', bredd: 600 }, { typ: 'dm', bredd: 600 },
+        { typ: 'dott', bredd: 640, pass: 'v' }, { typ: 'lada', bredd: 600 }, { typ: 'disk', bredd: 600 }, { typ: 'dm', bredd: 600 },
         { typ: 'lada', bredd: 600 }, { typ: 'lada', bredd: 600 }, { typ: 'pass', bredd: 360 }] },
       { id: 'B', namn: 'Höger vägg (bänk)', start: [5400, 2640], rot: 270, moduler: [
         { typ: 'lada', bredd: 800 }, { typ: 'spis', bredd: 600 }, { typ: 'lada', bredd: 600 }] },
       { id: 'C', namn: 'Övre väggen (högskåp)', start: [1050, 3590], rot: 0, moduler: [
         { typ: 'hog', bredd: 600 }, { typ: 'hog', bredd: 600 }, { typ: 'hog', bredd: 600 }, { typ: 'hog', bredd: 600 }, { typ: 'hog', bredd: 600, nisch: 'kyl' }] },
-      // Vicke 2a: ö = 2×2 lådskåp rygg mot rygg, stommar 400 djupa, + bänkdel 600 med ho till vänster (diskskåp)
-      { id: 'D', namn: 'Köksö, sida mot nedre väggen', start: [550, 1900], rot: 0, djup: 400, vagg: false, skivaDjup: 850, skivaOver: 25,
-        osaker: 'öns djup 2 × 400 är preliminärt (grov skala i planen); ho-delen till vänster = diskskåp 600 × 400.',
-        moduler: [{ typ: 'disk', bredd: 600 }, { typ: 'lada', bredd: 600 }, { typ: 'lada', bredd: 600 }] },
-      { id: 'E', namn: 'Köksö, sida mot högskåpen', start: [2350, 1900], rot: 180, djup: 400, vagg: false, skiva: false,
-        moduler: [{ typ: 'lada', bredd: 600 }, { typ: 'lada', bredd: 600 }] },
+      // Köksö BESLUTAD (Vicke: alternativ 3 med hyllor på baksidan, filer/kok1/koksö_alt.png panel b):
+      // en rad METOD-lådskåp 60 (fronter mot nedre väggens bänk) + öppna hyllor 300 på baksidan (mot högskåpen), skiva 900 över båda.
+      // Skivans framkant Y 1350 (gång 715 till bänkskivan 635), bakkant 2250 (gång ~725 till högskåpens fronter).
+      { id: 'D', namn: 'Köksö: lådskåp mot bänken', start: [500, 1945], rot: 0, djup: 590, vagg: false, skivaDjup: 900, skivaOver: 5,
+        osaker: 'gångarna blir ~715 (mot bänken) och ~725 (mot högskåpen) < 750; bänkdelen 650 till vänster = skivförlängning utan stomme (OSÄKER).',
+        moduler: [{ typ: 'oppen', bredd: 650 }, { typ: 'lada', bredd: 600 }, { typ: 'lada', bredd: 600 }] },
+      { id: 'E', namn: 'Köksö: öppna hyllor mot högskåpen', start: [2350, 1945], rot: 180, djup: 300, vagg: false, skiva: false,
+        moduler: [{ typ: 'hylla', bredd: 600 }, { typ: 'hylla', bredd: 600 }] },
     ],
   };
   // litet exempel med väggskåp (för test/demonstration av väggskåpsraden)

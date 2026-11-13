@@ -408,7 +408,7 @@ const KPAL = [
   { typ: 'hog', namn: 'Högskåp', txt: 'front 800 + 1200, fast hylla' }, { typ: 'hog', nisch: 'kyl', namn: 'Högskåp kyl/frys', txt: 'integrerad kyl/frys' },
   { typ: 'hog', nisch: 'ugn', namn: 'Högskåp ugn', txt: '2 lådor, ugnsnisch, dörr' },
   { typ: 'bank', vagg: true, namn: 'Bänkskåp + väggskåp', txt: 'väggskåp B×37 ovanför' },
-  { typ: 'pass', bredd: 50 }, { typ: 'oppen' },
+  { typ: 'hylla' }, { typ: 'pass', bredd: 50 }, { typ: 'oppen' },
 ];
 function lage(l) {
   LAGE = l; document.body.classList.toggle('kok', l === 'kok');
@@ -487,7 +487,7 @@ function ritaEditorKok(ed) {
   ${harD ? `<div class="rad2"><span>Dörrar</span>${seg('dorrar', dval, [['auto', 'auto'], ['1v', '1 ⟵ v'], ['1h', '1 h ⟶'], ['2', '2']])}</div>` : ''}
   ${t === 'hog' ? `<div class="rad2"><span>Nisch</span>${seg('nisch', m.nisch || 'ingen', [['ingen', 'ingen'], ['ugn', 'ugn'], ['micro', 'micro'], ['kyl', 'kyl/frys']])}</div>` : ''}
   ${t === 'hog' && !m.nisch ? `<div class="rad2"><span>Front</span>${seg('fronter', m.fronter === 'hel' ? 'hel' : 'delad', [['delad', '800 + 1200'], ['hel', 'hel 2000']])}</div>` : ''}
-  ${t === 'bank' || (t === 'hog' && m.nisch !== 'kyl') ? `<div class="rad2"><span>Hyllor${t === 'hog' ? ' (övre del)' : ''}</span>${steg('hyllor', m.hyllor != null ? m.hyllor : (t === 'hog' ? (m.fronter === 'hel' ? 4 : m.nisch ? 2 : 3) : 1))}</div>` : ''}
+  ${t === 'bank' || t === 'hylla' || (t === 'hog' && m.nisch !== 'kyl') ? `<div class="rad2"><span>Hyllor${t === 'hog' ? ' (övre del)' : ''}</span>${steg('hyllor', m.hyllor != null ? m.hyllor : (t === 'hog' ? (m.fronter === 'hel' ? 4 : m.nisch ? 2 : 3) : t === 'hylla' ? 2 : 1))}</div>` : ''}
   ${t === 'horn' ? `<div class="rad2"><span>Blindsida</span>${seg('blind', m.blind === 'h' ? 'h' : 'v', [['v', 'vänster'], ['h', 'höger']])}</div>` : ''}
   ${t !== 'hog' && r.vagg !== false ? `<div class="rad2"><span>Väggskåp ovanför</span>${seg('vagg', m.vagg ? 1 : 0, [[0, 'nej'], [1, 'ja']])}</div>` : ''}
   <div class="info">${mods.map(x => x.beskr).join('<br>')}<br>${mods.reduce((a, x) => a + (x.ut ? x.ut.delar.length : 0), 0) || SU.delar.filter(d => d.modul === nr).length} TCN-filer</div>`;
