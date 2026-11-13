@@ -148,8 +148,9 @@ function byggModul(ut, ox, sock, pre, nr) {
     const xs = d.antal === 2 ? [[1, false], [W - 1 - DB, true]] : [[2, d.hand === 'h']];
     xs.forEach(([x, hoger]) => {
       const px = hoger ? x + DB : x;
-      const piv = new THREE.Group(); piv.position.set(px, -2, 0); g0.add(piv);
-      const dg = new THREE.Group(); dg.position.set(-px, 2, 0); piv.add(dg);
+      // vrids kring dörrens yttre framkant (fullt anliggande gångjärn): dörren går inte utanför skåpkanten
+      const piv = new THREE.Group(); piv.position.set(px, -19, 0); g0.add(piv);
+      const dg = new THREE.Group(); dg.position.set(-px, 19, 0); piv.add(dg);
       box(dg, x, x + DB, -19, -2, zb, zb + DH, M.dorr, `${pre}Dörr ${hoger ? 'höger' : 'vänster'}`);
       d.gangjarn.forEach(c => hal(dg, hoger ? x + DB - 21.5 : x + 21.5, -1.4, zb + c, 35, 'y', M.kopp));
       piv.userData.hoger = hoger; dorrGrupp.push(piv);
@@ -161,7 +162,7 @@ function byggModul(ut, ox, sock, pre, nr) {
 function satDorrar() {
   dorrGrupp.forEach(p => {
     p.visible = lage.dorrar !== 'dolda';
-    p.rotation.z = lage.dorrar === 'oppna' ? (p.userData.hoger ? -1 : 1) * THREE.MathUtils.degToRad(-100) : 0;
+    p.rotation.z = lage.dorrar === 'oppna' ? (p.userData.hoger ? -1 : 1) * THREE.MathUtils.degToRad(-90) : 0;
   });
 }
 

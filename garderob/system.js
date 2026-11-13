@@ -122,6 +122,15 @@
     if (flera) su.beslag.push({ namn: 'Skruv modul–modul (4 per skarv)', antal: 4 * (sys.moduler.length - 1) * (sys.hojder && sys.hojder[1] ? 2 : 1) });
     su.bredd = W.reduce((a, b) => a + b, 0);
     su.hojd = (sys.hojder || [1500, 980]).reduce((a, b) => a + b, 0);
+    // dörr mot nischvägg: gångjärnssidan behöver passbit så att dörren går fri vid öppning
+    const PASS_MIN = 30;
+    if (sys.nisch && sys.nisch.bredd && su.moduler.length) {
+      const fri = sys.nischAuto ? (sys.passbit || 0) : (sys.nisch.bredd - su.bredd) / 2;
+      const gjSida = (m) => { const d = m.konfig.dorrar; if (!d) return []; return d.antal === 2 ? ['v', 'h'] : [d.hand === 'h' ? 'h' : 'v']; };
+      const forsta = su.moduler[0], sista = su.moduler[su.moduler.length - 1];
+      if (gjSida(forsta).includes('v') && fri < PASS_MIN) su.varningar.push(`M1: dörren tar i nischväggen – passbiten ${G.fmt(fri)} < ${PASS_MIN}. Öka passbiten eller sätt gångjärnet på andra sidan.`);
+      if (gjSida(sista).includes('h') && fri < PASS_MIN) su.varningar.push(`M${sista.nr}: dörren tar i nischväggen – passbiten ${G.fmt(fri)} < ${PASS_MIN}. Öka passbiten eller sätt gångjärnet på andra sidan.`);
+    }
     if (sys.nischAuto) su.info.push(`Nisch anpassad efter modulerna: ${sys.nisch.bredd} × ${sys.nisch.hojd}.`);
     if (sys.nisch && sys.nisch.bredd) {
       const fritt = sys.nisch.bredd - su.bredd;
@@ -143,7 +152,7 @@
   };
   const EXEMPEL = {
     namn: 'Exempel system', jobb: 'Garderob', nischAuto: true,
-    passbit: 10, sockel: 100, galler: 100,
+    passbit: 30, sockel: 100, galler: 100,
     hojder: [1500, 980], djup: [488, 488],
     moduler: [{ typ: 'lada' }, { typ: 'hang' }, { typ: 'hylla' }],
   };

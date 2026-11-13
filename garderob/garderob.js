@@ -31,6 +31,7 @@
     { id: 'skena', text: 'Lådskena: hål y 64/96 + 288/320, linje 96,5 + 260·i från botten; låda 410 djup', status: 'OSÄKER (1 skåpdjup)' },
     { id: 'stang', text: 'Klädstång: fäste 2×Ø5 c/c 32 vertikalt, mitt i användbart djup', status: 'EGEN (ej i TCN-underlag)' },
     { id: 'hel', text: 'Hel garderob: en stomme i full höjd, fast hylla (lådor: ovanför lådorna, hängdel: hatthylla H−600 med stång 70 under, hyllor: i delningshöjd), 4 gångjärn (översta DH−90)', status: 'EGEN (ej i TCN-underlag)' },
+    { id: 'passbit', text: 'Passbit mot nischvägg på gångjärnssidan ≥ 30 så att dörren (17) går fri vid öppning', status: 'OSÄKER (Acaciagatan har 30)' },
     { id: 'klots', text: 'Distansklots 460×425: tappar 100/L−100, start 75 från botten', status: 'OSÄKER (2 lådor)' },
   ];
 
