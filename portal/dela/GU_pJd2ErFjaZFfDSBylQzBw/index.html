@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="sv"><head><base href="../../"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Projektportal · Konstruktion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;700&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--y:#fbc021;--chili:#c8321a;--ox:#5a1a12;--cream:#fff6dc;--paper:#fffaf0;--ink:#2a1a12;--mute:#8a7a60;--line:#e6d9b8;--ok:#2f7d3a}
+*{box-sizing:border-box}
+body{margin:0;font-family:Barlow,sans-serif;background:var(--cream);color:var(--ink)}
+a{color:var(--ox)}
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:10px 18px;background:var(--y);border-bottom:3px solid var(--ox)}
+header h1{font-family:Anton;font-weight:400;font-size:26px;margin:0;color:var(--ox);letter-spacing:.02em;cursor:pointer}
+header .sub{font-family:'Barlow Condensed';font-weight:700;color:var(--ox);text-transform:uppercase;letter-spacing:.08em;font-size:14px}
+header .sp{flex:1}
+.btn{font-family:'Barlow Condensed';font-weight:700;font-size:15px;border:2px solid var(--ox);border-radius:6px;padding:5px 12px;background:var(--cream);color:var(--ox);text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn:hover{background:#fff}.btn.pri{background:var(--chili);border-color:var(--chili);color:#fff}
+.btn.sm{font-size:13px;padding:3px 9px;border-width:1.5px}
+select.btn{padding:4px 8px}
+.skiss{background:var(--ox);color:var(--y);font-family:'Barlow Condensed';font-weight:700;text-align:center;font-size:13px;padding:4px;letter-spacing:.05em}
+main{max-width:1180px;margin:0 auto;padding:18px}
+h2{font-family:'Barlow Condensed';font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--chili);font-size:17px;margin:22px 0 10px;display:flex;align-items:center;gap:8px}
+h2 .n{background:var(--chili);color:#fff;border-radius:12px;padding:0 9px;font-size:14px}
+/* frågekort */
+.qs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.q{background:var(--paper);border:2px solid var(--ox);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.q .top{display:flex;gap:6px;align-items:center;padding:8px 12px 0;font-family:'Barlow Condensed';font-weight:700;font-size:13px;color:var(--mute)}
+.q .top .pj{color:var(--ox);cursor:pointer;text-decoration:underline}
+.q .top .age{margin-left:auto}
+.q h3{font-family:'Barlow Condensed';font-weight:700;font-size:22px;line-height:1.1;margin:6px 12px 4px}
+.q .ctx{font-size:14px;color:#5b4a38;margin:0 12px 8px}
+.q img{width:100%;height:170px;object-fit:contain;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);cursor:zoom-in}
+.q .noimg{height:46px;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--mute);border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);background:#fff8}
+.q .alts{display:flex;flex-direction:column;gap:6px;padding:10px 12px 6px}
+.alt{display:flex;gap:8px;align-items:center;text-align:left;font-family:Barlow;font-size:15px;border:2px solid var(--line);background:#fff;border-radius:8px;padding:7px 10px;cursor:pointer}
+.alt b{font-family:'Barlow Condensed';font-size:17px;color:var(--ox);min-width:16px}
+.alt .rek{margin-left:auto;font-family:'Barlow Condensed';font-weight:700;font-size:12px;color:var(--ok)}
+.alt:hover{border-color:var(--ox)}.alt.on{border-color:var(--chili);background:#fdeee9}
+.q .ann{display:flex;gap:6px;padding:0 12px 12px}
+.q .ann input{flex:1;font:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:6px;padding:6px 8px;background:#fff}
+.q.sent{opacity:.55}.q.sent .alts,.q.sent .ann{pointer-events:none}
+/* projektkort */
+.ps{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.p{background:var(--paper);border:2px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column;gap:7px}
+.p:hover{border-color:var(--ox)}
+.p .nm{font-family:Anton;font-weight:400;font-size:21px;color:var(--ox);line-height:1.05}
+.p .tp{font-size:13px;color:#5b4a38;min-height:2.4em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.steps{display:flex;gap:3px}
+.steps span{flex:1;height:6px;border-radius:3px;background:var(--line)}
+.steps span.d{background:var(--ox)}.steps span.c{background:var(--chili)}
+.stl{font-family:'Barlow Condensed';font-weight:700;font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
+.chips{display:flex;gap:5px;flex-wrap:wrap}
+.chip{font-family:'Barlow Condensed';font-weight:700;font-size:13px;border-radius:10px;padding:1px 8px;background:#efe6cf;color:var(--ink);white-space:nowrap}
+.chip.r{background:var(--chili);color:#fff}.chip.y{background:var(--y);color:var(--ox)}
+/* projektsida */
+.back{font-family:'Barlow Condensed';font-weight:700;cursor:pointer;color:var(--ox)}
+.ph{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-top:6px}
+.ph h2x{font-family:Anton}
+.ph .t{font-family:Anton;font-size:40px;color:var(--ox);line-height:1;margin:0}
+.ph .acts{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.cols{display:grid;grid-template-columns:1.25fr 1fr;gap:20px}
+@media(max-width:820px){.cols{grid-template-columns:1fr}.ph .t{font-size:30px}}
+.box{background:var(--paper);border:2px solid var(--line);border-radius:10px;overflow:hidden}
+.tr{padding:10px 12px;border-bottom:1px solid var(--line)}
+.tr:last-child{border-bottom:0}
+.tr .h{display:flex;gap:8px;align-items:center}
+.tr .h b{font-family:'Barlow Condensed';font-size:18px;flex:1}
+.tr .m{font-size:13px;color:var(--mute)}
+.comp{display:none;margin-top:8px;gap:6px;flex-direction:column}
+.comp.on{display:flex}
+.comp textarea{font:inherit;font-size:15px;border:1.5px solid var(--ox);border-radius:6px;padding:8px;min-height:70px;background:#fff}
+.comp .r{display:flex;gap:6px;align-items:center}.comp .r .sp{flex:1}
+.is{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;padding:10px}
+.ic{background:#fff;border:1.5px solid var(--line);border-radius:8px;overflow:hidden;text-decoration:none;color:var(--ink)}
+.ic img{width:100%;height:90px;object-fit:cover;display:block}
+.ic div{padding:5px 7px;font-family:'Barlow Condensed';font-weight:700;font-size:14px;line-height:1.1}
+.bl{list-style:none;margin:0;padding:6px 12px}
+.bl li{padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}.bl li:last-child{border:0}
+.bl .d{font-family:'Barlow Condensed';font-weight:700;color:var(--mute);margin-right:6px}
+.empty{padding:12px;color:var(--mute);font-size:14px}
+#zoom{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;z-index:20;cursor:zoom-out}
+#zoom img{max-width:96vw;max-height:94vh;background:#fff}
+#toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ox);color:var(--cream);padding:10px 16px;border-radius:8px;font-size:14px;max-width:92vw;display:none;z-index:30;box-shadow:0 3px 12px #0005}
+body.locked .alt,body.locked .ann,body.locked .tr .h button{opacity:.45}
+.q .ok{margin:4px 12px;padding:6px 9px;border-radius:6px;background:#e6f2e4;color:var(--ok);font-family:'Barlow Condensed';font-weight:700;font-size:15px}
+.ann .hint{font-size:13px;color:var(--mute);align-self:center}
+.it{display:flex;gap:10px;align-items:center;padding:8px 12px 0;font-family:'Barlow Condensed';font-weight:700;font-size:14px;color:var(--mute)}
+.it label{display:flex;gap:4px;align-items:center;color:var(--ox);cursor:pointer}
+.ic{cursor:pointer}.ic:hover{border-color:var(--ox)}.ic .noi{height:90px;display:flex;align-items:center;justify-content:center;font-size:34px;background:#f6efdc}
+.st{font-family:'Barlow Condensed';font-weight:700;font-size:12px;color:var(--mute)}
+.st-oppen,.st-ny,.st-pagar,.st-analyserad{color:var(--chili)}.st-delvis{color:#a86a00}.st-atgardad,.st-stangd{color:var(--ok)}
+#iss{border:3px solid var(--ox);border-radius:12px;background:var(--paper);padding:0;width:min(720px,96vw);max-height:92vh;color:var(--ink)}
+#iss::backdrop{background:rgba(42,26,18,.6)}
+#issBody{padding:14px 18px 18px}
+#issBody .ih{display:flex;gap:6px;align-items:center}#issBody .sp{flex:1}
+#issBody .st{font-size:16px}
+#issBody h3{font-family:Anton;font-weight:400;font-size:26px;color:var(--ox);margin:8px 0 2px;line-height:1.1}
+#issBody .meta{font-size:13px;color:var(--mute);margin-bottom:10px}
+#issBody img.big{width:100%;max-height:52vh;object-fit:contain;background:#fff;border:1.5px solid var(--line);border-radius:8px;cursor:zoom-in}
+#issBody dl{margin:6px 0}#issBody dt,.lt{font-family:'Barlow Condensed';font-weight:700;color:var(--mute);text-transform:uppercase;font-size:12px;letter-spacing:.06em;margin-top:10px}
+#issBody dd{margin:2px 0 0;font-size:15px;line-height:1.35;word-break:break-word}
+#issBody .bl{padding:0}
+#issBody .acts{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 4px}
+#issBody .rep{border-top:2px dashed var(--line);margin-top:12px;padding-top:4px;display:flex;flex-direction:column;gap:6px}
+#issBody textarea{font:inherit;font-size:15px;border:1.5px solid var(--ox);border-radius:6px;padding:8px;min-height:64px;background:#fff}
+#issBody .r{display:flex;gap:6px;align-items:center;font-size:14px}#issBody .r .sp{flex:1}
+#issBody .sts{display:flex;gap:5px;flex-wrap:wrap}#issBody .sts .on{background:var(--chili);color:#fff;border-color:var(--chili)}
+.hg{display:grid;grid-template-columns:1fr 340px;gap:20px}@media(max-width:900px){.hg{grid-template-columns:1fr}}
+.fz{background:var(--paper);border:2px solid var(--ox);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:5px}
+.fzt{display:flex;align-items:center;gap:7px;font-family:'Barlow Condensed';font-size:20px}.fzt b{color:var(--ox)}
+.fzv{font-size:14px}.fzk{margin:0;padding-left:4px;list-style:none;font-size:13px}
+.fzs img,.fimg img{width:100%;max-height:200px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:6px;cursor:zoom-in}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#bbb;margin-right:3px}.dot.b{background:#2fae4a;box-shadow:0 0 0 3px #2fae4a33;animation:pl 1.6s infinite}.dot.l{background:#bbb}
+@keyframes pl{50%{box-shadow:0 0 0 6px #2fae4a11}}
+.m{font-size:13px;color:var(--mute)}
+.pg{scroll-margin-top:72px;display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:14px;margin-top:12px;align-items:start}
+@media(max-width:900px){.pg{grid-template-columns:1fr}}
+.vw{position:relative;background:#fff;border:2px solid var(--ox);border-radius:10px;overflow:hidden}
+.vw iframe{display:block;width:100%;height:min(62vh,560px);border:0}
+@media(max-width:900px){.vw iframe{height:48vh}}
+.vt{display:flex;gap:4px;flex-wrap:wrap;padding:6px;border-bottom:1px solid var(--line);background:var(--paper)}.vt .on{background:var(--ox);color:#fff}
+.vh{position:absolute;right:8px;bottom:6px;font-size:12px;color:var(--mute);background:#fffc;padding:1px 6px;border-radius:4px;pointer-events:none}
+.side{background:var(--paper);border:2px solid var(--line);border-radius:10px;padding:12px 14px;max-height:calc(min(62vh,560px) + 40px);overflow:auto}
+.lg{font-size:16px;line-height:1.4}.lg .nx{margin-top:6px;font-weight:600;color:var(--ox)}
+.facts{list-style:none;margin:10px 0;padding:0;font-size:14px}.facts li{padding:5px 0;border-bottom:1px dashed var(--line)}.facts b{font-family:'Barlow Condensed';color:var(--mute);text-transform:uppercase;font-size:12px;letter-spacing:.05em;display:block}
+.case .ih{display:flex;gap:6px;align-items:center}.case .sp{flex:1}.case .st{font-size:16px}
+.case h3{font-family:Anton;font-weight:400;font-size:24px;color:var(--ox);margin:8px 0 2px;line-height:1.1}
+.case .meta{font-size:13px;color:var(--mute);margin-bottom:8px}
+.case .imgs{display:grid;grid-template-columns:1fr 1fr;gap:6px}.case .imgs img{width:100%;height:120px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:6px;cursor:zoom-in}
+.case .imgs img:only-child{grid-column:1/-1;height:170px}
+.case dl{margin:6px 0}.case dt,.lt{font-family:'Barlow Condensed';font-weight:700;color:var(--mute);text-transform:uppercase;font-size:12px;letter-spacing:.06em;margin-top:8px}
+.case dd{margin:2px 0 0;font-size:14px;line-height:1.35;word-break:break-word}
+.case .rep{border-top:2px dashed var(--line);border-bottom:2px dashed var(--line);margin-top:10px;padding:6px 0 10px;display:flex;flex-direction:column;gap:6px}
+.case .ca{display:flex;gap:5px;flex-wrap:wrap}.case .fsl{display:flex;flex-direction:column;gap:5px}
+.case textarea{font:inherit;font-size:14px;border:1.5px solid var(--ox);border-radius:6px;padding:7px;min-height:54px;background:#fff}
+.case .r{display:flex;gap:6px;align-items:center}.case .r .sp{flex:1}
+.case .ok{padding:6px 9px;border-radius:6px;background:#e6f2e4;color:var(--ok);font-family:'Barlow Condensed';font-weight:700}
+.case details{margin-top:8px;font-size:13px}.case summary,.trd summary{cursor:pointer;font-family:'Barlow Condensed';font-weight:700;color:var(--mute)}
+.ic.sel{border-color:var(--chili);box-shadow:0 0 0 2px var(--chili)}
+.trd{margin-top:22px}.trd summary{font-size:15px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.tr .h .m{flex:1}.tr .h b{flex:0 1 auto!important;font-size:16px!important}
+.stp{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0 2px}
+.sb{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:7px 9px 8px;cursor:pointer;font-family:'Barlow Condensed'}
+.sb .bar{display:block;width:100%;height:6px;border-radius:3px;background:var(--line);margin-bottom:4px}
+.sb.d .bar{background:var(--ox)}.sb.c .bar{background:var(--chili)}
+.sb b{font-size:16px;color:var(--ox);text-transform:uppercase;letter-spacing:.04em}.sb.c b{color:var(--chili)}
+.sb small{font-size:13px;color:var(--mute);font-family:Barlow}
+.sb:hover{border-color:var(--ox)}.sb.on{border-color:var(--chili);box-shadow:0 0 0 2px var(--chili)}
+@media(max-width:700px){.stp{grid-template-columns:repeat(2,1fr)}}
+.cadt{width:100%;max-height:180px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:6px;cursor:zoom-in}
+.cad img{display:block;width:100%;max-height:520px;object-fit:contain;background:#fff;cursor:zoom-in}
+.rh{font-family:'Barlow Condensed';font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--chili);font-size:15px;margin:0 0 8px}
+#fzrail{display:none}
+#fzpill{display:none}
+@media(min-width:1100px){
+ body{padding-right:290px}
+ #fzrail{display:block;position:fixed;right:0;top:var(--ht,62px);bottom:0;width:290px;overflow:auto;padding:14px;background:var(--cream);border-left:3px solid var(--ox);z-index:4}
+ header,#lockbar{margin-right:-290px}
+ #fzrail .fz{border-width:2px}
+}
+@media(max-width:1099px){
+ #fzpill{display:flex;align-items:center;gap:4px;position:fixed;right:10px;bottom:10px;z-index:15;font-family:'Barlow Condensed';font-weight:700;font-size:14px;color:var(--ox);background:var(--paper);border:2px solid var(--ox);border-radius:16px;padding:4px 11px;box-shadow:0 2px 8px #0003;cursor:pointer}
+ body.fzopen #fzrail{display:block;position:fixed;right:10px;bottom:50px;width:min(330px,calc(100vw - 20px));max-height:60vh;overflow:auto;z-index:15;background:var(--cream);border:2px solid var(--ox);border-radius:10px;padding:10px;box-shadow:0 4px 16px #0004}
+ #toast{bottom:56px}
+}
+.cmp{border-top:2px solid var(--ox);background:var(--paper);padding:8px;display:flex;flex-direction:column;gap:6px}
+.cmp textarea{font:inherit;font-size:15px;border:1.5px solid var(--line);border-radius:6px;padding:7px 9px;min-height:46px;background:#fff;resize:vertical}
+.cmp textarea:focus{border-color:var(--ox);outline:0;min-height:80px}
+.cmp .r{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:14px}.cmp .r .sp{flex:1}.cmp label{display:flex;gap:4px;align-items:center;cursor:pointer}
+.fzq{list-style:none;margin:2px 0 0;padding:0;font-size:13px}.fzq li{display:flex;gap:6px;padding:3px 0;border-bottom:1px dashed var(--line)}.fzq li b{font-family:'Barlow Condensed';color:var(--ox);min-width:62px}.fzq .n{color:var(--mute);min-width:14px}
+.q{cursor:pointer;transition:box-shadow .15s}.q:hover{box-shadow:0 3px 12px #0002}
+#qbg{display:none}body.qf #qbg{display:block;position:fixed;inset:0;background:rgba(42,26,18,.6);z-index:39}
+body.qf{overflow:hidden}
+.q.focus{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(820px,94vw);max-height:92vh;overflow:auto;z-index:40;cursor:default;box-shadow:0 10px 40px #0007;animation:qin .18s ease-out}
+@keyframes qin{from{transform:translate(-50%,-50%) scale(.92);opacity:.6}}
+.q.focus h3{font-size:30px}.q.focus .ctx{font-size:16px}
+.q.focus img{height:auto;max-height:56vh;cursor:zoom-in}
+.q.focus .alt{font-size:17px;padding:10px 12px}
+body.gast #who,body.gast header a.btn,body.gast #fzrail,body.gast #fzpill{display:none!important}
+body.gast{padding-right:0!important}body.gast header,body.gast #lockbar{margin-right:0!important}
+footer{max-width:1180px;margin:30px auto;padding:0 18px;font-size:12px;color:var(--mute)}
+</style></head>
+<body>
+<div class="skiss" id="lockbar">Läsläge · öppna kopplingslänken (samma som Design Review) för att kunna svara</div>
+<header>
+  <h1 onclick="go('')">PROJEKTPORTAL</h1><span class="sub">Konstruktion</span>
+  <span class="sp"></span><span class="sub" id="upd" style="font-size:12px;opacity:.8"></span>
+  <select class="btn" id="who"><option value="vicke">Vicke</option><option value="hugo">Hugo</option></select>
+  <a class="btn" href="https://www.buttercup.nu/design-review/" target="_blank">3D · Design Review</a>
+  <a class="btn pri" href="https://www.buttercup.nu/design-review/nytt/" target="_blank">＋ Nytt projekt</a>
+</header>
+<aside id="fzrail"></aside><button id="fzpill" onclick="document.body.classList.toggle('fzopen')"></button>
+<div id="qbg" onclick="qUnfocus()"></div>
+<main id="main"></main>
+<footer>Projektportal v1 · data läst 2026-11-13 17:26 · uppdateras var 5:e minut · Discord är fortfarande motorn: svar härifrån hamnar i rätt tråd och Vickan svarar där som vanligt.</footer>
+<div id="zoom" onclick="this.style.display='none'"><img></div>
+<div id="toast"></div>
+<script>
+let D={"projekt": [{"konfig": [], "lage": {"lage": "Variant A (3 × M6 i Wavin-locket) och variant B (central M8) är modellerade och finns i Design Review. Jämförelsen rekommenderar A för prototypen och B som reserv.", "nasta": "Granska A mot B och mät lockets undersida (plan inom Ø58) och toppgodset.", "kalla": "~/code/konstruktion/rat-stop/PROJEKT.md, ~/code/konstruktion/rat-stop/skiss/AB_JAMFORELSE.md", "datum": "2026-11-08"}, "fusion": {"t": "2026-11-08T08:17:46.431000+00:00", "trad": "Fusion", "img": "img/fs/p-rat-stop.jpg"}, "stegdata": {"forstudie": {"fil": null, "rubriker": [], "status": "godkänd", "datum": null}, "modellering": {"fusion": "rat-stop", "fil": null, "rubriker": [], "datum": null}, "montering": {"finns": false, "pdf": [], "sidor": 0, "avvikelser": 0, "utvardering": false, "datum": null}}, "fusion_nu": false, "kanal": "rat-stop", "id": "1568630783986630872", "topic": "Råttstopp för avloppsrör/spolbrunn.  Rita av bifogad stepfil.", "steg": "modell i DR", "slugs": ["rat-stop", "rat-stop-b", "rat-stop-a"], "beslut": [], "namn": "rat stop", "dr": [{"slug": "rat-stop", "name": "rat stop", "v": 2, "exp": "2026-11-07 22:14", "struktur": "img/struktur/rat-stop.png"}, {"slug": "rat-stop-b", "name": "rat stop B (M8 i Wavin-lock)", "v": 1, "exp": "2026-11-08 08:15", "struktur": "img/struktur/rat-stop-b.png"}, {"slug": "rat-stop-a", "name": "rat stop A (3 × M6 i Wavin-lock)", "v": 1, "exp": "2026-11-08 09:12", "struktur": "img/struktur/rat-stop-a.png"}], "arenden": {"oppen": 0, "analyserad": 0, "pagar": 0, "delvis": 0, "atgardad": 0}, "avvikelser": 0, "oppna": [], "tradar": [{"id": "1568630789095039016", "name": "Fusion"}, {"id": "1568630785232343191", "name": "Konstruktion"}, {"id": "1568630790848520396", "name": "Design Review"}, {"id": "1568630787321102457", "name": "Montering"}], "last": "2026-11-08T09:18:36.821000+00:00", "vantar_pa_vicke": 0, "delningar": []}], "fragor": [], "fusion": {"upptagen": false, "vad": "", "ko": []}, "kod": "d06c49088b", "upd": "17:26"};
+const G={"tok": "GU_pJd2ErFjaZFfDSBylQzBw", "kanal": "rat-stop"};   // gäst-läge: {tok, kanal} på /portal/dela/<tok>/
+let P=D.projekt, Q=D.fragor;
+const STEG=['Förstudie','Modellering','Design Review','Montering'];
+const stegIx=s=>({'idé':0,'förstudie':0,'modellering':1,'modell i DR':2,'montering':3})[s]??0;
+const pn=k=>{const p=P.find(p=>p.kanal==k);return p?(p.namn||nice(k)):nice(k)};
+function nice(k){return k.replace(/^yamay-/,'Yamay ').replace(/-/g,' ').replace(/^./,c=>c.toUpperCase())}
+function ago(t){if(!t)return'';const s=(Date.now()-new Date(t))/1e3;if(s<3600)return Math.max(1,s/60|0)+' min';if(s<86400)return(s/3600|0)+' h';return(s/86400|0)+' d'}
+const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+const who=document.getElementById('who');who.value=localStorage.np_who||'vicke';who.onchange=()=>{localStorage.np_who=who.value};
+const GK=G?(()=>{const k='pp_gast_'+G.tok,m=location.hash.match(/k=(\d+)\.([\w-]+)/),n=location.hash.match(/n=([^&]+)/);
+  if(m){localStorage.setItem(k,JSON.stringify({id:m[1],token:m[2],namn:n?decodeURIComponent(n[1]):'Gäst'}));history.replaceState(null,'',location.pathname+location.search)}
+  try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}})():null;
+const WHO=()=>G?(GK?GK.namn:'Gäst'):(who.value==='hugo'?'Hugo':'Vicke');
+const hooks=()=>{try{return JSON.parse(localStorage.getItem('dr_hooks')||'null')}catch(e){return null}};
+const H=G?(GK?{_intake:{id:GK.id,token:GK.token}}:null):hooks(), CAN=!!(H&&H._intake);
+if(G){document.body.classList.add('gast');document.querySelector('header .sub').textContent='Delat projekt';
+  document.getElementById('lockbar').textContent='Läsläge · länken saknar din nyckel – öppna hela länken du fick för att kunna svara och kommentera';
+  document.querySelector('footer').textContent=`Delat projekt · data läst ${'2026-11-13 17:26'} · uppdateras automatiskt · dina svar och kommentarer går till projektgruppen${GK?' som ”'+GK.namn+' (gäst)”':''}.`}
+document.getElementById('lockbar').style.display=CAN?'none':'';
+if(!CAN)document.body.classList.add('locked');
+const SENT=JSON.parse(localStorage.pp_sent||'{}');
+async function send(np,content,file){
+  const fd=new FormData();
+  fd.append('payload_json',JSON.stringify({username:'Projektportal',content,allowed_mentions:{parse:[]}}));
+  if(G)np.by='gast';
+  fd.append('files[0]',new Blob([JSON.stringify(np)],{type:'application/json'}),'np.json');
+  if(file)fd.append('files[1]',file,file.name||'bild.jpg');
+  const r=await fetch(`https://discord.com/api/webhooks/${H._intake.id}/${H._intake.token}?wait=true`,{method:'POST',body:fd});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+}
+function toast(t){const e=document.getElementById('toast');e.innerHTML=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',5200)}
+function zoom(src){const z=document.getElementById('zoom');z.querySelector('img').src=src;z.style.display='flex'}
+function go(h){location.hash=h}
+window.onhashchange=render;
+
+function qCard(q){
+  const alts=q.alt.map(a=>`<button class="alt" data-k="${a.k}" onclick="pick('${q.id}','${a.k}')"><b>${a.k}</b>${esc(a.t)}${a.rek?'<span class="rek">★ rek</span>':''}</button>`).join('');
+  const done=SENT[q.id];
+  return `<div class="q${done?' sent':''}" id="q-${q.id}" onclick="qFocus(event,'${q.id}')">${done?'<div class="ok">✓ Besvarat från webben – väntar på Vickan</div>':''}
+   <div class="top"><span class="pj" onclick="go('p=${q.kanal}')">${esc(pn(q.kanal))}</span>›<span>${esc(q.trad)}</span><span class="age">${ago(q.fran)} sedan</span></div>
+   <h3>${esc(q.q)}</h3>${q.kontext?`<div class="ctx">${esc(q.kontext)}</div>`:''}
+   ${q.img?`<img src="${q.img}" alt="">`:'<div class="noimg">ingen skiss till denna fråga (gamla formatet)</div>'}
+   <div class="alts">${alts}</div>
+   <div class="ann"><input placeholder="Annat svar – eller vad är oklart?" id="qa-${q.id}"><button class="btn sm" onclick="pick('${q.id}','fritext')">Skicka</button></div>
+   <div class="ann"><button class="btn sm clar" onclick="clarify('${q.id}')">🔍 Förtydliga</button><span class="hint">${CLAR[q.id]?'✓ Förtydligande begärt – Vickan svarar i tråden och ersätter kortet':'Förstår du inte frågan? Vickan förklarar med ny skiss.'}</span></div></div>`;
+}
+const CLAR=JSON.parse(localStorage.pp_clar||'{}');
+async function clarify(id){
+  if(!CAN){toast('Öppna kopplingslänken först (samma som för Design Review).');return}
+  const q=Q.find(q=>q.id==id),el=document.getElementById('q-'+id),inp=document.getElementById('qa-'+id),b=el.querySelector('.clar');
+  b.disabled=true;b.textContent='Skickar…';
+  try{await send({v:1,portal:{thread:q.thread,qid:q.id,text:inp.value.trim(),clarify:true},by:who.value},`🔍 ${WHO()} vill ha ett förtydligande i #${q.kanal} › ${q.trad}`);
+    CLAR[id]=Date.now();localStorage.pp_clar=JSON.stringify(CLAR);inp.value='';
+    el.querySelector('.hint').textContent='✓ Förtydligande begärt – Vickan svarar i tråden och ersätter kortet';b.textContent='🔍 Begärt'}
+  catch(e){b.disabled=false;b.textContent='🔍 Förtydliga';toast('Kunde inte skicka: '+esc(e.message))}
+}
+async function pick(id,k){
+  if(!CAN){toast('Öppna kopplingslänken först (samma som för Design Review).');return}
+  const q=Q.find(q=>q.id==id), el=document.getElementById('q-'+id);
+  let txt; if(k=='fritext'){txt=document.getElementById('qa-'+id).value.trim();if(!txt)return}
+  else{const a=q.alt.find(a=>a.k==k);txt=`${k} – ${a.t}`;el.querySelectorAll('.alt').forEach(b=>b.classList.toggle('on',b.dataset.k==k))}
+  el.classList.add('sent');
+  try{await send({v:1,portal:{thread:q.thread,qid:q.id,text:txt},by:who.value},`💬 ${WHO()} svarar i #${q.kanal} › ${q.trad}`);
+    SENT[id]=Date.now();localStorage.pp_sent=JSON.stringify(SENT);
+    el.querySelector('.alts').insertAdjacentHTML('beforebegin',`<div class="ok">✓ Skickat: ”${esc(txt)}”. Vickan svarar i tråden.</div>`);
+  }catch(e){el.classList.remove('sent');toast('Kunde inte skicka: '+esc(e.message))}
+}
+function qFocus(e,id){const el=document.getElementById('q-'+id);if(!el)return;
+  if(el.classList.contains('focus')){if(e.target.tagName==='IMG')zoom(e.target.src);return}
+  if(e.target.closest('button,input,a,textarea,label'))return;
+  qUnfocus();el.classList.add('focus');document.body.classList.add('qf');el.scrollTop=0}
+function qUnfocus(){document.querySelectorAll('.q.focus').forEach(x=>x.classList.remove('focus'));document.body.classList.remove('qf')}
+addEventListener('keydown',e=>{if(e.key==='Escape')qUnfocus()});
+function pCard(p){
+  const ix=stegIx(p.steg), oq=Q.filter(q=>q.kanal==p.kanal).length, oi=(p.arenden.oppen||0)+(p.arenden.analyserad||0)+(p.arenden.pagar||0)+(p.arenden.delvis||0);
+  return `<div class="p" onclick="go('p=${p.kanal}')">
+   <div class="nm">${esc(p.namn||nice(p.kanal))}</div>
+   <div class="tp">${esc(p.topic)||'&nbsp;'}</div>
+   <div class="steps">${STEG.map((s,i)=>`<span class="${i<ix?'d':i==ix?'c':''}"></span>`).join('')}</div>
+   <div class="stl">${STEG[ix]}</div>
+   <div class="chips">${oq?`<span class="chip r">❓ ${oq} till dig</span>`:''}${oi?`<span class="chip y">📋 ${oi} öppna ärenden</span>`:''}<span class="chip">💬 ${ago(p.last)} sedan</span></div></div>`;
+}
+const PJN=[['horno','Horno'],['asado','Asado'],['tizon','Tizón'],['fire','Fire table'],['utek','Utekök'],['yakitori','Yakitori'],['vaxthus','Växthus'],['växthus','Växthus'],['rat','Rat stop'],['wallpocket','Wallpocket'],['ultima','Ultima'],['hor-','Horno'],['tiz-','Tizón'],['ute-','Utekök']];
+function fzKort(vem,vad){const t=(vem+' '+vad).toLowerCase();const pj=(PJN.find(([k])=>t.includes(k))||[])[1]||'';
+  let v=(vad||'').replace(/\s*\+\s*export[^+]*$/i,'').replace(/^(Horno|Asado|Tizon|Tizón|Fire table|Yakitori)\s*/i,'').replace(/\s+/g,' ').trim();
+  if(v.length>58)v=v.slice(0,56)+'…';return {pj,v}}
+function fusionBox(){const f=D.fusion;if(!f)return'';const nu=f.upptagen?fzKort(f.vem,f.vad):null;
+  const ko=(f.ko||[]).map((k,i)=>{const x=fzKort(k.vem,k.vad);return `<li><span class="n">${i+1}</span><b>${esc(x.pj||'–')}</b><span>${esc(x.v)}</span></li>`}).join('');
+  return `<div class="fz"><div class="fzt"><span class="dot ${f.upptagen?'b':'l'}"></span><b>${f.upptagen?'Jobbar':'Ledig'}</b>${f.upptagen?` <span class="m">sedan ${esc((f.start||'').slice(11))}</span>`:''}</div>
+   ${nu?`<div class="fzv"><b>${esc(nu.pj||'')}</b> ${esc(nu.v)}</div>`:''}
+   <div class="m">${(f.ko||[]).length?`Kö (${f.ko.length})`:'Kön är tom'}</div>${ko?`<ul class="fzq">${ko}</ul>`:''}
+   ${f.senaste&&f.senaste.img?`<div class="fzs"><img src="${f.senaste.img}" onclick="zoom(this.src)"><div class="m">Senast klart ${ago(f.senaste.t)} sedan</div></div>`:''}</div>`}
+function home(){
+  return `<h2>Att ta ställning till <span class="n">${Q.length}</span></h2>
+   <div class="qs">${Q.map(qCard).join('')||'<div class="empty">Inget väntar på dig.</div>'}</div>
+   <h2>Projekt <span class="n">${P.length}</span></h2>
+   <div class="ps">${P.map(pCard).join('')}</div>`;
+}
+// ---------- projektsida: 3D (Design Review inbäddad) + läge/ärende bredvid ----------
+let CUR=null, PK=null, DRS=null;
+const DRB=(location.hostname==='localhost'&&new URLSearchParams(location.search).get('drb'))||'https://www.buttercup.nu/design-review/';
+function drQ(u){return (u||'').split('?')[1]||''}
+function drGo(q){const f=document.getElementById('v3d');if(f&&f.contentWindow)f.contentWindow.postMessage({dr:'go',q},'*')}
+function projShell(k){const p=P.find(p=>p.kanal==k);
+  const ix=stegIx(p.steg), dc=`https://discord.com/channels/1114447465203109918/${p.id}`;
+  DRS=(p.dr[0]||{}).slug||null;
+  const tabs=p.dr.length>1?`<div class="vt">${p.dr.map(d=>`<button class="btn sm${d.slug==DRS?' on':''}" data-s="${d.slug}" onclick="setDR('${d.slug}')">${esc(d.name.replace(/^Yamay /,''))}</button>`).join('')}</div>`:'';
+  if(G)return `<div class="ph"><h1 class="t">${esc(p.namn||nice(k))}</h1>${(p.konfig||[]).length?`<div class="acts">${p.konfig.map(x=>`<a class="btn sm pri" target="_blank" href="${x.url}">🧩 ${esc(x.namn)} ↗</a>`).join('')}</div>`:''}</div>
+   <div id="psteps"></div>
+   <div class="pg"><div class="vw">${tabs}${DRS?`<iframe id="v3d" data-k="${k}" src="${DRB}?p=${DRS}&embed=1" allow="fullscreen"></iframe>`:'<div class="empty" style="padding:40px">Ingen 3D-modell exporterad än.</div>'}
+   <div class="cmp"><textarea id="cmpT" placeholder="Kommentar eller fråga till projektgruppen … (vyn ovan bifogas)"></textarea>
+    <div class="r">${DRS?'<label><input type="checkbox" id="cmpV" checked> 📷 Bifoga vyn</label>':''}<label class="btn sm">📎 Fil<input type="file" id="cmpF" accept="image/*,application/pdf" hidden onchange="this.parentNode.firstChild.textContent=this.files[0]?'📎 '+this.files[0].name.slice(0,16)+' ':'📎 Fil'"></label><span class="sp"></span>
+    <button class="btn sm pri" onclick="cmpSend('kommentar')">💬 Skicka kommentar</button></div></div></div>
+   <div class="side" id="pside"></div></div>
+   <div id="pbelow"></div>`;
+  return `<div class="back" onclick="go('')">← Alla projekt</div>
+   <div class="ph"><h1 class="t">${esc(p.namn||nice(k))}</h1>
+     <div class="acts"><button class="btn pri" onclick="projAct('fortsatt')">▶ Fortsätt utveckling</button><button class="btn" onclick="projAct('granska')">🧐 Granska (Fable)</button>${(p.konfig||[]).map(x=>`<a class="btn sm" target="_blank" href="${x.url}" title="${x.egen?'':'Projektet ingår som modul i '+esc(x.namn)}">🧩 ${esc(x.namn)}${x.egen?'':' (modul)'} ↗</a>`).join('')}<button class="btn sm" onclick="delaPanel()">🔗 Dela${p.delningar&&p.delningar.length?' ('+p.delningar.length+')':''}</button>${DRS?`<a class="btn sm" target="_blank" href="${DRB}?p=${DRS}">Design Review ↗</a>`:''}<a class="btn sm" target="_blank" href="${dc}">#${esc(k)} ↗</a></div></div>
+   <div id="psteps"></div>
+   <div class="pg"><div class="vw">${tabs}${DRS?`<iframe id="v3d" data-k="${k}" src="${DRB}?p=${DRS}&embed=1" allow="fullscreen"></iframe>`:'<div class="empty" style="padding:40px">Ingen 3D-modell exporterad än.</div>'}
+   <div class="cmp"><textarea id="cmpT" placeholder="Instruktion eller idé till projektet … (vyn ovan bifogas)"></textarea>
+    <div class="r">${DRS?'<label><input type="checkbox" id="cmpV" checked> 📷 Bifoga vyn</label>':''}<label class="btn sm">📎 Fil<input type="file" id="cmpF" accept="image/*,application/pdf" hidden onchange="this.parentNode.firstChild.textContent=this.files[0]?'📎 '+this.files[0].name.slice(0,16)+' ':'📎 Fil'"></label><span class="sp"></span>
+    <button class="btn sm" onclick="cmpSend('ide')">💡 Spara idé</button><button class="btn sm pri" onclick="cmpSend('instruktion')">▶ Skicka instruktion</button></div></div></div>
+   <div class="side" id="pside"></div></div>
+   <div id="pbelow"></div>`}
+const SK=['forstudie','modellering','designreview','montering'];
+function stegHtml(p){const ix=stegIx(p.steg),sd=p.stegdata||{};
+  const sub=[(sd.forstudie||{}).status?(/godkänd/i.test(sd.forstudie.status)?'✅ godkänd':'väntar på godkännande'):((sd.forstudie||{}).fil?'underlag finns':'–'),
+    (sd.modellering||{}).datum?'senast '+sd.modellering.datum.slice(5):'–',
+    p.dr[0]?`v${p.dr[0].v||'?'} · ${p.oppna.filter(i=>isOpen(i.status)).length} öppna`:'ingen export',
+    (sd.montering||{}).pdf&&(sd.montering||{}).pdf.length?'anvisning finns':((sd.montering||{}).finns?'påbörjad':'ej påbörjad')];
+  return `<div class="stp">${STEG.map((s,i)=>`<button class="sb ${i<ix?'d':i==ix?'c':''}${CUR&&CUR.steg==SK[i]?' on':''}" onclick="openSteg('${SK[i]}')"><span class="bar"></span><b>${s}</b><small>${esc(sub[i])}</small></button>`).join('')}</div>`}
+function openSteg(k){const p=P.find(p=>p.kanal==PK);CUR={k:PK,steg:k};document.getElementById('pside').innerHTML=stegPanel(p,k);
+  document.getElementById('psteps').innerHTML=stegHtml(p);document.querySelector('.pg').scrollIntoView({behavior:'smooth',block:'start'})}
+function li(a){return a&&a.length?`<ul class="bl">${a.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
+function stegPanel(p,k){const sd=(p.stegdata||{})[k]||{},n=STEG[SK.indexOf(k)];let body='',btn='';
+  const godk=/godkänd/i.test((p.stegdata?.forstudie||{}).status||'');
+  if(k=='forstudie'){body=`<dl><dt>Status</dt><dd>${esc(sd.status)||(sd.fil?'underlag finns, inte formellt godkänd':'ingen förstudie')}</dd>${sd.fil?`<dt>${esc(sd.fil)}${sd.datum?' · '+sd.datum:''}</dt><dd>${li(sd.rubriker)}</dd>`:''}</dl>`;
+    btn=`${!godk&&sd.fil?`<button class="btn pri" onclick="stegGo('forstudie','godkann')">✅ Godkänn förstudien</button>`:''}<button class="btn${godk||!sd.fil?' pri':''}" onclick="stegGo('forstudie','starta')">${sd.fil?'▶ Uppdatera förstudien':'▶ Starta förstudie'}</button>`}
+  if(k=='modellering'){const f=p.fusion;body=`<dl>${sd.fusion?`<dt>Fusion-projekt</dt><dd>${esc(sd.fusion)}</dd>`:''}<dt>Fusion nu</dt><dd>${p.fusion_nu?'<span class="dot b"></span>jobbar med projektet: '+esc(D.fusion.vad):(D.fusion.upptagen?'upptagen med annat projekt':'ledig')}</dd>
+     ${(p.dr.find(d=>d.slug==DRS)||{}).struktur?`<dt>CAD-struktur</dt><dd><img class="cadt" src="${(p.dr.find(d=>d.slug==DRS)).struktur}" onclick="zoom(this.src)"></dd>`:''}
+     ${sd.fil?`<dt>Senaste stegen (${esc(sd.fil)}${sd.datum?' · '+sd.datum:''})</dt><dd>${li(sd.rubriker)}</dd>`:''}</dl>${f&&f.img?`<div class="fimg"><img src="${f.img}" onclick="zoom(this.src)"><div class="m">${esc(f.trad)} · ${ago(f.t)} sedan</div></div>`:''}`;
+    btn=godk||!p.stegdata?.forstudie?.fil?`<button class="btn pri" onclick="stegGo('modellering','starta')">▶ Fortsätt modellering</button>`:'<div class="m">Modellering startar när förstudien är godkänd.</div>'}
+  if(k=='designreview'){body=`<dl><dt>Modeller</dt><dd>${p.dr.length?li(p.dr.map(d=>`${d.name}${d.v?' · v'+d.v:''}${d.exp?' · '+d.exp:''}`)):'ingen export än'}</dd>
+     <dt>Ärenden</dt><dd>${p.oppna.filter(i=>isOpen(i.status)).length} öppna av ${p.oppna.length} – klicka i listan nedan eller på 📍 i modellen</dd></dl>`;
+    btn=`<button class="btn pri" onclick="stegGo('designreview','starta')">▶ Exportera & gå igenom ärenden</button><button class="btn" onclick="projAct('granska')">🧐 Granska (Fable)</button>`}
+  if(k=='montering'){body=`<dl><dt>Anvisning</dt><dd>${sd.pdf&&sd.pdf.length?li(sd.pdf)+(sd.sidor?`<div class="m">${sd.sidor} sidor</div>`:''):(sd.finns?'påbörjad, ingen PDF än':'ej påbörjad')}</dd>
+     ${sd.avvikelser?`<dt>Monteringsavvikelser</dt><dd>${sd.avvikelser} st i AVVIKELSER.md</dd>`:''}${sd.datum?`<dt>Senast ändrad</dt><dd>${sd.datum}</dd>`:''}</dl>`;
+    btn=`<button class="btn pri" onclick="stegGo('montering','starta')">${sd.finns?'▶ Fortsätt monteringsanvisning':'▶ Starta montering'}</button>`}
+  return `<div class="case"><div class="ih"><button class="btn sm" onclick="closeIss()">← Läge</button></div><h3>${n}</h3>${body}
+   <div class="rep">${G?'':CAN?`<textarea id="issTxt" placeholder="Instruktion (valfritt), t.ex. ”fokusera på asklådan”"></textarea><div class="ca">${btn}<button class="btn" onclick="stegGo('${k}','underlag')">📄 Hämta underlag</button></div>
+   <div class="m">Svaret kommer i projektets ${k=='forstudie'?'Konstruktion':k=='modellering'?'Fusion':k=='designreview'?'Design Review':'Montering'}-tråd. ”Hämta underlag” postar sammanfattning + filer (PDF, bilder) där utan att ändra något.</div>`:'<div class="m">Öppna kopplingslänken för att kunna starta.</div>'}</div></div>`}
+function stegGo(k,mode){const n=STEG[SK.indexOf(k)];doSend({v:1,projekt:{kanal:PK,action:'steg',steg:k,mode,text:txtv()},by:who.value},`${mode=='underlag'?'📄':'▶'} ${WHO()}: ${n} (${mode}) i #${PK}`,
+  mode=='underlag'?`Underlaget för ${n} hämtas – kommer i tråden om en stund.`:mode=='godkann'?'Förstudien godkänns – Vickan skapar Fusion-projektet och svarar i tråden.':`${n} startad – Vickan svarar i tråden.`)}
+function vyShot(){return new Promise(res=>{const f=document.getElementById('v3d');if(!f){res(null);return}
+  const h=e=>{if(e.data&&e.data.dr&&e.data.ev==='shot'){removeEventListener('message',h);res(e.data)}};addEventListener('message',h);
+  f.contentWindow.postMessage({dr:'shot'},'*');setTimeout(()=>{removeEventListener('message',h);res(null)},5000)})}
+async function cmpSend(kind){if(!CAN){toast('Öppna kopplingslänken först (samma som för Design Review).');return}
+  const p=P.find(p=>p.kanal==PK),t=document.getElementById('cmpT'),txt=t.value.trim(),fi=document.getElementById('cmpF');if(!txt){t.focus();return}
+  const th=p.tradar.find(x=>x.name.toLowerCase()=='konstruktion')||p.tradar.find(x=>/konstruktion/i.test(x.name))||p.tradar[0];if(!th){toast('Projektet saknar tråd');return}
+  const bs=document.querySelectorAll('.cmp button');bs.forEach(b=>b.disabled=true);
+  let extra='',file=fi&&fi.files[0];
+  if(document.getElementById('cmpV')?.checked){const v=await vyShot();if(v&&v.img){extra=`\n🔗 Vy: ${v.url}${v.sel?`\n📍 Markerad: ${v.sel}`:''}${v.ver?`\n🧊 ${v.ver}`:''}`;
+    if(!file){const b=await (await fetch(v.img)).blob();file=new File([b],'vy.jpg',{type:'image/jpeg'})}}}
+  try{await send({v:1,portal:{thread:th.id,kind,text:txt+extra},by:who.value},`${kind=='ide'?'💡':kind=='kommentar'?'💬':'▶'} ${WHO()} – ${kind} i #${PK}`,file);
+    t.value='';if(fi){fi.value='';fi.parentNode.firstChild.textContent='📎 Fil'}
+    toast(kind=='kommentar'?'💬 Kommentaren är skickad till projektgruppen.':kind=='ide'?'💡 Idén är sparad – Vickan loggar den och ger en kort bedömning i Konstruktion-tråden.':'▶ Instruktionen är skickad – Vickan svarar i Konstruktion-tråden.')}
+  catch(e){toast('Kunde inte skicka: '+esc(e.message))}bs.forEach(b=>b.disabled=false)}
+function setDR(s){DRS=s;drGo('p='+s);document.querySelectorAll('.vt button').forEach(b=>b.classList.toggle('on',b.dataset.s==s))}
+function lageHtml(p){const L=p.lage||{}, oi=p.oppna.filter(i=>isOpen(i.status)).length, qs=Q.filter(q=>q.kanal==p.kanal).length;
+  const d=p.dr.find(d=>d.slug==DRS)||p.dr[0], f=p.fusion, b=p.beslut[0];
+  return `<h2 style="margin-top:0">Läge just nu</h2>
+   <div class="lg">${L.lage?esc(L.lage):'<span class="m">Ingen sammanfattning än.</span>'}${L.nasta?`<div class="nx">➜ ${esc(L.nasta)}</div>`:''}${L.datum?`<div class="m">enligt projektfilerna ${esc(L.datum)}</div>`:''}</div>
+   <ul class="facts">
+    ${d?`<li><b>3D-modell</b> ${esc(d.name)}${d.v?' · v'+d.v:''}${d.exp?' · exporterad '+esc(d.exp):''}</li>`:''}
+    <li><b>Fusion</b> ${p.fusion_nu?`<span class="dot b"></span>jobbar med projektet nu: ${esc(D.fusion.vad)}`:(f?`senaste bild ${ago(f.t)} sedan${f.text?' · '+esc(f.text.slice(0,90)):''}`:'–')}</li>
+    <li><b>Väntar på dig</b> ${qs?`<a href="#pbelow" onclick="document.getElementById('pbelow').scrollIntoView({behavior:'smooth'});return false">❓ ${qs} fråga${qs>1?'r':''}</a>`:'inget'}</li>
+    <li><b>Ärenden</b> ${oi} öppna av ${p.oppna.length}</li>
+    ${(p.konfig||[]).length?`<li><b>Konfigurator</b> ${p.konfig.map(x=>`<a href="${x.url}" target="_blank">🧩 ${esc(x.namn)} ↗</a>${x.egen?'':' <span class="m">(ingår som modul)</span>'}`).join(' · ')}</li>`:''}
+    ${b?`<li><b>Senaste beslut</b> ${esc(b.d.slice(5))} · ${esc(b.t.slice(0,120))}</li>`:''}
+   </ul>
+   ${f&&f.img?`<div class="fimg"><img src="${f.img}" onclick="zoom(this.src)"><div class="m">${esc(f.trad)} · ${ago(f.t)} sedan${f.link&&!G?` · <a href="${f.link}" target="_blank">Discord ↗</a>`:''}</div></div>`:''}`}
+function issTiles(p,k){const list=p.oppna.filter(i=>ALLA||isOpen(i.status));
+  return `<div class="it"><label><input type="checkbox" ${ALLA?'':'checked'} onchange="ALLA=!this.checked;render(true)"> Bara öppna</label><span>${p.oppna.filter(i=>isOpen(i.status)).length} öppna av ${p.oppna.length}</span></div>`+(list.length?`<div class="is">${list.map(i=>`<div class="ic${CUR&&CUR.id==i.id?' sel':''}" onclick="openIss('${k}','${i.id}')">${i.img?`<img src="${i.img}">`:'<div class="noi">'+(i.kind=='avv'?'🧐':'📸')+'</div>'}<div><span class="st st-${i.status}">${ST[i.status]?.[0]||''} ${ST[i.status]?.[1]||i.status}</span><br>${i.sev||''} ${typeof i.nr=='number'?'#'+i.nr:i.nr} ${esc(i.t)}</div></div>`).join('')}</div>`:'<div class="empty">Inga öppna ärenden.</div>')}
+function belowHtml(p,k){const qs=Q.filter(q=>q.kanal==k);
+  const trs=p.tradar.map(t=>`<div class="tr"><div class="h"><b>${esc(t.name)}</b><span class="m">${ago(t.last)} sedan · ${esc(t.by)}</span><button class="btn sm" onclick="comp('${t.id}')">Skriv</button><a class="btn sm" href="${t.link}" target="_blank">↗</a></div>
+     <div class="comp" id="c-${t.id}"><textarea placeholder="Skriv till tråden ${esc(t.name)} …"></textarea>
+       <div class="r"><label class="btn sm">📎 Bild<input type="file" accept="image/*" hidden onchange="this.parentNode.firstChild.textContent=this.files[0]?'📎 '+this.files[0].name.slice(0,18)+' ':'📎 Bild'"></label><span class="sp"></span>
+       <button class="btn sm pri" onclick="sendT('${t.id}','${esc(t.name)}')">Skicka till tråden</button></div></div></div>`).join('');
+  const bes=p.beslut.length?`<ul class="bl">${p.beslut.map(b=>`<li><span class="d">${b.d.slice(5)}</span>${esc(b.t)}</li>`).join('')}</ul>`:'<div class="empty">Inga beslut loggade i PROJEKT.md än.</div>';
+  const ds=p.dr.filter(d=>d.struktur), dsel=ds.find(d=>d.slug==DRS)||ds[0];
+  const cad=dsel?`<h2>CAD-struktur</h2><div class="box cad">${ds.length>1?`<div class="vt">${ds.map(d=>`<button class="btn sm${d===dsel?' on':''}" onclick="DRS='${d.slug}';setDR('${d.slug}');render(true)">${esc(d.name.replace(/^Yamay /,''))}</button>`).join('')}</div>`:''}<img src="${dsel.struktur}?v=${encodeURIComponent(dsel.exp||'')}" onclick="zoom(this.src)" alt="CAD-struktur"><div class="m" style="padding:4px 10px 8px">Ur Design Review-exporten ${dsel.v?'v'+dsel.v:''} · grön = egen del, blå = köpdel/bibliotek · fästelement utelämnade · klicka för att förstora</div></div>`:'';
+  return `${qs.length?`<h2>Att ta ställning till <span class="n">${qs.length}</span></h2><div class="qs">${qs.map(qCard).join('')}</div>`:''}
+   <h2>Ärenden</h2><div class="box">${issTiles(p,k)}</div>
+   ${G?'':`<h2>Beslut</h2><div class="box">${bes}</div>
+   <details class="trd"><summary>Discord-trådar (${p.tradar.length})</summary><div class="box">${trs||'<div class="empty">Inga trådar.</div>'}</div></details>`}
+   ${cad}`}
+function proj(k){const p=P.find(p=>p.kanal==k);const main=document.getElementById('main');
+  if(!p){main.innerHTML=home();return}
+  if(PK!==k||!document.getElementById('pside')){PK=k;CUR=null;main.innerHTML=projShell(k)}
+  const det=document.querySelector('details.trd'),open=det&&det.open;
+  document.getElementById('psteps').innerHTML=stegHtml(p);
+  document.getElementById('pside').innerHTML=CUR?(CUR.steg?stegPanel(p,CUR.steg):caseHtml(p,CUR.id)):lageHtml(p);
+  document.getElementById('pbelow').innerHTML=belowHtml(p,k);
+  if(open)document.querySelector('details.trd').open=true}
+let ALLA=false;
+const ST={ny:['🆕','Ny'],oppen:['🟠','Öppen'],analyserad:['🔍','Analyserad'],pagar:['🛠','Pågår'],delvis:['⚠️','Delvis'],atgardad:['✅','Åtgärdad'],stangd:['✔','Stängd'],avvisad:['❌','Avvisad']};
+const isOpen=s=>['ny','oppen','analyserad','pagar','delvis'].includes(s);
+const fmt=t=>{if(!t)return'';const d=new Date(t);return d.toLocaleDateString('sv-SE',{day:'numeric',month:'short'})+' '+d.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'})};
+function openIss(k,id){const p=P.find(p=>p.kanal==k),i=p&&p.oppna.find(i=>i.id==id);if(!i)return;
+  if(PK!==k){go('p='+k);setTimeout(()=>openIss(k,id),50);return}
+  CUR={k,id};document.getElementById('pside').innerHTML=caseHtml(p,id);
+  document.querySelectorAll('.ic').forEach(e=>e.classList.toggle('sel',e.getAttribute('onclick').includes(`'${id}'`)));
+  const q=drQ(i.url);if(q){if(i.slug&&i.slug!==DRS){DRS=i.slug;document.querySelectorAll('.vt button').forEach(b=>b.classList.toggle('on',b.dataset.s==DRS))}drGo(q)}
+  document.querySelector('.pg').scrollIntoView({behavior:'smooth',block:'start'})}
+const PA={fortsatt:['▶ Fortsätt utveckling','Vickan läser läget (beslut, trådar, frågor) och tar nästa beslutade steg – Fusion, export till Design Review – eller ställer en kort fråga om ett val behövs.','t.ex. ”fokusera på luckan” (valfritt)'],
+ granska:['🧐 Granska (Fable)','Fable gör en oberoende, läsande granskning av modellen och lösningarna (mått, material, värme, montering). Fynden verifieras av Vickan och blir ärenden här.','t.ex. ”titta särskilt på asklådan” (valfritt)']};
+function projAct(k){if(!CAN){toast('Öppna kopplingslänken först (samma som för Design Review).');return}
+  CUR=null;const a=PA[k];document.getElementById('pside').innerHTML=`<div class="case"><div class="ih"><button class="btn sm" onclick="closeIss()">← Läge</button></div>
+   <h3>${a[0]}</h3><div class="lg" style="font-size:15px">${a[1]}</div>
+   <div class="rep"><textarea id="issTxt" placeholder="${a[2]}"></textarea><div class="r"><span class="sp"></span><button class="btn pri" onclick="projGo('${k}')">Starta</button></div></div>
+   <div class="m">Svaret kommer i projektets Konstruktion-tråd och syns här under Läge/Ärenden.</div></div>`;
+  document.querySelector('.pg').scrollIntoView({behavior:'smooth',block:'start'})}
+function projGo(k){doSend({v:1,projekt:{kanal:PK,action:k,text:txtv()},by:who.value},`${PA[k][0]} – ${WHO()} i #${PK}`,k=='fortsatt'?'Startat – Vickan tar nästa steg och svarar i Konstruktion-tråden.':'Granskning beställd – Fable svarar i Konstruktion-tråden (tar en stund).')}
+function delaPanel(){const p=P.find(p=>p.kanal==PK);CUR=null;const ds=p.delningar||[];
+  document.getElementById('pside').innerHTML=`<div class="case"><div class="ih"><button class="btn sm" onclick="closeIss()">← Läge</button></div>
+   <h3>🔗 Dela projektet</h3><div class="lg" style="font-size:15px">Gästen får en hemlig länk som bara visar <b>${esc(p.namn||nice(PK))}</b>: 3D-vyn, läget, frågor, ärenden och CAD-strukturen – inga beslut, trådar eller andra projekt. Gästen kan svara på frågor, kommentera och rapportera problem; allt märks ”Namn (gäst)” och är förslag tills du bekräftat.</div>
+   ${ds.length?`<h2>Aktiva delningar</h2><ul class="bl">${ds.map(x=>`<li><b>${esc(x.namn)}</b> <span class="m">sedan ${esc(x.skapad)}</span> <button class="btn sm" onclick="delaStang('${x.id}','${esc(x.namn)}')">🔒 Stäng av</button></li>`).join('')}</ul>`:''}
+   <div class="rep">${CAN?`<textarea id="issTxt" placeholder="Gästens namn (t.ex. Anders, Plåtslagarn AB)"></textarea><div class="r"><span class="sp"></span><button class="btn pri" onclick="delaNy()">🔗 Skapa länk</button></div>
+   <div class="m">Länken postas i projektets Konstruktion-tråd (den innehåller gästens skrivnyckel – skicka den bara till gästen). Den fungerar efter ca 2 min.</div>`:'<div class="m">Öppna kopplingslänken för att kunna dela.</div>'}</div></div>`;
+  document.querySelector('.pg').scrollIntoView({behavior:'smooth',block:'start'})}
+function delaNy(){const n=txtv();if(!n){document.getElementById('issTxt').focus();return}doSend({v:1,dela:{kanal:PK,namn:n},by:who.value},`🔗 ${WHO()} delar #${PK} med ${n}`,`Länken för ${n} kommer i Konstruktion-tråden om en minut.`)}
+function delaStang(id,n){if(!confirm('Stäng av delningen med '+n+'?'))return;doSend({v:1,dela:{stang:id},by:who.value},`🔒 ${WHO()} stänger delning ${id} i #${PK}`,`Delningen med ${n} stängs av.`)}
+function closeIss(){CUR=null;const p=P.find(p=>p.kanal==PK);document.getElementById('pside').innerHTML=lageHtml(p);document.getElementById('psteps').innerHTML=stegHtml(p);
+  document.querySelectorAll('.ic.sel').forEach(e=>e.classList.remove('sel'));if(DRS)drGo('p='+DRS)}
+function caseHtml(p,id){const i=p.oppna.find(i=>i.id==id);if(!i){CUR=null;return lageHtml(p)}
+  const avv=i.kind=='avv', op=isOpen(i.status);
+  const desc=esc(i.desc||'').replace(/^(Modellen|Förväntat|Förslag|Verifierat|Kommentar):/gm,'<b>$1:</b>').replace(/\n/g,'<br>');
+  const log=(i.log||[]).map(l=>`<li><span class="d">${fmt(l[0])}</span>${ST[l[1]]?.[0]||''} <b>${ST[l[1]]?.[1]||l[1]}</b> · ${esc(l[2]||'')}</li>`).join('');
+  const com=(i.comments||[]).map(c=>Array.isArray(c)?{t:c[0],by:c[1],text:c[2]}:c).map(c=>`<li><span class="d">${fmt(c.t||'')}</span><b>${esc(c.by||'')}</b> ${esc(c.text||'')}</li>`).join('');
+  const sk=i.skiss?DRB+i.skiss:null;
+  let act;
+  if(G){act=`<textarea id="issTxt" placeholder="Kommentar eller fråga om ärendet …"></textarea>
+     <div class="r"><span class="sp"></span><button class="btn sm pri" id="issGo" onclick="repSend()">💬 Skicka</button></div>`}
+  else if(avv){act=`<div class="ca">${op?`<button class="btn pri" onclick="avvDo()">🛠 Åtgärda enligt förslaget</button>`:''}
+      ${['stangd','avvisad','oppen'].filter(s=>s!==i.status).map(s=>`<button class="btn sm" onclick="avvSt('${s}')">${({stangd:'✔ Stäng',avvisad:'❌ Avvisa',oppen:'↺ Öppna igen'})[s]}</button>`).join('')}</div>
+     <textarea id="issTxt" placeholder="Kommentar eller fråga till Vickan …"></textarea>
+     <div class="r"><span class="sp"></span><button class="btn sm pri" id="issGo" onclick="avvCom()">💬 Skicka & be Vickan svara</button></div>`}
+  else{const fs=(i.forslag||[]);
+    act=`${op&&fs.length?`<div class="lt">Välj lösning</div><div class="fsl">${fs.map(f=>`<button class="alt" onclick="repPick(${f.n})"><b>${f.n}</b>${esc(f.t)}</button>`).join('')}</div>`:''}
+     ${op&&!fs.length&&i.status!='ny'?`<div class="ca"><button class="btn sm" onclick="repSend('kör det du rekommenderar')">★ Kör rekommenderat</button></div>`:''}
+     <div class="ca">${op?`<button class="btn sm" onclick="repSt('stangd')">✔ Stäng (klart)</button><button class="btn sm" onclick="repSt('avvisad')">❌ Avvisa</button>`:`<button class="btn sm" onclick="repSt('oppen')">↺ Öppna igen</button>`}</div>
+     <textarea id="issTxt" placeholder="Svar, fråga eller ”alt 2 men …”"></textarea>
+     <div class="r"><span class="sp"></span><button class="btn sm pri" id="issGo" onclick="repSend()">Skicka</button></div>`}
+  return `<div class="case"><div class="ih"><button class="btn sm" onclick="closeIss()">← Läge</button><span class="sp"></span><span class="st st-${i.status}">${ST[i.status]?.[0]||''} ${ST[i.status]?.[1]||i.status}</span></div>
+   <h3>${typeof i.nr=='number'?'#'+i.nr:esc(i.nr||'')} ${esc(i.t)}</h3>
+   <div class="meta">${i.sevt?esc(i.sev+' '+i.sevt)+' · ':''}${avv?esc(i.srcl||'🧐 Avvikelse'):'📸 Rapport'} · ${esc(i.by||'')} · ${fmt(i.created)}</div>
+   <div class="imgs">${i.img?`<img src="${i.img}" onclick="zoom(this.src)" title="${avv?'Placering':'Rapportbild'}">`:''}${sk?`<img src="${sk}" onclick="zoom(this.src)" title="Vickans skiss av förslagen">`:''}</div>
+   <div class="rep">${CAN?act:'<div class="m">Öppna kopplingslänken för att kunna ta hand om ärendet.</div>'}</div>
+   <dl>${i.desc?`<dt>${avv?'Fynd':'Beskrivning'}</dt><dd>${desc}</dd>`:''}${i.part?`<dt>Del</dt><dd>${esc(i.part)}</dd>`:''}${i.ver?`<dt>Version</dt><dd>${esc(i.ver)}</dd>`:''}${i.choice_txt?`<dt>Valt</dt><dd>”${esc(i.choice_txt)}”</dd>`:''}</dl>
+   ${log||com?`<details><summary>Historik${com?' & kommentarer':''}</summary><ul class="bl">${log}${com}</ul></details>`:''}
+   ${G?'':`<div class="m" style="margin-top:8px">${i.link?`<a href="${i.link}" target="_blank">Analysen i Discord ↗</a> · `:''}<a href="${i.url}" target="_blank">Design Review ↗</a></div>`}</div>`}
+function curI(){const p=P.find(p=>p.kanal==CUR.k);return p.oppna.find(i=>i.id==CUR.id)}
+async function doSend(np,content,ok){if(!CAN){toast('Öppna kopplingslänken först (samma som för Design Review).');return}
+  document.querySelectorAll('#pside button').forEach(b=>b.disabled=true);
+  try{await send(np,content);toast(ok||'✓ Skickat. Vickan tar det i tråden.');const t=document.getElementById('issTxt');if(t)t.value='';
+    document.querySelector('#pside .rep').insertAdjacentHTML('afterbegin',`<div class="ok">✓ ${esc(ok||'Skickat')}</div>`)}
+  catch(e){toast('Kunde inte skicka: '+esc(e.message))}
+  document.querySelectorAll('#pside button').forEach(b=>b.disabled=false)}
+function txtv(){return (document.getElementById('issTxt')||{}).value?.trim()||''}
+function repSend(t){const i=curI();t=t||txtv();if(!t)return;const th=i.thread||((i.link||'').split('/')[5]);if(!th){toast('Ärendet saknar tråd');return}
+  doSend({v:1,portal:{thread:th,text:`↪ [#${i.nr} ${i.t}](${i.link})\n${t}`},by:who.value},`💬 ${WHO()} svarar på ärende #${i.nr} ${i.t}`,`Skickat: ”${t.slice(0,60)}”. Vickan svarar i tråden.`)}
+function repPick(n){const x=txtv();repSend(`alt ${n}${x?' – '+x:''}`)}
+function repSt(s){const i=curI();doSend({v:1,issue:{id:i.id,status:s,text:txtv()},by:who.value},`📋 ${WHO()}: ärende #${i.nr} → ${s}`,({stangd:'Ärendet stängs',avvisad:'Ärendet avvisas',oppen:'Ärendet öppnas igen'})[s]+' – syns inom ett par minuter.')}
+function avvSt(s){const i=curI();doSend({v:1,avv:{key:i.nr,slug:i.slug,title:i.t,status:s,text:txtv(),ask:false},by:who.value},`🧐 ${WHO()}: ${i.nr} → ${s}`,'Status skickad – syns inom ett par minuter.')}
+function avvCom(){const i=curI(),t=txtv();if(!t)return;doSend({v:1,avv:{key:i.nr,slug:i.slug,title:i.t,status:null,text:t,ask:true},by:who.value},`🧐 ${WHO()}: ${i.nr} kommentar`,'Kommentar skickad – Vickan svarar i Design Review-tråden.')}
+function avvDo(){const i=curI(),t=txtv();doSend({v:1,avv:{key:i.nr,slug:i.slug,title:i.t,status:null,text:t||'Godkänt: åtgärda enligt förslaget.',ask:false,do:true},by:who.value},`🛠 ${WHO()}: åtgärda ${i.nr}`,'Godkänt – Vickan ställer ändringen i Fusion-kön och svarar i Design Review-tråden.')}
+addEventListener('message',e=>{const d=e.data||{};if(!d.dr)return;
+  if(d.ev==='ready'&&G&&GK&&e.source)e.source.postMessage({dr:'gast',hook:{id:GK.id,token:GK.token},name:GK.namn},new URL(DRB,location.href).origin);
+  if(d.ev==='issue'&&PK)openIss(PK,d.id);
+  if(d.ev==='ready'&&CUR){const i=curI();if(i&&drQ(i.url)&&i.slug===d.slug&&!e.data.done)drGo(drQ(i.url))}});
+function comp(id){document.getElementById('c-'+id).classList.toggle('on')}
+async function sendT(id,name){
+  if(!CAN){toast('Öppna kopplingslänken först (samma som för Design Review).');return}
+  const c=document.getElementById('c-'+id),t=c.querySelector('textarea'),f=c.querySelector('input[type=file]').files[0];
+  if(!t.value.trim()&&!f)return;
+  const b=c.querySelector('.pri');b.disabled=true;b.textContent='Skickar…';
+  const k=(location.hash.match(/p=([^&]+)/)||[])[1]||'';
+  try{await send({v:1,portal:{thread:id,text:t.value.trim()},by:who.value},`💬 ${WHO()} skriver i #${decodeURIComponent(k)} › ${name}`,f);
+    t.value='';c.querySelector('input[type=file]').value='';comp(id);toast(`✓ Skickat till ${esc(name)}. Det syns i tråden inom en minut och Vickan svarar där.`)}
+  catch(e){toast('Kunde inte skicka: '+esc(e.message))}
+  b.disabled=false;b.textContent='Skicka till tråden';
+}
+function fusionUI(){const f=D.fusion||{};document.getElementById('fzrail').innerHTML=`<div class="rh">Fusion just nu</div>${fusionBox()}`;
+  const pj=f.upptagen?(P.find(p=>(f.vem+' '+f.vad).toLowerCase().replace(/-/g,' ').includes(p.kanal.replace('yamay-','').replace(/-/g,' ')))||null):null;
+  document.getElementById('fzpill').innerHTML=`<span class="dot ${f.upptagen?'b':'l'}"></span>Fusion ${f.upptagen?'jobbar'+(pj?' · '+esc((pj.namn||nice(pj.kanal)).replace(/^Yamay /,'')):''):'ledig'}${(f.ko||[]).length?` · kö ${f.ko.length}`:''}`}
+function ht(){const h=document.querySelector('header').getBoundingClientRect().bottom;document.body.style.setProperty('--ht',Math.max(0,h)+'px')}
+addEventListener('scroll',ht,{passive:true});addEventListener('resize',ht);
+function render(keep){if(!G)fusionUI();setTimeout(ht,0);const h=location.hash.slice(1);const m=h.match(/^p=(.+)$/);const y=scrollY;
+  if(G)proj(G.kanal);else if(m)proj(decodeURIComponent(m[1]));else{PK=null;CUR=null;document.getElementById('main').innerHTML=home()}
+  if(keep)scrollTo(0,y);else if(!m||!keep)scrollTo(0,0)}
+render();
+// ---- automatisk uppdatering: hämtar data.json var 60:e s (och när fliken blir synlig) och ritar om utan omladdning
+let SIG=JSON.stringify(D);const UPD=document.getElementById('upd');
+function busy(){if(document.querySelector('.q.focus'))return true;const a=document.activeElement;if(a&&/^(TEXTAREA|INPUT|SELECT)$/.test(a.tagName))return true;
+  return [...document.querySelectorAll('textarea,.ann input')].some(e=>e.value.trim())||!!document.querySelector('.comp.on')}
+async function refresh(){try{const r=await fetch((G?'dela/'+G.tok+'/':'')+'data.json?'+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const n=JSON.parse(t);
+  UPD.textContent='kollat '+new Date().toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'});
+  if(n.kod&&D.kod&&n.kod!==D.kod&&!busy()){location.reload();return}
+  if(JSON.stringify(n)===SIG)return; if(busy()){UPD.textContent='ny data – ritas om när du skickat/stängt';return}
+  D=n;P=D.projekt;Q=D.fragor;SIG=JSON.stringify(D);render(true);UPD.textContent='uppdaterad '+(D.upd||'');
+  for(const k in SENT)if(!Q.some(q=>q.id==k)){delete SENT[k]}localStorage.pp_sent=JSON.stringify(SENT);
+}catch(e){}}
+setInterval(refresh,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh()});
+</script>
+</body></html>
