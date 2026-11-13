@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Garderobskonfigurator · snickeri-tcn-3d</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;700&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--gul:#fbc021;--chili:#c8321a;--ox:#5a1a14;--cream:#fff6dc;--ink:#222}
+*{box-sizing:border-box}
+body{margin:0;font-family:Barlow,Helvetica,sans-serif;background:var(--cream);color:var(--ink)}
+header{background:var(--gul);padding:10px 18px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+header h1{font-family:Anton,sans-serif;font-weight:400;margin:0;font-size:28px;letter-spacing:.5px}
+header span{font-family:'Barlow Condensed';font-size:15px}
+main{display:grid;grid-template-columns:340px 1fr 340px;gap:14px;padding:14px}
+@media(max-width:1100px){main{grid-template-columns:1fr}}
+.kort{background:#fff;border:2px dashed #d9c38f;border-radius:10px;padding:12px}
+h2{font-family:'Barlow Condensed';font-weight:700;font-size:19px;margin:4px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+label{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;margin:5px 0}
+input,select{font:inherit;padding:3px 6px;border:1px solid #bbb;border-radius:5px;width:120px}
+input[type=checkbox]{width:auto}
+.skap{border:1px solid #e5d6ae;border-radius:8px;padding:8px;margin:8px 0;background:#fffbef}
+.skap h3{margin:0 0 4px;font-family:'Barlow Condensed';font-size:16px;display:flex;justify-content:space-between}
+button{font-family:'Barlow Condensed';font-weight:700;font-size:16px;border:0;border-radius:6px;padding:7px 12px;cursor:pointer;background:var(--ox);color:#fff;margin:3px 3px 3px 0}
+button.sek{background:#fff;color:var(--ox);border:2px solid var(--ox)}
+button.liten{font-size:13px;padding:2px 8px}
+.vyer{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.vyer>div{flex:1;min-width:240px}
+.varn{color:var(--chili);font-weight:600;font-size:14px}
+.info{font-size:13px;color:#555}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+td,th{padding:2px 4px;border-bottom:1px solid #eee;text-align:left}
+th{font-family:'Barlow Condensed';font-size:14px}
+.mapp{background:#f7eccd;font-weight:600}
+.osak{color:var(--chili)}
+small{color:#666}
+</style>
+</head>
+<body>
+<header><h1>GARDEROBSKONFIGURATOR</h1><span>snickeri-tcn-3d · v1 · regler ur skåpprogrammets TCN · export TCN + PDF</span></header>
+<main>
+<section class="kort" id="form">
+  <h2>Garderob</h2>
+  <label>Namn <input id="namn" style="width:180px"></label>
+  <label>Jobbnamn (i TCN) <input id="jobb" style="width:180px"></label>
+  <label>Bredd (utv.) <input id="bredd" type="number" step="1"></label>
+  <label>Nisch bredd × höjd <span><input id="nb" type="number" style="width:70px"> × <input id="nh" type="number" style="width:70px"></span></label>
+  <label>Sockel / galler <span><input id="sockel" type="number" style="width:70px"> / <input id="galler" type="number" style="width:70px"></span></label>
+  <h2>Skåp <small>(nerifrån)</small></h2>
+  <div id="skaplista"></div>
+  <button class="sek liten" id="nyttskap">+ skåp ovanpå</button>
+  <h2>Dörrar</h2>
+  <label>Antal <select id="dantal"><option value="0">inga</option><option value="1">1</option><option value="2">2</option></select></label>
+  <label>Under skåpet (mm) <input id="dunder" type="number"></label>
+  <label>Gångjärn (från dörrens underkant) <input id="dgj" style="width:140px"></label>
+  <hr>
+  <button class="sek" id="exempel">Exempel: Acaciagatan</button>
+  <button class="sek" id="ladda">Ladda konfig…</button><input type="file" id="fil" accept=".json" hidden>
+</section>
+
+<section class="kort">
+  <h2>Vyer</h2>
+  <div class="vyer"><div id="vyFront"></div><div id="vyDorr"></div><div id="vySida" style="max-width:180px"></div></div>
+  <div id="varn"></div>
+  <h2>Export</h2>
+  <button id="tcn">⬇ TCN-filer (zip)</button>
+  <button id="pdf">⬇ PDF-sammanställning</button>
+  <button class="sek" id="json">⬇ Konfig (JSON)</button>
+  <button class="sek" id="lank">🔗 Kopiera länk</button>
+  <p class="varn">Genererade filer är inte provkörda. Kör TpaCAD-simulering innan fräsning.</p>
+</section>
+
+<section class="kort">
+  <h2>Delar <small id="antal"></small></h2>
+  <div id="delar"></div>
+  <h2>Beslag</h2><div id="beslag" class="info"></div>
+  <h2>Regelbok</h2><div id="regler" class="info"></div>
+</section>
+</main>
+<script src="vendor/jszip.min.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="garderob.js"></script>
+<script src="ritning.js"></script>
+<script src="export.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+let K = null, UT = null;
+
+function tal(v, def = 0) { const n = parseFloat(String(v).replace(',', '.')); return isNaN(n) ? def : n; }
+function lista(v) { return String(v || '').split(/[ ,;\/]+/).map(x => tal(x, NaN)).filter(x => !isNaN(x)); }
+
+function tillForm(k) {
+  $('namn').value = k.namn || ''; $('jobb').value = k.jobb || ''; $('bredd').value = k.bredd;
+  $('nb').value = k.nisch ? k.nisch.bredd : ''; $('nh').value = k.nisch ? k.nisch.hojd : '';
+  $('sockel').value = k.sockel || 0; $('galler').value = k.galler || 0;
+  $('dantal').value = k.dorrar ? k.dorrar.antal : 0;
+  $('dunder').value = k.dorrar ? (k.dorrar.under || 0) : 50;
+  $('dgj').value = k.dorrar ? k.dorrar.gangjarn.join(', ') : '90, 780, 1420';
+  const L = $('skaplista'); L.innerHTML = '';
+  k.skap.forEach((s, i) => {
+    const d = document.createElement('div'); d.className = 'skap'; d.dataset.i = i;
+    d.innerHTML = `<h3>Skåp ${i + 1} <button class="sek liten" data-bort>ta bort</button></h3>
+      <label>Höjd <input data-f="hojd" type="number" value="${s.hojd}"></label>
+      <label>Djup <input data-f="djup" type="number" value="${s.djup}"></label>
+      <label>Rygg <select data-f="bak"><option value="spar"${s.bak !== 'ingen' ? ' selected' : ''}>i spår (6,5)</option><option value="ingen"${s.bak === 'ingen' ? ' selected' : ''}>ingen (löstagbar)</option></select></label>
+      <label>Fast hylla, mitt <input data-f="fast" type="number" placeholder="ingen" value="${s.fast ?? ''}"></label>
+      <label>Ställbara hyllor <input data-f="hyllor" value="${(s.hyllor || []).join(', ')}" placeholder="t.ex. 880, 1180"></label>
+      <label>Innerlådor <select data-f="lador">${[0, 1, 2, 3].map(n => `<option${n === (s.lador || 0) ? ' selected' : ''}>${n}</option>`).join('')}</select></label>`;
+    L.appendChild(d);
+  });
+}
+function franForm() {
+  const k = { namn: $('namn').value, jobb: $('jobb').value || 'Garderob', bredd: tal($('bredd').value, 910),
+    sockel: tal($('sockel').value), galler: tal($('galler').value), skap: [] };
+  if ($('nb').value) k.nisch = { bredd: tal($('nb').value), hojd: tal($('nh').value) };
+  document.querySelectorAll('.skap').forEach(d => {
+    const v = f => d.querySelector(`[data-f=${f}]`).value;
+    k.skap.push({ hojd: tal(v('hojd'), 1000), djup: tal(v('djup'), 488), bak: v('bak'),
+      fast: v('fast') === '' ? null : tal(v('fast')), hyllor: lista(v('hyllor')), lador: +v('lador') });
+  });
+  const n = +$('dantal').value;
+  k.dorrar = n ? { antal: n, under: tal($('dunder').value), gangjarn: lista($('dgj').value) } : null;
+  return k;
+}
+function rita() {
+  try { UT = Garderob.generera(K); } catch (e) { $('varn').innerHTML = `<p class="varn">Fel: ${e.message}</p>`; return; }
+  $('vyFront').innerHTML = Ritning.svg(Ritning.front(UT), 340, { fit: true });
+  $('vyDorr').innerHTML = K.dorrar ? Ritning.svg(Ritning.front(UT, { dorrar: true }), 340, { fit: true }) : '';
+  $('vySida').innerHTML = Ritning.svg(Ritning.sida(UT), 160, { fit: true });
+  $('varn').innerHTML = UT.varningar.map(v => `<p class="varn">⚠ ${v}</p>`).join('') + UT.info.map(v => `<p class="info">${v}</p>`).join('');
+  $('antal').textContent = `(${UT.delar.length} TCN-filer)`;
+  const s = UT.delar.slice().sort((a, b) => a.mapp.localeCompare(b.mapp) || a.fil.localeCompare(b.fil, 'sv', { numeric: true }));
+  let m = null, h = '<table><tr><th>Fil</th><th>Del</th><th>L×B×T</th></tr>';
+  s.forEach(d => { if (d.mapp !== m) { m = d.mapp; h += `<tr><td colspan=3 class="mapp">${m}</td></tr>`; }
+    h += `<tr><td>${d.fil.replace('.tcn', '')}</td><td>${d.typ}</td><td>${Garderob.fmt(d.L)}×${Garderob.fmt(d.B)}×${Garderob.fmt(d.T)}</td></tr>`; });
+  $('delar').innerHTML = h + '</table>' + (UT.saglista.length ? '<p class="info"><b>Sågas:</b> ' + UT.saglista.map(x => `${x.namn} ${x.L}×${x.B}×${x.T}`).join(' · ') + '</p>' : '');
+  $('beslag').innerHTML = UT.beslag.map(b => `${b.antal} × ${b.namn}`).join('<br>');
+  $('regler').innerHTML = UT.regler.map(r => `<div class="${/OSÄKER/.test(r.status) ? 'osak' : ''}">${/OSÄKER/.test(r.status) ? '⚠' : '✓'} ${r.text} <small>(${r.status})</small></div>`).join('');
+  history.replaceState(null, '', '#k=' + btoa(unescape(encodeURIComponent(JSON.stringify(K)))));
+}
+function satt(k) { K = k; tillForm(K); rita(); }
+function ladda(namn, blob) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = namn; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
+
+$('form').addEventListener('input', () => { K = franForm(); rita(); });
+$('form').addEventListener('change', () => { K = franForm(); rita(); });
+$('skaplista').addEventListener('click', e => { if (e.target.dataset.bort !== undefined) { e.target.closest('.skap').remove(); K = franForm(); satt(K); } });
+$('nyttskap').onclick = () => { K = franForm(); K.skap.push({ hojd: 900, djup: 340, bak: 'ingen', fast: null, hyllor: [], lador: 0 }); satt(K); };
+$('exempel').onclick = () => satt(JSON.parse(JSON.stringify(Garderob.ACACIA)));
+$('ladda').onclick = () => $('fil').click();
+$('fil').onchange = async e => { const f = e.target.files[0]; if (f) satt(JSON.parse(await f.text())); };
+$('tcn').onclick = async () => ladda(Export.rot(UT) + '.zip', await Export.tcnZip(UT, JSZip, 'blob'));
+$('pdf').onclick = () => ladda(Export.rot(UT) + '.pdf', Export.pdfRapport(UT, window.jspdf.jsPDF).output('blob'));
+$('json').onclick = () => ladda(Export.rot(UT) + '.json', new Blob([JSON.stringify(K, null, 2)], { type: 'application/json' }));
+$('lank').onclick = () => { navigator.clipboard.writeText(location.href); $('lank').textContent = '✓ kopierad'; setTimeout(() => $('lank').textContent = '🔗 Kopiera länk', 1500); };
+
+let start = JSON.parse(JSON.stringify(Garderob.ACACIA));
+const m = /#k=([^&]+)/.exec(location.hash);
+if (m) { try { start = JSON.parse(decodeURIComponent(escape(atob(m[1])))); } catch (e) { console.warn(e); } }
+window.__app = { get k() { return K; }, get ut() { return UT; }, satt };
+satt(start);
+</script>
+</body>
+</html>
