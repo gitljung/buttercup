@@ -145,7 +145,7 @@ function tillForm(k) {
 function franForm() {
   const k = { namn: $('namn').value || 'Garderob', jobb: $('jobb').value || 'Garderob',
     passbit: tal($('pass').value, 0), sockel: tal($('sockel').value, 0), galler: tal($('galler').value, 0),
-    hojder: [tal($('hn').value, 1500), tal($('ho').value, 0)], djup: [tal($('dn').value, 488), tal($('do').value, 340)], moduler: [] };
+    hojder: [tal($('hn').value, 1500), tal($('ho').value, 0)], djup: [tal($('dn').value, 488), tal($('do').value, tal($('dn').value, 488))], moduler: [] };
   if ($('nb').value) k.nisch = { bredd: tal($('nb').value), hojd: tal($('nh').value) };
   document.querySelectorAll('.modul').forEach(d => {
     const v = f => { const e = d.querySelector(`[data-f=${f}]`); return e ? e.value : ''; };

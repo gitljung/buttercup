@@ -38,7 +38,7 @@
 
   function modulKonfig(sys, m, i, W) {
     const [Hn, Ho] = sys.hojder || [1500, 980];
-    const [Dn, Do] = sys.djup || [488, 340];
+    const [Dn, Do] = sys.djup || [488, 488];
     const T = 20, n = sys.moduler.length;
     const ned = { hojd: Hn, djup: Dn, bak: 'spar', fast: null, hyllor: [], lador: 0 };
     const ovr = { hojd: Ho, djup: Do, bak: 'spar', fast: null, hyllor: [], lador: 0 };
@@ -115,7 +115,7 @@
   const EXEMPEL = {
     namn: 'Exempel system 2,4 m', jobb: 'Garderob',
     nisch: { bredd: 2420, hojd: 2680 }, passbit: 10, sockel: 100, galler: 100,
-    hojder: [1500, 980], djup: [488, 340],
+    hojder: [1500, 980], djup: [488, 488],
     moduler: [{ typ: 'lada' }, { typ: 'hang' }, { typ: 'hylla', bredd: 500 }],
   };
 
@@ -125,7 +125,7 @@
     const s0 = k.skap[0] || {}, s1 = k.skap[1];
     return {
       namn: k.namn, jobb: k.jobb, nisch: k.nisch, passbit: k.nisch ? (k.nisch.bredd - k.bredd) / 2 : 0, sockel: k.sockel, galler: k.galler,
-      hojder: [s0.hojd, s1 ? s1.hojd : 0], djup: [s0.djup, s1 ? s1.djup : 340],
+      hojder: [s0.hojd, s1 ? s1.hojd : 0], djup: [s0.djup, s1 ? s1.djup : s0.djup],
       moduler: [{ typ: s0.lador ? 'lada' : 'hylla', bredd: k.bredd, lador: s0.lador || 0, fast: s0.fast, ned: s0, ovr: s1, dorrar: k.dorrar ? k.dorrar.antal : 0, dorrinst: k.dorrar || undefined }],
     };
   }
