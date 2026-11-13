@@ -2131,7 +2131,359 @@
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
    "comments": []
+  },
+  {
+   "id": "av-YAK-1",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "yakitori-50",
+   "nr": "YAK-1",
+   "title": "Bordet under grillen blir 200–430 °C (låg, dåligt ventilerad spalt)",
+   "sev": "Före prototyp",
+   "sevemo": "🔴",
+   "by": "Fable",
+   "desc": "Modellen: Botten z 19,5–21,5 (19,5 mm luft till bordet), 20 mm vermikulit ovanpå, kolgallret direkt på isoleringen. Front/Bak/Sida går ned till z 0; ursparningarna mellan fötterna är bara 10 mm höga.\nFörväntat: Bordsgrill ska kunna stå på trä/laminat: bordsytan under ~80 °C vid långvarig eldning.\nFörslag: Fötter ~40 mm, öppet runt om, + blank strålskärm (rostfri/alu) mitt i spalten. Alternativ: lös underläggsplåt på distanser + krav på obrännbart underlag i manualen. Mät gärna med IR på en byggd grill först.\nVerifierat: Snitt i exportens nät: Botten z 19,5–21,5; Front/Bak/Sida har material från z 10,0 över |x|<~187 resp. |y|<~73 (Fable angav 12,5 mm och att sidorna är stängda – ursparningen är 10 mm hög och finns på alla fyra sidor, slutsatsen står sig). Egen 1D-serieräkning (vermikulit 0,13 W/mK, stillastående spalt med strålning ε 0,8/0,9, träskiva 30 mm, h 5 under): iso-ovansida 300/450/600 °C → bordsyta 207/316/427 °C (Fable 205–445).",
+   "part": "Yakitori 50 - låda:1 › Yakitori 50 - huvudkropp:1 › Botten:1",
+   "sel": "o40",
+   "url": "?p=yakitori-50&sel=o40",
+   "created": "2026-11-13T13:24:30+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-13T13:24:30+01:00",
+     "oppen",
+     "Vickan verifierade: Snitt i exportens nät: Botten z 19,5–21,5; Front/Bak/Sida har material från z 10,0 över |x|<~187 resp. |y|<~73 (Fable angav 12,5 mm och att sidorna är stängda –"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-13T13:24:30+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
+   "img": "",
+   "ver": "hittad v19",
+   "pname": "Yamay Yakitori 50",
+   "comments": []
+  },
+  {
+   "id": "av-YAK-2",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "yakitori-50",
+   "nr": "YAK-2",
+   "title": "Spett 150–180 mm når inte över toppöppningen 196 mm – spettlisten krävs",
+   "sev": "Före prototyp",
+   "sevemo": "🔴",
+   "by": "Fable",
+   "desc": "Modellen: Toppens öppning 466 × 196 mm (|y| ≤ 98 på ovansidan z 190), 17 mm kant per långsida. Spettlisten finns inte i modellen (STATUS: förslag, ej ritat).\nFörväntat: Vanliga yakitorispett (150–180 mm) ska vila på grillen.\nFörslag: Rita spettlist A: urtag ~60 × 22 mm mitt bak för Tray holder bak (x ±28, y 95–117) eller låt listen sluta vid y 94; SpettB 110 mm. Notera att lägsta hyllnivån inte kan användas samtidigt.\nVerifierat: Snitt x=0 och y=0 i Toppens nät: plan ovansida z 187–190 med inre kant |y| 98 och |x| 233 → 466 × 196 mm; 196 > 180 mm. Tray holder bak bbox x −28…28, y 95…117, z 172,5–390 – bekräftar krocken för en list över hela djupet.",
+   "part": "Yakitori 50 - låda:1 › Yakitori 50 - huvudkropp:1 › Topp:1",
+   "sel": "o52",
+   "url": "?p=yakitori-50&sel=o52",
+   "created": "2026-11-13T13:24:30+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-13T13:24:30+01:00",
+     "oppen",
+     "Vickan verifierade: Snitt x=0 och y=0 i Toppens nät: plan ovansida z 187–190 med inre kant |y| 98 och |x| 233 → 466 × 196 mm; 196 > 180 mm. Tray holder bak bbox x −28…28, y 95…117,"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-13T13:24:30+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
+   "img": "",
+   "ver": "hittad v19",
+   "pname": "Yamay Yakitori 50",
+   "comments": []
+  },
+  {
+   "id": "av-YAK-3",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "yakitori-50",
+   "nr": "YAK-3",
+   "title": "Kolgaller: Corten 3 mm i glöden, 2 mm längdspel/sida, bärs bara i ändarna",
+   "sev": "Före prototyp",
+   "sevemo": "🔴",
+   "by": "Fable",
+   "desc": "Modellen: Kolgaller 402 mm långt (x ±201), Corten 3 mm, platt mitt (z 66,5–69,5, inga långsidesflänsar), nedbockade kortändar till z 41,5. Isoleringens insida vid gallrets fot |x| 202,97 → spel 1,97 mm/sida.\nFörväntat: Galler i glöd (600–800 °C) ska tåla värmeutvidgning och inte sätta sig; projektets regel: Corten max ~450 °C.\nFörslag: Korta till 396 mm (3 mm/sida), bocka ned ett mittstöd (halverat spann). Material 1.4828 4 mm som Hornos kolrost, eller behåll Corten och sälj gallret som slitdel.\nVerifierat: Exporten: Kolgaller x −201,0…201,0; Isolering sida inre |x| 202,97 vid z 41,5 → 1,97 mm/sida. ΔL = 402·13,5e-6·(T−20): 3,7 mm vid 700 °C (1,85/sida) → spelet slut vid ~700–820 °C. Tvärsnitt x=0/150: bara 3 mm platta, inga flänsar. Böjspänningen (16–29 MPa) inte omräknad i nettosnitt.",
+   "part": "Kolgaller:1",
+   "sel": "o1",
+   "url": "?p=yakitori-50&sel=o1",
+   "created": "2026-11-13T13:24:30+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-13T13:24:30+01:00",
+     "oppen",
+     "Vickan verifierade: Exporten: Kolgaller x −201,0…201,0; Isolering sida inre |x| 202,97 vid z 41,5 → 1,97 mm/sida. ΔL = 402·13,5e-6·(T−20): 3,7 mm vid 700 °C (1,85/sida) → spelet sl"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-13T13:24:30+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
+   "img": "",
+   "ver": "hittad v19",
+   "pname": "Yamay Yakitori 50",
+   "comments": []
+  },
+  {
+   "id": "av-YAK-4",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "yakitori-50",
+   "nr": "YAK-4",
+   "title": "Ytterplåten blir ~150–250 °C vid glödens höjd – varning i manualen",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: Front/Bak/Sida Corten 2 mm med 20 mm vermikulit innanför; ventilernas handtag (Corten, 20 mm ut) lika varma.\nFörväntat: Brännrisk ska framgå (manual/märkning); handtag man ska röra under eldning bör vara greppbara.\nFörslag: Varning i manualen + ev. handtag/verktyg för ventilerna. Ingen rimlig isoleringstjocklek gör utsidan beröringssäker.\nVerifierat: Egen 1D-räkning (20 mm vermikulit 0,13 W/mK, h 8 + strålning ε 0,8): insida 500/700/800 °C → utsida 154/196/215 °C (Fable 177–254).",
+   "part": "Yakitori 50 - låda:1 › Yakitori 50 - huvudkropp:1 › Front:1",
+   "sel": "o42",
+   "url": "?p=yakitori-50&sel=o42",
+   "created": "2026-11-13T13:24:30+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-13T13:24:30+01:00",
+     "oppen",
+     "Vickan verifierade: Egen 1D-räkning (20 mm vermikulit 0,13 W/mK, h 8 + strålning ε 0,8): insida 500/700/800 °C → utsida 154/196/215 °C (Fable 177–254)."
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-13T13:24:30+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
+   "img": "",
+   "ver": "hittad v19",
+   "pname": "Yamay Yakitori 50",
+   "comments": []
+  },
+  {
+   "id": "av-YAK-5",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "yakitori-50",
+   "nr": "YAK-5",
+   "title": "Fjärde bottenskruven saknas (x −212, y +100)",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: Nedre plåtkuber vid (±212, ±100, z 12). Bottenskruvar ISO 7380-1 M6x10 (z 18) bara vid (−212,−100), (212,100), (212,−100). Botten har 4 genomgående hål.\nFörväntat: Skruv i alla fyra bottenhål/kuber.\nFörslag: Lägg till en ISO 7380-1 M6x10 vid (−212, +100) – kolla först mot STEP-förlagan. 17 → 18 M6x10 i lådan.\nVerifierat: Exportens skruvlägen: tre M6x10 på z 18 (−212,5/−100,5; 212,6/100,5; 212,6/−100,5), ingen vid −212/+100. Kuben där (Platkub:4) har sina två sidoskruvar. Botten: Eulerkarakteristik → genus 4 = 4 genomgående hål.",
+   "part": "Yakitori 50 - låda:1 › Yakitori 50 - huvudkropp:1 › Platkub:4",
+   "sel": "o48",
+   "url": "?p=yakitori-50&sel=o48",
+   "created": "2026-11-13T13:24:30+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-13T13:24:30+01:00",
+     "oppen",
+     "Vickan verifierade: Exportens skruvlägen: tre M6x10 på z 18 (−212,5/−100,5; 212,6/100,5; 212,6/−100,5), ingen vid −212/+100. Kuben där (Platkub:4) har sina två sidoskruvar. Botten:"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-13T13:24:30+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
+   "img": "",
+   "ver": "hittad v19",
+   "pname": "Yamay Yakitori 50",
+   "comments": []
+  },
+  {
+   "id": "av-YAK-6",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "yakitori-50",
+   "nr": "YAK-6",
+   "title": "Ventilskruvar M6 gängade i 2 mm Corten utan mutter/låsning",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: 4 × ISO 7380-1 M6x10 genom Ventil in i Front (2 mm) och ~6 mm in i isoleringen; inga muttrar någonstans i modellen. Skruvarna är glidstyrning för ventilen.\nFörväntat: Glidstyrning som inte kärvar/lossnar: låst förband eller ansatsskruv.\nFörslag: Nitmutter/pressmutter i Front, eller ansatsskruv + helmetallåsmutter (ficka i isoleringen).\nVerifierat: Exporten: M6x10:14–17 vid y −113,5, z 73, x 178/81/−77/−174 (genom Ventil y −135…−115 och Front y −115…−113). Inga komponenter med mutter i trädet. 2 mm / stigning 1 = 2 gängvarv.",
+   "part": "Yakitori 50 - låda:1 › Yakitori 50 - huvudkropp:1 › Ventil:1",
+   "sel": "o50",
+   "url": "?p=yakitori-50&sel=o50",
+   "created": "2026-11-13T13:24:30+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-13T13:24:30+01:00",
+     "oppen",
+     "Vickan verifierade: Exporten: M6x10:14–17 vid y −113,5, z 73, x 178/81/−77/−174 (genom Ventil y −135…−115 och Front y −115…−113). Inga komponenter med mutter i trädet. 2 mm / stign"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-13T13:24:30+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
+   "img": "",
+   "ver": "hittad v19",
+   "pname": "Yamay Yakitori 50",
+   "comments": []
+  },
+  {
+   "id": "av-YAK-7",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "yakitori-50",
+   "nr": "YAK-7",
+   "title": "Sträckmetall: material ej fastställt och olika tjocklek hel/halv (1,9 / 3,0 mm)",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: Strackmetall z 345–346,9 (1,9 mm), Strackmetall halv z 294,5–297,5 (3,0 mm), material 'Steel', beskrivning 'material ej fastställt'.\nFörväntat: Livsmedelsgaller över glöd med fastställt material, samma specifikation i hel- och halvgaller.\nFörslag: Rostfri 1.4301, samma sträckmetall i båda; uppdatera beskrivning/material.\nVerifierat: Exportens bbox: 1,9 mm resp. 3,0 mm; desc 'Sträckmetall (material ej fastställt i modellen)' på båda.",
+   "part": "Yakitori 50 - galler:1 › Strackmetall:1",
+   "sel": "o29",
+   "url": "?p=yakitori-50&sel=o29",
+   "created": "2026-11-13T13:24:31+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-13T13:24:31+01:00",
+     "oppen",
+     "Vickan verifierade: Exportens bbox: 1,9 mm resp. 3,0 mm; desc 'Sträckmetall (material ej fastställt i modellen)' på båda."
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-13T13:24:31+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
+   "img": "",
+   "ver": "hittad v19",
+   "pname": "Yamay Yakitori 50",
+   "comments": []
+  },
+  {
+   "id": "av-YAK-8",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "yakitori-50",
+   "nr": "YAK-8",
+   "title": "Stycklistefel: toppens beskrivning 'STEP AP214', Tray holder hoger utan beskrivning, 'Kopdel'",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: Toppkomponent pn 'yakitori 50', desc 'STEP AP214'; Tray holder hoger desc tom; ISO 7380-1 M6x10 desc 'Kopdel: …' (övriga 'Köpdel').\nFörväntat: Korrekt partNumber/beskrivning på alla komponenter.\nFörslag: Sätt beskrivning på toppen ('Yakitori 50 – grill, toppmontage'), 'Corten 2 mm, vattenskuren och bockad' på Tray holder hoger, rätta 'Kopdel' → 'Köpdel'.\nVerifierat: tree.json comps: exakt som beskrivet.",
+   "part": "Yakitori 50 - hyllsystem:1 › Tray holder hoger:1",
+   "sel": "o4",
+   "url": "?p=yakitori-50&sel=o4",
+   "created": "2026-11-13T13:24:31+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-13T13:24:31+01:00",
+     "oppen",
+     "Vickan verifierade: tree.json comps: exakt som beskrivet."
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-13T13:24:31+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
+   "img": "",
+   "ver": "hittad v19",
+   "pname": "Yamay Yakitori 50",
+   "comments": []
+  },
+  {
+   "id": "av-YAK-9",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "yakitori-50",
+   "nr": "YAK-9",
+   "title": "Botten saknar dräneringshål; vermikuliten bar bakom logotyperna",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: Botten har bara de 4 skruvhålen; vermikulitskivorna ligger bakom de genomskurna logotyperna i Front/Bak.\nFörväntat: Regn/fett ska kunna rinna ut; isoleringen skyddad eller utbytbar.\nFörslag: 2–4 dräneringshål i Botten, lock/huv som tillbehör, isoleringsskivor som reservdel.\nVerifierat: Botten-nätets Eulerkarakteristik → 4 genomgående hål (= skruvhålen). Fables delpåstående att vermikulitens överkant sticker in innanför toppöppningen stämmer INTE: Toppens nedbock (y ±92–95, x ±227–230) täcker skivornas överkant (iso y ±93, sida ~±228).",
+   "part": "Yakitori 50 - låda:1 › Yakitori 50 - huvudkropp:1 › Botten:1",
+   "sel": "o40",
+   "url": "?p=yakitori-50&sel=o40",
+   "created": "2026-11-13T13:24:31+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-13T13:24:31+01:00",
+     "oppen",
+     "Vickan verifierade: Botten-nätets Eulerkarakteristik → 4 genomgående hål (= skruvhålen). Fables delpåstående att vermikulitens överkant sticker in innanför toppöppningen stämmer IN"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-13T13:24:31+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
+   "img": "",
+   "ver": "hittad v19",
+   "pname": "Yamay Yakitori 50",
+   "comments": []
+  },
+  {
+   "id": "av-YAK-10",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "yakitori-50",
+   "nr": "YAK-10",
+   "title": "Välter av ~45 N knuff i överkant med hyllsystemet",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: 15,7 kg, fötterna 230 mm isär i djupled (y ±115), hyllsystemets topp z ~390.\nFörväntat: Grill med glöd ska inte välta av en lätt stöt.\nFörslag: Djupare/utstickande fötter – löses ihop med A1 (40 mm fötter).\nVerifierat: Egen räkning: F = 15,7·9,81·0,115 / 0,394 = 45,0 N (tyngdpunkt antagen centrerad i djupled). Fötter y ±115 och topp z 390–391 ur exporten.",
+   "part": "Yakitori 50 - hyllsystem:1",
+   "sel": "o3",
+   "url": "?p=yakitori-50&sel=o3",
+   "created": "2026-11-13T13:24:31+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-13T13:24:31+01:00",
+     "oppen",
+     "Vickan verifierade: Egen räkning: F = 15,7·9,81·0,115 / 0,394 = 45,0 N (tyngdpunkt antagen centrerad i djupled). Fötter y ±115 och topp z 390–391 ur exporten."
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-13T13:24:31+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
+   "img": "",
+   "ver": "hittad v19",
+   "pname": "Yamay Yakitori 50",
+   "comments": []
+  },
+  {
+   "id": "av-YAK-11",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "yakitori-50",
+   "nr": "YAK-11",
+   "title": "Hyllnivåerna ligger högt för yakitori",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: Gallren på z 294,5 / 345 (115–235 mm över bädden).\nFörväntat: –\nFörslag: –\nVerifierat: Nivåerna stämmer med exporten, men det är en bedömning utan krav: yakitorin grillas på Toppen/spettlisten (60–105 mm över glöden), hyllorna är för galler/varmhållning – Fable skriver själv 'bra för varmhållning'. Ingen avvikelse.",
+   "part": "Yakitori 50 - galler:1 › Strackmetall:1",
+   "sel": "o29",
+   "url": "?p=yakitori-50&sel=o29",
+   "created": "2026-11-13T13:24:31+01:00",
+   "status": "avvisad",
+   "log": [
+    [
+     "2026-11-13T13:24:31+01:00",
+     "avvisad",
+     "Vickan avvisade: Nivåerna stämmer med exporten, men det är en bedömning utan krav: yakitorin grillas på Toppen/spettlisten (60–105 mm över glöden), hyllorna är för galler/varmhå"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-13T13:24:31+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
+   "img": "",
+   "ver": "hittad v19",
+   "pname": "Yamay Yakitori 50",
+   "comments": []
   }
  ],
- "updated": "2026-11-13 13:10"
+ "updated": "2026-11-13 13:24"
 }
