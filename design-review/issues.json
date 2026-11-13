@@ -34,6 +34,16 @@
    "replies": 18,
    "last": "2026-11-07T19:03:49.353000+00:00",
    "analyzed": "2026-11-07T15:56:23.240000+00:00",
+   "forslag": [
+    {
+     "n": 1,
+     "t": "Lägg till en liten join-feature i varje överhörn som fyller V-hacket, och en cut-feature som tar bort flisan v"
+    },
+    {
+     "n": 2,
+     "t": "Rita om Kontur-skissen så att den följer den nya formen, med R8 i överhörnen och en ren övergång vid armen"
+    }
+   ],
    "choice": "2026-11-07T16:01:16.386000+00:00",
    "choice_txt": "alt 2",
    "done": "2026-11-07T19:03:49.353000+00:00",
@@ -72,6 +82,20 @@
    "replies": 8,
    "last": "2026-11-13T10:16:56.330000+00:00",
    "analyzed": "2026-11-07T15:56:43.626000+00:00",
+   "forslag": [
+    {
+     "n": 1,
+     "t": "Ta bort urtaget, så att front- och bakbenen går hela bredden ut till x 332 ända ner"
+    },
+    {
+     "n": 2,
+     "t": "Behåll en liten avlastning på ca 1 × 1 mm i hörnet, om laseroperatören vill ha det"
+    },
+    {
+     "n": 3,
+     "t": "Låt det vara som det är"
+    }
+   ],
    "choice": "2026-11-07T16:02:27.351000+00:00",
    "choice_txt": "1",
    "thread": "1568654411973263520",
@@ -104,6 +128,20 @@
    "replies": 2,
    "last": "2026-11-10T19:05:45.966000+00:00",
    "analyzed": "2026-11-10T19:05:45.603000+00:00",
+   "forslag": [
+    {
+     "n": 1,
+     "t": "Sätt LoX = 0 och behåll bredden 170"
+    },
+    {
+     "n": 2,
+     "t": "Sätt LoX = 0 och minska LoB till 160"
+    },
+    {
+     "n": 3,
+     "t": "Ett mellanläge, LoX = −14"
+    }
+   ],
    "thread": "1568925737023569940",
    "link": "https://discord.com/channels/1114447465203109918/1568925737023569940/1569789422210121899",
    "nr": 1,
@@ -141,9 +179,23 @@
      "Vickan: Klart. Alt C är inbyggt: stångbärarens främre kub sitter nu bakom kinden"
     ]
    ],
-   "replies": 22,
-   "last": "2026-11-13T10:18:15.424000+00:00",
+   "replies": 24,
+   "last": "2026-11-13T10:21:37.330000+00:00",
    "analyzed": "2026-11-11T07:21:53.136000+00:00",
+   "forslag": [
+    {
+     "n": 1,
+     "t": "Asado-U: fronten blir en läpp på 63 mm, jäms med Vermilite-bädden, plus kinder på cirka 55 mm i båda ändar"
+    },
+    {
+     "n": 2,
+     "t": "Som 1, men med en högre läpp, cirka 30 mm över bädden (~93 mm)"
+    },
+    {
+     "n": 3,
+     "t": "Fronten blir en lös lucka"
+    }
+   ],
    "choice": "2026-11-11T07:34:38.700000+00:00",
    "choice_txt": "1 vi börjar med 20. 2 behåll som de är, kanske en invikning på 20 där med?",
    "done": "2026-11-11T10:27:09.256000+00:00",
@@ -151,6 +203,7 @@
    "link": "https://discord.com/channels/1114447465203109918/1568926239748526121/1569974644159553586",
    "nr": 1,
    "img": "issues/1569974644159553586.jpg",
+   "skiss": "issues/1569974644159553586_s1569976918919479306.jpg",
    "pname": "Yamay Fire Table 1500"
   },
   {
@@ -187,6 +240,20 @@
    "replies": 11,
    "last": "2026-11-12T10:46:06.065000+00:00",
    "analyzed": "2026-11-11T07:24:23.218000+00:00",
+   "forslag": [
+    {
+     "n": 1,
+     "t": "Stäng urtaget nertill"
+    },
+    {
+     "n": 2,
+     "t": "Som 1, men slån går ner till benbågens nivå så att den blir högre och styvare"
+    },
+    {
+     "n": 3,
+     "t": "Inbock under bottnen"
+    }
+   ],
    "choice": "2026-11-11T07:37:12.859000+00:00",
    "choice_txt": "gör det du tycker är bäst",
    "done": "2026-11-12T10:46:06.065000+00:00",
@@ -1288,5 +1355,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-13 11:18"
+ "updated": "2026-11-13 11:22"
 }
