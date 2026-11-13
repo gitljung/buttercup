@@ -1645,7 +1645,7 @@
    "sel": "o25",
    "url": "?p=vaxthus-hjulsystem&sel=o25",
    "created": "2026-11-13T11:51:16+01:00",
-   "status": "oppen",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-13T11:51:16+01:00",
@@ -1656,13 +1656,18 @@
      "2026-11-13T12:56:41+01:00",
      "kommentar",
      "Vicke: Beslut 2026-11-13: anslaget blir en klack 14×8 mm, laserskuren på spakens överkant (inte stoppinne). Ingår i Fusion-jobbet H16."
+    ],
+    [
+     "2026-11-13T13:44:17+01:00",
+     "atgardad",
+     "vickan: 1 · Klack 14×8 mm laserskuren på spakens överkant; klaffen stannar mot klacken (H16, exp 13:40)"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T12:56:41+01:00",
+   "last": "2026-11-13T13:44:17+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1570057458125250643/1570750632711946287",
    "img": "avvikelser/VAX-1.jpg",
-   "ver": "hittad v1",
+   "ver": "hittad v1 · stängd 1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
    "comments": [
     [
@@ -1688,7 +1693,7 @@
    "sel": "o5",
    "url": "?p=vaxthus-hjulsystem&sel=o5",
    "created": "2026-11-13T11:51:16+01:00",
-   "status": "oppen",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-13T11:51:16+01:00",
@@ -1699,13 +1704,18 @@
      "2026-11-13T12:02:49+01:00",
      "kommentar",
      "Vickan: Vicke 2026-11-13: bara rakt drag → sidokraft i sväng utgår. Vridningen från hjulets 82 mm excentricitet (123–164 Nm) finns kvar, så 12 mm spak gäller fortfarande."
+    ],
+    [
+     "2026-11-13T13:44:17+01:00",
+     "atgardad",
+     "vickan: 1 · Spak 12 mm (SpakT 8→12); vridspänning ca 70–90 MPa mot ~205 (H16, exp 13:40)"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T12:02:49+01:00",
+   "last": "2026-11-13T13:44:17+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1570057458125250643/1570750632711946287",
    "img": "avvikelser/VAX-2.jpg",
-   "ver": "hittad v1",
+   "ver": "hittad v1 · stängd 1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
    "comments": [
     [
@@ -1726,24 +1736,29 @@
    "sev": "Före prototyp",
    "sevemo": "🔴",
    "by": "Fable",
-   "desc": "Modellen: Sidoplåt 6 mm (x 2096–2102) bär pivå-M16 140 mm över bocken; hjulmitt 92 mm utanför plåtens mittplan.\nFörväntat: Pivån tvåskärig/inspänd så att hjulet inte lutar under last.\nFörslag: Yttre kindplåt så att spak och klaff går mellan två plåtar (pivåbult och klaffaxel som distanser).\nVerifierat: Moment 1,5–2,0 kN × 92 mm = 138–184 Nm in via en M16 med Ø30-bricka; vid bocken (280 bred) ca 82 MPa men lokalt runt bulten flera hundra MPa (Fable 380, grov) – utböjning/lutning sannolik.",
+   "desc": "Modellen: Sidoplåt 6 mm (x 2096–2102) bär pivå-M16 140 mm över bocken; hjulmitt 92 mm utanför plåtens mittplan.\nFörväntat: Pivån tvåskärig/inspänd så att hjulet inte lutar under last.\nFörslag: Yttre kindplåt så att spak och klaff går mellan två plåtar (pivåbult och klaffaxel som distanser).\nVerifierat: Moment 1,5–2,0 kN × 92 mm = 138–184 Nm in via en M16 med Ø30-bricka; vid bocken (280 bred) ca 82 MPa men lokalt runt bulten flera hundra MPa (Fable 380, grov) – utböjning/lutning sannolik.\nKommentar: Yttre kindplåt 6 mm (VH-LH-KIND) – spak och klaff i gaffel, pivå i dubbelskär (H16, exp 13:40)",
    "part": "Växthus - delmontage lyfthjul:1 › Växthus - Lyfthjul fäste:1",
    "sel": "o2",
    "url": "?p=vaxthus-hjulsystem&sel=o2",
    "created": "2026-11-13T11:51:16+01:00",
-   "status": "oppen",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-13T11:51:16+01:00",
      "oppen",
      "Vickan verifierade: Moment 1,5–2,0 kN × 92 mm = 138–184 Nm in via en M16 med Ø30-bricka; vid bocken (280 bred) ca 82 MPa men lokalt runt bulten flera hundra MPa (Fable 380, grov) –"
+    ],
+    [
+     "2026-11-13T13:44:17+01:00",
+     "atgardad",
+     "vickan: 1 · Yttre kindplåt 6 mm (VH-LH-KIND) – spak och klaff i gaffel, pivå i dubbelskär (H16, exp 13:40)"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:51:16+01:00",
+   "last": "2026-11-13T13:44:17+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1570057458125250643/1570750632711946287",
    "img": "avvikelser/VAX-3.jpg",
-   "ver": "hittad v1",
+   "ver": "hittad v1 · stängd 1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
    "comments": []
   },
@@ -1838,24 +1853,29 @@
    "sev": "Bör åtgärdas",
    "sevemo": "🟡",
    "by": "Fable",
-   "desc": "Modellen: ISO 4017 M16x45 (helgängad enligt standard) som pivå.\nFörväntat: Slät lageryta i spakens hål.\nFörslag: ISO 4014 med stam genom spaken, eller hylsa på bulten.\nVerifierat: Artikel i trädet: ISO 4017 = helgängad; grepp 6+3+8 mm ligger helt på gängan.",
+   "desc": "Modellen: ISO 4017 M16x45 (helgängad enligt standard) som pivå.\nFörväntat: Slät lageryta i spakens hål.\nFörslag: ISO 4014 med stam genom spaken, eller hylsa på bulten.\nVerifierat: Artikel i trädet: ISO 4017 = helgängad; grepp 6+3+8 mm ligger helt på gängan.\nKommentar: Pivå ISO 4014 M16x60 delgängad + lagerhylsa rör Ø25x4 L12,5 (H16, exp 13:40)",
    "part": "Växthus - delmontage lyfthjul:1 › ISO 4017 M16x45 8.8 FZV:1",
    "sel": "",
    "url": "?p=vaxthus-hjulsystem",
    "created": "2026-11-13T11:51:16+01:00",
-   "status": "oppen",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-13T11:51:16+01:00",
      "oppen",
      "Vickan verifierade: Artikel i trädet: ISO 4017 = helgängad; grepp 6+3+8 mm ligger helt på gängan."
+    ],
+    [
+     "2026-11-13T13:44:17+01:00",
+     "atgardad",
+     "vickan: 1 · Pivå ISO 4014 M16x60 delgängad + lagerhylsa rör Ø25x4 L12,5 (H16, exp 13:40)"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:51:16+01:00",
+   "last": "2026-11-13T13:44:17+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1570057458125250643/1570750632711946287",
    "img": "avvikelser/VAX-6.jpg",
-   "ver": "hittad v1",
+   "ver": "hittad v1 · stängd 1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
    "comments": []
   },
@@ -1982,7 +2002,7 @@
    "sel": "o5",
    "url": "?p=vaxthus-hjulsystem&sel=o5",
    "created": "2026-11-13T11:51:16+01:00",
-   "status": "oppen",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-13T11:51:16+01:00",
@@ -1993,13 +2013,18 @@
      "2026-11-13T12:02:49+01:00",
      "kommentar",
      "Vickan: Bara rakt drag (Vicke 2026-11-13) minskar sidolasten, men pedalens sidokraft vid trampning finns kvar – löses med VAX-2."
+    ],
+    [
+     "2026-11-13T13:44:17+01:00",
+     "atgardad",
+     "vickan: 1 · Spak 12 mm + kindplåt ger sidostyvhet (H16, exp 13:40)"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T12:02:49+01:00",
+   "last": "2026-11-13T13:44:17+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1570057458125250643/1570750632711946287",
    "img": "avvikelser/VAX-10.jpg",
-   "ver": "hittad v1",
+   "ver": "hittad v1 · stängd 1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
    "comments": [
     [
@@ -2490,5 +2515,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-13 13:42"
+ "updated": "2026-11-13 13:44"
 }
