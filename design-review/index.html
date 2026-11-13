@@ -130,6 +130,14 @@ input[type=range]{width:100%;accent-color:var(--chili)}
 /* inbäddat läge (?embed=1) – används av Projektportalen */
 body.embed{grid-template-columns:1fr!important;grid-template-rows:1fr!important}
 body.embed>header,body.embed #side,body.embed aside,body.embed #info,body.embed #tabs,body.embed #sec,body.embed #exp,body.embed #iss,body.embed #hint{display:none!important}
+#emb{display:none}
+body.embed #emb{display:flex;position:fixed;right:8px;top:8px;z-index:30;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:60vw}
+body.embed #emb button{font-size:13px;padding:3px 8px;background:rgba(255,250,240,.95)}body.embed #emb button.on{background:var(--ox);color:#fff}
+body.embed.e-tree #side{display:flex!important;flex-direction:column;position:fixed;left:0;top:0;bottom:0;width:min(320px,70vw);z-index:25;background:var(--cream);border-right:2px solid var(--ox);box-shadow:4px 0 14px #0003}
+body.embed.e-info #info{display:block!important;position:fixed;right:0;top:44px;bottom:0;width:min(290px,70vw);z-index:24;background:var(--cream);border-left:2px solid var(--ox);overflow:auto;box-shadow:-4px 0 14px #0003}
+body.embed.e-sec #sec{display:block!important;top:auto;bottom:8px;left:8px}
+body.embed.e-exp #exp{display:block!important;top:auto;bottom:8px;right:8px;left:auto}
+body.embed.e-tree #views{left:calc(min(320px,70vw) + 8px)}
 body.embed #vp{grid-column:1/-1!important;grid-row:1/-1!important}
 body.embed #views{top:8px;left:8px;right:auto}
 </style>
@@ -139,6 +147,7 @@ body.embed #views{top:8px;left:8px;right:auto}
 <aside id="side"><h2>Träd · kopia av Fusion</h2><input id="q" placeholder="Sök komponent eller kropp…" autocomplete="off">
 <div class="tools"><button id="bAll">Visa allt</button><button id="bReset" title="Tänt/släckt som i Fusion">Som i Fusion</button><button id="bIso">Isolera</button><button id="bCol">Fäll ihop</button><button id="bFast" title="Tänd/släck alla fästelement i modellen">🔩 Fästelement</button></div>
 <div id="tree"></div></aside>
+<div id="emb"><button data-e="tree" title="Träd: tänd/släck, sök, isolera">🌳 Delar</button><button data-e="info" title="Info om markerad del">ℹ Info</button><button data-e="sec">✂ Snitt</button><button data-e="exp">⤢ Spräng</button><button id="eFast" title="Tänd/släck fästelement">🔩</button><button id="eRep" title="Rita på vyn och rapportera ett problem">📸 Rapportera</button></div>
 <main id="vp">
 <div class="panel" id="sec"><div style="display:flex;justify-content:space-between;align-items:center"><b>✂ Snitt</b><button id="bSecMin" style="display:none">▾</button></div>
 <div class="srow" data-a="0"><button>X</button><input type="range" min="0" max="1000" value="500"><span class="v">–</span><button title="Vänd">⇄</button></div>
@@ -543,6 +552,12 @@ window.__placePins=function(){const w=vp.clientWidth,h=vp.clientHeight;for(const
  const on=p.z<1&&Math.abs(p.x)<1.05&&Math.abs(p.y)<1.05;el.style.display=on?'':'none';if(on){el.style.left=((p.x+1)/2*w)+'px';el.style.top=((1-p.y)/2*h)+'px'}}};
 loadIss();setInterval(loadIss,60000);
 // Projektportalen styr den inbäddade vyn: {dr:'go', q:'p=..&sel=..&cam=..'} utan att ladda om sidan
+if(EMBED){document.querySelectorAll('#emb [data-e]').forEach(b=>b.onclick=()=>{const c='e-'+b.dataset.e,on=!document.body.classList.contains(c);document.body.classList.toggle(c,on);b.classList.toggle('on',on);if(c==='e-sec'&&on){}rs()});
+ $('#eFast').onclick=()=>{$('#bFast').click();$('#eFast').classList.toggle('on')};$('#eRep').onclick=()=>$('#rep-btn').click()}
+// portalen ber om aktuell vy (bild + länk) till instruktioner/idéer
+addEventListener('message',e=>{const d=e.data||{};if(!EMBED||d.dr!=='shot')return;
+ try{rs();R.render(S,C);const src=R.domElement,k=Math.min(1,1400/src.width),c=document.createElement('canvas');c.width=src.width*k;c.height=src.height*k;c.getContext('2d').drawImage(src,0,0,c.width,c.height);
+  toParent({ev:'shot',img:c.toDataURL('image/jpeg',.85),url:viewLink(),sel:sel?pathOf(sel):'',ver:META?`${META.doc} v${META.version}`:''})}catch(x){toParent({ev:'shot',err:String(x)})}});
 addEventListener('message',e=>{const d=e.data||{};if(!EMBED||d.dr!=='go')return;
  const u=new URL(location);const nq=new URLSearchParams(d.q||'');nq.set('embed','1');u.search=nq.toString();history.replaceState(null,'',u);
  const p=nq.get('p');if(p&&p!==$('#proj').value){$('#proj').value=p;stateApplied=false;load(p);renderIss()}
