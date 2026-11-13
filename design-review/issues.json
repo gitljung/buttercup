@@ -896,10 +896,15 @@
      "2026-11-13T11:40:14+01:00",
      "kommentar",
      "Vicke: Leta upp standardelar på nätet"
+    ],
+    [
+     "2026-11-13T11:43:40+01:00",
+     "kommentar",
+     "Vickan: Standarddelar hittade (kamintillbehor.se, Ø120 ID, AISI 316L, T600, hane/hona): rökrör 500 mm (arbetslängd 450) 270 kr ref 33163; 1000 mm (950) 416 kr ref 33162; klämband Ø120 41 k"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:40:14+01:00",
+   "last": "2026-11-13T11:43:40+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-8.jpg",
    "ver": "hittad v32",
@@ -909,6 +914,11 @@
      "2026-11-13T11:40:14+01:00",
      "Vicke",
      "Leta upp standardelar på nätet"
+    ],
+    [
+     "2026-11-13T11:43:40+01:00",
+     "Vickan",
+     "Standarddelar hittade (kamintillbehor.se, Ø120 ID, AISI 316L, T600, hane/hona): rökrör 500 mm (arbetslängd 450) 270 kr ref 33163; 1000 mm (950) 416 kr ref 33162; klämband Ø120 41 kr ref 33160; regnhuv Ø120 900 kr ref 32592; rör 250 mm med spjäll 1170 kr ref 1567-1197 (löser även HOR-3). Utsläpp idag ~1,47 m över mark -> ~1,92 m med 500 mm, ~2,42 m med 1000 mm. Förslag: stosen görs som standardrör i samma system så förlängningen sticks i + klämband; befintlig gnistkopp/hatt flyttas upp (standardhuven saknar gnistnät). Passning hona mot stosens YD måste mätas på riktigt rör. 1000 mm ger ~3x vindmoment på kragen -> stag. Inget ändrat i Fusion; väntar på val."
     ]
    ]
   },
@@ -939,10 +949,15 @@
      "2026-11-13T11:40:23+01:00",
      "kommentar",
      "Vicke: Godkänt: åtgärda enligt förslaget."
+    ],
+    [
+     "2026-11-13T11:43:37+01:00",
+     "kommentar",
+     "Vickan: Inget ändrat än: förslaget var R80 ELLER buffert, och R80 tar bort hyllan (luckan stannar ~73°). Fråga a/b ställd i Design Review-tråden + portalen (40a98437)."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:40:23+01:00",
+   "last": "2026-11-13T11:43:37+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-9.jpg",
    "ver": "hittad v32",
@@ -952,6 +967,11 @@
      "2026-11-13T11:40:23+01:00",
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
+    ],
+    [
+     "2026-11-13T11:43:37+01:00",
+     "Vickan",
+     "Inget ändrat än: förslaget var R80 ELLER buffert, och R80 tar bort hyllan (luckan stannar ~73°). Fråga a/b ställd i Design Review-tråden + portalen (40a98437)."
     ]
    ]
   },
@@ -1404,5 +1424,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-13 11:42"
+ "updated": "2026-11-13 11:43"
 }
