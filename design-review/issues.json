@@ -642,8 +642,8 @@
    "by": "Fable",
    "desc": "Modellen: Stoppklack ISO 7380 M6x8 i askskenans underben, huvud z 58–69. Bakrulle Ø30 z 66–96, askskenans överben z 101 (5 mm spel). Framrullar fasta y −195.\nFörväntat: Lådan ska stanna vid fullt utdrag och bara gå att ta ur med avsikt.\nFörslag: Bakrullarna längst bak (y ~150), stopp ~230 mm, 1,5 mm spel över rullen och urtagning som kräver att fronten lyfts (flik i lådbotten mot hjulhållaren).\nVerifierat: Mesh-volymer ur export v32 (7900 kg/m³): tom låda 7,8 kg, tp y −97 → passerar framrullen vid 98 mm utdrag (full med 13,8 l aska: 132 mm), långt före stoppet ~295. Tippad låda trycker bakrullen mot överbenet: underkant 101−30 = 71 > klackens topp 69 → 2 mm fri passage. Fable: 89/127 mm (bbox), samma slutsats.",
    "part": "Yamay Horno - delmontage Asklada:1",
-   "sel": "o62",
-   "url": "?p=horno&sel=o62",
+   "sel": "o63",
+   "url": "?p=horno&sel=o63",
    "created": "2026-11-12T16:00:35+01:00",
    "status": "stangd",
    "log": [
@@ -720,8 +720,8 @@
    "by": "Fable",
    "desc": "Modellen: 20 mm Vermilite + ventilerad spalt mellan Corten-innerlåda och ytterskal.\nFörväntat: Utsida som inte ger brännskada (~60–65 °C) – eller ett medvetet beslut om skalets temperatur före prototyp.\nFörslag: Välj väg: 40 mm Vermilite i sidor/bak (skal ~122 °C, innerlåda ~220 °C) eller strålskärm/filt (kräver rostfri innerlåda).\nVerifierat: Projektets egen termik/RAPPORT_luft_109.md: ytterskal 155–175 °C vid 550 °C; Fables 1D-räkning 143–196 °C. Två oberoende räkningar samstämmiga.",
    "part": "Yamay Horno - delmontage Eldstad:1",
-   "sel": "o248",
-   "url": "?p=horno&sel=o248",
+   "sel": "o249",
+   "url": "?p=horno&sel=o249",
    "created": "2026-11-12T16:00:35+01:00",
    "status": "oppen",
    "log": [
@@ -752,8 +752,8 @@
    "by": "Fable",
    "desc": "Modellen: Delmontage Rök: rökkrage, rökrör Ø120, gnistkopp, hatt, klämma, fiberlist – inget spjäll. Enda reglering = luftregistret 40 cm²; asklådefronten otätad.\nFörväntat: KONCEPT.md punkt 9: köpt rökrör + rökspjäll + regnhatt + gnistnät.\nFörslag: Vridspjäll i stosen med reglage framdraget till fronten; behåll registret på 40 cm².\nVerifierat: Listade alla komponenter i delmontage Rök i export v32: inget spjäll. KONCEPT.md rad 33 kräver rökspjäll. SWOT 2026-11-06 fynd 4 samma.",
    "part": "Yamay Horno - delmontage Rok:1",
-   "sel": "o205",
-   "url": "?p=horno&sel=o205",
+   "sel": "o206",
+   "url": "?p=horno&sel=o206",
    "created": "2026-11-12T16:00:35+01:00",
    "status": "stangd",
    "log": [
@@ -805,8 +805,8 @@
    "by": "Fable",
    "desc": "Modellen: Rostvinkel H/V: \"Corten 5 mm vattenskuren + 1 bock\", z 125–165, bär kolrosten (z 165–173) direkt under glödbädden.\nFörväntat: Material för glödzonen (projektregel: Corten oxiderar snabbt > ~450 °C) – 1.4828 som kolrosten.\nFörslag: Bocka in hyllan i gallerhållarens sidoplåt (1.4828), eller gör vinkeln i 1.4828.\nVerifierat: tree.json v32: desc + ap Corten, bbox z 125–165; kolrost laser z 165–173 vilar på den.",
    "part": "Yamay Horno - delmontage Eldstad:1 › Yamay Horno - Rostvinkel hoger:1",
-   "sel": "o257",
-   "url": "?p=horno&sel=o257",
+   "sel": "o258",
+   "url": "?p=horno&sel=o258",
    "created": "2026-11-12T16:00:35+01:00",
    "status": "stangd",
    "log": [
@@ -853,8 +853,8 @@
    "by": "Fable",
    "desc": "Modellen: Ledtapp H/V: \"M10 x 5 i öran (Loctite 2701)\".\nFörväntat: Låsning som håller i lagerbockens 150–300 °C (RAPPORT_luft_109) och när luckan vrider tappen i lossningsriktning på ena sidan.\nFörslag: Mekanisk låsning (genomgående tapp + DIN 6799 som askhjulens axel); minst Loctite 272 (230 °C).\nVerifierat: desc i export v32 för båda ledtapparna; Henkel TDS 2701 driftområde till 150 °C; projektets termikrapport anger lagerbocken 150–300 °C.",
    "part": "Yamay Horno - delmontage Lucka:1 › Yamay Horno - delmontage Gangjarn hoger:1 › Yamay Horno - Ledtapp hoger:1",
-   "sel": "o21",
-   "url": "?p=horno&sel=o21",
+   "sel": "o22",
+   "url": "?p=horno&sel=o22",
    "created": "2026-11-12T16:00:36+01:00",
    "status": "oppen",
    "log": [
@@ -896,8 +896,8 @@
    "by": "Fable",
    "desc": "Modellen: Vermilite botten 540×400×20, Vermilite front 540×137×20, Lucka Vermilite 585×276×25.\nFörväntat: Delar som går ur inköpt skiva (KONCEPT: Vermilite 600 500×300×20, art 2776220).\nFörslag: Dela med skarv, eller köp storformat (1000×1250 finns i 20/25/30 mm).\nVerifierat: bbox ur export v32: botten x −270..270, y −227..173; front z 437..574; lucka 585×276, y-tjocklek 25. Alla tre > 500×300.",
    "part": "Yamay Horno - delmontage Eldstad:1 › Yamay Horno - Vermilite botten:1",
-   "sel": "o273",
-   "url": "?p=horno&sel=o273",
+   "sel": "o275",
+   "url": "?p=horno&sel=o275",
    "created": "2026-11-12T16:00:36+01:00",
    "status": "stangd",
    "log": [
@@ -954,8 +954,8 @@
    "by": "Fable",
    "desc": "Modellen: Kolrostens topp z 173, lucköppningens underkant z 195 → 22 mm tröskel mot 50–80 mm glödbädd.\nFörväntat: Glöd ska stanna i eldstaden när luckan öppnas.\nFörslag: Löstagbart kolstopp ~60 mm i 1.4828 i slitsar i sidoplåtarna.\nVerifierat: Kolrost bbox z 165–173 (v32); STATUS h41 OppZ0 = 195.",
    "part": "Yamay Horno - delmontage Eldstad:1 › Yamay Horno - Kolrost laser:1",
-   "sel": "o261",
-   "url": "?p=horno&sel=o261",
+   "sel": "o262",
+   "url": "?p=horno&sel=o262",
    "created": "2026-11-12T16:00:36+01:00",
    "status": "avvisad",
    "log": [
@@ -991,8 +991,8 @@
    "by": "Fable",
    "desc": "Modellen: Hattens topp z 817 över ugnens botten.\nFörväntat: Utsläpp över huvudhöjd och bättre drag.\nFörslag: Förläng med standardrör Ø120 0,5–1 m.\nVerifierat: Hatt bbox z 792–817 (v32) + bärplan 650 (KONCEPT) = 1467 mm över mark.",
    "part": "Yamay Horno - delmontage Rok:1 › Yamay Horno - Hatt:1",
-   "sel": "o210",
-   "url": "?p=horno&sel=o210",
+   "sel": "o211",
+   "url": "?p=horno&sel=o211",
    "created": "2026-11-12T16:00:36+01:00",
    "status": "oppen",
    "log": [
@@ -1112,8 +1112,8 @@
    "by": "Fable",
    "desc": "Modellen: Lagerbock H/V \"Corten 3 mm, vattenskuren + 1 bock\", bär ledtapp Ø12 rostfri.\nFörväntat: Lagerbana som inte rostar/glappar; marginal vid last på öppen lucka.\nFörslag: Rostfri 1.4301 4–5 mm.\nVerifierat: desc + ap Corten i v32; Fables grova spänning ~200 MPa vid 30 kg (marginal ~1,7) ej omräknad.",
    "part": "Yamay Horno - delmontage Stomme:1 › Yamay Horno - Lagerbock hoger:1",
-   "sel": "o502",
-   "url": "?p=horno&sel=o502",
+   "sel": "o505",
+   "url": "?p=horno&sel=o505",
    "created": "2026-11-12T16:00:36+01:00",
    "status": "oppen",
    "log": [
@@ -1144,8 +1144,8 @@
    "by": "Fable",
    "desc": "Modellen: 6 st ISO 7040 M5 A2 (nylon) i delmontage Rök, z 691–797.\nFörväntat: Helmetall-låsmutter i het zon (Yamay-regel).\nFörslag: ISO 7042 eller ISO 4032 + kopparpasta.\nVerifierat: Räknade 6 instanser ISO 7040 M5 A2 i delmontage Rök (v32); SWOT 2026-11-06 fynd 2 samma.",
    "part": "Yamay Horno - delmontage Rok:1 › ISO 7040 M5 A2:1",
-   "sel": "o216",
-   "url": "?p=horno&sel=o216",
+   "sel": "o217",
+   "url": "?p=horno&sel=o217",
    "created": "2026-11-12T16:00:36+01:00",
    "status": "oppen",
    "log": [
@@ -1176,8 +1176,8 @@
    "by": "Fable",
    "desc": "Modellen: Gallerhållare \"Rostfritt 304 3 mm\"; Gallerhylla \"3 st/sida\" men 2 per sida; Spjäll \"304 2 mm\"; Askskena \"ISO 7380 M6x6\" men M6x25 i modellen; Fotbeslag med uteköktext (\"4 st per modul\", u06c).\nFörväntat: Gallerhållare 1.4828 (STATUS h84 rad 205), 2 hyllor/sida, spjäll 5 mm (STATUS h125), askskena M6x25, Horno-text på fotbeslaget.\nFörslag: Rätta description i respektive detaljfil.\nVerifierat: desc i tree.json v32 jämfört med instansantal, skruvar i Stomme (ISO 7380-1 M6x25 A4 ×6 under skenorna) och STATUS.md; spjällets 1,12 kg motsvarar 5 mm, inte 2.",
    "part": "Yamay Horno - delmontage Eldstad:1 › Yamay Horno - delmontage Gallerstall hoger:1 › Yamay Horno - Gallerhallare hoger:1",
-   "sel": "o276",
-   "url": "?p=horno&sel=o276",
+   "sel": "o279",
+   "url": "?p=horno&sel=o279",
    "created": "2026-11-12T16:00:36+01:00",
    "status": "oppen",
    "log": [
@@ -1208,8 +1208,8 @@
    "by": "Fable",
    "desc": "Modellen: Kopdel SPECIAL 17-7PH, \"Offert Gutekunst … Pris/leveranstid ej verifierat\".\nFörväntat: Verifierad köpdel innan prototypen låses (hela luckbalansen hänger på den).\nFörslag: Ta offert från Gutekunst nu.\nVerifierat: desc i v32.",
    "part": "Yamay Horno - delmontage Mekanik:1 › Yamay Horno - delmontage Fjaderpaket hoger:1 › Dragfjäder 1,8x16x109 17-7PH:1",
-   "sel": "o194",
-   "url": "?p=horno&sel=o194",
+   "sel": "o195",
+   "url": "?p=horno&sel=o195",
    "created": "2026-11-12T16:00:36+01:00",
    "status": "stangd",
    "log": [
@@ -2066,5 +2066,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-13 12:16"
+ "updated": "2026-11-13 12:24"
 }
