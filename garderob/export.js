@@ -5,7 +5,7 @@
 })(this, function (G, R) {
   'use strict';
   const kf = ut => ut.sys || ut.konfig;
-  const harDorr = ut => ut.moduler ? ut.moduler.some(m => m.konfig.dorrar) : !!ut.konfig.dorrar;
+  const harDorr = ut => ut.moduler ? ut.moduler.some(m => m.konfig && m.konfig.dorrar) : !!ut.konfig.dorrar;
   const rot = ut => (kf(ut).namn || 'Garderob').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\x20-\x7e]/g, '-').replace(/[\\/:*?"<>|]/g, '-') + (harDorr(ut) ? '_DORRAR' : '_UTAN_DORRAR');
 
   const ASCII = t => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\x20-\x7e]/g, '-');
@@ -43,14 +43,16 @@
     const txt = (s, x, y, o = {}) => { doc.setFontSize(o.size || 9); doc.setFont('helvetica', o.bold ? 'bold' : 'normal'); if (o.color) doc.setTextColor(...o.color); doc.text(L(s), x, y, o.align ? { align: o.align } : undefined); doc.setTextColor(0, 0, 0); };
 
     // --- sid 1: översikt ---
-    huvud(sys && ut.moduler.length > 1 ? 'Garderobssystem – sammanställning' : 'Garderob – sammanställning');
+    huvud(ut.kok ? 'Kök – sammanställning (IKEA METOD-mått, v0)' : sys && ut.moduler.length > 1 ? 'Garderobssystem – sammanställning' : 'Garderob – sammanställning');
     let y = 24;
     const mods = sys ? ut.moduler : [{ nr: 1, typ: '', konfig: ut.konfig, bredd: ut.konfig.bredd }];
-    const k0 = mods[0].konfig;
+    const k0 = (mods.find(m => m.konfig) || mods[0]).konfig;
     txt(`Jobb: ${k.jobb}`, M, y); y += 5;
-    const totB = mods.reduce((a, m) => a + m.konfig.bredd, 0);
-    txt(`Bredd ${totB} · höjd ${k0.hojd}` + (k.sockel ? ` · sockel ${k.sockel}` : '') + (k.galler ? ` · galler ${k.galler}` : '') + (k.nisch ? ` · nisch ${k.nisch.bredd}×${k.nisch.hojd}` : ''), M, y); y += 5;
+    const totB = mods.reduce((a, m) => a + (m.konfig ? m.konfig.bredd : 0), 0);
+    if (ut.kok) { txt(`${ut.rader.length} rader (${ut.rader.map(r => `${r.id} ${r.namn} ${r.langd}`).join(' · ')}) · bänkhöjd ${ut.bankHojd} · T ${ut.T}`, M, y, { size: 8.5 }); y += 5; }
+    else txt(`Bredd ${totB} · höjd ${k0.hojd}` + (k.sockel ? ` · sockel ${k.sockel}` : '') + (k.galler ? ` · galler ${k.galler}` : '') + (k.nisch ? ` · nisch ${k.nisch.bredd}×${k.nisch.hojd}` : ''), M, y); y += 5;
     mods.forEach(m => {
+      if (m.beskr) { if (y < 170) { txt(m.beskr, M, y, { size: 7.5 }); y += 3.9; } return; }
       const mk = m.konfig, s0 = mk.skap[0], s1 = mk.skap[1];
       const typ = sys && m.typ ? ({ lada: 'Lådor+hyllor', hang: 'Hängdel', hylla: 'Hyllor' })[m.typ] : '';
       txt(`${mods.length > 1 ? 'M' + m.nr + ' ' : ''}${typ} ${mk.bredd} bred: nedre ${s0.hojd}×${s0.djup}` + (s0.fast != null ? `, fast hylla ${s0.fast}` : '') + `, ${s0.hyllor.length} hyllor, ${s0.lador} lådor` + (s0.stang ? ', klädstång' : '') +

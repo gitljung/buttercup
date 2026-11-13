@@ -34,6 +34,8 @@ const M = {
   sockel: new THREE.MeshStandardMaterial({ color: 0xc8c2b6, roughness: 0.9 }),
   galler: new THREE.MeshStandardMaterial({ color: 0x777777, roughness: 0.6, wireframe: true }),
   vagg: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1, transparent: true, opacity: 0.35, side: THREE.DoubleSide }),
+  skiva: new THREE.MeshStandardMaterial({ color: 0x8a7f6e, roughness: 0.5 }),
+  maskin: new THREE.MeshStandardMaterial({ color: 0x2b2b2b, roughness: 0.4, metalness: 0.3 }),
   hal8: new THREE.MeshBasicMaterial({ color: 0x1f4e8c }),
   hal5: new THREE.MeshBasicMaterial({ color: 0xc8321a }),
   kopp: new THREE.MeshBasicMaterial({ color: 0x2f7d32 }),
@@ -55,11 +57,12 @@ function hal(g, x, y, z, d, axel, mat) {
   g.add(m);
 }
 
-let rot = null, dorrGrupp = [], lage = { dorrar: 'oppna', hal: true }, forstaGang = true;
+let rot = null, dorrGrupp = [], frontGrupp = [], lage = { dorrar: 'oppna', hal: true }, forstaGang = true;
 
 function bygg(ut) {
   if (rot) { V.remove(rot); rot.traverse(o => o.geometry && o.geometry !== cyl && o.geometry.dispose()); }
-  rot = new THREE.Group(); V.add(rot); dorrGrupp = [];
+  rot = new THREE.Group(); V.add(rot); dorrGrupp = []; frontGrupp = [];
+  if (ut.kok) return byggKok(ut);
   const sys = ut.moduler ? ut.sys : ut.konfig;
   const mods = ut.moduler ? ut.moduler.map(m => ({ ut: m.ut, x0: m.x0, nr: m.nr }))
     : [{ ut, x0: ut.konfig.nisch ? (ut.konfig.nisch.bredd - ut.konfig.bredd) / 2 : 0, nr: 1 }];
@@ -68,7 +71,7 @@ function bygg(ut) {
   const maxD = Math.max(...mods.flatMap(m => m.ut.konfig.skap.map(s => s.djup)));
   const hojd = Math.max(...mods.map(m => m.ut.konfig.hojd));
   if (sock) box(rot, x0, x1, 40, maxD, 0, sock, M.sockel, 'Sockel');
-  modGrupper = mods.map(m => byggModul(m.ut, m.x0, sock, mods.length > 1 ? `M${m.nr} ` : '', m.nr));
+  modGrupper = mods.map(m => byggModul(m.ut, m.x0, sock, mods.length > 1 ? `M${m.nr} ` : '', m.nr, rot, 0));
   markera(window.__valdModul || valdModul);
   if (gal) box(rot, x0, x1, 0, maxD, sock + hojd, sock + hojd + gal, M.galler, 'Galler');
   if (sys.nisch && sys.nisch.bredd) {
@@ -82,23 +85,58 @@ function bygg(ut) {
 }
 let senast = '';
 
-let modGrupper = [], valdModul = 0, markor = null;
+let modGrupper = [], valdModul = 0, markor = [];
 const markMat = new THREE.MeshBasicMaterial({ color: 0xfbc021, transparent: true, opacity: 0.22, depthWrite: false });
 function markera(nr) {
   valdModul = nr;
-  if (markor) { markor.parent && markor.parent.remove(markor); markor = null; }
-  const g = modGrupper[nr - 1]; if (!g || !rot) return;
-  const k = g.userData.konfig, sock = g.userData.sock;
-  const D = Math.max(...k.skap.map(s => s.djup));
-  const geo = new THREE.BoxGeometry(k.bredd + 16, D + 40, k.hojd + 16);
-  markor = new THREE.Mesh(geo, markMat); markor.position.set(k.bredd / 2, D / 2 - 20, sock + k.hojd / 2);
-  markor.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: 0xe0a000 })));
-  markor.raycast = () => {};
-  g.add(markor);
+  markor.forEach(m => m.parent && m.parent.remove(m)); markor = [];
+  if (!rot) return;
+  modGrupper.filter(g => g.userData.nr === nr).forEach(g => {
+    const k = g.userData.konfig, sock = g.userData.sock;
+    const B = g.userData.bredd || k.bredd, D = k ? Math.max(...k.skap.map(s => s.djup)) : 580, Hh = k ? k.hojd : g.userData.hojd || 800;
+    const geo = new THREE.BoxGeometry(B + 16, D + 40, Hh + 16);
+    const mk = new THREE.Mesh(geo, markMat); mk.position.set(B / 2, D / 2 - 20, sock + Hh / 2);
+    mk.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: 0xe0a000 })));
+    mk.raycast = () => {};
+    g.add(mk); markor.push(mk);
+  });
 }
-function byggModul(ut, ox, sock, pre, nr) {
+// kök: rader i rummets plan (X, Y) -> V (x, y) = (X, Y); raden vriden rot grader, fronten ut = xdir vriden −90°
+function byggKok(ut) {
+  const T = Math.PI / 180;
+  const grupper = ut.rader.map((r, ri) => {
+    const a = r.rot * T, xd = [Math.cos(a), Math.sin(a)], n = [xd[1], -xd[0]];
+    const g = new THREE.Group(); g.position.set(r.start[0] + r.yb * n[0], r.start[1] + r.yb * n[1], 0); g.rotation.z = a;
+    rot.add(g); return g;
+  });
+  modGrupper = ut.moduler.map(m => {
+    if (m.ut) return byggModul(m.ut, m.x0, m.z0, `${m.radId}-M${m.nr}${m.typ === 'vagg' ? 'V' : ''} `, m.nr, grupper[m.rad], m.y0);
+    const g0 = new THREE.Group(); g0.position.set(m.x0, 0, 0); grupper[m.rad].add(g0);
+    g0.userData = { nr: m.nr, konfig: null, sock: m.z0, bredd: m.bredd, hojd: 800 }; return g0;
+  });
+  (ut.extra3d || []).forEach(e => {
+    const b = box(grupper[e.rad], e.x0, e.x1, e.y0, e.y1, e.z0, e.z1, M[e.mat] || M.stomme, e.namn);
+    if (e.front) frontGrupp.push(b);
+    if (e.mat === 'vagg') { b.castShadow = false; }
+  });
+  markera(window.__valdModul || valdModul);
+  satDorrar();
+  // kamera: över rummet snett uppifrån
+  const pts = ut.rader.flatMap(r => { const a = r.rot * T; return [r.start, [r.start[0] + r.langd * Math.cos(a), r.start[1] + r.langd * Math.sin(a)]]; });
+  const X0 = Math.min(...pts.map(p => p[0])), X1 = Math.max(...pts.map(p => p[0])), Y0 = Math.min(...pts.map(p => p[1])), Y1 = Math.max(...pts.map(p => p[1]));
+  const nyckel = 'kok:' + ut.rader.length + ':' + X0 + ':' + X1 + ':' + Y0 + ':' + Y1;
+  if (forstaGang || nyckel !== senast) {
+    // från rummets öppna sida (min X), snett ovanifrån: ser fronterna på väggraderna
+    const c = new THREE.Vector3((X0 + X1) / 2000 + 0.3, 0.7, -(Y0 + Y1) / 2000);
+    ctl.target.copy(c);
+    const R = Math.max(X1 - X0, Y1 - Y0) / 1000;
+    cam.position.set(X0 / 1000 - R * 0.6, R * 1.0, c.z + R * 0.35); ctl.update();
+    forstaGang = false; senast = nyckel;
+  }
+}
+function byggModul(ut, ox, sock, pre, nr, foralder, oy) {
   const k = ut.konfig, T = k.T, W = k.bredd, med = !!k.dorrar;
-  const g0 = new THREE.Group(); g0.position.x = ox; rot.add(g0);
+  const g0 = new THREE.Group(); g0.position.x = ox; g0.position.y = oy || 0; foralder.add(g0);
   g0.userData = { nr, konfig: k, sock };
   let z = sock;
   k.skap.forEach(s => {
@@ -108,7 +146,7 @@ function byggModul(ut, ox, sock, pre, nr) {
     box(g, W - T, W, 0, D, z, z + H, M.stomme, `${n} sida höger`);
     box(g, T, W - T, 2, D, z, z + T, M.stomme, `${n} botten`);
     box(g, T, W - T, 2, D, z + H - T, z + H, M.stomme, `${n} topp`);
-    if (s.fast != null) box(g, T, W - T, 0, rygg ? ys : D, z + s.fast - T / 2, z + s.fast + T / 2, M.stomme, `${pre}Fast hylla`);
+    (s.fasta || (s.fast != null ? [s.fast] : [])).forEach(f => box(g, T, W - T, 0, rygg ? ys : D, z + f - T / 2, z + f + T / 2, M.stomme, `${pre}Fast hylla`));
     s.hyllor.forEach(m => box(g, T + 1, W - T - 1, 2, 2 + djHy, z + m + 4, z + m + 4 + T, M.hylla, `${pre}Ställbar hylla ${m}`));
     if (s.stang) {
       const st = new THREE.Mesh(new THREE.CylinderGeometry(12.5, 12.5, W - 2 * T, 20), M.stang);
@@ -144,7 +182,7 @@ function byggModul(ut, ox, sock, pre, nr) {
   });
   if (med) {
     const d = k.dorrar, DB = d.bredd || (d.antal === 2 ? (W - 6) / 2 : W - 4);
-    const xs = d.antal === 2 ? [[1, false], [W - 1 - DB, true]] : [[2, d.hand === 'h']];
+    const xs = d.antal === 2 ? [[1, false], [W - 1 - DB, true]] : [[(W - DB) / 2, d.hand === 'h']];
     d.seg.forEach(sg => { const zb = sock + sg.zb, DH = sg.DH; xs.forEach(([x, hoger]) => {
       const px = hoger ? x + DB : x;
       // vrids kring dörrens yttre framkant (fullt anliggande gångjärn): dörren går inte utanför skåpkanten
@@ -159,6 +197,7 @@ function byggModul(ut, ox, sock, pre, nr) {
 }
 
 function satDorrar() {
+  frontGrupp.forEach(f => f.visible = lage.dorrar !== 'dolda');
   dorrGrupp.forEach(p => {
     p.visible = lage.dorrar !== 'dolda';
     p.rotation.z = lage.dorrar === 'oppna' ? (p.userData.hoger ? -1 : 1) * THREE.MathUtils.degToRad(-90) : 0;

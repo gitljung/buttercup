@@ -21,7 +21,7 @@
       P.push({ t: 'rect', x: x0 + W - T, y: z, w: T, h: H, fill: FARG.stomme, stroke: '#333' });
       P.push({ t: 'rect', x: x0 + T, y: z, w: W - 2 * T, h: T, fill: FARG.stomme, stroke: '#333' });
       P.push({ t: 'rect', x: x0 + T, y: z + H - T, w: W - 2 * T, h: T, fill: FARG.stomme, stroke: '#333' });
-      if (s.fast != null) P.push({ t: 'rect', x: x0 + T, y: z + s.fast - T / 2, w: W - 2 * T, h: T, fill: FARG.stomme, stroke: '#333' });
+      (s.fasta || (s.fast != null ? [s.fast] : [])).forEach(f => P.push({ t: 'rect', x: x0 + T, y: z + f - T / 2, w: W - 2 * T, h: T, fill: FARG.stomme, stroke: '#333' }));
       s.hyllor.forEach(m => {
         P.push({ t: 'rect', x: x0 + T + 1, y: z + m + 6, w: W - 2 * T - 2, h: T, fill: '#ead7b5', stroke: '#555' });
         if (opt.etiketter) P.push({ t: 'text', x: x0 + W + 12, y: z + m, s: `hylla ${m}`, size: 7, color: '#555' });
@@ -42,7 +42,7 @@
     });
     if (opt.dorrar && k.dorrar) {
       const d = k.dorrar, DB = d.bredd || (d.antal === 2 ? (W - 6) / 2 : W - 4);
-      const xs = d.antal === 2 ? [[x0 + 1, false], [x0 + W - 1 - DB, true]] : [[x0 + 2, d.hand === 'h']];
+      const xs = d.antal === 2 ? [[x0 + 1, false], [x0 + W - 1 - DB, true]] : [[x0 + (W - DB) / 2, d.hand === 'h']];
       d.seg.forEach(sg => { const yb = sock + sg.zb, DH = sg.DH; xs.forEach(([x, hoger]) => {
         P.push({ t: 'rect', x, y: yb, w: DB, h: DH, fill: 'rgba(185,138,85,0.55)', stroke: '#5b3b17', lw: 1 });
         const kant = hoger ? x + DB - 21.5 : x + 21.5;
@@ -55,7 +55,7 @@
   function frontAlla(moduler, ram, opt = {}) {
     const P = [], sock = ram.sockel || 0, gal = ram.galler || 0;
     const xs = moduler.map(m => m.x0), x0 = Math.min(...xs), x1 = Math.max(...moduler.map(m => m.x0 + m.konfig.bredd));
-    const hojd = Math.max(...moduler.map(m => m.konfig.hojd));
+    const hojd = Math.max(...moduler.map(m => (m.z0 != null ? m.z0 - sock : 0) + m.konfig.hojd));
     const nb = ram.nisch && ram.nisch.bredd ? ram.nisch.bredd : x1 - x0;
     if (ram.nisch && ram.nisch.bredd) {
       P.push({ t: 'rect', x: 0, y: 0, w: nb, h: ram.nisch.hojd, stroke: '#999', dash: [8, 6], lw: 0.6 });
@@ -63,9 +63,10 @@
     }
     if (sock) { P.push({ t: 'rect', x: x0, y: 0, w: x1 - x0, h: sock, fill: '#eee', stroke: '#888' }); P.push({ t: 'text', x: x1 + 12, y: sock / 2 - 12, s: `sockel ${sock}`, anchor: 'middle', size: 8, color: '#666' }); }
     moduler.forEach(m => {
-      kropp(P, m.konfig, m.x0, sock, Object.assign({ etiketter: moduler.length === 1 }, opt));
-      P.push({ t: 'text', x: m.x0 + m.konfig.bredd / 2, y: -55, s: (moduler.length > 1 ? `M${m.nr} · ` : 'bredd ') + m.konfig.bredd, anchor: 'middle', size: 9 });
+      kropp(P, m.konfig, m.x0, m.z0 != null ? m.z0 : sock, Object.assign({ etiketter: moduler.length === 1 }, opt));
+      if (!m.utanEtikett) P.push({ t: 'text', x: m.x0 + m.konfig.bredd / 2, y: -55, s: (moduler.length > 1 ? `M${m.nr} · ` : 'bredd ') + m.konfig.bredd, anchor: 'middle', size: 9 });
     });
+    (ram.extra || []).forEach(p => { if (!p.dorr || opt.dorrar) P.push(p); });
     const top = sock + hojd;
     if (gal) { P.push({ t: 'rect', x: x0, y: top, w: x1 - x0, h: gal, fill: '#f4f4f4', stroke: '#888', dash: [4, 3] }); P.push({ t: 'text', x: (x0 + x1) / 2, y: top + gal / 2 - 4, s: `galler ${gal}`, anchor: 'middle', size: 8, color: '#666' }); }
     let z = sock;
@@ -79,6 +80,13 @@
     return frontAlla([{ konfig: k, x0, nr: 1 }], k, opt);
   }
   function frontSystem(su, opt = {}) {
+    if (su.kok) {   // kök: raderna efter varandra, moduler utan stomme (diskmaskin, passbit) bara som extra
+      const mods = su.moduler.filter(m => m.konfig).map(m => ({ konfig: m.konfig, x0: su.rader[m.rad].fx + m.x0, z0: m.z0, nr: m.nr, utanEtikett: m.utanEtikett }));
+      const r = mods.length ? frontAlla(mods, { extra: su.extraFront }, opt) : { prim: su.extraFront.filter(p => !p.dorr || opt.dorrar) };
+      const B = su.bredd, Hh = su.hojd + 200;
+      r.box = [-80, -170, B + 160, Hh + 220];
+      return r;
+    }
     return frontAlla(su.moduler.map(m => ({ konfig: m.konfig, x0: m.x0, nr: m.nr })), su.sys, opt);
   }
 

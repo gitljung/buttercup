@@ -36,7 +36,7 @@
     { id: 'klots', text: 'Distansklots 460×425: tappar 100/L−100, start 75 från botten', status: 'OSÄKER (2 lådor)' },
   ];
 
-  const MAT = {
+  const MATG = {
     stomme: { mapp: 'Ahorn 20mm_20', T: 20 },
     lada: { mapp: 'Egger H1334 15mm Span_15', T: 15 },
     distans: { mapp: 'Egger H1334 15mm Span_20', T: 20 },
@@ -99,11 +99,15 @@
       s.hyllor = s.hyllor || [];
       s.lador = s.lador || 0;
       s.fast = s.fast == null ? null : s.fast; // mitt på fasta hyllan, från skåpets botten
+      s.fasta = s.fasta ? s.fasta.slice() : (s.fast != null ? [s.fast] : []);   // flera fasta hyllor (kök: maskinnisch)
+      if (s.fast == null && s.fasta.length) s.fast = s.fasta[0];
     });
     k.hojd = z;
     if (k.dorrar) {
       const d = k.dorrar, under = d.under || 0, sist = k.skap.length - 1, FOG = 3;
-      if (d.delad && k.skap.length > 1) {
+      if (d.segment) {   // explicita dörrsegment i skåp 1 (kök): [{zb, DH, cups?}]
+        d.seg = d.segment.map(sg => ({ skap: sg.skap || 1, zb: sg.zb, DH: sg.DH, cups: sg.cups || gjAuto(sg.DH) }));
+      } else if (d.delad && k.skap.length > 1) {
         d.seg = k.skap.map((s, i) => {
           const zb = i === 0 ? -under : s.z0 + FOG / 2, zt = i === sist ? k.hojd : s.z0 + s.hojd - FOG / 2;
           return { skap: s.nr, zb, DH: zt - zb, cups: gjAuto(zt - zb) };
@@ -120,6 +124,7 @@
   // ---------- generator ----------
   function generera(konfig) {
     const k = normalisera(konfig);
+    const MAT = Object.assign({}, MATG, k.mat || {});   // kök: annan stomme/front
     const T = k.T, W = k.bredd, Bi = W - 2 * T;
     const ut = { konfig: k, delar: [], saglista: [], beslag: [], varningar: [], info: [], regler: REGLER };
     const med = !!k.dorrar;
@@ -160,7 +165,7 @@
         const yr = D - 19 / 2;
         [[T, 'bott'], [H - T - 80, 'topp'], [H / 2 - 40, 'mitt']].forEach(([x0]) => regl.push([x0 + 65, yr], [x0 + 15, yr]));
       }
-      const hrad = s.fast != null ? ord(rad5stom(djH), ORD_A).map(y => [s.fast, y]) : [];
+      const hrad = s.fasta.flatMap(f => ord(rad5stom(djH), ORD_A).map(y => [f, y]));
 
       function bygg(vanster) {
         const X = x => vanster ? H - x : x;
@@ -198,10 +203,10 @@
       if (rygg) {
         const RL = H - 2 * T + 14, RB = Bi + 14, RT = MAT.rygg.T;
         const ops = [];
-        if (s.fast != null) {
-          const x = (H - s.fast) - (T - 7);
+        s.fasta.forEach(f => {
+          const x = (H - f) - (T - 7);
           ord(rad5bak(32, RB - 32), ORD_B).forEach(y => ops.push(hal(1, x, y, -8, 8, 1)));
-        }
+        });
         push(del({ fil: fil(nr(), 'Back', 2), mapp: MAT.rygg.mapp, typ: 'Rygg', namn: nm('Back', RL, RB, RT), L: RL, B: RB, T: RT, overmatt: 0, ops }));
         for (let i = 0; i < 3; i++) {
           const RT2 = MAT.regel.T;
@@ -235,13 +240,13 @@
       });
 
       // fast hylla
-      if (s.fast != null) {
+      s.fasta.forEach(() => {
         const v = rad5stom(djH);
         const ops = [kontur(Bi, djH, T)];
         ord(rad5bak(25, Bi - 25), ORD_B).forEach(x => ops.push(kanthal(5, x, T)));
         [4, 6].forEach(sd => ord(v, ORD_A).forEach(x => ops.push(kanthal(sd, x, T))));
         push(del({ fil: fil(nr(), 'Horizontal', 1), mapp: MAT.stomme.mapp, typ: 'Fast hylla', namn: nm('Horizontal', Bi, djH, T), L: Bi, B: djH, T, ops }));
-      }
+      });
       // ställbara hyllor
       s.hyllor.forEach(() => {
         const ops = [kontur(Bi, djHy, T), ytaØ5(Bi - 10, 39), ytaØ5(Bi - 10, djHy - 37), ytaØ5(10, 39), ytaØ5(10, djHy - 37)];
@@ -314,7 +319,7 @@
       s.hyllor.forEach(m => { if (m - 32 < k.T + 30 || m + 32 > s.hojd - k.T - 30) ut.varningar.push(`Skåp ${s.nr}: hylla ${m} för nära topp/botten.`); });
       if (k.dorrar) {   // montageplatta (framkant 23–55) får inte krocka med hylla/fast hylla
         const pl = k.dorrar.seg.flatMap(sg => sg.cups.map(c => sg.zb + c - s.z0)).filter(x => x > 0 && x < s.hojd);
-        [...s.hyllor, ...(s.fast != null ? [s.fast] : [])].forEach(h => pl.forEach(p => {
+        [...s.hyllor, ...s.fasta].forEach(h => pl.forEach(p => {
           if (Math.abs(p - h) < 40) ut.varningar.push(`Skåp ${s.nr}: hylla ${h} krockar med montageplatta ${fmt(p)}.`); }));
       }
       if (s.bak === 'spar' && s.hojd - 2 * k.T + 14 > 2440) ut.varningar.push(`Skåp ${s.nr}: ryggen ${s.hojd - 2 * k.T + 14} är längre än en MDF-skiva (2440), kontrollera skivformatet.`);
@@ -367,5 +372,5 @@
     dorrar: { antal: 2, under: 50, gangjarn: [90, 780, 1420] },
   };
 
-  return { gjAuto, generera, skrivTcn, tillBytes, fmt, REGLER, MAT, ACACIA };
+  return { gjAuto, generera, skrivTcn, tillBytes, fmt, REGLER, MAT: MATG, ACACIA };
 });

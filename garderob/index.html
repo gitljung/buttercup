@@ -86,10 +86,18 @@ td{padding:2px 4px;border-bottom:1px solid #eee;text-align:left}
 .mapp{background:#f7eccd;font-weight:600}
 .osak{color:var(--chili)}
 .tom{color:#888;font-size:14px}
+.flikar{display:inline-flex;gap:0;margin-left:auto;border:2px solid var(--ox);border-radius:8px;overflow:hidden}
+.flikar button{margin:0;border-radius:0;background:#fff;color:var(--ox);padding:5px 16px;font-size:17px}
+.flikar button.på{background:var(--ox);color:#fff}
+.radrubrik{flex:none;writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Barlow Condensed';font-weight:700;font-size:14px;color:var(--ox);padding:4px 2px;border-left:3px solid var(--gul);cursor:pointer}
+.radrubrik.vald{background:var(--gul)}
+body.kok .bara-garderob{display:none}
+body:not(.kok) .bara-kok{display:none}
 </style>
 </head>
 <body>
-<header><h1>GARDEROBSKONFIGURATOR</h1><span>snickeri-tcn-3d · modulsystem · regler ur skåpprogrammets TCN · export TCN + PDF</span></header>
+<header><h1 id="rubrik">GARDEROBSKONFIGURATOR</h1><span id="underrubrik">snickeri-tcn-3d · modulsystem · regler ur skåpprogrammets TCN · export TCN + PDF</span>
+<span class="flikar"><button id="flikG" class="på">Garderob</button><button id="flikK">Kök</button></span></header>
 
 <div id="topp">
  <div id="vybox">
@@ -118,7 +126,7 @@ td{padding:2px 4px;border-bottom:1px solid #eee;text-align:left}
 <section>
   <div class="kort" id="editor"></div>
   <div class="kort" style="margin-top:14px">
-    <details id="rum">
+    <details id="rum" class="bara-garderob">
       <summary>Rum &amp; mått (nisch, sockel, höjder, djup)</summary>
       <div class="fält"><span>Namn</span><input id="namn" style="width:210px"></div>
       <div class="fält"><span>Jobbnamn i TCN</span><input id="jobb" style="width:210px"></div>
@@ -131,10 +139,29 @@ td{padding:2px 4px;border-bottom:1px solid #eee;text-align:left}
       <div class="info" id="hlasinfo" style="display:none">Låst: ändra nedre eller övre – den andra anpassar sig.</div>
       <div class="fält"><span>Djup nedre / övre</span><span class="par"><input id="dn" type="number"> / <input id="do" type="number"></span></div>
     </details>
+    <details id="rumKok" class="bara-kok">
+      <summary>Kök: rader &amp; mått (METOD)</summary>
+      <div class="fält"><span>Namn</span><input id="kNamn" style="width:210px"></div>
+      <div class="fält"><span>Jobbnamn i TCN</span><input id="kJobb" style="width:210px"></div>
+      <div class="fält"><span>Sockel (ben) / bänkskiva</span><span class="par"><input id="kSockel" type="number"> / <input id="kSkiva" type="number"></span></div>
+      <div class="fält"><span>Högskåp höjd</span><input id="kHog" type="number"></div>
+      <div class="fält"><span>Väggskåp höjd / överkant</span><span class="par"><select id="kVaggH"><option>400</option><option>600</option><option>800</option><option>1000</option></select> / <input id="kVaggOK" type="number" placeholder="auto"></span></div>
+      <h2 style="margin-top:10px">Rad <select id="kRad"></select></h2>
+      <div class="fält"><span>Radens namn</span><input id="rNamn" style="width:210px"></div>
+      <div class="fält"><span>Start X / Y i planen</span><span class="par"><input id="rX" type="number"> / <input id="rY" type="number"></span></div>
+      <div class="fält"><span>Riktning (grader)</span><select id="rRot"><option value="0">0 (→)</option><option value="90">90 (↑)</option><option value="180">180 (←)</option><option value="270">270 (↓)</option></select></div>
+      <div class="fält"><span>Djup inkl. skena</span><input id="rDjup" type="number"></div>
+      <div class="fält"><span>Mot vägg (skena, vägg)</span><input id="rVagg" type="checkbox" style="width:auto"></div>
+      <div class="fält"><span>Vägglängd (auto-bredder)</span><input id="rLangd" type="number" placeholder="–"></div>
+      <button class="sek" id="nyRad">+ ny rad</button> <button class="sek" id="bortRad" style="color:var(--chili);border-color:var(--chili)">✕ ta bort rad</button>
+      <p class="info">Rader = väggar/ö. 3D placerar raderna i planen (start + riktning); frontritningen visar dem efter varandra.</p>
+    </details>
     <details>
       <summary>Exempel &amp; filer</summary>
-      <button class="sek" id="exempel">Exempel</button>
-      <button class="sek" id="acacia">Acaciagatan</button>
+      <span class="bara-garderob"><button class="sek" id="exempel">Exempel</button>
+      <button class="sek" id="acacia">Acaciagatan</button></span>
+      <span class="bara-kok"><button class="sek" id="kok1">Kök 1 (Vickes plan)</button>
+      <button class="sek" id="kokRak">Rakt kök med väggskåp</button></span>
       <button class="sek" id="ladda">Ladda konfig…</button><input type="file" id="fil" accept=".json" hidden>
     </details>
   </div>
@@ -167,6 +194,7 @@ td{padding:2px 4px;border-bottom:1px solid #eee;text-align:left}
 <script src="vendor/jspdf.umd.min.js"></script>
 <script src="garderob.js"></script>
 <script src="system.js"></script>
+<script src="kok.js"></script>
 <script src="ritning.js"></script>
 <script src="export.js"></script>
 <script>
@@ -174,7 +202,7 @@ const $ = id => document.getElementById(id);
 const kopia = o => JSON.parse(JSON.stringify(o));
 const tal = (v, def = null) => { const n = parseFloat(String(v).replace(',', '.')); return isNaN(n) ? def : n; };
 const val = v => v == null ? '' : v;
-let K = null, SU = null, VALD = 0;
+let K = null, SU = null, VALD = 0, LAGE = 'garderob', KG = null, KK = null, RAD = 0;
 const TYPNAMN = { lada: 'Lådor + hyllor', hang: 'Hängdel', hylla: 'Hyllor' };
 
 // ---------- miniatyrer ----------
@@ -195,19 +223,23 @@ const PAL = [
   { typ: 'hylla', hel: true, namn: 'Hyllor, hel', txt: 'odelad, styv mitthylla' },
 ];
 function ritaPalett() {
+  if (LAGE === 'kok') return ritaPalettKok();
   $('pkort').innerHTML = PAL.map((p, i) => `<div class="pk" data-p="${i}" title="Lägg till ${p.namn}">${mini({ typ: p.typ, hel: p.hel }, 62)}<div><b>${p.namn}</b><small>${p.txt} · ${System.STD[p.typ]} br</small></div><span class="plus">+</span></div>`).join('');
 }
 $('pkort').addEventListener('click', e => {
-  const c = e.target.closest('.pk'); if (!c) return; const p = PAL[+c.dataset.p];
+  const c = e.target.closest('.pk'); if (!c) return;
+  if (LAGE === 'kok') return laggTillKok(KPAL[+c.dataset.p]);
+  const p = PAL[+c.dataset.p];
   K.moduler.push(Object.assign({ typ: p.typ }, p.hel ? { hel: true } : {}));
   VALD = K.moduler.length - 1; uppdatera();
 });
 
 // ---------- raden ----------
 function ritaRad() {
+  if (LAGE === 'kok') return ritaRadKok();
   const h = SU.moduler.map((m, i) => {
     const km = K.moduler[i];
-    const d = m.konfig.dorrar ? (m.konfig.dorrar.antal === 2 ? '2 dörrar' : '1 dörr') : 'öppen';
+    const d = m.konfig && m.konfig.dorrar ? (m.konfig.dorrar.antal === 2 ? '2 dörrar' : '1 dörr') : 'öppen';
     return `<div class="chip${i === VALD ? ' vald' : ''}" draggable="true" data-i="${i}">${mini(km, 120, { bredd: m.bredd })}<b>M${i + 1} · ${m.bredd}</b><span>${TYPNAMN[m.typ]}${km.hel ? ', hel' : ''} · ${d}</span></div>`;
   }).join('');
   $('rad').innerHTML = h + `<div class="chip ny" id="nychip" title="Lägg till – välj i paletten"><big>+</big>lägg till<br><small>(paletten ↗)</small></div>`;
@@ -222,13 +254,14 @@ $('rad').addEventListener('drop', e => {
   const till = +c.dataset.i, [m] = K.moduler.splice(dragFran, 1); K.moduler.splice(till, 0, m); VALD = till; dragFran = null; uppdatera();
 });
 $('rad').addEventListener('dragend', () => { dragFran = null; document.querySelectorAll('.chip.drag').forEach(c => c.classList.remove('drag')); });
-window.addEventListener('modulklick', e => { VALD = e.detail - 1; uppdatera(false); });
+window.addEventListener('modulklick', e => { if (LAGE === 'kok') return valjKokNr(e.detail); VALD = e.detail - 1; uppdatera(false); });
 
 // ---------- editor för vald modul ----------
 function seg(namn, val, alt) { return `<span class="seg" data-seg="${namn}">${alt.map(([v, t]) => `<button data-v="${v}" class="${String(v) === String(val) ? 'på' : ''}">${t}</button>`).join('')}</span>`; }
 function steg(namn, v) { return `<span class="steg" data-steg="${namn}"><button data-d="-1">−</button><output>${v}</output><button data-d="1">+</button></span>`; }
 function ritaEditor() {
   const ed = $('editor');
+  if (LAGE === 'kok') return ritaEditorKok(ed);
   if (!K.moduler.length) { ed.innerHTML = '<h2>2 · Modul</h2><p class="tom">Inga moduler än – välj en i paletten uppe till höger.</p>'; return; }
   VALD = Math.min(VALD, K.moduler.length - 1);
   const m = K.moduler[VALD], sm = SU.moduler[VALD], k = sm.konfig, s0 = k.skap[0], s1 = k.skap[1];
@@ -256,6 +289,7 @@ function ritaEditor() {
 function andraModul(f) { const m = K.moduler[VALD]; f(m); uppdatera(); }
 $('editor').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
+  if (LAGE === 'kok') return kokKlick(b);
   const sg = b.closest('[data-seg]'), st = b.closest('[data-steg]');
   if (b.dataset.act) {
     const i = VALD, M = K.moduler;
@@ -284,11 +318,13 @@ $('editor').addEventListener('click', e => {
 $('editor').addEventListener('input', e => {
   const f = e.target.dataset.f; if (!f) return;
   const v = tal(e.target.value);
+  if (LAGE === 'kok') { const m = kokModul(); if (m) { if (v == null) delete m[f]; else m[f] = v; } return; }
   K.moduler[VALD][f] = v == null ? undefined : v;
   if (f === 'bredd') document.querySelectorAll('#editor [data-f=bredd]').forEach(x => x !== e.target && (x.value = e.target.value));
   uppdatera(false, true);
 });
 $('editor').addEventListener('change', e => { if (e.target.dataset.f) uppdatera(); });
+$('editor').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.dataset.f) uppdatera(); });
 
 // ---------- rum & mått ----------
 function tillRum(k) {
@@ -322,18 +358,20 @@ $('rum').addEventListener('change', e => {
 
 // ---------- allt ----------
 function uppdatera(raden = true, snabb = false) {
-  try { SU = System.generera(K); } catch (e) { console.error(e); $('varn').innerHTML = `<p class="varn">Fel: ${e.message}</p>`; return; }
-  VALD = Math.max(0, Math.min(VALD, K.moduler.length - 1));
-  window.__ut = SU; window.dispatchEvent(new CustomEvent('garderob', { detail: SU }));
-  window.__valdModul = VALD + 1; window.Vy3d && Vy3d.markera(VALD + 1);
+  try { SU = LAGE === 'kok' ? Kok.generera(K) : System.generera(K); } catch (e) { console.error(e); $('varn').innerHTML = `<p class="varn">Fel: ${e.message}</p>`; return; }
+  if (LAGE === 'kok') kokKlamp(); else VALD = Math.max(0, Math.min(VALD, K.moduler.length - 1));
+  const valdNr = LAGE === 'kok' ? kokNr() : VALD + 1;
+  window.__ut = SU; window.__valdModul = valdNr; window.dispatchEvent(new CustomEvent('garderob', { detail: SU }));
+  window.Vy3d && Vy3d.markera(valdNr);
   ritaRad();
   if (!snabb) ritaEditor();
+  if (LAGE === 'kok') tillRumKok(false);
   if (K.nischAuto && SU.sys.nisch) { $('nb').value = SU.sys.nisch.bredd; $('nh').value = SU.sys.nisch.hojd; }
   $('vyFront').innerHTML = Ritning.svg(Ritning.frontSystem(SU), 420, { fit: true });
-  const harD = SU.moduler.some(m => m.konfig.dorrar);
+  const harD = SU.moduler.some(m => m.konfig && m.konfig.dorrar);
   $('vyDorr').innerHTML = harD ? Ritning.svg(Ritning.frontSystem(SU, { dorrar: true }), 420, { fit: true }) : '';
   $('varn').innerHTML = SU.varningar.map(v => `<p class="varn">⚠ ${v}</p>`).join('') + SU.info.map(v => `<p class="info">${v}</p>`).join('');
-  $('sum3d').textContent = `${SU.moduler.length} moduler · ${SU.bredd} × ${SU.hojd} · ${SU.delar.length} TCN-filer` + (SU.varningar.length ? ` · ⚠ ${SU.varningar.length}` : '');
+  $('sum3d').textContent = LAGE === 'kok' ? `${SU.rader.length} rader · ${new Set(SU.moduler.map(m => m.nr)).size} moduler · bänkhöjd ${SU.bankHojd} · ${SU.delar.length} TCN-filer` + (SU.varningar.length ? ` · ⚠ ${SU.varningar.length}` : '') : `${SU.moduler.length} moduler · ${SU.bredd} × ${SU.hojd} · ${SU.delar.length} TCN-filer` + (SU.varningar.length ? ` · ⚠ ${SU.varningar.length}` : '');
   $('antal').textContent = `(${SU.delar.length} TCN-filer)`;
   const s = SU.delar.slice().sort((a, b) => (a.modul - b.modul) || a.mapp.localeCompare(b.mapp) || a.fil.localeCompare(b.fil, 'sv', { numeric: true }));
   let g0 = null, h = '<table>';
@@ -342,9 +380,12 @@ function uppdatera(raden = true, snabb = false) {
   $('delar').innerHTML = h + '</table>' + (SU.saglista.length ? '<p class="info"><b>Sågas/kapas:</b> ' + SU.saglista.map(x => `${x.namn} ${Garderob.fmt(x.L)}×${x.B}×${x.T}`).join(' · ') + '</p>' : '');
   $('beslag').innerHTML = SU.beslag.map(b => `${b.antal} × ${b.namn}`).join('<br>');
   $('regler').innerHTML = SU.regler.map(r => { const o = /OSÄKER|EGEN/.test(r.status); return `<div class="${o ? 'osak' : ''}">${o ? '⚠' : '✓'} ${r.text} <small>(${r.status})</small></div>`; }).join('');
-  history.replaceState(null, '', '#k=' + btoa(unescape(encodeURIComponent(JSON.stringify(K)))));
+  history.replaceState(null, '', (LAGE === 'kok' ? '#kok=' : '#k=') + btoa(unescape(encodeURIComponent(JSON.stringify(K)))));
 }
-function satt(k) { K = System.franEnkel(kopia(k)); VALD = 0; tillRum(K); ritaPalett(); uppdatera(); }
+function satt(k) {
+  if (k.rader) return sattKok(k);
+  lage('garderob'); K = KG = System.franEnkel(kopia(k)); VALD = 0; tillRum(K); ritaPalett(); uppdatera();
+}
 function ladda(namn, blob) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = namn; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
 
 $('exempel').onclick = () => satt(System.EXEMPEL);
@@ -359,10 +400,154 @@ document.querySelectorAll('input[name=d3]').forEach(r => r.onchange = () => wind
 $('h3').onchange = () => window.Vy3d && Vy3d.satt({ hal: $('h3').checked });
 $('ram3').onclick = () => window.Vy3d && Vy3d.ram();
 
+
+// ================= KÖK (flik) =================
+const KTYP = Kok.TYPER;
+const KPAL = [
+  { typ: 'lada' }, { typ: 'bank' }, { typ: 'disk' }, { typ: 'spis' }, { typ: 'dm' }, { typ: 'horn' }, { typ: 'dott' },
+  { typ: 'hog', namn: 'Högskåp', txt: 'front 800 + 1200, fast hylla' }, { typ: 'hog', nisch: 'kyl', namn: 'Högskåp kyl/frys', txt: 'integrerad kyl/frys' },
+  { typ: 'hog', nisch: 'ugn', namn: 'Högskåp ugn', txt: '2 lådor, ugnsnisch, dörr' },
+  { typ: 'bank', vagg: true, namn: 'Bänkskåp + väggskåp', txt: 'väggskåp B×37 ovanför' },
+  { typ: 'pass', bredd: 50 }, { typ: 'oppen' },
+];
+function lage(l) {
+  LAGE = l; document.body.classList.toggle('kok', l === 'kok');
+  $('flikG').classList.toggle('på', l !== 'kok'); $('flikK').classList.toggle('på', l === 'kok');
+  $('rubrik').textContent = l === 'kok' ? 'KÖKSKONFIGURATOR' : 'GARDEROBSKONFIGURATOR';
+  $('underrubrik').textContent = l === 'kok' ? 'snickeri-tcn-3d · v0 · IKEA METOD-mått · garderobens motor (T 18) · ⚠ regler ej bekräftade mot kök-TCN'
+    : 'snickeri-tcn-3d · modulsystem · regler ur skåpprogrammets TCN · export TCN + PDF';
+  document.title = (l === 'kok' ? 'Kökskonfigurator' : 'Garderobskonfigurator') + ' · snickeri-tcn-3d';
+}
+function bytFlik(l) {
+  if (l === LAGE) return;
+  if (LAGE === 'kok') KK = K; else KG = K;
+  if (l === 'kok') sattKok(KK || Kok.KOK1); else satt(KG || System.EXEMPEL);
+}
+$('flikG').onclick = () => bytFlik('garderob');
+$('flikK').onclick = () => bytFlik('kok');
+function sattKok(k) { lage('kok'); K = KK = kopia(k); RAD = 0; VALD = 0; ritaPalett(); tillRumKok(true); uppdatera(); }
+$('kok1').onclick = () => sattKok(Kok.KOK1);
+$('kokRak').onclick = () => sattKok(Kok.RAK);
+
+function kokModul() { const r = K.rader[RAD]; return r && r.moduler[VALD]; }
+function kokKlamp() { RAD = Math.max(0, Math.min(RAD, K.rader.length - 1)); const r = K.rader[RAD]; VALD = r ? Math.max(0, Math.min(VALD, r.moduler.length - 1)) : 0; }
+function kokNr() { let n = 0; for (let i = 0; i < RAD; i++) n += K.rader[i].moduler.length; return n + VALD + 1; }
+function valjKokNr(nr) { let n = nr; for (let i = 0; i < K.rader.length; i++) { if (n <= K.rader[i].moduler.length) { RAD = i; VALD = n - 1; break; } n -= K.rader[i].moduler.length; } uppdatera(false); }
+function miniKok(mod, px, rad) {
+  const su = Kok.generera({ namn: 'x', jobb: 'x', sockel: K ? K.sockel : 80, skiva: K ? K.skiva : 38, hogH: K ? K.hogH : 2000, vaggH: K ? K.vaggH : 600,
+    rader: [{ id: 'A', djup: rad && rad.djup, vagg: rad ? rad.vagg : true, moduler: [mod] }] });
+  const r = Ritning.frontSystem(su, { dorrar: true });
+  r.prim = r.prim.filter(q => q.t !== 'text'); r.box = [-30, -30, su.bredd + 60, su.hojd + 60];
+  return Ritning.svg(r, px);
+}
+function kpNamn(p) { return p.namn || KTYP[p.typ].namn; }
+function ritaPalettKok() {
+  $('pkort').innerHTML = `<p style="margin:0 0 6px">Läggs sist i rad <b>${K.rader[RAD] ? K.rader[RAD].id + ' · ' + K.rader[RAD].namn : '–'}</b>.</p>` +
+    KPAL.map((p, i) => `<div class="pk" data-p="${i}" title="Lägg till ${kpNamn(p)}">${miniKok(Object.assign({ bredd: p.bredd || KTYP[p.typ].std }, p), 52)}<div><b>${kpNamn(p)}</b><small>${p.txt || KTYP[p.typ].txt} · ${p.bredd || KTYP[p.typ].std} br</small></div><span class="plus">+</span></div>`).join('');
+}
+function laggTillKok(p) {
+  if (!K.rader.length) K.rader.push({ id: 'A', namn: 'Vägg', start: [0, 0], rot: 0, moduler: [] });
+  const m = { typ: p.typ, bredd: p.bredd || KTYP[p.typ].std }; if (p.nisch) m.nisch = p.nisch; if (p.vagg) m.vagg = true;
+  K.rader[RAD].moduler.push(m); VALD = K.rader[RAD].moduler.length - 1; uppdatera();
+}
+function ritaRadKok() {
+  let h = '', nr = 0;
+  K.rader.forEach((r, ri) => {
+    h += `<div class="radrubrik${ri === RAD ? ' vald' : ''}" data-rr="${ri}" title="välj rad">${r.id} · ${r.namn || ''}</div>`;
+    r.moduler.forEach((m, j) => {
+      nr++; const t = KTYP[m.typ] || KTYP.bank;
+      const W = SU.moduler.find(x => x.nr === nr); const B = W ? W.bredd : m.bredd;
+      h += `<div class="chip${ri === RAD && j === VALD ? ' vald' : ''}" data-r="${ri}" data-j="${j}">${miniKok(m, 110, r)}<b>${r.id}-M${nr} · ${B}</b><span>${t.namn}${m.nisch ? ' ' + m.nisch : ''}${m.vagg ? ' + vägg' : ''}</span></div>`;
+    });
+  });
+  $('rad').innerHTML = h + `<div class="chip ny" id="nychip" title="Lägg till – välj i paletten"><big>+</big>lägg till<br><small>(paletten ↗)</small></div>`;
+  $('nychip').onclick = () => $('palett').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  $('radinfo').textContent = 'Klicka på en modul för att ändra den. Klicka på radens namn för att välja rad (paletten lägger till där).';
+}
+$('rad').addEventListener('click', e => {
+  if (LAGE !== 'kok') return;
+  const rr = e.target.closest('[data-rr]'); if (rr) { RAD = +rr.dataset.rr; VALD = 0; ritaPalett(); tillRumKok(true); return uppdatera(false); }
+  const c = e.target.closest('.chip[data-r]'); if (c) { RAD = +c.dataset.r; VALD = +c.dataset.j; ritaPalett(); tillRumKok(true); uppdatera(false); }
+});
+function ritaEditorKok(ed) {
+  const r = K.rader[RAD], m = kokModul();
+  if (!m) { ed.innerHTML = `<h2>2 · Modul</h2><p class="tom">Rad ${r ? r.id : ''} är tom – välj en modul i paletten.</p>`; return; }
+  const nr = kokNr(), mods = SU.moduler.filter(x => x.nr === nr), t = m.typ;
+  const dval = m.dorrar == null ? 'auto' : (m.dorrar === 1 ? (m.hand === 'h' ? '1h' : '1v') : String(m.dorrar));
+  const harD = ['bank', 'disk', 'hog'].includes(t);
+  const hy = mods[0] && mods[0].konfig ? mods[0].konfig.skap[0].hyllor.length : 0;
+  ed.innerHTML = `
+  <div id="modhuvud"><h2>2 · Modul ${r.id}-M${nr}</h2><span>
+    <button class="sek" data-act="vanster" title="flytta vänster">◀</button><button class="sek" data-act="hoger" title="flytta höger">▶</button>
+    <button class="sek" data-act="kopiera" title="duplicera">⧉</button><button class="sek" data-act="bort" title="ta bort" style="color:var(--chili);border-color:var(--chili)">✕</button></span></div>
+  <div class="rad2"><span>Typ</span>${seg('typ', t, Object.keys(KTYP).map(k => [k, KTYP[k].namn]))}</div>
+  <div class="rad2"><span>Bredd</span>${seg('kbredd', m.bredd || 'auto', [...(r.langd ? [['auto', 'auto']] : []), ...Kok.METOD.bredder.map(b => [b, b / 10])])}</div>
+  <div class="rad2"><span></span><span class="bredd"><input type="number" data-f="bredd" value="${val(m.bredd)}" placeholder="eget"> mm</span></div>
+  ${t === 'lada' ? `<div class="rad2"><span>Lådor</span>${seg('lador', m.lador === 4 ? 4 : 3, [[3, '3 (40/20/20)'], [4, '4 (40/20/10/10)']])}</div>` : ''}
+  ${harD ? `<div class="rad2"><span>Dörrar</span>${seg('dorrar', dval, [['auto', 'auto'], ['1v', '1 ⟵ v'], ['1h', '1 h ⟶'], ['2', '2']])}</div>` : ''}
+  ${t === 'hog' ? `<div class="rad2"><span>Nisch</span>${seg('nisch', m.nisch || 'ingen', [['ingen', 'ingen'], ['ugn', 'ugn'], ['micro', 'micro'], ['kyl', 'kyl/frys']])}</div>` : ''}
+  ${t === 'hog' && !m.nisch ? `<div class="rad2"><span>Front</span>${seg('fronter', m.fronter === 'hel' ? 'hel' : 'delad', [['delad', '800 + 1200'], ['hel', 'hel 2000']])}</div>` : ''}
+  ${t === 'bank' || (t === 'hog' && m.nisch !== 'kyl') ? `<div class="rad2"><span>Hyllor${t === 'hog' ? ' (övre del)' : ''}</span>${steg('hyllor', m.hyllor != null ? m.hyllor : (t === 'hog' ? (m.fronter === 'hel' ? 4 : m.nisch ? 2 : 3) : 1))}</div>` : ''}
+  ${t === 'horn' ? `<div class="rad2"><span>Blindsida</span>${seg('blind', m.blind === 'h' ? 'h' : 'v', [['v', 'vänster'], ['h', 'höger']])}</div>` : ''}
+  ${t !== 'hog' && r.vagg !== false ? `<div class="rad2"><span>Väggskåp ovanför</span>${seg('vagg', m.vagg ? 1 : 0, [[0, 'nej'], [1, 'ja']])}</div>` : ''}
+  <div class="info">${mods.map(x => x.beskr).join('<br>')}<br>${mods.reduce((a, x) => a + (x.ut ? x.ut.delar.length : 0), 0) || SU.delar.filter(d => d.modul === nr).length} TCN-filer</div>`;
+}
+function kokKlick(b) {
+  const r = K.rader[RAD], M = r ? r.moduler : [], i = VALD;
+  if (b.dataset.act) {
+    if (b.dataset.act === 'bort') { M.splice(i, 1); VALD = Math.max(0, i - 1); }
+    if (b.dataset.act === 'kopiera') { M.splice(i + 1, 0, kopia(M[i])); VALD = i + 1; }
+    if (b.dataset.act === 'vanster' && i > 0) { [M[i - 1], M[i]] = [M[i], M[i - 1]]; VALD = i - 1; }
+    if (b.dataset.act === 'hoger' && i < M.length - 1) { [M[i + 1], M[i]] = [M[i], M[i + 1]]; VALD = i + 1; }
+    return uppdatera();
+  }
+  const sg = b.closest('[data-seg]'), st = b.closest('[data-steg]'), m = M[i]; if (!m) return;
+  if (sg) {
+    const v = b.dataset.v, n = sg.dataset.seg;
+    if (n === 'typ' && m.typ !== v) { const ny = { typ: v, bredd: m.bredd }; if (m.vagg && v !== 'hog') ny.vagg = true; Object.keys(m).forEach(f => delete m[f]); Object.assign(m, ny); if (v === 'horn' || v === 'dott') m.bredd = 640; }
+    if (n === 'kbredd') { if (v === 'auto') delete m.bredd; else m.bredd = +v; }
+    if (n === 'lador') m.lador = +v;
+    if (n === 'dorrar') { delete m.hand; if (v === 'auto') delete m.dorrar; else if (v[0] === '1') { m.dorrar = 1; if (v === '1h') m.hand = 'h'; } else m.dorrar = +v; }
+    if (n === 'nisch') { if (v === 'ingen') delete m.nisch; else m.nisch = v; delete m.hyllor; }
+    if (n === 'fronter') { if (v === 'hel') m.fronter = 'hel'; else delete m.fronter; delete m.hyllor; }
+    if (n === 'blind') m.blind = v;
+    if (n === 'vagg') { if (+v) m.vagg = true; else delete m.vagg; }
+  }
+  if (st) { const out = st.querySelector('output'); m[st.dataset.steg] = Math.max(0, Math.min(8, +out.value + +b.dataset.d)); }
+  uppdatera();
+}
+function tillRumKok(radOcksa) {
+  $('kNamn').value = K.namn || ''; $('kJobb').value = K.jobb || '';
+  $('kSockel').value = val(K.sockel != null ? K.sockel : 80); $('kSkiva').value = val(K.skiva != null ? K.skiva : 38);
+  $('kHog').value = K.hogH || 2000; $('kVaggH').value = String(K.vaggH || 600); $('kVaggOK').value = val(K.vaggOK);
+  $('kVaggOK').placeholder = 'auto ' + ((K.sockel != null ? K.sockel : 80) + (K.hogH || 2000));
+  if (!radOcksa) return;
+  $('kRad').innerHTML = K.rader.map((r, i) => `<option value="${i}" ${i === RAD ? 'selected' : ''}>${r.id} · ${r.namn || ''}</option>`).join('');
+  const r = K.rader[RAD]; if (!r) return;
+  $('rNamn').value = r.namn || ''; $('rX').value = (r.start || [0, 0])[0]; $('rY').value = (r.start || [0, 0])[1];
+  $('rRot').value = String(r.rot || 0); $('rDjup').value = r.djup || 600; $('rVagg').checked = r.vagg !== false; $('rLangd').value = val(r.langd);
+}
+$('kRad').onchange = () => { RAD = +$('kRad').value; VALD = 0; ritaPalett(); tillRumKok(true); uppdatera(); };
+$('rumKok').addEventListener('change', e => {
+  if (e.target.id === 'kRad') return;
+  Object.assign(K, { namn: $('kNamn').value || 'Kök', jobb: $('kJobb').value || 'Kok', sockel: tal($('kSockel').value, 80), skiva: tal($('kSkiva').value, 38),
+    hogH: tal($('kHog').value, 2000), vaggH: tal($('kVaggH').value, 600) });
+  const ok = tal($('kVaggOK').value); if (ok) K.vaggOK = ok; else delete K.vaggOK;
+  const r = K.rader[RAD];
+  if (r) {
+    Object.assign(r, { namn: $('rNamn').value, start: [tal($('rX').value, 0), tal($('rY').value, 0)], rot: +$('rRot').value, djup: tal($('rDjup').value, 600) });
+    if ($('rVagg').checked) delete r.vagg; else r.vagg = false;
+    const L = tal($('rLangd').value); if (L) r.langd = L; else delete r.langd;
+  }
+  tillRumKok(true); uppdatera();
+});
+$('nyRad').onclick = () => { const id = String.fromCharCode(65 + K.rader.length); K.rader.push({ id, namn: 'Ny rad', start: [0, 0], rot: 0, moduler: [] }); RAD = K.rader.length - 1; VALD = 0; ritaPalett(); tillRumKok(true); uppdatera(); };
+$('bortRad').onclick = () => { if (!K.rader.length || !confirm('Ta bort rad ' + K.rader[RAD].id + '?')) return; K.rader.splice(RAD, 1); RAD = 0; VALD = 0; ritaPalett(); tillRumKok(true); uppdatera(); };
+
 let start = System.EXEMPEL;
-const mm = /#k=([^&]+)/.exec(location.hash);
+const mm = /#(?:k|kok)=([^&]+)/.exec(location.hash);
 if (mm) { try { start = JSON.parse(decodeURIComponent(escape(atob(mm[1])))); } catch (e) { console.warn(e); } }
-window.__app = { get k() { return K; }, get ut() { return SU; }, get vald() { return VALD; }, satt };
+window.__app = { get k() { return K; }, get ut() { return SU; }, get vald() { return VALD; }, get lage() { return LAGE; }, satt, lage: (l) => bytFlik(l) };
 satt(start);
 </script>
 </body>
