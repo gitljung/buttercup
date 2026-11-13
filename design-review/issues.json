@@ -89,8 +89,8 @@
      "Vicke (webb)"
     ]
    ],
-   "replies": 65,
-   "last": "2026-11-13T11:54:31.076000+00:00",
+   "replies": 67,
+   "last": "2026-11-13T12:09:17.328000+00:00",
    "analyzed": "2026-11-07T15:56:43.626000+00:00",
    "forslag": [
     {
@@ -1790,7 +1790,7 @@
    "sel": "o4",
    "url": "?p=vaxthus-hjulsystem&sel=o4",
    "created": "2026-11-13T11:51:16+01:00",
-   "status": "oppen",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-13T11:51:16+01:00",
@@ -1801,13 +1801,18 @@
      "2026-11-13T12:05:47+01:00",
      "kommentar",
      "Vickan: Vicke valde b (100–120 mm) 2026-11-13. Mål 110 mm: pivå→hjulaxel 170, pivå z 104. Väntar på a/b om pedalkraft vs spaklängd innan Fusion."
+    ],
+    [
+     "2026-11-13T13:10:02+01:00",
+     "atgardad",
+     "Vickan: 1 · H15: frigång 110 mm (SpakA 170, pivå z 104), export 2026-11-13 13:08"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T12:05:47+01:00",
+   "last": "2026-11-13T13:10:02+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1570057458125250643/1570750632711946287",
    "img": "avvikelser/VAX-5.jpg",
-   "ver": "hittad v1",
+   "ver": "hittad v1 · stängd 1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
    "comments": [
     [
@@ -2128,5 +2133,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-13 13:08"
+ "updated": "2026-11-13 13:10"
 }
