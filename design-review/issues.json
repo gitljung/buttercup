@@ -248,8 +248,8 @@
      "Vickan: ✅ Klart. Fronten täcker nu stenen här, eftersom asköppningen i fronten är igenslagen (steg"
     ]
    ],
-   "replies": 11,
-   "last": "2026-11-12T10:46:06.065000+00:00",
+   "replies": 12,
+   "last": "2026-11-13T12:06:22.727000+00:00",
    "analyzed": "2026-11-11T07:24:23.218000+00:00",
    "forslag": [
     {
@@ -502,7 +502,7 @@
    "sel": "o349",
    "url": "?p=tizon&sel=o349",
    "created": "2026-11-12T16:00:16+01:00",
-   "status": "delvis",
+   "status": "stangd",
    "log": [
     [
      "2026-11-12T16:00:16+01:00",
@@ -518,10 +518,15 @@
      "2026-11-13T13:06:14+01:00",
      "kommentar",
      "Vicke: Godkänt: åtgärda enligt förslaget."
+    ],
+    [
+     "2026-11-13T13:06:25+01:00",
+     "stangd",
+     "Vicke: "
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T13:06:14+01:00",
+   "last": "2026-11-13T13:06:25+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
    "img": "avvikelser/TIZ-7.jpg",
    "ver": "hittad v29 · v32",
