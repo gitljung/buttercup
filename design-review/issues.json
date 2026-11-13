@@ -1760,8 +1760,8 @@
    "by": "Fable",
    "desc": "Modellen: 2 st M12x150 per fäste med ISO 7089 12 (Ø24, 320 mm²) på z 52; fästets fläns z 5–83 mot syllens utsida (x 2060), hjulmitt x 2191.\nFörväntat: Kontakttryck under bricka i trä tvärs fibrerna ≤ ca 2,5–5 MPa.\nFörslag: Genomgående plattstål 50×6 på syllens insida (eller stor bricka/plåt per bult), alt. fäste som går in under syllen.\nVerifierat: M = F·131 mm = 197–262 Nm, hävarm 26–31 mm → 3,2–5,0 kN per bult → 10–16 MPa under brickan.",
    "part": "ISO 4014 M12x150 8.8 FZV:1",
-   "sel": "o43",
-   "url": "?p=vaxthus-hjulsystem&sel=o43",
+   "sel": "o53",
+   "url": "?p=vaxthus-hjulsystem&sel=o53",
    "created": "2026-11-13T11:51:16+01:00",
    "status": "oppen",
    "log": [
@@ -1840,8 +1840,8 @@
    "by": "Fable",
    "desc": "Modellen: ISO 4017 M16x45 (helgängad enligt standard) som pivå.\nFörväntat: Slät lageryta i spakens hål.\nFörslag: ISO 4014 med stam genom spaken, eller hylsa på bulten.\nVerifierat: Artikel i trädet: ISO 4017 = helgängad; grepp 6+3+8 mm ligger helt på gängan.",
    "part": "Växthus - delmontage lyfthjul:1 › ISO 4017 M16x45 8.8 FZV:1",
-   "sel": "o27",
-   "url": "?p=vaxthus-hjulsystem&sel=o27",
+   "sel": "",
+   "url": "?p=vaxthus-hjulsystem",
    "created": "2026-11-13T11:51:16+01:00",
    "status": "oppen",
    "log": [
@@ -1872,8 +1872,8 @@
    "by": "Fable",
    "desc": "Modellen: Plattstål 80×8, L 2241, V-vinkel 60° från dragriktningen.\nFörväntat: Dragstången ska tåla tryck när huset bromsas eller skjuts.\nFörslag: Styvare profil (vinkel/rör) eller mellanstag; alternativt tydlig regel: bara drag.\nVerifierat: Pcr = π²·E·(80·8³/12)/2241² = 1,41 kN per stång; vinkel ur bbox 60,2°, stångkraft ≈ hela dragkraften.",
    "part": "Växthus - delmontage dragstång:1 › Växthus - Dragstång:1",
-   "sel": "o374",
-   "url": "?p=vaxthus-hjulsystem&sel=o374",
+   "sel": "o434",
+   "url": "?p=vaxthus-hjulsystem&sel=o434",
    "created": "2026-11-13T11:51:16+01:00",
    "status": "oppen",
    "log": [
@@ -2022,8 +2022,8 @@
    "by": "Fable",
    "desc": "Modellen: Material Steel: 2000×120×120 → 226 kg.\nFörväntat: Trä ca 14 kg.\nFörslag: Sätt trämaterial på Tröskelregel (påverkar vikt/BOM).\nVerifierat: 2×0,12×0,12×7850 = 226,1 kg; ×500 = 14,4 kg; h12_det.log kg 226,08.",
    "part": "Växthus - Tröskelregel:1",
-   "sel": "o392",
-   "url": "?p=vaxthus-hjulsystem&sel=o392",
+   "sel": "o452",
+   "url": "?p=vaxthus-hjulsystem&sel=o452",
    "created": "2026-11-13T11:51:16+01:00",
    "status": "oppen",
    "log": [
@@ -2490,5 +2490,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-13 13:34"
+ "updated": "2026-11-13 13:42"
 }
