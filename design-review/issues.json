@@ -735,7 +735,7 @@
    "sel": "o257",
    "url": "?p=horno&sel=o257",
    "created": "2026-11-12T16:00:35+01:00",
-   "status": "oppen",
+   "status": "stangd",
    "log": [
     [
      "2026-11-12T16:00:35+01:00",
@@ -746,10 +746,15 @@
      "2026-11-13T11:46:21+01:00",
      "kommentar",
      "Vicke: Godkänt: åtgärda enligt förslaget."
+    ],
+    [
+     "2026-11-13T11:46:29+01:00",
+     "stangd",
+     "Vicke: "
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:46:21+01:00",
+   "last": "2026-11-13T11:46:29+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-4.jpg",
    "ver": "hittad v32",
