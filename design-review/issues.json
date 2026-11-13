@@ -84,8 +84,8 @@
      "Vicke (webb)"
     ]
    ],
-   "replies": 27,
-   "last": "2026-11-13T10:46:28.875000+00:00",
+   "replies": 31,
+   "last": "2026-11-13T10:47:48.463000+00:00",
    "analyzed": "2026-11-07T15:56:43.626000+00:00",
    "forslag": [
     {
@@ -1154,10 +1154,15 @@
      "2026-11-13T11:46:14+01:00",
      "stangd",
      "Vicke: "
+    ],
+    [
+     "2026-11-13T11:48:24+01:00",
+     "kommentar",
+     "Vickan: Alternativ (handräkning): lagerfjädern RZ-130K-04I 1.4310 (Gutekunst katalog, ~5 d) går i öppet läge på 79 N = 75 % av Fn 105 N, tau ≈ 490 MPa = 'hög last' -> gräns ~160 °C (1.4310"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:46:14+01:00",
+   "last": "2026-11-13T11:48:24+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-13.jpg",
    "ver": "hittad v32",
@@ -1167,6 +1172,11 @@
      "2026-11-13T11:45:00+01:00",
      "Vicke",
      "leta alternativ"
+    ],
+    [
+     "2026-11-13T11:48:24+01:00",
+     "Vickan",
+     "Alternativ (handräkning): lagerfjädern RZ-130K-04I 1.4310 (Gutekunst katalog, ~5 d) går i öppet läge på 79 N = 75 % av Fn 105 N, tau ≈ 490 MPa = 'hög last' -> gräns ~160 °C (1.4310), ~200 °C (17-7PH), ~160 °C (316). Fjädern beräknad 180–250 °C med skärm -> även 17-7PH-specialen är marginell. Spakarna: (1) lagerfjäder 1.4310 till prototypen + termoelement/kraftmätning, 17-7PH-offert parallellt; (2) lägre spänning: d 2,0 -> ~350 MPa (~54 %) = 'låg last' 250 °C (1.4310)/300 °C (316, Sodemann lager) men ~75 varv, L0 ~170–180 (utrymme ej kontrollerat); (3) fjädern ut ur kylspalten. Rek (1). Status lämnad stängd (Vicke)."
     ]
    ]
   },
@@ -1491,5 +1501,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-13 11:46"
+ "updated": "2026-11-13 11:48"
 }
