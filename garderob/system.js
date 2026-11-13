@@ -92,6 +92,13 @@
   function generera(sys) {
     sys = JSON.parse(JSON.stringify(sys));
     sys.namn = sys.namn || 'Garderob'; sys.jobb = sys.jobb || 'Garderob';
+    // låst totalhöjd: övre = total − nedre (nedre styr)
+    const lasVarn = [];
+    if (sys.lasHojd) {
+      const tot = sys.lasHojd, hn = Math.min((sys.hojder || [1500])[0], tot);
+      sys.hojder = [hn, tot - hn];
+      if (tot - hn > 0 && tot - hn < 300) lasVarn.push(`Övre skåpet blir bara ${tot - hn} högt (låst totalhöjd ${tot}).`);
+    }
     const W = bredder(sys);
     if (sys.nischAuto) {
       const [Hn, Ho] = sys.hojder || [1500, 980];
@@ -132,6 +139,8 @@
       if (gjSida(forsta).includes('v') && fri < PASS_MIN) su.varningar.push(`M1: dörren tar i nischväggen – passbiten ${G.fmt(fri)} < ${PASS_MIN}. Öka passbiten eller sätt gångjärnet på andra sidan.`);
       if (gjSida(sista).includes('h') && fri < PASS_MIN) su.varningar.push(`M${sista.nr}: dörren tar i nischväggen – passbiten ${G.fmt(fri)} < ${PASS_MIN}. Öka passbiten eller sätt gångjärnet på andra sidan.`);
     }
+    lasVarn.forEach(v => su.varningar.push(v));
+    if (sys.lasHojd) su.info.push(`Totalhöjd låst: ${sys.lasHojd} (nedre ${sys.hojder[0]} + övre ${sys.hojder[1]}).`);
     if (sys.nischAuto) su.info.push(`Nisch anpassad efter modulerna: ${sys.nisch.bredd} × ${sys.nisch.hojd}.`);
     if (sys.nisch && sys.nisch.bredd) {
       const fritt = sys.nisch.bredd - su.bredd;

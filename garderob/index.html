@@ -126,7 +126,9 @@ td{padding:2px 4px;border-bottom:1px solid #eee;text-align:left}
       <div class="fält"><span>Nisch bredd × höjd</span><span class="par"><input id="nb" type="number"> × <input id="nh" type="number"></span></div>
       <div class="fält"><span>Passbit per sida</span><input id="pass" type="number"></div>
       <div class="fält"><span>Sockel / galler</span><span class="par"><input id="sockel" type="number"> / <input id="galler" type="number"></span></div>
+      <div class="fält"><span>Lås totalhöjd 🔒</span><span class="par"><input id="hlas" type="checkbox" style="width:auto"> <input id="htot" type="number" title="nedre + övre"> <button class="sek" id="hnisch" style="padding:0 6px;font-size:13px" title="totalhöjd = nisch − sockel − galler">= nisch</button></span></div>
       <div class="fält"><span>Höjd nedre / övre</span><span class="par"><input id="hn" type="number"> / <input id="ho" type="number"></span></div>
+      <div class="info" id="hlasinfo" style="display:none">Låst: ändra nedre eller övre – den andra anpassar sig.</div>
       <div class="fält"><span>Djup nedre / övre</span><span class="par"><input id="dn" type="number"> / <input id="do" type="number"></span></div>
     </details>
     <details>
@@ -295,9 +297,23 @@ function tillRum(k) {
   $('nb').value = k.nisch ? val(k.nisch.bredd) : ''; $('nh').value = k.nisch ? val(k.nisch.hojd) : '';
   $('nb').disabled = $('nh').disabled = !!k.nischAuto;
   $('pass').value = val(k.passbit); $('sockel').value = val(k.sockel); $('galler').value = val(k.galler);
+  $('hlas').checked = !!k.lasHojd; $('htot').value = k.lasHojd || (k.hojder[0] + k.hojder[1]); $('htot').disabled = !k.lasHojd;
+  $('hlasinfo').style.display = k.lasHojd ? '' : 'none';
   $('hn').value = k.hojder[0]; $('ho').value = k.hojder[1]; $('dn').value = k.djup[0]; $('do').value = k.djup[1];
 }
-$('rum').addEventListener('change', () => {
+$('hnisch').onclick = e => { e.preventDefault(); const n = SU && SU.sys.nisch; if (!n || !n.hojd) return;
+  $('hlas').checked = true; $('htot').value = n.hojd - tal($('sockel').value, 0) - tal($('galler').value, 0); $('rum').dispatchEvent(new Event('change')); };
+let senastHojd = null;
+$('rum').addEventListener('focusin', e => { if (e.target.id === 'hn' || e.target.id === 'ho') senastHojd = e.target.id; });
+$('rum').addEventListener('change', e => {
+  if ($('hlas').checked) {
+    const tot = tal($('htot').value, tal($('hn').value, 1500) + tal($('ho').value, 0));
+    if (e && e.target && e.target.id === 'ho') $('hn').value = tot - tal($('ho').value, 0);
+    $('ho').value = tot - tal($('hn').value, 0);
+    K.lasHojd = tot;
+  } else delete K.lasHojd;
+  $('htot').disabled = !$('hlas').checked; $('hlasinfo').style.display = $('hlas').checked ? '' : 'none';
+  if (!$('hlas').checked) $('htot').value = tal($('hn').value, 0) + tal($('ho').value, 0);
   Object.assign(K, { namn: $('namn').value || 'Garderob', jobb: $('jobb').value || 'Garderob', passbit: tal($('pass').value, 0), sockel: tal($('sockel').value, 0), galler: tal($('galler').value, 0),
     hojder: [tal($('hn').value, 1500), tal($('ho').value, 0)], djup: [tal($('dn').value, 488), tal($('do').value, tal($('dn').value, 488))] });
   if ($('nauto').checked) { K.nischAuto = true; delete K.nisch; } else { delete K.nischAuto; K.nisch = { bredd: tal($('nb').value, SU ? SU.sys.nisch && SU.sys.nisch.bredd : 1000), hojd: tal($('nh').value, 2680) }; }
