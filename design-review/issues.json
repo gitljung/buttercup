@@ -497,7 +497,7 @@
    "sev": "Bör åtgärdas",
    "sevemo": "🟡",
    "by": "Fable",
-   "desc": "Modellen: v29: Fotbeslag 'Corten 5/M10', Spjäll '2 mm glider 20', Rökstos 'Ø150', Rökrör 'Ø150 682', Rörklämma 'z 831–861', Vred hake 'bock 30°', hylsa 'längd 35', Asklåda U '8 × M6', Askfront '6 slitsar spjäll bakom', Lucka Vermilite '25 mm'\nFörväntat: Beskrivning = geometri (går till stycklista/ritning)\nFörslag: Rätta resterande sex beskrivningar för hand i Properties (API återställer dem vid sparning)\nVerifierat: Jämfört desc v29/v32 i tree.json: rättade i v32 = Fotbeslag, Spjäll, Rökstos, Rökrör, Rörklämma, Vred hake/hylsa, Asklåda U, Vermilite front. Kvar v32: Askfront '6 luftslitsar, spjäll bakom' och Lucka Vermilite '25 mm' (bbox y −288…−268 = 20 mm); enligt GRANSKNING även Innerlåda U, Lucka front, Lucka insida, Vermilite sida\nKommentar: 9 beskrivningar rättade; kvar Askfront, Lucka Vermilite, Innerlåda U, Lucka front, Lucka insida, Vermilite sida",
+   "desc": "Modellen: v29: Fotbeslag 'Corten 5/M10', Spjäll '2 mm glider 20', Rökstos 'Ø150', Rökrör 'Ø150 682', Rörklämma 'z 831–861', Vred hake 'bock 30°', hylsa 'längd 35', Asklåda U '8 × M6', Askfront '6 slitsar spjäll bakom', Lucka Vermilite '25 mm'\nFörväntat: Beskrivning = geometri (går till stycklista/ritning)\nFörslag: Rätta resterande sex beskrivningar för hand i Properties (API återställer dem vid sparning)\nVerifierat: Jämfört desc v29/v32 i tree.json: rättade i v32 = Fotbeslag, Spjäll, Rökstos, Rökrör, Rörklämma, Vred hake/hylsa, Asklåda U, Vermilite front. Kvar v32: Askfront '6 luftslitsar, spjäll bakom' och Lucka Vermilite '25 mm' (bbox y −288…−268 = 20 mm); enligt GRANSKNING även Innerlåda U, Lucka front, Lucka insida, Vermilite sida",
    "part": "Yamay Tizon - Asklada:1 › Yamay Tizon - Askfront:1",
    "sel": "o349",
    "url": "?p=tizon&sel=o349",
@@ -513,15 +513,26 @@
      "2026-11-12T16:00:23+01:00",
      "delvis",
      "Vickan: v32 · 9 beskrivningar rättade; kvar Askfront, Lucka Vermilite, Innerlåda U, Lucka front, Lucka insida, Vermilite sida"
+    ],
+    [
+     "2026-11-13T13:06:14+01:00",
+     "kommentar",
+     "Vicke: Godkänt: åtgärda enligt förslaget."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-12T16:00:23+01:00",
+   "last": "2026-11-13T13:06:14+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
    "img": "avvikelser/TIZ-7.jpg",
    "ver": "hittad v29 · v32",
    "pname": "Yamay Tizón",
-   "comments": []
+   "comments": [
+    [
+     "2026-11-13T13:06:14+01:00",
+     "Vicke",
+     "Godkänt: åtgärda enligt förslaget."
+    ]
+   ]
   },
   {
    "id": "av-TIZ-8",
@@ -2107,5 +2118,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-13 12:56"
+ "updated": "2026-11-13 13:06"
 }
