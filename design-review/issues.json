@@ -84,8 +84,8 @@
      "Vicke (webb)"
     ]
    ],
-   "replies": 41,
-   "last": "2026-11-13T10:54:20.857000+00:00",
+   "replies": 42,
+   "last": "2026-11-13T10:54:26.471000+00:00",
    "analyzed": "2026-11-07T15:56:43.626000+00:00",
    "forslag": [
     {
@@ -639,7 +639,7 @@
    "sel": "o62",
    "url": "?p=horno&sel=o62",
    "created": "2026-11-12T16:00:35+01:00",
-   "status": "oppen",
+   "status": "stangd",
    "log": [
     [
      "2026-11-12T16:00:35+01:00",
@@ -650,10 +650,15 @@
      "2026-11-13T11:54:21+01:00",
      "kommentar",
      "Vicke: Godkänt: åtgärda enligt förslaget."
+    ],
+    [
+     "2026-11-13T11:54:27+01:00",
+     "stangd",
+     "Vicke: "
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:54:21+01:00",
+   "last": "2026-11-13T11:54:27+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-1.jpg",
    "ver": "hittad v32",
