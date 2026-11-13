@@ -84,8 +84,8 @@
      "Vicke (webb)"
     ]
    ],
-   "replies": 45,
-   "last": "2026-11-13T10:56:28.025000+00:00",
+   "replies": 49,
+   "last": "2026-11-13T10:57:02.464000+00:00",
    "analyzed": "2026-11-07T15:56:43.626000+00:00",
    "forslag": [
     {
@@ -670,10 +670,15 @@
      "2026-11-13T11:56:29+01:00",
      "stangd",
      "Vicke: "
+    ],
+    [
+     "2026-11-13T11:56:52+01:00",
+     "kommentar",
+     "Vickan: Samma lösning som asklådans stopp alt a – redan byggd i Fusion (h131: bakrulle y 136, klack i skenans överben, underbenets klack bort). Export till DR pågår i samma kedja; HOR-1 få"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:56:29+01:00",
+   "last": "2026-11-13T11:56:52+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-1.jpg",
    "ver": "hittad v32",
@@ -688,6 +693,11 @@
      "2026-11-13T11:56:21+01:00",
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
+    ],
+    [
+     "2026-11-13T11:56:52+01:00",
+     "Vickan",
+     "Samma lösning som asklådans stopp alt a – redan byggd i Fusion (h131: bakrulle y 136, klack i skenans överben, underbenets klack bort). Export till DR pågår i samma kedja; HOR-1 får modellversion när den är ute."
     ]
    ]
   },
@@ -2006,5 +2016,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-13 11:56"
+ "updated": "2026-11-13 11:58"
 }
