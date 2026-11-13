@@ -13,6 +13,8 @@
   const OS = 'OSÄKER (ej bekräftad mot kök-TCN)';
   const METOD = { T: 18, sockel: 80, bankH: 800, bankD: 590, skena: 10, vaggD: 370, hogH: 2000, skiva: 38,
     skivaOver: 35, sockelFram: 520, skenaUnder: 60, fog: 3, vaggH: 600, bredder: [200, 300, 400, 600, 800] };
+  // Handtag (Vicke 2026-11-13: "handtag mitt på alla luckor"): bygelhandtag liggande, centrerat på varje front; Ø5 genom, c/c parameter
+  const HANDTAG = { cc: 128, langd: 160, djup: 30, d: 5, luftMin: 10 };
   const KMAT = { stomme: { mapp: 'Spanskiva vit 18mm_18', T: 18 }, dorr: { mapp: 'Front 18mm_18', T: 18 } };
 
   const TYPER = {
@@ -44,7 +46,8 @@
     { id: 'k_hog', text: 'Högskåp (Vicke: hel stomme): EN stomme 2000, front delad 797 + 1197 (fog 3 vid 800), gjAuto per dörr, plattor i samma sidor, fast hylla 800 för styvhet; kyl/frys: samma stomme, inga hyllor (maskinnisch)', status: OS },
     { id: 'k_nisch', text: 'Högskåp med maskinnisch: två fasta hyllor (nischens under-/överkant), ugn 600 över 2 lådor, micro 400 på 1000', status: OS },
     { id: 'k_horn', text: 'Blindhörn (Vicke 1a): stomme B×59×80, lucka på öppna sidan (B − blindsida 600) om ≥ 150, annars täckfront; blindsidan täcks av grannradens skåp', status: OS },
-    { id: 'k_dott', text: 'Dött hörn (Vicke 2026-11-13, Kök 1): ingen stomme i hörnrutan; passbit (B − 600) i frontplanet mot grannradens front, bänkskivan går över; passbit sågas med 20 övermått', status: 'EGEN (Vicke 2026-11-13)' },
+    { id: 'k_dott', text: 'Dött hörn (Vicke 2026-11-13, Kök 1): ingen stomme i hörnrutan; passbit (B − 600) i frontplanet mot grannradens front + täckbit (B − 619) i grannradens frontplan, bänkskivan går över; passbitar sågas med 20 övermått. Med handtag (k_handtag) krävs B ≥ 619 + djup + 10 på BÅDA väggarna (Kök 1: 660)', status: 'EGEN (Vicke 2026-11-13)' },
+    { id: 'k_handtag', text: 'Handtag mitt på ALLA fronter (lådfronter, dörrar, diskmaskinsfront): liggande bygelhandtag, centrum = frontens mitt, 2 × Ø5 genom c/c 128 (parameter sys.handtag {cc, langd, djup 30}); dött hörn: luft = passbit + 1,5 − 19 − handtagsdjup ≥ 10 åt båda hållen, annars varning', status: 'EGEN (Vicke 2026-11-13)' },
     { id: 'k_dm', text: 'Diskmaskin: bara front 597×797, inga beslagshål (maskinens mall)', status: OS },
     { id: 'k_vagg', text: 'Väggskåp: djup 370, överkant = sockel + högskåp (linjerar), varning om bänk–väggskåp < 450 (rek. 500–600)', status: OS },
     { id: 'k_o', text: 'Köksö (Vicke alt 3): lådskåp 59 + öppna hyllor 300 (ingen rygg, 2 hyllor) rygg mot rygg, skiva 900; bänkdel 650 = skivförlängning utan stomme', status: OS },
@@ -155,6 +158,22 @@
     ut.beslag.push({ namn: 'Blum Tandembox/Legrabox-låda (köpdel) ⚠ hålbild ej bekräftad', antal: lador.length });
   }
 
+  // Handtagshål mitt på varje front (Vicke 2026-11-13). Dörr: L = höjd, B = bredd; lådfront: L = bredd, B = höjd.
+  function handtag(delar, H, varn) {
+    let n = 0;
+    delar.forEach(d => {
+      let pts = null;
+      if (/^Dörr/.test(d.typ) || d.typ === 'Diskmaskinsfront') pts = [[d.L / 2, d.B / 2 - H.cc / 2], [d.L / 2, d.B / 2 + H.cc / 2]];
+      else if (/^Lådfront/.test(d.typ)) pts = [[d.L / 2 - H.cc / 2, d.B / 2], [d.L / 2 + H.cc / 2, d.B / 2]];
+      if (!pts) return;
+      const tvars = /^Lådfront/.test(d.typ) ? d.L : d.B;
+      if (tvars < H.langd + 20 && varn) varn.push(`${d.typ} ${G.fmt(tvars)} bred: handtag ${H.langd} ryms knappt.`);
+      pts.forEach(([x, y]) => d.ops.push({ typ: 'hal', sida: 1, x: r2(x), y: r2(y), z: -(d.T + 2), d: H.d, genom: 1 }));
+      n++;
+    });
+    return n;
+  }
+
   function generera(sys0) {
     const sys = JSON.parse(JSON.stringify(sys0));
     sys.namn = sys.namn || 'Kök'; sys.jobb = sys.jobb || 'Kok';
@@ -162,6 +181,7 @@
     sys.skiva = sys.skiva != null ? sys.skiva : METOD.skiva;
     sys.hogH = sys.hogH || METOD.hogH; sys.vaggH = sys.vaggH || METOD.vaggH;
     sys.rader = sys.rader || [];
+    const HT = Object.assign({}, HANDTAG, sys.handtag || {});
     const su = { kok: true, sys, rader: [], moduler: [], delar: [], saglista: [], beslag: [], varningar: [], info: [], regler: REGLER, extra3d: [], extraFront: [] };
     const T = METOD.T, bankTopp = sys.sockel + METOD.bankH, bankHojd = bankTopp + sys.skiva;
     let nr = 0, fx = 0;   // fx: radens x-förskjutning i frontritningen (raderna efter varandra)
@@ -196,6 +216,8 @@
         blocks.forEach(b => {
           const ut = G.generera(b.konfig);
           if (b.lador && b.lador.length) laddor(ut, ut.konfig, b.lador);
+          const nHt = handtag(ut.delar, HT, ut.varningar);
+          if (nHt) ut.beslag.push({ namn: `Handtag c/c ${HT.cc} (liggande, mitt på fronten)`, antal: nHt });
           const mapp = b.vagg ? `${rad.id}-M${nr}V Vaggskap ${Wm}` : mapp0;
           const mod = { nr, typ: b.vagg ? 'vagg' : m.typ, typNamn: b.vagg ? 'Väggskåp' : typ.namn, rad: ri, radId: rad.id, x0: x, y0: b.y0 || 0, z0: b.z0, bredd: Wm, konfig: ut.konfig, ut, mapp, utanEtikett: !!b.vagg };
           mod.beskr = `${rad.id}-M${nr}${b.vagg ? 'V' : ''} ${mod.typNamn} ${Wm}×${ut.konfig.skap[0].djup}×${ut.konfig.hojd}` +
@@ -212,8 +234,15 @@
           (b.lador || []).forEach(l => {
             E({ x0: x + 1.5, x1: x + Wm - 1.5, y0: -19, y1: -1, z0: b.z0 + l.zb, z1: b.z0 + l.zb + l.nom - 3, mat: 'dorr', front: true, namn: `M${nr} lådfront ${l.nom / 10}` });
             F({ x: x + 1.5, y: b.z0 + l.zb, w: Wm - 3, h: l.nom - 3, fill: 'rgba(185,138,85,0.55)', stroke: '#5b3b17', dorr: true });
-            F({ x: x + Wm / 2 - 60, y: b.z0 + l.zb + l.nom - 40, w: 120, h: 8, fill: '#555', dorr: true });
+            const zm = b.z0 + l.zb + (l.nom - 3) / 2;
+            F({ x: x + Wm / 2 - HT.langd / 2, y: zm - 4, w: HT.langd, h: 8, fill: '#555', dorr: true });
+            E({ x0: x + Wm / 2 - HT.langd / 2, x1: x + Wm / 2 + HT.langd / 2, y0: -19 - HT.djup, y1: -19, z0: zm - 6, z1: zm + 6, mat: 'stang', front: true, namn: `M${nr} handtag` });
           });
+          if (ut.konfig.dorrar) {   // handtag mitt på varje dörr (frontritningen; i 3D följer de inte dörrens rörelse och ritas därför inte)
+            const d = ut.konfig.dorrar, DB = d.bredd || (d.antal === 2 ? (Wm - 6) / 2 : Wm - 4);
+            const xs = d.antal === 2 ? [1, Wm - 1 - DB] : [(Wm - DB) / 2];
+            d.seg.forEach(sg => xs.forEach(dx => F({ x: x + dx + DB / 2 - HT.langd / 2, y: b.z0 + sg.zb + sg.DH / 2 - 4, w: HT.langd, h: 8, fill: '#555', dorr: true })));
+          }
           if (b.maskin) {
             E({ x0: x + T + 2, x1: x + Wm - T - 2, y0: -18, y1: 540, z0: b.z0 + b.maskin.z0 + 2, z1: b.z0 + b.maskin.z1 - 2, mat: 'maskin', namn: b.maskin.namn });
             F({ x: x + T, y: b.z0 + b.maskin.z0, w: Wm - 2 * T, h: b.maskin.z1 - b.maskin.z0, fill: '#3b3b3b' });
@@ -228,6 +257,8 @@
         if (m.typ === 'dm') {
           const FB = Wm - 3, FH = METOD.bankH - 3, FT = KMAT.dorr.T;
           const d = { skap: 1, fil: '1_1_Dishwasher front_1.tcn', mapp: KMAT.dorr.mapp, typ: 'Diskmaskinsfront', overmatt: 2.5, namn: `Dishwasher front ${sys.jobb} ${rad.id}${nr} L=${FH} B=${FB} T=${FT}`, L: FH, B: FB, T: FT, ops: [kontur(FH, FB, FT)] };
+          handtag([d], HT, su.varningar);
+          su.beslag.push({ namn: `Handtag c/c ${HT.cc} (liggande, mitt på fronten)`, antal: 1 });
           su.delar.push(Object.assign(d, { modul: nr, modulMapp: mapp0, etikett: `${rad.id}-M${nr}/1_1_Dishwasher front_1` }));
           su.beslag.push({ namn: 'Integrerad diskmaskin 60 (köpdel)', antal: 1 });
           su.moduler.push({ nr, typ: 'dm', typNamn: typ.namn, rad: ri, radId: rad.id, x0: x, y0: 0, z0: sys.sockel, bredd: Wm, konfig: null, ut: null, mapp: mapp0, beskr: `${rad.id}-M${nr} Diskmaskin ${Wm} (bara front ${FB}×${FH})` });
@@ -235,7 +266,8 @@
           E({ x0: x + 1.5, x1: x + Wm - 1.5, y0: -19, y1: -1, z0: sys.sockel, z1: sys.sockel + FH, mat: 'dorr', front: true, namn: `M${nr} diskmaskinsfront` });
           E({ x0: x + 2, x1: x + Wm - 2, y0: 0, y1: 560, z0: sys.sockel, z1: bankTopp - 2, mat: 'maskin', namn: 'Diskmaskin (köpdel)' });
           F({ x: x + 1.5, y: sys.sockel, w: FB, h: FH, fill: '#c8dbe8', stroke: '#345' });
-          F({ x: x + Wm / 2 - 80, y: sys.sockel + FH - 50, w: 160, h: 8, fill: '#555' });
+          F({ x: x + Wm / 2 - HT.langd / 2, y: sys.sockel + FH / 2 - 4, w: HT.langd, h: 8, fill: '#555' });
+          E({ x0: x + Wm / 2 - HT.langd / 2, x1: x + Wm / 2 + HT.langd / 2, y0: -19 - HT.djup, y1: -19, z0: sys.sockel + FH / 2 - 6, z1: sys.sockel + FH / 2 + 6, mat: 'stang', front: true, namn: `M${nr} handtag` });
         } else if (m.typ === 'dott') {
           const syn = Wm - 600, xb = m.pass === 'h' ? x : x + 600;   // passbiten på sidan mot grannraden ('v' = default, som blindhörnet)
           su.saglista.push({ namn: `${rad.id}-M${nr} dött hörn passbit`, L: METOD.bankH, B: syn + 20, T: KMAT.dorr.T, material: 'Front 18 (sågas, anpassas mot grannradens front)' });
@@ -244,7 +276,16 @@
           if (syn > 0) { E({ x0: xb, x1: xb + syn, y0: -19, y1: 0, z0: sys.sockel, z1: bankTopp, mat: 'stomme', namn: `Passbit dött hörn ${syn}` }); F({ x: xb, y: sys.sockel, w: syn, h: METOD.bankH, fill: '#ddd' }); }
           F({ x: m.pass === 'h' ? x + syn : x, y: sys.sockel, w: 600, h: METOD.bankH, fill: 'none', stroke: '#aaa', dash: [6, 4] });
           su.extraFront.push({ t: 'text', x: fx + x + Wm / 2, y: sys.sockel + 330, s: 'dött hörn', anchor: 'middle', size: 8, color: '#888' });
-          if (syn < 50) su.info.push(`⚠ ${rad.id}-M${nr}: dött hörn med passbit ${syn} – bara ~${syn - 19} mm från grannradens front till hörnet; handtag djupare än så krockar med lådorna intill (greppfri front/korta handtag, eller passbit ≥ 50).`);
+          // täckbit i grannradens frontplan (mellan vår front och grannradens första front), sågas
+          const tb = syn - 19, xt = m.pass === 'h' ? x + Wm - 619 : x + 600;
+          if (tb > 3) {
+            su.saglista.push({ namn: `${rad.id}-M${nr} dött hörn täckbit (grannradens frontplan)`, L: METOD.bankH, B: tb + 20, T: KMAT.dorr.T, material: 'Front 18 (sågas, anpassas)' });
+            E({ x0: xt, x1: xt + 19, y0: -syn, y1: -19, z0: sys.sockel, z1: bankTopp, mat: 'stomme', namn: `Täckbit dött hörn ${tb}` });
+          }
+          // handtag (Vicke: mitt på alla luckor): lådan intill hörnet får inte ta i grannradens handtag – samma luft åt båda hållen
+          const luft = syn + 1.5 - 19 - HT.djup;
+          if (luft < HT.luftMin) su.varningar.push(`${rad.id}-M${nr}: dött hörn ${Wm} – bara ${G.fmt(luft)} mm luft mellan utdragen låda och grannradens handtag (djup ${HT.djup}); hörnet behöver ≥ ${619 + HT.djup + HT.luftMin} på båda väggarna.`);
+          else su.info.push(`${rad.id}-M${nr}: dött hörn ${Wm}, passbit ${syn} + täckbit ${tb}; luft till grannradens handtag ${G.fmt(luft)} mm (handtag ${HT.djup} djupt).`);
         } else if (m.typ === 'pass' || m.typ === 'oppen') {
           if (m.typ === 'pass') su.saglista.push({ namn: `${rad.id}-M${nr} passbit`, L: METOD.bankH, B: Wm + 20, T, material: 'Front 18 (sågas, anpassas mot vägg)' });
           su.moduler.push({ nr, typ: m.typ, typNamn: typ.namn, rad: ri, radId: rad.id, x0: x, y0: 0, z0: sys.sockel, bredd: Wm, konfig: null, ut: null, mapp: mapp0, beskr: `${rad.id}-M${nr} ${typ.namn} ${Wm}` });
@@ -297,10 +338,10 @@
     namn: 'Kök 1 (Vickes plan)', jobb: 'Kok1', sockel: 80, skiva: 38, hogH: 2000, rum: { bredd: 5400, djup: 3590 },
     rader: [
       { id: 'A', namn: 'Nedre väggen (bänk)', start: [5400, 0], rot: 180, moduler: [
-        { typ: 'dott', bredd: 640, pass: 'v' }, { typ: 'lada', bredd: 600 }, { typ: 'disk', bredd: 600 }, { typ: 'dm', bredd: 600 },
-        { typ: 'lada', bredd: 600 }, { typ: 'lada', bredd: 600 }, { typ: 'pass', bredd: 360 }] },
+        { typ: 'dott', bredd: 660, pass: 'v' }, { typ: 'lada', bredd: 600 }, { typ: 'disk', bredd: 600 }, { typ: 'dm', bredd: 600 },
+        { typ: 'lada', bredd: 600 }, { typ: 'lada', bredd: 600 }, { typ: 'pass', bredd: 340 }] },
       { id: 'B', namn: 'Höger vägg (bänk)', start: [5400, 2640], rot: 270, moduler: [
-        { typ: 'lada', bredd: 800 }, { typ: 'spis', bredd: 600 }, { typ: 'lada', bredd: 600 }] },
+        { typ: 'lada', bredd: 780 }, { typ: 'spis', bredd: 600 }, { typ: 'lada', bredd: 600 }] },   // 800 → 780 + hörn 660 (Vicke: handtag mitt på alla luckor, 2026-11-13)
       { id: 'C', namn: 'Övre väggen (högskåp)', start: [1050, 3590], rot: 0, moduler: [
         { typ: 'hog', bredd: 600 }, { typ: 'hog', bredd: 600 }, { typ: 'hog', bredd: 600 }, { typ: 'hog', bredd: 600 }, { typ: 'hog', bredd: 600, nisch: 'kyl' }] },
       // Köksö BESLUTAD (Vicke: alternativ 3 med hyllor på baksidan, filer/kok1/koksö_alt.png panel b):
@@ -321,5 +362,5 @@
       { typ: 'bank', bredd: 400, vagg: true }, { typ: 'lada', bredd: 600, lador: 4, vagg: true }, { typ: 'hog', bredd: 600, nisch: 'kyl', fronter: 'hel' }] }],
   };
 
-  return { METOD, KMAT, TYPER, LADOR, REGLER, generera, bredder, KOK1, RAK, jamn };
+  return { METOD, KMAT, HANDTAG, TYPER, LADOR, REGLER, generera, bredder, KOK1, RAK, jamn };
 });
