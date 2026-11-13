@@ -34,6 +34,12 @@ td,th{padding:2px 4px;border-bottom:1px solid #eee;text-align:left}
 th{font-family:'Barlow Condensed';font-size:14px}
 .mapp{background:#f7eccd;font-weight:600}
 .osak{color:var(--chili)}
+#vy3d{position:relative;height:560px;border-radius:8px;overflow:hidden;border:1px solid #e5d6ae;margin:6px 0}
+#vy3d canvas{display:block}
+#vy3d-namn{position:absolute;left:10px;top:8px;font-family:'Barlow Condensed';font-weight:700;font-size:17px;color:var(--ox);pointer-events:none}
+.ctl3d{font-size:14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+label.r{display:inline-flex;margin:0;gap:3px}
+.ctl3d input{width:auto}
 small{color:#666}
 </style>
 </head>
@@ -63,6 +69,16 @@ small{color:#666}
   <h2>Vyer</h2>
   <div class="vyer"><div id="vyFront"></div><div id="vyDorr"></div><div id="vySida" style="max-width:180px"></div></div>
   <div id="varn"></div>
+  <h2>3D</h2>
+  <div class="ctl3d">
+    Dörrar: <label class="r"><input type="radio" name="d3" value="stangda"> stängda</label>
+    <label class="r"><input type="radio" name="d3" value="oppna" checked> öppna</label>
+    <label class="r"><input type="radio" name="d3" value="dolda"> dolda</label>
+    · <label class="r"><input type="checkbox" id="h3" checked> hål i sidorna</label>
+    <button class="sek liten" id="ram3">centrera</button>
+  </div>
+  <div id="vy3d"><div id="vy3d-namn"></div></div>
+  <small>Dra = rotera · scroll = zoom · högerdra = panorera · klicka på en del = namn</small>
   <h2>Export</h2>
   <button id="tcn">⬇ TCN-filer (zip)</button>
   <button id="pdf">⬇ PDF-sammanställning</button>
@@ -78,6 +94,9 @@ small{color:#666}
   <h2>Regelbok</h2><div id="regler" class="info"></div>
 </section>
 </main>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+<script type="module" src="vy3d.js"></script>
 <script src="vendor/jszip.min.js"></script>
 <script src="vendor/jspdf.umd.min.js"></script>
 <script src="garderob.js"></script>
@@ -137,6 +156,7 @@ function rita() {
   $('delar').innerHTML = h + '</table>' + (UT.saglista.length ? '<p class="info"><b>Sågas:</b> ' + UT.saglista.map(x => `${x.namn} ${x.L}×${x.B}×${x.T}`).join(' · ') + '</p>' : '');
   $('beslag').innerHTML = UT.beslag.map(b => `${b.antal} × ${b.namn}`).join('<br>');
   $('regler').innerHTML = UT.regler.map(r => `<div class="${/OSÄKER/.test(r.status) ? 'osak' : ''}">${/OSÄKER/.test(r.status) ? '⚠' : '✓'} ${r.text} <small>(${r.status})</small></div>`).join('');
+  window.__ut = UT; window.dispatchEvent(new CustomEvent('garderob', { detail: UT }));
   history.replaceState(null, '', '#k=' + btoa(unescape(encodeURIComponent(JSON.stringify(K)))));
 }
 function satt(k) { K = k; tillForm(K); rita(); }
@@ -154,6 +174,9 @@ $('pdf').onclick = () => ladda(Export.rot(UT) + '.pdf', Export.pdfRapport(UT, wi
 $('json').onclick = () => ladda(Export.rot(UT) + '.json', new Blob([JSON.stringify(K, null, 2)], { type: 'application/json' }));
 $('lank').onclick = () => { navigator.clipboard.writeText(location.href); $('lank').textContent = '✓ kopierad'; setTimeout(() => $('lank').textContent = '🔗 Kopiera länk', 1500); };
 
+document.querySelectorAll('input[name=d3]').forEach(r => r.onchange = () => window.Vy3d && Vy3d.satt({ dorrar: r.value }));
+$('h3').onchange = () => window.Vy3d && Vy3d.satt({ hal: $('h3').checked });
+$('ram3').onclick = () => window.Vy3d && Vy3d.ram();
 let start = JSON.parse(JSON.stringify(Garderob.ACACIA));
 const m = /#k=([^&]+)/.exec(location.hash);
 if (m) { try { start = JSON.parse(decodeURIComponent(escape(atob(m[1])))); } catch (e) { console.warn(e); } }
