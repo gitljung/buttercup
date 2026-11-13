@@ -406,7 +406,10 @@ $('#expD').onchange=e=>{EXP.deep=e.target.checked;applyExplode()};
 const HK='dr_hooks';
 (function(){const m=location.hash.match(/dr=([A-Za-z0-9_\-]+)/);if(m){try{const j=JSON.parse(atob(m[1].replace(/-/g,'+').replace(/_/g,'/')));localStorage.setItem(HK,JSON.stringify(j));}catch(e){}
  history.replaceState(null,'',location.pathname+location.search)}})();
-const hooks=()=>{try{return JSON.parse(localStorage.getItem(HK)||'null')}catch(e){return null}};
+let GH=null;   // gäst-nyckel från Projektportalens delade sida (postMessage dr:'gast'); rapporter går då via np_router som "Namn (gäst)"
+const hooks=()=>{if(GH)return {_intake:GH};try{return JSON.parse(localStorage.getItem(HK)||'null')}catch(e){return null}};
+addEventListener('message',e=>{const d=e.data||{};if(!EMBED||d.dr!=='gast'||!d.hook)return;
+ GH={id:String(d.hook.id),token:String(d.hook.token)};document.body.classList.add('gast');if(d.name&&$('#repName')){$('#repName').value=d.name;$('#repName').readOnly=true}});
 const RC=$('#repC'),RX=RC.getContext('2d');let shot=null,shapes=[],cur=null,tool='ring',color='#e11d1d',sev='Mindre';
 const SEV={'Fråga':0x3a7bd5,'Mindre':0xfbc021,'Måste fixas':0xc8321a};
 function viewLink(){const u=new URL(location.origin+location.pathname);const p=$('#proj').value;u.searchParams.set('p',p);
@@ -519,7 +522,7 @@ function goIssue(i){hot=i.id;const u=new URL(i.url||('?p='+i.slug),location.href
  if($('#proj').value!==i.slug){$('#proj').value=i.slug;stateApplied=false;load(i.slug);renderIss()}
  else if(model){for(const id in own)own[id]=fus[id];sec.forEach(s=>{s.on=false;s.t=.5;s.flip=false});EXP.f=0;$('#expS').value=0;select(null);applyExplode();window.__applyState();renderIss()}
  if(innerWidth<=820)toggleIss(false)}
-let edOpen=null;const canEdit=()=>{const h=hooks();return !!(h&&h._intake)};
+let edOpen=null;const canEdit=()=>{if(GH)return false;const h=hooks();return !!(h&&h._intake)};
 async function sendAvv(c,i){const H=hooks(),em=c.querySelector('.em'),pk=c.querySelector('[data-st].pick'),st=pk&&pk.dataset.st!==i.status?pk.dataset.st:null,txt=c.querySelector('textarea').value.trim(),ask=c.querySelector('[data-ask]').checked;
  if(!st&&!txt){em.textContent='Välj en ny status eller skriv feedback.';return}
  let who=localStorage.getItem('np_who');if(!who){who=confirm('Är du Vicke? (Avbryt = Hugo)')?'vicke':'hugo';localStorage.setItem('np_who',who)}
