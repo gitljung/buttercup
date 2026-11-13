@@ -137,7 +137,8 @@ body.embed.e-tree #side{display:flex!important;flex-direction:column;position:fi
 body.embed.e-info #info{display:block!important;position:fixed;right:0;top:44px;bottom:0;width:min(290px,70vw);z-index:24;background:var(--cream);border-left:2px solid var(--ox);overflow:auto;box-shadow:-4px 0 14px #0003}
 body.embed.e-sec #sec{display:block!important;top:auto;bottom:8px;left:8px}
 body.embed.e-exp #exp{display:block!important;top:auto;bottom:8px;right:8px;left:auto}
-body.embed.e-tree #views{left:calc(min(320px,70vw) + 8px)}
+body.embed #views{top:46px}body.embed.e-tree #views{left:calc(min(320px,70vw) + 8px)}
+body.embed.e-tree #side{height:100vh;max-height:none}body.embed.e-tree #tree{flex:1;min-height:0;overflow:auto;max-height:none}
 body.embed #vp{grid-column:1/-1!important;grid-row:1/-1!important}
 body.embed #views{top:8px;left:8px;right:auto}
 </style>
