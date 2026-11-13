@@ -209,8 +209,8 @@
    "by": "Fable",
    "desc": "Modellen: v29: gångjärnsbockarna har hål i Front men inga skruvar/muttrar; askskenor och luckans rf-insida utan infästning; ledtappar (Axel Ø8 h9x22) utan låsbrickor\nFörväntat: Varje del fäst med köpdelar i modellen och stycklistan\nFörslag: M6 + mutter i gångjärnsbockarna, M6 + hylsa genom Vermilite för askskenorna, M6 i flytborr för luckans insida, ledtapp med spår + DIN 6799\nVerifierat: Instansräkning i DR-exporten v29 mot v32: ISO 7380-1 M6x16 10.9 8->12 och ISO 4032 M6 8 8->12 (nya i toppen), M6x35 A4 4->8, Distanshylsa Ø12 4->8, M6x25 A4 0->6 (Lucka), DIN 6799 0->4, Axel Ø8 ersatt av Ledtapp med 2 spår\nKommentar: Steg 29: 4 × M6x16 10.9 + mutter i gångjärnsbockarna, ledtappar med 2 × DIN 6799, askskenor M6x35 A4 + hylsa, luckans insida 6 × M6x25 A4",
    "part": "Yamay Tizon - Gangjarnsbock:1",
-   "sel": "o417",
-   "url": "?p=tizon&sel=o417",
+   "sel": "o429",
+   "url": "?p=tizon&sel=o429",
    "created": "2026-11-12T16:00:16+01:00",
    "status": "atgardad",
    "log": [
@@ -315,8 +315,8 @@
    "by": "Fable",
    "desc": "Modellen: v29: stos Ø120,0 rf i böjens hona ID 120 (svart stål)\nFörväntat: Hane med spel och styrfas (standardhane Ø119,4)\nFörslag: Stos Ø119,4 × 2 med styrfas 3 × 1\nVerifierat: Räknat: (17,3−12)e-6 × 400 K × 120 = 0,25 mm interferens på diametern = stämmer. v32 desc: Ø119,4 × 2, radiellt spel 0,3, styrfas 3 × 1 (t486)\nKommentar: Stos Ø119,4 × 2 med styrfas 3 × 1, radiellt spel 0,3",
    "part": "Yamay Tizon - Rok bak:1 › Yamay Tizon - Rokstos bak:1",
-   "sel": "o490",
-   "url": "?p=tizon&sel=o490",
+   "sel": "o502",
+   "url": "?p=tizon&sel=o502",
    "created": "2026-11-12T16:00:16+01:00",
    "status": "atgardad",
    "log": [
@@ -352,8 +352,8 @@
    "by": "Fable",
    "desc": "Modellen: Rörtopp z 983 och hatt z 1 093 i exporten (häll z 483) → på modul med häll 900: rörtopp 1 400, hatt 1 510 över golv\nFörväntat: Utsläpp över ansiktshöjd för en stående person, särskilt med svagt drag\nFörslag: Egen fråga: längre rör/förlängning eller rör bakom modulen; avgör tillsammans med dragmätningen på prototypen\nVerifierat: bbox ur tree.json v32: Rokror vertikal z 753–983, Hatt O120 z 1 068–1 093, Hall hel topp z 483; 900 + 500 = 1 400, 900 + 610 = 1 510",
    "part": "Yamay Tizon - Rok bak:1 › Yamay Tizon - Hatt O120:1",
-   "sel": "o500",
-   "url": "?p=tizon&sel=o500",
+   "sel": "o512",
+   "url": "?p=tizon&sel=o512",
    "created": "2026-11-12T16:00:16+01:00",
    "status": "oppen",
    "log": [
@@ -458,8 +458,8 @@
    "by": "Fable",
    "desc": "Modellen: v29: Vermilite, fiberlist, tätningsband m.fl. = 'Steel'; kolrost och ringsats inte köpdelar\nFörväntat: Rätt material per del; köpdelar märkta\nFörslag: Sätt rf-material på återstående rostfria delar för hand i Properties\nVerifierat: mat i tree.json v32: Vermilite 600, Keramisk fiber 250, Glasfiberband 500, Kolrost/Ringsats Iron Cast + kop=true. Kvar 'Steel': Rokstos bak (rf 1.4301), och även Rörklämma, Stag skorsten, Gnistkopp, Hatt (alla rf 1.4301 enligt desc)\nKommentar: Vermilite/fiber/band/gjutgods rätt + köpdelsmärkta; Rökstos, Rörklämma, Stag, Gnistkopp, Hatt kvar på Steel",
    "part": "Yamay Tizon - Rok bak:1 › Yamay Tizon - Rokstos bak:1",
-   "sel": "o490",
-   "url": "?p=tizon&sel=o490",
+   "sel": "o502",
+   "url": "?p=tizon&sel=o502",
    "created": "2026-11-12T16:00:16+01:00",
    "status": "delvis",
    "log": [
@@ -1288,5 +1288,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-12 16:53"
+ "updated": "2026-11-13 09:12"
 }
