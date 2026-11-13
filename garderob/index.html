@@ -13,7 +13,18 @@ body{margin:0;font-family:Barlow,Helvetica,sans-serif;background:var(--cream);co
 header{background:var(--gul);padding:10px 18px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
 header h1{font-family:Anton,sans-serif;font-weight:400;margin:0;font-size:28px;letter-spacing:.5px}
 header span{font-family:'Barlow Condensed';font-size:15px}
-#topp{position:relative;margin:14px 14px 0}
+#topp{margin:14px 14px 0;display:grid;grid-template-columns:1fr 250px;gap:14px}
+#vybox{position:relative}
+#palett{background:#fff;border:2px dashed #d9c38f;border-radius:10px;padding:10px;overflow:auto;max-height:58vh;min-height:380px}
+#palett h2{margin:0 0 2px}
+#palett p{margin:0 0 8px;font-size:13px;color:#555}
+.pk{display:flex;gap:8px;align-items:center;border:2px solid #e5d6ae;border-radius:8px;padding:6px;margin:0 0 8px;cursor:pointer;background:#fffbef;transition:.12s}
+.pk:hover{border-color:var(--ox);background:#fff3cf;transform:translateX(-2px)}
+.pk svg{height:78px;width:auto;flex:none}
+.pk b{font-family:'Barlow Condensed';font-size:17px;display:block;line-height:1.1}
+.pk small{font-size:12px}
+.pk .plus{margin-left:auto;font-family:Anton;font-size:22px;color:var(--ox)}
+@media(max-width:900px){#topp{grid-template-columns:1fr}#palett{max-height:none;min-height:0}}
 #vy3d{position:relative;height:58vh;min-height:380px;border-radius:10px;overflow:hidden;border:2px dashed #d9c38f;background:#f3ecdb}
 #vy3d canvas{display:block}
 #vy3d-namn{position:absolute;left:12px;top:10px;font-family:'Barlow Condensed';font-weight:700;font-size:18px;color:var(--ox);pointer-events:none}
@@ -51,6 +62,7 @@ small{color:#666}
 <header><h1>GARDEROBSKONFIGURATOR</h1><span>snickeri-tcn-3d · modulsystem · regler ur skåpprogrammets TCN · export TCN + PDF</span></header>
 
 <div id="topp">
+ <div id="vybox">
   <div id="vy3d"><div id="vy3d-namn"></div></div>
   <div class="ctl3d">
     Dörrar: <label><input type="radio" name="d3" value="stangda"> stängda</label>
@@ -61,6 +73,12 @@ small{color:#666}
   </div>
   <div id="sum3d"></div>
   <div id="hjalp">dra = rotera · scroll = zoom · högerdra = panorera · klick = delnamn</div>
+ </div>
+ <aside id="palett">
+  <h2>Lägg till modul</h2>
+  <p>Klicka – modulen läggs till längst till höger. Ordning, bredd och dörrar ändras under <b>Moduler</b>.</p>
+  <div id="pkort"></div>
+ </aside>
 </div>
 
 <main>
@@ -68,6 +86,7 @@ small{color:#666}
   <h2>System</h2>
   <label>Namn <input id="namn" style="width:200px"></label>
   <label>Jobbnamn (i TCN) <input id="jobb" style="width:200px"></label>
+  <label>Nischen anpassas efter modulerna <input id="nauto" type="checkbox" style="width:auto"></label>
   <label class="par">Nisch bredd × höjd <span><input id="nb" type="number"> × <input id="nh" type="number"></span></label>
   <label class="par">Passbit per sida <input id="pass" type="number"></label>
   <label class="par">Sockel / galler <span><input id="sockel" type="number"> / <input id="galler" type="number"></span></label>
@@ -75,11 +94,9 @@ small{color:#666}
   <label class="par">Djup nedre / övre <span><input id="dn" type="number"> / <input id="do" type="number"></span></label>
   <h2>Moduler <small>(vänster → höger)</small></h2>
   <div id="moduler"></div>
-  <button class="sek liten" data-ny="lada">+ Lådor+hyllor</button>
-  <button class="sek liten" data-ny="hang">+ Hängdel</button>
-  <button class="sek liten" data-ny="hylla">+ Hyllor</button>
+  <p class="info">➜ Nya moduler läggs till från <b>paletten till höger om 3D-vyn</b>.</p>
   <hr>
-  <button class="sek" id="exempel">Exempel 2,4 m</button>
+  <button class="sek" id="exempel">Exempel</button>
   <button class="sek" id="acacia">Acaciagatan</button>
   <button class="sek" id="ladda">Ladda konfig…</button><input type="file" id="fil" accept=".json" hidden>
 </section>
@@ -122,7 +139,9 @@ const val = v => v == null ? '' : v;
 
 function tillForm(k) {
   $('namn').value = k.namn || ''; $('jobb').value = k.jobb || '';
+  $('nauto').checked = !!k.nischAuto;
   $('nb').value = k.nisch ? val(k.nisch.bredd) : ''; $('nh').value = k.nisch ? val(k.nisch.hojd) : '';
+  $('nb').disabled = $('nh').disabled = !!k.nischAuto;
   $('pass').value = val(k.passbit); $('sockel').value = val(k.sockel); $('galler').value = val(k.galler);
   $('hn').value = k.hojder[0]; $('ho').value = k.hojder[1]; $('dn').value = k.djup[0]; $('do').value = k.djup[1];
   const L = $('moduler'); L.innerHTML = '';
@@ -147,7 +166,8 @@ function franForm() {
   const k = { namn: $('namn').value || 'Garderob', jobb: $('jobb').value || 'Garderob',
     passbit: tal($('pass').value, 0), sockel: tal($('sockel').value, 0), galler: tal($('galler').value, 0),
     hojder: [tal($('hn').value, 1500), tal($('ho').value, 0)], djup: [tal($('dn').value, 488), tal($('do').value, tal($('dn').value, 488))], moduler: [] };
-  if ($('nb').value) k.nisch = { bredd: tal($('nb').value), hojd: tal($('nh').value) };
+  if ($('nauto').checked) k.nischAuto = true;
+  else if ($('nb').value) k.nisch = { bredd: tal($('nb').value), hojd: tal($('nh').value) };
   document.querySelectorAll('.modul').forEach(d => {
     const v = f => { const e = d.querySelector(`[data-f=${f}]`); return e ? (e.type === 'checkbox' ? (e.checked ? '1' : '') : e.value) : ''; };
     const gammal = (K && K.moduler[+d.dataset.i]) || {};
@@ -174,6 +194,7 @@ function franForm() {
 }
 function rita() {
   try { SU = System.generera(K); } catch (e) { console.error(e); $('varn').innerHTML = `<p class="varn">Fel: ${e.message}</p>`; return; }
+  if (K.nischAuto) { $('nb').value = SU.sys.nisch.bredd; $('nh').value = SU.sys.nisch.hojd; }
   window.__ut = SU; window.dispatchEvent(new CustomEvent('garderob', { detail: SU }));
   document.querySelectorAll('.modul').forEach((d, i) => { const m = SU.moduler[i]; if (m) d.querySelector('[data-auto]').textContent = K.moduler[i].bredd ? '' : `= ${m.bredd}`; });
   $('vyFront').innerHTML = Ritning.svg(Ritning.frontSystem(SU), 420, { fit: true });
@@ -195,14 +216,33 @@ function satt(k) { K = System.franEnkel(k); tillForm(K); rita(); }
 function ladda(namn, blob) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = namn; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
 const kopia = o => JSON.parse(JSON.stringify(o));
 
-$('form').addEventListener('change', e => { const typbyte = e.target.dataset.f === 'typ' || e.target.dataset.f === 'hel'; K = franForm(); typbyte ? satt(K) : rita(); });
+$('form').addEventListener('change', e => { const typbyte = e.target.dataset.f === 'typ' || e.target.dataset.f === 'hel' || e.target.id === 'nauto'; K = franForm(); typbyte ? satt(K) : rita(); });
 $('form').addEventListener('input', e => { if (e.target.tagName === 'INPUT') { K = franForm(); rita(); } });
 $('moduler').addEventListener('click', e => {
   const d = e.target.closest('.modul'); if (!d) return; const i = +d.dataset.i;
   if (e.target.dataset.bort !== undefined) { K.moduler.splice(i, 1); satt(K); }
   else if (e.target.dataset.flytta) { const j = i + +e.target.dataset.flytta; if (j >= 0 && j < K.moduler.length) { [K.moduler[i], K.moduler[j]] = [K.moduler[j], K.moduler[i]]; satt(K); } }
 });
-document.querySelectorAll('[data-ny]').forEach(b => b.onclick = () => { K = franForm(); K.moduler.push({ typ: b.dataset.ny }); satt(K); });
+// palett med bilder
+const PAL = [
+  { typ: 'lada', namn: 'Lådor + hyllor', txt: '2 innerlådor, fast hylla, hyllor' },
+  { typ: 'hang', namn: 'Hängdel', txt: 'klädstång, hyllor ovanför' },
+  { typ: 'hylla', namn: 'Hyllor', txt: 'ställbara hyllor' },
+  { typ: 'lada', hel: true, namn: 'Lådor + hyllor, hel', txt: 'odelad stomme i full höjd' },
+  { typ: 'hang', hel: true, namn: 'Hängdel, hel', txt: 'hatthylla + lång stång' },
+  { typ: 'hylla', hel: true, namn: 'Hyllor, hel', txt: 'odelad, styv mitthylla' },
+];
+$('pkort').innerHTML = PAL.map((p, i) => {
+  const su = System.generera({ namn: 'x', jobb: 'x', hojder: [1500, 980], djup: [488, 488], moduler: [{ typ: p.typ, hel: p.hel, dorrar: 0 }] });
+  const r = Ritning.frontSystem(su); r.prim = r.prim.filter(q => q.t !== 'text'); r.box = [-30, -30, su.bredd + 60, su.hojd + 60];
+  return `<div class="pk" data-p="${i}" title="Lägg till ${p.namn}">${Ritning.svg(r, 62)}<div><b>${p.namn}</b><small>${p.txt} · ${System.STD[p.typ]} br</small></div><span class="plus">+</span></div>`;
+}).join('');
+$('pkort').addEventListener('click', e => {
+  const c = e.target.closest('.pk'); if (!c) return; const p = PAL[+c.dataset.p];
+  K = franForm(); K.moduler.push(Object.assign({ typ: p.typ }, p.hel ? { hel: true } : {}));
+  satt(K);
+  const sista = document.querySelectorAll('.modul'); sista[sista.length - 1].style.outline = '3px solid #fbc021'; setTimeout(() => sista[sista.length - 1] && (sista[sista.length - 1].style.outline = ''), 1500);
+});
 $('exempel').onclick = () => satt(kopia(System.EXEMPEL));
 $('acacia').onclick = () => satt(kopia(System.ACACIA));
 $('ladda').onclick = () => $('fil').click();

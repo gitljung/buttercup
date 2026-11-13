@@ -21,7 +21,9 @@
     return u;
   }
 
+  const STD = { lada: 900, hang: 800, hylla: 600 };   // standardbredd när nischen anpassas efter modulerna
   function bredder(sys) {
+    if (sys.nischAuto) return sys.moduler.map(m => m.bredd || STD[m.typ] || 800);
     const pass = sys.passbit != null ? sys.passbit : 0;
     const tillg = sys.nisch && sys.nisch.bredd ? sys.nisch.bredd - 2 * pass : null;
     const fasta = sys.moduler.filter(m => m.bredd).reduce((a, m) => a + m.bredd, 0);
@@ -90,6 +92,10 @@
     sys = JSON.parse(JSON.stringify(sys));
     sys.namn = sys.namn || 'Garderob'; sys.jobb = sys.jobb || 'Garderob';
     const W = bredder(sys);
+    if (sys.nischAuto) {
+      const [Hn, Ho] = sys.hojder || [1500, 980];
+      sys.nisch = { bredd: W.reduce((a, b) => a + b, 0) + 2 * (sys.passbit || 0), hojd: (sys.sockel || 0) + Hn + Ho + (sys.galler || 0) };
+    }
     const su = { sys, moduler: [], delar: [], saglista: [], beslag: [], varningar: [], info: [], regler: G.REGLER };
     let x = sys.nisch && sys.nisch.bredd ? (sys.passbit || 0) : 0;
     const flera = sys.moduler.length > 1;
@@ -116,6 +122,7 @@
     if (flera) su.beslag.push({ namn: 'Skruv modul–modul (4 per skarv)', antal: 4 * (sys.moduler.length - 1) * (sys.hojder && sys.hojder[1] ? 2 : 1) });
     su.bredd = W.reduce((a, b) => a + b, 0);
     su.hojd = (sys.hojder || [1500, 980]).reduce((a, b) => a + b, 0);
+    if (sys.nischAuto) su.info.push(`Nisch anpassad efter modulerna: ${sys.nisch.bredd} × ${sys.nisch.hojd}.`);
     if (sys.nisch && sys.nisch.bredd) {
       const fritt = sys.nisch.bredd - su.bredd;
       if (fritt < 0) su.varningar.push(`Modulerna (${su.bredd}) är bredare än nischen (${sys.nisch.bredd}).`);
@@ -135,10 +142,10 @@
     moduler: [{ typ: 'lada', lador: 2, fast: 590, ned: { hyllor: [880, 1180] }, ovr: { bak: 'ingen', hyllor: [320, 640] }, dorrar: 2 }],
   };
   const EXEMPEL = {
-    namn: 'Exempel system 2,4 m', jobb: 'Garderob',
-    nisch: { bredd: 2420, hojd: 2680 }, passbit: 10, sockel: 100, galler: 100,
+    namn: 'Exempel system', jobb: 'Garderob', nischAuto: true,
+    passbit: 10, sockel: 100, galler: 100,
     hojder: [1500, 980], djup: [488, 488],
-    moduler: [{ typ: 'lada' }, { typ: 'hang' }, { typ: 'hylla', bredd: 500 }],
+    moduler: [{ typ: 'lada' }, { typ: 'hang' }, { typ: 'hylla' }],
   };
 
   // gammal enkel konfig (skap/dorrar) -> system med en modul
@@ -152,5 +159,5 @@
     };
   }
 
-  return { generera, bredder, modulKonfig, TYPER, ACACIA, EXEMPEL, franEnkel, jamn };
+  return { STD, generera, bredder, modulKonfig, TYPER, ACACIA, EXEMPEL, franEnkel, jamn };
 });
