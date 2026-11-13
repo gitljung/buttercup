@@ -83,16 +83,6 @@
   "exported": "2026-11-11 18:34"
  },
  {
-  "slug": "tizon",
-  "name": "Yamay Tizón",
-  "doc": "Yamay Tizon",
-  "version": 34,
-  "exported": "2026-11-13 09:08",
-  "channel": "yamay-tizon",
-  "thread": "1568925737023569940",
-  "fusion_project": "yamay-tizon"
- },
- {
   "slug": "fire-table",
   "name": "Yamay Fire Table 1500",
   "doc": "Yamay Fire Table 1500",
@@ -145,5 +135,15 @@
   "channel": "snickeri-tcn-3d",
   "thread": "1570770795943428138",
   "fusion_project": "snickeri-tcn-3d"
+ },
+ {
+  "slug": "tizon",
+  "name": "Yamay Tizón",
+  "doc": "Yamay Tizon",
+  "version": 34,
+  "exported": "2026-11-13 15:51",
+  "channel": "yamay-tizon",
+  "thread": "1568925737023569940",
+  "fusion_project": "yamay-tizon"
  }
 ]
