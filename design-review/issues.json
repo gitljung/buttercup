@@ -882,7 +882,7 @@
    "sel": "o22",
    "url": "?p=horno&sel=o22",
    "created": "2026-11-12T16:00:36+01:00",
-   "status": "oppen",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-12T16:00:36+01:00",
@@ -893,13 +893,18 @@
      "2026-11-13T11:36:14+01:00",
      "kommentar",
      "Vicke: Godkänt: åtgärda enligt förslaget."
+    ],
+    [
+     "2026-11-13T13:08:30+01:00",
+     "atgardad",
+     "Vickan: v44 · Ledtappen utan gänga/Loctite: tapp Ø12 h9 genom lagerbock + fjäderarm, ansats mot örat, Ø10 × 5 i örat (hål Ø8,5 gängat → Ø10,3), huvudet ersatt av spår Ø10 × 1,25 + DIN 6799 stl 1"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:36:14+01:00",
+   "last": "2026-11-13T13:08:30+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-5.jpg",
-   "ver": "hittad v32",
+   "ver": "hittad v32 · stängd v44",
    "pname": "Yamay Horno",
    "comments": [
     [
