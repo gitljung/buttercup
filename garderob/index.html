@@ -131,14 +131,15 @@ function tillForm(k) {
     const dval = m.dorrar == null ? 'auto' : String(m.dorrar);
     d.innerHTML = `<h3><span>M${i + 1} · <select data-f="typ" style="width:auto">${Object.entries(TYP).map(([t, x]) => `<option value="${t}"${t === m.typ ? ' selected' : ''}>${x.namn}</option>`).join('')}</select></span>
         <button class="sek liten" data-flytta="-1" title="flytta vänster">◀</button><button class="sek liten" data-flytta="1" title="flytta höger">▶</button><button class="sek liten" data-bort title="ta bort">✕</button></h3>
+      <label>Hel garderob (odelad) <input data-f="hel" type="checkbox" style="width:auto"${m.hel ? ' checked' : ''}></label>
       <label>Bredd <span><input data-f="bredd" type="number" placeholder="auto" value="${val(m.bredd)}" style="width:80px"> <span class="auto" data-auto></span></span></label>
       <label>Dörrar <span><select data-f="dorrar" style="width:70px">${['auto', '0', '1', '2'].map(o => `<option${o === dval ? ' selected' : ''}>${o}</option>`).join('')}</select>
         <select data-f="hand" style="width:80px" title="gångjärnssida vid 1 dörr"><option value="v"${m.hand !== 'h' ? ' selected' : ''}>vänster</option><option value="h"${m.hand === 'h' ? ' selected' : ''}>höger</option></select></span></label>
       ${m.typ === 'lada' ? `<label>Innerlådor / fast hylla <span><select data-f="lador" style="width:55px">${[0, 1, 2, 3].map(n => `<option${n === (m.lador != null ? m.lador : 2) ? ' selected' : ''}>${n}</option>`).join('')}</select>
         <input data-f="fast" type="number" placeholder="auto" value="${val(m.fast)}" style="width:70px"></span></label>` : ''}
-      ${m.typ !== 'hang' ? `<label>Hyllor nedre (antal) <input data-f="hyllorNed" type="number" min="0" max="8" placeholder="auto" value="${val(m.hyllorNed)}" style="width:70px"></label>` : ''}
-      <label>Hyllor övre (antal) <input data-f="hyllorOvr" type="number" min="0" max="6" placeholder="auto" value="${val(m.hyllorOvr)}" style="width:70px"></label>
-      <label>Rygg övre <select data-f="ovrbak" style="width:150px"><option value="spar">i spår</option><option value="ingen"${m.ovr && m.ovr.bak === 'ingen' ? ' selected' : ''}>ingen (löstagbar)</option></select></label>`;
+      ${m.typ !== 'hang' ? `<label>${m.hel ? (m.typ === 'lada' ? 'Hyllor ovanför lådor' : 'Hyllor under mitthyllan') : 'Hyllor nedre'} (antal) <input data-f="hyllorNed" type="number" min="0" max="8" placeholder="auto" value="${val(m.hyllorNed)}" style="width:70px"></label>` : ''}
+      ${m.hel && m.typ === 'lada' ? '' : `<label>${m.hel ? 'Hyllor ovanför ' + (m.typ === 'hang' ? 'hatthyllan' : 'mitthyllan') : 'Hyllor övre'} (antal) <input data-f="hyllorOvr" type="number" min="0" max="6" placeholder="auto" value="${val(m.hyllorOvr)}" style="width:70px"></label>`}
+      ${m.hel ? '' : `<label>Rygg övre <select data-f="ovrbak" style="width:150px"><option value="spar">i spår</option><option value="ingen"${m.ovr && m.ovr.bak === 'ingen' ? ' selected' : ''}>ingen (löstagbar)</option></select></label>`}`;
     L.appendChild(d);
   });
 }
@@ -148,10 +149,11 @@ function franForm() {
     hojder: [tal($('hn').value, 1500), tal($('ho').value, 0)], djup: [tal($('dn').value, 488), tal($('do').value, tal($('dn').value, 488))], moduler: [] };
   if ($('nb').value) k.nisch = { bredd: tal($('nb').value), hojd: tal($('nh').value) };
   document.querySelectorAll('.modul').forEach(d => {
-    const v = f => { const e = d.querySelector(`[data-f=${f}]`); return e ? e.value : ''; };
+    const v = f => { const e = d.querySelector(`[data-f=${f}]`); return e ? (e.type === 'checkbox' ? (e.checked ? '1' : '') : e.value) : ''; };
     const gammal = (K && K.moduler[+d.dataset.i]) || {};
     const m = { typ: v('typ') };
     if (tal(v('bredd')) != null) m.bredd = tal(v('bredd'));
+    if (v('hel')) m.hel = true;
     if (v('dorrar') !== 'auto') m.dorrar = +v('dorrar');
     if (v('hand') === 'h') m.hand = 'h';
     if (m.typ === 'lada') { m.lador = +(v('lador') || 2); if (tal(v('fast')) != null) m.fast = tal(v('fast')); }
@@ -193,7 +195,7 @@ function satt(k) { K = System.franEnkel(k); tillForm(K); rita(); }
 function ladda(namn, blob) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = namn; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
 const kopia = o => JSON.parse(JSON.stringify(o));
 
-$('form').addEventListener('change', e => { const typbyte = e.target.dataset.f === 'typ'; K = franForm(); typbyte ? satt(K) : rita(); });
+$('form').addEventListener('change', e => { const typbyte = e.target.dataset.f === 'typ' || e.target.dataset.f === 'hel'; K = franForm(); typbyte ? satt(K) : rita(); });
 $('form').addEventListener('input', e => { if (e.target.tagName === 'INPUT') { K = franForm(); rita(); } });
 $('moduler').addEventListener('click', e => {
   const d = e.target.closest('.modul'); if (!d) return; const i = +d.dataset.i;

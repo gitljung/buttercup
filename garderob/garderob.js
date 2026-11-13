@@ -30,6 +30,7 @@
     { id: 'distans', text: 'Med dörrar: distansklossar 20 mm per sida, lådan 40 mm smalare', status: 'säker' },
     { id: 'skena', text: 'Lådskena: hål y 64/96 + 288/320, linje 96,5 + 260·i från botten; låda 410 djup', status: 'OSÄKER (1 skåpdjup)' },
     { id: 'stang', text: 'Klädstång: fäste 2×Ø5 c/c 32 vertikalt, mitt i användbart djup', status: 'EGEN (ej i TCN-underlag)' },
+    { id: 'hel', text: 'Hel garderob: en stomme i full höjd, fast hylla (lådor: ovanför lådorna, hängdel: hatthylla H−600 med stång 70 under, hyllor: i delningshöjd), 4 gångjärn (översta DH−90)', status: 'EGEN (ej i TCN-underlag)' },
     { id: 'klots', text: 'Distansklots 460×425: tappar 100/L−100, start 75 från botten', status: 'OSÄKER (2 lådor)' },
   ];
 
@@ -288,6 +289,7 @@
     }
     k.skap.forEach(s => {
       s.hyllor.forEach(m => { if (m - 32 < k.T + 30 || m + 32 > s.hojd - k.T - 30) ut.varningar.push(`Skåp ${s.nr}: hylla ${m} för nära topp/botten.`); });
+      if (s.bak === 'spar' && s.hojd - 2 * k.T + 14 > 2440) ut.varningar.push(`Skåp ${s.nr}: ryggen ${s.hojd - 2 * k.T + 14} är längre än en MDF-skiva (2440), kontrollera skivformatet.`);
       if (s.lador && s.djup < 440) ut.varningar.push(`Skåp ${s.nr}: lådor 410 kräver djup ≥ 440.`);
       if (s.lador && s.fast != null && 96.5 + 260 * (s.lador - 1) + 220 > s.fast - 10) ut.varningar.push(`Skåp ${s.nr}: lådorna når upp till fasta hyllan.`);
     });

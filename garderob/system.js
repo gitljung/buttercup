@@ -55,9 +55,30 @@
     ovr.hyllor = jamn(T, Ho - T, m.hyllorOvr != null ? m.hyllorOvr : 2);
     if (m.ned) Object.assign(ned, m.ned);
     if (m.ovr) Object.assign(ovr, m.ovr);
-    const skap = Ho > 0 ? [ned, ovr] : [ned];
+    let skap = Ho > 0 ? [ned, ovr] : [ned];
+    const H = Hn + Ho;
+    if (m.hel) {
+      // hel (odelad) garderob: en stomme i full höjd, nedre djupet. Fast hylla ger styvhet.
+      const hel = { hojd: H, djup: Dn, bak: 'spar', fast: null, hyllor: [], lador: 0 };
+      if (m.typ === 'lada') {
+        hel.lador = m.lador != null ? m.lador : 2;
+        hel.fast = m.fast != null ? m.fast : (hel.lador ? Math.round(96.5 + 260 * (hel.lador - 1) + 233.5) : Hn);
+        hel.hyllor = jamn(hel.fast + 10, H - T, m.hyllorNed != null ? m.hyllorNed : 5);
+      } else if (m.typ === 'hang') {
+        hel.fast = m.fast != null ? m.fast : H - 600;                 // hatthylla
+        hel.stang = m.stang || hel.fast - 70;
+        hel.hyllor = jamn(hel.fast + 10, H - T, m.hyllorOvr != null ? m.hyllorOvr : 1);
+      } else {
+        hel.fast = m.fast != null ? m.fast : Hn;                      // styv mitthylla i delningshöjd
+        hel.hyllor = [...jamn(T, hel.fast - 10, m.hyllorNed != null ? m.hyllorNed : 4), ...jamn(hel.fast + 10, H - T, m.hyllorOvr != null ? m.hyllorOvr : 2)];
+      }
+      if (m.helinst) Object.assign(hel, m.helinst);
+      skap = [hel];
+    }
     const antalD = m.dorrar != null ? m.dorrar : (W > 650 ? 2 : 1);
-    const dorrar = antalD ? Object.assign({ antal: antalD, under: sys.sockel ? 50 : 0, gangjarn: [90, 780, 1420] }, antalD === 1 ? { hand: m.hand || 'v' } : {}, m.dorrinst || {}) : null;
+    const DH = H + (sys.sockel ? 50 : 0);
+    const gj = m.hel ? [90, 780, 1420, DH - 90] : [90, 780, 1420];
+    const dorrar = antalD ? Object.assign({ antal: antalD, under: sys.sockel ? 50 : 0, gangjarn: gj }, antalD === 1 ? { hand: m.hand || 'v' } : {}, m.dorrinst || {}) : null;
     return {
       namn: n === 1 ? sys.namn : `${sys.namn} M${i + 1}`,
       jobb: m.jobb || (n === 1 ? sys.jobb : `${sys.jobb} M${i + 1}`),
@@ -86,6 +107,7 @@
       if (W[i] > 1200) su.varningar.push(`M${i + 1}: bredd ${W[i]} > 1200 – hyllorna svajar, dela modulen.`);
       if (k.dorrar && k.dorrar.antal === 1 && W[i] > 650) su.varningar.push(`M${i + 1}: en dörr på ${W[i]} – välj 2 dörrar.`);
       if (k.dorrar && k.dorrar.antal === 2 && W[i] < 500) su.varningar.push(`M${i + 1}: två dörrar på ${W[i]} blir smala.`);
+      if (m.hel) su.info.push(`M${i + 1}: hel garderob ${k.skap[0].hojd} h (odelad).`);
       if (m.typ === 'lada' && W[i] < 400) su.varningar.push(`M${i + 1}: lådor kräver bredd ≥ 400.`);
       x += W[i];
     });
