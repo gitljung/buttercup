@@ -1500,10 +1500,15 @@
      "2026-11-14T22:26:51+01:00",
      "kommentar",
      "Vicke: Godkänt: åtgärda enligt förslaget."
+    ],
+    [
+     "2026-11-14T23:05:15+01:00",
+     "kommentar",
+     "Vickan: Vicke valde b: distanshylsa 6 mm (A4, Ø14/Ø8,5) med O-ring på M8-skruven. Provköket med skarvset, skivor, EPDM/silikon och sidopaneler 3 mm byggs efter UTE-3/5/7 + UTE-10-exporten."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-14T22:26:51+01:00",
+   "last": "2026-11-14T23:05:15+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
    "img": "",
    "ver": "hittad v2",
@@ -1513,6 +1518,11 @@
      "2026-11-14T22:26:51+01:00",
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
+    ],
+    [
+     "2026-11-14T23:05:15+01:00",
+     "Vickan",
+     "Vicke valde b: distanshylsa 6 mm (A4, Ø14/Ø8,5) med O-ring på M8-skruven. Provköket med skarvset, skivor, EPDM/silikon och sidopaneler 3 mm byggs efter UTE-3/5/7 + UTE-10-exporten."
     ]
    ]
   },
@@ -2705,5 +2715,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-14 22:37"
+ "updated": "2026-11-14 23:05"
 }
