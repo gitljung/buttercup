@@ -2586,15 +2586,26 @@
      "2026-11-13T13:24:30+01:00",
      "oppen",
      "Vickan verifierade: Exportens skruvlägen: tre M6x10 på z 18 (−212,5/−100,5; 212,6/100,5; 212,6/−100,5), ingen vid −212/+100. Kuben där (Platkub:4) har sina två sidoskruvar. Botten:"
+    ],
+    [
+     "2026-11-15T00:15:17+01:00",
+     "kommentar",
+     "Vicke: Godkänt: åtgärda enligt förslaget."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T13:24:30+01:00",
+   "last": "2026-11-15T00:15:17+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
    "img": "avvikelser/YAK-5.jpg",
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
-   "comments": []
+   "comments": [
+    [
+     "2026-11-15T00:15:17+01:00",
+     "Vicke",
+     "Godkänt: åtgärda enligt förslaget."
+    ]
+   ]
   },
   {
    "id": "av-YAK-6",
@@ -2810,5 +2821,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-15 00:13"
+ "updated": "2026-11-15 00:15"
 }
