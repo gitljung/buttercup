@@ -1580,7 +1580,7 @@
    "sel": "o193",
    "url": "?p=utekok&sel=o193",
    "created": "2026-11-12T16:13:54+01:00",
-   "status": "stangd",
+   "status": "delvis",
    "log": [
     [
      "2026-11-12T16:13:54+01:00",
@@ -1596,13 +1596,18 @@
      "2026-11-14T22:27:26+01:00",
      "stangd",
      "Vicke: "
+    ],
+    [
+     "2026-11-14T22:37:06+01:00",
+     "delvis",
+     "Vickan: master Asado v8 · Silikon VMQ 2 mm under grillmodulernas skivor (Asado/Horno/Tizón), EPDM bara under bänkar: Epdm-param i masters Asado v8/Horno v10/Tizón v2 + konfiguratorns stycklista (silikonlist"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-14T22:27:26+01:00",
+   "last": "2026-11-14T22:37:06+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
    "img": "avvikelser/UTE-6.jpg",
-   "ver": "hittad v2",
+   "ver": "hittad v2 · master Asado v8",
    "pname": "Yamay Utekök – alla moduler (K-0010)",
    "comments": [
     [
@@ -2700,5 +2705,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-14 22:32"
+ "updated": "2026-11-14 22:37"
 }
