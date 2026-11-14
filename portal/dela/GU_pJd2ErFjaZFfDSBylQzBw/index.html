@@ -116,6 +116,7 @@ body.locked .alt,body.locked .ann,body.locked .tr .h button{opacity:.45}
 .pg{scroll-margin-top:72px;display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:14px;margin-top:12px;align-items:start}
 @media(max-width:900px){.pg{grid-template-columns:1fr}}
 .vw{position:relative;background:#fff;border:2px solid var(--ox);border-radius:10px;overflow:hidden}
+.wbv{display:block;position:relative;background:#fff}.wbv img{display:block;width:100%;height:auto}.wbv span{position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.72);color:#fff;font-size:13px;padding:5px 10px;border-radius:6px}
 .vw iframe{display:block;width:100%;height:min(62vh,560px);border:0}
 @media(max-width:900px){.vw iframe{height:48vh}}
 .vt{display:flex;gap:4px;flex-wrap:wrap;padding:6px;border-bottom:1px solid var(--line);background:var(--paper)}.vt .on{background:var(--ox);color:#fff}
@@ -192,11 +193,11 @@ footer{max-width:1180px;margin:30px auto;padding:0 18px;font-size:12px;color:var
 <aside id="fzrail"></aside><button id="fzpill" onclick="document.body.classList.toggle('fzopen')"></button>
 <div id="qbg" onclick="qUnfocus()"></div>
 <main id="main"></main>
-<footer>Projektportal v1 · data läst 2026-11-14 21:46 · uppdateras var 5:e minut · Discord är fortfarande motorn: svar härifrån hamnar i rätt tråd och Vickan svarar där som vanligt.</footer>
+<footer>Projektportal v1 · data läst 2026-11-14 21:48 · uppdateras var 5:e minut · Discord är fortfarande motorn: svar härifrån hamnar i rätt tråd och Vickan svarar där som vanligt.</footer>
 <div id="zoom" onclick="this.style.display='none'"><img></div>
 <div id="toast"></div>
 <script>
-let D={"projekt": [{"konfig": [], "lage": {"lage": "Variant A (3 × M6 i Wavin-locket) och variant B (central M8) är modellerade och finns i Design Review. Jämförelsen rekommenderar A för prototypen och B som reserv.", "nasta": "Granska A mot B och mät lockets undersida (plan inom Ø58) och toppgodset.", "kalla": "~/code/konstruktion/rat-stop/PROJEKT.md, ~/code/konstruktion/rat-stop/skiss/AB_JAMFORELSE.md", "datum": "2026-11-08"}, "fusion": {"t": "2026-11-08T08:17:46.431000+00:00", "trad": "Fusion", "img": "img/fs/p-rat-stop.jpg"}, "stegdata": {"forstudie": {"fil": null, "rubriker": [], "status": "godkänd", "datum": null}, "modellering": {"fusion": "rat-stop", "fil": null, "rubriker": [], "datum": null}, "montering": {"finns": false, "pdf": [], "sidor": 0, "avvikelser": 0, "utvardering": false, "datum": null}}, "fusion_nu": false, "kanal": "rat-stop", "id": "1568630783986630872", "topic": "Råttstopp för avloppsrör/spolbrunn.  Rita av bifogad stepfil.", "steg": "modell i DR", "slugs": ["rat-stop", "rat-stop-b", "rat-stop-a"], "beslut": [], "namn": "rat stop", "dr": [{"slug": "rat-stop", "name": "rat stop", "v": 2, "exp": "2026-11-07 22:14", "struktur": "img/struktur/rat-stop.png"}, {"slug": "rat-stop-b", "name": "rat stop B (M8 i Wavin-lock)", "v": 1, "exp": "2026-11-08 08:15", "struktur": "img/struktur/rat-stop-b.png"}, {"slug": "rat-stop-a", "name": "rat stop A (3 × M6 i Wavin-lock)", "v": 1, "exp": "2026-11-08 09:12", "struktur": "img/struktur/rat-stop-a.png"}], "arenden": {"oppen": 0, "analyserad": 0, "pagar": 0, "delvis": 0, "atgardad": 0}, "avvikelser": 0, "oppna": [], "tradar": [{"id": "1568630785232343191", "name": "Konstruktion"}, {"id": "1568630789095039016", "name": "Fusion"}, {"id": "1568630790848520396", "name": "Design Review"}, {"id": "1568630787321102457", "name": "Montering"}], "last": "2026-11-13T16:26:18.604000+00:00", "vantar_pa_vicke": 0, "delningar": []}], "fragor": [], "fusion": {"upptagen": false, "vad": "", "ko": []}, "kod": "d06c49088b", "upd": "21:46"};
+let D={"projekt": [{"konfig": [], "lage": {"lage": "Variant A (3 × M6 i Wavin-locket) och variant B (central M8) är modellerade och finns i Design Review. Jämförelsen rekommenderar A för prototypen och B som reserv.", "nasta": "Granska A mot B och mät lockets undersida (plan inom Ø58) och toppgodset.", "kalla": "~/code/konstruktion/rat-stop/PROJEKT.md, ~/code/konstruktion/rat-stop/skiss/AB_JAMFORELSE.md", "datum": "2026-11-08"}, "fusion": {"t": "2026-11-08T08:17:46.431000+00:00", "trad": "Fusion", "img": "img/fs/p-rat-stop.jpg"}, "stegdata": {"forstudie": {"fil": null, "rubriker": [], "status": "godkänd", "datum": null}, "modellering": {"fusion": "rat-stop", "fil": null, "rubriker": [], "datum": null}, "montering": {"finns": false, "pdf": [], "sidor": 0, "avvikelser": 0, "utvardering": false, "datum": null}}, "fusion_nu": false, "kanal": "rat-stop", "id": "1568630783986630872", "topic": "Råttstopp för avloppsrör/spolbrunn.  Rita av bifogad stepfil.", "steg": "modell i DR", "slugs": ["rat-stop", "rat-stop-b", "rat-stop-a"], "beslut": [], "namn": "rat stop", "webb": null, "dr": [{"slug": "rat-stop", "name": "rat stop", "v": 2, "exp": "2026-11-07 22:14", "struktur": "img/struktur/rat-stop.png"}, {"slug": "rat-stop-b", "name": "rat stop B (M8 i Wavin-lock)", "v": 1, "exp": "2026-11-08 08:15", "struktur": "img/struktur/rat-stop-b.png"}, {"slug": "rat-stop-a", "name": "rat stop A (3 × M6 i Wavin-lock)", "v": 1, "exp": "2026-11-08 09:12", "struktur": "img/struktur/rat-stop-a.png"}], "arenden": {"oppen": 0, "analyserad": 0, "pagar": 0, "delvis": 0, "atgardad": 0}, "avvikelser": 0, "oppna": [], "tradar": [{"id": "1568630785232343191", "name": "Konstruktion"}, {"id": "1568630789095039016", "name": "Fusion"}, {"id": "1568630790848520396", "name": "Design Review"}, {"id": "1568630787321102457", "name": "Montering"}], "last": "2026-11-13T16:26:18.604000+00:00", "vantar_pa_vicke": 0, "delningar": []}], "fragor": [], "fusion": {"upptagen": false, "vad": "", "ko": []}, "kod": "f29e07389a", "upd": "21:48"};
 const G={"tok": "GU_pJd2ErFjaZFfDSBylQzBw", "kanal": "rat-stop"};   // gäst-läge: {tok, kanal} på /portal/dela/<tok>/
 let P=D.projekt, Q=D.fragor;
 const STEG=['Förstudie','Modellering','Design Review','Montering'];
@@ -214,7 +215,7 @@ const hooks=()=>{try{return JSON.parse(localStorage.getItem('dr_hooks')||'null')
 const H=G?(GK?{_intake:{id:GK.id,token:GK.token}}:null):hooks(), CAN=!!(H&&H._intake);
 if(G){document.body.classList.add('gast');document.querySelector('header .sub').textContent='Delat projekt';
   document.getElementById('lockbar').textContent='Läsläge · länken saknar din nyckel – öppna hela länken du fick för att kunna svara och kommentera';
-  document.querySelector('footer').textContent=`Delat projekt · data läst ${'2026-11-14 21:46'} · uppdateras automatiskt · dina svar och kommentarer går till projektgruppen${GK?' som ”'+GK.namn+' (gäst)”':''}.`}
+  document.querySelector('footer').textContent=`Delat projekt · data läst ${'2026-11-14 21:48'} · uppdateras automatiskt · dina svar och kommentarer går till projektgruppen${GK?' som ”'+GK.namn+' (gäst)”':''}.`}
 document.getElementById('lockbar').style.display=CAN?'none':'';
 if(!CAN)document.body.classList.add('locked');
 const SENT=JSON.parse(localStorage.pp_sent||'{}');
@@ -300,13 +301,15 @@ let CUR=null, PK=null, DRS=null;
 const DRB=(location.hostname==='localhost'&&new URLSearchParams(location.search).get('drb'))||'https://www.buttercup.nu/design-review/';
 function drQ(u){return (u||'').split('?')[1]||''}
 function drGo(q){const f=document.getElementById('v3d');if(f&&f.contentWindow)f.contentWindow.postMessage({dr:'go',q},'*')}
+// projekt med webbsida i stället för 3D (projekt.json webb {url,img,namn,datum}): skärmdump som länk
+function webbVy(w){return `<a class="wbv" href="${w.url}" target="_blank" title="Öppna ${esc(w.namn||w.url)}"><img src="${w.img}" alt=""><span>🌐 ${esc(w.namn||'Webbsidan')} ↗${w.datum?' · skärmdump '+esc(w.datum):''}</span></a>`}
 function projShell(k){const p=P.find(p=>p.kanal==k);
   const ix=stegIx(p.steg), dc=`https://discord.com/channels/1114447465203109918/${p.id}`;
-  DRS=(p.dr[0]||{}).slug||null;
+  DRS=p.webb?null:((p.dr[0]||{}).slug||null);
   const tabs=p.dr.length>1?`<div class="vt">${p.dr.map(d=>`<button class="btn sm${d.slug==DRS?' on':''}" data-s="${d.slug}" onclick="setDR('${d.slug}')">${esc(d.name.replace(/^Yamay /,''))}</button>`).join('')}</div>`:'';
   if(G)return `<div class="ph"><h1 class="t">${esc(p.namn||nice(k))}</h1>${(p.konfig||[]).length?`<div class="acts">${p.konfig.map(x=>`<a class="btn sm pri" target="_blank" href="${x.url}">🧩 ${esc(x.namn)} ↗</a>`).join('')}</div>`:''}</div>
    <div id="psteps"></div>
-   <div class="pg"><div class="vw">${tabs}${DRS?`<iframe id="v3d" data-k="${k}" src="${DRB}?p=${DRS}&embed=1" allow="fullscreen"></iframe>`:'<div class="empty" style="padding:40px">Ingen 3D-modell exporterad än.</div>'}
+   <div class="pg"><div class="vw">${p.webb?webbVy(p.webb):tabs+(DRS?`<iframe id="v3d" data-k="${k}" src="${DRB}?p=${DRS}&embed=1" allow="fullscreen"></iframe>`:'<div class="empty" style="padding:40px">Ingen 3D-modell exporterad än.</div>')}
    <div class="cmp"><textarea id="cmpT" placeholder="Kommentar eller fråga till projektgruppen … (vyn ovan bifogas)"></textarea>
     <div class="r">${DRS?'<label><input type="checkbox" id="cmpV" checked> 📷 Bifoga vyn</label>':''}<label class="btn sm">📎 Fil<input type="file" id="cmpF" accept="image/*,application/pdf" hidden onchange="this.parentNode.firstChild.textContent=this.files[0]?'📎 '+this.files[0].name.slice(0,16)+' ':'📎 Fil'"></label><span class="sp"></span>
     <button class="btn sm pri" onclick="cmpSend('kommentar')">💬 Skicka kommentar</button></div></div></div>
@@ -316,7 +319,7 @@ function projShell(k){const p=P.find(p=>p.kanal==k);
    <div class="ph"><h1 class="t">${esc(p.namn||nice(k))}</h1>
      <div class="acts"><button class="btn pri" onclick="projAct('fortsatt')">▶ Fortsätt utveckling</button><button class="btn" onclick="projAct('granska')">🧐 Granska (Fable)</button>${(p.konfig||[]).map(x=>`<a class="btn sm" target="_blank" href="${x.url}" title="${x.egen?'':'Projektet ingår som modul i '+esc(x.namn)}">🧩 ${esc(x.namn)}${x.egen?'':' (modul)'} ↗</a>`).join('')}<button class="btn sm" onclick="delaPanel()">🔗 Dela${p.delningar&&p.delningar.length?' ('+p.delningar.length+')':''}</button>${DRS?`<a class="btn sm" target="_blank" href="${DRB}?p=${DRS}">Design Review ↗</a>`:''}<a class="btn sm" target="_blank" href="${dc}">#${esc(k)} ↗</a></div></div>
    <div id="psteps"></div>
-   <div class="pg"><div class="vw">${tabs}${DRS?`<iframe id="v3d" data-k="${k}" src="${DRB}?p=${DRS}&embed=1" allow="fullscreen"></iframe>`:'<div class="empty" style="padding:40px">Ingen 3D-modell exporterad än.</div>'}
+   <div class="pg"><div class="vw">${p.webb?webbVy(p.webb):tabs+(DRS?`<iframe id="v3d" data-k="${k}" src="${DRB}?p=${DRS}&embed=1" allow="fullscreen"></iframe>`:'<div class="empty" style="padding:40px">Ingen 3D-modell exporterad än.</div>')}
    <div class="cmp"><textarea id="cmpT" placeholder="Instruktion eller idé till projektet … (vyn ovan bifogas)"></textarea>
     <div class="r">${DRS?'<label><input type="checkbox" id="cmpV" checked> 📷 Bifoga vyn</label>':''}<label class="btn sm">📎 Fil<input type="file" id="cmpF" accept="image/*,application/pdf" hidden onchange="this.parentNode.firstChild.textContent=this.files[0]?'📎 '+this.files[0].name.slice(0,16)+' ':'📎 Fil'"></label><span class="sp"></span>
     <button class="btn sm" onclick="cmpSend('ide')">💡 Spara idé</button><button class="btn sm pri" onclick="cmpSend('instruktion')">▶ Skicka instruktion</button></div></div></div>
