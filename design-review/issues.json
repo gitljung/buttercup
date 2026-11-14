@@ -1384,15 +1384,26 @@
      "2026-11-12T16:13:54+01:00",
      "oppen",
      "Vickan verifierade: delar.json ur modulexporterna: lägsta z U-rygg 2,0 / Sockel 5,0 / Fotbeslag 11,0 i alla fyra stommarna. Plats: Vicke 2026-11-12 'Höör'."
+    ],
+    [
+     "2026-11-14T22:26:15+01:00",
+     "kommentar",
+     "Vicke: Godkänt: åtgärda enligt förslaget."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-12T16:13:54+01:00",
+   "last": "2026-11-14T22:26:15+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
    "img": "avvikelser/UTE-2.jpg",
    "ver": "hittad v2",
    "pname": "Yamay Utekök – alla moduler (K-0010)",
-   "comments": []
+   "comments": [
+    [
+     "2026-11-14T22:26:15+01:00",
+     "Vicke",
+     "Godkänt: åtgärda enligt förslaget."
+    ]
+   ]
   },
   {
    "id": "av-UTE-3",
@@ -2536,5 +2547,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-14 22:24"
+ "updated": "2026-11-14 22:26"
 }
