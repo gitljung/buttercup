@@ -1523,15 +1523,26 @@
      "2026-11-12T16:13:54+01:00",
      "oppen",
      "Vickan verifierade: Bbox Bottenhylla/Mellanhylla 1500: x ±746,5, kubar bara y ±282 i hörnen. Egen räkning (L 45×3 + läpp 26×3, fy 355, fritt upplagd): flyter vid ~520 N (53 kg) – ä"
+    ],
+    [
+     "2026-11-14T22:26:59+01:00",
+     "kommentar",
+     "Vicke: Godkänt: åtgärda enligt förslaget."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-12T16:13:54+01:00",
+   "last": "2026-11-14T22:26:59+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
    "img": "avvikelser/UTE-5.jpg",
    "ver": "hittad v2",
    "pname": "Yamay Utekök – alla moduler (K-0010)",
-   "comments": []
+   "comments": [
+    [
+     "2026-11-14T22:26:59+01:00",
+     "Vicke",
+     "Godkänt: åtgärda enligt förslaget."
+    ]
+   ]
   },
   {
    "id": "av-UTE-6",
@@ -2579,5 +2590,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-14 22:26"
+ "updated": "2026-11-14 22:27"
 }
