@@ -185,6 +185,96 @@ body.gast{padding-right:0!important}body.gast header,body.gast #lockbar{margin-r
 .insk .tx{font-size:15px;margin-top:2px}.insk .sv{font-size:14px;margin-top:3px;color:#3a2a20;padding-left:10px;border-left:3px solid var(--y)}
 .chip{font-size:12.5px;font-weight:600;padding:1px 8px;border-radius:10px;background:#eee;white-space:nowrap}
 .c-klar{background:#e3f1e3;color:#245c24}.c-jobbar{background:#fff1c6;color:#7a5600}.c-fraga{background:#dfe9fb;color:#1d4790}.c-inget{background:#f3e2dc;color:#8a2f1a}.c-varn{background:#fde6c8;color:#8a4a00}
+/* startsida v2: kontrollrum (dator) + galleri (mobil) – alla klasser börjar med k- */
+main.k-wide{max-width:none;padding:0 18px 18px 0}
+.k-kr{display:grid;grid-template-columns:390px minmax(0,1fr);gap:20px;align-items:start}
+.k-L{position:sticky;top:var(--ht,62px);height:calc(100vh - var(--ht,62px));overflow:auto;background:var(--paper);border-right:3px solid var(--ox)}
+.k-lh{display:flex;align-items:baseline;gap:8px;padding:9px 12px 7px;border-bottom:2px solid var(--line)}
+.k-lh b,.k-cap{font-family:'Barlow Condensed';font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--chili);font-size:15px}
+.k-lh small{margin-left:auto;color:var(--mute);font-size:11px}
+.k-gh{font-family:'Barlow Condensed';font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ox);background:#f7ecc9;padding:3px 12px;border-bottom:1px solid var(--line);display:flex;gap:6px}
+.k-gh span{margin-left:auto;color:var(--mute)}
+.k-gh.din{background:var(--chili);color:#fff}.k-gh.din span{color:#fff}
+.k-rw{display:grid;grid-template-columns:7px 46px minmax(0,1fr) auto;gap:9px;align-items:center;padding:6px 12px 6px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.k-rw:hover{background:#fff}.k-rw.on{background:var(--y)}
+.k-st{align-self:stretch;background:var(--line)}
+.k-rw.din .k-st{background:var(--chili)}.k-rw.vickan .k-st{background:var(--y)}.k-rw.granska .k-st{background:#e09a00}.k-rw.redo .k-st{background:var(--ok)}
+.k-rw.on .k-st{background:var(--ox)}
+.k-rw img,.k-ni{width:46px;height:38px;object-fit:cover;border-radius:4px;background:#e9dfc4;display:block}
+.k-rn b{display:block;font-family:Anton;font-weight:400;font-size:16px;color:var(--ox);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k-rn small{font-family:'Barlow Condensed';font-weight:700;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.k-rw.on .k-rn small{color:var(--ox)}
+.k-hx{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.k-heat{display:flex;gap:2px}.k-heat i{width:8px;height:13px;border-radius:2px;background:var(--line)}
+.k-heat i.h1{background:#f6d77a}.k-heat i.h2{background:#f0a531}.k-heat i.h3{background:var(--chili)}
+.k-rw.on .k-heat i.h0{background:#fff8}.k-rw.on .k-heat i.h1{background:#fff}
+.k-pr{display:inline-flex;align-items:center;justify-content:center;min-width:21px;height:21px;border-radius:11px;padding:0 6px;font-family:'Barlow Condensed';font-weight:700;font-size:13px;color:#fff;margin-left:4px}
+.k-pr.r{background:var(--chili)}.k-pr.g{background:#e09a00}.k-pr.ok{background:var(--ok)}
+.k-M{padding-top:16px;min-width:0}
+.k-hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px}
+@media(max-width:1400px){.k-hero{grid-template-columns:1fr}}
+.k-bi{border-radius:10px;border:2px solid var(--ox);overflow:hidden;background:#fff;aspect-ratio:16/10;cursor:pointer;position:relative}
+.k-bi img{width:100%;height:100%;object-fit:contain;display:block}
+.k-bi span{position:absolute;right:8px;bottom:8px;background:#2a1a12cc;color:#fff;font-family:'Barlow Condensed';font-weight:700;font-size:14px;border-radius:5px;padding:2px 9px}
+.k-nob{height:100%;display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:14px}
+.k-tur{display:inline-block;font-family:'Barlow Condensed';font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:1px 9px;background:var(--line);color:var(--ox)}
+.k-tur.din{background:var(--chili);color:#fff}.k-tur.vickan{background:var(--y)}.k-tur.granska{background:#e09a00;color:#fff}.k-tur.redo{background:var(--ok);color:#fff}
+.k-vf{font-size:13px;color:var(--mute);margin-left:6px}
+.k-M h1{font-family:Anton;font-weight:400;font-size:40px;color:var(--ox);margin:6px 0 10px;line-height:1;cursor:pointer}
+.k-sb{display:flex;gap:4px;margin-bottom:24px}
+.k-sb span{flex:1;height:6px;border-radius:3px;background:var(--line);position:relative}
+.k-sb span.d{background:var(--ox)}.k-sb span.c{background:var(--chili)}
+.k-sb b{position:absolute;top:9px;left:0;font-family:'Barlow Condensed';font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);white-space:nowrap}
+.k-sb span.c b{color:var(--chili)}.k-sb span.d b{color:var(--ox)}
+.k-sb.kort{margin-bottom:0}
+.k-nx{background:#fff;border:2px solid var(--chili);border-radius:8px;padding:9px 12px;font-weight:600;line-height:1.35;margin:10px 0;font-size:15px}
+.k-lg{line-height:1.4;font-size:15px}
+.k-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.k-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:1400px){.k-two{grid-template-columns:1fr}}
+.k-box{background:var(--paper);border:2px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:16px;min-width:0}
+.k-stack{display:flex;height:20px;border-radius:5px;overflow:hidden;margin:8px 0 6px;background:var(--line)}
+.k-leg{display:flex;gap:4px 14px;font-size:12.5px;color:var(--mute);flex-wrap:wrap}
+.k-leg b{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+.k-il{display:grid;grid-template-columns:18px 58px minmax(0,1fr);gap:6px;padding:5px 0;border-top:1px solid var(--line);font-size:14px;align-items:baseline}
+.k-il.ev{grid-template-columns:52px minmax(0,1fr)}
+.k-il.kl{cursor:pointer}.k-il.kl:hover{background:#fff}
+.k-il b{font-family:'Barlow Condensed';font-weight:700;color:var(--ox);white-space:nowrap}
+.k-c2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.k-c3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.k-e{padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;line-height:1.3;cursor:pointer}
+.k-e:hover{background:#fff8}
+.k-em{display:flex;gap:6px;align-items:center;margin-bottom:2px}
+.k-em b{font-family:'Barlow Condensed';font-weight:700;font-size:12px;letter-spacing:.05em;text-transform:uppercase;background:var(--ox);color:var(--y);border-radius:3px;padding:0 6px}
+.k-em span{color:var(--mute);font-size:11.5px;margin-left:auto}
+/* galleri (mobil) */
+.k-kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+@media(max-width:760px){.k-kpi{grid-template-columns:1fr 1fr}}
+.k-kp{background:var(--paper);border:2px solid var(--line);border-radius:10px;padding:8px 12px;display:flex;align-items:center;gap:10px;min-width:0}
+.k-kp>b{font-family:Anton;font-weight:400;font-size:36px;line-height:1;color:var(--ox)}
+.k-kp.hot{border-color:var(--chili);background:#fff;cursor:pointer}.k-kp.hot>b{color:var(--chili)}
+.k-kp small{display:block;color:var(--mute);font-size:12.5px;line-height:1.2}
+.k-fl{display:flex;gap:6px;overflow-x:auto;margin:0 -18px 12px;padding:0 18px 2px;scrollbar-width:none}
+.k-fl::-webkit-scrollbar{display:none}
+.k-ch{font-family:'Barlow Condensed';font-weight:700;font-size:15px;border:2px solid var(--line);border-radius:18px;padding:3px 13px;background:var(--paper);color:var(--ox);white-space:nowrap;cursor:pointer}
+.k-ch.on{background:var(--ox);border-color:var(--ox);color:var(--y)}
+.k-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.k-c{background:var(--paper);border:2px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer}
+.k-c.din{border-color:var(--chili);box-shadow:0 0 0 2px var(--chili)}
+.k-c.vilar{opacity:.66}.k-c.vilar .k-im img{filter:grayscale(.8)}
+.k-im{position:relative;aspect-ratio:16/9;background:#3a2a20;flex:none;overflow:hidden}
+.k-im img{width:100%;height:100%;object-fit:cover;display:block}
+.k-im:after{content:'';position:absolute;inset:45% 0 0 0;background:linear-gradient(transparent,rgba(30,10,6,.88))}
+.k-im h3{position:absolute;left:12px;bottom:7px;right:10px;margin:0;z-index:1;font-family:Anton;font-weight:400;font-size:23px;color:#fff;line-height:1.05}
+.k-im .k-tur{position:absolute;top:8px;left:8px;z-index:1;font-size:13px;background:var(--cream)}
+.k-im .k-tur.din{background:var(--chili)}.k-im .k-tur.vickan{background:var(--y)}
+.k-tid{position:absolute;top:8px;right:8px;z-index:1;font-family:'Barlow Condensed';font-weight:700;font-size:13px;border-radius:4px;padding:1px 7px;background:rgba(30,10,6,.7);color:#fff}
+.k-bd{padding:10px 12px 12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.k-ro{display:flex;align-items:center;margin-top:5px}
+.k-ro .stl{color:var(--chili)}
+.k-nxt{font-size:14px;line-height:1.3}
+/* mobil: sidhuvudet bryts på två rader i stället för att sticka ut utanför skärmen */
+@media(max-width:700px){header{flex-wrap:wrap;gap:6px 8px;padding:8px 12px}header h1{font-size:22px}#upd{display:none}header .btn{font-size:14px;padding:4px 9px}main{padding:12px}.k-fl{margin:0 -12px 12px;padding:0 12px 2px}}
 footer{max-width:1180px;margin:30px auto;padding:0 18px;font-size:12px;color:var(--mute)}
 </style></head>
 <body>
@@ -199,11 +289,11 @@ footer{max-width:1180px;margin:30px auto;padding:0 18px;font-size:12px;color:var
 <aside id="fzrail"></aside><button id="fzpill" onclick="document.body.classList.toggle('fzopen')"></button>
 <div id="qbg" onclick="qUnfocus()"></div>
 <main id="main"></main>
-<footer>Projektportal v1 · data läst 2026-11-14 22:25 · uppdateras var 5:e minut · Discord är fortfarande motorn: svar härifrån hamnar i rätt tråd och Vickan svarar där som vanligt.</footer>
+<footer>Projektportal v2 · data läst 2026-11-14 22:28 · uppdateras var 5:e minut · Discord är fortfarande motorn: svar härifrån hamnar i rätt tråd och Vickan svarar där som vanligt.</footer>
 <div id="zoom" onclick="this.style.display='none'"><img></div>
 <div id="toast"></div>
 <script>
-let D={"projekt": [{"konfig": [], "lage": {"lage": "Första provbit vald: provbit_01.tcn (ficka 100×100 R30 d6 i 200×200×18) genererad och granskad, ej provkörd.", "nasta": "Vicke: TpaCAD Errors + materialsimulering → luftkörning → spillskiva.", "datum": "2026-11-13", "kalla": "PROJEKT.md BESLUT, Konstruktion-tråden"}, "fusion": {"t": "2026-11-14T21:13:30.808000+00:00", "trad": "Konstruktion", "img": "img/fs/p-test-med-maskinkod-till-fras.jpg"}, "stegdata": {"forstudie": {"fil": "FÖRSTUDIE.md", "rubriker": ["1. Förståelse / syfte", "2. Vad filerna visar (verifierat)", "3. Jämförbara lösningar (källor)", "4. Standarder / mått", "5. Koncept (skisser/01koncept.png)", "6. Uppdelning / struktur", "7. Risker", "8. Kostnad / tid (grovt)"], "status": "klar – väntar på godkännande för modellering (2026-11-13). Se FÖRSTUDIE.md, skisser/, analys/ (TCN-spec i analys/ref/, prototyp tcn_parse.py", "datum": "2026-11-13"}, "modellering": {"fusion": "test-med-maskinkod-till-fras", "fil": null, "rubriker": [], "datum": null}, "montering": {"finns": false, "pdf": [], "sidor": 0, "avvikelser": 0, "utvardering": false, "datum": null}}, "fusion_nu": false, "kanal": "test-med-maskinkod-till-fras", "id": "1570762220583780382", "topic": "Analysera filerna för att lära dig skriva tcn kod", "steg": "modellering", "slugs": ["test-med-maskinkod-till-fras"], "beslut": [], "namn": "Alis fräs och cad", "webb": {"url": "https://www.buttercup.nu/tcn/", "img": "img/webb/test-med-maskinkod-till-fras.jpg", "namn": "PDF/DXF/STEP → TCN", "datum": "2026-11-14"}, "dr": [{"slug": "test-med-maskinkod-till-fras", "name": "test med maskinkod till fräs", "v": null, "exp": null, "struktur": null}], "arenden": {"oppen": 0, "analyserad": 0, "pagar": 0, "delvis": 0, "atgardad": 0}, "avvikelser": 0, "oppna": [], "tradar": [{"id": "1570762221485826193", "name": "Konstruktion"}, {"id": "1570762227588407356", "name": "Design Review"}, {"id": "1570762226032185425", "name": "Fusion"}, {"id": "1570762223150694512", "name": "Montering"}], "last": "2026-11-14T21:13:30.808000+00:00", "inskickat": [], "vantar_pa_vicke": 0, "delningar": []}], "fragor": [], "fusion": {"upptagen": false, "vad": "", "ko": []}, "kod": "3266d38ecb", "upd": "22:25"};
+let D={"projekt": [{"konfig": [], "lage": {"lage": "Första provbit vald: provbit_01.tcn (ficka 100×100 R30 d6 i 200×200×18) genererad och granskad, ej provkörd.", "nasta": "Vicke: TpaCAD Errors + materialsimulering → luftkörning → spillskiva.", "datum": "2026-11-13", "kalla": "PROJEKT.md BESLUT, Konstruktion-tråden"}, "fusion": {"t": "2026-11-14T21:13:30.808000+00:00", "trad": "Konstruktion", "img": "img/fs/p-test-med-maskinkod-till-fras.jpg"}, "stegdata": {"forstudie": {"fil": "FÖRSTUDIE.md", "rubriker": ["1. Förståelse / syfte", "2. Vad filerna visar (verifierat)", "3. Jämförbara lösningar (källor)", "4. Standarder / mått", "5. Koncept (skisser/01koncept.png)", "6. Uppdelning / struktur", "7. Risker", "8. Kostnad / tid (grovt)"], "status": "klar – väntar på godkännande för modellering (2026-11-13). Se FÖRSTUDIE.md, skisser/, analys/ (TCN-spec i analys/ref/, prototyp tcn_parse.py", "datum": "2026-11-13"}, "modellering": {"fusion": "test-med-maskinkod-till-fras", "fil": null, "rubriker": [], "datum": null}, "montering": {"finns": false, "pdf": [], "sidor": 0, "avvikelser": 0, "utvardering": false, "datum": null}}, "fusion_nu": false, "kanal": "test-med-maskinkod-till-fras", "id": "1570762220583780382", "topic": "Analysera filerna för att lära dig skriva tcn kod", "steg": "modellering", "slugs": ["test-med-maskinkod-till-fras"], "beslut": [], "namn": "Alis fräs och cad", "webb": {"url": "https://www.buttercup.nu/tcn/", "img": "img/webb/test-med-maskinkod-till-fras.jpg", "namn": "PDF/DXF/STEP → TCN", "datum": "2026-11-14"}, "dr": [{"slug": "test-med-maskinkod-till-fras", "name": "test med maskinkod till fräs", "v": null, "exp": null, "struktur": null}], "arenden": {"oppen": 0, "analyserad": 0, "pagar": 0, "delvis": 0, "atgardad": 0}, "avvikelser": 0, "oppna": [], "tradar": [{"id": "1570762221485826193", "name": "Konstruktion"}, {"id": "1570762227588407356", "name": "Design Review"}, {"id": "1570762226032185425", "name": "Fusion"}, {"id": "1570762223150694512", "name": "Montering"}], "last": "2026-11-14T21:13:30.808000+00:00", "inskickat": [], "vantar_pa_vicke": 0, "tur": "din", "tur_varfor": "enligt lägestexten 2026-11-13", "delningar": []}], "fragor": [], "fusion": {"upptagen": false, "vad": "", "ko": []}, "kod": "eeefcc6050", "upd": "22:28"};
 const G={"tok": "6WxGbANMYXyXtZBxQWf8Mk2t", "kanal": "test-med-maskinkod-till-fras"};   // gäst-läge: {tok, kanal} på /portal/dela/<tok>/
 let P=D.projekt, Q=D.fragor;
 const STEG=['Förstudie','Modellering','Design Review','Montering'];
@@ -221,7 +311,7 @@ const hooks=()=>{try{return JSON.parse(localStorage.getItem('dr_hooks')||'null')
 const H=G?(GK?{_intake:{id:GK.id,token:GK.token}}:null):hooks(), CAN=!!(H&&H._intake);
 if(G){document.body.classList.add('gast');document.querySelector('header .sub').textContent='Delat projekt';
   document.getElementById('lockbar').textContent='Läsläge · länken saknar din nyckel – öppna hela länken du fick för att kunna svara och kommentera';
-  document.querySelector('footer').textContent=`Delat projekt · data läst ${'2026-11-14 22:25'} · uppdateras automatiskt · dina svar och kommentarer går till projektgruppen${GK?' som ”'+GK.namn+' (gäst)”':''}.`}
+  document.querySelector('footer').textContent=`Delat projekt · data läst ${'2026-11-14 22:28'} · uppdateras automatiskt · dina svar och kommentarer går till projektgruppen${GK?' som ”'+GK.namn+' (gäst)”':''}.`}
 document.getElementById('lockbar').style.display=CAN?'none':'';
 if(!CAN)document.body.classList.add('locked');
 const SENT=JSON.parse(localStorage.pp_sent||'{}');
@@ -296,12 +386,69 @@ function fusionBox(){const f=D.fusion;if(!f)return'';const nu=f.upptagen?fzKort(
    ${nu?`<div class="fzv"><b>${esc(nu.pj||'')}</b> ${esc(nu.v)}</div>`:''}
    <div class="m">${(f.ko||[]).length?`Kö (${f.ko.length})`:'Kön är tom'}</div>${ko?`<ul class="fzq">${ko}</ul>`:''}
    ${f.senaste&&f.senaste.img?`<div class="fzs"><img src="${f.senaste.img}" onclick="zoom(this.src)"><div class="m">Senast klart ${ago(f.senaste.t)} sedan</div></div>`:''}</div>`}
-function home(){
-  return `<h2>Att ta ställning till <span class="n">${Q.length}</span></h2>
-   <div class="qs">${Q.map(qCard).join('')||'<div class="empty">Inget väntar på dig.</div>'}</div>
-   <h2>Projekt <span class="n">${P.length}</span></h2>
-   <div class="ps">${P.map(pCard).join('')}</div>`;
-}
+// ---------- startsida v2: kontrollrum (dator ≥1100 px) + galleri (mobil) ----------
+// p.tur / p.tur_varfor sätts av samla.py (vems_tur). Händelser och 14-dagarsaktivitet räknas här ur samma data.
+const TUR={din:['Din tur','🙋'],vickan:['Vickan jobbar','🛠'],granska:['Att granska','👀'],redo:['Redo för nästa steg','▶'],vilar:['Vilar','😴']};
+const TORD=['din','vickan','granska','redo','vilar'];
+const MQ=matchMedia('(min-width:1100px)');
+let SEL=null,FILT=null;try{SEL=sessionStorage.getItem('pp_sel')}catch(e){}
+const pTur=p=>TUR[p.tur]?p.tur:'redo';
+const pNm=p=>p.namn||nice(p.kanal);
+const pBild=p=>(p.webb&&p.webb.img)||(p.fusion&&p.fusion.img)||'';
+const pOp=p=>(p.oppna||[]).filter(i=>isOpen(i.status));
+const pSort=()=>[...P].sort((a,b)=>TORD.indexOf(pTur(a))-TORD.indexOf(pTur(b))||new Date(b.last||0)-new Date(a.last||0));
+const dkey=t=>{const d=new Date(t);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+function pEv(p){const ev=[];
+  for(const b of p.beslut||[])ev.push({t:b.d+'T12:00:00',x:'Beslut: '+b.t,dag:b.d.slice(5)});
+  for(const x of p.inskickat||[]){ev.push({t:x.t,x:(x.typl||'Inskickat')+(x.text?' · '+x.text:'')});if(x.svar)ev.push({t:x.svar.t,x:'Vickan: '+x.svar.r})}
+  for(const i of p.oppna||[])for(const l of i.log||[])ev.push({t:l[0],x:`${typeof i.nr=='number'?'#'+i.nr:i.nr||''} ${i.t||''} → ${(ST[l[1]]||[])[1]||l[1]}`,id:i.id});
+  return ev.filter(e=>e.t&&!isNaN(new Date(e.t))).sort((a,b)=>new Date(b.t)-new Date(a.t))}
+const evT=e=>e.dag||ago(e.t);
+function kHeat(p){const c={};for(const e of pEv(p))c[dkey(e.t)]=(c[dkey(e.t)]||0)+1;for(const t of p.tradar||[])if(t.last)c[dkey(t.last)]=(c[dkey(t.last)]||0)+1;
+  let h='';for(let i=13;i>=0;i--){const k=dkey(Date.now()-i*864e5),n=c[k]||0;h+=`<i class="h${n==0?0:n<3?1:n<7?2:3}" title="${k}: ${n} händelser"></i>`}return `<span class="k-heat">${h}</span>`}
+function kPr(p){const o=pOp(p),r=o.filter(i=>i.sev=='🔴').length,g=o.length-r;
+  return o.length?`${r?`<span class="k-pr r" title="${r} allvarliga öppna ärenden">${r}</span>`:''}${g?`<span class="k-pr g" title="${g} övriga öppna ärenden">${g}</span>`:''}`:((p.oppna||[]).length?'<span class="k-pr ok" title="Inga öppna ärenden">✓</span>':'')}
+function kSteg(p,lab){const ix=stegIx(p.steg);return `<div class="k-sb${lab?'':' kort'}">${STEG.map((s,i)=>`<span class="${i<ix?'d':i==ix?'c':''}">${lab?`<b>${s}</b>`:''}</span>`).join('')}</div>`}
+function kSel(k){SEL=k;try{sessionStorage.setItem('pp_sel',k)}catch(e){}render(true)}
+function kAct(k,a){go('p='+k);setTimeout(()=>projAct(a),120)}
+function kFilt(t){FILT=FILT==t?null:t;render(true)}
+function kQ(){return Q.length?`<h2 style="margin-top:0">Att ta ställning till <span class="n">${Q.length}</span></h2><div class="qs" style="margin-bottom:18px">${Q.map(qCard).join('')}</div>`:''}
+function kDetalj(p){const t=pTur(p),L=p.lage||{},o=p.oppna||[],op=pOp(p),b=pBild(p),d=(p.dr||[])[0],k=p.kanal,tot=o.length||1,cnt=f=>o.filter(f).length;
+  const seg=[['var(--chili)','Öppna allvarliga',cnt(i=>isOpen(i.status)&&i.status!='delvis'&&i.sev=='🔴')],['#e09a00','Öppna övriga',cnt(i=>isOpen(i.status)&&i.status!='delvis'&&i.sev!='🔴')],['#f6d77a','Delvis',cnt(i=>i.status=='delvis')],['var(--ok)','Åtgärdade',cnt(i=>i.status=='atgardad'||i.status=='stangd')],['#bbb','Avvisade',cnt(i=>i.status=='avvisad')]];
+  const ev=pEv(p).slice(0,7);
+  return `<div class="k-hero"><div class="k-bi" onclick="go('p=${k}')" title="Öppna projektet">${b?`<img src="${b}" alt="">`:'<div class="k-nob">Ingen bild än</div>'}<span>${d&&d.v?'3D · v'+d.v+' →':'Öppna →'}</span></div>
+   <div><span class="k-tur ${t}">${TUR[t][1]} ${TUR[t][0]}</span>${p.tur_varfor?`<span class="k-vf">${esc(p.tur_varfor)}</span>`:''}
+    <h1 onclick="go('p=${k}')">${esc(pNm(p))}</h1>${kSteg(p,1)}
+    ${L.nasta?`<div class="k-nx">➜ ${esc(L.nasta)}</div>`:''}
+    <div class="k-lg">${L.lage?esc(L.lage):'<span class="m">Ingen sammanfattning än.</span>'}${L.datum?` <span class="m">(enligt projektfilerna ${esc(L.datum)})</span>`:''}</div>
+    <div class="k-acts"><button class="btn pri" onclick="go('p=${k}')">Öppna projektet →</button><button class="btn" onclick="kAct('${k}','fortsatt')">▶ Fortsätt utveckling</button><button class="btn" onclick="kAct('${k}','granska')">🧐 Granska</button>${d?`<a class="btn" target="_blank" href="${DRB}?p=${d.slug}">Design Review ↗</a>`:''}</div></div></div>
+   <div class="k-two"><div class="k-box"><span class="k-cap">Ärenden · ${op.length} öppna av ${o.length}</span>
+     ${o.length?`<div class="k-stack">${seg.map(s=>`<i style="background:${s[0]};width:${s[2]/tot*100}%" title="${s[1]} ${s[2]}"></i>`).join('')}</div><div class="k-leg">${seg.filter(s=>s[2]).map(s=>`<span><b style="background:${s[0]}"></b>${s[1]} ${s[2]}</span>`).join('')}</div>`:''}
+     <div style="margin-top:8px">${op.slice(0,7).map(i=>`<div class="k-il kl" onclick="openIss('${k}','${i.id}')"><span>${i.sev||'📋'}</span><b>${typeof i.nr=='number'?'#'+i.nr:esc(i.nr||'')}</b><span>${esc(i.t)}</span></div>`).join('')||`<span class="m">${o.length?'Inga öppna ärenden.':'Inga ärenden än.'}</span>`}${op.length>7?`<div class="k-il kl" onclick="go('p=${k}')"><span></span><b></b><span class="m">+ ${op.length-7} till – öppna projektet</span></div>`:''}</div></div>
+    <div class="k-box"><span class="k-cap">Senast i projektet</span>${ev.map(e=>`<div class="k-il ev${e.id?' kl':''}"${e.id?` onclick="openIss('${k}','${e.id}')"`:''}><b>${evT(e)}</b><span class="k-c2">${esc(e.x)}</span></div>`).join('')||'<div class="m" style="margin-top:8px">Ingen loggad händelse.</div>'}</div></div>`}
+function homeDesk(){const L=pSort(),p=L.find(p=>p.kanal==SEL)||L[0];if(!p)return '<div class="empty">Inga projekt.</div>';SEL=p.kanal;
+  let rows='',g=null;for(const x of L){const t=pTur(x);if(t!=g){g=t;rows+=`<div class="k-gh ${t}">${TUR[t][1]} ${TUR[t][0]}<span>${L.filter(y=>pTur(y)==t).length}</span></div>`}
+    rows+=`<div class="k-rw ${t}${x===p?' on':''}" onclick="kSel('${x.kanal}')" ondblclick="go('p=${x.kanal}')" title="${esc(x.tur_varfor||'')} · dubbelklicka för att öppna"><span class="k-st"></span>${pBild(x)?`<img src="${pBild(x)}" alt="">`:'<span class="k-ni"></span>'}<div class="k-rn"><b>${esc(pNm(x))}</b><small>${STEG[stegIx(x.steg)]}${x.last?' · '+ago(x.last):''}</small></div><div class="k-hx">${kHeat(x)}<div>${kPr(x)}</div></div></div>`}
+  return `<div class="k-kr"><div class="k-L"><div class="k-lh"><b>Projekt ${P.length}</b><small>aktivitet 14 dagar · öppna ärenden</small></div>${rows}</div><div class="k-M">${kQ()}${kDetalj(p)}</div></div>`}
+function kFeed(){const ev=P.flatMap(p=>pEv(p).map(e=>({...e,p}))).sort((a,b)=>new Date(b.t)-new Date(a.t)).slice(0,14);
+  return ev.length?`<div class="rh" style="margin-top:18px">Senaste händelser</div>${ev.map(e=>`<div class="k-e" onclick="${e.id?`openIss('${e.p.kanal}','${e.id}')`:MQ.matches?`kSel('${e.p.kanal}')`:`go('p=${e.p.kanal}')`}"><div class="k-em"><b>${esc(pNm(e.p).replace(/^Yamay /,''))}</b><span>${evT(e)}</span></div><div class="k-c2">${esc(e.x)}</div></div>`).join('')}`:''}
+function homeMob(){const L=pSort(),f=D.fusion||{},n=t=>L.filter(p=>pTur(p)==t).length;
+  const op=L.flatMap(pOp),rod=op.filter(i=>i.sev=='🔴').length,akt=L.filter(p=>p.last&&Date.now()-new Date(p.last)<1728e5).length;
+  if(FILT&&!n(FILT))FILT=null;const V=FILT?L.filter(p=>pTur(p)==FILT):L;
+  return `${kQ()}<div class="k-kpi">
+    <div class="k-kp hot" onclick="kFilt('din')"><b>${n('din')}</b><div><span class="k-cap">Din tur</span><small>väntar på ditt val eller svar</small></div></div>
+    <div class="k-kp"><b>${op.length}</b><div><span class="k-cap">Öppna ärenden</span><small>${rod} allvarliga · ${op.length-rod} övriga</small></div></div>
+    <div class="k-kp"><b>${akt}</b><div><span class="k-cap">Aktiva</span><small>senaste 48 h, av ${L.length} projekt</small></div></div>
+    <div class="k-kp"><b style="font-size:24px">${f.upptagen?'Jobbar':'Ledig'}</b><div><span class="k-cap">Fusion</span><small>${(f.ko||[]).length?'kö '+f.ko.length:'kön är tom'}</small></div></div></div>
+   <div class="k-fl"><span class="k-ch${FILT?'':' on'}" onclick="FILT=null;render(true)">Alla ${L.length}</span>${TORD.filter(n).map(t=>`<span class="k-ch${FILT==t?' on':''}" onclick="kFilt('${t}')">${TUR[t][1]} ${TUR[t][0]} ${n(t)}</span>`).join('')}</div>
+   <div class="k-g">${V.map(p=>{const t=pTur(p),b=pBild(p);return `<div class="k-c ${t}" onclick="go('p=${p.kanal}')">
+     <div class="k-im">${b?`<img src="${b}" alt="" loading="lazy">`:''}<span class="k-tur ${t}">${TUR[t][1]} ${TUR[t][0]}</span>${p.last?`<span class="k-tid">${ago(p.last)}</span>`:''}<h3>${esc(pNm(p))}</h3></div>
+     <div class="k-bd"><div>${kSteg(p)}<div class="k-ro"><span class="stl">${STEG[stegIx(p.steg)]}</span><span class="sp" style="flex:1"></span>${kPr(p)}</div></div>
+     <div class="k-nxt k-c3">${(p.lage||{}).nasta?'➜ '+esc(p.lage.nasta):esc(p.tur_varfor||p.topic||'')}</div></div></div>`}).join('')}</div>`}
+let KM=null;
+function home(){KM=MQ.matches;return KM?homeDesk():homeMob()}
+function kMode(){if(G||/^#p=/.test(location.hash)||KM===MQ.matches||busy())return;render(true)}
+MQ.addEventListener('change',kMode);addEventListener('resize',kMode);
 // ---------- projektsida: 3D (Design Review inbäddad) + läge/ärende bredvid ----------
 let CUR=null, PK=null, DRS=null;
 const DRB=(location.hostname==='localhost'&&new URLSearchParams(location.search).get('drb'))||'https://www.buttercup.nu/design-review/';
@@ -512,13 +659,14 @@ async function sendT(id,name){
   catch(e){toast('Kunde inte skicka: '+esc(e.message))}
   b.disabled=false;b.textContent='Skicka till tråden';
 }
-function fusionUI(){const f=D.fusion||{};document.getElementById('fzrail').innerHTML=`<div class="rh">Fusion just nu</div>${fusionBox()}`;
+function fusionUI(){const f=D.fusion||{};document.getElementById('fzrail').innerHTML=`<div class="rh">Fusion just nu</div>${fusionBox()}${/^#p=/.test(location.hash)?'':kFeed()}`;
   const pj=f.upptagen?(P.find(p=>(f.vem+' '+f.vad).toLowerCase().replace(/-/g,' ').includes(p.kanal.replace('yamay-','').replace(/-/g,' ')))||null):null;
   document.getElementById('fzpill').innerHTML=`<span class="dot ${f.upptagen?'b':'l'}"></span>Fusion ${f.upptagen?'jobbar'+(pj?' · '+esc((pj.namn||nice(pj.kanal)).replace(/^Yamay /,'')):''):'ledig'}${(f.ko||[]).length?` · kö ${f.ko.length}`:''}`}
 function ht(){const h=document.querySelector('header').getBoundingClientRect().bottom;document.body.style.setProperty('--ht',Math.max(0,h)+'px')}
 addEventListener('scroll',ht,{passive:true});addEventListener('resize',ht);
 function render(keep){if(!G)fusionUI();setTimeout(ht,0);const h=location.hash.slice(1);const m=h.match(/^p=(.+)$/);const y=scrollY;
-  if(G)proj(G.kanal);else if(m)proj(decodeURIComponent(m[1]));else{PK=null;CUR=null;document.getElementById('main').innerHTML=home()}
+  if(G)proj(G.kanal);else if(m)proj(decodeURIComponent(m[1]));else{PK=null;CUR=null;const ls=(document.querySelector('.k-L')||{}).scrollTop||0;document.getElementById('main').innerHTML=home();const l=document.querySelector('.k-L');if(l)l.scrollTop=ls}
+  document.getElementById('main').classList.toggle('k-wide',!G&&!m&&MQ.matches);
   if(keep)scrollTo(0,y);else if(!m||!keep)scrollTo(0,0)}
 render();
 // ---- automatisk uppdatering: hämtar data.json var 60:e s (och när fliken blir synlig) och ritar om utan omladdning
