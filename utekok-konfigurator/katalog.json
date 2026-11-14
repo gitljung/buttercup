@@ -35,7 +35,7 @@
    ],
    "topplat_hal": 9,
    "pa_grill": true,
-   "pa_grill_anm": "Skiva även på grillmodulernas topplåt (vickesluring 2026-11-07); grillen står på skivan → +8 mm (EPDM 2 + skiva 6). Asado: sänk ModH 697 → 689 i Fusion för att lådan ska stanna på 900.",
+   "pa_grill_anm": "Skiva även på grillmodulernas topplåt (vickesluring 2026-11-07); grillen står på skivan → +8 mm (silikon 2 + skiva 6). Asado: sänk ModH 697 → 689 i Fusion för att lådan ska stanna på 900.",
    "tra": {
     "material": "massivt trä, utomhus (t.ex. termoask, ek eller teak) – förslag",
     "t": 30,
@@ -48,7 +48,7 @@
    "mellanlagg": {
     "bank": "EPDM 2 mm",
     "grill": "silikon (VMQ) 2 mm, tål ca 200 °C",
-    "anm": "granskning 2026-11-12 B: skivan under Asado ca 95–115 °C med Vermilite 20, EPDM tål ca 120–130 °C – silikon under alla grillmoduler; mät på prototypen"
+    "anm": "UTE-6 godkänd av Vicke 2026-11-14. Granskning 2026-11-12 B: skivan under Asado ca 95–115 °C med Vermilite 20, EPDM tål ca 120–130 °C – silikon under alla grillmoduler; mät på prototypen"
    }
   },
   "sockel": {

@@ -110,7 +110,7 @@
         fel.push(`Modul ${i + 1}: ${tv.namn} (topp ${900 + tv.hojd} mm) krockar med ${q.m.namn}s rattar, som sticker ut ${q.m.utstick} mm över grannbänken på ${q.m.utstick_z[0]}–${q.m.utstick_z[1]} mm. Ställ den på en bänk som inte står bredvid Asado.`);
       if (tv.langd > p.m.bredd + 50) varn.push(`Modul ${i + 1}: ${tv.namn} (${tv.langd} mm) är bredare än modulen.`);
       else if (tv.langd > p.m.bredd) info.push(`Modul ${i + 1}: ${tv.namn} är ${tv.langd} mm och sticker ut ${(tv.langd - p.m.bredd) / 2} mm per sida över modulen.`);
-      info.push(`Modul ${i + 1}: ${tv.namn} ${tv.anm}. Värmen mot skivan under grillen är inte kontrollerad (EPDM under bänkskivan tål ca 120–130 °C).`);
+      info.push(`Modul ${i + 1}: ${tv.namn} ${tv.anm}. Värmen mot bänkskivan är inte kontrollerad (EPDM under bänkskivan tål ca 120–130 °C).`);
     }));
     if (konf.skiva === 'tra') {
       const M = materialer(L, konf, kat), ST = kat.gemensamt.skiva.tra;
@@ -268,6 +268,11 @@
       rader.push({ art: 'Fixbricka M6 (fast punkt, en per skiva)', antal: SVr.length });
     }
     if (ntb) rader.push({ art: 'Insatsmutter M6 A4 + ISO 7380 M6x16 A4 + bricka (träskivans skruvar underifrån)', antal: ntb });
+    { // mellanlägg topplåt–skiva: silikon under grillmodulernas skivor (UTE-6, Vicke 2026-11-14), EPDM under bänkskivor; 2 lister per skiva (fram + bak)
+      const mG = SV.filter(s => s.grill).reduce((t, s) => t + 2 * s.langd, 0), mB = SV.filter(s => !s.grill).reduce((t, s) => t + 2 * s.langd, 0);
+      if (mG) rader.push({ art: 'Silikonlist VMQ 2 mm, ca 200 °C (under grillmodulernas skivor, m)', antal: r2(mG / 1000) });
+      if (mB) rader.push({ art: 'EPDM-list 2 mm (under bänkskivor, m)', antal: r2(mB / 1000) });
+    }
     const SP = sidor(konf, kat);
     SP.forEach(q => rader.push({ art: `Sidopanel ${q.nr} (modul ${q.modul}, ${q.ande === 'start' ? 'början' : 'slut'}${q.ovre ? ', överdel mot lägre granne' : ''}): ${q.mat === 'tra' ? 'trä' : 'rostfri'} ${q.t} × ${q.djup} × ${q.hojd} mm, ${q.bultar} ${q.mat === 'tra' ? 'insatsmuttrar M8' : 'pinnbultar M8'}`, antal: 1, kg: q.kg }));
     const nsb = SP.reduce((s, q) => s + q.bultar, 0);
