@@ -2463,16 +2463,21 @@
    "sel": "o52",
    "url": "?p=yakitori-50&sel=o52",
    "created": "2026-11-13T13:24:30+01:00",
-   "status": "oppen",
+   "status": "avvisad",
    "log": [
     [
      "2026-11-13T13:24:30+01:00",
      "oppen",
      "Vickan verifierade: Snitt x=0 och y=0 i Toppens nät: plan ovansida z 187–190 med inre kant |y| 98 och |x| 233 → 466 × 196 mm; 196 > 180 mm. Tray holder bak bbox x −28…28, y 95…117,"
+    ],
+    [
+     "2026-11-15T00:11:17+01:00",
+     "avvisad",
+     "Vicke: "
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T13:24:30+01:00",
+   "last": "2026-11-15T00:11:17+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
    "img": "avvikelser/YAK-2.jpg",
    "ver": "hittad v19",
@@ -2768,5 +2773,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-15 00:01"
+ "updated": "2026-11-15 00:11"
 }
