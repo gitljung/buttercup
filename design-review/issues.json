@@ -1768,15 +1768,26 @@
      "2026-11-12T16:13:54+01:00",
      "oppen",
      "Vickan verifierade: Mina summor ur modulexporterna (stål 7,85): Bänk 500 48,9 kg, Bänk 1000 80,4, Hörnbänk 88,9, Horno-modul 87,2, Asado-modul 116,4. site/utekok/tree.json meta.exp"
+    ],
+    [
+     "2026-11-14T22:30:00+01:00",
+     "kommentar",
+     "Vicke: Godkänt: åtgärda enligt förslaget."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-12T16:13:54+01:00",
+   "last": "2026-11-14T22:30:00+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
    "img": "",
    "ver": "hittad v2",
    "pname": "Yamay Utekök – alla moduler (K-0010)",
-   "comments": []
+   "comments": [
+    [
+     "2026-11-14T22:30:00+01:00",
+     "Vicke",
+     "Godkänt: åtgärda enligt förslaget."
+    ]
+   ]
   },
   {
    "id": "av-VAX-1",
@@ -2664,5 +2675,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-14 22:29"
+ "updated": "2026-11-14 22:30"
 }
