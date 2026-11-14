@@ -179,6 +179,12 @@ body.qf{overflow:hidden}
 .q.focus .alt{font-size:17px;padding:10px 12px}
 body.gast #who,body.gast header a.btn,body.gast #fzrail,body.gast #fzpill{display:none!important}
 body.gast{padding-right:0!important}body.gast header,body.gast #lockbar{margin-right:0!important}
+.insk .ix{padding:8px 10px;border-top:1px solid var(--line)}
+.insk .ix .h{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.insk .ix .sp{flex:1}
+.insk .ty{font-family:'Barlow Condensed';font-weight:700;color:var(--ox);font-size:15px}
+.insk .tx{font-size:15px;margin-top:2px}.insk .sv{font-size:14px;margin-top:3px;color:#3a2a20;padding-left:10px;border-left:3px solid var(--y)}
+.chip{font-size:12.5px;font-weight:600;padding:1px 8px;border-radius:10px;background:#eee;white-space:nowrap}
+.c-klar{background:#e3f1e3;color:#245c24}.c-jobbar{background:#fff1c6;color:#7a5600}.c-fraga{background:#dfe9fb;color:#1d4790}.c-inget{background:#f3e2dc;color:#8a2f1a}.c-varn{background:#fde6c8;color:#8a4a00}
 footer{max-width:1180px;margin:30px auto;padding:0 18px;font-size:12px;color:var(--mute)}
 </style></head>
 <body>
@@ -193,11 +199,11 @@ footer{max-width:1180px;margin:30px auto;padding:0 18px;font-size:12px;color:var
 <aside id="fzrail"></aside><button id="fzpill" onclick="document.body.classList.toggle('fzopen')"></button>
 <div id="qbg" onclick="qUnfocus()"></div>
 <main id="main"></main>
-<footer>Projektportal v1 · data läst 2026-11-14 21:50 · uppdateras var 5:e minut · Discord är fortfarande motorn: svar härifrån hamnar i rätt tråd och Vickan svarar där som vanligt.</footer>
+<footer>Projektportal v1 · data läst 2026-11-14 21:51 · uppdateras var 5:e minut · Discord är fortfarande motorn: svar härifrån hamnar i rätt tråd och Vickan svarar där som vanligt.</footer>
 <div id="zoom" onclick="this.style.display='none'"><img></div>
 <div id="toast"></div>
 <script>
-let D={"projekt": [{"konfig": [], "lage": {"lage": "Variant A (3 × M6 i Wavin-locket) och variant B (central M8) är modellerade och finns i Design Review. Jämförelsen rekommenderar A för prototypen och B som reserv.", "nasta": "Granska A mot B och mät lockets undersida (plan inom Ø58) och toppgodset.", "kalla": "~/code/konstruktion/rat-stop/PROJEKT.md, ~/code/konstruktion/rat-stop/skiss/AB_JAMFORELSE.md", "datum": "2026-11-08"}, "fusion": {"t": "2026-11-08T08:17:46.431000+00:00", "trad": "Fusion", "img": "img/fs/p-rat-stop.jpg"}, "stegdata": {"forstudie": {"fil": null, "rubriker": [], "status": "godkänd", "datum": null}, "modellering": {"fusion": "rat-stop", "fil": null, "rubriker": [], "datum": null}, "montering": {"finns": false, "pdf": [], "sidor": 0, "avvikelser": 0, "utvardering": false, "datum": null}}, "fusion_nu": false, "kanal": "rat-stop", "id": "1568630783986630872", "topic": "Råttstopp för avloppsrör/spolbrunn.  Rita av bifogad stepfil.", "steg": "modell i DR", "slugs": ["rat-stop", "rat-stop-b", "rat-stop-a"], "beslut": [], "namn": "rat stop", "webb": null, "dr": [{"slug": "rat-stop", "name": "rat stop", "v": 2, "exp": "2026-11-07 22:14", "struktur": "img/struktur/rat-stop.png"}, {"slug": "rat-stop-b", "name": "rat stop B (M8 i Wavin-lock)", "v": 1, "exp": "2026-11-08 08:15", "struktur": "img/struktur/rat-stop-b.png"}, {"slug": "rat-stop-a", "name": "rat stop A (3 × M6 i Wavin-lock)", "v": 1, "exp": "2026-11-08 09:12", "struktur": "img/struktur/rat-stop-a.png"}], "arenden": {"oppen": 0, "analyserad": 0, "pagar": 0, "delvis": 0, "atgardad": 0}, "avvikelser": 0, "oppna": [], "tradar": [{"id": "1568630785232343191", "name": "Konstruktion"}, {"id": "1568630789095039016", "name": "Fusion"}, {"id": "1568630790848520396", "name": "Design Review"}, {"id": "1568630787321102457", "name": "Montering"}], "last": "2026-11-13T16:26:18.604000+00:00", "inskickat": [], "vantar_pa_vicke": 0, "delningar": []}], "fragor": [], "fusion": {"upptagen": false, "vad": "", "ko": []}, "kod": "39b1c98dfd", "upd": "21:50"};
+let D={"projekt": [{"konfig": [], "lage": {"lage": "Variant A (3 × M6 i Wavin-locket) och variant B (central M8) är modellerade och finns i Design Review. Jämförelsen rekommenderar A för prototypen och B som reserv.", "nasta": "Granska A mot B och mät lockets undersida (plan inom Ø58) och toppgodset.", "kalla": "~/code/konstruktion/rat-stop/PROJEKT.md, ~/code/konstruktion/rat-stop/skiss/AB_JAMFORELSE.md", "datum": "2026-11-08"}, "fusion": {"t": "2026-11-08T08:17:46.431000+00:00", "trad": "Fusion", "img": "img/fs/p-rat-stop.jpg"}, "stegdata": {"forstudie": {"fil": null, "rubriker": [], "status": "godkänd", "datum": null}, "modellering": {"fusion": "rat-stop", "fil": null, "rubriker": [], "datum": null}, "montering": {"finns": false, "pdf": [], "sidor": 0, "avvikelser": 0, "utvardering": false, "datum": null}}, "fusion_nu": false, "kanal": "rat-stop", "id": "1568630783986630872", "topic": "Råttstopp för avloppsrör/spolbrunn.  Rita av bifogad stepfil.", "steg": "modell i DR", "slugs": ["rat-stop", "rat-stop-b", "rat-stop-a"], "beslut": [], "namn": "rat stop", "webb": null, "dr": [{"slug": "rat-stop", "name": "rat stop", "v": 2, "exp": "2026-11-07 22:14", "struktur": "img/struktur/rat-stop.png"}, {"slug": "rat-stop-b", "name": "rat stop B (M8 i Wavin-lock)", "v": 1, "exp": "2026-11-08 08:15", "struktur": "img/struktur/rat-stop-b.png"}, {"slug": "rat-stop-a", "name": "rat stop A (3 × M6 i Wavin-lock)", "v": 1, "exp": "2026-11-08 09:12", "struktur": "img/struktur/rat-stop-a.png"}], "arenden": {"oppen": 0, "analyserad": 0, "pagar": 0, "delvis": 0, "atgardad": 0}, "avvikelser": 0, "oppna": [], "tradar": [{"id": "1568630785232343191", "name": "Konstruktion"}, {"id": "1568630789095039016", "name": "Fusion"}, {"id": "1568630790848520396", "name": "Design Review"}, {"id": "1568630787321102457", "name": "Montering"}], "last": "2026-11-13T16:26:18.604000+00:00", "inskickat": [], "vantar_pa_vicke": 0, "delningar": []}], "fragor": [], "fusion": {"upptagen": false, "vad": "", "ko": []}, "kod": "3266d38ecb", "upd": "21:51"};
 const G={"tok": "GU_pJd2ErFjaZFfDSBylQzBw", "kanal": "rat-stop"};   // gäst-läge: {tok, kanal} på /portal/dela/<tok>/
 let P=D.projekt, Q=D.fragor;
 const STEG=['Förstudie','Modellering','Design Review','Montering'];
@@ -215,7 +221,7 @@ const hooks=()=>{try{return JSON.parse(localStorage.getItem('dr_hooks')||'null')
 const H=G?(GK?{_intake:{id:GK.id,token:GK.token}}:null):hooks(), CAN=!!(H&&H._intake);
 if(G){document.body.classList.add('gast');document.querySelector('header .sub').textContent='Delat projekt';
   document.getElementById('lockbar').textContent='Läsläge · länken saknar din nyckel – öppna hela länken du fick för att kunna svara och kommentera';
-  document.querySelector('footer').textContent=`Delat projekt · data läst ${'2026-11-14 21:50'} · uppdateras automatiskt · dina svar och kommentarer går till projektgruppen${GK?' som ”'+GK.namn+' (gäst)”':''}.`}
+  document.querySelector('footer').textContent=`Delat projekt · data läst ${'2026-11-14 21:51'} · uppdateras automatiskt · dina svar och kommentarer går till projektgruppen${GK?' som ”'+GK.namn+' (gäst)”':''}.`}
 document.getElementById('lockbar').style.display=CAN?'none':'';
 if(!CAN)document.body.classList.add('locked');
 const SENT=JSON.parse(localStorage.pp_sent||'{}');
@@ -378,12 +384,24 @@ function lageHtml(p){const L=p.lage||{}, oi=p.oppna.filter(i=>isOpen(i.status)).
     <li><b>Fusion</b> ${p.fusion_nu?`<span class="dot b"></span>jobbar med projektet nu: ${esc(D.fusion.vad)}`:(f?`senaste bild ${ago(f.t)} sedan${f.text?' · '+esc(f.text.slice(0,90)):''}`:'–')}</li>
     <li><b>Väntar på dig</b> ${qs?`<a href="#pbelow" onclick="document.getElementById('pbelow').scrollIntoView({behavior:'smooth'});return false">❓ ${qs} fråga${qs>1?'r':''}</a>`:'inget'}</li>
     <li><b>Ärenden</b> ${oi} öppna av ${p.oppna.length}</li>
+    ${(p.inskickat||[]).length?(()=>{const L=p.inskickat,j=L.filter(x=>x.st=='jobbar').length,f=L.filter(x=>x.st=='fraga').length,i=L.filter(x=>x.st=='inget').length;
+      return `<li><b>Inskickat</b> <a href="#" onclick="document.querySelector('.insk').scrollIntoView({behavior:'smooth',block:'center'});return false">${[j?'🛠 '+j+' pågår':'',f?'❓ '+f+' följdfråga':'',i?'⏳ '+i+' utan svar':''].filter(Boolean).join(' · ')||'💬 '+L.length+' besvarade'}</a></li>`})():''}
     ${(p.konfig||[]).length?`<li><b>Konfigurator</b> ${p.konfig.map(x=>`<a href="${x.url}" target="_blank">🧩 ${esc(x.namn)} ↗</a>${x.egen?'':' <span class="m">(ingår som modul)</span>'}`).join(' · ')}</li>`:''}
     ${b?`<li><b>Senaste beslut</b> ${esc(b.d.slice(5))} · ${esc(b.t.slice(0,120))}</li>`:''}
    </ul>
    ${f&&f.img?`<div class="fimg"><img src="${f.img}" onclick="zoom(this.src)"><div class="m">${esc(f.trad)} · ${ago(f.t)} sedan${f.link&&!G?` · <a href="${f.link}" target="_blank">Discord ↗</a>`:''}</div></div>`:''}`}
 function issTiles(p,k){const list=p.oppna.filter(i=>ALLA||isOpen(i.status));
   return `<div class="it"><label><input type="checkbox" ${ALLA?'':'checked'} onchange="ALLA=!this.checked;render(true)"> Bara öppna</label><span>${p.oppna.filter(i=>isOpen(i.status)).length} öppna av ${p.oppna.length}</span></div>`+(list.length?`<div class="is">${list.map(i=>`<div class="ic${CUR&&CUR.id==i.id?' sel':''}" onclick="openIss('${k}','${i.id}')">${i.img?`<img src="${i.img}">`:'<div class="noi">'+(i.kind=='avv'?'🧐':'📸')+'</div>'}<div><span class="st st-${i.status}">${ST[i.status]?.[0]||''} ${ST[i.status]?.[1]||i.status}</span><br>${i.sev||''} ${typeof i.nr=='number'?'#'+i.nr:i.nr} ${esc(i.t)}</div></div>`).join('')}</div>`:'<div class="empty">Inga öppna ärenden.</div>')}
+function inskHtml(p){const L=p.inskickat||[];if(!L.length)return'';const VIS=INSK_ALLA?L:L.slice(0,6);
+  const n=s=>L.filter(x=>x.st==s).length;
+  return `<h2>Inskickat & återkoppling <span class="n">${L.length}</span></h2><div class="box insk">
+   <div class="it"><span>${['jobbar','fraga','inget','varn'].filter(n).map(s=>`${({jobbar:'🛠',fraga:'❓',inget:'⏳',varn:'⚠️'})[s]} ${n(s)}`).join(' · ')||'allt besvarat'}</span></div>
+   ${VIS.map(x=>`<div class="ix st-${x.st}"><div class="h"><span class="ty">${esc(x.typl)}</span><span class="m">${fmt(x.t)} · ${esc(x.by.replace(/ \((webb|gäst)\)$/,''))}${G?'':' · '+esc(x.trad)}</span><span class="sp"></span><span class="chip c-${x.st}">${esc(x.stl)}</span></div>
+     ${x.text?`<div class="tx">${esc(x.text)}</div>`:''}
+     ${x.svar?`<div class="sv">↳ <b>Vickan:</b> ${esc(x.svar.r)} <span class="m">${fmt(x.svar.t)}</span>${x.svar.link?` <a href="${x.svar.link}" target="_blank">↗</a>`:''}</div>`:''}
+     ${x.q?`<div class="sv"><a href="#" onclick="qFocus({target:document.body},'${x.q}');return false">❓ Svara på följdfrågan</a></div>`:''}</div>`).join('')}
+   ${L.length>6?`<div class="it"><a href="#" onclick="INSK_ALLA=!INSK_ALLA;render(true);return false">${INSK_ALLA?'Visa färre':'Visa alla '+L.length}</a></div>`:''}</div>`}
+let INSK_ALLA=false;
 function belowHtml(p,k){const qs=Q.filter(q=>q.kanal==k);
   const trs=p.tradar.map(t=>`<div class="tr"><div class="h"><b>${esc(t.name)}</b><span class="m">${ago(t.last)} sedan · ${esc(t.by)}</span><button class="btn sm" onclick="comp('${t.id}')">Skriv</button><a class="btn sm" href="${t.link}" target="_blank">↗</a></div>
      <div class="comp" id="c-${t.id}"><textarea placeholder="Skriv till tråden ${esc(t.name)} …"></textarea>
@@ -393,6 +411,7 @@ function belowHtml(p,k){const qs=Q.filter(q=>q.kanal==k);
   const ds=p.dr.filter(d=>d.struktur), dsel=ds.find(d=>d.slug==DRS)||ds[0];
   const cad=dsel?`<h2>CAD-struktur</h2><div class="box cad">${ds.length>1?`<div class="vt">${ds.map(d=>`<button class="btn sm${d===dsel?' on':''}" onclick="DRS='${d.slug}';setDR('${d.slug}');render(true)">${esc(d.name.replace(/^Yamay /,''))}</button>`).join('')}</div>`:''}<img src="${dsel.struktur}?v=${encodeURIComponent(dsel.exp||'')}" onclick="zoom(this.src)" alt="CAD-struktur"><div class="m" style="padding:4px 10px 8px">Ur Design Review-exporten ${dsel.v?'v'+dsel.v:''} · grön = egen del, blå = köpdel/bibliotek · fästelement utelämnade · klicka för att förstora</div></div>`:'';
   return `${qs.length?`<h2>Att ta ställning till <span class="n">${qs.length}</span></h2><div class="qs">${qs.map(qCard).join('')}</div>`:''}
+   ${inskHtml(p)}
    <h2>Ärenden</h2><div class="box">${issTiles(p,k)}</div>
    ${G?'':`<h2>Beslut</h2><div class="box">${bes}</div>
    <details class="trd"><summary>Discord-trådar (${p.tradar.length})</summary><div class="box">${trs||'<div class="empty">Inga trådar.</div>'}</div></details>`}
