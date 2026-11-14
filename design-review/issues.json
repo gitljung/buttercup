@@ -2628,16 +2628,21 @@
    "sel": "o50",
    "url": "?p=yakitori-50&sel=o50",
    "created": "2026-11-13T13:24:30+01:00",
-   "status": "oppen",
+   "status": "avvisad",
    "log": [
     [
      "2026-11-13T13:24:30+01:00",
      "oppen",
      "Vickan verifierade: Exporten: M6x10:14–17 vid y −113,5, z 73, x 178/81/−77/−174 (genom Ventil y −135…−115 och Front y −115…−113). Inga komponenter med mutter i trädet. 2 mm / stign"
+    ],
+    [
+     "2026-11-15T00:15:32+01:00",
+     "avvisad",
+     "Vicke: "
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T13:24:30+01:00",
+   "last": "2026-11-15T00:15:32+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
    "img": "avvikelser/YAK-6.jpg",
    "ver": "hittad v19",
