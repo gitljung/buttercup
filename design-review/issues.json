@@ -2506,15 +2506,26 @@
      "2026-11-13T13:24:30+01:00",
      "oppen",
      "Vickan verifierade: Exporten: Kolgaller x −201,0…201,0; Isolering sida inre |x| 202,97 vid z 41,5 → 1,97 mm/sida. ΔL = 402·13,5e-6·(T−20): 3,7 mm vid 700 °C (1,85/sida) → spelet sl"
+    ],
+    [
+     "2026-11-15T00:13:17+01:00",
+     "kommentar",
+     "Vicke: Godkänt: åtgärda enligt förslaget."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T13:24:30+01:00",
+   "last": "2026-11-15T00:13:17+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
    "img": "avvikelser/YAK-3.jpg",
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
-   "comments": []
+   "comments": [
+    [
+     "2026-11-15T00:13:17+01:00",
+     "Vicke",
+     "Godkänt: åtgärda enligt förslaget."
+    ]
+   ]
   },
   {
    "id": "av-YAK-4",
@@ -2773,5 +2784,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-15 00:11"
+ "updated": "2026-11-15 00:13"
 }
