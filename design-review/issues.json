@@ -248,8 +248,8 @@
      "Vickan: ✅ Klart. Fronten täcker nu stenen här, eftersom asköppningen i fronten är igenslagen (steg"
     ]
    ],
-   "replies": 19,
-   "last": "2026-11-14T22:55:36.182000+00:00",
+   "replies": 20,
+   "last": "2026-11-14T22:55:44.750000+00:00",
    "analyzed": "2026-11-11T07:24:23.218000+00:00",
    "forslag": [
     {
@@ -624,7 +624,7 @@
    "sev": "Bör åtgärdas",
    "sevemo": "🟡",
    "by": "Fable",
-   "desc": "Modellen: v29: gamla _Ref i 17 filer, aldrig kvitterade\nFörväntat: t12 = 0 avvikelser i alla filer före DXF/nästa masterändring\nFörslag: Gör om Derive-länken i Eldstad och toppen innan nästa måttändring\nVerifierat: Kan inte ses i exporten; STATUS NULÄGE v32: t12 0 avvikelser i 53/55 filer, Eldstad (RbYf_Ref) + toppen (16 _Ref) har Derive utan dokumentreferens\nKommentar: 53/55 filer OK; Eldstad + toppen kvar",
+   "desc": "Modellen: v29: gamla _Ref i 17 filer, aldrig kvitterade\nFörväntat: t12 = 0 avvikelser i alla filer före DXF/nästa masterändring\nFörslag: Gör om Derive-länken i Eldstad och toppen innan nästa måttändring\nVerifierat: Kan inte ses i exporten; STATUS NULÄGE v32: t12 0 avvikelser i 53/55 filer, Eldstad (RbYf_Ref) + toppen (16 _Ref) har Derive utan dokumentreferens",
    "part": "Yamay Tizon - Eldstad:1",
    "sel": "o188",
    "url": "?p=tizon&sel=o188",
@@ -640,15 +640,26 @@
      "2026-11-12T16:00:23+01:00",
      "delvis",
      "Vickan: v32 · 53/55 filer OK; Eldstad + toppen kvar"
+    ],
+    [
+     "2026-11-14T23:55:45+01:00",
+     "kommentar",
+     "Vicke: Godkänt: åtgärda enligt förslaget."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-12T16:00:23+01:00",
+   "last": "2026-11-14T23:55:45+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
    "img": "avvikelser/TIZ-9.jpg",
    "ver": "hittad v29 · v32",
    "pname": "Yamay Tizón",
-   "comments": []
+   "comments": [
+    [
+     "2026-11-14T23:55:45+01:00",
+     "Vicke",
+     "Godkänt: åtgärda enligt förslaget."
+    ]
+   ]
   },
   {
    "id": "av-TIZ-10",
