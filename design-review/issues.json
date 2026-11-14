@@ -370,15 +370,26 @@
      "2026-11-12T16:00:16+01:00",
      "oppen",
      "Vickan verifierade: Räknat: α 12e-6 × 200 K × 440/528 mm = 1,06 / 1,27 mm. Exporten v32: Toppram bb 440×528×3, 8 × ISO 10642 M6x12 10.9 i Ytterskal, ingen ändring i steg 29 (GRANSK"
+    ],
+    [
+     "2026-11-14T23:55:17+01:00",
+     "kommentar",
+     "Vicke: Godkänt: åtgärda enligt förslaget."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-12T16:00:16+01:00",
+   "last": "2026-11-14T23:55:17+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
    "img": "avvikelser/TIZ-3.jpg",
    "ver": "hittad v29",
    "pname": "Yamay Tizón",
-   "comments": []
+   "comments": [
+    [
+     "2026-11-14T23:55:17+01:00",
+     "Vicke",
+     "Godkänt: åtgärda enligt förslaget."
+    ]
+   ]
   },
   {
    "id": "av-TIZ-4",
@@ -2715,5 +2726,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-14 23:05"
+ "updated": "2026-11-14 23:55"
 }
