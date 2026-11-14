@@ -275,6 +275,26 @@ main.k-wide{max-width:none;padding:0 18px 18px 0}
 .k-nxt{font-size:14px;line-height:1.3}
 /* mobil: sidhuvudet bryts på två rader i stället för att sticka ut utanför skärmen */
 @media(max-width:700px){header{flex-wrap:wrap;gap:6px 8px;padding:8px 12px}header h1{font-size:22px}#upd{display:none}header .btn{font-size:14px;padding:4px 9px}main{padding:12px}.k-fl{margin:0 -12px 12px;padding:0 12px 2px}}
+/* projektsida v2 */
+.k-pnav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.k-vx{display:flex;gap:4px;align-items:center}.k-vx select{max-width:210px}
+.k-pt{display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-top:10px}
+#pnx .k-nx{margin:8px 0 0;font-size:16px}
+.k-tabs{display:flex;gap:5px;overflow-x:auto;margin:24px 0 12px;border-bottom:3px solid var(--ox);scroll-margin-top:calc(var(--ht,62px) + 8px);scrollbar-width:none}
+.k-tabs::-webkit-scrollbar{display:none}
+.k-tab{font-family:'Barlow Condensed';font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;padding:6px 14px 5px;border:2px solid var(--line);border-bottom:0;border-radius:8px 8px 0 0;background:var(--paper);color:var(--ox);cursor:pointer;white-space:nowrap}
+.k-tab:hover{background:#fff}.k-tab.on{background:var(--ox);border-color:var(--ox);color:var(--y)}
+.k-tab span{font-size:13px;margin-left:5px;opacity:.75;letter-spacing:0}
+.k-tab span.ny{background:var(--chili);color:#fff;opacity:1;border-radius:9px;padding:0 7px}
+.k-if{flex-wrap:wrap;gap:6px!important;padding:10px 10px 0!important}.k-if .k-ch{font-size:14px;padding:2px 11px}
+.k-ist{padding:10px 12px 0}.k-ist .k-stack{margin-top:0}
+.k-ny{display:inline-block;background:var(--chili);color:#fff;font-family:'Barlow Condensed';font-weight:700;font-size:11.5px;letter-spacing:.04em;border-radius:9px;padding:0 7px;margin-left:6px;text-transform:none}
+.ic{position:relative}.ic .k-ny{position:absolute;top:5px;right:5px;margin:0}
+.k-hr{display:grid;grid-template-columns:104px minmax(0,1fr);gap:8px;padding:7px 12px;border-bottom:1px solid var(--line);font-size:14px;line-height:1.35;align-items:baseline}
+.k-hr:last-child{border-bottom:0}.k-hr.kl{cursor:pointer}.k-hr.kl:hover{background:#fff}
+.k-hr b{font-family:'Barlow Condensed';font-weight:700;color:var(--mute);white-space:nowrap}
+.k-hr.ny b{color:var(--chili)}.k-hr.ny b:before{content:'● '}
+@media(max-width:700px){.ph .acts{margin-left:0}.k-hr{grid-template-columns:84px minmax(0,1fr)}}
 footer{max-width:1180px;margin:30px auto;padding:0 18px;font-size:12px;color:var(--mute)}
 </style></head>
 <body>
@@ -289,11 +309,11 @@ footer{max-width:1180px;margin:30px auto;padding:0 18px;font-size:12px;color:var
 <aside id="fzrail"></aside><button id="fzpill" onclick="document.body.classList.toggle('fzopen')"></button>
 <div id="qbg" onclick="qUnfocus()"></div>
 <main id="main"></main>
-<footer>Projektportal v2 · data läst 2026-11-14 22:32 · uppdateras var 5:e minut · Discord är fortfarande motorn: svar härifrån hamnar i rätt tråd och Vickan svarar där som vanligt.</footer>
+<footer>Projektportal v2 · data läst 2026-11-14 22:42 · uppdateras var 5:e minut · Discord är fortfarande motorn: svar härifrån hamnar i rätt tråd och Vickan svarar där som vanligt.</footer>
 <div id="zoom" onclick="this.style.display='none'"><img></div>
 <div id="toast"></div>
 <script>
-let D={"projekt": [{"konfig": [], "lage": {"lage": "Variant A (3 × M6 i Wavin-locket) och variant B (central M8) är modellerade och finns i Design Review. Jämförelsen rekommenderar A för prototypen och B som reserv.", "nasta": "Granska A mot B och mät lockets undersida (plan inom Ø58) och toppgodset.", "kalla": "~/code/konstruktion/rat-stop/PROJEKT.md, ~/code/konstruktion/rat-stop/skiss/AB_JAMFORELSE.md", "datum": "2026-11-08"}, "fusion": {"t": "2026-11-08T08:17:46.431000+00:00", "trad": "Fusion", "img": "img/fs/p-rat-stop.jpg"}, "stegdata": {"forstudie": {"fil": null, "rubriker": [], "status": "godkänd", "datum": null}, "modellering": {"fusion": "rat-stop", "fil": null, "rubriker": [], "datum": null}, "montering": {"finns": false, "pdf": [], "sidor": 0, "avvikelser": 0, "utvardering": false, "datum": null}}, "fusion_nu": false, "kanal": "rat-stop", "id": "1568630783986630872", "topic": "Råttstopp för avloppsrör/spolbrunn.  Rita av bifogad stepfil.", "steg": "modell i DR", "slugs": ["rat-stop", "rat-stop-b", "rat-stop-a"], "beslut": [], "namn": "rat stop", "webb": null, "dr": [{"slug": "rat-stop", "name": "rat stop", "v": 2, "exp": "2026-11-07 22:14", "struktur": "img/struktur/rat-stop.png"}, {"slug": "rat-stop-b", "name": "rat stop B (M8 i Wavin-lock)", "v": 1, "exp": "2026-11-08 08:15", "struktur": "img/struktur/rat-stop-b.png"}, {"slug": "rat-stop-a", "name": "rat stop A (3 × M6 i Wavin-lock)", "v": 1, "exp": "2026-11-08 09:12", "struktur": "img/struktur/rat-stop-a.png"}], "arenden": {"oppen": 0, "analyserad": 0, "pagar": 0, "delvis": 0, "atgardad": 0}, "avvikelser": 0, "oppna": [], "tradar": [{"id": "1568630785232343191", "name": "Konstruktion"}, {"id": "1568630789095039016", "name": "Fusion"}, {"id": "1568630790848520396", "name": "Design Review"}, {"id": "1568630787321102457", "name": "Montering"}], "last": "2026-11-14T21:24:15.869000+00:00", "inskickat": [], "vantar_pa_vicke": 0, "tur": "vickan", "tur_varfor": "ett inskick bearbetas", "delningar": []}], "fragor": [], "fusion": {"upptagen": false, "vad": "", "ko": []}, "kod": "eeefcc6050", "upd": "22:32"};
+let D={"projekt": [{"konfig": [], "lage": {"lage": "Variant A (3 × M6 i Wavin-locket) och variant B (central M8) är modellerade och finns i Design Review. Jämförelsen rekommenderar A för prototypen och B som reserv.", "nasta": "Granska A mot B och mät lockets undersida (plan inom Ø58) och toppgodset.", "kalla": "~/code/konstruktion/rat-stop/PROJEKT.md, ~/code/konstruktion/rat-stop/skiss/AB_JAMFORELSE.md", "datum": "2026-11-08"}, "fusion": {"t": "2026-11-08T08:17:46.431000+00:00", "trad": "Fusion", "img": "img/fs/p-rat-stop.jpg"}, "stegdata": {"forstudie": {"fil": null, "rubriker": [], "status": "godkänd", "datum": null}, "modellering": {"fusion": "rat-stop", "fil": null, "rubriker": [], "datum": null}, "montering": {"finns": false, "pdf": [], "sidor": 0, "avvikelser": 0, "utvardering": false, "datum": null}}, "fusion_nu": false, "kanal": "rat-stop", "id": "1568630783986630872", "topic": "Råttstopp för avloppsrör/spolbrunn.  Rita av bifogad stepfil.", "steg": "modell i DR", "slugs": ["rat-stop", "rat-stop-b", "rat-stop-a"], "beslut": [], "namn": "rat stop", "webb": null, "dr": [{"slug": "rat-stop", "name": "rat stop", "v": 2, "exp": "2026-11-07 22:14", "struktur": "img/struktur/rat-stop.png"}, {"slug": "rat-stop-b", "name": "rat stop B (M8 i Wavin-lock)", "v": 1, "exp": "2026-11-08 08:15", "struktur": "img/struktur/rat-stop-b.png"}, {"slug": "rat-stop-a", "name": "rat stop A (3 × M6 i Wavin-lock)", "v": 1, "exp": "2026-11-08 09:12", "struktur": "img/struktur/rat-stop-a.png"}], "arenden": {"oppen": 0, "analyserad": 0, "pagar": 0, "delvis": 0, "atgardad": 0}, "avvikelser": 0, "oppna": [], "tradar": [{"id": "1568630785232343191", "name": "Konstruktion"}, {"id": "1568630789095039016", "name": "Fusion"}, {"id": "1568630790848520396", "name": "Design Review"}, {"id": "1568630787321102457", "name": "Montering"}], "last": "2026-11-14T21:24:15.869000+00:00", "inskickat": [], "vantar_pa_vicke": 0, "tur": "vickan", "tur_varfor": "ett inskick bearbetas", "delningar": []}], "fragor": [], "fusion": {"upptagen": false, "vad": "", "ko": []}, "kod": "9dab37baec", "upd": "22:42"};
 const G={"tok": "GU_pJd2ErFjaZFfDSBylQzBw", "kanal": "rat-stop"};   // gäst-läge: {tok, kanal} på /portal/dela/<tok>/
 let P=D.projekt, Q=D.fragor;
 const STEG=['Förstudie','Modellering','Design Review','Montering'];
@@ -311,7 +331,7 @@ const hooks=()=>{try{return JSON.parse(localStorage.getItem('dr_hooks')||'null')
 const H=G?(GK?{_intake:{id:GK.id,token:GK.token}}:null):hooks(), CAN=!!(H&&H._intake);
 if(G){document.body.classList.add('gast');document.querySelector('header .sub').textContent='Delat projekt';
   document.getElementById('lockbar').textContent='Läsläge · länken saknar din nyckel – öppna hela länken du fick för att kunna svara och kommentera';
-  document.querySelector('footer').textContent=`Delat projekt · data läst ${'2026-11-14 22:32'} · uppdateras automatiskt · dina svar och kommentarer går till projektgruppen${GK?' som ”'+GK.namn+' (gäst)”':''}.`}
+  document.querySelector('footer').textContent=`Delat projekt · data läst ${'2026-11-14 22:42'} · uppdateras automatiskt · dina svar och kommentarer går till projektgruppen${GK?' som ”'+GK.namn+' (gäst)”':''}.`}
 document.getElementById('lockbar').style.display=CAN?'none':'';
 if(!CAN)document.body.classList.add('locked');
 const SENT=JSON.parse(localStorage.pp_sent||'{}');
@@ -428,7 +448,7 @@ function kDetalj(p){const t=pTur(p),L=p.lage||{},o=p.oppna||[],op=pOp(p),b=pBild
     <div class="k-box"><span class="k-cap">Senast i projektet</span>${ev.map(e=>`<div class="k-il ev${e.id?' kl':''}"${e.id?` onclick="openIss('${k}','${e.id}')"`:''}><b>${evT(e)}</b><span class="k-c2">${esc(e.x)}</span></div>`).join('')||'<div class="m" style="margin-top:8px">Ingen loggad händelse.</div>'}</div></div>`}
 function homeDesk(){const L=pSort(),p=L.find(p=>p.kanal==SEL)||L[0];if(!p)return '<div class="empty">Inga projekt.</div>';SEL=p.kanal;
   let rows='',g=null;for(const x of L){const t=pTur(x);if(t!=g){g=t;rows+=`<div class="k-gh ${t}">${TUR[t][1]} ${TUR[t][0]}<span>${L.filter(y=>pTur(y)==t).length}</span></div>`}
-    rows+=`<div class="k-rw ${t}${x===p?' on':''}" onclick="kSel('${x.kanal}')" ondblclick="go('p=${x.kanal}')" title="${esc(x.tur_varfor||'')} · dubbelklicka för att öppna"><span class="k-st"></span>${pBild(x)?`<img src="${pBild(x)}" alt="">`:'<span class="k-ni"></span>'}<div class="k-rn"><b>${esc(pNm(x))}</b><small>${STEG[stegIx(x.steg)]}${x.last?' · '+ago(x.last):''}</small></div><div class="k-hx">${kHeat(x)}<div>${kPr(x)}</div></div></div>`}
+    rows+=`<div class="k-rw ${t}${x===p?' on':''}" onclick="kSel('${x.kanal}')" ondblclick="go('p=${x.kanal}')" title="${esc(x.tur_varfor||'')} · dubbelklicka för att öppna"><span class="k-st"></span>${pBild(x)?`<img src="${pBild(x)}" alt="">`:'<span class="k-ni"></span>'}<div class="k-rn"><b>${esc(pNm(x))}</b><small>${STEG[stegIx(x.steg)]}${x.last?' · '+ago(x.last):''}${kNy(x)}</small></div><div class="k-hx">${kHeat(x)}<div>${kPr(x)}</div></div></div>`}
   return `<div class="k-kr"><div class="k-L"><div class="k-lh"><b>Projekt ${P.length}</b><small>aktivitet 14 dagar · öppna ärenden</small></div>${rows}</div><div class="k-M">${kQ()}${kDetalj(p)}</div></div>`}
 function kFeed(){const ev=P.flatMap(p=>pEv(p).map(e=>({...e,p}))).sort((a,b)=>new Date(b.t)-new Date(a.t)).slice(0,14);
   return ev.length?`<div class="rh" style="margin-top:18px">Senaste händelser</div>${ev.map(e=>`<div class="k-e" onclick="${e.id?`openIss('${e.p.kanal}','${e.id}')`:MQ.matches?`kSel('${e.p.kanal}')`:`go('p=${e.p.kanal}')`}"><div class="k-em"><b>${esc(pNm(e.p).replace(/^Yamay /,''))}</b><span>${evT(e)}</span></div><div class="k-c2">${esc(e.x)}</div></div>`).join('')}`:''}
@@ -443,13 +463,13 @@ function homeMob(){const L=pSort(),f=D.fusion||{},n=t=>L.filter(p=>pTur(p)==t).l
    <div class="k-fl"><span class="k-ch${FILT?'':' on'}" onclick="FILT=null;render(true)">Alla ${L.length}</span>${TORD.filter(n).map(t=>`<span class="k-ch${FILT==t?' on':''}" onclick="kFilt('${t}')">${TUR[t][1]} ${TUR[t][0]} ${n(t)}</span>`).join('')}</div>
    <div class="k-g">${V.map(p=>{const t=pTur(p),b=pBild(p);return `<div class="k-c ${t}" onclick="go('p=${p.kanal}')">
      <div class="k-im">${b?`<img src="${b}" alt="" loading="lazy">`:''}<span class="k-tur ${t}">${TUR[t][1]} ${TUR[t][0]}</span>${p.last?`<span class="k-tid">${ago(p.last)}</span>`:''}<h3>${esc(pNm(p))}</h3></div>
-     <div class="k-bd"><div>${kSteg(p)}<div class="k-ro"><span class="stl">${STEG[stegIx(p.steg)]}</span><span class="sp" style="flex:1"></span>${kPr(p)}</div></div>
+     <div class="k-bd"><div>${kSteg(p)}<div class="k-ro"><span class="stl">${STEG[stegIx(p.steg)]}</span><span class="sp" style="flex:1"></span>${kNy(p)}${kPr(p)}</div></div>
      <div class="k-nxt k-c3">${(p.lage||{}).nasta?'➜ '+esc(p.lage.nasta):esc(p.tur_varfor||p.topic||'')}</div></div></div>`}).join('')}</div>`}
 let KM=null;
 function home(){KM=MQ.matches;return KM?homeDesk():homeMob()}
 function kMode(){if(G||/^#p=/.test(location.hash)||KM===MQ.matches||busy())return;render(true)}
 MQ.addEventListener('change',kMode);addEventListener('resize',kMode);
-// ---------- projektsida: 3D (Design Review inbäddad) + läge/ärende bredvid ----------
+// ---------- projektsida (v2-tillägg längre ned: "projektsida v2"): 3D (Design Review inbäddad) + läge/ärende bredvid ----------
 let CUR=null, PK=null, DRS=null;
 const DRB=(location.hostname==='localhost'&&new URLSearchParams(location.search).get('drb'))||'https://www.buttercup.nu/design-review/';
 function drQ(u){return (u||'').split('?')[1]||''}
@@ -461,17 +481,17 @@ function projShell(k){const p=P.find(p=>p.kanal==k);
   DRS=p.webb?null:((p.dr[0]||{}).slug||null);
   const tabs=p.dr.length>1?`<div class="vt">${p.dr.map(d=>`<button class="btn sm${d.slug==DRS?' on':''}" data-s="${d.slug}" onclick="setDR('${d.slug}')">${esc(d.name.replace(/^Yamay /,''))}</button>`).join('')}</div>`:'';
   if(G)return `<div class="ph"><h1 class="t">${esc(p.namn||nice(k))}</h1>${(p.konfig||[]).length?`<div class="acts">${p.konfig.map(x=>`<a class="btn sm pri" target="_blank" href="${x.url}">🧩 ${esc(x.namn)} ↗</a>`).join('')}</div>`:''}</div>
-   <div id="psteps"></div>
+   <div id="pnx"></div><div id="psteps"></div>
    <div class="pg"><div class="vw">${p.webb?webbVy(p.webb):tabs+(DRS?`<iframe id="v3d" data-k="${k}" src="${DRB}?p=${DRS}&embed=1" allow="fullscreen"></iframe>`:'<div class="empty" style="padding:40px">Ingen 3D-modell exporterad än.</div>')}
    <div class="cmp"><textarea id="cmpT" placeholder="Kommentar eller fråga till projektgruppen … (vyn ovan bifogas)"></textarea>
     <div class="r">${DRS?'<label><input type="checkbox" id="cmpV" checked> 📷 Bifoga vyn</label>':''}<label class="btn sm">📎 Fil<input type="file" id="cmpF" accept="image/*,application/pdf" hidden onchange="this.parentNode.firstChild.textContent=this.files[0]?'📎 '+this.files[0].name.slice(0,16)+' ':'📎 Fil'"></label><span class="sp"></span>
     <button class="btn sm pri" onclick="cmpSend('kommentar')">💬 Skicka kommentar</button></div></div></div>
    <div class="side" id="pside"></div></div>
    <div id="pbelow"></div>`;
-  return `<div class="back" onclick="go('')">← Alla projekt</div>
+  return `<div class="k-pnav"><span class="back" onclick="go('')">← Alla projekt</span><span class="sp" style="flex:1"></span>${kVaxla(k)}</div>
    <div class="ph"><h1 class="t">${esc(p.namn||nice(k))}</h1>
      <div class="acts"><button class="btn pri" onclick="projAct('fortsatt')">▶ Fortsätt utveckling</button><button class="btn" onclick="projAct('granska')">🧐 Granska (Fable)</button>${(p.konfig||[]).map(x=>`<a class="btn sm" target="_blank" href="${x.url}" title="${x.egen?'':'Projektet ingår som modul i '+esc(x.namn)}">🧩 ${esc(x.namn)}${x.egen?'':' (modul)'} ↗</a>`).join('')}<button class="btn sm" onclick="delaPanel()">🔗 Dela${p.delningar&&p.delningar.length?' ('+p.delningar.length+')':''}</button>${DRS?`<a class="btn sm" target="_blank" href="${DRB}?p=${DRS}">Design Review ↗</a>`:''}<a class="btn sm" target="_blank" href="${dc}">#${esc(k)} ↗</a></div></div>
-   <div id="psteps"></div>
+   <div id="pnx"></div><div id="psteps"></div>
    <div class="pg"><div class="vw">${p.webb?webbVy(p.webb):tabs+(DRS?`<iframe id="v3d" data-k="${k}" src="${DRB}?p=${DRS}&embed=1" allow="fullscreen"></iframe>`:'<div class="empty" style="padding:40px">Ingen 3D-modell exporterad än.</div>')}
    <div class="cmp"><textarea id="cmpT" placeholder="Instruktion eller idé till projektet … (vyn ovan bifogas)"></textarea>
     <div class="r">${DRS?'<label><input type="checkbox" id="cmpV" checked> 📷 Bifoga vyn</label>':''}<label class="btn sm">📎 Fil<input type="file" id="cmpF" accept="image/*,application/pdf" hidden onchange="this.parentNode.firstChild.textContent=this.files[0]?'📎 '+this.files[0].name.slice(0,16)+' ':'📎 Fil'"></label><span class="sp"></span>
@@ -525,23 +545,45 @@ function setDR(s){DRS=s;drGo('p='+s);document.querySelectorAll('.vt button').for
 function lageHtml(p){const L=p.lage||{}, oi=p.oppna.filter(i=>isOpen(i.status)).length, qs=Q.filter(q=>q.kanal==p.kanal).length;
   const d=p.dr.find(d=>d.slug==DRS)||p.dr[0], f=p.fusion, b=p.beslut[0];
   return `<h2 style="margin-top:0">Läge just nu</h2>
-   <div class="lg">${L.lage?esc(L.lage):'<span class="m">Ingen sammanfattning än.</span>'}${L.nasta?`<div class="nx">➜ ${esc(L.nasta)}</div>`:''}${L.datum?`<div class="m">enligt projektfilerna ${esc(L.datum)}</div>`:''}</div>
+   <div class="lg">${L.lage?esc(L.lage):'<span class="m">Ingen sammanfattning än.</span>'}${L.datum?`<div class="m">enligt projektfilerna ${esc(L.datum)}</div>`:''}</div>
    <ul class="facts">
     ${d?`<li><b>3D-modell</b> ${esc(d.name)}${d.v?' · v'+d.v:''}${d.exp?' · exporterad '+esc(d.exp):''}</li>`:''}
     <li><b>Fusion</b> ${p.fusion_nu?`<span class="dot b"></span>jobbar med projektet nu: ${esc(D.fusion.vad)}`:(f?`senaste bild ${ago(f.t)} sedan${f.text?' · '+esc(f.text.slice(0,90)):''}`:'–')}</li>
     <li><b>Väntar på dig</b> ${qs?`<a href="#pbelow" onclick="document.getElementById('pbelow').scrollIntoView({behavior:'smooth'});return false">❓ ${qs} fråga${qs>1?'r':''}</a>`:'inget'}</li>
     <li><b>Ärenden</b> ${oi} öppna av ${p.oppna.length}</li>
     ${(p.inskickat||[]).length?(()=>{const L=p.inskickat,j=L.filter(x=>x.st=='jobbar').length,f=L.filter(x=>x.st=='fraga').length,i=L.filter(x=>x.st=='inget').length;
-      return `<li><b>Inskickat</b> <a href="#" onclick="document.querySelector('.insk').scrollIntoView({behavior:'smooth',block:'center'});return false">${[j?'🛠 '+j+' pågår':'',f?'❓ '+f+' följdfråga':'',i?'⏳ '+i+' utan svar':''].filter(Boolean).join(' · ')||'💬 '+L.length+' besvarade'}</a></li>`})():''}
+      return `<li><b>Inskickat</b> <a href="#" onclick="pTab('inskickat');return false">${[j?'🛠 '+j+' pågår':'',f?'❓ '+f+' följdfråga':'',i?'⏳ '+i+' utan svar':''].filter(Boolean).join(' · ')||'💬 '+L.length+' besvarade'}</a></li>`})():''}
     ${(p.konfig||[]).length?`<li><b>Konfigurator</b> ${p.konfig.map(x=>`<a href="${x.url}" target="_blank">🧩 ${esc(x.namn)} ↗</a>${x.egen?'':' <span class="m">(ingår som modul)</span>'}`).join(' · ')}</li>`:''}
     ${b?`<li><b>Senaste beslut</b> ${esc(b.d.slice(5))} · ${esc(b.t.slice(0,120))}</li>`:''}
    </ul>
    ${f&&f.img?`<div class="fimg"><img src="${f.img}" onclick="zoom(this.src)"><div class="m">${esc(f.trad)} · ${ago(f.t)} sedan${f.link&&!G?` · <a href="${f.link}" target="_blank">Discord ↗</a>`:''}</div></div>`:''}`}
-function issTiles(p,k){const list=p.oppna.filter(i=>ALLA||isOpen(i.status));
-  return `<div class="it"><label><input type="checkbox" ${ALLA?'':'checked'} onchange="ALLA=!this.checked;render(true)"> Bara öppna</label><span>${p.oppna.filter(i=>isOpen(i.status)).length} öppna av ${p.oppna.length}</span></div>`+(list.length?`<div class="is">${list.map(i=>`<div class="ic${CUR&&CUR.id==i.id?' sel':''}" onclick="openIss('${k}','${i.id}')">${i.img?`<img src="${i.img}">`:'<div class="noi">'+(i.kind=='avv'?'🧐':'📸')+'</div>'}<div><span class="st st-${i.status}">${ST[i.status]?.[0]||''} ${ST[i.status]?.[1]||i.status}</span><br>${i.sev||''} ${typeof i.nr=='number'?'#'+i.nr:i.nr} ${esc(i.t)}</div></div>`).join('')}</div>`:'<div class="empty">Inga öppna ärenden.</div>')}
+// ---------- projektsida v2 ----------
+let PTAB='arenden',IFILT=null,HALLA=false;
+// "nytt sedan sist": per webbläsare (localStorage). SEEN = senast öppnad per projekt, SEEN0 = värdet när projektet öppnades nu.
+const SEEN=(()=>{try{return JSON.parse(localStorage.pp_seen||'{}')}catch(e){return {}}})(),SEEN0={};
+let BASE=+localStorage.pp_seen_base||0;if(!BASE){BASE=Date.now();localStorage.pp_seen_base=BASE}
+function seenOpen(k){if(G)return;SEEN0[k]=SEEN[k]||BASE}
+function seenNu(k){if(G)return;SEEN[k]=Date.now();try{localStorage.pp_seen=JSON.stringify(SEEN)}catch(e){}}
+const isNy=(k,t)=>!G&&!!t&&!!SEEN0[k]&&+new Date(t)>SEEN0[k];
+function nyN(p){if(G)return 0;const s=SEEN[p.kanal]||BASE;return pEv(p).filter(e=>!e.dag&&+new Date(e.t)>s).length}
+function kNy(p){const n=nyN(p);return n?`<span class="k-ny" title="${n} händelser sedan du senast öppnade projektet">${n} nytt</span>`:''}
+function pTab(t){PTAB=t;HALLA=false;render(true);const e=document.querySelector('.k-tabs');if(e)e.scrollIntoView({behavior:'smooth',block:'start'})}
+function kVaxla(k){const L=pSort(),i=L.findIndex(p=>p.kanal==k);if(L.length<2||i<0)return'';const a=L[(i-1+L.length)%L.length],b=L[(i+1)%L.length];
+  return `<span class="k-vx"><button class="btn sm" title="Föregående: ${esc(pNm(a))}" onclick="go('p=${a.kanal}')">‹</button><select class="btn sm" title="Byt projekt" onchange="this.blur();go('p='+this.value)">${TORD.map(t=>{const X=L.filter(p=>pTur(p)==t);return X.length?`<optgroup label="${TUR[t][0]}">${X.map(p=>`<option value="${p.kanal}"${p.kanal==k?' selected':''}>${esc(pNm(p))}${p.kanal!=k&&nyN(p)?' ●':''}</option>`).join('')}</optgroup>`:''}).join('')}</select><button class="btn sm" title="Nästa: ${esc(pNm(b))}" onclick="go('p=${b.kanal}')">›</button></span>`}
+function pnxHtml(p){const t=pTur(p),L=p.lage||{};
+  return `${G?'':`<div class="k-pt"><span class="k-tur ${t}">${TUR[t][1]} ${TUR[t][0]}</span>${p.tur_varfor?`<span class="k-vf">${esc(p.tur_varfor)}</span>`:''}</div>`}${L.nasta?`<div class="k-nx">➜ ${esc(L.nasta)}</div>`:''}`}
+function issTiles(p,k){const o=p.oppna,op=o.filter(i=>isOpen(i.status)),tot=o.length||1,cnt=f=>o.filter(f).length;
+  const seg=[['var(--chili)','Öppna allvarliga',cnt(i=>isOpen(i.status)&&i.status!='delvis'&&i.sev=='🔴')],['#e09a00','Öppna övriga',cnt(i=>isOpen(i.status)&&i.status!='delvis'&&i.sev!='🔴')],['#f6d77a','Delvis',cnt(i=>i.status=='delvis')],['var(--ok)','Åtgärdade',cnt(i=>i.status=='atgardad'||i.status=='stangd')],['#bbb','Avvisade',cnt(i=>i.status=='avvisad')]];
+  const bas=ALLA?o:op,sevs=[...new Map(bas.filter(i=>i.sev).map(i=>[i.sev,i.sevt||''])).entries()];
+  if(IFILT&&!sevs.some(s=>s[0]==IFILT))IFILT=null;
+  const rank=i=>(isOpen(i.status)?0:10)+(i.sev=='🔴'?0:i.sev=='🟡'?1:2);
+  const list=bas.filter(i=>!IFILT||i.sev==IFILT).sort((a,b)=>rank(a)-rank(b)||String(b.last||'').localeCompare(String(a.last||'')));
+  return `${o.length?`<div class="k-ist"><div class="k-stack">${seg.map(s=>`<i style="background:${s[0]};width:${s[2]/tot*100}%" title="${s[1]} ${s[2]}"></i>`).join('')}</div><div class="k-leg">${seg.filter(s=>s[2]).map(s=>`<span><b style="background:${s[0]}"></b>${s[1]} ${s[2]}</span>`).join('')}</div></div>`:''}
+   <div class="it k-if"><span class="k-ch${ALLA?'':' on'}" onclick="ALLA=false;render(true)">Öppna ${op.length}</span><span class="k-ch${ALLA?' on':''}" onclick="ALLA=true;render(true)">Alla ${o.length}</span>${sevs.length>1?sevs.map(([s,t])=>`<span class="k-ch${IFILT==s?' on':''}" onclick="IFILT=IFILT=='${s}'?null:'${s}';render(true)">${s} ${esc(t)} ${bas.filter(i=>i.sev==s).length}</span>`).join(''):''}</div>`
+   +(list.length?`<div class="is">${list.map(i=>`<div class="ic${CUR&&CUR.id==i.id?' sel':''}" onclick="openIss('${k}','${i.id}')">${i.img?`<img src="${i.img}" loading="lazy">`:'<div class="noi">'+(i.kind=='avv'?'🧐':'📸')+'</div>'}${isNy(k,i.last)?'<span class="k-ny">nytt</span>':''}<div><span class="st st-${i.status}">${ST[i.status]?.[0]||''} ${ST[i.status]?.[1]||i.status}</span><br>${i.sev||''} ${typeof i.nr=='number'?'#'+i.nr:i.nr} ${esc(i.t)}</div></div>`).join('')}</div>`:`<div class="empty">${o.length?'Inga ärenden med det urvalet.':'Inga ärenden än.'}</div>`)}
 function inskHtml(p){const L=p.inskickat||[];if(!L.length)return'';const VIS=INSK_ALLA?L:L.slice(0,6);
   const n=s=>L.filter(x=>x.st==s).length;
-  return `<h2>Inskickat & återkoppling <span class="n">${L.length}</span></h2><div class="box insk">
+  return `<div class="box insk">
    <div class="it"><span>${['jobbar','fraga','inget','varn'].filter(n).map(s=>`${({jobbar:'🛠',fraga:'❓',inget:'⏳',varn:'⚠️'})[s]} ${n(s)}`).join(' · ')||'allt besvarat'}</span></div>
    ${VIS.map(x=>`<div class="ix st-${x.st}"><div class="h"><span class="ty">${esc(x.typl)}</span><span class="m">${fmt(x.t)} · ${esc(x.by.replace(/ \((webb|gäst)\)$/,''))}${G?'':' · '+esc(x.trad)}</span><span class="sp"></span><span class="chip c-${x.st}">${esc(x.stl)}</span></div>
      ${x.text?`<div class="tx">${esc(x.text)}</div>`:''}
@@ -556,16 +598,25 @@ function belowHtml(p,k){const qs=Q.filter(q=>q.kanal==k);
        <button class="btn sm pri" onclick="sendT('${t.id}','${esc(t.name)}')">Skicka till tråden</button></div></div></div>`).join('');
   const bes=p.beslut.length?`<ul class="bl">${p.beslut.map(b=>`<li><span class="d">${b.d.slice(5)}</span>${esc(b.t)}</li>`).join('')}</ul>`:'<div class="empty">Inga beslut loggade i PROJEKT.md än.</div>';
   const ds=p.dr.filter(d=>d.struktur), dsel=ds.find(d=>d.slug==DRS)||ds[0];
-  const cad=dsel?`<h2>CAD-struktur</h2><div class="box cad">${ds.length>1?`<div class="vt">${ds.map(d=>`<button class="btn sm${d===dsel?' on':''}" onclick="DRS='${d.slug}';setDR('${d.slug}');render(true)">${esc(d.name.replace(/^Yamay /,''))}</button>`).join('')}</div>`:''}<img src="${dsel.struktur}?v=${encodeURIComponent(dsel.exp||'')}" onclick="zoom(this.src)" alt="CAD-struktur"><div class="m" style="padding:4px 10px 8px">Ur Design Review-exporten ${dsel.v?'v'+dsel.v:''} · grön = egen del, blå = köpdel/bibliotek · fästelement utelämnade · klicka för att förstora</div></div>`:'';
+  const cad=dsel?`<div class="box cad">${ds.length>1?`<div class="vt">${ds.map(d=>`<button class="btn sm${d===dsel?' on':''}" onclick="DRS='${d.slug}';setDR('${d.slug}');render(true)">${esc(d.name.replace(/^Yamay /,''))}</button>`).join('')}</div>`:''}<img src="${dsel.struktur}?v=${encodeURIComponent(dsel.exp||'')}" onclick="zoom(this.src)" alt="CAD-struktur"><div class="m" style="padding:4px 10px 8px">Ur Design Review-exporten ${dsel.v?'v'+dsel.v:''} · grön = egen del, blå = köpdel/bibliotek · fästelement utelämnade · klicka för att förstora</div></div>`:'';
+  const ev=G?[]:pEv(p),nyE=ev.filter(e=>!e.dag&&isNy(k,e.t)).length,ni=(p.inskickat||[]).length;
+  const T=[['arenden','Ärenden',p.oppna.filter(i=>isOpen(i.status)).length+' öppna']];
+  if(ni||!G)T.push(['inskickat','Inskickat',ni||'']);
+  if(!G)T.push(['beslut','Beslut',p.beslut.length||''],['historik','Historik',nyE?nyE+' nya':''],['tradar','Trådar',p.tradar.length||'']);
+  if(cad)T.push(['cad','CAD-struktur','']);
+  if(!T.some(t=>t[0]==PTAB))PTAB='arenden';
+  const VIS=HALLA?ev:ev.slice(0,30);
+  const body=PTAB=='arenden'?`<div class="box">${issTiles(p,k)}</div>`
+   :PTAB=='inskickat'?(inskHtml(p)||'<div class="box"><div class="empty">Inget inskickat från portalen än.</div></div>')
+   :PTAB=='beslut'?`<div class="box">${bes}</div>`
+   :PTAB=='historik'?`<div class="box">${VIS.map(e=>`<div class="k-hr${e.id?' kl':''}${!e.dag&&isNy(k,e.t)?' ny':''}"${e.id?` onclick="openIss('${k}','${e.id}')"`:''}><b>${e.dag||fmt(e.t)}</b><span>${esc(e.x)}</span></div>`).join('')||'<div class="empty">Ingen loggad händelse än.</div>'}${ev.length>30?`<div class="it"><a href="#" onclick="HALLA=!HALLA;render(true);return false">${HALLA?'Visa färre':'Visa alla '+ev.length}</a></div>`:''}</div>`
+   :PTAB=='tradar'?`<div class="box">${trs||'<div class="empty">Inga trådar.</div>'}</div>`:cad;
   return `${qs.length?`<h2>Att ta ställning till <span class="n">${qs.length}</span></h2><div class="qs">${qs.map(qCard).join('')}</div>`:''}
-   ${inskHtml(p)}
-   <h2>Ärenden</h2><div class="box">${issTiles(p,k)}</div>
-   ${G?'':`<h2>Beslut</h2><div class="box">${bes}</div>
-   <details class="trd"><summary>Discord-trådar (${p.tradar.length})</summary><div class="box">${trs||'<div class="empty">Inga trådar.</div>'}</div></details>`}
-   ${cad}`}
+   <div class="k-tabs">${T.map(t=>`<span class="k-tab${t[0]==PTAB?' on':''}" onclick="pTab('${t[0]}')">${t[1]}${t[2]!==''?`<span${t[0]=='historik'?' class="ny"':''}>${t[2]}</span>`:''}</span>`).join('')}</div>${body}`}
 function proj(k){const p=P.find(p=>p.kanal==k);const main=document.getElementById('main');
   if(!p){main.innerHTML=home();return}
-  if(PK!==k||!document.getElementById('pside')){PK=k;CUR=null;main.innerHTML=projShell(k)}
+  if(PK!==k||!document.getElementById('pside')){PK=k;CUR=null;seenOpen(k);main.innerHTML=projShell(k)}
+  seenNu(k);document.getElementById('pnx').innerHTML=pnxHtml(p);
   const det=document.querySelector('details.trd'),open=det&&det.open;
   document.getElementById('psteps').innerHTML=stegHtml(p);
   document.getElementById('pside').innerHTML=CUR?(CUR.steg?stegPanel(p,CUR.steg):caseHtml(p,CUR.id)):lageHtml(p);
