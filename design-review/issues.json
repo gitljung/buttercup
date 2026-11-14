@@ -248,8 +248,8 @@
      "Vickan: ✅ Klart. Fronten täcker nu stenen här, eftersom asköppningen i fronten är igenslagen (steg"
     ]
    ],
-   "replies": 17,
-   "last": "2026-11-13T14:57:54.785000+00:00",
+   "replies": 18,
+   "last": "2026-11-14T22:55:26.369000+00:00",
    "analyzed": "2026-11-11T07:24:23.218000+00:00",
    "forslag": [
     {
@@ -571,7 +571,7 @@
    "sev": "Bör åtgärdas",
    "sevemo": "🟡",
    "by": "Fable",
-   "desc": "Modellen: v29: Vermilite, fiberlist, tätningsband m.fl. = 'Steel'; kolrost och ringsats inte köpdelar\nFörväntat: Rätt material per del; köpdelar märkta\nFörslag: Sätt rf-material på återstående rostfria delar för hand i Properties\nVerifierat: mat i tree.json v32: Vermilite 600, Keramisk fiber 250, Glasfiberband 500, Kolrost/Ringsats Iron Cast + kop=true. Kvar 'Steel': Rokstos bak (rf 1.4301), och även Rörklämma, Stag skorsten, Gnistkopp, Hatt (alla rf 1.4301 enligt desc)\nKommentar: Vermilite/fiber/band/gjutgods rätt + köpdelsmärkta; Rökstos, Rörklämma, Stag, Gnistkopp, Hatt kvar på Steel",
+   "desc": "Modellen: v29: Vermilite, fiberlist, tätningsband m.fl. = 'Steel'; kolrost och ringsats inte köpdelar\nFörväntat: Rätt material per del; köpdelar märkta\nFörslag: Sätt rf-material på återstående rostfria delar för hand i Properties\nVerifierat: mat i tree.json v32: Vermilite 600, Keramisk fiber 250, Glasfiberband 500, Kolrost/Ringsats Iron Cast + kop=true. Kvar 'Steel': Rokstos bak (rf 1.4301), och även Rörklämma, Stag skorsten, Gnistkopp, Hatt (alla rf 1.4301 enligt desc)",
    "part": "Yamay Tizon - Rok bak:1 › Yamay Tizon - Rokstos bak:1",
    "sel": "o502",
    "url": "?p=tizon&sel=o502",
@@ -587,15 +587,26 @@
      "2026-11-12T16:00:23+01:00",
      "delvis",
      "Vickan: v32 · Vermilite/fiber/band/gjutgods rätt + köpdelsmärkta; Rökstos, Rörklämma, Stag, Gnistkopp, Hatt kvar på Steel"
+    ],
+    [
+     "2026-11-14T23:55:27+01:00",
+     "kommentar",
+     "Vicke: Godkänt: åtgärda enligt förslaget."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-12T16:00:23+01:00",
+   "last": "2026-11-14T23:55:27+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
    "img": "avvikelser/TIZ-8.jpg",
    "ver": "hittad v29 · v32",
    "pname": "Yamay Tizón",
-   "comments": []
+   "comments": [
+    [
+     "2026-11-14T23:55:27+01:00",
+     "Vicke",
+     "Godkänt: åtgärda enligt förslaget."
+    ]
+   ]
   },
   {
    "id": "av-TIZ-9",
