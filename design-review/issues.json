@@ -1464,8 +1464,8 @@
    "by": "Fable",
    "desc": "Modellen: Kopdel SPECIAL 17-7PH, \"Offert Gutekunst … Pris/leveranstid ej verifierat\".\nFörväntat: Verifierad köpdel innan prototypen låses (hela luckbalansen hänger på den).\nFörslag: Ta offert från Gutekunst nu.\nVerifierat: desc i v32.",
    "part": "Yamay Horno - delmontage Mekanik:1 › Yamay Horno - delmontage Fjaderpaket hoger:1 › Dragfjäder 1,8x16x109 17-7PH:1",
-   "sel": "o199",
-   "url": "?p=horno&sel=o199",
+   "sel": "",
+   "url": "?p=horno",
    "created": "2026-11-12T16:00:36+01:00",
    "status": "stangd",
    "log": [
@@ -3151,5 +3151,5 @@
    "est_txt": ""
   }
  ],
- "updated": "2026-11-15 21:13"
+ "updated": "2026-11-15 22:37"
 }
