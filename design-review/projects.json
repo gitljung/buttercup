@@ -9,16 +9,6 @@
   "thread": "1568653342975074445"
  },
  {
-  "slug": "yakitori-50",
-  "name": "Yamay Yakitori 50",
-  "channel": "yamay-grill",
-  "thread": "1565091505507410073",
-  "fusion_project": "yamay-yakitori50",
-  "doc": "Yakitori 50",
-  "version": 19,
-  "exported": "2026-11-07 22:11"
- },
- {
   "slug": "rat-stop",
   "name": "rat stop",
   "doc": "rat-stop",
@@ -145,5 +135,15 @@
   "channel": "utekök-utveckling",
   "thread": "1566342329911218261",
   "fusion_project": "yamay-utekok"
+ },
+ {
+  "slug": "yakitori-50",
+  "name": "Yamay Yakitori 50",
+  "channel": "yamay-grill",
+  "thread": "1565091505507410073",
+  "fusion_project": "yamay-yakitori50",
+  "doc": "Yakitori 50",
+  "version": 20,
+  "exported": "2026-11-15 07:30"
  }
 ]
