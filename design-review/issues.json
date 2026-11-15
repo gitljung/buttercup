@@ -2718,10 +2718,15 @@
      "2026-11-15T00:13:43+01:00",
      "stangd",
      "Vicke: "
+    ],
+    [
+     "2026-11-15T01:40:03+01:00",
+     "kommentar",
+     "Vickan: Ej åtgärdad än: Fusion kraschade 00:58 (under ett annat projekts jobb) innan YAK-8 kom fram i kön. Skripten är klara (yamay_yakitori50/native/y8_fusion.sh) och körs när Fusion star"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-15T00:13:43+01:00",
+   "last": "2026-11-15T01:40:03+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
    "img": "avvikelser/YAK-8.jpg",
    "ver": "hittad v19",
@@ -2731,6 +2736,11 @@
      "2026-11-15T00:13:35+01:00",
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
+    ],
+    [
+     "2026-11-15T01:40:03+01:00",
+     "Vickan",
+     "Ej åtgärdad än: Fusion kraschade 00:58 (under ett annat projekts jobb) innan YAK-8 kom fram i kön. Skripten är klara (yamay_yakitori50/native/y8_fusion.sh) och körs när Fusion startats om."
     ]
    ]
   },
@@ -2836,5 +2846,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-15 00:19"
+ "updated": "2026-11-15 01:40"
 }
