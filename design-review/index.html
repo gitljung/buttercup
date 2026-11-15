@@ -495,7 +495,7 @@ $('#repSend').onclick=async e=>{e.preventDefault();const t=$('#repT').value.trim
 
 // ---------- ärenden (site/issues.json, skrivs av ~/.hermes/scripts/dr_issues.py ur Discord-trådarna) ----------
 let ISS=[],issScope='proj',hot=null;const PINS={};
-const ST={kommentar:['💬','Kommentar'],oppen:['🟠','Öppen'],delvis:['⚠️','Delvis'],ny:['🆕','Ny'],analyserad:['🔍','Analyserad'],pagar:['🛠','Pågår'],atgardad:['✅','Åtgärdad'],stangd:['✔','Stängd'],avvisad:['❌','Avvisad']};
+const ST={kommentar:['💬','Kommentar'],oppen:['🟠','Öppen'],delvis:['⚠️','Delvis'],ny:['🆕','Ny'],analyserad:['🔍','Analyserad'],pagar:['🛠','Åtgärdas'],atgardad:['✅','Åtgärdad'],stangd:['✔','Stängd'],avvisad:['❌','Avvisad']};
 const isOpenSt=s=>s==='ny'||s==='analyserad'||s==='pagar'||s==='oppen'||s==='delvis';
 let issSrc='all';const srcOk=i=>issSrc==='all'||(issSrc==='rep'?i.kind!=='avv':i.kind==='avv');
 const fmtD=t=>{const d=new Date(t);return d.toLocaleDateString('sv-SE',{day:'numeric',month:'short'})+' '+d.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'})};
@@ -512,7 +512,8 @@ function renderIss(){const slug=$('#proj').value,mine=ISS.filter(i=>i.slug===slu
   ${i.img?`<img src="${i.img}" loading="lazy" alt="" data-full="${i.img}">`:''}${i.desc?`<p>${esc(i.desc)}</p>`:''}${i.part?`<div class="pt">📍 ${esc(i.part)}</div>`:''}
   ${(i.comments||[]).length?`<div class="cm">${i.comments.map(([t,w,x])=>`<div><b>💬 ${esc(w)}</b> <span>${fmtD(t)}</span><br>${esc(x)}</div>`).join('')}</div>`:''}
   ${(i.log||[]).length?`<details><summary>Historik (${i.log.length})</summary><ul>${i.log.map(([t,s,w])=>`<li>${fmtD(t)} · ${(ST[s]||[''])[0]} ${esc(w)}</li>`).join('')}</ul></details>`:''}
-  ${i.kind==='avv'&&canEdit()?`<div class="ed" ${edOpen===i.id?'':'hidden'}><div class="sts">${['oppen','delvis','atgardad','stangd','avvisad'].map(k=>`<button type="button" data-st="${k}" class="${k===i.status?'cur':''}">${ST[k][0]} ${ST[k][1]}</button>`).join('')}</div>
+  ${i.kind==='avv'&&canEdit()?`<div class="ed" ${edOpen===i.id?'':'hidden'}><div class="sts">${(i.status==='pagar'?['oppen']:['oppen','delvis'].includes(i.status)?['do','stangd','avvisad']:['oppen']).map(k=>`<button type="button" data-st="${k}">${({do:'🛠 Åtgärda enligt förslaget',oppen:i.status==='pagar'?'↺ Avbryt åtgärd':'↺ Öppna igen',stangd:'✔ Stäng – ingen ändring behövs',avvisad:'❌ Avvisa – fyndet är fel'})[k]}</button>`).join('')}</div>
+  <div style="font-size:12px;color:var(--mute);margin-bottom:5px">${i.status==='pagar'?'🛠 Vickan åtgärdar – stängs automatiskt (✅) när ändringen syns i en ny modellversion.':['oppen','delvis'].includes(i.status)?'Välj ett: <b>Åtgärda</b> = Vickan ändrar modellen och stänger själv när det syns. <b>Stäng</b> = inget ska ändras. <b>Avvisa</b> = fyndet stämmer inte.':''}</div>
   <textarea placeholder="Feedback / motivering (valfritt vid statusbyte)"></textarea><label><input type="checkbox" data-ask checked> Be Vickan svara på feedbacken</label>
   <div class="row3"><button type="button" data-send class="go">Skicka</button><span class="em"></span></div></div>`:''}
   <div class="a"><button data-go>Visa i 3D</button>${i.kind==='avv'&&canEdit()?`<button data-ed>✏️ Status / feedback</button>`:''}${i.link?`<a href="${i.link}" target="_blank" rel="noopener">${i.kind==='avv'?'Rapporten':'Tråden'} i Discord ↗</a>`:''}${i.replies?`<span style="font-size:12px;color:var(--mute)">${i.replies} svar · senast ${fmtD(i.last)}</span>`:''}</div></div>`}).join('')
@@ -526,12 +527,12 @@ let edOpen=null;const canEdit=()=>{if(GH)return false;const h=hooks();return !!(
 async function sendAvv(c,i){const H=hooks(),em=c.querySelector('.em'),pk=c.querySelector('[data-st].pick'),st=pk&&pk.dataset.st!==i.status?pk.dataset.st:null,txt=c.querySelector('textarea').value.trim(),ask=c.querySelector('[data-ask]').checked;
  if(!st&&!txt){em.textContent='Välj en ny status eller skriv feedback.';return}
  let who=localStorage.getItem('np_who');if(!who){who=confirm('Är du Vicke? (Avbryt = Hugo)')?'vicke':'hugo';localStorage.setItem('np_who',who)}
- const key=i.nr,fd=new FormData();
- fd.append('payload_json',JSON.stringify({username:'Design Review',content:`🧐 ${key}: ${st?'status → '+st:'feedback'} (${who==='hugo'?'Hugo':'Vicke'})`,allowed_mentions:{parse:[]}}));
- fd.append('files[0]',new Blob([JSON.stringify({v:1,by:who,avv:{key,slug:i.slug,title:i.title,status:st,text:txt,ask}})],{type:'application/json'}),'np.json');
+ const key=i.nr,fd=new FormData(),isDo=st==='do';
+ fd.append('payload_json',JSON.stringify({username:'Design Review',content:`🧐 ${key}: ${isDo?'åtgärda enligt förslaget':st?'status → '+st:'feedback'} (${who==='hugo'?'Hugo':'Vicke'})`,allowed_mentions:{parse:[]}}));
+ fd.append('files[0]',new Blob([JSON.stringify({v:1,by:who,avv:{key,slug:i.slug,title:i.title,status:isDo?null:st,text:txt,ask,do:isDo}})],{type:'application/json'}),'np.json');
  c.querySelector('[data-send]').disabled=true;em.textContent='Skickar…';
  try{const r=await fetch(`https://discord.com/api/webhooks/${H._intake.id}/${H._intake.token}?wait=true`,{method:'POST',body:fd});if(!r.ok)throw new Error(r.status);
-  const nm=who==='hugo'?'Hugo':'Vicke',t=new Date().toISOString();if(st){i.status=st;(i.log=i.log||[]).push([t,st,nm+(txt?': '+txt.slice(0,120):'')])}
+  const nm=who==='hugo'?'Hugo':'Vicke',t=new Date().toISOString();if(st){const s2=isDo?'pagar':st;i.status=s2;(i.log=i.log||[]).push([t,s2,nm+(txt?': '+txt.slice(0,120):'')])}
   if(txt){(i.comments=i.comments||[]).push([t,nm,txt]);if(!st)(i.log=i.log||[]).push([t,'kommentar',nm+': '+txt.slice(0,120)])}
   edOpen=null;renderIss();const k=$(`#issL [data-i="${i.id}"] .a`);if(k)k.insertAdjacentHTML('beforeend','<span class="em">✓ Skickat – syns i tråden'+(ask&&txt?', Vickan svarar där':'')+'</span>')}
  catch(err){em.textContent='Kunde inte skicka: '+err.message;c.querySelector('[data-send]').disabled=false}}
