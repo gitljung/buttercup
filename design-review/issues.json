@@ -248,8 +248,8 @@
      "Vickan: ✅ Klart. Fronten täcker nu stenen här, eftersom asköppningen i fronten är igenslagen (steg"
     ]
    ],
-   "replies": 25,
-   "last": "2026-11-14T23:18:11.393000+00:00",
+   "replies": 26,
+   "last": "2026-11-15T15:35:28.353000+00:00",
    "analyzed": "2026-11-11T07:24:23.218000+00:00",
    "forslag": [
     {
@@ -501,12 +501,12 @@
    "sev": "Bör åtgärdas",
    "sevemo": "🟡",
    "by": "Fable",
-   "desc": "Modellen: STATUS angav 73 kg (bara stål)\nFörväntat: Driftklar vikt med Vermilite och gjutgods: lyft och modullast räknas på den\nFörslag: Räkna lyft/modullast på ~100 kg tills kolrost/ringsats har riktiga vikter\nVerifierat: v32 med rätt material (GRANSKNING punkt 6): stål 69,6 + Vermilite 9,7 + gjutgods 20,0 (massiva platshållare) = 99,3 kg\nKommentar: Vikten ur Fusion ≈ 99 kg; lyft/modullast inte omräknade",
+   "desc": "Modellen: STATUS angav 73 kg (bara stål)\nFörväntat: Driftklar vikt med Vermilite och gjutgods: lyft och modullast räknas på den\nFörslag: Räkna lyft/modullast på ~100 kg tills kolrost/ringsats har riktiga vikter\nVerifierat: v32 med rätt material (GRANSKNING punkt 6): stål 69,6 + Vermilite 9,7 + gjutgods 20,0 (massiva platshållare) = 99,3 kg",
    "part": "",
    "sel": "",
    "url": "?p=tizon",
    "created": "2026-11-12T16:00:16+01:00",
-   "status": "delvis",
+   "status": "pagar",
    "log": [
     [
      "2026-11-12T16:00:16+01:00",
@@ -517,15 +517,26 @@
      "2026-11-12T16:00:22+01:00",
      "delvis",
      "Vickan: v32 · Vikten ur Fusion ≈ 99 kg; lyft/modullast inte omräknade"
+    ],
+    [
+     "2026-11-15T16:35:29+01:00",
+     "pagar",
+     "Vicke: Godkänt: åtgärda enligt förslaget."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-12T16:00:22+01:00",
+   "last": "2026-11-15T16:35:29+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
    "img": "",
    "ver": "hittad v29 · v32",
    "pname": "Yamay Tizón",
-   "comments": [],
+   "comments": [
+    [
+     "2026-11-15T16:35:29+01:00",
+     "Vicke",
+     "Godkänt: åtgärda enligt förslaget."
+    ]
+   ],
    "est_min": 10,
    "est": "≈ 10 min",
    "est_txt": "Viktomräkning i underlaget, ingen Fusion-ändring"
