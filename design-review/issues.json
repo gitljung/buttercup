@@ -476,9 +476,9 @@
    "ver": "hittad v29",
    "pname": "Yamay Tizón",
    "comments": [],
-   "est_min": 30,
-   "est": "≈ 30 min",
-   "est_txt": "Kräver dragmätning på prototypen först; sedan rörförlängning ~30 min"
+   "est_min": 15,
+   "est": "≈ 15 min",
+   "est_txt": "Kräver dragmätning på prototypen först; sedan rörförlängning"
   },
   {
    "id": "av-TIZ-6",
@@ -516,8 +516,8 @@
    "ver": "hittad v29 · v32",
    "pname": "Yamay Tizón",
    "comments": [],
-   "est_min": 15,
-   "est": "≈ 15 min",
+   "est_min": 10,
+   "est": "≈ 10 min",
    "est_txt": "Viktomräkning i underlaget, ingen Fusion-ändring"
   },
   {
@@ -739,8 +739,8 @@
    "ver": "hittad v29",
    "pname": "Yamay Tizón",
    "comments": [],
-   "est_min": 240,
-   "est": "≈ 4 h",
+   "est_min": 120,
+   "est": "≈ 2 h",
    "est_txt": "Kräver val av ringsats/rost först; sedan rita in delarna + modul"
   },
   {
@@ -855,9 +855,9 @@
    "ver": "hittad v32",
    "pname": "Yamay Horno",
    "comments": [],
-   "est_min": 180,
-   "est": "≈ 3 h",
-   "est_txt": "Kräver ert val först: 40 mm Vermilite eller strålskärm. Sedan om-ritning av sidor/bak + värmekontroll"
+   "est_min": 90,
+   "est": "≈ 1,5 h",
+   "est_txt": "Kräver ert val först: 40 mm Vermilite eller strålskärm. Sedan sidor/bak + värmekontroll"
   },
   {
    "id": "av-HOR-3",
@@ -1185,8 +1185,8 @@
      "Standarddelar hittade (kamintillbehor.se, Ø120 ID, AISI 316L, T600, hane/hona): rökrör 500 mm (arbetslängd 450) 270 kr ref 33163; 1000 mm (950) 416 kr ref 33162; klämband Ø120 41 kr ref 33160; regnhuv Ø120 900 kr ref 32592; rör 250 mm med spjäll 1170 kr ref 1567-1197 (löser även HOR-3). Utsläpp idag ~1,47 m över mark -> ~1,92 m med 500 mm, ~2,42 m med 1000 mm. Förslag: stosen görs som standardrör i samma system så förlängningen sticks i + klämband; befintlig gnistkopp/hatt flyttas upp (standardhuven saknar gnistnät). Passning hona mot stosens YD måste mätas på riktigt rör. 1000 mm ger ~3x vindmoment på kragen -> stag. Inget ändrat i Fusion; väntar på val."
     ]
    ],
-   "est_min": 30,
-   "est": "≈ 30 min",
+   "est_min": 15,
+   "est": "≈ 15 min",
    "est_txt": "Standardrör Ø120 ur biblioteket + export"
   },
   {
@@ -1261,8 +1261,8 @@
      "Godkänt: åtgärda enligt förslaget."
     ]
    ],
-   "est_min": 60,
-   "est": "≈ 1 h",
+   "est_min": 25,
+   "est": "≈ 25 min",
    "est_txt": "Fjäderarm R80 + ny momentkontroll av luckan"
   },
   {
@@ -1296,9 +1296,9 @@
    "ver": "hittad v32",
    "pname": "Yamay Horno",
    "comments": [],
-   "est_min": 45,
-   "est": "≈ 45 min",
-   "est_txt": "Materialbyte till 1.4301 och ny plåttjocklek (bockradier/utvikning)"
+   "est_min": 20,
+   "est": "≈ 20 min",
+   "est_txt": "Materialbyte till 1.4301 + ny plåttjocklek"
   },
   {
    "id": "av-HOR-11",
@@ -1331,8 +1331,8 @@
    "ver": "hittad v32",
    "pname": "Yamay Horno",
    "comments": [],
-   "est_min": 20,
-   "est": "≈ 20 min",
+   "est_min": 10,
+   "est": "≈ 10 min",
    "est_txt": "Byte av mutterartikel i 6 positioner"
   },
   {
@@ -1366,8 +1366,8 @@
    "ver": "hittad v32",
    "pname": "Yamay Horno",
    "comments": [],
-   "est_min": 20,
-   "est": "≈ 20 min",
+   "est_min": 10,
+   "est": "≈ 10 min",
    "est_txt": "Beskrivningar i detaljfilerna"
   },
   {
@@ -1671,8 +1671,8 @@
      "Vicke valde b: distanshylsa 6 mm (A4, Ø14/Ø8,5) med O-ring på M8-skruven. Provköket med skarvset, skivor, EPDM/silikon och sidopaneler 3 mm byggs efter UTE-3/5/7 + UTE-10-exporten."
     ]
    ],
-   "est_min": 240,
-   "est": "≈ 4 h",
+   "est_min": 120,
+   "est": "≈ 2 h",
    "est_txt": "Komplett provkök: skarv, skiva, EPDM, sidopanel + distanser"
   },
   {
@@ -1778,8 +1778,8 @@
      "Godkänt: åtgärda enligt förslaget."
     ]
    ],
-   "est_min": 20,
-   "est": "≈ 20 min",
+   "est_min": 10,
+   "est": "≈ 10 min",
    "est_txt": "Silikon i stället för EPDM; IR-mätning på prototypen efteråt"
   },
   {
@@ -1885,8 +1885,8 @@
      "Godkänt: åtgärda enligt förslaget."
     ]
    ],
-   "est_min": 90,
-   "est": "≈ 1,5 h",
+   "est_min": 40,
+   "est": "≈ 40 min",
    "est_txt": "Distanser/fler skruvar i alla moduler + kök"
   },
   {
@@ -2169,8 +2169,8 @@
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
    "comments": [],
-   "est_min": 45,
-   "est": "≈ 45 min",
+   "est_min": 20,
+   "est": "≈ 20 min",
    "est_txt": "Plattstål 50×6 längs syllen + bultar"
   },
   {
@@ -2306,8 +2306,8 @@
      "Vicke 2026-11-13: bara rakt drag, ingen sväng. Stången får bara dra framåt – backa/skjut aldrig med den. Kvarstår för inbromsning; dimensioneras om om backning ska tillåtas."
     ]
    ],
-   "est_min": 60,
-   "est": "≈ 1 h",
+   "est_min": 25,
+   "est": "≈ 25 min",
    "est_txt": "Kräver val: styvare profil eller mellanstag (eller regel: bara drag)"
   },
   {
@@ -2341,8 +2341,8 @@
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
    "comments": [],
-   "est_min": 60,
-   "est": "≈ 1 h",
+   "est_min": 25,
+   "est": "≈ 25 min",
    "est_txt": "Skarv + skarvlask i modellen, kontroll mot hjullägen"
   },
   {
@@ -2376,8 +2376,8 @@
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
    "comments": [],
-   "est_min": 15,
-   "est": "≈ 15 min",
+   "est_min": 10,
+   "est": "≈ 10 min",
    "est_txt": "Flyttinstruktion i underlaget, ingen Fusion-ändring"
   },
   {
@@ -2497,8 +2497,8 @@
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
    "comments": [],
-   "est_min": 60,
-   "est": "≈ 1 h",
+   "est_min": 30,
+   "est": "≈ 30 min",
    "est_txt": "Uppdatera plat.md/kopdelar.md + beskrivningar, ta om priser"
   },
   {
@@ -2532,8 +2532,8 @@
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
    "comments": [],
-   "est_min": 30,
-   "est": "≈ 30 min",
+   "est_min": 15,
+   "est": "≈ 15 min",
    "est_txt": "Kräver val av hjul; sedan BOM + modell"
   },
   {
@@ -2567,8 +2567,8 @@
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
    "comments": [],
-   "est_min": 20,
-   "est": "≈ 20 min",
+   "est_min": 15,
+   "est": "≈ 15 min",
    "est_txt": "Rätta text och rendera om animationen"
   },
   {
@@ -2602,8 +2602,8 @@
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
    "comments": [],
-   "est_min": 90,
-   "est": "≈ 1,5 h",
+   "est_min": 40,
+   "est": "≈ 40 min",
    "est_txt": "Fötter 40 mm + blank strålskärm; tar även YAK-10"
   },
   {
@@ -2703,8 +2703,8 @@
      "Godkänt: åtgärda enligt förslaget."
     ]
    ],
-   "est_min": 45,
-   "est": "≈ 45 min",
+   "est_min": 20,
+   "est": "≈ 20 min",
    "est_txt": "Kolgaller 396 mm + 2 mittstöd (pågår, utvikningskontrollen ska rättas)"
   },
   {
@@ -2738,8 +2738,8 @@
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
    "comments": [],
-   "est_min": 20,
-   "est": "≈ 20 min",
+   "est_min": 10,
+   "est": "≈ 10 min",
    "est_txt": "Varningstext i manualen"
   },
   {
@@ -2869,8 +2869,8 @@
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
    "comments": [],
-   "est_min": 20,
-   "est": "≈ 20 min",
+   "est_min": 10,
+   "est": "≈ 10 min",
    "est_txt": "Material + samma sträckmetall i hel/halv"
   },
   {
@@ -3050,5 +3050,5 @@
    "est_txt": ""
   }
  ],
- "updated": "2026-11-15 07:57"
+ "updated": "2026-11-15 08:06"
 }
