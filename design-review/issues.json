@@ -309,7 +309,10 @@
    "img": "avvikelser/TIZ-1.jpg",
    "ver": "hittad v29 · stängd v32",
    "pname": "Yamay Tizón",
-   "comments": []
+   "comments": [],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-TIZ-2",
@@ -346,7 +349,10 @@
    "img": "avvikelser/TIZ-2.jpg",
    "ver": "hittad v29 · stängd v32",
    "pname": "Yamay Tizón",
-   "comments": []
+   "comments": [],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-TIZ-3",
@@ -394,7 +400,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": 0,
+   "est": "inget CAD-arbete",
+   "est_txt": "Mätning med termoelement vid första eldningen; ritas om bara om ramen rör sig"
   },
   {
    "id": "av-TIZ-4",
@@ -431,7 +440,10 @@
    "img": "avvikelser/TIZ-4.jpg",
    "ver": "hittad v29 · stängd v32",
    "pname": "Yamay Tizón",
-   "comments": []
+   "comments": [],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-TIZ-5",
@@ -463,7 +475,10 @@
    "img": "avvikelser/TIZ-5.jpg",
    "ver": "hittad v29",
    "pname": "Yamay Tizón",
-   "comments": []
+   "comments": [],
+   "est_min": 30,
+   "est": "≈ 30 min",
+   "est_txt": "Kräver dragmätning på prototypen först; sedan rörförlängning ~30 min"
   },
   {
    "id": "av-TIZ-6",
@@ -500,7 +515,10 @@
    "img": "",
    "ver": "hittad v29 · v32",
    "pname": "Yamay Tizón",
-   "comments": []
+   "comments": [],
+   "est_min": 15,
+   "est": "≈ 15 min",
+   "est_txt": "Viktomräkning i underlaget, ingen Fusion-ändring"
   },
   {
    "id": "av-TIZ-7",
@@ -563,7 +581,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-TIZ-8",
@@ -621,7 +642,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-TIZ-9",
@@ -679,7 +703,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-TIZ-10",
@@ -711,7 +738,10 @@
    "img": "avvikelser/TIZ-10.jpg",
    "ver": "hittad v29",
    "pname": "Yamay Tizón",
-   "comments": []
+   "comments": [],
+   "est_min": 240,
+   "est": "≈ 4 h",
+   "est_txt": "Kräver val av ringsats/rost först; sedan rita in delarna + modul"
   },
   {
    "id": "av-HOR-1",
@@ -789,7 +819,10 @@
      "Vickan",
      "Samma lösning som asklådans stopp alt a – redan byggd i Fusion (h131: bakrulle y 136, klack i skenans överben, underbenets klack bort). Export till DR pågår i samma kedja; HOR-1 får modellversion när den är ute."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-HOR-2",
@@ -821,7 +854,10 @@
    "img": "avvikelser/HOR-2.jpg",
    "ver": "hittad v32",
    "pname": "Yamay Horno",
-   "comments": []
+   "comments": [],
+   "est_min": 180,
+   "est": "≈ 3 h",
+   "est_txt": "Kräver ert val först: 40 mm Vermilite eller strålskärm. Sedan om-ritning av sidor/bak + värmekontroll"
   },
   {
    "id": "av-HOR-3",
@@ -879,7 +915,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-HOR-4",
@@ -932,7 +971,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-HOR-5",
@@ -980,7 +1022,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-HOR-6",
@@ -1043,7 +1088,10 @@
      "Vicke",
      "dela med skarv"
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-HOR-7",
@@ -1080,7 +1128,10 @@
    "img": "avvikelser/HOR-7.jpg",
    "ver": "hittad v32",
    "pname": "Yamay Horno",
-   "comments": []
+   "comments": [],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-HOR-8",
@@ -1133,7 +1184,10 @@
      "Vickan",
      "Standarddelar hittade (kamintillbehor.se, Ø120 ID, AISI 316L, T600, hane/hona): rökrör 500 mm (arbetslängd 450) 270 kr ref 33163; 1000 mm (950) 416 kr ref 33162; klämband Ø120 41 kr ref 33160; regnhuv Ø120 900 kr ref 32592; rör 250 mm med spjäll 1170 kr ref 1567-1197 (löser även HOR-3). Utsläpp idag ~1,47 m över mark -> ~1,92 m med 500 mm, ~2,42 m med 1000 mm. Förslag: stosen görs som standardrör i samma system så förlängningen sticks i + klämband; befintlig gnistkopp/hatt flyttas upp (standardhuven saknar gnistnät). Passning hona mot stosens YD måste mätas på riktigt rör. 1000 mm ger ~3x vindmoment på kragen -> stag. Inget ändrat i Fusion; väntar på val."
     ]
-   ]
+   ],
+   "est_min": 30,
+   "est": "≈ 30 min",
+   "est_txt": "Standardrör Ø120 ur biblioteket + export"
   },
   {
    "id": "av-HOR-9",
@@ -1206,7 +1260,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": 60,
+   "est": "≈ 1 h",
+   "est_txt": "Fjäderarm R80 + ny momentkontroll av luckan"
   },
   {
    "id": "av-HOR-10",
@@ -1238,7 +1295,10 @@
    "img": "avvikelser/HOR-10.jpg",
    "ver": "hittad v32",
    "pname": "Yamay Horno",
-   "comments": []
+   "comments": [],
+   "est_min": 45,
+   "est": "≈ 45 min",
+   "est_txt": "Materialbyte till 1.4301 och ny plåttjocklek (bockradier/utvikning)"
   },
   {
    "id": "av-HOR-11",
@@ -1270,7 +1330,10 @@
    "img": "avvikelser/HOR-11.jpg",
    "ver": "hittad v32",
    "pname": "Yamay Horno",
-   "comments": []
+   "comments": [],
+   "est_min": 20,
+   "est": "≈ 20 min",
+   "est_txt": "Byte av mutterartikel i 6 positioner"
   },
   {
    "id": "av-HOR-12",
@@ -1302,7 +1365,10 @@
    "img": "avvikelser/HOR-12.jpg",
    "ver": "hittad v32",
    "pname": "Yamay Horno",
-   "comments": []
+   "comments": [],
+   "est_min": 20,
+   "est": "≈ 20 min",
+   "est_txt": "Beskrivningar i detaljfilerna"
   },
   {
    "id": "av-HOR-13",
@@ -1370,7 +1436,10 @@
      "Vickan",
      "Utfört (h135): lagerfjäder RZ-130K-04I 1.4310 i modellen v41 (2026-11-13 12:28); mätprotokoll + 17-7PH-offertutkast i yamay_josper/termisk/"
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-UTE-1",
@@ -1423,7 +1492,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-UTE-2",
@@ -1486,7 +1558,10 @@
      "Vickan",
      "Godkännandet noterat (BESLUT i STATUS.md). Inte åtgärdad än: fotbeslagets M6 (z 20) hamnar under nya plåtkanten 25 → a/b-fråga i portalen. Byggs i samma kedja som UTE-3."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-UTE-3",
@@ -1539,7 +1614,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-UTE-4",
@@ -1592,7 +1670,10 @@
      "Vickan",
      "Vicke valde b: distanshylsa 6 mm (A4, Ø14/Ø8,5) med O-ring på M8-skruven. Provköket med skarvset, skivor, EPDM/silikon och sidopaneler 3 mm byggs efter UTE-3/5/7 + UTE-10-exporten."
     ]
-   ]
+   ],
+   "est_min": 240,
+   "est": "≈ 4 h",
+   "est_txt": "Komplett provkök: skarv, skiva, EPDM, sidopanel + distanser"
   },
   {
    "id": "av-UTE-5",
@@ -1640,7 +1721,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-UTE-6",
@@ -1693,7 +1777,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": 20,
+   "est": "≈ 20 min",
+   "est_txt": "Silikon i stället för EPDM; IR-mätning på prototypen efteråt"
   },
   {
    "id": "av-UTE-7",
@@ -1741,7 +1828,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-UTE-8",
@@ -1794,7 +1884,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": 90,
+   "est": "≈ 1,5 h",
+   "est_txt": "Distanser/fler skruvar i alla moduler + kök"
   },
   {
    "id": "av-UTE-9",
@@ -1847,7 +1940,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-UTE-10",
@@ -1895,7 +1991,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-VAX-1",
@@ -1943,7 +2042,10 @@
      "Vicke",
      "Beslut 2026-11-13: anslaget blir en klack 14×8 mm, laserskuren på spakens överkant (inte stoppinne). Ingår i Fusion-jobbet H16."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-VAX-2",
@@ -1991,7 +2093,10 @@
      "Vickan",
      "Vicke 2026-11-13: bara rakt drag → sidokraft i sväng utgår. Vridningen från hjulets 82 mm excentricitet (123–164 Nm) finns kvar, så 12 mm spak gäller fortfarande."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-VAX-3",
@@ -2028,7 +2133,10 @@
    "img": "avvikelser/VAX-3.jpg",
    "ver": "hittad v1 · stängd 1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
-   "comments": []
+   "comments": [],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-VAX-4",
@@ -2060,7 +2168,10 @@
    "img": "avvikelser/VAX-4.jpg",
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
-   "comments": []
+   "comments": [],
+   "est_min": 45,
+   "est": "≈ 45 min",
+   "est_txt": "Plattstål 50×6 längs syllen + bultar"
   },
   {
    "id": "av-VAX-5",
@@ -2108,7 +2219,10 @@
      "Vickan",
      "Vicke valde b (100–120 mm) 2026-11-13. Mål 110 mm: pivå→hjulaxel 170, pivå z 104. Väntar på a/b om pedalkraft vs spaklängd innan Fusion."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-VAX-6",
@@ -2145,7 +2259,10 @@
    "img": "avvikelser/VAX-6.jpg",
    "ver": "hittad v1 · stängd 1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
-   "comments": []
+   "comments": [],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-VAX-7",
@@ -2188,7 +2305,10 @@
      "Vickan",
      "Vicke 2026-11-13: bara rakt drag, ingen sväng. Stången får bara dra framåt – backa/skjut aldrig med den. Kvarstår för inbromsning; dimensioneras om om backning ska tillåtas."
     ]
-   ]
+   ],
+   "est_min": 60,
+   "est": "≈ 1 h",
+   "est_txt": "Kräver val: styvare profil eller mellanstag (eller regel: bara drag)"
   },
   {
    "id": "av-VAX-8",
@@ -2220,7 +2340,10 @@
    "img": "",
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
-   "comments": []
+   "comments": [],
+   "est_min": 60,
+   "est": "≈ 1 h",
+   "est_txt": "Skarv + skarvlask i modellen, kontroll mot hjullägen"
   },
   {
    "id": "av-VAX-9",
@@ -2252,7 +2375,10 @@
    "img": "",
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
-   "comments": []
+   "comments": [],
+   "est_min": 15,
+   "est": "≈ 15 min",
+   "est_txt": "Flyttinstruktion i underlaget, ingen Fusion-ändring"
   },
   {
    "id": "av-VAX-10",
@@ -2300,7 +2426,10 @@
      "Vickan",
      "Bara rakt drag (Vicke 2026-11-13) minskar sidolasten, men pedalens sidokraft vid trampning finns kvar – löses med VAX-2."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-VAX-11",
@@ -2332,7 +2461,10 @@
    "img": "avvikelser/VAX-11.jpg",
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
-   "comments": []
+   "comments": [],
+   "est_min": 10,
+   "est": "≈ 10 min",
+   "est_txt": "Trämaterial på Tröskelregel"
   },
   {
    "id": "av-VAX-12",
@@ -2364,7 +2496,10 @@
    "img": "avvikelser/VAX-12.jpg",
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
-   "comments": []
+   "comments": [],
+   "est_min": 60,
+   "est": "≈ 1 h",
+   "est_txt": "Uppdatera plat.md/kopdelar.md + beskrivningar, ta om priser"
   },
   {
    "id": "av-VAX-13",
@@ -2396,7 +2531,10 @@
    "img": "avvikelser/VAX-13.jpg",
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
-   "comments": []
+   "comments": [],
+   "est_min": 30,
+   "est": "≈ 30 min",
+   "est_txt": "Kräver val av hjul; sedan BOM + modell"
   },
   {
    "id": "av-VAX-14",
@@ -2428,7 +2566,10 @@
    "img": "",
    "ver": "hittad v1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
-   "comments": []
+   "comments": [],
+   "est_min": 20,
+   "est": "≈ 20 min",
+   "est_txt": "Rätta text och rendera om animationen"
   },
   {
    "id": "av-YAK-1",
@@ -2460,7 +2601,10 @@
    "img": "avvikelser/YAK-1.jpg",
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
-   "comments": []
+   "comments": [],
+   "est_min": 90,
+   "est": "≈ 1,5 h",
+   "est_txt": "Fötter 40 mm + blank strålskärm; tar även YAK-10"
   },
   {
    "id": "av-YAK-2",
@@ -2497,7 +2641,10 @@
    "img": "avvikelser/YAK-2.jpg",
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
-   "comments": []
+   "comments": [],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-YAK-3",
@@ -2555,7 +2702,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": 45,
+   "est": "≈ 45 min",
+   "est_txt": "Kolgaller 396 mm + 2 mittstöd (pågår, utvikningskontrollen ska rättas)"
   },
   {
    "id": "av-YAK-4",
@@ -2587,7 +2737,10 @@
    "img": "avvikelser/YAK-4.jpg",
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
-   "comments": []
+   "comments": [],
+   "est_min": 20,
+   "est": "≈ 20 min",
+   "est_txt": "Varningstext i manualen"
   },
   {
    "id": "av-YAK-5",
@@ -2640,7 +2793,10 @@
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-YAK-6",
@@ -2677,7 +2833,10 @@
    "img": "avvikelser/YAK-6.jpg",
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
-   "comments": []
+   "comments": [],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-YAK-7",
@@ -2709,7 +2868,10 @@
    "img": "avvikelser/YAK-7.jpg",
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
-   "comments": []
+   "comments": [],
+   "est_min": 20,
+   "est": "≈ 20 min",
+   "est_txt": "Material + samma sträckmetall i hel/halv"
   },
   {
    "id": "av-YAK-8",
@@ -2772,7 +2934,10 @@
      "Vickan",
      "Ej åtgärdad än: Fusion kraschade 00:58 (under ett annat projekts jobb) innan YAK-8 kom fram i kön. Skripten är klara (yamay_yakitori50/native/y8_fusion.sh) och körs när Fusion startats om."
     ]
-   ]
+   ],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-YAK-9",
@@ -2809,7 +2974,10 @@
    "img": "avvikelser/YAK-9.jpg",
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
-   "comments": []
+   "comments": [],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   },
   {
    "id": "av-YAK-10",
@@ -2841,7 +3009,10 @@
    "img": "avvikelser/YAK-10.jpg",
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
-   "comments": []
+   "comments": [],
+   "est_min": 0,
+   "est": "inget CAD-arbete",
+   "est_txt": "Ingår i YAK-1 (fötterna)"
   },
   {
    "id": "av-YAK-11",
@@ -2873,8 +3044,11 @@
    "img": "",
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
-   "comments": []
+   "comments": [],
+   "est_min": null,
+   "est": "",
+   "est_txt": ""
   }
  ],
- "updated": "2026-11-15 07:45"
+ "updated": "2026-11-15 07:57"
 }
