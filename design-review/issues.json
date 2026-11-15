@@ -1510,8 +1510,8 @@
    "by": "Fable",
    "desc": "Modellen: U-ryggens underkant z 2 mm och sockeln z 5 mm över mark i lägsta fotläget, i alla moduler (bank 500/1000, Horno 1000, Asado 1500)\nFörväntat: Ingen Corten i ständig markfukt (projektets research §3): plåtkant ≥ 20–30 mm över mark\nFörslag: Höj gavlarnas/sockelns underkant till ~25 mm över mark i lägsta läget, EPDM-läpp på sockeln; ModH och bänkhöjd oförändrade. Köket ska stå i Höör (inland) – kustregeln gäller inte, markfukten gör det.\nVerifierat: delar.json ur modulexporterna: lägsta z U-rygg 2,0 / Sockel 5,0 / Fotbeslag 11,0 i alla fyra stommarna. Plats: Vicke 2026-11-12 'Höör'.",
    "part": "Yamay Utekok - Asado-modul 1500:1 › Yamay Utekok - Sockel 1500:1",
-   "sel": "o2321",
-   "url": "?p=utekok&sel=o2321",
+   "sel": "o1971",
+   "url": "?p=utekok&sel=o1971",
    "created": "2026-11-12T16:13:54+01:00",
    "status": "atgardad",
    "log": [
@@ -1576,8 +1576,8 @@
    "by": "Fable",
    "desc": "Modellen: Fot GN 343.6-40-M10-50, modulen kan höjas 0–21 mm\nFörväntat: Fall 1:100 längs K-0001 (3,5 m) = 35 mm, 1:50 = 70 mm\nFörslag: Längre gänga (t.ex. M10×80, ca 0–50 mm) eller högre fotbeslag, ihop med A2-höjningen; kontrollera att Ganter har längden\nVerifierat: Fotens artikel i exporten: GN 343.6-40-M10-50-KR. Räknat: 3500/100 = 35 mm, 3500/50 = 70 mm; 21 mm räcker för 2,10 m (1:100) resp. 1,05 m (1:50).",
    "part": "Yamay Utekok - Bankmodul 500:1 › Yamay Utekok - Fotpaket:1 › Yamay Utekok - Fotbeslag:1",
-   "sel": "o116",
-   "url": "?p=utekok&sel=o116",
+   "sel": "o68",
+   "url": "?p=utekok&sel=o68",
    "created": "2026-11-12T16:13:54+01:00",
    "status": "atgardad",
    "log": [
@@ -1688,8 +1688,8 @@
    "by": "Fable",
    "desc": "Modellen: Plan 3 mm hylla med 26 mm läpp, bär mellan hörnkubarna, spann 1464 mm; 5–6 mm nedböjning med 80 kg ved\nFörväntat: Bottenhyllan (120 över mark) tål en person på framkanten\nFörslag: Returbock 15 mm på läppen (C-kant, ca 1600 N) eller läpp 40\nVerifierat: Bbox Bottenhylla/Mellanhylla 1500: x ±746,5, kubar bara y ±282 i hörnen. Egen räkning (L 45×3 + läpp 26×3, fy 355, fritt upplagd): flyter vid ~520 N (53 kg) – ännu lägre än Fables 650–720 N.",
    "part": "Yamay Utekok - Asado-modul 1500:1 › Yamay Utekok - Asado-modul 1500 stomme:1 › Yamay Utekok - Bottenhylla 1500:1",
-   "sel": "o2121",
-   "url": "?p=utekok&sel=o2121",
+   "sel": "o1835",
+   "url": "?p=utekok&sel=o1835",
    "created": "2026-11-12T16:13:54+01:00",
    "status": "stangd",
    "log": [
@@ -1739,8 +1739,8 @@
    "by": "Fable",
    "desc": "Modellen: Vermilite 20 mm i lådan → skiva/topplåt under grillen ca 95–117 °C (1D-räkning); EPDM under skivan\nFörväntat: Tätning som tål temperaturen med marginal (EPDM ca 120–130 °C kontinuerligt)\nFörslag: Silikon i stället för EPDM under grillmodulerna; mät lådans undersida med IR på prototypen\nVerifierat: Fables 1D-räkning g02 (§9): 247–282 °C lådbotten → 94–117 °C under. Bedömning, inte mätt; ingen EPDM finns modellerad (se A4).",
    "part": "Yamay Utekok - Asado-modul 1500:1 › Yamay Utekok - Asado-modul 1500 stomme:1 › Yamay Utekok - Topplat 1500:1",
-   "sel": "o2119",
-   "url": "?p=utekok&sel=o2119",
+   "sel": "o1833",
+   "url": "?p=utekok&sel=o1833",
    "created": "2026-11-12T16:13:54+01:00",
    "status": "delvis",
    "log": [
@@ -3055,5 +3055,5 @@
    "est_txt": ""
   }
  ],
- "updated": "2026-11-15 08:41"
+ "updated": "2026-11-15 09:51"
 }
