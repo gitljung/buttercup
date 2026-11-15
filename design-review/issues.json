@@ -2595,7 +2595,7 @@
    "sel": "o48",
    "url": "?p=yakitori-50&sel=o48",
    "created": "2026-11-13T13:24:30+01:00",
-   "status": "stangd",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-13T13:24:30+01:00",
@@ -2611,13 +2611,18 @@
      "2026-11-15T00:15:27+01:00",
      "stangd",
      "Vicke: "
+    ],
+    [
+     "2026-11-15T07:32:04+01:00",
+     "atgardad",
+     "Vickan: v20 · ISO 7380-1 M6x10 tillagd vid (−212,6; +100,5) i Yakitori 50 - låda, rigid joint i bottenhålet; 4 av 4 bottenskruvar, lådan 18 M6x10 (v20)"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-15T00:15:27+01:00",
+   "last": "2026-11-15T07:32:04+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
    "img": "avvikelser/YAK-5.jpg",
-   "ver": "hittad v19",
+   "ver": "hittad v19 · stängd v20",
    "pname": "Yamay Yakitori 50",
    "comments": [
     [
@@ -2856,5 +2861,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-15 07:28"
+ "updated": "2026-11-15 07:32"
 }
