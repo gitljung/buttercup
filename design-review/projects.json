@@ -117,16 +117,6 @@
   "fusion_project": "snickeri-tcn-3d"
  },
  {
-  "slug": "tizon",
-  "name": "Yamay Tizón",
-  "doc": "Yamay Tizon",
-  "version": 35,
-  "exported": "2026-11-15 00:07",
-  "channel": "yamay-tizon",
-  "thread": "1568925737023569940",
-  "fusion_project": "yamay-tizon"
- },
- {
   "slug": "yakitori-50",
   "name": "Yamay Yakitori 50",
   "channel": "yamay-grill",
@@ -156,5 +146,15 @@
   "channel": "utekök-utveckling",
   "thread": "1566342329911218261",
   "fusion_project": "yamay-utekok"
+ },
+ {
+  "slug": "tizon",
+  "name": "Yamay Tizón",
+  "doc": "Yamay Tizon",
+  "version": 36,
+  "exported": "2026-11-15 17:01",
+  "channel": "yamay-tizon",
+  "thread": "1568925737023569940",
+  "fusion_project": "yamay-tizon"
  }
 ]
