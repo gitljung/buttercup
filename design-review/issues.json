@@ -1441,7 +1441,7 @@
    "sel": "o2321",
    "url": "?p=utekok&sel=o2321",
    "created": "2026-11-12T16:13:54+01:00",
-   "status": "stangd",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-12T16:13:54+01:00",
@@ -1462,13 +1462,18 @@
      "2026-11-14T22:32:18+01:00",
      "kommentar",
      "Vickan: Godkännandet noterat (BESLUT i STATUS.md). Inte åtgärdad än: fotbeslagets M6 (z 20) hamnar under nya plåtkanten 25 → a/b-fråga i portalen. Byggs i samma kedja som UTE-3."
+    ],
+    [
+     "2026-11-15T07:28:41+01:00",
+     "atgardad",
+     "Vickan: K-0010 v11 2026-11-15 07:27 · Vänt fotbeslag (M6 z 55, FotY 180), GolvZ/SockZ0 25 i alla 7 moduler"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-14T22:32:18+01:00",
+   "last": "2026-11-15T07:28:41+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
    "img": "avvikelser/UTE-2.jpg",
-   "ver": "hittad v2",
+   "ver": "hittad v2 · stängd K-0010 v11 2026-11-15 07:27",
    "pname": "Yamay Utekök – alla moduler (K-0010)",
    "comments": [
     [
@@ -1499,7 +1504,7 @@
    "sel": "o116",
    "url": "?p=utekok&sel=o116",
    "created": "2026-11-12T16:13:54+01:00",
-   "status": "stangd",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-12T16:13:54+01:00",
@@ -1515,13 +1520,18 @@
      "2026-11-14T22:26:43+01:00",
      "stangd",
      "Vicke: "
+    ],
+    [
+     "2026-11-15T07:28:41+01:00",
+     "atgardad",
+     "Vickan: K-0010 v11 2026-11-15 07:27 · GN M10-80 i fotpaketet, med i samma ombygge som UTE-2"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-14T22:26:43+01:00",
+   "last": "2026-11-15T07:28:41+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
    "img": "avvikelser/UTE-3.jpg",
-   "ver": "hittad v2",
+   "ver": "hittad v2 · stängd K-0010 v11 2026-11-15 07:27",
    "pname": "Yamay Utekök – alla moduler (K-0010)",
    "comments": [
     [
@@ -2846,5 +2856,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-15 07:27"
+ "updated": "2026-11-15 07:28"
 }
