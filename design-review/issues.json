@@ -784,7 +784,7 @@
    "sel": "o207",
    "url": "?p=tizon&sel=o207",
    "created": "2026-11-12T16:00:16+01:00",
-   "status": "oppen",
+   "status": "delvis",
    "log": [
     [
      "2026-11-12T16:00:16+01:00",
@@ -800,13 +800,18 @@
      "2026-11-15T16:40:39+01:00",
      "oppen",
      "Vickan: väntar på val: 1) ringsats egen laserskuren 10 mm (a★) eller köpt gjutjärn (b); 2) rita Tizón-modulen nu 500 bred (a★) eller vänta (b). Kolrost = Kirami KIR-503 135×290 (1,6 kg), i"
+    ],
+    [
+     "2026-11-16T00:24:52+01:00",
+     "delvis",
+     "vickan: 37 · Kolrost = verklig Kirami KIR-503 (1,64 kg/st, t600). Vermilite-skarvar behövs inte (delar ryms i 1000×610). Kvar: ringsats + Tizón-modul (val)."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-15T16:40:39+01:00",
+   "last": "2026-11-16T00:24:52+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
    "img": "avvikelser/TIZ-10.jpg",
-   "ver": "hittad v29",
+   "ver": "hittad v29 · 37",
    "pname": "Yamay Tizón",
    "comments": [
     [
@@ -3161,5 +3166,5 @@
    "est_txt": ""
   }
  ],
- "updated": "2026-11-16 00:12"
+ "updated": "2026-11-16 00:24"
 }
