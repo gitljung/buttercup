@@ -248,8 +248,8 @@
      "Vickan: ✅ Klart. Fronten täcker nu stenen här, eftersom asköppningen i fronten är igenslagen (steg"
     ]
    ],
-   "replies": 27,
-   "last": "2026-11-15T15:35:35.033000+00:00",
+   "replies": 28,
+   "last": "2026-11-15T15:35:43.156000+00:00",
    "analyzed": "2026-11-11T07:24:23.218000+00:00",
    "forslag": [
     {
@@ -756,21 +756,32 @@
    "sel": "o207",
    "url": "?p=tizon&sel=o207",
    "created": "2026-11-12T16:00:16+01:00",
-   "status": "oppen",
+   "status": "pagar",
    "log": [
     [
      "2026-11-12T16:00:16+01:00",
      "oppen",
      "Vickan verifierade: tree.json v32: Kolrost 'Förenklad platshållare' bb 290×135×20, Ringsats '(platshallare) = skiva' bb 240×240×10; ingen modulkomponent i trädet; Vermilite sida/ba"
+    ],
+    [
+     "2026-11-15T16:37:17+01:00",
+     "pagar",
+     "Vicke: Godkänt: åtgärda enligt förslaget."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-12T16:00:16+01:00",
+   "last": "2026-11-15T16:37:17+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1568925730962669640/1570388341914865745",
    "img": "avvikelser/TIZ-10.jpg",
    "ver": "hittad v29",
    "pname": "Yamay Tizón",
-   "comments": [],
+   "comments": [
+    [
+     "2026-11-15T16:37:17+01:00",
+     "Vicke",
+     "Godkänt: åtgärda enligt förslaget."
+    ]
+   ],
    "est_min": 120,
    "est": "≈ 2 h",
    "est_txt": "Kräver val av ringsats/rost först; sedan rita in delarna + modul"
@@ -3102,5 +3113,5 @@
    "est_txt": ""
   }
  ],
- "updated": "2026-11-15 16:35"
+ "updated": "2026-11-15 16:37"
 }
