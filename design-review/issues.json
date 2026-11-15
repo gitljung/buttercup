@@ -2662,7 +2662,7 @@
    "sel": "o1",
    "url": "?p=yakitori-50&sel=o1",
    "created": "2026-11-13T13:24:30+01:00",
-   "status": "pagar",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-13T13:24:30+01:00",
@@ -2688,13 +2688,18 @@
      "2026-11-15T07:43:54+01:00",
      "pagar",
      "Vickan: Vickan rättar kolgallret (kontrollen underkände 07:09, inget sparat)"
+    ],
+    [
+     "2026-11-15T08:40:59+01:00",
+     "atgardad",
+     "Vickan: v21 · Kolgaller 396 mm (KolKort 3 mm/sida, bb ±198) + 2 nedbockade mittstöd, en kropp, plåt, tidslinjefel 0. Export 08:40."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-15T07:43:54+01:00",
+   "last": "2026-11-15T08:40:59+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
    "img": "avvikelser/YAK-3.jpg",
-   "ver": "hittad v19",
+   "ver": "hittad v19 · stängd v21",
    "pname": "Yamay Yakitori 50",
    "comments": [
     [
@@ -2703,9 +2708,9 @@
      "Godkänt: åtgärda enligt förslaget."
     ]
    ],
-   "est_min": 20,
-   "est": "≈ 20 min",
-   "est_txt": "Kolgaller 396 mm + 2 mittstöd (pågår, utvikningskontrollen ska rättas)"
+   "est_min": 0,
+   "est": "inget CAD-arbete",
+   "est_txt": "Klar"
   },
   {
    "id": "av-YAK-4",
@@ -3050,5 +3055,5 @@
    "est_txt": ""
   }
  ],
- "updated": "2026-11-15 08:06"
+ "updated": "2026-11-15 08:41"
 }
