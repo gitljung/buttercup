@@ -1352,24 +1352,29 @@
    "sev": "Bör åtgärdas",
    "sevemo": "🟡",
    "by": "Fable",
-   "desc": "Modellen: Lagerbock H/V \"Corten 3 mm, vattenskuren + 1 bock\", bär ledtapp Ø12 rostfri.\nFörväntat: Lagerbana som inte rostar/glappar; marginal vid last på öppen lucka.\nFörslag: Rostfri 1.4301 4–5 mm.\nVerifierat: desc + ap Corten i v32; Fables grova spänning ~200 MPa vid 30 kg (marginal ~1,7) ej omräknad.",
+   "desc": "Modellen: Lagerbock H/V \"Corten 3 mm, vattenskuren + 1 bock\", bär ledtapp Ø12 rostfri.\nFörväntat: Lagerbana som inte rostar/glappar; marginal vid last på öppen lucka.\nFörslag: Rostfri 1.4301 4–5 mm.\nVerifierat: desc + ap Corten i v32; Fables grova spänning ~200 MPa vid 30 kg (marginal ~1,7) ej omräknad.\nKommentar: Vicke a (PLM kort 17): Lagerbock h/v rostfritt 1.4301 5 mm (LbT, R5), ledtapp +2 mm, DIN 6799 + M6x16 flyttade 2 mm. 0 krockar, arm 0,5 mm kvar. DR v46.",
    "part": "Yamay Horno - delmontage Stomme:1 › Yamay Horno - Lagerbock hoger:1",
    "sel": "o537",
    "url": "?p=horno&sel=o537",
    "created": "2026-11-12T16:00:36+01:00",
-   "status": "oppen",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-12T16:00:36+01:00",
      "oppen",
      "Vickan verifierade: desc + ap Corten i v32; Fables grova spänning ~200 MPa vid 30 kg (marginal ~1,7) ej omräknad."
+    ],
+    [
+     "2026-11-15T21:13:49+01:00",
+     "atgardad",
+     "Vickan: 46 · Vicke a (PLM kort 17): Lagerbock h/v rostfritt 1.4301 5 mm (LbT, R5), ledtapp +2 mm, DIN 6799 + M6x16 flyttade 2 mm. 0 krockar, arm 0,5 mm kvar. DR v46."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-12T16:00:36+01:00",
+   "last": "2026-11-15T21:13:49+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-10.jpg",
-   "ver": "hittad v32",
+   "ver": "hittad v32 · stängd 46",
    "pname": "Yamay Horno",
    "comments": [],
    "est_min": 20,
@@ -3146,5 +3151,5 @@
    "est_txt": ""
   }
  ],
- "updated": "2026-11-15 17:07"
+ "updated": "2026-11-15 21:13"
 }
