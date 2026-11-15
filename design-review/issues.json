@@ -2717,7 +2717,7 @@
    "sel": "o4",
    "url": "?p=yakitori-50&sel=o4",
    "created": "2026-11-13T13:24:31+01:00",
-   "status": "stangd",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-13T13:24:31+01:00",
@@ -2738,13 +2738,18 @@
      "2026-11-15T01:40:03+01:00",
      "kommentar",
      "Vickan: Ej åtgärdad än: Fusion kraschade 00:58 (under ett annat projekts jobb) innan YAK-8 kom fram i kön. Skripten är klara (yamay_yakitori50/native/y8_fusion.sh) och körs när Fusion star"
+    ],
+    [
+     "2026-11-15T07:34:36+01:00",
+     "atgardad",
+     "Vickan: v20 · Toppen: pn 'Yakitori 50 - toppmontage', beskrivning 'Yakitori 50 – grill, toppmontage'; Tray holder höger 'Corten 2 mm, vattenskuren och bockad'; skruven 'Köpdel'. Export 07:34."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-15T01:40:03+01:00",
+   "last": "2026-11-15T07:34:36+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
    "img": "avvikelser/YAK-8.jpg",
-   "ver": "hittad v19",
+   "ver": "hittad v19 · stängd v20",
    "pname": "Yamay Yakitori 50",
    "comments": [
     [
@@ -2861,5 +2866,5 @@
    "comments": []
   }
  ],
- "updated": "2026-11-15 07:32"
+ "updated": "2026-11-15 07:34"
 }
