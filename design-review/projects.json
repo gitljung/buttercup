@@ -127,16 +127,6 @@
   "fusion_project": "yamay-tizon"
  },
  {
-  "slug": "utekok",
-  "name": "Yamay Utekök – alla moduler (K-0010)",
-  "doc": "Yamay Utekok - Kok K-0010",
-  "version": 11,
-  "exported": "2026-11-15 07:27",
-  "channel": "utekök-utveckling",
-  "thread": "1566342329911218261",
-  "fusion_project": "yamay-utekok"
- },
- {
   "slug": "yakitori-50",
   "name": "Yamay Yakitori 50",
   "channel": "yamay-grill",
@@ -156,5 +146,15 @@
   "thread": "1571445488874688572",
   "fusion_project": "yamay-koncept-for-produktutvecklingsverktyg",
   "pending": true
+ },
+ {
+  "slug": "utekok",
+  "name": "Yamay Utekök – alla moduler (K-0010)",
+  "doc": "Yamay Utekok - Kok K-0010",
+  "version": 12,
+  "exported": "2026-11-15 09:50",
+  "channel": "utekök-utveckling",
+  "thread": "1566342329911218261",
+  "fusion_project": "yamay-utekok"
  }
 ]
