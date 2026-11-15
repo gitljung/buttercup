@@ -1721,7 +1721,7 @@
    "sel": "",
    "url": "?p=utekok",
    "created": "2026-11-12T16:13:54+01:00",
-   "status": "oppen",
+   "status": "delvis",
    "log": [
     [
      "2026-11-12T16:13:54+01:00",
@@ -1737,13 +1737,18 @@
      "2026-11-14T23:05:15+01:00",
      "kommentar",
      "Vickan: Vicke valde b: distanshylsa 6 mm (A4, Ø14/Ø8,5) med O-ring på M8-skruven. Provköket med skarvset, skivor, EPDM/silikon och sidopaneler 3 mm byggs efter UTE-3/5/7 + UTE-10-exporten."
+    ],
+    [
+     "2026-11-16T00:12:50+01:00",
+     "delvis",
+     "vickan: K-0010 v13 2026-11-16 00:06 · Provkök i K-0010: 7 skivor rostfri 6 med CD-pinnbultar + M6 A4 under topplåten, mellanläggsramar (EPDM bänk/silikon grill), 4 sidopaneler 3 mm, 40 skarvset (ISO 7380 M8x20 + distan"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-14T23:05:15+01:00",
+   "last": "2026-11-16T00:12:50+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
    "img": "",
-   "ver": "hittad v2",
+   "ver": "hittad v2 · K-0010 v13 2026-11-16 00:06",
    "pname": "Yamay Utekök – alla moduler (K-0010)",
    "comments": [
     [
@@ -3156,5 +3161,5 @@
    "est_txt": ""
   }
  ],
- "updated": "2026-11-16 00:11"
+ "updated": "2026-11-16 00:12"
 }
