@@ -128,7 +128,7 @@
    "url": "https://www.buttercup.nu/design-review/?p=tizon&cam=-13%2C240%2C2522%2C0%2C531%2C-81",
    "sel": "",
    "created": "2026-11-10T19:00:49.698000+00:00",
-   "status": "pagar",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-10T19:05:45.603000+00:00",
@@ -139,10 +139,15 @@
      "2026-11-15T15:37:28.151000+00:00",
      "pagar",
      "Vicke (webb): ”alt 3”"
+    ],
+    [
+     "2026-11-15T16:06:53.251000+00:00",
+     "atgardad",
+     "Vickan: ✅ Klart. Loggan på luckan flyttad till alt 3 (LoX −14: x −99…71, nästan centrerad och ~10 "
     ]
    ],
-   "replies": 3,
-   "last": "2026-11-15T15:37:28.151000+00:00",
+   "replies": 4,
+   "last": "2026-11-15T16:06:53.251000+00:00",
    "analyzed": "2026-11-10T19:05:45.603000+00:00",
    "forslag": [
     {
@@ -160,6 +165,7 @@
    ],
    "choice": "2026-11-15T15:37:28.151000+00:00",
    "choice_txt": "alt 3",
+   "done": "2026-11-15T16:06:53.251000+00:00",
    "thread": "1568925737023569940",
    "link": "https://discord.com/channels/1114447465203109918/1568925737023569940/1569789422210121899",
    "nr": 1,
@@ -255,8 +261,8 @@
      "Vickan: ✅ Klart. Fronten täcker nu stenen här, eftersom asköppningen i fronten är igenslagen (steg"
     ]
    ],
-   "replies": 36,
-   "last": "2026-11-15T15:42:10.058000+00:00",
+   "replies": 38,
+   "last": "2026-11-15T16:07:19.095000+00:00",
    "analyzed": "2026-11-11T07:24:23.218000+00:00",
    "forslag": [
     {
@@ -3140,5 +3146,5 @@
    "est_txt": ""
   }
  ],
- "updated": "2026-11-15 16:43"
+ "updated": "2026-11-15 17:07"
 }
