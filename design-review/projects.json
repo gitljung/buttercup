@@ -145,5 +145,16 @@
   "doc": "Yakitori 50",
   "version": 21,
   "exported": "2026-11-15 08:40"
+ },
+ {
+  "slug": "koncept-for-produktutvecklingsverktyg",
+  "name": "Koncept för produktutvecklingsverktyg",
+  "doc": null,
+  "version": null,
+  "exported": null,
+  "channel": "yamay-koncept-for-produktutvecklingsverktyg",
+  "thread": "1571445488874688572",
+  "fusion_project": "yamay-koncept-for-produktutvecklingsverktyg",
+  "pending": true
  }
 ]
