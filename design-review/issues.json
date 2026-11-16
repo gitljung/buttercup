@@ -2558,24 +2558,29 @@
    "sev": "Bör åtgärdas",
    "sevemo": "🟡",
    "by": "Fable",
-   "desc": "Modellen: Material Steel: 2000×120×120 → 226 kg.\nFörväntat: Trä ca 14 kg.\nFörslag: Sätt trämaterial på Tröskelregel (påverkar vikt/BOM).\nVerifierat: 2×0,12×0,12×7850 = 226,1 kg; ×500 = 14,4 kg; h12_det.log kg 226,08.",
+   "desc": "Modellen: Material Steel: 2000×120×120 → 226 kg.\nFörväntat: Trä ca 14 kg.\nFörslag: Sätt trämaterial på Tröskelregel (påverkar vikt/BOM).\nVerifierat: 2×0,12×0,12×7850 = 226,1 kg; ×500 = 14,4 kg; h12_det.log kg 226,08.\nKommentar: Material Pine (Fusion-bibliotek, ~570 kg/m³) på Växthus - Tröskelregel v2: 226,08 → 16,42 kg/st; hjulsystem v2 uppdaterad och exporterad.",
    "part": "Växthus - Tröskelregel:1",
    "sel": "o452",
    "url": "?p=vaxthus-hjulsystem&sel=o452",
    "created": "2026-11-13T11:51:16+01:00",
-   "status": "oppen",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-13T11:51:16+01:00",
      "oppen",
      "Vickan verifierade: 2×0,12×0,12×7850 = 226,1 kg; ×500 = 14,4 kg; h12_det.log kg 226,08."
+    ],
+    [
+     "2026-11-16T09:50:48+01:00",
+     "atgardad",
+     "Vickan: v2 · Material Pine (Fusion-bibliotek, ~570 kg/m³) på Växthus - Tröskelregel v2: 226,08 → 16,42 kg/st; hjulsystem v2 uppdaterad och exporterad."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:51:16+01:00",
+   "last": "2026-11-16T09:50:48+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1570057458125250643/1570750632711946287",
    "img": "avvikelser/VAX-11.jpg",
-   "ver": "hittad v1",
+   "ver": "hittad v1 · stängd v2",
    "pname": "Växthus – hjulsystem",
    "comments": [],
    "est_min": 10,
