@@ -56,16 +56,6 @@
   "exported": "2026-11-11 18:34"
  },
  {
-  "slug": "fire-table",
-  "name": "Yamay Fire Table 1500",
-  "doc": "Yamay Fire Table 1500",
-  "version": 4,
-  "exported": "2026-11-13 11:23",
-  "channel": "yamay-fire-table",
-  "thread": "1568926239748526121",
-  "fusion_project": "yamay-fire-table"
- },
- {
   "slug": "test-med-maskinkod-till-fras",
   "name": "test med maskinkod till fräs",
   "doc": null,
@@ -156,5 +146,15 @@
   "channel": "utekök-utveckling",
   "thread": "1566342329911218261",
   "fusion_project": "yamay-utekok"
+ },
+ {
+  "slug": "fire-table",
+  "name": "Yamay Fire Table 1500",
+  "doc": "Yamay Fire Table 1500",
+  "version": 5,
+  "exported": "2026-11-16 15:49",
+  "channel": "yamay-fire-table",
+  "thread": "1568926239748526121",
+  "fusion_project": "yamay-fire-table"
  }
 ]
