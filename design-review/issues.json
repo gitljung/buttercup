@@ -3228,7 +3228,112 @@
    "est_min": null,
    "est": "",
    "est_txt": ""
+  },
+  {
+   "id": "av-UTE-11",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "utekok",
+   "nr": "UTE-11",
+   "title": "Obehandlad Corten som hyllplan ger rostfläckar på det som ställs där",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: Bottenhyllor (alla moduler) är obehandlad Corten 3 mm\nFörväntat: Kärl, textil och kartong på hyllan ska inte få rostfläckar (värst första åren)\nFörslag: Löst inlägg (rostfri plåt eller träribbor) som tillval, eller oljad/vaxad hylla\nVerifierat: Kvar i K-0010 v13: Bottenhylla 500/1000/1500/hörnbänk utan ytbehandling eller inlägg",
+   "part": "Yamay Utekok - Asado-modul 1500:1 › Yamay Utekok - Asado-modul 1500 stomme:1 › Yamay Utekok - Bottenhylla 1500:1",
+   "sel": "o1839",
+   "url": "?p=utekok&sel=o1839",
+   "created": "2026-11-16T11:44:20+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-16T11:44:20+01:00",
+     "oppen",
+     "Vickan verifierade: Kvar i K-0010 v13: Bottenhylla 500/1000/1500/hörnbänk utan ytbehandling eller inlägg"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-16T11:44:20+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
+   "img": "",
+   "ver": "hittad v2",
+   "pname": "Yamay Utekök",
+   "comments": [],
+   "est_min": 15,
+   "est": "≈ 15 min",
+   "est_txt": "Val först: inlägg (ny köp-/plåtdel) eller oljad yta (bara beskrivning)"
+  },
+  {
+   "id": "av-UTE-12",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "utekok",
+   "nr": "UTE-12",
+   "title": "Skuggfogen 6 mm vid grillen är öppen uppåt – aska och fett rinner ned",
+   "sev": "Bör åtgärdas",
+   "sevemo": "🟡",
+   "by": "Fable",
+   "desc": "Modellen: Spalt 6 mm mellan sidopanel 2 (y 1253–1256, z 697–900) och bänkens skiva/gavel (y 1262), öppen uppifrån\nFörväntat: Ingen öppen spalt i bänkytan bredvid grillen, eller en spalt som går att rengöra\nFörslag: Täcklist över fogen, eller bänkskivan dragen över fogen (avgörs före skivbeställning)\nVerifierat: DR K-0010 v13: Sidopanel 2 rostfri 3 bb y 1253–1256; Skiva 2 rostfri 6 bb y 1262–2251, z 894–900; inget däremellan i z 700–900",
+   "part": "Sidopanel 2 slut 620x203 overdel:1",
+   "sel": "o3347",
+   "url": "?p=utekok&sel=o3347",
+   "created": "2026-11-16T11:44:20+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-16T11:44:20+01:00",
+     "oppen",
+     "Vickan verifierade: DR K-0010 v13: Sidopanel 2 rostfri 3 bb y 1253–1256; Skiva 2 rostfri 6 bb y 1262–2251, z 894–900; inget däremellan i z 700–900"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-16T11:44:20+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
+   "img": "",
+   "ver": "hittad v2",
+   "pname": "Yamay Utekök",
+   "comments": [],
+   "est_min": 25,
+   "est": "≈ 25 min",
+   "est_txt": "Val först: täcklist (ny plåtdel) eller skiva över fogen (skivmått)"
+  },
+  {
+   "id": "av-UTE-13",
+   "kind": "avv",
+   "src": "fable",
+   "srcl": "🧐 Fable",
+   "slug": "utekok",
+   "nr": "UTE-13",
+   "title": "Ergonomi: Asados rattar över grannbänken, Hornos rök i ansiktshöjd",
+   "sev": "Info",
+   "sevemo": "🔵",
+   "by": "Fable",
+   "desc": "Modellen: Asados rattar sticker ca 230 mm in över grannbänken (z 1192–1506; Bänk 500 bredvid får 268 mm fri bredd). Hornos rökutsläpp ca 1,51 m över mark (689 + 8 + 817)\nFörväntat: Medvetet val: fri bänkyta bredvid Asado och rök över ansiktshöjd\nFörslag: Besluta om det accepteras; annars Bänk 1000 bredvid Asado och/eller skorstensförlängning på Horno\nVerifierat: Mått ur granskningen 12/11 (katalog + modell); modulhöjd ModH 689 och skiva 8 oförändrade i v13",
+   "part": "",
+   "sel": "",
+   "url": "?p=utekok",
+   "created": "2026-11-16T11:44:20+01:00",
+   "status": "oppen",
+   "log": [
+    [
+     "2026-11-16T11:44:20+01:00",
+     "oppen",
+     "Vickan verifierade: Mått ur granskningen 12/11 (katalog + modell); modulhöjd ModH 689 och skiva 8 oförändrade i v13"
+    ]
+   ],
+   "replies": 0,
+   "last": "2026-11-16T11:44:20+01:00",
+   "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
+   "img": "",
+   "ver": "hittad v2",
+   "pname": "Yamay Utekök",
+   "comments": [],
+   "est_min": 0,
+   "est": "inget CAD-arbete",
+   "est_txt": "Beslut; ändring bara om Vicke vill byta grannmodul/skorsten"
   }
  ],
- "updated": "2026-11-16 09:50"
+ "updated": "2026-11-16 11:45"
 }
