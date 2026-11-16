@@ -1404,8 +1404,8 @@
    "by": "Fable",
    "desc": "Modellen: 6 st ISO 7040 M5 A2 (nylon) i delmontage Rök, z 691–797.\nFörväntat: Helmetall-låsmutter i het zon (Yamay-regel).\nFörslag: ISO 7042 eller ISO 4032 + kopparpasta.\nVerifierat: Räknade 6 instanser ISO 7040 M5 A2 i delmontage Rök (v32); SWOT 2026-11-06 fynd 2 samma.",
    "part": "Yamay Horno - delmontage Rok:1 › ISO 7040 M5 A2:1",
-   "sel": "o225",
-   "url": "?p=horno&sel=o225",
+   "sel": "",
+   "url": "?p=horno",
    "created": "2026-11-12T16:00:36+01:00",
    "status": "oppen",
    "log": [
@@ -3335,5 +3335,5 @@
    "est_txt": "Beslut; ändring bara om Vicke vill byta grannmodul/skorsten"
   }
  ],
- "updated": "2026-11-16 11:45"
+ "updated": "2026-11-16 22:55"
 }
