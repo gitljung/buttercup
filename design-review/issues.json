@@ -2709,15 +2709,26 @@
      "2026-11-13T13:24:30+01:00",
      "oppen",
      "Vickan verifierade: Snitt i exportens nät: Botten z 19,5–21,5; Front/Bak/Sida har material från z 10,0 över |x|<~187 resp. |y|<~73 (Fable angav 12,5 mm och att sidorna är stängda –"
+    ],
+    [
+     "2026-11-16T08:56:03+01:00",
+     "kommentar",
+     "Vickan: Vicke 15/11 (PLM #69, c) + 16/11 (#142, a): mät med IR på byggd grill (trä + rostfri skiva) innan fötterna ändras. Öppen tills mätningen finns."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T13:24:30+01:00",
+   "last": "2026-11-16T08:56:03+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
    "img": "avvikelser/YAK-1.jpg",
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
-   "comments": [],
+   "comments": [
+    [
+     "2026-11-16T08:56:03+01:00",
+     "Vickan",
+     "Vicke 15/11 (PLM #69, c) + 16/11 (#142, a): mät med IR på byggd grill (trä + rostfri skiva) innan fötterna ändras. Öppen tills mätningen finns."
+    ]
+   ],
    "est_min": 40,
    "est": "≈ 40 min",
    "est_txt": "Fötter 40 mm + blank strålskärm; tar även YAK-10"
@@ -2844,21 +2855,32 @@
    "sel": "o42",
    "url": "?p=yakitori-50&sel=o42",
    "created": "2026-11-13T13:24:30+01:00",
-   "status": "oppen",
+   "status": "stangd",
    "log": [
     [
      "2026-11-13T13:24:30+01:00",
      "oppen",
      "Vickan verifierade: Egen 1D-räkning (20 mm vermikulit 0,13 W/mK, h 8 + strålning ε 0,8): insida 500/700/800 °C → utsida 154/196/215 °C (Fable 177–254)."
+    ],
+    [
+     "2026-11-16T08:55:56+01:00",
+     "stangd",
+     "vicke: Vicke 15/11 (PLM kort #71, val b): bara varning i manualen och på grillen – ingen modelländring; varningen följs upp i 📘 Manual"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T13:24:30+01:00",
+   "last": "2026-11-16T08:55:56+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
    "img": "avvikelser/YAK-4.jpg",
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
-   "comments": [],
+   "comments": [
+    [
+     "2026-11-16T08:55:56+01:00",
+     "vicke",
+     "Vicke 15/11 (PLM kort #71, val b): bara varning i manualen och på grillen – ingen modelländring; varningen följs upp i 📘 Manual"
+    ]
+   ],
    "est_min": 10,
    "est": "≈ 10 min",
    "est_txt": "Varningstext i manualen"
@@ -2981,15 +3003,26 @@
      "2026-11-13T13:24:31+01:00",
      "oppen",
      "Vickan verifierade: Exportens bbox: 1,9 mm resp. 3,0 mm; desc 'Sträckmetall (material ej fastställt i modellen)' på båda."
+    ],
+    [
+     "2026-11-16T08:56:03+01:00",
+     "kommentar",
+     "Vickan: Beslutat (Vicke, PLM #72 + #144): rostfri 1.4301, 3,0 mm i både hel- och halvgaller. Ej ritat än – modellen v21 har fortfarande 1,9/3,0 mm."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T13:24:31+01:00",
+   "last": "2026-11-16T08:56:03+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
    "img": "avvikelser/YAK-7.jpg",
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
-   "comments": [],
+   "comments": [
+    [
+     "2026-11-16T08:56:03+01:00",
+     "Vickan",
+     "Beslutat (Vicke, PLM #72 + #144): rostfri 1.4301, 3,0 mm i både hel- och halvgaller. Ej ritat än – modellen v21 har fortfarande 1,9/3,0 mm."
+    ]
+   ],
    "est_min": 10,
    "est": "≈ 10 min",
    "est_txt": "Material + samma sträckmetall i hel/halv"
@@ -3116,21 +3149,32 @@
    "sel": "o3",
    "url": "?p=yakitori-50&sel=o3",
    "created": "2026-11-13T13:24:31+01:00",
-   "status": "oppen",
+   "status": "stangd",
    "log": [
     [
      "2026-11-13T13:24:31+01:00",
      "oppen",
      "Vickan verifierade: Egen räkning: F = 15,7·9,81·0,115 / 0,394 = 45,0 N (tyngdpunkt antagen centrerad i djupled). Fötter y ±115 och topp z 390–391 ur exporten."
+    ],
+    [
+     "2026-11-16T08:55:56+01:00",
+     "stangd",
+     "vicke: Vicke 15/11 (PLM kort #70): inget problem – ingen ändring"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T13:24:31+01:00",
+   "last": "2026-11-16T08:55:56+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
    "img": "avvikelser/YAK-10.jpg",
    "ver": "hittad v19",
    "pname": "Yamay Yakitori 50",
-   "comments": [],
+   "comments": [
+    [
+     "2026-11-16T08:55:56+01:00",
+     "vicke",
+     "Vicke 15/11 (PLM kort #70): inget problem – ingen ändring"
+    ]
+   ],
    "est_min": 0,
    "est": "inget CAD-arbete",
    "est_txt": "Ingår i YAK-1 (fötterna)"
@@ -3171,5 +3215,5 @@
    "est_txt": ""
   }
  ],
- "updated": "2026-11-16 00:43"
+ "updated": "2026-11-16 08:56"
 }
