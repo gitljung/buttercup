@@ -84,20 +84,6 @@
   "pending": true
  },
  {
-  "slug": "vaxthus-lyfthjul",
-  "name": "Växthus – lyfthjul (delmontage)",
-  "doc": "Växthus - delmontage lyfthjul",
-  "version": 1,
-  "exported": "2026-11-13 13:39"
- },
- {
-  "slug": "vaxthus-hjulsystem",
-  "name": "Växthus – hjulsystem (6 lyfthjul + drag)",
-  "doc": "Växthus - hjulsystem",
-  "version": 1,
-  "exported": "2026-11-13 13:40"
- },
- {
   "slug": "snickeri-tcn-3d",
   "name": "Snickeri-tcn-3d",
   "doc": "Acaciagatan B108 - dorrar",
@@ -156,5 +142,19 @@
   "channel": "utekök-utveckling",
   "thread": "1566342329911218261",
   "fusion_project": "yamay-utekok"
+ },
+ {
+  "slug": "vaxthus-lyfthjul",
+  "name": "Växthus – lyfthjul (delmontage)",
+  "doc": "Växthus - delmontage lyfthjul",
+  "version": 1,
+  "exported": "2026-11-16 09:41"
+ },
+ {
+  "slug": "vaxthus-hjulsystem",
+  "name": "Växthus – hjulsystem (6 lyfthjul + drag)",
+  "doc": "Växthus - hjulsystem",
+  "version": 1,
+  "exported": "2026-11-16 09:42"
  }
 ]
