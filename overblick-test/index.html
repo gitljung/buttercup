@@ -88,7 +88,7 @@ details.pd{border:2px solid var(--ink);border-radius:11px;padding:6px 10px;margi
 #tb{left:6px;right:6px;top:6px;gap:4px}#tb .btn{font-size:13.5px;padding:2px 9px}#tb u{display:none}#zk{left:8px;bottom:8px}#zk .btn{padding:4px 13px;font-size:17px}
 #pn h2{font-size:21px}#not{bottom:58px;white-space:normal;width:86%;text-align:center}#ps{display:none!important}}
 </style></head><body>
-<div class="sk">TESTSIDA · fryst kopia av PLM-prototypens data 2026-11-16 21:57 · inget startas, sparas eller skickas</div>
+<div class="sk">TESTSIDA · fryst kopia av PLM-prototypens data 2026-11-16 22:02 · inget startas, sparas eller skickas</div>
 <header><h1>ÖVERBLICKEN</h1><span class="u" id="sum"></span></header>
 <main><div id="kv"><canvas id="c"></canvas><div id="tb"></div>
 <div id="goo"></div><div id="ibx"></div><div id="ps"></div><div id="ag"></div><div id="not"></div>
@@ -130,7 +130,8 @@ const POP = new Float32Array(N);
 // Fusion-kön som eget kluster: stor droppe i mitten, kön som små droppar moturs från klockan tolv (på testsidan är förloppet låtsat)
 const FUS = {x: 878, y: 772, R: 34, RK: 76, rq: 11, jobb: null, ko: [], n: 0, pa: []};   // pa = jobb på väg: knoppas av från kortet och vandrar till kön
 { const f = (D.tjanster || []).find(t => t.id === 'fusion'); if (f && f.status === 'upptagen') FUS.jobb = {namn: f.vem || 'jobb', dot: null, tIn: -9, t0: 0, dur: 45}; }
-const fusPlats = n => { const v = -1.5708 - n * .5236, rr = FUS.RK + Math.floor(n / 12) * 24; return [FUS.x + Math.cos(v) * rr, FUS.y + Math.sin(v) * rr]; };
+const fusPlats = n => { const varv = Math.floor(n / 12), v = -1.5708 - n * .5236 - varv * .2618, rr = FUS.RK + varv * 26;      // yttre varv ligger i luckorna mellan de inre
+  return [FUS.x + Math.cos(v) * rr, FUS.y + Math.sin(v) * rr]; };
 function fusKo(j) { const at = AT.get(j); if (!at) return; at.fus = true; FUS.pa.push({dot: j, at, namn: D.dots[j].nr, x: PX[j], y: PY[j], dur: at.dur, t1: at.t0 + 2.4 + FUS.pa.length * .25, u: 0, sida: slump(j + 5) > .5 ? 1 : -1}); kick(); }
 function fusProv() { FUS.n++; FUS.ko.push({dot: null, namn: 'prov ' + FUS.n, x: FUS.x + 160, y: FUS.y - 150, dur: 7 + slump(FUS.n) * 9}); kick(); }
 function fusSteg() {
@@ -159,7 +160,7 @@ function fusRita(sk) {
   FUS.ko.forEach((k, n) => { const x = sx(k.x), y = sy(k.y), r = rq * (1 + .04 * Math.sin(tid * 2 + n));
     
     ctx.fillStyle = RO; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill(); glans(x, y, r);
-    if (r >= 13) { ctx.fillStyle = '#fff'; ctx.font = `700 ${Math.min(15, r * .5)}px 'Barlow Condensed'`; ctx.fillText(k.namn, x, y + .5); } });
+    if (r >= 13) { const tx2 = passa(k.namn, r * 1.7, Math.min(15, r * .5), 8, 700); ctx.fillStyle = '#fff'; if (tx2) ctx.fillText(tx2, x, y + .5); } });
   let pr = 0; if (j) pr = Math.max(0, Math.min(1, (tid - j.t0) / j.dur));
   const Rs = R * (1 + .025 * Math.sin(tid * 1.4));
   // timglas: jobbet står kvar överst och rinner ner genom halsen. Det röda sjunker i den övre droppen och stiger i Fusion-droppen.
@@ -172,7 +173,7 @@ function fusRita(sk) {
     ctx.fillStyle = '#f6d9d3'; ctx.beginPath(); ctx.arc(x, y, rt, 0, 6.2832); ctx.fill();
     ctx.save(); ctx.beginPath(); ctx.arc(x, y, rt, 0, 6.2832); ctx.clip(); ctx.fillStyle = RO; const yk = y + rt - 2 * rt * kvar; ctx.beginPath(); ctx.moveTo(x - rt, y + rt); for (let m = 0; m <= 10; m++) ctx.lineTo(x - rt + 2 * rt * m / 10, yk + Math.abs(m - 5) / 5 * -rt * .12 * (kvar < 1 ? 1 : 0)); ctx.lineTo(x + rt, y + rt); ctx.closePath(); ctx.fill(); ctx.restore();
     ctx.beginPath(); ctx.arc(x, y, rt, 0, 6.2832); ctx.lineWidth = Math.max(1.2, rt * .1); ctx.strokeStyle = RO; ctx.stroke(); glans(x, y, rt);
-    if (rt >= 13) { ctx.font = `700 ${Math.min(15, rt * .45)}px 'Barlow Condensed'`; halo(j.namn, x, y + .5, '#1d1a16', 3); } }
+    if (rt >= 13) { const tx2 = passa(j.namn, rt * 1.7, Math.min(15, rt * .45), 8, 700); if (tx2) halo(tx2, x, y + .5, '#1d1a16', 2.5); } }
   ctx.fillStyle = GR; ctx.beginPath(); ctx.arc(X, Y, Rs, 0, 6.2832); ctx.fill();
   if (niva > .002) { ctx.save(); ctx.beginPath(); ctx.arc(X, Y, Rs, 0, 6.2832); ctx.clip(); const vag = niva < .98 ? Rs * .05 : 0;
     for (let lag = 0; lag < 2; lag++) { ctx.globalAlpha = lag ? 1 : .45; ctx.fillStyle = RO; ctx.beginPath(); ctx.moveTo(X - Rs, Y + Rs);
@@ -184,8 +185,9 @@ function fusRita(sk) {
   ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle';
   if (Rs >= 15) { if (j) { ctx.font = `700 ${Math.min(26, Rs * .5)}px 'Barlow Condensed'`; halo(Math.round(pr * 100) + ' %', X, Y, '#1d1a16', 3); }
     else { ctx.font = `700 ${Math.min(20, Rs * .4)}px 'Barlow Condensed'`; ctx.fillText('ledig', X, Y + .5); } }
-  ctx.textBaseline = 'alphabetic'; ctx.font = `${Math.max(13, Math.min(24, 15 * sk))}px Anton`; halo('FUSION-KÖN', X, Y - (FUS.RK + FUS.rq + 9) * sk, '#1d1a16', 4);
-  ctx.font = `600 ${Math.max(11.5, Math.min(16, 10 * sk))}px 'Barlow Condensed'`; halo(`1 jobb åt gången · ${FUS.ko.length} i kö`, X, Y + (FUS.RK + FUS.rq + 14) * sk, '#7a7368', 3);
+  const yf = (FUS.RK + Math.floor(Math.max(0, FUS.ko.length - (j ? 0 : 1)) / 12) * 26 + FUS.rq * 1.5) * sk;
+  ctx.textBaseline = 'alphabetic'; ctx.font = `${Math.max(13, Math.min(24, 15 * sk))}px Anton`; halo('FUSION-KÖN', X, Y - yf - 7, '#1d1a16', 4);
+  ctx.textBaseline = 'top'; ctx.font = `600 ${Math.max(11.5, Math.min(16, 10 * sk))}px 'Barlow Condensed'`; halo(`1 jobb åt gången · ${FUS.ko.length} i kö`, X, Y + yf + 5, '#7a7368', 3); ctx.textBaseline = 'alphabetic';
 }
 // Agenternas kluster: varje agent är en stor droppe med sina jobb runt sig; varje jobb har egen färg och fylls efter hur långt det kommit
 const AGK = D.ag.map((a, i) => ({x: i ? 252 : 96, y: i ? 792 : 776, R: 24, RK: 50, rq: 9.5}));
@@ -195,7 +197,7 @@ function agJobb(ai) { const u = [];
   AT.forEach((at, j) => { if (at.ag !== ai) return; if (!at.jf) at.jf = PAL[jobbNr++ % PAL.length]; const pr = atPr(at), kl = at.fus ? at.fklar : at.t0 + .8 + at.dur; if (pr >= 1 && kl != null && tid - kl > RET) return; u.push({namn: D.dots[j].nr, pr, kl: pr >= 1 ? kl : null, f: at.jf, dot: j, ref: at, igang: pr > 0 && pr < 1 || (!at.fus && pr < 1 && tid >= at.t0 + .8)}); });
   RK.forEach((r, key) => { if (r.ag !== ai) return; if (!r.jf) r.jf = PAL[jobbNr++ % PAL.length]; const pr = Math.max(0, Math.min(1, (tid - r.t0 - 2.4) / KOLLTID)), [ty, id] = key.split(':'); u.push({namn: 'koll ' + (ty === 'k' ? D.kat[KI[id]].namn : D.prj[+id].kort), pr, f: r.jf, ref: r, igang: pr > 0 && pr < 1}); });
   return u; }
-const agPlats = (A, n, rr) => { const v = -1.5708 - n * .62; rr = (rr || A.RK) + Math.floor(n / 10) * 21; return [A.x + Math.cos(v) * rr, A.y + Math.sin(v) * rr]; };
+const agPlats = (A, n, rr) => { const varv = Math.floor(n / 10), v = -1.5708 - (n % 10) * .6283 - varv * .314; rr = (rr || A.RK) + varv * 23; return [A.x + Math.cos(v) * rr, A.y + Math.sin(v) * rr]; };
 function agRita(sk) {
   AGK.forEach((A, ai) => { const a = D.ag[ai], X = sx(A.x), Y = sy(A.y), R = A.R * sk * (1 + .03 * Math.sin(tid * 1.3 + ai * 2)), rq = A.rq * sk; if (X + 90 * sk < 0 || X - 90 * sk > vw || Y + 90 * sk < 0 || Y - 90 * sk > vh) return;
     const jb = agJobb(ai); A.jb = jb;
@@ -214,11 +216,12 @@ function agRita(sk) {
       ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.clip(); ctx.fillStyle = q.f; const niv = y + r - 2 * r * q.pr; ctx.beginPath(); ctx.moveTo(x - r, y + r);
       for (let m = 0; m <= 12; m++) ctx.lineTo(x - r + 2 * r * m / 12, niv + (q.pr < 1 ? Math.sin(m * 1.1 + tid * 3 + n) * r * .07 : 0)); ctx.lineTo(x + r, y + r); ctx.closePath(); ctx.fill(); ctx.restore();
       ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.lineWidth = Math.max(1.2, r * .12); ctx.strokeStyle = q.f; ctx.stroke(); glans(x, y, r);
-      if (r >= 13) { ctx.textBaseline = 'middle'; ctx.font = `700 ${Math.min(14, r * .42)}px 'Barlow Condensed'`; halo(q.pr >= 1 ? '✓ ' + q.namn : q.namn, x, y - (r > 22 ? r * .18 : 0), '#1d1a16', 3); if (r > 22) { ctx.font = `600 ${Math.min(13, r * .34)}px 'Barlow Condensed'`; halo(Math.round(q.pr * 100) + ' %', x, y + r * .32, '#1d1a16', 3); } } });
+      if (r >= 13) { ctx.textBaseline = 'middle'; const tx2 = passa(q.pr >= 1 ? '✓ ' + q.namn : q.namn, r * 1.7, Math.min(14, r * .42), 8, 700); if (tx2) halo(tx2, x, y - (r > 22 ? r * .18 : 0), '#1d1a16', 2.5); if (r > 22) { ctx.font = `600 ${Math.min(13, r * .34)}px 'Barlow Condensed'`; halo(Math.round(q.pr * 100) + ' %', x, y + r * .32, '#1d1a16', 2.5); } } });
     ctx.fillStyle = a.farg; ctx.beginPath(); ctx.arc(X, Y, R, 0, 6.2832); ctx.fill(); glans(X, Y, R);
     ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.font = `${Math.max(9, R * .85)}px Anton`; ctx.fillText(a.namn[0], X, Y + R * .05);
-    ctx.textBaseline = 'alphabetic'; ctx.font = `${Math.max(12, Math.min(22, 13 * sk))}px Anton`; halo(a.namn.toUpperCase(), X, Y - (A.RK + A.rq + 7) * sk, a.kant, 4);
-    ctx.font = `600 ${Math.max(11, Math.min(15, 9.5 * sk))}px 'Barlow Condensed'`; halo(jb.length ? jb.length + ' jobb · dra mig till ett kort' : 'ledig · dra mig till ett kort', X, Y + (A.RK + A.rq + 13) * sk, '#7a7368', 3); });
+    const yt = (A.RK + Math.floor(Math.max(0, jb.length - 1) / 10) * 23 + A.rq * 1.1) * sk;      // rubrik och underrad flyttar ut när jobben fyller fler varv
+    ctx.textBaseline = 'alphabetic'; ctx.font = `${Math.max(12, Math.min(22, 13 * sk))}px Anton`; halo(a.namn.toUpperCase(), X, Y - yt - 7, a.kant, 4);
+    ctx.textBaseline = 'top'; ctx.font = `600 ${Math.max(11, Math.min(15, 9.5 * sk))}px 'Barlow Condensed'`; halo(jb.length ? jb.length + ' jobb · dra mig till ett kort' : 'ledig · dra mig till ett kort', X, Y + yt + 5, '#7a7368', 3); ctx.textBaseline = 'alphabetic'; });
 }
 // trådar: varje jobb som är igång hänger ihop med den som utför det (agenten, och Fusion medan jobbet körs där)
 function trad(sk) {
@@ -436,6 +439,11 @@ function radbryt(txt, bredd, maxrad) {
   rad.push(kapad ? r + '…' : r);
   return rad;
 }
+// text som ska rymmas i en boll: krymper först, kortas sedan med …, och utelämnas helt om den ändå inte får plats
+function passa(txt, bredd, fsMax, fsMin, vikt) { let fs = fsMax; const f = z => { ctx.font = `${vikt} ${z}px 'Barlow Condensed'`; }; f(fs); let w = ctx.measureText(txt).width;
+  if (w > bredd) { fs = Math.max(fsMin, fs * bredd / w); f(fs); w = ctx.measureText(txt).width; }
+  while (w > bredd && txt.length > 3) { txt = txt.slice(0, -2).trimEnd() + '…'; w = ctx.measureText(txt).width; if (txt.length <= 3) break; txt = txt.slice(0, -1); }
+  return w <= bredd ? txt : ''; }
 function halo(txt, x, y, farg, lw) { ctx.lineJoin = 'round'; ctx.lineWidth = lw || 4; ctx.strokeStyle = '#fffdf8'; ctx.strokeText(txt, x, y); ctx.fillStyle = farg; ctx.fillText(txt, x, y); }
 function rita() {
   t = mjuk(T0, T1, cam.k);
