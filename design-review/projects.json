@@ -129,16 +129,6 @@
   "exported": "2026-11-16 11:21"
  },
  {
-  "slug": "utekok",
-  "name": "Yamay Utekök",
-  "doc": "Yamay Utekok - Kok K-0010",
-  "version": 13,
-  "exported": "2026-11-16 12:08",
-  "channel": "utekök-utveckling",
-  "thread": "1566342329911218261",
-  "fusion_project": "yamay-utekok"
- },
- {
   "slug": "fire-table",
   "name": "Yamay Fire Table 1500",
   "doc": "Yamay Fire Table 1500",
@@ -170,5 +160,15 @@
   "doc": "15 kvm förråd",
   "version": 23,
   "exported": "2026-11-16 23:06"
+ },
+ {
+  "slug": "utekok",
+  "name": "Yamay Utekök",
+  "doc": "Yamay Utekok - Kok K-0010",
+  "version": 14,
+  "exported": "2026-11-16 23:28",
+  "channel": "utekök-utveckling",
+  "thread": "1566342329911218261",
+  "fusion_project": "yamay-utekok"
  }
 ]
