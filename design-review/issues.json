@@ -2593,24 +2593,29 @@
    "sev": "Bör åtgärdas",
    "sevemo": "🟡",
    "by": "Fable",
-   "desc": "Modellen: plat.md/kopdelar.md: 8 hjul, bockad spak, klaff 8, dragstång 10. Trädets desc: klaff '8 mm', spak 'bockad trampflik'.\nFörväntat: Modellen: 6 hjul, plan spak 8 mm, klaff 6 mm, dragstång 8 mm.\nFörslag: Uppdatera plat.md/kopdelar.md och komponentbeskrivningarna efter H12/H14, ta om priser.\nVerifierat: plat.md rad 16–21 (antal 8, klaff t 8, dragstång t 10); tree.json klaff bb 6 mm men desc 8 mm.",
+   "desc": "Modellen: plat.md/kopdelar.md: 8 hjul, bockad spak, klaff 8, dragstång 10. Trädets desc: klaff '8 mm', spak 'bockad trampflik'.\nFörväntat: Modellen: 6 hjul, plan spak 8 mm, klaff 6 mm, dragstång 8 mm.\nFörslag: Uppdatera plat.md/kopdelar.md och komponentbeskrivningarna efter H12/H14, ta om priser.\nVerifierat: plat.md rad 16–21 (antal 8, klaff t 8, dragstång t 10); tree.json klaff bb 6 mm men desc 8 mm.\nKommentar: Beskrivningar rättade i detaljfilerna (export 2026-11-16 09:42); plat.md/kopdelar.md omräknade för H16 (6 hjul, spak 12): plåt Scandcut 4 884 kr, köpdelar 5 862 kr inkl.",
    "part": "Växthus - delmontage lyfthjul:1 › Växthus - Lyfthjul klaff:1",
    "sel": "o25",
    "url": "?p=vaxthus-hjulsystem&sel=o25",
    "created": "2026-11-13T11:51:16+01:00",
-   "status": "oppen",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-13T11:51:16+01:00",
      "oppen",
      "Vickan verifierade: plat.md rad 16–21 (antal 8, klaff t 8, dragstång t 10); tree.json klaff bb 6 mm men desc 8 mm."
+    ],
+    [
+     "2026-11-16T09:50:03+01:00",
+     "atgardad",
+     "Vickan: 1 · Beskrivningar rättade i detaljfilerna (export 2026-11-16 09:42); plat.md/kopdelar.md omräknade för H16 (6 hjul, spak 12): plåt Scandcut 4 884 kr, köpdelar 5 862 kr inkl."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:51:16+01:00",
+   "last": "2026-11-16T09:50:03+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1570057458125250643/1570750632711946287",
    "img": "avvikelser/VAX-12.jpg",
-   "ver": "hittad v1",
+   "ver": "hittad v1 · stängd 1",
    "pname": "Växthus – hjulsystem",
    "comments": [],
    "est_min": 30,
@@ -3220,5 +3225,5 @@
    "est_txt": ""
   }
  ],
- "updated": "2026-11-16 09:49"
+ "updated": "2026-11-16 09:50"
 }
