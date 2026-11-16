@@ -88,7 +88,7 @@ details.pd{border:2px solid var(--ink);border-radius:11px;padding:6px 10px;margi
 #tb{left:6px;right:6px;top:6px;gap:4px}#tb .btn{font-size:13.5px;padding:2px 9px}#tb u{display:none}#zk{left:8px;bottom:8px}#zk .btn{padding:4px 13px;font-size:17px}
 #pn h2{font-size:21px}#not{bottom:58px;white-space:normal;width:86%;text-align:center}#ps{display:none!important}}
 </style></head><body>
-<div class="sk">TESTSIDA · fryst kopia av PLM-prototypens data 2026-11-16 21:24 · inget startas, sparas eller skickas</div>
+<div class="sk">TESTSIDA · fryst kopia av PLM-prototypens data 2026-11-16 21:27 · inget startas, sparas eller skickas</div>
 <header><h1>ÖVERBLICKEN</h1><span class="u" id="sum"></span></header>
 <main><div id="kv"><canvas id="c"></canvas><div id="tb"></div>
 <div id="goo"></div><div id="ibx"></div><div id="ps"></div><div id="ag"></div><div id="not"></div>
@@ -174,6 +174,31 @@ function fusRita(sk) {
     else if (!j) { ctx.font = `700 ${Math.min(20, Rs * .4)}px 'Barlow Condensed'`; ctx.fillText('ledig', X, Y + .5); } }
   ctx.textBaseline = 'alphabetic'; ctx.font = `${Math.max(13, Math.min(24, 15 * sk))}px Anton`; halo('FUSION-KÖN', X, Y - (FUS.RK + FUS.rq + 9) * sk, '#1d1a16', 4);
   ctx.font = `600 ${Math.max(11.5, Math.min(16, 10 * sk))}px 'Barlow Condensed'`; halo(`1 jobb åt gången · ${FUS.ko.length} i kö`, X, Y + (FUS.RK + FUS.rq + 14) * sk, '#7a7368', 3);
+}
+// Agenternas kluster: varje agent är en stor droppe med sina jobb runt sig; varje jobb har egen färg och fylls efter hur långt det kommit
+const AGK = D.ag.map((a, i) => ({x: i ? 252 : 96, y: i ? 792 : 776, R: 24, RK: 50, rq: 9.5}));
+const PAL = ['#c8321a', '#143c7d', '#e8891a', '#7a3e8e', '#d4577b', '#3b8fb5', '#8a6d1c', '#1f8a70']; let jobbNr = 0;
+const atPr = at => at.fus ? fusPr(at) : Math.max(0, Math.min(1, (tid - at.t0 - .8) / at.dur));
+function agJobb(ai) { const u = [];
+  AT.forEach((at, j) => { if (at.ag !== ai) return; if (!at.jf) at.jf = PAL[jobbNr++ % PAL.length]; const pr = atPr(at), kl = at.fus ? at.fklar : at.t0 + .8 + at.dur; if (pr >= 1 && kl != null && tid - kl > 8) return; u.push({namn: D.dots[j].nr, pr, f: at.jf, dot: j}); });
+  RK.forEach((r, key) => { if (r.ag !== ai) return; if (!r.jf) r.jf = PAL[jobbNr++ % PAL.length]; const pr = Math.max(0, Math.min(1, (tid - r.t0 - 2.4) / 40)), [ty, id] = key.split(':'); u.push({namn: 'koll ' + (ty === 'k' ? D.kat[KI[id]].namn : D.prj[+id].kort), pr, f: r.jf}); });
+  return u; }
+const agPlats = (A, n) => { const v = -1.5708 - n * .62, rr = A.RK + Math.floor(n / 10) * 21; return [A.x + Math.cos(v) * rr, A.y + Math.sin(v) * rr]; };
+function agRita(sk) {
+  AGK.forEach((A, ai) => { const a = D.ag[ai], X = sx(A.x), Y = sy(A.y), R = A.R * sk * (1 + .03 * Math.sin(tid * 1.3 + ai * 2)), rq = A.rq * sk; if (X + 90 * sk < 0 || X - 90 * sk > vw || Y + 90 * sk < 0 || Y - 90 * sk > vh) return;
+    const jb = agJobb(ai); A.jb = jb;
+    ctx.setLineDash([3, 6]); ctx.lineWidth = 1.5; ctx.strokeStyle = '#cfc8b8'; ctx.beginPath(); ctx.arc(X, Y, A.RK * sk, 0, 6.2832); ctx.stroke(); ctx.setLineDash([]); ctx.textAlign = 'center';
+    jb.forEach((q, n) => { const [wx2, wy2] = agPlats(A, n), x = sx(wx2), y = sy(wy2), r = rq * (1 + .04 * Math.sin(tid * 2 + n)); q.x = wx2; q.y = wy2;
+      if (n === 0) meta(x, y, r, X, Y, R, '#ece6d8', a.farg); else { const [px, py] = agPlats(A, n - 1); meta(x, y, r, sx(px), sy(py), rq, '#ece6d8', '#ece6d8'); }
+      ctx.fillStyle = '#ece6d8'; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
+      ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.clip(); ctx.fillStyle = q.f; const niv = y + r - 2 * r * q.pr; ctx.beginPath(); ctx.moveTo(x - r, y + r);
+      for (let m = 0; m <= 12; m++) ctx.lineTo(x - r + 2 * r * m / 12, niv + (q.pr < 1 ? Math.sin(m * 1.1 + tid * 3 + n) * r * .07 : 0)); ctx.lineTo(x + r, y + r); ctx.closePath(); ctx.fill(); ctx.restore();
+      ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.lineWidth = Math.max(1.2, r * .12); ctx.strokeStyle = q.f; ctx.stroke(); glans(x, y, r);
+      if (r >= 13) { ctx.textBaseline = 'middle'; ctx.font = `700 ${Math.min(14, r * .42)}px 'Barlow Condensed'`; halo(q.pr >= 1 ? '✓ ' + q.namn : q.namn, x, y - (r > 22 ? r * .18 : 0), '#1d1a16', 3); if (r > 22) { ctx.font = `600 ${Math.min(13, r * .34)}px 'Barlow Condensed'`; halo(Math.round(q.pr * 100) + ' %', x, y + r * .32, '#1d1a16', 3); } } });
+    ctx.fillStyle = a.farg; ctx.beginPath(); ctx.arc(X, Y, R, 0, 6.2832); ctx.fill(); glans(X, Y, R);
+    ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.font = `${Math.max(9, R * .85)}px Anton`; ctx.fillText(a.namn[0], X, Y + R * .05);
+    ctx.textBaseline = 'alphabetic'; ctx.font = `${Math.max(12, Math.min(22, 13 * sk))}px Anton`; halo(a.namn.toUpperCase(), X, Y - (A.RK + A.rq + 7) * sk, a.kant, 4);
+    ctx.font = `600 ${Math.max(11, Math.min(15, 9.5 * sk))}px 'Barlow Condensed'`; halo(jb.length ? jb.length + ' jobb · dra mig till ett kort' : 'ledig · dra mig till ett kort', X, Y + (A.RK + A.rq + 13) * sk, '#7a7368', 3); });
 }
 let DRAG = null;                            // agent som dras: {ai, mx, my, inne, mal, g}
 // pöl: oregelbunden, mjuk kontur som långsamt ändrar form (i stället för en rund boll)
@@ -432,12 +457,13 @@ function rita() {
     ctx.globalAlpha = .9; ctx.lineCap = 'round'; ctx.lineWidth = lw; ctx.strokeStyle = a.farg; bana(v0, v1, R + lw * .5); ctx.stroke();
     if (e > .98) { const sv = tid * .9; ctx.globalAlpha = .55; ctx.strokeStyle = '#ffffff'; ctx.lineWidth = lw * .35; bana(sv, sv + .9, R + lw * .5); ctx.stroke(); }
     ctx.lineCap = 'butt'; ctx.globalAlpha = 1; });
-  fusRita(sk);
+  fusRita(sk); agRita(sk);
   if (DRAG && DRAG.inne) {              // den dragna agentdroppen: dras mot närmaste droppe och flyter ihop med den
     const a = D.ag[DRAG.ai], m = DRAG.mal, rb = 22; let bx = DRAG.mx, by = DRAG.my, gm = 0, X = 0, Y = 0, r = 0;
     if (m >= 0) { X = sx(PX[m]); Y = sy(PY[m]); r = PR[m] * sk * .93; gm = 1 - Math.max(0, Math.min(1, (Math.hypot(bx - X, by - Y) - r) / 60)); gm = gm * gm * (3 - 2 * gm); }
     DRAG.g += (gm - DRAG.g) * .2; const g = DRAG.g; ctx.globalAlpha = .96;
     if (m >= 0) { bx += (X - bx) * g * .5; by += (Y - by) * g * .5; meta(bx, by, rb, X, Y, r, a.farg, F[D.dots[m].f]); }
+    if (DRAG.fran) { const A = AGK[DRAG.ai]; meta(bx, by, rb, sx(A.x), sy(A.y), A.R * sk, a.farg, a.farg); }       // droppen töjs ut ur agenten i klustret
     ctx.fillStyle = a.farg; ctx.beginPath(); ctx.arc(bx, by, rb * (1 + .03 * Math.sin(tid * 3)), 0, 6.2832); ctx.fill(); glans(bx, by, rb); ctx.globalAlpha = 1;
     ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.textAlign = 'center'; ctx.font = "19px Anton"; ctx.fillText(a.namn[0], bx, by + 1); ctx.textBaseline = 'alphabetic';
   }
@@ -467,14 +493,18 @@ function traff(mx, my) {
   for (let i = 0; i < D.prj.length; i++) if (Math.hypot(X - QX[i], Y - QY[i]) <= QR[i]) return {prj: i};
   for (let i = 0; i < D.kat.length; i++) { const [x, y, R] = D.lay.ov.kat[i]; if (Math.hypot(X - x, Y - y) <= R) return {kat: D.kat[i].id}; }
   if (Math.hypot(X - FUS.x, Y - FUS.y) <= FUS.RK + FUS.rq + 4) return {fus: true};
+  for (let i = 0; i < AGK.length; i++) { const A = AGK[i], dd = Math.hypot(X - A.x, Y - A.y); if (dd <= A.RK + A.rq + 4) { const jq = (A.jb || []).find(q => q.dot != null && Math.hypot(X - q.x, Y - q.y) <= A.rq + 3); return {agk: i, mitt: dd <= A.R + Math.max(3, (grov ? 14 : 4) / sk), jobb: jq ? jq.dot : null}; } }
   return {};
 }
 const pek = new Map(); let ned = null, nyp = null;
 const pos = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
 cv.addEventListener('wheel', e => { e.preventDefault(); if (INFO) infoStang(); const [mx, my] = pos(e); const dy = e.deltaY * (e.deltaMode === 1 ? 16 : 1); zoomVid(mx, my, Math.exp(-dy * (e.ctrlKey ? .012 : .0017))); $('#tt').style.display = 'none'; }, {passive: false});
 cv.addEventListener('contextmenu', e => e.preventDefault());
-cv.addEventListener('pointerdown', e => { grov = e.pointerType === 'touch'; if (INFO) infoStang(); try { cv.setPointerCapture(e.pointerId); } catch (x) {} const p = pos(e); pek.set(e.pointerId, p);
+cv.addEventListener('pointerdown', e => { grov = e.pointerType === 'touch'; if (INFO) infoStang();
+  { const p0 = pos(e), ha = traff(p0[0], p0[1]); if (ha.agk != null && ha.mitt) return agDrag(e, ha.agk, true); }
+  try { cv.setPointerCapture(e.pointerId); } catch (x) {} const p = pos(e); pek.set(e.pointerId, p);
   if (pek.size === 1) { ned = {x: p[0], y: p[1], cx: mal.x, cy: mal.y, flyttat: false}; const mi0 = modTraff(p[0], p[1]), h0 = traff(p[0], p[1]), mi = (h0.dot == null || (grov && mi0 >= 0 && PR[h0.dot] * cam.k * bas < 9)) && !knopp(p[0], p[1]) ? mi0 : -1; HALL = mi >= 0 ? {p: mi, t0: performance.now(), x0: mal.x, y0: mal.y, k0: mal.k, h: 0} : null;
+    if (!HALL && h0.agk != null && h0.jobb != null) HALL = {d: h0.jobb, t0: performance.now(), x0: mal.x, y0: mal.y, k0: mal.k, h: 0};
     if (!HALL && h0.fus) HALL = {f: 1, t0: performance.now(), x0: mal.x, y0: mal.y, k0: mal.k, h: 0};
     if (!HALL && h0.dot != null && t > .5 && !knopp(p[0], p[1])) HALL = {d: h0.dot, t0: performance.now(), x0: mal.x, y0: mal.y, k0: mal.k, h: 0}; if (HALL) kick(); }
   else if (pek.size === 2) { const [a, b] = [...pek.values()]; nyp = {d: Math.hypot(a[0] - b[0], a[1] - b[1])}; if (ned) ned.flyttat = true; } });
@@ -514,6 +544,7 @@ function klick(mx, my, e) {
   if (h.prj != null) { const k = D.prj[h.prj].kat; if (t < .5) return tillKat(k); return S.fok === h.prj ? tillKat(k) : tillPrj(h.prj); }
   if (h.kat) { if (S.z !== h.kat || S.fok != null) tillKat(h.kat); }
   if (h.fus) flyg(FUS.x, FUS.y, passK(125));
+  if (h.agk != null) { if (h.jobb != null) { const [x, y, r] = D.lay.det.dots[h.jobb]; return flyg(x, y, Math.min(KMAX, .12 * Math.min(vw, vh) / (r * bas))); } flyg(AGK[h.agk].x, AGK[h.agk].y, passK(95)); }
 }
 
 // ---------- agentbollar: dra en agent och släpp den på ett problem ----------
@@ -546,9 +577,9 @@ function bkJa() { const v = bekrafta.v, a = D.ag[v.ai]; $('#bk').style.display =
   RK.set(v.key, {ag: v.ai, t0: tid, farg: a.farg, v: v.v});
   if (!v.fable) v.oppna.forEach((j, n) => AT.set(j, {ag: v.ai, t0: tid + 1.2 + n * .1, dur: 10 + slump(j + 77) * 22, farg: a.farg, kant: a.kant, dx: .7, dy: -.7})); if (!v.fable && v.ai === 0) v.oppna.forEach(fusKo);
   S.sel.clear(); ui(); kick(); notis(v.fable ? `Fable-koll av ${v.namn} · testsida, inget startas` : `${a.namn} tar ${v.n} kort i ${v.namn} · testsida, inget startas`, true); }
-function agDrag(e, ai) {
+function agDrag(e, ai, fran) {
   e.preventDefault(); bkNej(); const a = D.ag[ai], g = document.createElement('div'); g.className = 'ab sp'; g.style.background = a.farg; g.textContent = a.namn[0]; document.body.appendChild(g);
-  DRAG = {ai, mx: 0, my: 0, inne: false, mal: -1, g: 0};
+  DRAG = {ai, mx: 0, my: 0, inne: false, mal: -1, g: 0, fran: !!fran};
   const lyft = e.pointerType === 'touch' ? 48 : 0;      // på pekskärm ritas droppen ovanför fingret så att den syns
   const mv = ev => { const b = cv.getBoundingClientRect(); DRAG.mx = ev.clientX - b.left; DRAG.my = ev.clientY - b.top - lyft; DRAG.inne = ev.clientX >= b.left && ev.clientX <= b.right && ev.clientY >= b.top && ev.clientY <= b.bottom;
     g.style.left = ev.clientX - 22 + 'px'; g.style.top = ev.clientY - 22 - lyft + 'px'; g.style.opacity = DRAG.inne ? 0 : 1;
@@ -666,7 +697,7 @@ function direkt() { cam.x = mal.x; cam.y = mal.y; cam.k = mal.k; rita(); lage();
   addEventListener('resize', () => { if (INFO) infoStang(); matt(); direkt(); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { rita(); });
 })();
-window.__app = {FUS, fusProv, fusKo, infoVisa, infoStang, get INFO() { return INFO; }, oppnaKortZoom, stangKort, zoomKnapp, hall, modTraff, oppnaSida, stangSida, oppnaKort, get HALL() { return HALL; }, meta, narmast, get DRAG() { return DRAG; }, BUD, SVAR, svara, knopp, RK, bekrafta, bkJa, bkNej, ringUnder, AT, mata, angraAt, S, D, cam, mal, IMG, hem, tillKat, tillPrj, zoomVid, farg, klickDot, klick, starta, rensa, steg, rita, lage, direkt, traff,
+window.__app = {AGK, agJobb, FUS, fusProv, fusKo, infoVisa, infoStang, get INFO() { return INFO; }, oppnaKortZoom, stangKort, zoomKnapp, hall, modTraff, oppnaSida, stangSida, oppnaKort, get HALL() { return HALL; }, meta, narmast, get DRAG() { return DRAG; }, BUD, SVAR, svara, knopp, RK, bekrafta, bkJa, bkNej, ringUnder, AT, mata, angraAt, S, D, cam, mal, IMG, hem, tillKat, tillPrj, zoomVid, farg, klickDot, klick, starta, rensa, steg, rita, lage, direkt, traff,
   bank: n => { const t0 = performance.now(); for (let i = 0; i < n; i++) { steg(1 / 60); tid += 1 / 60; rita(); } return (performance.now() - t0) / n; },
   fram: s => { tid += s; rita(); }, skarm: i => [sx(PX[i]), sy(PY[i]), PR[i] * cam.k * bas], pskarm: i => [sx(QX[i]), sy(QY[i]), QR[i] * cam.k * bas], t: () => t};
 </script></body></html>
