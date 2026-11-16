@@ -88,7 +88,7 @@ details.pd{border:2px solid var(--ink);border-radius:11px;padding:6px 10px;margi
 #tb{left:6px;right:6px;top:6px;gap:4px}#tb .btn{font-size:13.5px;padding:2px 9px}#tb u{display:none}#zk{left:8px;bottom:8px}#zk .btn{padding:4px 13px;font-size:17px}
 #pn h2{font-size:21px}#not{bottom:58px;white-space:normal;width:86%;text-align:center}#ps{display:none!important}}
 </style></head><body>
-<div class="sk">TESTSIDA · fryst kopia av PLM-prototypens data 2026-11-16 21:27 · inget startas, sparas eller skickas</div>
+<div class="sk">TESTSIDA · fryst kopia av PLM-prototypens data 2026-11-16 21:31 · inget startas, sparas eller skickas</div>
 <header><h1>ÖVERBLICKEN</h1><span class="u" id="sum"></span></header>
 <main><div id="kv"><canvas id="c"></canvas><div id="tb"></div>
 <div id="goo"></div><div id="ibx"></div><div id="ps"></div><div id="ag"></div><div id="not"></div>
@@ -199,6 +199,21 @@ function agRita(sk) {
     ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.font = `${Math.max(9, R * .85)}px Anton`; ctx.fillText(a.namn[0], X, Y + R * .05);
     ctx.textBaseline = 'alphabetic'; ctx.font = `${Math.max(12, Math.min(22, 13 * sk))}px Anton`; halo(a.namn.toUpperCase(), X, Y - (A.RK + A.rq + 7) * sk, a.kant, 4);
     ctx.font = `600 ${Math.max(11, Math.min(15, 9.5 * sk))}px 'Barlow Condensed'`; halo(jb.length ? jb.length + ' jobb · dra mig till ett kort' : 'ledig · dra mig till ett kort', X, Y + (A.RK + A.rq + 13) * sk, '#7a7368', 3); });
+}
+// trådar: varje jobb som är igång hänger ihop med den som utför det (agenten, och Fusion medan jobbet körs där)
+function trad(sk) {
+  ctx.lineCap = 'round'; const lw = Math.max(1.6, Math.min(4.5, 2.1 * Math.sqrt(sk)));
+  const dra = (x1, y1, x2, y2, f, fas) => { if ((x1 < 0 && x2 < 0) || (x1 > vw && x2 > vw) || (y1 < 0 && y2 < 0) || (y1 > vh && y2 > vh)) return;
+    const mx = (x1 + x2) / 2 + (y2 - y1) * .13, my = (y1 + y2) / 2 - (x2 - x1) * .13 + Math.sin(tid * .8 + fas) * 7;
+    ctx.globalAlpha = .45; ctx.strokeStyle = f; ctx.lineWidth = lw; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.quadraticCurveTo(mx, my, x2, y2); ctx.stroke();
+    ctx.globalAlpha = .95; ctx.fillStyle = f; for (let n = 0; n < 3; n++) { const u = (tid * .2 + n / 3 + fas * .37) % 1, v = 1 - u; ctx.beginPath(); ctx.arc(v * v * x1 + 2 * u * v * mx + u * u * x2, v * v * y1 + 2 * u * v * my + u * u * y2, lw * (1.25 + .5 * Math.sin(u * 3.1416)), 0, 6.2832); ctx.fill(); } };
+  AT.forEach((at, j) => { if (tid < at.t0 + .8) return; const pr = atPr(at); if (pr >= 1) return; if (!at.jf) at.jf = PAL[jobbNr++ % PAL.length]; const A = AGK[at.ag], x = sx(PX[j]), y = sy(PY[j]);
+    dra(sx(A.x), sy(A.y), x, y, at.jf, j);
+    if (at.fus && FUS.jobb && FUS.jobb.at === at && tid >= FUS.jobb.t0) dra(sx(FUS.x), sy(FUS.y), x, y, '#c8321a', j + .5); });
+  RK.forEach((r, key) => { if (tid < r.t0 + 2.4 || tid > r.t0 + 42.4) return; if (!r.jf) r.jf = PAL[jobbNr++ % PAL.length]; const [ty, id] = key.split(':'), A = AGK[r.ag]; let cx, cy, R;
+    if (ty === 'k') [cx, cy, R] = D.lay.ov.kat[KI[id]]; else { cx = QX[+id]; cy = QY[+id]; R = QR[+id]; }
+    const L = Math.hypot(A.x - cx, A.y - cy) || 1; dra(sx(A.x), sy(A.y), sx(cx + (A.x - cx) / L * R), sy(cy + (A.y - cy) / L * R), r.jf, R); });
+  ctx.globalAlpha = 1; ctx.lineCap = 'butt';
 }
 let DRAG = null;                            // agent som dras: {ai, mx, my, inne, mal, g}
 // pöl: oregelbunden, mjuk kontur som långsamt ändrar form (i stället för en rund boll)
@@ -384,6 +399,7 @@ function rita() {
     const q = im.width / im.height, w = q >= 1 ? st : st * q, h = q >= 1 ? st / q : st;
     ctx.globalAlpha = t; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(im, X - w / 2, Y - h / 2, w, h); ctx.globalAlpha = 1;
   });
+  trad(sk);
   const harSel = S.sel.size > 0; BUD.length = 0;
   let HX = 0, HY = 0, HR = 1; if (hov >= 0) { HX = PX[hov]; HY = PY[hov]; HR = PR[hov]; }
   for (let i = 0; i < N; i++) {
@@ -430,6 +446,7 @@ function rita() {
       ctx.save(); pol(X, Y, r * .93, i, .045); ctx.clip(); ctx.fillStyle = at.farg; ctx.beginPath();
       for (let q = 0; q <= 40; q++) { const th = q / 40 * 6.2832, w = 1 + vag * Math.sin(3 * th + tid * 2.4 + i) + vag * .6 * Math.sin(5 * th - tid * 1.7 + i * 2); const ax = bx + Math.cos(th) * Rc * w, ay = by + Math.sin(th) * Rc * w; q ? ctx.lineTo(ax, ay) : ctx.moveTo(ax, ay); }
       ctx.fill(); ctx.restore(); ctx.globalAlpha = 1; glans(X, Y, r * .93);
+      if (at.jf && e0 >= 1) { ctx.beginPath(); ctx.arc(X, Y, r * .93 + 2.5, 0, 6.2832); ctx.lineWidth = Math.max(2, Math.min(6, r * .07)); ctx.strokeStyle = at.jf; ctx.stroke(); }
     }
     if (d.f === 'a') { ctx.lineWidth = Math.max(1.6, r * .22); ctx.strokeStyle = '#b9d6c2'; ctx.stroke(); const v = tid * 1.6 + FA[j4] * 6.28; ctx.beginPath(); ctx.arc(X, Y, Math.max(r - Math.max(1, r * .11), .5), v, v + 2.4 + Math.sin(tid * .9 + FA[j4 + 1] * 6) * .8); ctx.strokeStyle = F.k; ctx.lineCap = 'round'; ctx.stroke(); ctx.lineCap = 'butt'; }
     if (s) { ctx.globalAlpha = 1; pol(X, Y, r * .93 + 3.5, i, .045); ctx.lineWidth = 3; ctx.strokeStyle = '#1d1a16'; ctx.stroke(); ctx.globalAlpha = al; }
