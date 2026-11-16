@@ -88,7 +88,7 @@ details.pd{border:2px solid var(--ink);border-radius:11px;padding:6px 10px;margi
 #tb{left:6px;right:6px;top:6px;gap:4px}#tb .btn{font-size:13.5px;padding:2px 9px}#tb u{display:none}#zk{left:8px;bottom:8px}#zk .btn{padding:4px 13px;font-size:17px}
 #pn h2{font-size:21px}#not{bottom:58px;white-space:normal;width:86%;text-align:center}#ps{display:none!important}}
 </style></head><body>
-<div class="sk">TESTSIDA · fryst kopia av PLM-prototypens data 2026-11-16 21:54 · inget startas, sparas eller skickas</div>
+<div class="sk">TESTSIDA · fryst kopia av PLM-prototypens data 2026-11-16 21:57 · inget startas, sparas eller skickas</div>
 <header><h1>ÖVERBLICKEN</h1><span class="u" id="sum"></span></header>
 <main><div id="kv"><canvas id="c"></canvas><div id="tb"></div>
 <div id="goo"></div><div id="ibx"></div><div id="ps"></div><div id="ag"></div><div id="not"></div>
@@ -192,7 +192,7 @@ const AGK = D.ag.map((a, i) => ({x: i ? 252 : 96, y: i ? 792 : 776, R: 24, RK: 5
 const PAL = ['#c8321a', '#143c7d', '#e8891a', '#7a3e8e', '#d4577b', '#3b8fb5', '#8a6d1c', '#1f8a70']; let jobbNr = 0;
 const atPr = at => at.fus ? fusPr(at) : Math.max(0, Math.min(1, (tid - at.t0 - .8) / at.dur));
 function agJobb(ai) { const u = [];
-  AT.forEach((at, j) => { if (at.ag !== ai) return; if (!at.jf) at.jf = PAL[jobbNr++ % PAL.length]; const pr = atPr(at), kl = at.fus ? at.fklar : at.t0 + .8 + at.dur; if (pr >= 1 && kl != null && tid - kl > 8) return; u.push({namn: D.dots[j].nr, pr, f: at.jf, dot: j, ref: at, igang: pr > 0 && pr < 1 || (!at.fus && pr < 1 && tid >= at.t0 + .8)}); });
+  AT.forEach((at, j) => { if (at.ag !== ai) return; if (!at.jf) at.jf = PAL[jobbNr++ % PAL.length]; const pr = atPr(at), kl = at.fus ? at.fklar : at.t0 + .8 + at.dur; if (pr >= 1 && kl != null && tid - kl > RET) return; u.push({namn: D.dots[j].nr, pr, kl: pr >= 1 ? kl : null, f: at.jf, dot: j, ref: at, igang: pr > 0 && pr < 1 || (!at.fus && pr < 1 && tid >= at.t0 + .8)}); });
   RK.forEach((r, key) => { if (r.ag !== ai) return; if (!r.jf) r.jf = PAL[jobbNr++ % PAL.length]; const pr = Math.max(0, Math.min(1, (tid - r.t0 - 2.4) / KOLLTID)), [ty, id] = key.split(':'); u.push({namn: 'koll ' + (ty === 'k' ? D.kat[KI[id]].namn : D.prj[+id].kort), pr, f: r.jf, ref: r, igang: pr > 0 && pr < 1}); });
   return u; }
 const agPlats = (A, n, rr) => { const v = -1.5708 - n * .62; rr = (rr || A.RK) + Math.floor(n / 10) * 21; return [A.x + Math.cos(v) * rr, A.y + Math.sin(v) * rr]; };
@@ -201,7 +201,14 @@ function agRita(sk) {
     const jb = agJobb(ai); A.jb = jb;
     ctx.setLineDash([3, 6]); ctx.lineWidth = 1.5; ctx.strokeStyle = '#cfc8b8'; ctx.beginPath(); ctx.arc(X, Y, A.RK * sk, 0, 6.2832); ctx.stroke(); ctx.setLineDash([]); ctx.textAlign = 'center';
     jb.forEach((q, n) => { const malR = q.igang ? A.R + A.rq * 1.7 : A.RK; q.ref.kr = q.ref.kr == null ? A.RK : q.ref.kr + (malR - q.ref.kr) * .08;      // jobb som är igång flyter ihop med agenten, övriga väntar ute på ringen
-      const [wx2, wy2] = agPlats(A, n, q.ref.kr), x = sx(wx2), y = sy(wy2), r = rq * (1 + .04 * Math.sin(tid * 2 + n)); q.x = wx2; q.y = wy2;
+      let [wx2, wy2] = agPlats(A, n, q.ref.kr); const r = rq * (1 + .04 * Math.sin(tid * 2 + n));
+      if (q.kl != null && q.dot != null) {       // jobbet är klart: bubblan vandrar hem till kortet den kom ifrån
+        const u = Math.max(0, Math.min(1, (tid - q.kl) / RET)), e = u * u * (3 - 2 * u), tx = PX[q.dot], ty = PY[q.dot], L = Math.hypot(tx - wx2, ty - wy2) || 1, bx = (wx2 + tx) / 2 + (ty - wy2) * .18, by = (wy2 + ty) / 2 - (tx - wx2) * .18;
+        const hx = (1 - e) * (1 - e) * wx2 + 2 * e * (1 - e) * bx + e * e * tx, hy = (1 - e) * (1 - e) * wy2 + 2 * e * (1 - e) * by + e * e * ty, x = sx(hx), y = sy(hy), rr = Math.max(r * (1 - .3 * e), 3.5), dr = PR[q.dot] * sk * .93;
+        if (u < .25) { ctx.globalAlpha = .45 * (1 - u / .25); meta(x, y, rr, X, Y, R, a.farg, a.farg, true); ctx.globalAlpha = 1; }
+        if (Math.hypot(x - sx(tx), y - sy(ty)) < dr + rr + 30) meta(x, y, rr, sx(tx), sy(ty), dr, q.f, a.farg);
+        ctx.fillStyle = q.f; ctx.beginPath(); ctx.arc(x, y, rr, 0, 6.2832); ctx.fill(); glans(x, y, rr); q.x = hx; q.y = hy; return; }
+      const x = sx(wx2), y = sy(wy2); q.x = wx2; q.y = wy2;
       if (q.igang) { ctx.globalAlpha = .45; meta(x, y, r, X, Y, R, a.farg, a.farg, true); ctx.globalAlpha = 1; }      // bara jobb som är igång har kontakt med agenten, halvgenomskinlig
       ctx.fillStyle = '#ece6d8'; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
       ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.clip(); ctx.fillStyle = q.f; const niv = y + r - 2 * r * q.pr; ctx.beginPath(); ctx.moveTo(x - r, y + r);
@@ -229,7 +236,7 @@ function trad(sk) {
   ctx.globalAlpha = 1; ctx.lineCap = 'butt';
 }
 // Åtgärdsbubblor: när en koll är klar föds förslag ur agenten och flyger till sin plats i rätt projektring (exempeltexter på testsidan)
-const KOLLTID = 16, ATG = [];
+const KOLLTID = 16, ATG = [], RET = 1.5;   // RET = tiden det tar för en klar jobbubbla att vandra hem till sitt kort
 function atgPlats(p, r) { const L = D.lay.det, [cx, cy, R] = L.prj[p], m = L.mod[p], hinder = PD[p].map(i => L.dots[i]).concat(ATG.filter(g => g.p === p && !g.dod).map(g => [cx + g.ox, cy + g.oy, g.r])); let b = [0, R * .5], bs = -1e9;
   for (let n = 0; n < 260; n++) { const v = slump(n * 7.3 + p * 31 + ATG.length * 13) * 6.2832, d = Math.sqrt(slump(n * 3.1 + p * 17 + ATG.length * 5 + 2)) * (R - r - 3), x = cx + Math.cos(v) * d, y = cy + Math.sin(v) * d;
     let fri = Math.hypot(x - m[0], y - m[1]) - m[2] * .42 - r; hinder.forEach(h => { fri = Math.min(fri, Math.hypot(x - h[0], y - h[1]) - h[2] - r); }); if (fri > bs) { bs = fri; b = [x - cx, y - cy]; if (fri > 2.5) break; } }
@@ -241,19 +248,24 @@ function atgSkapa(key, ai) {
     if (op.length >= 2) forsl.push([p, `Slå ihop ${D.dots[op[1]].nr} och ${D.dots[op[op.length - 1]].nr}`, 'De två korten ser ut att gälla samma sak och kan besvaras på en gång.']);
     if (op.length >= 4) forsl.push([p, 'Ge de enkla till Vickan', `${op.length - 2} av korten kräver inget beslut av en människa och kan gå direkt till Vickan.`]);
     if ((D.prj[p].sparrar || []).length && D.prj[p].kat !== 'webb') forsl.push([p, 'Inför release: ' + D.prj[p].sparrar[0][0], 'Det här spärrar release och har ingen ägare i dag.']); });
-  const ut = forsl.slice(0, 14); ut.forEach((f, n) => { const r = 5.2, [ox, oy] = atgPlats(f[0], r); ATG.push({p: f[0], ox, oy, r, t0: tid + .25 + n * .16, ai, titel: f[1], text: f[2], koll: namn, sida: n % 2 ? 1 : -1, fx: A.x, fy: A.y}); });
+  const ut = forsl.slice(0, 14); ut.forEach((f, n) => { const r = 5.2, [ox, oy] = atgPlats(f[0], r); ATG.push({p: f[0], ox, oy, r, t0: tid + .25 + n * .16, ai, titel: f[1], text: f[2], koll: 'kollen av ' + namn, sida: n % 2 ? 1 : -1, fx: A.x, fy: A.y}); });
   kick(); notis(`${D.ag[ai].namn}s koll av ${namn} är klar · ${ut.length} förslag flyger ut till sina projekt`);
 }
 function atgVal(i, ja) { const g = ATG[i]; if (!g) return; g.st = ja ? 'ja' : 'nej'; g.tv = tid; kick(); }
-function atgLage(g) { const u = Math.max(0, Math.min(1, (tid - g.t0) / 1.5)), e = u * u * (3 - 2 * u), tx = QX[g.p] + g.ox, ty = QY[g.p] + g.oy, L = Math.hypot(tx - g.fx, ty - g.fy) || 1, bx = (g.fx + tx) / 2 - (ty - g.fy) / L * L * .2 * g.sida, by = (g.fy + ty) / 2 + (tx - g.fx) / L * L * .2 * g.sida - L * .1;
+function atgLage(g) { const u = Math.max(0, Math.min(1, (tid - g.t0) / (g.kort ? .8 : 1.5))), e = u * u * (3 - 2 * u), tx = QX[g.p] + g.ox, ty = QY[g.p] + g.oy, L = Math.hypot(tx - g.fx, ty - g.fy) || 1, bx = (g.fx + tx) / 2 - (ty - g.fy) / L * L * .2 * g.sida, by = (g.fy + ty) / 2 + (tx - g.fx) / L * L * .2 * g.sida - L * .1;
   return [(1 - e) * (1 - e) * g.fx + 2 * e * (1 - e) * bx + e * e * tx, (1 - e) * (1 - e) * g.fy + 2 * e * (1 - e) * by + e * e * ty, u]; }
 function atgRita(sk) {
+  AT.forEach((at, j) => { if (atPr(at) < 1) return; const kl = at.fus ? at.fklar : at.t0 + .8 + at.dur; if (kl == null) return;       // utfall när jobbubblan kommit hem: kortet klarmarkeras, eller en åtgärd föds
+    if (at.utfall == null) at.utfall = slump(j * 3 + 1) < .3 ? 'atgard' : 'klar';
+    if (at.utfall === 'atgard' && !at.gjort && tid >= kl + RET) { at.gjort = true; const d = D.dots[j], a = D.ag[at.ag], rr = 5.2, [ox, oy] = atgPlats(d.p, rr); AT.delete(j); SVAR.delete(j); POP[j] = 1;
+      ATG.push({p: d.p, ox, oy, r: rr, t0: tid, ai: at.ag, titel: 'Följdfråga: ' + d.nr, text: `${a.namn} kom inte hela vägen med ${d.nr}. En sak behöver ditt beslut innan kortet kan stängas.`, koll: 'jobbet ' + d.nr, sida: 1, fx: PX[j], fy: PY[j], kort: 1});
+      notis(`${d.nr}: ${a.namn} är klar men lämnar en följdfråga`); ui(); } });
   RK.forEach((r, key) => { const kl = r.t0 + 2.4 + KOLLTID; if (!r.klar && tid >= kl) { r.klar = true; atgSkapa(key, r.ag); } if (r.klar && tid > kl + 5) RK.delete(key); });
   ctx.textAlign = 'center';
   ATG.forEach((g, n) => { if (g.dod || tid < g.t0) return; const [wx2, wy2, u] = atgLage(g), a = D.ag[g.ai]; let r = g.r * sk * (.35 + .65 * Math.min(1, u * 1.6)) * (u > .86 && u < 1 ? 1 + .22 * Math.sin((u - .86) / .14 * 3.1416) : 1) * (1 + .04 * Math.sin(tid * 1.8 + n));
     if (g.st === 'nej') { const q = (tid - g.tv) / .45; if (q >= 1) { g.dod = true; return; } r *= 1 - q; }
     const x = sx(wx2) + (u >= 1 ? Math.sin(tid * .7 + n) * r * .08 : 0), y = sy(wy2) + (u >= 1 ? Math.cos(tid * .6 + n * 2) * r * .08 : 0); g.sx = wx2; g.sy = wy2;
-    if (u < .3) { const A = AGK[g.ai]; ctx.globalAlpha = .5 * (1 - u / .3); meta(x, y, r, sx(A.x), sy(A.y), A.R * sk, a.farg, a.farg, true); ctx.globalAlpha = 1; }
+    if (u < .3 && !g.kort) { const A = AGK[g.ai]; ctx.globalAlpha = .5 * (1 - u / .3); meta(x, y, r, sx(A.x), sy(A.y), A.R * sk, a.farg, a.farg, true); ctx.globalAlpha = 1; }
     const ja = g.st === 'ja'; ctx.fillStyle = ja ? F.g : '#eadcf2'; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill(); ctx.lineWidth = Math.max(1.3, Math.min(5, r * .12)); ctx.strokeStyle = ja ? '#8a7a2a' : a.farg; ctx.stroke(); glans(x, y, r);
     if (r >= 9) { ctx.fillStyle = ja ? '#1d1a16' : a.kant; ctx.textBaseline = 'middle';
       if (r < 30) { ctx.font = `${Math.min(17, r * .9)}px Anton`; ctx.fillText(ja ? '✓' : '+', x, y + .5); }
@@ -338,7 +350,7 @@ function infoKalla(I) { const sk = cam.k * bas; if (I.typ === 'g') { const g = A
 function ruta(e, l, t, w, h, rad) { const st = e.style; st.left = l + 'px'; st.top = t + 'px'; st.width = w + 'px'; st.height = h + 'px'; st.borderRadius = rad + 'px'; }
 function infoHtml(typ, id) {
   if (typ === 'g') { const g = ATG[id], a = D.ag[g.ai];
-    return {huvud: `<span class="ix" onclick="infoStang()">✕</span><div style="padding-right:22px"><span class="cp" style="border-color:${a.farg};color:${a.kant}">Förslag från ${esc(a.namn)}</span><span class="cp">${esc(D.prj[g.p].kort)}</span>${g.st === 'ja' ? '<span class="cp">✓ blir kort</span>' : ''}</div><div class="it">${esc(g.titel)}</div><div>${esc(g.text)}</div><div style="margin-top:6px;color:var(--mut)">Ur kollen av ${esc(g.koll)}. Exempeltext på testsidan.</div>`,
+    return {huvud: `<span class="ix" onclick="infoStang()">✕</span><div style="padding-right:22px"><span class="cp" style="border-color:${a.farg};color:${a.kant}">Förslag från ${esc(a.namn)}</span><span class="cp">${esc(D.prj[g.p].kort)}</span>${g.st === 'ja' ? '<span class="cp">✓ blir kort</span>' : ''}</div><div class="it">${esc(g.titel)}</div><div>${esc(g.text)}</div><div style="margin-top:6px;color:var(--mut)">Ur ${esc(g.koll)}. Exempeltext på testsidan.</div>`,
       farg: a.farg, ton: '#eadcf2', val: g.st === 'ja' ? [] : [{b: '✓', t: 'Gör till ett kort', gor: `infoStang();atgVal(${id},1)`}, {b: '✕', t: 'Avfärda', gor: `infoStang();atgVal(${id},0)`}]}; }
   if (typ === 'f') { const j = FUS.jobb, f = (D.tjanster || []).find(t => t.id === 'fusion') || {};
     return {huvud: `<span class="ix" onclick="infoStang()">✕</span><div class="in">FUSION</div><div style="color:var(--mut)">Allt som skriver i modellen · ${esc(f.kap || '1 jobb åt gången')}</div>` +
@@ -483,7 +495,8 @@ function rita() {
     if (at) {                             // agenten går in i problemet och äter det inifrån: andelen uppäten = hur långt jobbet kommit
       const p0 = Math.max(0, Math.min(1, (tid - at.t0) / .8)); e0 = p0 * p0 * (3 - 2 * p0);
       pr = at.fus ? fusPr(at) : Math.max(0, Math.min(1, (tid - at.t0 - .8) / at.dur));
-      if (pr >= 1) { const q = Math.min(1, (tid - (at.fus ? at.fklar : at.t0 + .8 + at.dur)) / .9), k = q * q * (3 - 2 * q); fc = F.k; rI = r * (1 - .5 * k) * (1 + .12 * Math.sin(q * 3.1416)); }
+      const tk = at.fus ? at.fklar : at.t0 + .8 + at.dur; if (pr >= 1 && tid < tk + RET) pr = .999;      // kortet blir klart först när jobbubblan kommit hem
+      if (pr >= 1) { const q = Math.min(1, (tid - tk - RET) / .9), k = q * q * (3 - 2 * q); fc = F.k; rI = r * (1 - .5 * k) * (1 + .12 * Math.sin(q * 3.1416)); }
     }
     pol(X, Y, (d.f === 'a' ? Math.max(r - Math.max(1, r * .11), .5) : rI) * .93, i, .045); ctx.fillStyle = fc; ctx.fill(); glans(X, Y, rI * .93);
     if (at && pr < 1) {                   // agentdroppen glider in och flyter ihop med problemdroppen, sedan fyller den den inifrån
