@@ -2663,24 +2663,29 @@
    "sev": "Bör åtgärdas",
    "sevemo": "🟡",
    "by": "Fable",
-   "desc": "Modellen: hjul/animation.py rad 27: 'Alla 8 hjul uppe'.\nFörväntat: 6 hjul.\nFörslag: Rätta texten och rendera om animationen.\nVerifierat: grep i hjul/animation.py.",
+   "desc": "Modellen: hjul/animation.py rad 27: 'Alla 8 hjul uppe'.\nFörväntat: 6 hjul.\nFörslag: Rätta texten och rendera om animationen.\nVerifierat: grep i hjul/animation.py.\nKommentar: Underlag rättat 2026-11-16: animation.py rad 27 = 'Alla 6 hjul uppe', lyfthjul_animation.mp4 omrenderad (ingen modelländring)",
    "part": "",
    "sel": "",
    "url": "?p=vaxthus-hjulsystem",
    "created": "2026-11-13T11:51:16+01:00",
-   "status": "oppen",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-13T11:51:16+01:00",
      "oppen",
      "Vickan verifierade: grep i hjul/animation.py."
+    ],
+    [
+     "2026-11-16T09:41:04+01:00",
+     "atgardad",
+     "vickan: 1 · Underlag rättat 2026-11-16: animation.py rad 27 = 'Alla 6 hjul uppe', lyfthjul_animation.mp4 omrenderad (ingen modelländring)"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:51:16+01:00",
+   "last": "2026-11-16T09:41:04+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1570057458125250643/1570750632711946287",
    "img": "",
-   "ver": "hittad v1",
+   "ver": "hittad v1 · stängd 1",
    "pname": "Växthus – hjulsystem (6 lyfthjul + drag)",
    "comments": [],
    "est_min": 15,
@@ -3215,5 +3220,5 @@
    "est_txt": ""
   }
  ],
- "updated": "2026-11-16 09:25"
+ "updated": "2026-11-16 09:41"
 }
