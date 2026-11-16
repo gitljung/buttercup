@@ -921,24 +921,29 @@
    "sev": "Före prototyp",
    "sevemo": "🔴",
    "by": "Fable",
-   "desc": "Modellen: 20 mm Vermilite + ventilerad spalt mellan Corten-innerlåda och ytterskal.\nFörväntat: Utsida som inte ger brännskada (~60–65 °C) – eller ett medvetet beslut om skalets temperatur före prototyp.\nFörslag: Välj väg: 40 mm Vermilite i sidor/bak (skal ~122 °C, innerlåda ~220 °C) eller strålskärm/filt (kräver rostfri innerlåda).\nVerifierat: Projektets egen termik/RAPPORT_luft_109.md: ytterskal 155–175 °C vid 550 °C; Fables 1D-räkning 143–196 °C. Två oberoende räkningar samstämmiga.",
+   "desc": "Modellen: 20 mm Vermilite + ventilerad spalt mellan Corten-innerlåda och ytterskal.\nFörväntat: Utsida som inte ger brännskada (~60–65 °C) – eller ett medvetet beslut om skalets temperatur före prototyp.\nFörslag: Välj väg: 40 mm Vermilite i sidor/bak (skal ~122 °C, innerlåda ~220 °C) eller strålskärm/filt (kräver rostfri innerlåda).\nVerifierat: Projektets egen termik/RAPPORT_luft_109.md: ytterskal 155–175 °C vid 550 °C; Fables 1D-räkning 143–196 °C. Två oberoende räkningar samstämmiga.\nKommentar: Val c: varningsdekal Het yta (ISO 7010 W017) på fronten. Kvar: rökspjällets reglage, vredet och luftspjällets grepp beräknas 50–90 °C – nytt fynd i PLM (kort #417)",
    "part": "Yamay Horno - delmontage Eldstad:1",
    "sel": "o285",
    "url": "?p=horno&sel=o285",
    "created": "2026-11-12T16:00:35+01:00",
-   "status": "oppen",
+   "status": "delvis",
    "log": [
     [
      "2026-11-12T16:00:35+01:00",
      "oppen",
      "Vickan verifierade: Projektets egen termik/RAPPORT_luft_109.md: ytterskal 155–175 °C vid 550 °C; Fables 1D-räkning 143–196 °C. Två oberoende räkningar samstämmiga."
+    ],
+    [
+     "2026-11-16T22:57:35+01:00",
+     "delvis",
+     "Vickan: 49 · Val c: varningsdekal Het yta (ISO 7010 W017) på fronten. Kvar: rökspjällets reglage, vredet och luftspjällets grepp beräknas 50–90 °C – nytt fynd i PLM (kort #417)"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-12T16:00:35+01:00",
+   "last": "2026-11-16T22:57:35+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-2.jpg",
-   "ver": "hittad v32",
+   "ver": "hittad v32 · 49",
    "pname": "Yamay Horno",
    "comments": [],
    "est_min": 90,
@@ -1235,7 +1240,7 @@
    "sel": "o219",
    "url": "?p=horno&sel=o219",
    "created": "2026-11-12T16:00:36+01:00",
-   "status": "oppen",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-12T16:00:36+01:00",
@@ -1251,13 +1256,18 @@
      "2026-11-13T11:43:40+01:00",
      "kommentar",
      "Vickan: Standarddelar hittade (kamintillbehor.se, Ø120 ID, AISI 316L, T600, hane/hona): rökrör 500 mm (arbetslängd 450) 270 kr ref 33163; 1000 mm (950) 416 kr ref 33162; klämband Ø120 41 k"
+    ],
+    [
+     "2026-11-16T22:57:35+01:00",
+     "atgardad",
+     "Vickan: 49 · Rökröret 627 mm (+500): hatten z 1317, röken ut på ca 1,9 m (PLM kort #417, val a)"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T11:43:40+01:00",
+   "last": "2026-11-16T22:57:35+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-8.jpg",
-   "ver": "hittad v32",
+   "ver": "hittad v32 · stängd 49",
    "pname": "Yamay Horno",
    "comments": [
     [
@@ -1402,24 +1412,29 @@
    "sev": "Bör åtgärdas",
    "sevemo": "🟡",
    "by": "Fable",
-   "desc": "Modellen: 6 st ISO 7040 M5 A2 (nylon) i delmontage Rök, z 691–797.\nFörväntat: Helmetall-låsmutter i het zon (Yamay-regel).\nFörslag: ISO 7042 eller ISO 4032 + kopparpasta.\nVerifierat: Räknade 6 instanser ISO 7040 M5 A2 i delmontage Rök (v32); SWOT 2026-11-06 fynd 2 samma.",
+   "desc": "Modellen: 6 st ISO 7040 M5 A2 (nylon) i delmontage Rök, z 691–797.\nFörväntat: Helmetall-låsmutter i het zon (Yamay-regel).\nFörslag: ISO 7042 eller ISO 4032 + kopparpasta.\nVerifierat: Räknade 6 instanser ISO 7040 M5 A2 i delmontage Rök (v32); SWOT 2026-11-06 fynd 2 samma.\nKommentar: 6 × ISO 7042 M5 A4 helmetall i stället för ISO 7040 (PLM kort #417, val a)",
    "part": "Yamay Horno - delmontage Rok:1 › ISO 7040 M5 A2:1",
    "sel": "",
    "url": "?p=horno",
    "created": "2026-11-12T16:00:36+01:00",
-   "status": "oppen",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-12T16:00:36+01:00",
      "oppen",
      "Vickan verifierade: Räknade 6 instanser ISO 7040 M5 A2 i delmontage Rök (v32); SWOT 2026-11-06 fynd 2 samma."
+    ],
+    [
+     "2026-11-16T22:57:35+01:00",
+     "atgardad",
+     "Vickan: 49 · 6 × ISO 7042 M5 A4 helmetall i stället för ISO 7040 (PLM kort #417, val a)"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-12T16:00:36+01:00",
+   "last": "2026-11-16T22:57:35+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-11.jpg",
-   "ver": "hittad v32",
+   "ver": "hittad v32 · stängd 49",
    "pname": "Yamay Horno",
    "comments": [],
    "est_min": 10,
@@ -3335,5 +3350,5 @@
    "est_txt": "Beslut; ändring bara om Vicke vill byta grannmodul/skorsten"
   }
  ],
- "updated": "2026-11-16 22:55"
+ "updated": "2026-11-16 22:57"
 }
