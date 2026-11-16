@@ -49,13 +49,6 @@
   "fusion_project": "manual-till-wallpocket"
  },
  {
-  "slug": "vaxthus-drag",
-  "name": "Växthus – dragstång (delmontage)",
-  "doc": "Växthus - delmontage dragstång",
-  "version": 1,
-  "exported": "2026-11-11 18:13"
- },
- {
   "slug": "vaxthus",
   "name": "Växthus (bågväxthus 4×10 m)",
   "doc": "Växthus",
@@ -148,13 +141,20 @@
   "name": "Växthus – lyfthjul (delmontage)",
   "doc": "Växthus - delmontage lyfthjul",
   "version": 1,
-  "exported": "2026-11-16 09:41"
+  "exported": "2026-11-16 11:18"
  },
  {
   "slug": "vaxthus-hjulsystem",
   "name": "Växthus – hjulsystem",
   "doc": "Växthus - hjulsystem",
   "version": 2,
-  "exported": "2026-11-16 09:44"
+  "exported": "2026-11-16 11:19"
+ },
+ {
+  "slug": "vaxthus-drag",
+  "name": "Växthus – dragstång (delmontage)",
+  "doc": "Växthus - delmontage dragstång",
+  "version": 1,
+  "exported": "2026-11-16 11:21"
  }
 ]
