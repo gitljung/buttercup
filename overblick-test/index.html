@@ -88,7 +88,7 @@ details.pd{border:2px solid var(--ink);border-radius:11px;padding:6px 10px;margi
 #tb{left:6px;right:6px;top:6px;gap:4px}#tb .btn{font-size:13.5px;padding:2px 9px}#tb u{display:none}#zk{left:8px;bottom:8px}#zk .btn{padding:4px 13px;font-size:17px}
 #pn h2{font-size:21px}#not{bottom:58px;white-space:normal;width:86%;text-align:center}#ps{display:none!important}}
 </style></head><body>
-<div class="sk">TESTSIDA · fryst kopia av PLM-prototypens data 2026-11-16 21:36 · inget startas, sparas eller skickas</div>
+<div class="sk">TESTSIDA · fryst kopia av PLM-prototypens data 2026-11-16 21:39 · inget startas, sparas eller skickas</div>
 <header><h1>ÖVERBLICKEN</h1><span class="u" id="sum"></span></header>
 <main><div id="kv"><canvas id="c"></canvas><div id="tb"></div>
 <div id="goo"></div><div id="ibx"></div><div id="ps"></div><div id="ag"></div><div id="not"></div>
@@ -134,7 +134,7 @@ const fusPlats = n => { const v = -1.5708 - n * .5236, rr = FUS.RK + Math.floor(
 function fusKo(j) { const at = AT.get(j); if (!at) return; at.fus = true; FUS.pa.push({dot: j, at, namn: D.dots[j].nr, x: PX[j], y: PY[j], dur: at.dur, t1: at.t0 + 2.4 + FUS.pa.length * .25, u: 0, sida: slump(j + 5) > .5 ? 1 : -1}); kick(); }
 function fusProv() { FUS.n++; FUS.ko.push({dot: null, namn: 'prov ' + FUS.n, x: FUS.x + 160, y: FUS.y - 150, dur: 7 + slump(FUS.n) * 9}); kick(); }
 function fusSteg() {
-  if (FUS.jobb && tid >= FUS.jobb.t0 + FUS.jobb.dur) { if (FUS.jobb.at) FUS.jobb.at.fklar = tid; FUS.jobb = null; }
+  if (FUS.jobb && tid >= FUS.jobb.t0 + FUS.jobb.dur) { if (FUS.jobb.at) FUS.jobb.at.fklar = tid; FUS.jobb = null; FUS.tom = tid; }
   if (!FUS.jobb && FUS.ko.length) { const k = FUS.ko[0], [tx, ty] = fusPlats(0); if (Math.hypot(k.x - tx, k.y - ty) < 3) { FUS.ko.shift(); k.tIn = tid; k.t0 = tid + .9; FUS.jobb = k; } }
   FUS.ko.forEach((k, n) => { const [tx, ty] = fusPlats(n); k.x += (tx - k.x) * .1; k.y += (ty - k.y) * .1; });
   // jobb på väg: när agenten gjort kortet redo knoppas ett rött Fusion-jobb av och vandrar i en båge bort till kön
@@ -155,17 +155,18 @@ function fusRita(sk) {
   if (X + 130 * sk < 0 || X - 130 * sk > vw || Y + 130 * sk < 0 || Y - 130 * sk > vh) return;
   ctx.setLineDash([3, 6]); ctx.lineWidth = 1.5; ctx.strokeStyle = '#cfc8b8'; ctx.beginPath(); ctx.arc(X, Y, FUS.RK * sk, 0, 6.2832); ctx.stroke(); ctx.setLineDash([]);
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  FUS.ko.forEach((k, n) => { const x = sx(k.x), y = sy(k.y), r = rq * (1 + .04 * Math.sin(tid * 2 + n)); if (n) { const q = FUS.ko[n - 1]; meta(x, y, r, sx(q.x), sy(q.y), rq, RO, RO); }
+  FUS.ko.forEach((k, n) => { const x = sx(k.x), y = sy(k.y), r = rq * (1 + .04 * Math.sin(tid * 2 + n)); 
     ctx.fillStyle = RO; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill(); glans(x, y, r);
     if (r >= 13) { ctx.fillStyle = '#fff'; ctx.font = `700 ${Math.min(15, r * .5)}px 'Barlow Condensed'`; ctx.fillText(k.namn, x, y + .5); } });
   let pr = 0, inne = 0; if (j) { inne = Math.max(0, Math.min(1, (tid - j.tIn) / .9)); inne = inne * inne * (3 - 2 * inne); pr = Math.max(0, Math.min(1, (tid - j.t0) / j.dur)); }
-  const rod = j ? inne * (1 - pr) : 0, Rs = R * (1 + .025 * Math.sin(tid * 1.4)) * (1 + .06 * rod);
-  if (j && inne < 1) { const [px, py] = fusPlats(0), x = sx(px + (FUS.x - px) * inne), y = sy(py + (FUS.y - py) * inne); meta(x, y, rq, X, Y, Rs, RO, bland(GR, RO, rod * .3)); ctx.fillStyle = RO; ctx.beginPath(); ctx.arc(x, y, rq, 0, 6.2832); ctx.fill(); }
-  ctx.fillStyle = bland(GR, RO, rod * .3); ctx.beginPath(); ctx.arc(X, Y, Rs, 0, 6.2832); ctx.fill();
-  if (rod > .01) {                       // det röda jobbet blandas in i den gröna droppen och löses upp allt eftersom jobbet går
-    ctx.save(); ctx.beginPath(); ctx.arc(X, Y, Rs, 0, 6.2832); ctx.clip(); ctx.fillStyle = RO;
-    for (let m = 0; m < 3; m++) { const v = tid * (.7 + m * .25) + m * 2.1, d = Rs * .34 * (1 - pr * .5), cx = X + Math.cos(v) * d * (m ? 1 : .2), cy = Y + Math.sin(v) * d * (m ? 1 : .2), rr = Rs * Math.sqrt(rod) * (m ? .5 : .72);
-      ctx.globalAlpha = m ? .75 : .9; ctx.beginPath(); for (let q = 0; q <= 30; q++) { const th = q / 30 * 6.2832, w = 1 + .12 * Math.sin(3 * th + tid * 2 + m) + .07 * Math.sin(5 * th - tid * 1.6); const ax = cx + Math.cos(th) * rr * w, ay = cy + Math.sin(th) * rr * w; q ? ctx.lineTo(ax, ay) : ctx.moveTo(ax, ay); } ctx.fill(); }
+  const Rs = R * (1 + .025 * Math.sin(tid * 1.4)) * (1 + .05 * inne * (1 - pr));
+  // det röda jobbet fyller på den gröna droppen underifrån: nivån = hur långt jobbet kommit. När jobbet är klart rinner det ur.
+  let niva = j ? Math.max(pr, .06 * inne) : 0; if (!j && FUS.tom != null) { const u = (tid - FUS.tom) / .8; niva = u < 1 ? (1 - u) * (1 - u) : 0; }
+  if (j && inne < 1) { const [px, py] = fusPlats(0), x = sx(px + (FUS.x - px) * inne), y = sy(py + (FUS.y - py) * inne); meta(x, y, rq, X, Y, Rs, RO, GR); ctx.fillStyle = RO; ctx.beginPath(); ctx.arc(x, y, rq, 0, 6.2832); ctx.fill(); }
+  ctx.fillStyle = GR; ctx.beginPath(); ctx.arc(X, Y, Rs, 0, 6.2832); ctx.fill();
+  if (niva > .002) { ctx.save(); ctx.beginPath(); ctx.arc(X, Y, Rs, 0, 6.2832); ctx.clip(); const yn = Y + Rs - 2 * Rs * niva, vag = niva < .98 ? Rs * .05 : 0;
+    for (let lag = 0; lag < 2; lag++) { ctx.globalAlpha = lag ? 1 : .45; ctx.fillStyle = RO; ctx.beginPath(); ctx.moveTo(X - Rs, Y + Rs);
+      for (let m = 0; m <= 20; m++) ctx.lineTo(X - Rs + 2 * Rs * m / 20, yn + (lag ? 0 : -Rs * .05) + Math.sin(m * .9 + tid * (lag ? 2.6 : -1.9) + lag * 2) * vag); ctx.lineTo(X + Rs, Y + Rs); ctx.closePath(); ctx.fill(); }
     ctx.restore(); ctx.globalAlpha = 1; }
   glans(X, Y, Rs);
   if (j && inne >= 1) { ctx.beginPath(); ctx.arc(X, Y, Rs + Math.max(3, Rs * .1), -1.5708, -1.5708 + 6.2832 * pr); ctx.lineWidth = Math.max(2.5, Rs * .09); ctx.lineCap = 'round'; ctx.strokeStyle = '#1d1a16'; ctx.stroke(); ctx.lineCap = 'butt'; }
