@@ -88,7 +88,7 @@ details.pd{border:2px solid var(--ink);border-radius:11px;padding:6px 10px;margi
 #tb{left:6px;right:6px;top:6px;gap:4px}#tb .btn{font-size:13.5px;padding:2px 9px}#tb u{display:none}#zk{left:8px;bottom:8px}#zk .btn{padding:4px 13px;font-size:17px}
 #pn h2{font-size:21px}#not{bottom:58px;white-space:normal;width:86%;text-align:center}#ps{display:none!important}}
 </style></head><body>
-<div class="sk">TESTSIDA · fryst kopia av PLM-prototypens data 2026-11-16 21:31 · inget startas, sparas eller skickas</div>
+<div class="sk">TESTSIDA · fryst kopia av PLM-prototypens data 2026-11-16 21:36 · inget startas, sparas eller skickas</div>
 <header><h1>ÖVERBLICKEN</h1><span class="u" id="sum"></span></header>
 <main><div id="kv"><canvas id="c"></canvas><div id="tb"></div>
 <div id="goo"></div><div id="ibx"></div><div id="ps"></div><div id="ag"></div><div id="not"></div>
@@ -180,16 +180,17 @@ const AGK = D.ag.map((a, i) => ({x: i ? 252 : 96, y: i ? 792 : 776, R: 24, RK: 5
 const PAL = ['#c8321a', '#143c7d', '#e8891a', '#7a3e8e', '#d4577b', '#3b8fb5', '#8a6d1c', '#1f8a70']; let jobbNr = 0;
 const atPr = at => at.fus ? fusPr(at) : Math.max(0, Math.min(1, (tid - at.t0 - .8) / at.dur));
 function agJobb(ai) { const u = [];
-  AT.forEach((at, j) => { if (at.ag !== ai) return; if (!at.jf) at.jf = PAL[jobbNr++ % PAL.length]; const pr = atPr(at), kl = at.fus ? at.fklar : at.t0 + .8 + at.dur; if (pr >= 1 && kl != null && tid - kl > 8) return; u.push({namn: D.dots[j].nr, pr, f: at.jf, dot: j}); });
-  RK.forEach((r, key) => { if (r.ag !== ai) return; if (!r.jf) r.jf = PAL[jobbNr++ % PAL.length]; const pr = Math.max(0, Math.min(1, (tid - r.t0 - 2.4) / 40)), [ty, id] = key.split(':'); u.push({namn: 'koll ' + (ty === 'k' ? D.kat[KI[id]].namn : D.prj[+id].kort), pr, f: r.jf}); });
+  AT.forEach((at, j) => { if (at.ag !== ai) return; if (!at.jf) at.jf = PAL[jobbNr++ % PAL.length]; const pr = atPr(at), kl = at.fus ? at.fklar : at.t0 + .8 + at.dur; if (pr >= 1 && kl != null && tid - kl > 8) return; u.push({namn: D.dots[j].nr, pr, f: at.jf, dot: j, ref: at, igang: pr > 0 && pr < 1 || (!at.fus && pr < 1 && tid >= at.t0 + .8)}); });
+  RK.forEach((r, key) => { if (r.ag !== ai) return; if (!r.jf) r.jf = PAL[jobbNr++ % PAL.length]; const pr = Math.max(0, Math.min(1, (tid - r.t0 - 2.4) / 40)), [ty, id] = key.split(':'); u.push({namn: 'koll ' + (ty === 'k' ? D.kat[KI[id]].namn : D.prj[+id].kort), pr, f: r.jf, ref: r, igang: pr > 0 && pr < 1}); });
   return u; }
-const agPlats = (A, n) => { const v = -1.5708 - n * .62, rr = A.RK + Math.floor(n / 10) * 21; return [A.x + Math.cos(v) * rr, A.y + Math.sin(v) * rr]; };
+const agPlats = (A, n, rr) => { const v = -1.5708 - n * .62; rr = (rr || A.RK) + Math.floor(n / 10) * 21; return [A.x + Math.cos(v) * rr, A.y + Math.sin(v) * rr]; };
 function agRita(sk) {
   AGK.forEach((A, ai) => { const a = D.ag[ai], X = sx(A.x), Y = sy(A.y), R = A.R * sk * (1 + .03 * Math.sin(tid * 1.3 + ai * 2)), rq = A.rq * sk; if (X + 90 * sk < 0 || X - 90 * sk > vw || Y + 90 * sk < 0 || Y - 90 * sk > vh) return;
     const jb = agJobb(ai); A.jb = jb;
     ctx.setLineDash([3, 6]); ctx.lineWidth = 1.5; ctx.strokeStyle = '#cfc8b8'; ctx.beginPath(); ctx.arc(X, Y, A.RK * sk, 0, 6.2832); ctx.stroke(); ctx.setLineDash([]); ctx.textAlign = 'center';
-    jb.forEach((q, n) => { const [wx2, wy2] = agPlats(A, n), x = sx(wx2), y = sy(wy2), r = rq * (1 + .04 * Math.sin(tid * 2 + n)); q.x = wx2; q.y = wy2;
-      if (n === 0) meta(x, y, r, X, Y, R, '#ece6d8', a.farg); else { const [px, py] = agPlats(A, n - 1); meta(x, y, r, sx(px), sy(py), rq, '#ece6d8', '#ece6d8'); }
+    jb.forEach((q, n) => { const malR = q.igang ? A.R + A.rq * .8 : A.RK; q.ref.kr = q.ref.kr == null ? A.RK : q.ref.kr + (malR - q.ref.kr) * .08;      // jobb som är igång flyter ihop med agenten, övriga väntar ute på ringen
+      const [wx2, wy2] = agPlats(A, n, q.ref.kr), x = sx(wx2), y = sy(wy2), r = rq * (1 + .04 * Math.sin(tid * 2 + n)); q.x = wx2; q.y = wy2;
+      if (q.ref.kr < A.RK - 2) meta(x, y, r, X, Y, R, '#ece6d8', a.farg);
       ctx.fillStyle = '#ece6d8'; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
       ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.clip(); ctx.fillStyle = q.f; const niv = y + r - 2 * r * q.pr; ctx.beginPath(); ctx.moveTo(x - r, y + r);
       for (let m = 0; m <= 12; m++) ctx.lineTo(x - r + 2 * r * m / 12, niv + (q.pr < 1 ? Math.sin(m * 1.1 + tid * 3 + n) * r * .07 : 0)); ctx.lineTo(x + r, y + r); ctx.closePath(); ctx.fill(); ctx.restore();
@@ -399,7 +400,6 @@ function rita() {
     const q = im.width / im.height, w = q >= 1 ? st : st * q, h = q >= 1 ? st / q : st;
     ctx.globalAlpha = t; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(im, X - w / 2, Y - h / 2, w, h); ctx.globalAlpha = 1;
   });
-  trad(sk);
   const harSel = S.sel.size > 0; BUD.length = 0;
   let HX = 0, HY = 0, HR = 1; if (hov >= 0) { HX = PX[hov]; HY = PY[hov]; HR = PR[hov]; }
   for (let i = 0; i < N; i++) {
