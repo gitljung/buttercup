@@ -88,7 +88,7 @@ details.pd{border:2px solid var(--ink);border-radius:11px;padding:6px 10px;margi
 #tb{left:6px;right:6px;top:6px;gap:4px}#tb .btn{font-size:13.5px;padding:2px 9px}#tb u{display:none}#zk{left:8px;bottom:8px}#zk .btn{padding:4px 13px;font-size:17px}
 #pn h2{font-size:21px}#not{bottom:58px;white-space:normal;width:86%;text-align:center}#ps{display:none!important}}
 </style></head><body>
-<div class="sk">TESTSIDA · fryst kopia av PLM-prototypens data 2026-11-17 08:45 · inget startas, sparas eller skickas</div>
+<div class="sk">TESTSIDA · fryst kopia av PLM-prototypens data 2026-11-17 08:50 · inget startas, sparas eller skickas</div>
 <header><h1>ÖVERBLICKEN</h1><span class="u" id="sum"></span></header>
 <main><div id="kv"><canvas id="c"></canvas><div id="tb"></div>
 <div id="goo"></div><canvas id="hc"></canvas><div id="ibx"></div><div id="ps"></div><div id="ag"></div><div id="not"></div>
@@ -399,16 +399,19 @@ function infoForm(h) { const I = INFO; if (!I) return; const e = h * h * (3 - 2 
   I.nu = [lp(X - r * .8, m[0]), lp(Y - r * .8, m[1]), lp(r * 1.6, m[2]), lp(r * 1.6, m[3])]; ruta(I.box, I.nu[0], I.nu[1], I.nu[2], I.nu[3], lp(r * .8, 18)); infoRam(); }
 function infoRam() { const I = INFO; if (!I || !I.nu) return; const [X, Y, r] = infoKalla(I), n = I.nu, rk = Math.min(r * .72, 40), H = I.H, t = performance.now() / 1000;
   ruta(I.kalla, X - rk, Y - rk, rk * 2, rk * 2, rk);
-  const tx = Math.max(n[0] + 16, Math.min(n[0] + n[2] - 16, X)), ty = Math.max(n[1] + 16, Math.min(n[1] + n[3] - 16, Y)), L = Math.hypot(tx - X, ty - Y) || 1, th = Math.max(12, Math.min(26, r * .5)), ux = (tx - X) / L, uy = (ty - Y) / L;
+  const th = Math.max(12, Math.min(26, r * .5)), ins = I.typ === 'p' ? 16 : Math.min(th + 3, n[2] / 2, n[3] / 2), tx = Math.max(n[0] + ins, Math.min(n[0] + n[2] - ins, X)), ty = Math.max(n[1] + ins, Math.min(n[1] + n[3] - ins, Y)), L = Math.hypot(tx - X, ty - Y) || 1, ux = (tx - X) / L, uy = (ty - Y) / L;
   // halsen: en kedja droppar som smalnar av och vidgas igen in mot rutan, och dallrar lätt (goo-filtret smälter ihop dem)
   hx.setTransform(dpr, 0, 0, dpr, 0, 0); hx.clearRect(0, 0, vw, vh); hRit = true;
-  if (I.typ !== 'p' && L > r * .6) { ctx = hx; meta(X, Y, r, tx, ty, th, H.farg, H.farg, true); hx.fillStyle = H.farg; hx.beginPath(); hx.arc(tx, ty, th, 0, 6.2832); hx.fill(); ctx = ctx0; }
+  if (I.typ !== 'p' && L > r * .6) { ctx = hx; meta(X, Y, r, tx, ty, th, H.farg, H.farg, true); hx.fillStyle = H.farg; hx.beginPath(); hx.arc(tx, ty, th, 0, 6.2832); hx.fill(); ctx = ctx0;
+    // inne i rutan tonas hinnan bort, så den flyter in i rutans färg och inte syns som en boll
+    const ex = Math.max(n[0], Math.min(n[0] + n[2], X)), ey = Math.max(n[1], Math.min(n[1] + n[3], Y)), g = hx.createLinearGradient(ex, ey, ex + ux * th * 2.1, ey + uy * th * 2.1); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.25, 'rgba(0,0,0,.35)'); g.addColorStop(1, '#000');
+    hx.save(); hx.beginPath(); hx.rect(n[0], n[1], n[2], n[3]); hx.clip(); hx.globalCompositeOperation = 'destination-out'; hx.fillStyle = g; hx.fillRect(n[0], n[1], n[2], n[3]); hx.restore(); }
   if (I.typ === 'p') I.led.forEach((b, q) => { const u = (q + 1) / (I.led.length + 1), w = Math.sin(t * 2.1 + q * 1.7) * 2.4 * Math.sin(u * 3.1416), rr = (rk * .5 * Math.pow(1 - u, 3) + th * (.5 + .7 * u * u)) * (1 + .07 * Math.sin(t * 2.6 + q * 1.3));
     ruta(b, X + ux * L * u - uy * w - rr, Y + uy * L * u + ux * w - rr, rr * 2, rr * 2, rr); });
   // färgen: rutan börjar i droppens färg och tonar över till sin egen, utan skarp kant mot halsen
   const c = Math.max(0, Math.min(I.e == null ? 1 : I.e, (performance.now() - I.t0) / 330)), ut = 84 + (1 - c) * (1 - c) * 900;
   const kx = Math.max(n[0], Math.min(n[0] + n[2], X)), ky = Math.max(n[1], Math.min(n[1] + n[3], Y)), d0 = Math.max(0, Math.hypot(kx - X, ky - Y) - 3);
-  I.box.style.background = `radial-gradient(circle at ${(X - n[0]).toFixed(1)}px ${(Y - n[1]).toFixed(1)}px, ${H.farg} ${Math.round(d0)}px, ${Math.round(d0 + ut * .26)}px, ${H.ton} ${Math.round(d0 + ut)}px)`;
+  I.box.style.background = `radial-gradient(circle at ${(X - n[0]).toFixed(1)}px ${(Y - n[1]).toFixed(1)}px, ${H.farg} ${Math.round(d0 + 5)}px, ${Math.round(d0 + 5 + ut * .42)}px, ${H.ton} ${Math.round(d0 + 5 + ut)}px)`;
   // konturen: mjukt ojämna hörn som rör sig långsamt
   if (I.st === 'oppen') { const o = q => (20 + 8 * Math.sin(t * .8 + q * 1.9)).toFixed(1) + 'px'; I.box.style.borderRadius = `${o(0)} ${o(1)} ${o(2)} ${o(3)} / ${o(4)} ${o(5)} ${o(6)} ${o(7)}`; } }
 function infoOppna() { const I = INFO; if (!I) return; I.st = 'oppen'; infoForm(1); I.txt.classList.add('pa');
