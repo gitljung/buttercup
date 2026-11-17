@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Bygger den fristående appen Hasses Hälsoresa (buttercup.nu/halsoresa/) ur STARK IGEN-koden.
-Kör efter ändringar i Hasses pass i ../traning/index.html:  python3 halsoresa/build.py
+"""Bygger Hasses Hälsoresa (buttercup.nu/halsoresa/). STARK IGEN är borttagen (Victor 2026-11-17).
+Källan ligger nu här: src/app.html (appkoden) + src/sw_mall.js. Ark i ex/hasse/, ljud i hasse/.
+Redigera src/app.html och kör:  python3 halsoresa/build.py
 Egen PWA: eget manifest, egen service worker (scope /halsoresa/), egna ikoner, egna localStorage-nycklar."""
 import json, os, re, shutil, glob
-R = os.path.dirname(os.path.abspath(__file__)); T = os.path.join(R, '..', 'traning')
-s = open(os.path.join(T, 'index.html'), encoding='utf-8').read()
+R = os.path.dirname(os.path.abspath(__file__)); T = os.path.join(R, 'src')
+s = open(os.path.join(T, 'app.html'), encoding='utf-8').read()
 
 def rep(a, b, n=1):
     global s
@@ -29,12 +30,7 @@ s = s.replace("if (hb) hb.textContent = 'Olistad · Hasses hälsoresa';", "")
 open(os.path.join(R, 'index.html'), 'w', encoding='utf-8').write(s)
 
 # tillgångar
-os.makedirs(os.path.join(R, 'ex', 'hasse'), exist_ok=True); os.makedirs(os.path.join(R, 'hasse'), exist_ok=True)
-for f in glob.glob(os.path.join(T, 'ex', 'hasse', '*.webp')): shutil.copy2(f, os.path.join(R, 'ex', 'hasse'))
-for f in glob.glob(os.path.join(T, 'hasse', '*.mp3')): shutil.copy2(f, os.path.join(R, 'hasse'))
-shutil.copy2(os.path.join(T, 'hasse.webp'), R)
-m = json.load(open(os.path.join(T, 'ex', 'manifest.json')))
-json.dump({'h': m['h'], 'hasse': m['hasse']}, open(os.path.join(R, 'ex', 'manifest.json'), 'w'), separators=(',', ':'))
+# tillgångarna ligger direkt i halsoresa/ (ex/hasse/*.webp, hasse/*.mp3, hasse.webp, ex/manifest.json med h + hasse)
 
 # förcacha bara ark som används: 32-rutorsark (_x2) + övriga som nämns i koden och saknar _x2
 X2 = set(re.findall(r"'([a-z0-9]+)'", re.search(r"const X2 = new Set\(\[(.*?)\]\)", s, re.S).group(1)))
@@ -49,7 +45,7 @@ h = _hh.hexdigest()[:8]
 core = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './hasse.webp', './ex/manifest.json'] + \
        ['./ex/hasse/' + f for f in HFILES] + \
        ['./hasse/' + os.path.basename(f) for f in sorted(glob.glob(os.path.join(R, 'hasse', '*.mp3')))]
-sw = open(os.path.join(T, 'sw.js'), encoding='utf-8').read()
+sw = open(os.path.join(T, 'sw_mall.js'), encoding='utf-8').read()
 sw = re.sub(r"const C = '[^']*';", f"const C = 'halsoresa-{h}';", sw)
 sw = re.sub(r"const CORE = \[.*?\];", 'const CORE = ' + json.dumps(core) + ';', sw, flags=re.S)
 sw = sw.replace('// Stark igen:', '// Hasses Hälsoresa:')

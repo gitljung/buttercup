@@ -17,7 +17,12 @@
       "permanent": true
     },
     {
-      "source": "/traning/halsoresa/",
+      "source": "/traning/",
+      "destination": "/halsoresa/",
+      "permanent": true
+    },
+    {
+      "source": "/traning/:path*",
       "destination": "/halsoresa/",
       "permanent": true
     }
