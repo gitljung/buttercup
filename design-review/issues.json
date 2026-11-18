@@ -3024,8 +3024,8 @@
    "by": "Fable",
    "desc": "Modellen: Strackmetall z 345–346,9 (1,9 mm), Strackmetall halv z 294,5–297,5 (3,0 mm), material 'Steel', beskrivning 'material ej fastställt'.\nFörväntat: Livsmedelsgaller över glöd med fastställt material, samma specifikation i hel- och halvgaller.\nFörslag: Rostfri 1.4301, samma sträckmetall i båda; uppdatera beskrivning/material.\nVerifierat: Exportens bbox: 1,9 mm resp. 3,0 mm; desc 'Sträckmetall (material ej fastställt i modellen)' på båda.",
    "part": "Yakitori 50 - galler:1 › Strackmetall:1",
-   "sel": "o34",
-   "url": "?p=yakitori-50&sel=o34",
+   "sel": "o29",
+   "url": "?p=yakitori-50&sel=o29",
    "created": "2026-11-13T13:24:31+01:00",
    "status": "oppen",
    "log": [
@@ -3222,8 +3222,8 @@
    "by": "Fable",
    "desc": "Modellen: Gallren på z 294,5 / 345 (115–235 mm över bädden).\nFörväntat: –\nFörslag: –\nVerifierat: Nivåerna stämmer med exporten, men det är en bedömning utan krav: yakitorin grillas på Toppen/spettlisten (60–105 mm över glöden), hyllorna är för galler/varmhållning – Fable skriver själv 'bra för varmhållning'. Ingen avvikelse.",
    "part": "Yakitori 50 - galler:1 › Strackmetall:1",
-   "sel": "o34",
-   "url": "?p=yakitori-50&sel=o34",
+   "sel": "o29",
+   "url": "?p=yakitori-50&sel=o29",
    "created": "2026-11-13T13:24:31+01:00",
    "status": "avvisad",
    "log": [
@@ -3350,5 +3350,5 @@
    "est_txt": "Beslut; ändring bara om Vicke vill byta grannmodul/skorsten"
   }
  ],
- "updated": "2026-11-18 08:32"
+ "updated": "2026-11-18 08:58"
 }

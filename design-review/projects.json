@@ -145,16 +145,6 @@
   "exported": "2026-11-17 09:08"
  },
  {
-  "slug": "yakitori-50",
-  "name": "Yamay Yakitori 50",
-  "channel": "yamay-grill",
-  "thread": "1565091505507410073",
-  "fusion_project": "yamay-yakitori50",
-  "doc": "Yakitori 50",
-  "version": 22,
-  "exported": "2026-11-18 08:31"
- },
- {
   "slug": "fire-table",
   "name": "Yamay Fire Table 1500",
   "doc": "Yamay Fire Table 1500",
@@ -163,5 +153,15 @@
   "channel": "yamay-fire-table",
   "thread": "1568926239748526121",
   "fusion_project": "yamay-fire-table"
+ },
+ {
+  "slug": "yakitori-50",
+  "name": "Yamay Yakitori 50",
+  "channel": "yamay-grill",
+  "thread": "1565091505507410073",
+  "fusion_project": "yamay-yakitori50",
+  "doc": "Yakitori 50",
+  "version": 25,
+  "exported": "2026-11-18 08:58"
  }
 ]
