@@ -129,16 +129,6 @@
   "fusion_project": "yamay-utekok"
  },
  {
-  "slug": "fire-table",
-  "name": "Yamay Fire Table 1500",
-  "doc": "Yamay Fire Table 1500",
-  "version": 6,
-  "exported": "2026-11-16 23:47",
-  "channel": "yamay-fire-table",
-  "thread": "1568926239748526121",
-  "fusion_project": "yamay-fire-table"
- },
- {
   "slug": "horno",
   "name": "Yamay Horno",
   "doc": "Yamay Horno - ugn",
@@ -163,5 +153,15 @@
   "doc": "Yakitori 50",
   "version": 22,
   "exported": "2026-11-18 08:31"
+ },
+ {
+  "slug": "fire-table",
+  "name": "Yamay Fire Table 1500",
+  "doc": "Yamay Fire Table 1500",
+  "version": 7,
+  "exported": "2026-11-18 08:40",
+  "channel": "yamay-fire-table",
+  "thread": "1568926239748526121",
+  "fusion_project": "yamay-fire-table"
  }
 ]
