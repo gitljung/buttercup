@@ -3027,7 +3027,7 @@
    "sel": "o29",
    "url": "?p=yakitori-50&sel=o29",
    "created": "2026-11-13T13:24:31+01:00",
-   "status": "oppen",
+   "status": "atgardad",
    "log": [
     [
      "2026-11-13T13:24:31+01:00",
@@ -3038,13 +3038,18 @@
      "2026-11-16T08:56:03+01:00",
      "kommentar",
      "Vickan: Beslutat (Vicke, PLM #72 + #144): rostfri 1.4301, 3,0 mm i både hel- och halvgaller. Ej ritat än – modellen v21 har fortfarande 1,9/3,0 mm."
+    ],
+    [
+     "2026-11-18T08:59:56+01:00",
+     "atgardad",
+     "vickan: 25 · Rostfri 1.4301, 3,0 mm i hel- och halvgaller (v22); maska Sintab 3551-062674 62×23, gods 3×3, 74 % öppet (v25, PLM #496/#499). Modellen platt 3 mm; verklig bygghöjd 6 mm (param Str"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-16T08:56:03+01:00",
+   "last": "2026-11-18T08:59:56+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1565091505507410073/1570774168503324753",
    "img": "avvikelser/YAK-7.jpg",
-   "ver": "hittad v19",
+   "ver": "hittad v19 · stängd 25",
    "pname": "Yamay Yakitori 50",
    "comments": [
     [
@@ -3350,5 +3355,5 @@
    "est_txt": "Beslut; ändring bara om Vicke vill byta grannmodul/skorsten"
   }
  ],
- "updated": "2026-11-18 08:58"
+ "updated": "2026-11-18 09:00"
 }
