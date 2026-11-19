@@ -31,6 +31,10 @@ galler (eller passbit ovan) = nisch. Djup per sektion: skåp | luft (t.ex. 550 +
 en enda stomme i full höjd = hel modul. Innerlådor räknas per modul (texten i modulens del av uppställningen).
 KONTROLL: summan av passbitar + moduler måste bli nischbredden och sockel + nedre + övre + galler nischhöjden. Går det inte
 ihop: skriv det i kontrollera i stället för att justera ett mått i tysthet. TV-/mediamöbel eller kök: ejGarderob=true.
+PRIORITET (beslut 2026-11-19): 1) samma KONFIGURATION som ritningen – rätt antal moduler i rätt ordning, typ, hel/delad,
+antal innerlådor, utvändiga lådor, hyllor, klädstänger och dörrar per modul; 2) nischens yttermått exakt. Inredningshöjder
+(delning, lådfronter, hyllor, stång) är riktvärden – konfiguratorn lägger dem i 32 mm-raster och standardfronter efteråt, så
+lägg krut på att antalen blir rätt och lägg inte en kontrollera-rad för höjder som skiljer några mm.
 Mått i mm som heltal. Skriv på svenska i lasat (det du faktiskt läst med värden), antaget (dina antaganden),
 kontrollera (det snickaren måste verifiera). Hitta inte på mått du inte ser – lägg dem i antaget.`;
 
