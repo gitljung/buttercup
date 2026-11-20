@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Hasse 3D – test (swing)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--gul:#fbc021;--chili:#c8321a;--ink:#2A1206;--cream:#FFF6DC}
+  html,body{margin:0;height:100%;background:var(--cream);font-family:'Barlow Condensed',system-ui,sans-serif;color:var(--ink);overflow:hidden}
+  #c{position:fixed;inset:0;width:100vw;height:100vh;display:block;touch-action:none}
+  .top{position:fixed;left:0;right:0;top:0;padding:12px 16px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none}
+  h1{font-family:Anton,sans-serif;font-weight:400;font-size:28px;margin:0;letter-spacing:.5px;line-height:1}
+  h1 small{display:block;font-family:'Barlow Condensed';font-weight:600;font-size:15px;opacity:.75;letter-spacing:0;margin-top:3px}
+  .klocka{pointer-events:auto;background:var(--ink);color:var(--gul);border-radius:14px;padding:8px 14px;text-align:center;min-width:92px}
+  .klocka b{font-family:Anton;font-weight:400;font-size:38px;display:block;line-height:1}
+  .klocka span{font-size:15px;color:#fff}
+  .ui{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  button{font:800 17px 'Barlow Condensed',sans-serif;background:var(--gul);color:var(--ink);border:3px solid var(--ink);border-radius:12px;padding:7px 13px;cursor:pointer;box-shadow:0 3px 0 var(--ink)}
+  button.av{background:#fff}
+  button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+  #stat{position:fixed;left:12px;bottom:calc(64px + env(safe-area-inset-bottom));font:600 14px 'Barlow Condensed';background:rgba(255,255,255,.8);border:2px solid var(--ink);border-radius:9px;padding:3px 8px}
+  #lad{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font:800 24px 'Barlow Condensed'}
+  @media (max-width:700px){h1{font-size:22px} .klocka b{font-size:30px} button{font-size:15px;padding:6px 10px} #stat{bottom:calc(108px + env(safe-area-inset-bottom))} #kalla{bottom:calc(108px + env(safe-area-inset-bottom))!important;max-width:55vw}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="lad">Laddar Hasse …</div>
+<div class="top">
+  <h1>KETTLEBELL-SWING<small>3D-test · Hasse riggad · rör inte appen</small></h1>
+  <div class="klocka"><b id="tid">0:30</b><span id="reps">0 reps</span></div>
+</div>
+<div id="stat">–</div>
+<div id="kalla" style="position:fixed;right:10px;bottom:calc(64px + env(safe-area-inset-bottom));font:600 12px 'Barlow Condensed';color:#655e54;text-align:right">Rörelse: mocap ur „Kettlebell Swing Hip Hinge Style“ av Taco fleur, <a href="https://commons.wikimedia.org/wiki/File:Kettlebell_Swing_Hip_Hinge_Style.webm" style="color:#655e54">CC BY-SA 4.0</a></div>
+<div class="ui">
+  <button id="bStart">▶ Starta 30 s</button>
+  <button id="bTempo" class="av">Tempo 2,0 s</button>
+  <button id="bVy" class="av">Vy: snett</button>
+  <button id="bStil" class="av">Stil: Borderlands</button>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+window.__err = null; window.__ready = false;
+window.addEventListener('error', e => { window.__err = String(e.message || e); });
+const cv = document.getElementById('c');
+const R = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+R.setPixelRatio(Math.min(devicePixelRatio, 2));
+R.setClearColor(0xFFF6DC);
+const scene = new THREE.Scene();
+const cam = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
+const ctl = new OrbitControls(cam, cv); ctl.target.set(0, 0.95, 0); ctl.enablePan = false; ctl.minDistance = 2.5; ctl.maxDistance = 9;
+const sol = new THREE.DirectionalLight(0xffffff, 2.4); sol.position.set(-2, 4, 3); scene.add(sol);
+scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+// markskugga
+const sk = new THREE.Mesh(new THREE.CircleGeometry(0.55, 40), new THREE.MeshBasicMaterial({ color: 0x2A1206, transparent: true, opacity: 0.14 }));
+sk.rotation.x = -Math.PI / 2; sk.position.y = 0.002; sk.scale.set(1, 0.55, 1); scene.add(sk);
+
+// ---- Borderlands-look: toon 3 steg + skuggstreck + svart kontur (inverted hull) ----
+const grad = new THREE.DataTexture(new Uint8Array([90, 90, 90, 255, 170, 170, 170, 255, 255, 255, 255, 255]), 3, 1);
+grad.minFilter = grad.magFilter = THREE.NearestFilter; grad.needsUpdate = true;
+function toon(src) {
+  const m = new THREE.MeshToonMaterial({ map: src.map || null, color: src.map ? 0xffffff : src.color, gradientMap: grad });
+  m.onBeforeCompile = s => {
+    s.fragmentShader = s.fragmentShader.replace('#include <dithering_fragment>', `#include <dithering_fragment>
+      float bas = max(dot(diffuseColor.rgb, vec3(.299,.587,.114)), .04);
+      float lj = dot(outgoingLight, vec3(.299,.587,.114)) / bas;
+      float streck = step(fract((gl_FragCoord.x + gl_FragCoord.y) / (5.0 * ${R.getPixelRatio().toFixed(1)})), .28);
+      gl_FragColor.rgb *= mix(1.0, .45, streck * (1.0 - smoothstep(.55, .75, lj)));`);
+  };
+  return m;
+}
+function kontur(tjock) {
+  const m = new THREE.MeshBasicMaterial({ color: 0x120804, side: THREE.BackSide });
+  m.onBeforeCompile = s => {
+    s.vertexShader = s.vertexShader.replace('#include <project_vertex>', `
+      #ifdef USE_SKINNING
+        vec3 kn = normalize(objectNormal);
+      #else
+        vec3 kn = normalize(normal);
+      #endif
+      transformed += kn * ${tjock.toFixed(4)};
+      #include <project_vertex>`);
+    if (!s.vertexShader.includes('beginnormal_vertex'))
+      s.vertexShader = s.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>');
+  };
+  return m;
+}
+let mixer, act, kropp, konturer = [], orig = new Map(), toonM = new Map(), stil = 'bl';
+const loader = new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
+loader.load('hasse.glb', g => {
+  const root = g.scene; scene.add(root);
+  const extra = [];
+  root.traverse(o => {
+    if (!o.isMesh) return;
+    o.frustumCulled = false;
+    orig.set(o, o.material);
+    const t = toon(o.material); toonM.set(o, t); o.material = t;
+    if (o.isSkinnedMesh) kropp = o;
+    const k = o.isSkinnedMesh ? new THREE.SkinnedMesh(o.geometry, kontur(0.006)) : new THREE.Mesh(o.geometry, kontur(0.005));
+    if (o.isSkinnedMesh) k.bind(o.skeleton, o.bindMatrix);
+    k.frustumCulled = false; if (o.morphTargetInfluences) k.morphTargetInfluences = o.morphTargetInfluences;
+    extra.push([o, k]);
+  });
+  for (const [o, k] of extra) { o.parent.add(k); k.position.copy(o.position); k.quaternion.copy(o.quaternion); k.scale.copy(o.scale); konturer.push([o, k]); }
+  mixer = new THREE.AnimationMixer(root);
+  act = mixer.clipAction(g.animations[0]); act.play();
+  window.__clip = g.animations[0].duration;
+  document.getElementById('lad').remove();
+  window.__ready = true;
+  setTempo(2.0);
+}, undefined, e => { window.__err = 'GLB: ' + e; document.getElementById('lad').textContent = 'Kunde inte ladda modellen'; });
+
+// ---- tempo + timer (som i appen: CX.tempo swing = 2 s/rep) ----
+let tempo = 2.0, kor = false, kvar = 30, reps = 0, fas = 0;
+function setTempo(t) { tempo = t; if (act) act.timeScale = window.__clip / tempo; document.getElementById('bTempo').textContent = 'Tempo ' + t.toFixed(1).replace('.', ',') + ' s'; }
+document.getElementById('bTempo').onclick = () => setTempo(tempo === 2.0 ? 1.5 : tempo === 1.5 ? 2.5 : 2.0);
+document.getElementById('bStart').onclick = () => { kor = !kor; if (kor && kvar <= 0) { kvar = 30; reps = 0; } document.getElementById('bStart').textContent = kor ? '⏸ Paus' : '▶ Fortsätt'; };
+const VYER = [['snett', [2.6, 1.5, 3.6]], ['sida', [4.6, 1.2, 0.01]], ['fram', [0.01, 1.2, 4.6]]];
+let vy = 0;
+function satVy(i) { vy = i; const p = VYER[i][1]; const sm = innerWidth < 700 ? 1.25 : 1; cam.position.set(p[0] * sm, p[1], p[2] * sm); ctl.update(); document.getElementById('bVy').textContent = 'Vy: ' + VYER[i][0]; }
+document.getElementById('bVy').onclick = () => satVy((vy + 1) % VYER.length);
+document.getElementById('bStil').onclick = () => {
+  stil = stil === 'bl' ? 'orig' : 'bl';
+  for (const [o, k] of konturer) { o.material = stil === 'bl' ? toonM.get(o) : orig.get(o); k.visible = stil === 'bl'; }
+  document.getElementById('bStil').textContent = 'Stil: ' + (stil === 'bl' ? 'Borderlands' : 'original');
+};
+function resize() { const w = innerWidth, h = innerHeight; R.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); }
+addEventListener('resize', resize); resize(); satVy(0);
+
+// ---- ansikte: blink + flin i toppen av svingen ----
+let blinkT = 2.5, blinkA = 0;
+const clock = new THREE.Clock();
+let fN = 0, fT = 0, fps = 0, ms = 0;
+function loop() {
+  requestAnimationFrame(loop);
+  const dt = Math.min(clock.getDelta(), 0.1);
+  if (mixer) {
+    mixer.update(dt);
+    const ny = (act.time / window.__clip) % 1;
+    if (kor) { if (fas < 0.62 && ny >= 0.62) reps++; kvar -= dt; if (kvar <= 0) { kvar = 0; kor = false; document.getElementById('bStart').textContent = '▶ Igen'; } }
+    fas = ny;
+    const m = window.__lock ? [] : kropp.morphTargetInfluences;
+    blinkT -= dt; if (blinkT < 0) { blinkA = 0.16; blinkT = 2 + Math.random() * 3; }
+    if (blinkA > 0) blinkA -= dt;
+    m[0] = blinkA > 0 ? Math.sin((blinkA / 0.16) * Math.PI) : 0;
+    const topp = Math.exp(-Math.pow(((ny - 0.62 + 1.5) % 1 - 0.5) / 0.12, 2));
+    m[1] = topp;
+  }
+  document.getElementById('tid').textContent = '0:' + String(Math.ceil(kvar)).padStart(2, '0');
+  document.getElementById('reps').textContent = reps + (reps === 1 ? ' rep' : ' reps');
+  const t0 = performance.now(); R.render(scene, cam); ms = ms * 0.9 + (performance.now() - t0) * 0.1;
+  fN++; fT += dt; if (fT >= 1) { fps = fN / fT; fN = 0; fT = 0; window.__fps = fps;
+    document.getElementById('stat').textContent = `${fps.toFixed(0)} fps · ${R.info.render.triangles} tri · GLB 0,3 MB`; }
+}
+loop();
+// mätning: rendera n bilder i följd och vänta in GPU:n → ms per bild
+window.__bench = (n = 120) => { const gl = R.getContext(); const t0 = performance.now();
+  for (let i = 0; i < n; i++) { mixer.update(1 / 60); R.render(scene, cam); } gl.finish(); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(4));
+  return (performance.now() - t0) / n; };
+window.__dr = { setT: (t) => { if (act) { act.time = t * window.__clip; mixer.update(0); } }, pause: (p) => { if (act) act.paused = p; }, satVy, cam, ctl, R, scene };
+</script>
+</body>
+</html>
