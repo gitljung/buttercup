@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<title>Hasse 3D – test (swing)</title>
+<title>Hasse 3D – test v2 (swing)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;800&display=swap" rel="stylesheet">
 <style>
@@ -31,7 +31,7 @@
 <canvas id="c"></canvas>
 <div id="lad">Laddar Hasse …</div>
 <div class="top">
-  <h1>KETTLEBELL-SWING<small>3D-test · Hasse riggad · rör inte appen</small></h1>
+  <h1>KETTLEBELL-SWING<small id="under">3D-test v2 · Hunyuan3D-bas + tuschtextur · rör inte appen</small></h1>
   <div class="klocka"><b id="tid">0:30</b><span id="reps">0 reps</span></div>
 </div>
 <div id="stat">–</div>
@@ -40,6 +40,7 @@
   <button id="bStart">▶ Starta 30 s</button>
   <button id="bTempo" class="av">Tempo 2,0 s</button>
   <button id="bVy" class="av">Vy: snett</button>
+  <button id="bVer">Modell: v2</button>
   <button id="bStil" class="av">Stil: Borderlands</button>
 </div>
 <script type="module">
@@ -57,17 +58,30 @@ const scene = new THREE.Scene();
 const cam = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
 const ctl = new OrbitControls(cam, cv); ctl.target.set(0, 0.95, 0); ctl.enablePan = false; ctl.minDistance = 2.5; ctl.maxDistance = 9;
 const sol = new THREE.DirectionalLight(0xffffff, 2.4); sol.position.set(-2, 4, 3); scene.add(sol);
-scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+const amb = new THREE.AmbientLight(0xffffff, 0.9); scene.add(amb);
+const fyll = new THREE.DirectionalLight(0xbfd4ff, 0.5); fyll.position.set(3, 1.5, -2); scene.add(fyll);
 // markskugga
 const sk = new THREE.Mesh(new THREE.CircleGeometry(0.55, 40), new THREE.MeshBasicMaterial({ color: 0x2A1206, transparent: true, opacity: 0.14 }));
 sk.rotation.x = -Math.PI / 2; sk.position.y = 0.002; sk.scale.set(1, 0.55, 1); scene.add(sk);
 
-// ---- Borderlands-look: toon 3 steg + skuggstreck + svart kontur (inverted hull) ----
+// ---- v1: toon 3 steg + skuggstreck · v2: mjukt målat ljus (tuschen ligger i texturen) + rim · båda: svart kontur ----
 const grad = new THREE.DataTexture(new Uint8Array([90, 90, 90, 255, 170, 170, 170, 255, 255, 255, 255, 255]), 3, 1);
 grad.minFilter = grad.magFilter = THREE.NearestFilter; grad.needsUpdate = true;
-function toon(src) {
-  const m = new THREE.MeshToonMaterial({ map: src.map || null, color: src.map ? 0xffffff : src.color, gradientMap: grad });
+// mjuk ramp: målade övergångar i stället för hårda steg
+const rampD = new Uint8Array(256 * 4);
+for (let i = 0; i < 256; i++) { const t = i / 255; const v = 0.52 + 0.30 * (1 / (1 + Math.exp(-(t - 0.34) * 11))) + 0.18 * (1 / (1 + Math.exp(-(t - 0.72) * 14)));
+  const c = Math.round(Math.min(1, v) * 255); rampD.set([c, c, c, 255], i * 4); }
+const ramp = new THREE.DataTexture(rampD, 256, 1); ramp.minFilter = ramp.magFilter = THREE.LinearFilter; ramp.needsUpdate = true;
+function toon(src, ver) {
+  const m = new THREE.MeshToonMaterial({ map: src.map || null, color: src.map ? 0xffffff : src.color, gradientMap: ver === 2 ? ramp : grad });
   m.onBeforeCompile = s => {
+    if (ver === 2) {
+      s.fragmentShader = s.fragmentShader.replace('#include <dithering_fragment>', `#include <dithering_fragment>
+        float rim = pow(1.0 - clamp(dot(normalize(vNormal), normalize(vViewPosition)), 0.0, 1.0), 2.6);
+        gl_FragColor.rgb += rim * vec3(1.0, .93, .78) * .16;
+        gl_FragColor.rgb = mix(vec3(dot(gl_FragColor.rgb, vec3(.299,.587,.114))), gl_FragColor.rgb, 1.08);`);
+      return;
+    }
     s.fragmentShader = s.fragmentShader.replace('#include <dithering_fragment>', `#include <dithering_fragment>
       float bas = max(dot(diffuseColor.rgb, vec3(.299,.587,.114)), .04);
       float lj = dot(outgoingLight, vec3(.299,.587,.114)) / bas;
@@ -76,46 +90,71 @@ function toon(src) {
   };
   return m;
 }
-function kontur(tjock) {
+// kontur i skärmrum (konstant tuschbredd i px, oberoende av gltfpacks kvantisering)
+const KONT = { value: 0.004 };
+function kontur(px) {
   const m = new THREE.MeshBasicMaterial({ color: 0x120804, side: THREE.BackSide });
   m.onBeforeCompile = s => {
-    s.vertexShader = s.vertexShader.replace('#include <project_vertex>', `
+    s.uniforms.uK = KONT; s.uniforms.uPx = { value: px };
+    s.vertexShader = 'uniform float uK; uniform float uPx;\n' + s.vertexShader.replace('#include <project_vertex>', `#include <project_vertex>
       #ifdef USE_SKINNING
-        vec3 kn = normalize(objectNormal);
+        vec3 kn = normalize(normalMatrix * objectNormal);
       #else
-        vec3 kn = normalize(normal);
+        vec3 kn = normalize(normalMatrix * normal);
       #endif
-      transformed += kn * ${tjock.toFixed(4)};
-      #include <project_vertex>`);
-    if (!s.vertexShader.includes('beginnormal_vertex'))
-      s.vertexShader = s.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>');
+      vec2 kd = kn.xy; float kl = length(kd);
+      if (kl > 1e-4) gl_Position.xy += kd / kl * uK * uPx * gl_Position.w;
+      gl_Position.z += 0.0004 * gl_Position.w;`);
   };
   return m;
 }
-let mixer, act, kropp, konturer = [], orig = new Map(), toonM = new Map(), stil = 'bl';
+const MOD = {};  // ver → {root, mixer, act, kropp, konturer, orig, toonM, clip}
+let ver = 0, stil = 'bl', mixer, act, kropp;
 const loader = new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
-loader.load('hasse.glb', g => {
-  const root = g.scene; scene.add(root);
-  const extra = [];
-  root.traverse(o => {
-    if (!o.isMesh) return;
-    o.frustumCulled = false;
-    orig.set(o, o.material);
-    const t = toon(o.material); toonM.set(o, t); o.material = t;
-    if (o.isSkinnedMesh) kropp = o;
-    const k = o.isSkinnedMesh ? new THREE.SkinnedMesh(o.geometry, kontur(0.006)) : new THREE.Mesh(o.geometry, kontur(0.005));
-    if (o.isSkinnedMesh) k.bind(o.skeleton, o.bindMatrix);
-    k.frustumCulled = false; if (o.morphTargetInfluences) k.morphTargetInfluences = o.morphTargetInfluences;
-    extra.push([o, k]);
+const FIL = { 1: 'hasse.glb', 2: 'hasse_v2.glb' };
+const MB = {};
+function laddaVer(v) {
+  return new Promise((ok, fel) => {
+    if (MOD[v]) return ok(MOD[v]);
+    fetch(FIL[v], { method: 'HEAD' }).then(r => { MB[v] = (+r.headers.get('content-length') / 1048576); }).catch(() => {});
+    loader.load(FIL[v], g => {
+      const root = g.scene; const M = { root, konturer: [], orig: new Map(), toonM: new Map() };
+      const extra = [];
+      root.traverse(o => {
+        if (!o.isMesh) return;
+        o.frustumCulled = false;
+        M.orig.set(o, o.material);
+        const t = toon(o.material, v); M.toonM.set(o, t); o.material = t;
+        if (o.isSkinnedMesh) M.kropp = o;
+        const tj = v === 2 ? 2.6 : 2.2;
+        const k = o.isSkinnedMesh ? new THREE.SkinnedMesh(o.geometry, kontur(tj)) : new THREE.Mesh(o.geometry, kontur(tj * 0.8));
+        if (o.isSkinnedMesh) k.bind(o.skeleton, o.bindMatrix);
+        k.frustumCulled = false; if (o.morphTargetInfluences) k.morphTargetInfluences = o.morphTargetInfluences;
+        extra.push([o, k]);
+      });
+      for (const [o, k] of extra) { if (o.isSkinnedMesh) { o.parent.add(k); k.position.copy(o.position); k.quaternion.copy(o.quaternion); k.scale.copy(o.scale); } else o.add(k); M.konturer.push([o, k]); }
+      M.mixer = new THREE.AnimationMixer(root);
+      M.act = M.mixer.clipAction(g.animations[0]); M.act.play(); M.clip = g.animations[0].duration;
+      MOD[v] = M; ok(M);
+    }, undefined, e => fel(e));
   });
-  for (const [o, k] of extra) { o.parent.add(k); k.position.copy(o.position); k.quaternion.copy(o.quaternion); k.scale.copy(o.scale); konturer.push([o, k]); }
-  mixer = new THREE.AnimationMixer(root);
-  act = mixer.clipAction(g.animations[0]); act.play();
-  window.__clip = g.animations[0].duration;
-  document.getElementById('lad').remove();
-  window.__ready = true;
-  setTempo(2.0);
-}, undefined, e => { window.__err = 'GLB: ' + e; document.getElementById('lad').textContent = 'Kunde inte ladda modellen'; });
+}
+async function visaVer(v) {
+  const M = await laddaVer(v);
+  const tid = act ? (act.time / window.__clip) : 0;
+  for (const k in MOD) { if (MOD[k].root.parent) scene.remove(MOD[k].root); }
+  scene.add(M.root); ver = v; mixer = M.mixer; act = M.act; kropp = M.kropp; window.__clip = M.clip;
+  act.time = tid * M.clip; mixer.update(0);
+  for (const [o, k] of M.konturer) { o.material = stil === 'bl' ? M.toonM.get(o) : M.orig.get(o); k.visible = stil === 'bl'; }
+  sol.intensity = v === 2 ? 2.0 : 2.4; amb.intensity = v === 2 ? 1.15 : 0.9;
+  document.getElementById('bVer').textContent = 'Modell: v' + v;
+  document.getElementById('under').textContent = v === 2 ? '3D-test v2 · Hunyuan3D-bas + tuschtextur · rör inte appen' : '3D-test v1 · TRELLIS-bas (jämförelse) · rör inte appen';
+  setTempo(tempo);
+}
+const startVer = +(new URLSearchParams(location.search).get('v') || 2);
+visaVer(startVer === 1 ? 1 : 2).then(() => { const l = document.getElementById('lad'); if (l) l.remove(); window.__ready = true; })
+  .catch(e => { window.__err = 'GLB: ' + e; document.getElementById('lad').textContent = 'Kunde inte ladda modellen'; });
+document.getElementById('bVer').onclick = () => visaVer(ver === 2 ? 1 : 2);
 
 // ---- tempo + timer (som i appen: CX.tempo swing = 2 s/rep) ----
 let tempo = 2.0, kor = false, kvar = 30, reps = 0, fas = 0;
@@ -127,11 +166,11 @@ let vy = 0;
 function satVy(i) { vy = i; const p = VYER[i][1]; const sm = innerWidth < 700 ? 1.25 : 1; cam.position.set(p[0] * sm, p[1], p[2] * sm); ctl.update(); document.getElementById('bVy').textContent = 'Vy: ' + VYER[i][0]; }
 document.getElementById('bVy').onclick = () => satVy((vy + 1) % VYER.length);
 document.getElementById('bStil').onclick = () => {
-  stil = stil === 'bl' ? 'orig' : 'bl';
-  for (const [o, k] of konturer) { o.material = stil === 'bl' ? toonM.get(o) : orig.get(o); k.visible = stil === 'bl'; }
+  stil = stil === 'bl' ? 'orig' : 'bl'; const M = MOD[ver];
+  for (const [o, k] of M.konturer) { o.material = stil === 'bl' ? M.toonM.get(o) : M.orig.get(o); k.visible = stil === 'bl'; }
   document.getElementById('bStil').textContent = 'Stil: ' + (stil === 'bl' ? 'Borderlands' : 'original');
 };
-function resize() { const w = innerWidth, h = innerHeight; R.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); }
+function resize() { const w = innerWidth, h = innerHeight; R.setSize(w, h, false); KONT.value = 2 / h; cam.aspect = w / h; cam.updateProjectionMatrix(); }
 addEventListener('resize', resize); resize(); satVy(0);
 
 // ---- ansikte: blink + flin i toppen av svingen ----
@@ -146,7 +185,7 @@ function loop() {
     const ny = (act.time / window.__clip) % 1;
     if (kor) { if (fas < 0.62 && ny >= 0.62) reps++; kvar -= dt; if (kvar <= 0) { kvar = 0; kor = false; document.getElementById('bStart').textContent = '▶ Igen'; } }
     fas = ny;
-    const m = window.__lock ? [] : kropp.morphTargetInfluences;
+    const m = window.__lock || !kropp ? [] : kropp.morphTargetInfluences;
     blinkT -= dt; if (blinkT < 0) { blinkA = 0.16; blinkT = 2 + Math.random() * 3; }
     if (blinkA > 0) blinkA -= dt;
     m[0] = blinkA > 0 ? Math.sin((blinkA / 0.16) * Math.PI) : 0;
@@ -157,14 +196,14 @@ function loop() {
   document.getElementById('reps').textContent = reps + (reps === 1 ? ' rep' : ' reps');
   const t0 = performance.now(); R.render(scene, cam); ms = ms * 0.9 + (performance.now() - t0) * 0.1;
   fN++; fT += dt; if (fT >= 1) { fps = fN / fT; fN = 0; fT = 0; window.__fps = fps;
-    document.getElementById('stat').textContent = `${fps.toFixed(0)} fps · ${R.info.render.triangles} tri · GLB 0,3 MB`; }
+    document.getElementById('stat').textContent = `${fps.toFixed(0)} fps · ${R.info.render.triangles} tri · v${ver} · GLB ${MB[ver] ? MB[ver].toFixed(1).replace('.', ',') + ' MB' : '–'}`; }
 }
 loop();
 // mätning: rendera n bilder i följd och vänta in GPU:n → ms per bild
 window.__bench = (n = 120) => { const gl = R.getContext(); const t0 = performance.now();
   for (let i = 0; i < n; i++) { mixer.update(1 / 60); R.render(scene, cam); } gl.finish(); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(4));
   return (performance.now() - t0) / n; };
-window.__dr = { setT: (t) => { if (act) { act.time = t * window.__clip; mixer.update(0); } }, pause: (p) => { if (act) act.paused = p; }, satVy, cam, ctl, R, scene };
+window.__dr = { visaVer, ver: () => ver, setT: (t) => { if (act) { act.time = t * window.__clip; mixer.update(0); } }, pause: (p) => { if (act) act.paused = p; }, satVy, cam, ctl, R, scene };
 </script>
 </body>
 </html>
