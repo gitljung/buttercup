@@ -1746,7 +1746,7 @@
    "sel": "",
    "url": "?p=utekok",
    "created": "2026-11-12T16:13:54+01:00",
-   "status": "delvis",
+   "status": "stangd",
    "log": [
     [
      "2026-11-12T16:13:54+01:00",
@@ -1767,10 +1767,15 @@
      "2026-11-16T00:12:50+01:00",
      "delvis",
      "vickan: K-0010 v13 2026-11-16 00:06 · Provkök i K-0010: 7 skivor rostfri 6 med CD-pinnbultar + M6 A4 under topplåten, mellanläggsramar (EPDM bänk/silikon grill), 4 sidopaneler 3 mm, 40 skarvset (ISO 7380 M8x20 + distan"
+    ],
+    [
+     "2026-11-20T19:01:36+01:00",
+     "stangd",
+     "Vicke: Stängd av Vicke (PLM-kort #572, val b): provköket i K-0010 v13 räcker för UTE-4 – 40 skarvset med hylsa 6 + O-ring, 7 skivor rostfri 6, 5 EPDM + 2 silikonramar, 4 sidopaneler 3 mm."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-16T00:12:50+01:00",
+   "last": "2026-11-20T19:01:36+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
    "img": "",
    "ver": "hittad v2 · K-0010 v13 2026-11-16 00:06",
@@ -1785,6 +1790,11 @@
      "2026-11-14T23:05:15+01:00",
      "Vickan",
      "Vicke valde b: distanshylsa 6 mm (A4, Ø14/Ø8,5) med O-ring på M8-skruven. Provköket med skarvset, skivor, EPDM/silikon och sidopaneler 3 mm byggs efter UTE-3/5/7 + UTE-10-exporten."
+    ],
+    [
+     "2026-11-20T19:01:36+01:00",
+     "Vicke",
+     "Stängd av Vicke (PLM-kort #572, val b): provköket i K-0010 v13 räcker för UTE-4 – 40 skarvset med hylsa 6 + O-ring, 7 skivor rostfri 6, 5 EPDM + 2 silikonramar, 4 sidopaneler 3 mm. Resten (#74 a mellanlägg 4 mm/Ø16, blindpanel 6 mm-hylsor, hörnets grannmodul +12) flyttat till UTE-8."
     ]
    ],
    "est_min": 120,
@@ -1996,10 +2006,15 @@
      "2026-11-14T22:32:46+01:00",
      "oppen",
      "Vickan: Beslut (Defaultval): mittregel = tätmassa MS-polymer (ingen geometri, behåller bärning); blindpanel = 6 mm distans, fästs som UTE-4-svaret (clinch/hylsa) och modelleras i hörnbänke"
+    ],
+    [
+     "2026-11-20T19:01:36+01:00",
+     "kommentar",
+     "Vickan: Övertar rest från UTE-4 (Vicke, PLM #572 val b): (1) #74 a – mellanläggsramar 4 mm med Ø16-hål vid de 48 kubskruvhuvudena (7 ramar) → skivor/grillar +2 (bänk 902, grill 699). (2) B"
     ]
    ],
    "replies": 0,
-   "last": "2026-11-14T22:32:46+01:00",
+   "last": "2026-11-20T19:01:36+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566342329911218261/1570455012721688728",
    "img": "",
    "ver": "hittad v2",
@@ -2009,11 +2024,16 @@
      "2026-11-14T22:29:29+01:00",
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
+    ],
+    [
+     "2026-11-20T19:01:36+01:00",
+     "Vickan",
+     "Övertar rest från UTE-4 (Vicke, PLM #572 val b): (1) #74 a – mellanläggsramar 4 mm med Ø16-hål vid de 48 kubskruvhuvudena (7 ramar) → skivor/grillar +2 (bänk 902, grill 699). (2) Blindpanel H/V +6 mm på 8 × hylsa 6 M6 (YM-10801) + M6-skruv +6. (3) M8-skarvset i hörnbänkens 6 M8-hål + grannmoduler +12 mm (KOK_POSER). Sedan DR-export + dr_version."
     ]
    ],
-   "est_min": 40,
-   "est": "≈ 40 min",
-   "est_txt": "Distanser/fler skruvar i alla moduler + kök"
+   "est_min": 60,
+   "est": "≈ 1 h",
+   "est_txt": "Mellanlägg 4 mm/Ø16 (7 ramar), blindpanel 6 mm-hylsor, hörnets skarvset +12, export"
   },
   {
    "id": "av-UTE-9",
@@ -3355,5 +3375,5 @@
    "est_txt": "Beslut; ändring bara om Vicke vill byta grannmodul/skorsten"
   }
  ],
- "updated": "2026-11-18 09:00"
+ "updated": "2026-11-20 19:01"
 }
