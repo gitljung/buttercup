@@ -148,7 +148,7 @@ async function visaVer(v) {
   for (const [o, k] of M.konturer) { o.material = stil === 'bl' ? M.toonM.get(o) : M.orig.get(o); k.visible = stil === 'bl'; }
   sol.intensity = v === 2 ? 2.0 : 2.4; amb.intensity = v === 2 ? 1.15 : 0.9;
   document.getElementById('bVer').textContent = 'Modell: v' + v;
-  document.getElementById('under').textContent = v === 2 ? '3D-test v2 · Hunyuan3D-bas + tuschtextur · rör inte appen' : '3D-test v1 · TRELLIS-bas (jämförelse) · rör inte appen';
+  document.getElementById('under').textContent = v === 2 ? '3D-test v2.1 · armar och klot utanför kroppen · rör inte appen' : '3D-test v1 · TRELLIS-bas (jämförelse) · rör inte appen';
   setTempo(tempo);
 }
 const startVer = +(new URLSearchParams(location.search).get('v') || 2);
