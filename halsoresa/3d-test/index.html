@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<title>Hasse 3D – test v2 (swing)</title>
+<title>Hasse 3D – test v2 (swing + knäböj)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;800&display=swap" rel="stylesheet">
 <style>
@@ -23,7 +23,7 @@
   button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
   #stat{position:fixed;left:12px;bottom:calc(64px + env(safe-area-inset-bottom));font:600 14px 'Barlow Condensed';background:rgba(255,255,255,.8);border:2px solid var(--ink);border-radius:9px;padding:3px 8px}
   #lad{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font:800 24px 'Barlow Condensed'}
-  @media (max-width:700px){h1{font-size:22px} .klocka b{font-size:30px} button{font-size:15px;padding:6px 10px} #stat{bottom:calc(108px + env(safe-area-inset-bottom))} #kalla{bottom:calc(108px + env(safe-area-inset-bottom))!important;max-width:55vw}}
+  @media (max-width:700px){h1{font-size:22px} .klocka b{font-size:30px} button{font-size:15px;padding:6px 10px} #stat{bottom:calc(108px + env(safe-area-inset-bottom))} #kalla{bottom:auto!important;top:86px;left:16px;right:auto!important;text-align:left!important;max-width:70vw}}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
 </head>
@@ -31,12 +31,13 @@
 <canvas id="c"></canvas>
 <div id="lad">Laddar Hasse …</div>
 <div class="top">
-  <h1>KETTLEBELL-SWING<small id="under">3D-test v2 · Hunyuan3D-bas + tuschtextur · rör inte appen</small></h1>
+  <h1><span id="rubrik">KETTLEBELL-SWING</span><small id="under">3D-test v2 · Hunyuan3D-bas + tuschtextur · rör inte appen</small></h1>
   <div class="klocka"><b id="tid">0:30</b><span id="reps">0 reps</span></div>
 </div>
 <div id="stat">–</div>
-<div id="kalla" style="position:fixed;right:10px;bottom:calc(64px + env(safe-area-inset-bottom));font:600 12px 'Barlow Condensed';color:#655e54;text-align:right">Rörelse: mocap ur „Kettlebell Swing Hip Hinge Style“ av Taco fleur, <a href="https://commons.wikimedia.org/wiki/File:Kettlebell_Swing_Hip_Hinge_Style.webm" style="color:#655e54">CC BY-SA 4.0</a></div>
+<div id="kalla" style="position:fixed;right:10px;bottom:calc(64px + env(safe-area-inset-bottom));font:600 12px 'Barlow Condensed';color:#655e54;text-align:right"></div>
 <div class="ui">
+  <button id="bOvn">Övning: Swing</button>
   <button id="bStart">▶ Starta 30 s</button>
   <button id="bTempo" class="av">Tempo 2,0 s</button>
   <button id="bVy" class="av">Vy: snett</button>
@@ -134,7 +135,8 @@ function laddaVer(v) {
       });
       for (const [o, k] of extra) { if (o.isSkinnedMesh) { o.parent.add(k); k.position.copy(o.position); k.quaternion.copy(o.quaternion); k.scale.copy(o.scale); } else o.add(k); M.konturer.push([o, k]); }
       M.mixer = new THREE.AnimationMixer(root);
-      M.act = M.mixer.clipAction(g.animations[0]); M.act.play(); M.clip = g.animations[0].duration;
+      M.acts = {}; for (const a of g.animations) M.acts[a.name] = M.mixer.clipAction(a);
+      M.act = M.acts.swing || M.mixer.clipAction(g.animations[0]); M.act.play(); M.clip = M.act.getClip().duration;
       MOD[v] = M; ok(M);
     }, undefined, e => fel(e));
   });
@@ -143,14 +145,39 @@ async function visaVer(v) {
   const M = await laddaVer(v);
   const tid = act ? (act.time / window.__clip) : 0;
   for (const k in MOD) { if (MOD[k].root.parent) scene.remove(MOD[k].root); }
-  scene.add(M.root); ver = v; mixer = M.mixer; act = M.act; kropp = M.kropp; window.__clip = M.clip;
-  act.time = tid * M.clip; mixer.update(0);
+  scene.add(M.root); ver = v; mixer = M.mixer; kropp = M.kropp;
+  if (!M.acts[ovn]) ovn = 'swing';
+  for (const k in M.acts) if (k !== ovn) M.acts[k].stop();
+  act = M.acts[ovn] || M.act; act.play(); window.__clip = act.getClip().duration;
+  act.time = tid * window.__clip; mixer.update(0); visaOvn();
   for (const [o, k] of M.konturer) { o.material = stil === 'bl' ? M.toonM.get(o) : M.orig.get(o); k.visible = stil === 'bl'; }
   sol.intensity = v === 2 ? 2.0 : 2.4; amb.intensity = v === 2 ? 1.15 : 0.9;
   document.getElementById('bVer').textContent = 'Modell: v' + v;
-  document.getElementById('under').textContent = v === 2 ? '3D-test v2.1 · armar och klot utanför kroppen · rör inte appen' : '3D-test v1 · TRELLIS-bas (jämförelse) · rör inte appen';
-  setTempo(tempo);
+  document.getElementById('under').textContent = v === 2 ? '3D-test v2.2 · swing + knäböj mot bänk i samma GLB · rör inte appen' : '3D-test v1 · TRELLIS-bas (jämförelse) · rör inte appen';
+  setTempo(OVN[ovn].tempo);
 }
+// ---- övningar: ett klipp per övning i samma GLB (kort #583) ----
+const OVN = {
+  swing: { namn: 'Swing', rubrik: 'KETTLEBELL-SWING', tempo: 2.0, tempon: [2.0, 1.5, 2.5], rep: 0.62, flin: 0.62,
+    kalla: 'Rörelse: mocap ur „Kettlebell Swing Hip Hinge Style“ av Taco fleur, <a href="https://commons.wikimedia.org/wiki/File:Kettlebell_Swing_Hip_Hinge_Style.webm" style="color:#655e54">CC BY-SA 4.0</a>' },
+  goblet: { namn: 'Knäböj', rubrik: 'KNÄBÖJ MOT BÄNK', tempo: 2.5, tempon: [2.5, 2.0, 3.0], rep: 0.9, flin: 0.55,
+    kalla: 'Rörelse: mocap ur „Kettlebell Racked Squats (side view)“ av Taco fleur, <a href="https://commons.wikimedia.org/wiki/File:Kettlebell_Racked_Squats_(side_view).webm" style="color:#655e54">CC BY-SA 4.0</a> · goblet-grepp + bänk: Vickan' } };
+let ovn = new URLSearchParams(location.search).get('ovn') === 'goblet' ? 'goblet' : 'swing';
+function visaOvn() {
+  const o = OVN[ovn]; const M = MOD[ver];
+  document.getElementById('rubrik').textContent = o.rubrik;
+  document.getElementById('kalla').innerHTML = o.kalla;
+  const b = document.getElementById('bOvn'); b.textContent = 'Övning: ' + o.namn;
+  b.disabled = !(M && M.acts.goblet); b.style.opacity = b.disabled ? 0.45 : 1; b.title = b.disabled ? 'Bara swing i v1' : '';
+}
+function satOvn(n) {
+  const M = MOD[ver]; if (!M || !M.acts[n]) return;
+  ovn = n; for (const k in M.acts) if (k !== n) M.acts[k].stop();
+  act = M.acts[n]; act.reset(); act.play(); window.__clip = act.getClip().duration; mixer.update(0);
+  kvar = 30; reps = 0; fas = 0; kor = false; document.getElementById('bStart').textContent = '▶ Starta 30 s';
+  setTempo(OVN[n].tempo); visaOvn();
+}
+document.getElementById('bOvn').onclick = () => satOvn(ovn === 'swing' ? 'goblet' : 'swing');
 const startVer = +(new URLSearchParams(location.search).get('v') || 2);
 visaVer(startVer === 1 ? 1 : 2).then(() => { const l = document.getElementById('lad'); if (l) l.remove(); window.__ready = true; })
   .catch(e => { window.__err = 'GLB: ' + e; document.getElementById('lad').textContent = 'Kunde inte ladda modellen'; });
@@ -159,7 +186,7 @@ document.getElementById('bVer').onclick = () => visaVer(ver === 2 ? 1 : 2);
 // ---- tempo + timer (som i appen: CX.tempo swing = 2 s/rep) ----
 let tempo = 2.0, kor = false, kvar = 30, reps = 0, fas = 0;
 function setTempo(t) { tempo = t; if (act) act.timeScale = window.__clip / tempo; document.getElementById('bTempo').textContent = 'Tempo ' + t.toFixed(1).replace('.', ',') + ' s'; }
-document.getElementById('bTempo').onclick = () => setTempo(tempo === 2.0 ? 1.5 : tempo === 1.5 ? 2.5 : 2.0);
+document.getElementById('bTempo').onclick = () => { const L = OVN[ovn].tempon; setTempo(L[(L.indexOf(tempo) + 1) % L.length]); };
 document.getElementById('bStart').onclick = () => { kor = !kor; if (kor && kvar <= 0) { kvar = 30; reps = 0; } document.getElementById('bStart').textContent = kor ? '⏸ Paus' : '▶ Fortsätt'; };
 const VYER = [['snett', [2.6, 1.5, 3.6]], ['sida', [4.6, 1.2, 0.01]], ['fram', [0.01, 1.2, 4.6]]];
 let vy = 0;
@@ -183,13 +210,14 @@ function loop() {
   if (mixer) {
     mixer.update(dt);
     const ny = (act.time / window.__clip) % 1;
-    if (kor) { if (fas < 0.62 && ny >= 0.62) reps++; kvar -= dt; if (kvar <= 0) { kvar = 0; kor = false; document.getElementById('bStart').textContent = '▶ Igen'; } }
+    const rf = OVN[ovn].rep;
+    if (kor) { if (fas < rf && ny >= rf) reps++; kvar -= dt; if (kvar <= 0) { kvar = 0; kor = false; document.getElementById('bStart').textContent = '▶ Igen'; } }
     fas = ny;
     const m = window.__lock || !kropp ? [] : kropp.morphTargetInfluences;
     blinkT -= dt; if (blinkT < 0) { blinkA = 0.16; blinkT = 2 + Math.random() * 3; }
     if (blinkA > 0) blinkA -= dt;
     m[0] = blinkA > 0 ? Math.sin((blinkA / 0.16) * Math.PI) : 0;
-    const topp = Math.exp(-Math.pow(((ny - 0.62 + 1.5) % 1 - 0.5) / 0.12, 2));
+    const topp = Math.exp(-Math.pow(((ny - OVN[ovn].flin + 1.5) % 1 - 0.5) / 0.12, 2));
     m[1] = topp;
   }
   document.getElementById('tid').textContent = '0:' + String(Math.ceil(kvar)).padStart(2, '0');
@@ -203,7 +231,7 @@ loop();
 window.__bench = (n = 120) => { const gl = R.getContext(); const t0 = performance.now();
   for (let i = 0; i < n; i++) { mixer.update(1 / 60); R.render(scene, cam); } gl.finish(); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(4));
   return (performance.now() - t0) / n; };
-window.__dr = { visaVer, ver: () => ver, setT: (t) => { if (act) { act.time = t * window.__clip; mixer.update(0); } }, pause: (p) => { if (act) act.paused = p; }, satVy, cam, ctl, R, scene };
+window.__dr = { visaVer, ver: () => ver, satOvn, ovn: () => ovn, setT: (t) => { if (act) { act.time = t * window.__clip; mixer.update(0); } }, pause: (p) => { if (act) act.paused = p; }, satVy, cam, ctl, R, scene };
 </script>
 </body>
 </html>
