@@ -33,6 +33,11 @@ const SECRET = () => env('SBS_SECRET', '') || crypto.createHmac('sha256', String
 const sign = (s) => crypto.createHmac('sha256', SECRET()).update(s).digest('base64url').slice(0, 32);
 const dag = () => new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Stockholm' });
 const b64u = (o) => Buffer.from(JSON.stringify(o)).toString('base64url');
+// sparbiljett för det delade bordet (api/sticker-studio-board.js): bara en lyckad 'finish' får en, giltig 48 h, en gång per id
+function saveToken(id, dry) {
+  const p = b64u({ k: 'save', id, exp: Date.now() + 48 * 3600e3, ...(dry ? { dry: 1 } : {}) });
+  return p + '.' + crypto.createHmac('sha256', SECRET()).update('save:' + p).digest('base64url');
+}
 
 function readCookie(req) {
   const m = new RegExp('(?:^|;\\s*)' + COOKIE + '=([^;]+)').exec(req.headers.cookie || '');
@@ -252,7 +257,7 @@ module.exports = async (req, res) => {
       for (let i = 0; i < 2; i++) { await new Promise((r) => setTimeout(r, +env('SBS_FAKE_MS', 700))); line({ t: 'partial', i, b64, fmt }); }
       await new Promise((r) => setTimeout(r, +env('SBS_FAKE_MS', 700)));
       usage = { dry: true }; ok = true;
-      line({ t: 'final', b64, fmt, usage, usd: 0, ms: Date.now() - t0 });
+      line({ t: 'final', b64, fmt, usage, usd: 0, ms: Date.now() - t0, ...(kind === 'finish' ? { save: saveToken(id, true) } : {}) });
     } else {
       const dec = new TextDecoder(); let buf = '';
       for await (const chunk of upstream.body) {
@@ -264,7 +269,7 @@ module.exports = async (req, res) => {
           if (!data || data === '[DONE]') continue;
           let j; try { j = JSON.parse(data); } catch (e) { continue; }
           if (/partial_image$/.test(j.type)) line({ t: 'partial', i: j.partial_image_index, b64: j.b64_json, fmt: mode === 'high' ? 'png' : 'jpeg' });
-          else if (/completed$/.test(j.type)) { usage = j.usage || null; ok = true; line({ t: 'final', b64: j.b64_json, fmt: mode === 'high' ? 'png' : 'jpeg', usage, usd: usd(usage), ms: Date.now() - t0 }); }
+          else if (/completed$/.test(j.type)) { usage = j.usage || null; ok = true; line({ t: 'final', b64: j.b64_json, fmt: mode === 'high' ? 'png' : 'jpeg', usage, usd: usd(usage), ms: Date.now() - t0, ...(kind === 'finish' ? { save: saveToken(id, false) } : {}) }); }
           else if (j.type === 'error' || j.error) line({ t: 'error', fel: 'AI-fel: ' + String((j.error && j.error.message) || 'okänt').slice(0, 200) });
         }
       }
