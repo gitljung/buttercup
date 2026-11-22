@@ -4,7 +4,8 @@
 // GET  /api/sticker-studio/            -> { quota } (+ sätter besökscookie)
 // POST /api/sticker-studio/  JSON { kind: 'gen'|'edit'|'finish', image: dataURL (jpeg/png/webp),
 //        prompt?, texts?: [str], note?, styles?: [{ i: atlasindex, key, w }],
-//        motifs?: [{ i, key, handle, pos: { x, y, s, z } }] }   (motivzonen/mashup: x,y 0..1 i zonen, y nedåt, s = storlek/zonbredd, z = lager)
+//        motifs?: [{ i, key, handle, w, pos: { x, y, s, z } }] }   (motivzonen/mashup: w = andel av stickern inne i rutan 0..1 = motivvikt;
+//        x,y 0..1 = tyngdpunkt av delen i rutan, y nedåt, s = storlek/zonbredd, z = lager)
 //   bilder till OpenAI: 1 = papper/version, 2.. = motiv (max 4), sedan stilar (max 4) -> högst 9 (gpt-image tar upp till 16)
 //   gen    = low, image = pappersbild (ritning + text + uppladdad bild)
 //   edit   = low, image = aktuell version med användarens markeringar ritade ovanpå, note = kort instruktion
@@ -22,7 +23,7 @@ const crypto = require('crypto');
 const ORIGINS = new Set(['https://www.buttercup.nu', 'https://buttercup.nu', 'https://buttercup-omega.vercel.app']);
 const REF_BASE = 'https://www.buttercup.nu/stickerbord_studio/stickers/ref/';
 const NREF = 71;
-const MAXMOT = 4, MOTW = 2;   // motivzonen: max 4 motiv, royaltyvikt 2 (= 2 × 100 %) per motiv
+const MAXMOT = 4, MOTW = 2;   // motivzonen: max 4 motiv, royaltyvikt MOTW × motiv-% (andel i rutan)
 const MAX_BODY = 3.5e6, MAX_IMG = 2.4e6;
 const RATE = { text: 5, imgIn: 8, out: 30 };   // USD per Mtok (gpt-image-2 listpris nov 2026)
 const COOKIE = 'sbs_q';
@@ -123,7 +124,12 @@ centred with generous black margin – nothing touches or crosses the image edge
 function where(p) {
   const h = p.x < 0.36 ? 'left' : p.x > 0.64 ? 'right' : 'centre', v = p.y < 0.36 ? 'top' : p.y > 0.64 ? 'bottom' : 'middle';
   const pos = v === 'middle' ? (h === 'centre' ? 'centre' : h) : h === 'centre' ? v : `${v}-${h}`;
-  return `${pos}, ${p.s > 0.42 ? 'large' : p.s < 0.24 ? 'small' : 'medium'}`;
+  return pos;
+}
+// motivvikt -> roll/storlek i kompositionen (rel = andel av motivens totala vikt, abs = andel i rutan)
+function prominence(rel, abs, many) {
+  if (!many) return abs >= 0.6 ? 'the main subject – large and dominant' : abs >= 0.3 ? 'a clearly visible but not dominant element (about a third to half of the design)' : 'a SMALL accent/supporting element – keep it small';
+  return rel >= 0.5 ? 'DOMINANT main character – the largest and most prominent' : rel >= 0.3 ? 'secondary character – clearly visible but noticeably smaller' : 'small supporting element – much smaller, a side detail';
 }
 // bilder: 1 = papper/version, 2.. = motiv (mashup), sedan stilar
 function buildPrompt(kind, b, sty, mot = []) {
@@ -135,16 +141,19 @@ function buildPrompt(kind, b, sty, mot = []) {
   const order = mot.map((m, k) => [m.pos.z, k]).sort((a, c) => a[0] - c[0]).map(([, k]) => mi[k]);
   let motifLine = '';
   if (mot.length && kind === 'gen') {
-    motifLine = `${mr} ${many ? 'are MOTIF references' : 'is a MOTIF reference'} (${mot.map((m, k) => `${mi[k]} by ${m.handle}`).join(', ')}): INCLUDE ${many ? 'these characters/objects' : 'this character/object'} in the design – recognisable (same creature/character/object, key features, colours, outfit) – `
+    const mt = mot.reduce((a, m) => a + m.mw, 0) || 1;
+    const mw = mot.map((m, k) => `${mi[k]} (${m.handle}) ${Math.round((many ? m.mw / mt : m.mw) * 100)}% – ${prominence(m.mw / mt, m.mw, many)}, ${where(m.pos)}`).join('; ');
+    motifLine = `${mr} ${many ? 'are MOTIF references' : 'is a MOTIF reference'}: INCLUDE ${many ? 'these characters/objects' : 'this character/object'} in the design – recognisable (same creature/character/object, key features, colours, outfit) – `
       + `combined with the customer's sketch and text into ONE cohesive sticker${many ? ' (a mashup: they share one composition, interacting or overlapping naturally – not separate stickers side by side)' : ''}. `
-      + `Arrange roughly as the customer placed them: ${mot.map((m, k) => `${mi[k]} ${where(m.pos)}`).join('; ')}${many ? ` (back to front: ${order.join(', ')})` : ''}. `
+      + `Motif reference${many ? 's' : ''} weighted: ${mw}. ${many ? 'Relative size and prominence MUST follow these weights (higher % = bigger and more central). ' : ''}`
+      + `Positions follow roughly where the customer placed them${many ? ` (back to front: ${order.join(', ')})` : ''}. `
       + `Redraw ${many ? 'them' : 'it'} in ONE unified style${sty.length ? ' (from the style references)' : ''}; do not paste ${many ? 'them' : 'it'} in, and do not copy ${many ? 'their' : 'its'} die-cut borders, backgrounds or any words/lettering.`;
   } else if (mot.length) {
     motifLine = `${mr} ${many ? 'are the MOTIF references' : 'is the MOTIF reference'} already combined in this design – keep ${many ? 'those characters/objects' : 'that character/object'} recognisable and in the same unified style; never add ${many ? 'their' : 'its'} original lettering.`;
   }
   const sr = sty.length > 1 ? `images ${s0}–${s0 + sty.length - 1}` : `image ${s0}`;
   const styleLine = sty.length ? `Style references weighted: ${sw}. Blend their drawing style, linework, colour palette and lettering approach in those proportions – borrow STYLE only, never copy their motifs or their text.`
-      + (mot.length ? ` IMPORTANT: ${sr} ${sty.length > 1 ? 'are' : 'is'} STYLE-ONLY – do NOT draw any figure, creature, skull, face or object from ${sty.length > 1 ? 'them' : 'it'}; the only characters/objects in the sticker are the MOTIF reference${many ? 's' : ''} (${mi.join(', ')}) plus what the customer drew or wrote.` : '')
+      + (mot.length ? ` IMPORTANT: ${sr} ${sty.length > 1 ? 'are' : 'is'} STYLE-ONLY – do NOT draw any figure, creature, skull, face or object from ${sty.length > 1 ? 'them' : 'it'}; the only characters/objects in the sticker are the MOTIF reference${many ? 's' : ''} (${mi.join(', ')}) plus what the customer drew or wrote – exactly ${mot.length} referenced character${many ? 's' : ''}, no extra creatures, skulls or faces.` : '')
     : kind !== 'gen' ? 'Keep the design\'s current drawing style.' : mot.length ? 'No separate style references: draw everything in one bold, friendly, hand-drawn sticker style that suits the motifs.' : 'No style references: use a bold, friendly, hand-drawn sticker style.';
   const textLine = texts.length ? `Text on the sticker, spelled EXACTLY letter for letter (keep case and spelling, no extra words): ${texts.map((t) => `"${t}"`).join(', ')}.` : 'Do not add any text or letters that are not in image 1.';
   let task;
@@ -181,7 +190,8 @@ module.exports = async (req, res) => {
   const seen = new Set(), n01 = (x, d) => (Number.isFinite(+x) ? Math.max(0, Math.min(1, +x)) : d);
   const mot = (Array.isArray(b.motifs) ? b.motifs : []).slice(0, MAXMOT).map((m, k) => {
     const p = m && typeof m.pos === 'object' && m.pos ? m.pos : {};
-    return { i: Math.floor(+m.i), key: clean(m.key, 60), handle: clean(m.handle, 40) || '@stickerapp', w: MOTW,
+    const mw = Number.isFinite(+m.w) && +m.w > 0 ? Math.max(0.01, Math.min(1, +m.w)) : 1;   // motiv-% (andel i rutan); saknas = 100 %
+    return { i: Math.floor(+m.i), key: clean(m.key, 60), handle: clean(m.handle, 40) || '@stickerapp', mw, w: MOTW * mw,
       pos: { x: n01(p.x, 0.5), y: n01(p.y, 0.5), s: n01(p.s, 0.4), z: Number.isFinite(+p.z) ? +p.z : k } };
   }).filter((m) => m.i >= 0 && m.i < NREF && !seen.has(m.i) && seen.add(m.i));
   const sty = (Array.isArray(b.styles) ? b.styles : []).slice(0, 4).map((s) => ({ i: Math.floor(+s.i), key: clean(s.key, 60), handle: clean(s.handle, 40) || '@stickerapp', w: Math.max(0, Math.min(1, +s.w || 0)) }))
@@ -266,8 +276,8 @@ module.exports = async (req, res) => {
   }
   // royalty-/creditlogg
   const logg = { sbs: 'generering', id, t: new Date().toISOString(), kind, mode, ok, dry: !!dry, visitor: crypto.createHash('sha256').update(vis.v).digest('hex').slice(0, 12), ip,
-    // royaltyandel: motiv väger dubbelt (MOTW = 2 × 100 %) mot stilarnas andel innanför linjen; role = motif|style
-    refs: [...mot.map((m) => ({ ...m, role: 'motif' })), ...sty.map((s) => ({ ...s, role: 'style' }))].map((r, k, A) => ({ role: r.role, key: r.key, i: r.i, handle: r.handle, w: +r.w.toFixed(3),
+    // royaltyandel: motiv väger MOTW × motiv-% (pct = andel i rutan) mot stilarnas andel innanför linjen; role = motif|style
+    refs: [...mot.map((m) => ({ ...m, role: 'motif' })), ...sty.map((s) => ({ ...s, role: 'style' }))].map((r, k, A) => ({ role: r.role, key: r.key, i: r.i, handle: r.handle, pct: +(r.role === 'motif' ? r.mw : r.w).toFixed(3), w: +r.w.toFixed(3),
       share: +(r.w / (A.reduce((a, x) => a + x.w, 0) || 1)).toFixed(3), ...(r.pos ? { pos: r.pos } : {}) })),
     usage, usd: usd(usage), ms: Date.now() - t0 };
   console.log(JSON.stringify(logg));
