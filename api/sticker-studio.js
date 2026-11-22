@@ -169,6 +169,7 @@ module.exports = async (req, res) => {
   const prompt = buildPrompt(kind, b, sty);
   const dry = (test && b.dry) || process.env.SBS_FAKE === '1';
   let upstream = null;
+  const t0 = Date.now();
   if (!dry) {
     if (!process.env.OPENAI_API_KEY) return send(res, 503, { fel: 'AI är inte konfigurerad på servern' });
     let refs;
@@ -204,7 +205,6 @@ module.exports = async (req, res) => {
   res.setHeader('Set-Cookie', cookieFor(nvis));
   const line = (o) => res.write(JSON.stringify(o) + '\n');
   line({ t: 'start', id, kind, mode, quota: q });
-  const t0 = Date.now();
   let usage = null, ok = false;
   try {
     if (dry) {
