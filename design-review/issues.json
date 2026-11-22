@@ -1332,10 +1332,15 @@
      "2026-11-13T12:45:34+01:00",
      "delvis",
      "Vickan: 42 · R70 utförd (Fjaderarm h/v, örats kvartsskiva, frontslits KedjaZ+5=252, kätting +10 i armänden); silikonbufferten väntar på a/b-fråga e1df03dd – stopptappen finns inte sedan h56"
+    ],
+    [
+     "2026-11-22T15:34:04+01:00",
+     "kommentar",
+     "Vickan: PLM kort 40 (Vicke a): stopptapp O8 + silikonslang VMQ O8xO12x6 pa lagerbocken, klacken -1,5 mm, matas pa prototypen (byt om > 200 C). DR v67 (2026-11-22 15:29)."
     ]
    ],
    "replies": 0,
-   "last": "2026-11-13T12:45:34+01:00",
+   "last": "2026-11-22T15:34:04+01:00",
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-9.jpg",
    "ver": "hittad v32 · 42",
@@ -1355,6 +1360,11 @@
      "2026-11-13T11:44:44+01:00",
      "Vicke",
      "Godkänt: åtgärda enligt förslaget."
+    ],
+    [
+     "2026-11-22T15:34:04+01:00",
+     "Vickan",
+     "PLM kort 40 (Vicke a): stopptapp O8 + silikonslang VMQ O8xO12x6 pa lagerbocken, klacken -1,5 mm, matas pa prototypen (byt om > 200 C). DR v67 (2026-11-22 15:29)."
     ]
    ],
    "est_min": 25,
@@ -3375,5 +3385,5 @@
    "est_txt": "Beslut; ändring bara om Vicke vill byta grannmodul/skorsten"
   }
  ],
- "updated": "2026-11-22 15:11"
+ "updated": "2026-11-22 15:35"
 }
