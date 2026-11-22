@@ -160,7 +160,7 @@ function buildPrompt(kind, b, sty, mot = []) {
   if (kind === 'gen' && b.empty) task = user || !mot.length ? `Image 1 is an empty sheet of paper – ignore it. Design a new sticker from the customer's description: "${user}".` : 'Image 1 is an empty sheet of paper – ignore it. Design a new sticker that is a mashup of the motif references.';
   else if (kind === 'gen') task = `Image 1 is the customer's own sketch/layout on paper (drawing, typed text and/or an uploaded picture). Turn it into a finished sticker design: keep its motif, composition and idea, redraw it cleanly.${user ? ` Customer's description: "${user}".` : ''}`;
   else if (kind === 'edit') task = `Image 1 is the current sticker design with the customer's corrections drawn ON TOP in red and/or black marker${note ? ` and this note: "${note}"` : ''}. Apply what the marks and the note ask for (circled = change/fix this, arrows = move, scribbles = remove, drawn shapes = add this), then remove every marker annotation. Keep everything else in the design exactly as it is.${user ? ` Original description: "${user}".` : ''}`;
-  else task = `Image 1 is the approved draft of a sticker. Re-render THIS EXACT design as the final high-quality print file: same motif, composition, colours, lettering and border – only sharper, cleaner and more polished. Do not redesign.`;
+  else task = `Image 1 is the approved draft of a sticker. It is the ONLY image – everything (characters, mashup, style, lettering) is already in it. Re-render THIS EXACT design as the final high-quality print file: same motif, composition, colours, lettering and border – only sharper, cleaner and more polished. Do not redesign.`;
   return [task, motifLine, styleLine, textLine, RULES].filter(Boolean).join('\n');
 }
 const usd = (u) => u ? ((u.input_tokens_details?.text_tokens || 0) * RATE.text + (u.input_tokens_details?.image_tokens || 0) * RATE.imgIn + (u.output_tokens || 0) * RATE.out) / 1e6 : null;
@@ -205,14 +205,14 @@ module.exports = async (req, res) => {
     return send(res, 429, { fel, quota: q, why }, vis0 ? {} : { 'Set-Cookie': cookieFor(vis) });
   }
   const id = crypto.randomBytes(6).toString('hex');
-  const prompt = buildPrompt(kind, b, sty, mot);
+  const prompt = kind === 'gen' ? buildPrompt(kind, b, sty, mot) : buildPrompt(kind, b, [], []);
   const dry = (test && b.dry) || process.env.SBS_FAKE === '1';
   let upstream = null;
   const t0 = Date.now();
   if (!dry) {
     if (!process.env.OPENAI_API_KEY) return send(res, 503, { fel: 'AI är inte konfigurerad på servern' });
-    let refs;
-    try { refs = await Promise.all([...mot, ...sty].map((s) => ref(s.i))); } catch (e) { return send(res, 502, { fel: String(e.message || e) }); }
+    let refs; // gen: motiv+stilar; edit/finish: bara utkastet (annars kopierar high ett av motiven)
+    try { refs = kind === 'gen' ? await Promise.all([...mot, ...sty].map((s) => ref(s.i))) : []; } catch (e) { return send(res, 502, { fel: String(e.message || e) }); }
     const fd = new FormData();
     fd.append('model', env('SBS_MODEL', 'gpt-image-2'));
     fd.append('prompt', prompt);
