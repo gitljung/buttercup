@@ -113,7 +113,7 @@
    "link": "https://discord.com/channels/1114447465203109918/1568654411973263520/1568654452636778670",
    "nr": 1,
    "img": "issues/1568654452636778670.jpg",
-   "pname": "Yamay Horno - ugn"
+   "pname": "Yamay Horno"
   },
   {
    "id": "1569789422210121899",
@@ -888,7 +888,7 @@
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-1.jpg",
    "ver": "hittad v32",
-   "pname": "Yamay Horno - ugn",
+   "pname": "Yamay Horno",
    "comments": [
     [
      "2026-11-13T11:54:21+01:00",
@@ -944,7 +944,7 @@
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-2.jpg",
    "ver": "hittad v32 · 49",
-   "pname": "Yamay Horno - ugn",
+   "pname": "Yamay Horno",
    "comments": [],
    "est_min": 90,
    "est": "≈ 1,5 h",
@@ -999,7 +999,7 @@
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-3.jpg",
    "ver": "hittad v32 · stängd v43",
-   "pname": "Yamay Horno - ugn",
+   "pname": "Yamay Horno",
    "comments": [
     [
      "2026-11-13T11:52:17+01:00",
@@ -1055,7 +1055,7 @@
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-4.jpg",
    "ver": "hittad v32 · stängd v40",
-   "pname": "Yamay Horno - ugn",
+   "pname": "Yamay Horno",
    "comments": [
     [
      "2026-11-13T11:46:21+01:00",
@@ -1106,7 +1106,7 @@
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-5.jpg",
    "ver": "hittad v32 · stängd v44",
-   "pname": "Yamay Horno - ugn",
+   "pname": "Yamay Horno",
    "comments": [
     [
      "2026-11-13T11:36:14+01:00",
@@ -1167,7 +1167,7 @@
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-6.jpg",
    "ver": "hittad v32 · stängd v40",
-   "pname": "Yamay Horno - ugn",
+   "pname": "Yamay Horno",
    "comments": [
     [
      "2026-11-13T11:38:14+01:00",
@@ -1218,7 +1218,7 @@
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-7.jpg",
    "ver": "hittad v32",
-   "pname": "Yamay Horno - ugn",
+   "pname": "Yamay Horno",
    "comments": [],
    "est_min": null,
    "est": "",
@@ -1268,7 +1268,7 @@
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-8.jpg",
    "ver": "hittad v32 · stängd 49",
-   "pname": "Yamay Horno - ugn",
+   "pname": "Yamay Horno",
    "comments": [
     [
      "2026-11-13T11:40:14+01:00",
@@ -1339,7 +1339,7 @@
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-9.jpg",
    "ver": "hittad v32 · 42",
-   "pname": "Yamay Horno - ugn",
+   "pname": "Yamay Horno",
    "comments": [
     [
      "2026-11-13T11:40:23+01:00",
@@ -1374,8 +1374,8 @@
    "by": "Fable",
    "desc": "Modellen: Lagerbock H/V \"Corten 3 mm, vattenskuren + 1 bock\", bär ledtapp Ø12 rostfri.\nFörväntat: Lagerbana som inte rostar/glappar; marginal vid last på öppen lucka.\nFörslag: Rostfri 1.4301 4–5 mm.\nVerifierat: desc + ap Corten i v32; Fables grova spänning ~200 MPa vid 30 kg (marginal ~1,7) ej omräknad.\nKommentar: Vicke a (PLM kort 17): Lagerbock h/v rostfritt 1.4301 5 mm (LbT, R5), ledtapp +2 mm, DIN 6799 + M6x16 flyttade 2 mm. 0 krockar, arm 0,5 mm kvar. DR v46.",
    "part": "Yamay Horno - delmontage Stomme:1 › Yamay Horno - Lagerbock hoger:1",
-   "sel": "o549",
-   "url": "?p=horno&sel=o549",
+   "sel": "o585",
+   "url": "?p=horno&sel=o585",
    "created": "2026-11-12T16:00:36+01:00",
    "status": "atgardad",
    "log": [
@@ -1395,7 +1395,7 @@
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-10.jpg",
    "ver": "hittad v32 · stängd 46",
-   "pname": "Yamay Horno - ugn",
+   "pname": "Yamay Horno",
    "comments": [],
    "est_min": 20,
    "est": "≈ 20 min",
@@ -1435,7 +1435,7 @@
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-11.jpg",
    "ver": "hittad v32 · stängd 49",
-   "pname": "Yamay Horno - ugn",
+   "pname": "Yamay Horno",
    "comments": [],
    "est_min": 10,
    "est": "≈ 10 min",
@@ -1475,7 +1475,7 @@
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-12.jpg",
    "ver": "hittad v32 · stängd v47",
-   "pname": "Yamay Horno - ugn",
+   "pname": "Yamay Horno",
    "comments": [],
    "est_min": 10,
    "est": "≈ 10 min",
@@ -1530,7 +1530,7 @@
    "link": "https://discord.com/channels/1114447465203109918/1566422901639356506/1570408647018676348",
    "img": "avvikelser/HOR-13.jpg",
    "ver": "hittad v32",
-   "pname": "Yamay Horno - ugn",
+   "pname": "Yamay Horno",
    "comments": [
     [
      "2026-11-13T11:45:00+01:00",
@@ -3375,5 +3375,5 @@
    "est_txt": "Beslut; ändring bara om Vicke vill byta grannmodul/skorsten"
   }
  ],
- "updated": "2026-11-22 14:47"
+ "updated": "2026-11-22 15:11"
 }
