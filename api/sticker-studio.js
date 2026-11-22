@@ -3,7 +3,9 @@
 //
 // GET  /api/sticker-studio/            -> { quota } (+ sätter besökscookie)
 // POST /api/sticker-studio/  JSON { kind: 'gen'|'edit'|'finish', image: dataURL (jpeg/png/webp),
-//        prompt?, texts?: [str], note?, styles?: [{ i: atlasindex, key, w }] }
+//        prompt?, texts?: [str], note?, styles?: [{ i: atlasindex, key, w }],
+//        motifs?: [{ i, key, handle, pos: { x, y, s, z } }] }   (motivzonen/mashup: x,y 0..1 i zonen, y nedåt, s = storlek/zonbredd, z = lager)
+//   bilder till OpenAI: 1 = papper/version, 2.. = motiv (max 4), sedan stilar (max 4) -> högst 9 (gpt-image tar upp till 16)
 //   gen    = low, image = pappersbild (ritning + text + uppladdad bild)
 //   edit   = low, image = aktuell version med användarens markeringar ritade ovanpå, note = kort instruktion
 //   finish = high, image = vald version (ren) -> slutlig tryckfil
@@ -20,6 +22,7 @@ const crypto = require('crypto');
 const ORIGINS = new Set(['https://www.buttercup.nu', 'https://buttercup.nu', 'https://buttercup-omega.vercel.app']);
 const REF_BASE = 'https://www.buttercup.nu/stickerbord_studio/stickers/ref/';
 const NREF = 71;
+const MAXMOT = 4, MOTW = 2;   // motivzonen: max 4 motiv, royaltyvikt 2 (= 2 × 100 %) per motiv
 const MAX_BODY = 3.5e6, MAX_IMG = 2.4e6;
 const RATE = { text: 5, imgIn: 8, out: 30 };   // USD per Mtok (gpt-image-2 listpris nov 2026)
 const COOKIE = 'sbs_q';
@@ -116,19 +119,38 @@ const RULES = `STICKER RULES: one single flat printable die-cut sticker, seen st
 A clean continuous WHITE die-cut border (even width) around the whole design. The sticker is isolated on a plain solid BLACK background,
 centred with generous black margin – nothing touches or crosses the image edges. Full colour, crisp print-ready artwork.`;
 
-function buildPrompt(kind, b, sty) {
+// grov placering i motivzonen -> ord ("top-left, large")
+function where(p) {
+  const h = p.x < 0.36 ? 'left' : p.x > 0.64 ? 'right' : 'centre', v = p.y < 0.36 ? 'top' : p.y > 0.64 ? 'bottom' : 'middle';
+  const pos = v === 'middle' ? (h === 'centre' ? 'centre' : h) : h === 'centre' ? v : `${v}-${h}`;
+  return `${pos}, ${p.s > 0.42 ? 'large' : p.s < 0.24 ? 'small' : 'medium'}`;
+}
+// bilder: 1 = papper/version, 2.. = motiv (mashup), sedan stilar
+function buildPrompt(kind, b, sty, mot = []) {
   const texts = (Array.isArray(b.texts) ? b.texts : []).slice(0, 4).map((t) => clean(t, 40)).filter(Boolean);
   const user = clean(b.prompt, 300), note = clean(b.note, 200);
-  const tot = sty.reduce((a, s) => a + s.w, 0) || 1;
-  const sw = sty.map((s, k) => `image ${k + 2} (${s.handle}) ${Math.round((s.w / tot) * 100)}%`).join(', ');
-  const styleLine = sty.length ? `Style references weighted: ${sw}. Blend their drawing style, linework, colour palette and lettering approach in those proportions – borrow STYLE only, never copy their motifs or their text.` : 'No style references: use a bold, friendly, hand-drawn sticker style.';
+  const tot = sty.reduce((a, s) => a + s.w, 0) || 1, s0 = 2 + mot.length;
+  const sw = sty.map((s, k) => `image ${k + s0} (${s.handle}) ${Math.round((s.w / tot) * 100)}%`).join(', ');
+  const mi = mot.map((m, k) => `image ${k + 2}`), mr = mot.length > 1 ? `Images 2–${1 + mot.length}` : 'Image 2', many = mot.length > 1;
+  const order = mot.map((m, k) => [m.pos.z, k]).sort((a, c) => a[0] - c[0]).map(([, k]) => mi[k]);
+  let motifLine = '';
+  if (mot.length && kind === 'gen') {
+    motifLine = `${mr} ${many ? 'are MOTIF references' : 'is a MOTIF reference'} (${mot.map((m, k) => `${mi[k]} by ${m.handle}`).join(', ')}): INCLUDE ${many ? 'these characters/objects' : 'this character/object'} in the design – recognisable (same creature/character/object, key features, colours, outfit) – `
+      + `combined with the customer's sketch and text into ONE cohesive sticker${many ? ' (a mashup: they share one composition, interacting or overlapping naturally – not separate stickers side by side)' : ''}. `
+      + `Arrange roughly as the customer placed them: ${mot.map((m, k) => `${mi[k]} ${where(m.pos)}`).join('; ')}${many ? ` (back to front: ${order.join(', ')})` : ''}. `
+      + `Redraw ${many ? 'them' : 'it'} in ONE unified style${sty.length ? ' (from the style references)' : ''}; do not paste ${many ? 'them' : 'it'} in, and do not copy ${many ? 'their' : 'its'} die-cut borders, backgrounds or any words/lettering.`;
+  } else if (mot.length) {
+    motifLine = `${mr} ${many ? 'are the MOTIF references' : 'is the MOTIF reference'} already combined in this design – keep ${many ? 'those characters/objects' : 'that character/object'} recognisable and in the same unified style; never add ${many ? 'their' : 'its'} original lettering.`;
+  }
+  const styleLine = sty.length ? `Style references weighted: ${sw}. Blend their drawing style, linework, colour palette and lettering approach in those proportions – borrow STYLE only, never copy their motifs or their text.`
+    : kind !== 'gen' ? 'Keep the design\'s current drawing style.' : mot.length ? 'No separate style references: draw everything in one bold, friendly, hand-drawn sticker style that suits the motifs.' : 'No style references: use a bold, friendly, hand-drawn sticker style.';
   const textLine = texts.length ? `Text on the sticker, spelled EXACTLY letter for letter (keep case and spelling, no extra words): ${texts.map((t) => `"${t}"`).join(', ')}.` : 'Do not add any text or letters that are not in image 1.';
   let task;
-  if (kind === 'gen' && b.empty) task = `Image 1 is an empty sheet of paper – ignore it. Design a new sticker from the customer's description: "${user}".`;
+  if (kind === 'gen' && b.empty) task = user || !mot.length ? `Image 1 is an empty sheet of paper – ignore it. Design a new sticker from the customer's description: "${user}".` : 'Image 1 is an empty sheet of paper – ignore it. Design a new sticker that is a mashup of the motif references.';
   else if (kind === 'gen') task = `Image 1 is the customer's own sketch/layout on paper (drawing, typed text and/or an uploaded picture). Turn it into a finished sticker design: keep its motif, composition and idea, redraw it cleanly.${user ? ` Customer's description: "${user}".` : ''}`;
   else if (kind === 'edit') task = `Image 1 is the current sticker design with the customer's corrections drawn ON TOP in red and/or black marker${note ? ` and this note: "${note}"` : ''}. Apply what the marks and the note ask for (circled = change/fix this, arrows = move, scribbles = remove, drawn shapes = add this), then remove every marker annotation. Keep everything else in the design exactly as it is.${user ? ` Original description: "${user}".` : ''}`;
   else task = `Image 1 is the approved draft of a sticker. Re-render THIS EXACT design as the final high-quality print file: same motif, composition, colours, lettering and border – only sharper, cleaner and more polished. Do not redesign.`;
-  return `${task}\n${styleLine}\n${textLine}\n${RULES}`;
+  return [task, motifLine, styleLine, textLine, RULES].filter(Boolean).join('\n');
 }
 const usd = (u) => u ? ((u.input_tokens_details?.text_tokens || 0) * RATE.text + (u.input_tokens_details?.image_tokens || 0) * RATE.imgIn + (u.output_tokens || 0) * RATE.out) / 1e6 : null;
 
@@ -154,7 +176,12 @@ module.exports = async (req, res) => {
   const mode = kind === 'finish' ? 'high' : 'low';
   const img = dataUrl(b.image);
   if (!img) return send(res, 400, { fel: 'bild saknas eller är för stor' });
-  const seen = new Set();
+  const seen = new Set(), n01 = (x, d) => (Number.isFinite(+x) ? Math.max(0, Math.min(1, +x)) : d);
+  const mot = (Array.isArray(b.motifs) ? b.motifs : []).slice(0, MAXMOT).map((m, k) => {
+    const p = m && typeof m.pos === 'object' && m.pos ? m.pos : {};
+    return { i: Math.floor(+m.i), key: clean(m.key, 60), handle: clean(m.handle, 40) || '@stickerapp', w: MOTW,
+      pos: { x: n01(p.x, 0.5), y: n01(p.y, 0.5), s: n01(p.s, 0.4), z: Number.isFinite(+p.z) ? +p.z : k } };
+  }).filter((m) => m.i >= 0 && m.i < NREF && !seen.has(m.i) && seen.add(m.i));
   const sty = (Array.isArray(b.styles) ? b.styles : []).slice(0, 4).map((s) => ({ i: Math.floor(+s.i), key: clean(s.key, 60), handle: clean(s.handle, 40) || '@stickerapp', w: Math.max(0, Math.min(1, +s.w || 0)) }))
     .filter((s) => s.i >= 0 && s.i < NREF && s.w > 0 && !seen.has(s.i) && seen.add(s.i));
   const L = limits(test, b);
@@ -166,19 +193,19 @@ module.exports = async (req, res) => {
     return send(res, 429, { fel, quota: q, why }, vis0 ? {} : { 'Set-Cookie': cookieFor(vis) });
   }
   const id = crypto.randomBytes(6).toString('hex');
-  const prompt = buildPrompt(kind, b, sty);
+  const prompt = buildPrompt(kind, b, sty, mot);
   const dry = (test && b.dry) || process.env.SBS_FAKE === '1';
   let upstream = null;
   const t0 = Date.now();
   if (!dry) {
     if (!process.env.OPENAI_API_KEY) return send(res, 503, { fel: 'AI är inte konfigurerad på servern' });
     let refs;
-    try { refs = await Promise.all(sty.map((s) => ref(s.i))); } catch (e) { return send(res, 502, { fel: String(e.message || e) }); }
+    try { refs = await Promise.all([...mot, ...sty].map((s) => ref(s.i))); } catch (e) { return send(res, 502, { fel: String(e.message || e) }); }
     const fd = new FormData();
     fd.append('model', env('SBS_MODEL', 'gpt-image-2'));
     fd.append('prompt', prompt);
     fd.append('image[]', new Blob([img.buf], { type: img.type }), 'image1.' + img.ext);
-    refs.forEach((buf, k) => fd.append('image[]', new Blob([buf], { type: 'image/jpeg' }), `style${k + 2}.jpg`));
+    refs.forEach((buf, k) => fd.append('image[]', new Blob([buf], { type: 'image/jpeg' }), `${k < mot.length ? 'motif' : 'style'}${k + 2}.jpg`));
     fd.append('quality', mode);
     fd.append('size', '1024x1024');
     fd.append('output_format', mode === 'high' ? 'png' : 'jpeg');
@@ -204,7 +231,7 @@ module.exports = async (req, res) => {
   res.setHeader('X-Accel-Buffering', 'no');
   res.setHeader('Set-Cookie', cookieFor(nvis));
   const line = (o) => res.write(JSON.stringify(o) + '\n');
-  line({ t: 'start', id, kind, mode, quota: q });
+  line({ t: 'start', id, kind, mode, quota: q, refs: { motifs: mot.length, styles: sty.length }, ...(test ? { prompt } : {}) });
   let usage = null, ok = false;
   try {
     if (dry) {
@@ -237,10 +264,13 @@ module.exports = async (req, res) => {
   }
   // royalty-/creditlogg
   const logg = { sbs: 'generering', id, t: new Date().toISOString(), kind, mode, ok, dry: !!dry, visitor: crypto.createHash('sha256').update(vis.v).digest('hex').slice(0, 12), ip,
-    styles: sty.map((s) => ({ key: s.key, i: s.i, handle: s.handle, w: +s.w.toFixed(3), share: +(s.w / (sty.reduce((a, x) => a + x.w, 0) || 1)).toFixed(3) })),
+    // royaltyandel: motiv väger dubbelt (MOTW = 2 × 100 %) mot stilarnas andel innanför linjen; role = motif|style
+    refs: [...mot.map((m) => ({ ...m, role: 'motif' })), ...sty.map((s) => ({ ...s, role: 'style' }))].map((r, k, A) => ({ role: r.role, key: r.key, i: r.i, handle: r.handle, w: +r.w.toFixed(3),
+      share: +(r.w / (A.reduce((a, x) => a + x.w, 0) || 1)).toFixed(3), ...(r.pos ? { pos: r.pos } : {}) })),
     usage, usd: usd(usage), ms: Date.now() - t0 };
   console.log(JSON.stringify(logg));
   if (kvOn()) { try { await kv(['RPUSH', `sbs:logg:${dag().slice(0, 7)}`, JSON.stringify(logg)]); } catch (e) { console.error('kv logg', e); } }
   res.end();
 };
 module.exports.config = { maxDuration: 300 };
+module.exports.buildPrompt = buildPrompt;   // lokalt test
