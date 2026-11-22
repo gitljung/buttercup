@@ -88,13 +88,6 @@
   "exported": "2026-11-16 11:18"
  },
  {
-  "slug": "vaxthus-hjulsystem",
-  "name": "Växthus – hjulsystem",
-  "doc": "Växthus - hjulsystem",
-  "version": 2,
-  "exported": "2026-11-16 11:19"
- },
- {
   "slug": "vaxthus-drag",
   "name": "Växthus – dragstång (delmontage)",
   "doc": "Växthus - delmontage dragstång",
@@ -180,5 +173,12 @@
   "doc": "Växthus",
   "version": 27,
   "exported": "2026-11-22 11:24"
+ },
+ {
+  "slug": "vaxthus-hjulsystem",
+  "name": "Växthus – hjulsystem",
+  "doc": "Växthus - hjulsystem",
+  "version": 3,
+  "exported": "2026-11-22 11:28"
  }
 ]
