@@ -142,7 +142,9 @@ function buildPrompt(kind, b, sty, mot = []) {
   } else if (mot.length) {
     motifLine = `${mr} ${many ? 'are the MOTIF references' : 'is the MOTIF reference'} already combined in this design – keep ${many ? 'those characters/objects' : 'that character/object'} recognisable and in the same unified style; never add ${many ? 'their' : 'its'} original lettering.`;
   }
+  const sr = sty.length > 1 ? `images ${s0}–${s0 + sty.length - 1}` : `image ${s0}`;
   const styleLine = sty.length ? `Style references weighted: ${sw}. Blend their drawing style, linework, colour palette and lettering approach in those proportions – borrow STYLE only, never copy their motifs or their text.`
+      + (mot.length ? ` IMPORTANT: ${sr} ${sty.length > 1 ? 'are' : 'is'} STYLE-ONLY – do NOT draw any figure, creature, skull, face or object from ${sty.length > 1 ? 'them' : 'it'}; the only characters/objects in the sticker are the MOTIF reference${many ? 's' : ''} (${mi.join(', ')}) plus what the customer drew or wrote.` : '')
     : kind !== 'gen' ? 'Keep the design\'s current drawing style.' : mot.length ? 'No separate style references: draw everything in one bold, friendly, hand-drawn sticker style that suits the motifs.' : 'No style references: use a bold, friendly, hand-drawn sticker style.';
   const textLine = texts.length ? `Text on the sticker, spelled EXACTLY letter for letter (keep case and spelling, no extra words): ${texts.map((t) => `"${t}"`).join(', ')}.` : 'Do not add any text or letters that are not in image 1.';
   let task;
