@@ -180,5 +180,12 @@
   "channel": "utekök-utveckling",
   "thread": "1566342329911218261",
   "fusion_project": "yamay-utekok"
+ },
+ {
+  "slug": "yatai",
+  "name": "Yatai",
+  "doc": "Yatai",
+  "version": 3,
+  "exported": "2026-11-23 12:24"
  }
 ]
