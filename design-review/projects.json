@@ -1,14 +1,5 @@
 [
  {
-  "slug": "asado-1500",
-  "name": "Yamay Asado 1500",
-  "doc": "Yamay Asado 1500",
-  "version": 32,
-  "exported": "2026-11-07 22:00",
-  "channel": "yamay-asado",
-  "thread": "1568653342975074445"
- },
- {
   "slug": "rat-stop",
   "name": "rat stop",
   "doc": "rat-stop",
@@ -201,5 +192,14 @@
   "doc": "Yatai",
   "version": 9,
   "exported": "2026-11-23 20:07"
+ },
+ {
+  "slug": "asado-1500",
+  "name": "Yamay Asado 1500",
+  "doc": "Yamay Asado 1500",
+  "version": 39,
+  "exported": "2026-11-23 22:30",
+  "channel": "yamay-asado",
+  "thread": "1568653342975074445"
  }
 ]
