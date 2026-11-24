@@ -173,20 +173,6 @@
   "fusion_project": "yamay-utekok"
  },
  {
-  "slug": "yatai-event",
-  "name": "Yatai – eventläge (tillägg utfällda)",
-  "doc": "Yatai",
-  "version": 9,
-  "exported": "2026-11-23 20:06"
- },
- {
-  "slug": "yatai-transport",
-  "name": "Yatai – transportläge (allt infällt)",
-  "doc": "Yatai",
-  "version": 9,
-  "exported": "2026-11-23 20:07"
- },
- {
   "slug": "asado-1500",
   "name": "Yamay Asado 1500",
   "doc": "Yamay Asado 1500",
@@ -199,7 +185,21 @@
   "slug": "yatai",
   "name": "Yatai",
   "doc": "Yatai",
-  "version": 9,
-  "exported": "2026-11-24 16:07"
+  "version": 12,
+  "exported": "2026-11-24 17:01"
+ },
+ {
+  "slug": "yatai-event",
+  "name": "Yatai – event (grill ute, allt utfällt)",
+  "doc": "Yatai",
+  "version": 12,
+  "exported": "2026-11-24 17:02"
+ },
+ {
+  "slug": "yatai-transport",
+  "name": "Yatai – transport (allt infällt)",
+  "doc": "Yatai",
+  "version": 12,
+  "exported": "2026-11-24 17:03"
  }
 ]
