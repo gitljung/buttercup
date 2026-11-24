@@ -173,13 +173,6 @@
   "fusion_project": "yamay-utekok"
  },
  {
-  "slug": "yatai",
-  "name": "Yatai",
-  "doc": "Yatai",
-  "version": 9,
-  "exported": "2026-11-23 20:02"
- },
- {
   "slug": "yatai-event",
   "name": "Yatai – eventläge (tillägg utfällda)",
   "doc": "Yatai",
@@ -201,5 +194,12 @@
   "exported": "2026-11-23 22:44",
   "channel": "yamay-asado",
   "thread": "1568653342975074445"
+ },
+ {
+  "slug": "yatai",
+  "name": "Yatai",
+  "doc": "Yatai",
+  "version": 9,
+  "exported": "2026-11-24 16:07"
  }
 ]
