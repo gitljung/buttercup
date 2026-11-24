@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BAGL rollpenna – mått in, modell ut</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Parametrisk 3D-modell av BAGL-rollpennan för Molotow ONE4ALL 627HS. Knappa in pennans mått – hylsa, gaffel, rulle och spänntång följer med.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Buttercup">
+<meta property="og:title" content="BAGL rollpenna – mått in, modell ut">
+<meta property="og:description" content="Knappa in pennans mått – hylsa, gaffel, rulle och spänntång följer med live.">
+<meta property="og:url" content="https://www.buttercup.nu/bagl-rollpen/">
+<meta property="og:image" content="https://www.buttercup.nu/bagl-rollpen/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.buttercup.nu/bagl-rollpen/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+:root{--ink:#151514;--board:#f5f4f1;--muted:#5f5b55;--rule:#d6d2ca;--chili:#C8340A;--warn:#c41a1a;--guess:#fff1b8;
+  --display:"Barlow Condensed","Arial Narrow",sans-serif;--body:"Barlow",system-ui,sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--board);color:var(--ink);font-family:var(--body);overflow:hidden}
+.bc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 14px;background:var(--chili);color:#FFF6DC;font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px;position:fixed;top:0;left:0;right:0;z-index:50;height:36px}
+.bc-bar a{color:#FFF6DC;text-decoration:none}
+#view{position:fixed;top:36px;left:0;right:380px;bottom:0}
+#view canvas{display:block;width:100%;height:100%;touch-action:none}
+#panel{position:fixed;top:36px;right:0;width:380px;bottom:0;overflow-y:auto;background:#fff;border-left:1px solid var(--rule);padding:10px 14px 30px;z-index:20}
+h1{font-family:var(--display);font-size:24px;margin:4px 0 2px;letter-spacing:.02em;text-transform:uppercase}
+.sub{font-size:13px;color:var(--muted);margin:0 0 8px}
+details.grp{border-top:1px solid var(--rule);padding:4px 0}
+details.grp>summary{font-family:var(--display);font-size:18px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;padding:6px 0;list-style:none}
+details.grp>summary::before{content:"▸ ";color:var(--chili)}
+details.grp[open]>summary::before{content:"▾ "}
+.row{display:grid;grid-template-columns:1fr 74px;gap:2px 8px;align-items:center;padding:4px 6px;border-radius:6px;margin:2px 0}
+.row label{font-size:13.5px;line-height:1.2}
+.row .tag{font-size:10.5px;font-weight:600;color:#8a6a00;background:#ffe27a;border-radius:4px;padding:0 4px;margin-left:4px;vertical-align:1px}
+.row input[type=number]{width:74px;font:500 15px var(--body);padding:4px 6px;border:1px solid var(--rule);border-radius:6px;text-align:right}
+.row input[type=range]{grid-column:1/3;width:100%;margin:0;accent-color:var(--ink)}
+.row select{grid-column:2;font:500 14px var(--body);padding:3px}
+.row.sel{grid-template-columns:1fr 150px}.row.sel select{width:150px}
+.row.guess{background:var(--guess)}
+.row.chk{grid-template-columns:1fr auto}
+.note{font-size:12px;color:var(--muted);margin:4px 6px 6px;line-height:1.35}
+.btns{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+button{font:600 13px var(--body);padding:7px 10px;border:1px solid var(--ink);background:#fff;border-radius:999px;cursor:pointer}
+button.on{background:var(--ink);color:#fff}
+button.pri{background:var(--ink);color:#fff}
+#derived{font-size:13.5px;margin:6px 0;border-collapse:collapse;width:100%}
+#derived td{padding:2px 4px;border-bottom:1px dotted var(--rule)}#derived td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+#warn div{color:#fff;background:var(--warn);border-radius:6px;padding:5px 8px;margin:4px 0;font-size:13px;line-height:1.3}
+#warn div.ok{background:#2d7a3a}
+#warn div.info{background:#e9e5dc;color:var(--ink)}
+#toolbar{position:fixed;left:10px;top:46px;z-index:15;display:flex;flex-wrap:wrap;gap:6px;max-width:calc(100% - 400px)}
+#toolbar button{background:rgba(255,255,255,.92)}#toolbar button.on{background:var(--ink);color:#fff}
+#hud{position:fixed;left:10px;bottom:10px;z-index:15;background:rgba(255,255,255,.9);border-radius:8px;padding:6px 10px;font-size:13px;line-height:1.35;pointer-events:none}
+#hud b{font-variant-numeric:tabular-nums}
+#hud .w{color:var(--warn);font-weight:700}
+#toast{position:fixed;left:50%;top:60px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 14px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .3s;z-index:60;pointer-events:none}
+#sheetToggle{display:none}
+@media (max-width:760px){
+  #view{right:0;bottom:44vh}
+  #panel{top:auto;left:0;right:0;width:auto;height:44vh;border-left:0;border-top:2px solid var(--ink);border-radius:14px 14px 0 0;padding-top:0}
+  #panel.min{height:52px;overflow:hidden}
+  body.min #view{bottom:52px}
+  #sheetToggle{display:flex;position:sticky;top:0;background:#fff;z-index:3;justify-content:space-between;align-items:center;padding:10px 2px 8px;font-family:var(--display);font-size:17px;font-weight:700;text-transform:uppercase;cursor:pointer;border-bottom:1px solid var(--rule)}
+  #toolbar{max-width:calc(100% - 20px);top:44px}
+  #toolbar button{padding:6px 9px;font-size:12px}
+  #hud{bottom:calc(44vh + 8px);font-size:12px}
+  body.min #hud{bottom:60px}
+  .row input[type=number]{font-size:16px}
+  h1{font-size:21px}
+}
+</style>
+</head>
+<body>
+<div class="bc-bar"><a href="https://www.buttercup.nu/">← buttercup.nu</a><span>BAGL rollpenna · Molotow ONE4ALL</span></div>
+<div id="view"></div>
+<div id="toolbar">
+  <button data-t="ghost" class="on">Genomskinlig hylsa</button>
+  <button data-t="section">Snitt</button>
+  <button data-t="sectionDir" title="Byt snittriktning">Snitt: längs rullaxeln</button>
+  <button data-t="explode">Sprängvy</button>
+  <button data-t="pen" class="on">Pennan</button>
+  <button data-t="fit">Centrera</button>
+</div>
+<div id="hud"></div>
+<div id="panel">
+  <div id="sheetToggle"><span>Mått &amp; reglage</span><span id="sheetArrow">▾</span></div>
+  <h1>BAGL rollpenna</h1>
+  <p class="sub">Knappa in pennans mått (mm). Hylsa, stopp, gaffel, rulle och spänntång räknas om direkt, på samma sätt som Fusion-modellen. <b style="background:#ffe27a;padding:0 3px;border-radius:3px">Gula fält</b> är gissade tills du ändrar dem.</p>
+  <div id="groups"></div>
+  <details class="grp" open><summary>Härledda mått</summary>
+    <table id="derived"></table>
+    <div id="warn"></div>
+  </details>
+  <details class="grp" open><summary>Skicka tillbaka</summary>
+    <div class="btns">
+      <button class="pri" id="bCopy">Kopiera mått (JSON)</button>
+      <button id="bDl">Ladda ner mått</button>
+      <button id="bReset">Återställ</button>
+    </div>
+    <div class="note">Klistra in JSON:en i chatten (eller skicka filen) så uppdateras Fusion-modellen med samma mått. Värdena sparas i den här webbläsaren.</div>
+  </details>
+  <details class="grp"><summary>Ladda ner STL</summary>
+    <div class="note"><b>Förenklad, för test – slutlig STL kommer från Fusion.</b> Gängan är inte modellerad (bara räfflor), text på rullen saknas, delarna är inte sammanfogade.</div>
+    <div class="btns">
+      <button data-stl="hylsa">Hylsa + gaffel + tång</button>
+      <button data-stl="mutter">Spännmutter</button>
+      <button data-stl="adapter">Adapterhylsa</button>
+      <button data-stl="rulle">Rulle</button>
+    </div>
+  </details>
+</div>
+<div id="toast"></div>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { STLExporter } from 'three/addons/exporters/STLExporter.js';
+
+window.__errs = [];
+window.addEventListener('error', e => window.__errs.push(String(e.message)));
+
+// ---------------- parametrar ----------------
+// [nyckel, etikett, standard, min, max, gissat, (Fusion-namn)]
+const GROUPS = [
+ ['Pennan', [
+  ['PennaD','Kroppens Ø (aluminium)',25.4,15,40,false],
+  ['Ring1D','Ring 1 Ø (stora vita ringen)',28.6,15,45,false],
+  ['Ring1L','Ring 1 längd',16,0,60,true],
+  ['Ring2D','Ring 2 Ø (mindre ringen)',24,10,45,true],
+  ['Ring2L','Ring 2 längd (0 = ingen ring 2)',10,0,40,true],
+  ['HallarB','Spetshållare bredd (längs rullaxeln)',19,5,35,false],
+  ['HallarT','Spetshållare tjocklek',12,3,30,true],
+  ['HallarL','Spetshållare längd',11,1,40,false],
+  ['SpetsB','Filtspets bredd',15,2,35,false],
+  ['SpetsT','Filtspets tjocklek',5,1,20,true],
+  ['SpetsUt','Spetsens utstick från hållaren',11,2,40,false],
+  ['StoppMot','Vad vilar mot stoppet?',{ring2:'Ring 2 framsida',ring1:'Ring 1 ansats'},null,null,false],
+ ]],
+ ['Passning', [
+  ['Spel','Spel ring i hylsan (diametralt)',0.4,0,2,false],
+  ['Vagg','Hylsans vägg',2.4,1,6,false],
+  ['Tryck','Spetsens inpressning mot rullen',0.6,0,3,false],
+  ['SlotSpel','Spel spetshållare i nyckelhålet',0.6,0,2,false],
+  ['HornR','Hörnurtag i nyckelhålet (radie)',0.8,0,2,false],
+  ['StoppT','Stoppringens tjocklek',2.4,1,6,false],
+  ['AxSpel','Axiell luft vid den andra ansatsen',0.5,0,3,false],
+  ['HylsaL','Hylsans längd bakåt från stoppet',75,30,150,false],
+ ]],
+ ['Rulle', [
+  ['RullD','Rullens Ø (textens bas)',50,20,90,false],
+  ['RullB','Rullens bredd',18,5,40,false],
+  ['TextRelief','Textens relief',1.2,0.2,3,false],
+  ['LagerD','Kullager ytter-Ø (623ZZ)',10,5,22,false],
+  ['LagerB','Kullager bredd',4,2,8,false],
+  ['AxelD','Axel Ø',3,2,8,false],
+  ['GaffelT','Gaffelbenens tjocklek',3.5,1.5,8,false],
+  ['GaffelB','Gaffelbenens bredd',16,6,30,false],
+  ['GaffelSpel','Spel rulle–gaffel per sida',0.6,0,3,false],
+ ]],
+ ['Spänntång', [
+  ['Gang','Gänga',{auto:'Auto (förslag)',M24:'M24x2',M27:'M27x2',M30:'M30x2',M33:'M33x2',M36:'M36x2',M39:'M39x2',M40:'M40x2',M42:'M42x2',M45:'M45x2',M48:'M48x2',M52:'M52x2'},null,null,false],
+  ['Adapter','Adapterhylsa',{auto:'Auto',ja:'Ja',nej:'Nej'},null,null,false],
+  ['AdapterL','Adapterns längd (0 = auto)',0,0,120,false],
+  ['AdapterSpel','Spel adapter–kropp (diametralt)',0.2,0,1,false],
+  ['AdapterSlits','Adapterns slits',1.5,0.5,4,false],
+  ['FingerL','Fingrarnas längd',18,8,40,false],
+  ['GangL','Gängans längd',16,6,30,false],
+  ['MutterSlag','Mutterns slag',6,2,12,false],
+  ['Atdrag','Visa mutter åtdragen (mm)',0,0,12,false],
+ ]],
+];
+const FIELDS = {}; const DEF = {};
+for (const [g, list] of GROUPS) for (const f of list) { FIELDS[f[0]] = { g, label:f[1], def:f[2], min:f[3], max:f[4], guess:f[5] }; DEF[f[0]] = typeof f[2]==='object' ? Object.keys(f[2])[0] : f[2]; }
+
+const LS = 'bagl_rollpen_web_v1';
+let P = { ...DEF }, edited = {};
+try { const s = JSON.parse(localStorage.getItem(LS) || 'null'); if (s) { for (const k in s.P) if (k in DEF && (typeof FIELDS[k].def !== 'object' || s.P[k] in FIELDS[k].def)) P[k] = s.P[k]; edited = s.edited || {}; } } catch (e) {}
+const V = { ghost:true, section:false, sectionDir:0, explode:false, pen:true };
+const save = () => { try { localStorage.setItem(LS, JSON.stringify({ P, edited })); } catch (e) {} };
+
+// ---------------- panel ----------------
+const groupsEl = document.getElementById('groups');
+const rowEls = {};
+GROUPS.forEach(([g, list], gi) => {
+  const d = document.createElement('details'); d.className = 'grp'; if (gi === 0) d.open = true;
+  d.innerHTML = `<summary>${g}</summary>`;
+  for (const [k] of list) {
+    const F = FIELDS[k]; const row = document.createElement('div');
+    if (typeof F.def === 'object') {
+      row.className = 'row sel';
+      row.innerHTML = `<label>${F.label}</label><select>${Object.entries(F.def).map(([v,t])=>`<option value="${v}">${t}</option>`).join('')}</select>`;
+      const s = row.querySelector('select'); s.value = P[k];
+      s.onchange = () => { P[k] = s.value; edited[k] = 1; changed(); };
+    } else {
+      row.className = 'row';
+      row.innerHTML = `<label>${F.label}${F.guess?'<span class="tag">gissat</span>':''}</label><input type="number" step="0.1" min="${F.min}" max="${F.max}"><input type="range" step="0.1" min="${F.min}" max="${F.max}">`;
+      const [n, r] = row.querySelectorAll('input'); n.value = P[k]; r.value = P[k];
+      const set = (v, src) => { v = parseFloat(v); if (!isFinite(v)) return; P[k] = v; edited[k] = 1; if (src!==n) n.value = v; if (src!==r) r.value = v; changed(); };
+      n.oninput = () => set(n.value, n); r.oninput = () => set(r.value, r);
+    }
+    rowEls[k] = row; d.appendChild(row);
+    if (k === 'StoppMot') { const nt = document.createElement('div'); nt.className = 'note'; nt.id = 'ringNote'; d.appendChild(nt); }
+    if (k === 'Atdrag') { const nt = document.createElement('div'); nt.className = 'note'; nt.textContent = 'Fingrar: Ø = bore + 7.4 vid gängan → bore + 5.4 i toppen (som i Fusion). Gängförslaget = minsta M..x2 där gängans spår går fritt från konen.'; d.appendChild(nt); }
+  }
+  groupsEl.appendChild(d);
+});
+function refreshGuess() { for (const k in rowEls) rowEls[k].classList.toggle('guess', FIELDS[k].guess && !edited[k]); }
+function refreshInputs() { for (const k in rowEls) { const r = rowEls[k]; r.querySelectorAll('input,select').forEach(e => e.value = P[k]); } refreshGuess(); }
+refreshGuess();
+const panel = document.getElementById('panel');
+document.getElementById('sheetToggle').onclick = () => { panel.classList.toggle('min'); document.body.classList.toggle('min', panel.classList.contains('min')); document.getElementById('sheetArrow').textContent = panel.classList.contains('min') ? '▴' : '▾'; setTimeout(resize, 50); };
+
+// ---------------- härledning (samma logik som Fusion-skriptet) ----------------
+const THREADS = [24,27,30,33,36,39,40,42,45,48,52];
+function derive(p) {
+  const D = {}; const W = []; const I = [];
+  const step = p.Ring2L > 0 && p.Ring2D < p.Ring1D - 0.4;           // centreringssteg för ring 2
+  D.step = step;
+  D.HalD = Math.max(p.Ring1D, p.PennaD, p.Ring2L > 0 ? p.Ring2D : 0) + p.Spel;   // hela hålet, ringarna ska passera bakifrån
+  D.HalD2 = step ? p.Ring2D + p.Spel : D.HalD;
+  D.RO = D.HalD/2 + p.Vagg; D.OD = 2*D.RO;
+  const r2stop = !step || p.StoppMot === 'ring2' || p.Ring2L <= 0;
+  D.zPen = r2stop ? 0 : p.AxSpel;                                   // ring 2:s framsida (pennans front före hållaren)
+  D.zStep = step ? (r2stop ? p.Ring2L - p.AxSpel : p.Ring2L + p.AxSpel) : 0;
+  D.zR1 = D.zPen + p.Ring2L;                                        // ring 1 framsida
+  D.zBody = D.zR1 + p.Ring1L;                                       // aluminiumets början
+  D.zHold = D.zPen - p.HallarL;                                     // hållarens nederkant
+  D.tipEnd = D.zHold - p.SpetsUt;                                   // spetsens fria ände
+  D.SpetsL = -D.tipEnd;
+  D.RullR = p.RullD/2 + p.TextRelief;
+  D.contact = D.tipEnd + p.Tryck;
+  D.RullZ = D.contact - D.RullR;
+  D.GaffelInre = Math.max(p.RullB + 2*p.GaffelSpel, Math.max(p.HallarB, p.SpetsB) + 1);
+  D.keyX = p.HallarB + p.SlotSpel; D.keyY = p.HallarT + p.SlotSpel;
+  D.zLeg = D.RullZ - p.LagerD/2 - 3;
+  // spänntång
+  D.HL = p.HylsaL; D.FingerD0 = D.HalD + 7.4; D.FingerD1 = D.HalD + 5.4;
+  D.Zc = D.HL - p.FingerL; D.Z0 = D.Zc - p.GangL;
+  const sug = THREADS.find(g => (g - 2.7) > D.FingerD0 + 0.05) || 56;
+  D.GangSug = sug; D.GangD = p.Gang === 'auto' ? sug : +String(p.Gang).replace('M','');
+  D.MutterD = D.GangD + 8;
+  D.closeMax = 2*((D.FingerD0 - D.FingerD1)/2) * p.MutterSlag / p.FingerL;   // diametral stängning vid fullt slag
+  D.needNoAd = D.HalD - p.PennaD;
+  D.AdapterD = D.HalD - 0.2;
+  D.needAd = (D.HalD - D.AdapterD) + p.AdapterSpel;
+  D.adapterSug = D.needNoAd > D.closeMax * 0.8;
+  D.adapter = p.Adapter === 'ja' || (p.Adapter === 'auto' && D.adapterSug);
+  D.AdapterL = p.AdapterL > 0 ? p.AdapterL : Math.max(5, D.HL - D.zBody - 1);
+  D.zAd0 = D.zBody; D.zAd1 = D.zBody + D.AdapterL;
+  D.ringSum = p.Ring1L + p.Ring2L;
+
+  // ---- varningar ----
+  if (p.SpetsB > p.RullB) W.push(`Spetsen (${p.SpetsB}) är bredare än rullen (${p.RullB}) – bläck hamnar utanför texten.`);
+  if (p.SpetsB > p.HallarB) W.push(`Spetsen (${p.SpetsB}) är bredare än hållaren (${p.HallarB}) – stämmer måtten?`);
+  if (p.SpetsT > p.HallarT) W.push(`Spetsens tjocklek (${p.SpetsT}) är större än hållarens (${p.HallarT}).`);
+  if (p.HallarB + 1 > p.RullB + 2*p.GaffelSpel) I.push(`Gaffeln styrs av hållaren (${p.HallarB}) → inre ${f1(D.GaffelInre)}. Rullen får ${f1((D.GaffelInre - p.RullB)/2)} mm axialspel per sida – brickor/distanser.`);
+  if (p.Ring2L > 0 && p.Ring2D > p.Ring1D) W.push(`Ring 2 (Ø${p.Ring2D}) är större än ring 1 (Ø${p.Ring1D}) – inget centreringssteg, hålet följer ring 2.`);
+  if (p.PennaD > p.Ring1D) W.push(`Kroppen (Ø${p.PennaD}) är större än ring 1 – hålet följer kroppen.`);
+  const diag = Math.hypot(D.keyX, D.keyY);
+  if (r2stop && p.Ring2L > 0) {
+    if (D.keyX >= p.Ring2D) W.push(`Nyckelhålet (${f1(D.keyX)}) är bredare än ring 2 (Ø${p.Ring2D}) – ringen har inget att vila på. Välj "Ring 1 ansats".`);
+    else if (diag > p.Ring2D - 0.5) I.push(`Nyckelhålets hörn (diagonal ${f1(diag)}) når nästan ut till ring 2 (Ø${p.Ring2D}) – anliggningen blir smal i hörnen.`);
+  } else if (Math.max(D.keyX, D.keyY) >= Math.min(p.Ring1D, p.Ring2L>0?p.Ring2D:99)) W.push('Nyckelhålet är större än ringen – inget stopp.');
+  if (p.HallarL < p.StoppT + D.zPen + 1) W.push(`Hållaren (${p.HallarL}) är för kort för att gå igenom stoppringen (${f1(p.StoppT + D.zPen)}) – styrningen i nyckelhålet tappas.`);
+  if (D.contact > D.zHold - 1) W.push(`Rullen når hållaren: bara ${f1(D.zHold - D.contact)} mm mellan rullens topp och hållaren.`);
+  if (D.contact + 0 > -p.StoppT - 1 - 0 && D.RullR > D.RO) W.push('Rullen går upp i hylsan.');
+  if (D.Z0 < 2) W.push(`Hylsan (${D.HL}) är för kort för gänga + fingrar (${f1(p.GangL + p.FingerL + 2)}).`);
+  if (D.Zc < D.zBody) W.push(`Fingrarna börjar på ring 1 (z ${f1(D.Zc)} < ${f1(D.zBody)}) – öka hylsans längd så de klämmer kroppen.`);
+  if (!D.adapter && D.needNoAd > D.closeMax) W.push(`Fingrarna måste stänga ${f1(D.needNoAd)} mm men klarar ~${f2(D.closeMax)} mm → använd adapterhylsa.`);
+  if (D.adapter && D.needAd > D.closeMax) W.push(`Även med adapter krävs ${f2(D.needAd)} mm stängning (max ~${f2(D.closeMax)}).`);
+  if (D.adapter && D.zAd1 < D.HL - 2) W.push(`Adaptern slutar ${f1(D.HL - D.zAd1)} mm före hylsans ände – fingrarna klämmer delvis luft.`);
+  if (D.adapter && D.zAd1 > D.HL + 0.25 + p.MutterSlag - p.Atdrag) W.push('Adaptern sticker upp i mutterns topplock.');
+  if (p.Gang !== 'auto' && D.GangD - 2.7 <= D.FingerD0) W.push(`M${D.GangD}x2 är för liten: gängans spår skär i konen (Ø${f1(D.FingerD0)}). Förslag M${sug}x2.`);
+  if (D.adapterSug && p.Adapter === 'nej') W.push('Adapter avstängd fast fingrarna inte når kroppen.');
+  D.W = W; D.I = I;
+  return D;
+}
+const f1 = v => (Math.round(v*10)/10).toFixed(1);
+const f2 = v => (Math.round(v*100)/100).toFixed(2);
+
+// ---------------- three ----------------
+const view = document.getElementById('view');
+const renderer = new THREE.WebGLRenderer({ antialias:true, preserveDrawingBuffer:true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.localClippingEnabled = true;
+view.appendChild(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0xeceae5);
+const camera = new THREE.PerspectiveCamera(32, 1, 1, 5000);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = false;
+controls.addEventListener('change', () => render());
+scene.add(new THREE.HemisphereLight(0xffffff, 0xb8b2a6, 1.6));
+const sun = new THREE.DirectionalLight(0xffffff, 2.0); sun.position.set(120, 200, 160); scene.add(sun);
+const fill = new THREE.DirectionalLight(0xffffff, 0.7); fill.position.set(-150, -60, -100); scene.add(fill);
+const grid = new THREE.GridHelper(400, 40, 0xc9c4ba, 0xdcd8cf); scene.add(grid);
+
+const clipPlane = new THREE.Plane(new THREE.Vector3(0,0,-1), 0);
+const MATS = [];
+function mat(color, o = {}) {
+  const m = new THREE.MeshStandardMaterial({ color, roughness:o.r ?? .6, metalness:o.m ?? 0, side:THREE.DoubleSide, ...(o.extra||{}) });
+  m.userData.ghostable = !!o.ghost; m.userData.noClip = !!o.noClip; MATS.push(m); return m;
+}
+const M = {
+  sleeve: mat(0xeeebe4, { ghost:true, r:.55 }),
+  plate: mat(0xdcd8cf, { ghost:true, r:.55 }),
+  nut: mat(0x26262a, { r:.6 }),
+  adapter: mat(0x2f7fd0, { r:.6 }),
+  roller: mat(0x2b2b2b, { r:.85 }),
+  steel: mat(0x9a9ca1, { r:.3, m:.5 }),
+  body: mat(0xf08a1c, { r:.35, m:.2, noClip:true }),
+  label: mat(0xffd21a, { r:.5, noClip:true }),
+  white: mat(0xffffff, { r:.45, noClip:true }),
+  white2: mat(0xf1f1ee, { r:.5, noClip:true }),
+  felt: mat(0xfbfaf4, { r:.95, noClip:true }),
+};
+function applyMatState() {
+  for (const m of MATS) {
+    m.clippingPlanes = V.section && !m.userData.noClip ? [clipPlane] : [];
+    if (m.userData.ghostable) { m.transparent = V.ghost; m.opacity = V.ghost ? 0.33 : 1; m.depthWrite = !V.ghost; }
+    m.needsUpdate = true;
+  }
+  if (textMat) { textMat.clippingPlanes = V.section ? [clipPlane] : []; textMat.needsUpdate = true; }
+  clipPlane.normal.set(V.sectionDir ? -1 : 0, 0, V.sectionDir ? 0 : -1);
+}
+// rulletext (spegelvänd, som på stämpeln)
+let textMat = null;
+function makeTextTex() {
+  const c = document.createElement('canvas'); c.width = 2048; c.height = 128; const g = c.getContext('2d');
+  g.clearRect(0,0,c.width,c.height); g.fillStyle = '#000';
+  g.font = '700 96px "Barlow Condensed", Arial Narrow, sans-serif'; g.textBaseline = 'middle'; g.textAlign = 'center';
+  g.save(); g.translate(c.width/2, c.height/2); g.scale(-1, 1); g.fillText('GOOD BAGELS · GOOD DAYS ·', 0, 4); g.restore();
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+textMat = new THREE.MeshStandardMaterial({ color:0x111111, map:makeTextTex(), alphaTest:.5, transparent:false, roughness:.8, side:THREE.DoubleSide });
+
+const root = new THREE.Group(); scene.add(root);
+const parts = {};
+function dispose(o) { o.traverse(c => { if (c.geometry) c.geometry.dispose(); }); }
+function lathe(pts, m, seg = 96, phi0 = 0, phiL = Math.PI*2) {
+  const g = new THREE.LatheGeometry(pts.map(([r,y]) => new THREE.Vector2(r, y)), seg, phi0, phiL);
+  g.computeVertexNormals(); return new THREE.Mesh(g, m);
+}
+function boxAt(sx, y0, y1, sz, m, x = 0, z = 0) {
+  const g = new THREE.BoxGeometry(sx, y1 - y0, sz); const o = new THREE.Mesh(g, m); o.position.set(x, (y0+y1)/2, z); return o;
+}
+function cylY(r, y0, y1, m, seg = 64) { const o = new THREE.Mesh(new THREE.CylinderGeometry(r, r, y1-y0, seg), m); o.position.y = (y0+y1)/2; return o; }
+function cylX(r, x0, x1, y, m, seg = 48, open = false) { const g = new THREE.CylinderGeometry(r, r, x1-x0, seg, 1, open); g.rotateZ(Math.PI/2); const o = new THREE.Mesh(g, m); o.position.set((x0+x1)/2, y, 0); return o; }
+function ringX(ri, ro, x0, x1, y, m) { // rör längs X
+  const pts = [[ri,x0],[ro,x0],[ro,x1],[ri,x1],[ri,x0]].map(([r,v]) => new THREE.Vector2(r, v));
+  const g = new THREE.LatheGeometry(pts, 48); g.rotateZ(-Math.PI/2); g.computeVertexNormals(); const o = new THREE.Mesh(g, m); o.position.y = y; return o;
+}
+
+let D = null;
+function build() {
+  const p = P; D = derive(p); window.__D = D;
+  for (const k in parts) { root.remove(parts[k]); dispose(parts[k]); }
+  for (const k of ['sleeve','nut','adapter','roller','pen']) { parts[k] = new THREE.Group(); parts[k].name = k; root.add(parts[k]); }
+  const { HalD, HalD2, RO, HL, Zc, Z0 } = D;
+  const rB = HalD/2, rB2 = HalD2/2;
+  // --- hylsa (lathe) ---
+  const RG = D.GangD/2, Rg = (D.GangD - 2.7)/2, R0 = D.FingerD0/2, R1 = D.FingerD1/2, Zr = Zc - 0.25;
+  const out = [];
+  const z0 = Math.max(Z0, 0.5);
+  out.push([rB2, 0], [RO, 0], [RO, z0 - 0.3]);
+  // gänga som räfflor (inte helix)
+  const pitch = 2, depth = 1.08;
+  let y = z0; out.push([RG - depth, y]);
+  while (y + pitch <= Zr + 1e-6) { out.push([RG, y + pitch*0.35], [RG, y + pitch*0.55], [RG - depth, y + pitch*0.9]); y += pitch; }
+  out.push([RG - depth, Zr], [Rg, Zr], [Rg, Zc], [rB, Zc]);
+  if (D.step) out.push([rB, D.zStep], [rB2, D.zStep]);
+  out.push([rB2, 0]);
+  const sl = lathe(out, M.sleeve, 128); sl.userData.stl = 1; parts.sleeve.add(sl);
+  // fingrar: 6 st med slitsar
+  const slitA = 1.4 / R1;
+  for (let k = 0; k < 6; k++) {
+    const a0 = k*Math.PI/3 + slitA/2 + Math.PI/6;
+    const fg = lathe([[rB, Zc],[R0, Zc],[R1, HL],[rB, HL],[rB, Zc]], M.sleeve, 16, a0, Math.PI/3 - slitA);
+    fg.userData.stl = 1; parts.sleeve.add(fg);
+  }
+  // stoppring med nyckelhål (z -StoppT..0)
+  const sh = new THREE.Shape(); sh.absarc(0, 0, RO, 0, Math.PI*2, false);
+  const hole = new THREE.Path(); const hx = D.keyX/2, hy = D.keyY/2, r = p.HornR;
+  const corners = [[hx,-hy,180],[hx,hy,270],[-hx,hy,0],[-hx,-hy,90]];
+  corners.forEach(([cx,cy,a0], i) => {
+    for (let s = 0; s <= 12; s++) { const a = (a0 + 270*s/12) * Math.PI/180; const px = cx + r*Math.cos(a), py = cy + r*Math.sin(a); (i===0&&s===0) ? hole.moveTo(px,py) : hole.lineTo(px,py); }
+  });
+  hole.closePath(); sh.holes.push(hole);
+  const pg = new THREE.ExtrudeGeometry(sh, { depth:p.StoppT, bevelEnabled:false, curveSegments:96 });
+  pg.rotateX(Math.PI/2); // extruderar mot -y; formens y blir z
+  const plate = new THREE.Mesh(pg, M.plate); plate.userData.stl = 1; parts.sleeve.add(plate);
+  // gaffelben (x = rullaxeln)
+  const legTop = -p.StoppT + 0.01, legBot = D.zLeg, gb = p.GaffelB/2, fr = Math.min(5, gb - 0.5, (legTop - legBot)/2 - 0.5);
+  for (const s of [1,-1]) {
+    const ls = new THREE.Shape();
+    ls.moveTo(-gb, legTop); ls.lineTo(-gb, legBot + fr); ls.absarc(-gb + fr, legBot + fr, fr, Math.PI, Math.PI*1.5, false);
+    ls.lineTo(gb - fr, legBot); ls.absarc(gb - fr, legBot + fr, fr, Math.PI*1.5, Math.PI*2, false); ls.lineTo(gb, legTop); ls.closePath();
+    const ah = new THREE.Path(); ah.absarc(0, D.RullZ, (p.AxelD + 0.3)/2, 0, Math.PI*2, true); ls.holes.push(ah);
+    const lg = new THREE.ExtrudeGeometry(ls, { depth:p.GaffelT, bevelEnabled:false, curveSegments:24 });
+    lg.rotateY(Math.PI/2); // extrudering längs +x, formens x → -z
+    const leg = new THREE.Mesh(lg, M.sleeve); leg.position.x = s > 0 ? D.GaffelInre/2 : -D.GaffelInre/2 - p.GaffelT;
+    leg.userData.stl = 1; parts.sleeve.add(leg);
+  }
+  // --- mutter (profil från Fusion) ---
+  const gs = 0.25, RM = D.MutterD/2, slag = p.MutterSlag, at = Math.min(p.Atdrag, slag);
+  const Zb = Z0 + slag, Rmin = (D.GangD - 2.165)/2 + gs, top = HL + slag + 0.25, Rlip = p.PennaD/2 + 0.8;
+  const Rcs = R0 + (R1 - R0)*slag/p.FingerL + gs/2;
+  const nut = lathe([[Rmin+.06,Zb],[RM-.1,Zb],[RM,Zb+.1],[RM,top-.1],[RM-.1,top],[Rlip,top],[Rlip,HL+slag],[R1+gs/2,HL+slag],[R1+gs/2,HL],[Rcs,Zc+slag],[Rmin,Zc+slag],[Rmin,Zb+.06],[Rmin+.06,Zb]], M.nut, 18*4);
+  nut.userData.stl = 1; parts.nut.add(nut); parts.nut.userData.base = -at;
+  // --- adapter ---
+  if (D.adapter) {
+    const ri = (p.PennaD + p.AdapterSpel)/2, ro = D.AdapterD/2, sa = p.AdapterSlits / ro;
+    const ad = lathe([[ri,D.zAd0],[ro,D.zAd0],[ro,D.zAd1],[ri,D.zAd1],[ri,D.zAd0]], M.adapter, 96, sa/2 + Math.PI/2, Math.PI*2 - sa);
+    ad.userData.stl = 1; parts.adapter.add(ad);
+  }
+  // --- rulle, axel, lager ---
+  const xb = p.RullB/2, rc = p.RullD/2;
+  const core = (() => {
+    const pts = [[p.LagerD/2, -xb],[rc, -xb],[rc, xb],[p.LagerD/2, xb],[p.LagerD/2, -xb]].map(([a,b]) => new THREE.Vector2(a,b));
+    const g = new THREE.LatheGeometry(pts, 96); g.rotateZ(-Math.PI/2); g.computeVertexNormals(); return new THREE.Mesh(g, M.roller);
+  })();
+  core.position.y = D.RullZ; core.userData.stl = 1; parts.roller.add(core);
+  const tx = cylX(D.RullR, -xb*0.85, xb*0.85, D.RullZ, textMat, 160, true); parts.roller.add(tx);
+  const axL = D.GaffelInre/2 + p.GaffelT + 1;
+  parts.roller.add(cylX(p.AxelD/2, -axL, axL, D.RullZ, M.steel, 24));
+  for (const s of [1,-1]) parts.roller.add(ringX(p.AxelD/2, p.LagerD/2, s>0 ? xb - p.LagerB : -xb, s>0 ? xb : -xb + p.LagerB, D.RullZ, M.steel));
+  // --- pennan ---
+  const pen = parts.pen;
+  pen.add(boxAt(p.SpetsB, D.tipEnd, D.zHold + 0.01, p.SpetsT, M.felt));
+  pen.add(boxAt(p.HallarB, D.zHold, D.zPen + 0.01, p.HallarT, M.white));
+  if (p.Ring2L > 0) pen.add(cylY(p.Ring2D/2, D.zPen, D.zR1 + 0.01, M.white2));
+  if (p.Ring1L > 0) pen.add(cylY(p.Ring1D/2, D.zR1, D.zBody, M.white));
+  const bodyL = 120;
+  pen.add(cylY(p.PennaD/2, D.zBody, D.zBody + bodyL, M.body));
+  pen.add(cylY(p.PennaD/2 + 0.15, D.zBody + 30, D.zBody + 75, M.label));
+  pen.add(cylY(p.PennaD/2 - 0.6, D.zBody + bodyL, D.zBody + bodyL + 6, M.white));
+  for (const k in parts) parts[k].userData.base = parts[k].userData.base || 0;
+  applyView(); applyMatState(); updatePanel(); render();
+}
+function applyView() {
+  const e = V.explode ? 1 : 0;
+  const offNut = D.HL - D.Z0 + 6, nutTop = D.HL + P.MutterSlag + 0.25 + offNut;
+  const offAd = D.adapter ? nutTop + 8 - D.zAd0 : offNut;
+  const below = D.adapter ? D.zAd1 + offAd : nutTop;
+  const offPen = below + 12 - D.tipEnd;
+  const off = { pen: offPen*e, adapter: offAd*e, nut: offNut*e, roller: -40*e, sleeve: 0 };
+  for (const k in parts) parts[k].position.y = (parts[k].userData.base || 0) + (off[k] || 0);
+  parts.pen.visible = V.pen;
+}
+
+// ---------------- härledda + HUD ----------------
+function updatePanel() {
+  const p = P;
+  const rows = [
+    ['Hål (ring 1 + spel)', `Ø ${f1(D.HalD)}`],
+    ['Centreringssteg ring 2', D.step ? `Ø ${f1(D.HalD2)}, ${f1(Math.max(0,D.zStep))} lång` : 'nej'],
+    ['Stopp mot', D.zPen === 0 ? 'ring 2 framsida' : 'ring 1 ansats'],
+    ['Hylsans ytter-Ø', `Ø ${f1(D.OD)}`],
+    ['Nyckelhål', `${f1(D.keyX)} × ${f1(D.keyY)} R${p.HornR}`],
+    ['Spetsens ände under stoppet', f1(D.SpetsL)],
+    ['Gaffel inre bredd', f1(D.GaffelInre)],
+    ['Rullens centrum (Z)', f1(D.RullZ)],
+    ['Kontakt spets–rulle (Z)', f1(D.contact)],
+    ['Rullens Ø över text', f1(2*D.RullR)],
+    ['Gängförslag', `M${D.GangSug}x2` + (p.Gang!=='auto' && D.GangD!==D.GangSug ? ` (vald M${D.GangD}x2)` : '')],
+    ['Fingrar Ø', `${f1(D.FingerD0)} → ${f1(D.FingerD1)}`],
+    ['Fingrar stänger max', `${f2(D.closeMax)} mm`],
+    ['Behov utan / med adapter', `${f2(D.needNoAd)} / ${f2(D.needAd)}`],
+    ['Adapterhylsa', D.adapter ? `Ø${f1(p.PennaD + p.AdapterSpel)}/${f1(D.AdapterD)} × ${f1(D.AdapterL)}` : 'nej'],
+    ['Spännmutter ytter-Ø', `Ø ${f1(D.MutterD)}`],
+  ];
+  document.getElementById('derived').innerHTML = rows.map(([a,b]) => `<tr><td>${a}</td><td>${b}</td></tr>`).join('');
+  const w = document.getElementById('warn');
+  w.innerHTML = D.W.map(t => `<div>⚠ ${t}</div>`).join('') + D.I.map(t => `<div class="info">ℹ ${t}</div>`).join('') + (D.W.length ? '' : '<div class="ok">✓ Inga krockar enligt de enkla kontrollerna.</div>');
+  const rn = document.getElementById('ringNote');
+  if (rn) rn.innerHTML = `Ring 1 + ring 2 = <b>${f1(D.ringSum)}</b> mm. Tidigare angavs kragen till 39.3 – om det gäller båda ringarna ska summan bli 39.3. Pennan skjuts in spetsen först bakifrån.`;
+  document.getElementById('hud').innerHTML = `Hål <b>Ø${f1(D.HalD)}</b> · hylsa <b>Ø${f1(D.OD)}</b> · gaffel <b>${f1(D.GaffelInre)}</b> · rulle Z <b>${f1(D.RullZ)}</b> · <b>M${D.GangD}x2</b>` + (D.W.length ? ` · <span class="w">${D.W.length} varning${D.W.length>1?'ar':''}</span>` : '');
+}
+
+// ---------------- render/kamera ----------------
+function resize() { const w = view.clientWidth, h = view.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); render(); }
+function render() { renderer.render(scene, camera); }
+function fit(dirIn) {
+  root.updateMatrixWorld(true);
+  const box = new THREE.Box3();
+  for (const k in parts) if (parts[k].visible) box.expandByObject(parts[k]);
+  const c = box.getCenter(new THREE.Vector3()), sz = box.getSize(new THREE.Vector3());
+  const R = 0.5 * Math.hypot(sz.x, sz.y, sz.z);
+  const vf = camera.fov * Math.PI / 360, hf = Math.atan(Math.tan(vf) * camera.aspect);
+  const dist = R / Math.sin(Math.min(vf, hf)) * 1.15;
+  controls.target.copy(c);
+  const dir = (dirIn || (V.section ? (V.sectionDir ? new THREE.Vector3(1, .18, .28) : new THREE.Vector3(.28, .18, 1)) : new THREE.Vector3(0.62, 0.22, 0.75))).clone().normalize();
+  camera.position.copy(c).addScaledVector(dir, dist);
+  grid.position.y = box.min.y - 3;
+  controls.update(); render();
+}
+new ResizeObserver(resize).observe(view);
+
+// ---------------- knappar ----------------
+const toast = t => { const e = document.getElementById('toast'); e.textContent = t; e.style.opacity = 1; setTimeout(() => e.style.opacity = 0, 1800); };
+document.querySelectorAll('#toolbar button').forEach(b => b.onclick = () => {
+  const t = b.dataset.t;
+  if (t === 'fit') return fit();
+  if (t === 'sectionDir') { V.sectionDir ^= 1; b.textContent = 'Snitt: ' + (V.sectionDir ? 'tvärs rullaxeln' : 'längs rullaxeln'); if (!V.section) { V.section = true; } }
+  else V[t] = !V[t];
+  syncToolbar(); applyView(); applyMatState(); if (t !== 'ghost') fit(); render();
+});
+function syncToolbar() { document.querySelectorAll('#toolbar button').forEach(b => { const t = b.dataset.t; if (t in V && t !== 'sectionDir') b.classList.toggle('on', !!V[t]); }); }
+function exportJSON() {
+  const out = { projekt:'BAGL rollpenna – Molotow ONE4ALL 627HS', datum:new Date().toISOString().slice(0,10), matt:{}, gissat_kvar:[], harlett:{} };
+  for (const k in DEF) out.matt[k] = P[k];
+  for (const k in FIELDS) if (FIELDS[k].guess && !edited[k]) out.gissat_kvar.push(k);
+  Object.assign(out.harlett, { HalD:+f2(D.HalD), HalD2_centrering:D.step?+f2(D.HalD2):null, HylsaOD:+f2(D.OD), Nyckelhal:[+f2(D.keyX), +f2(D.keyY)], SpetsL:+f2(D.SpetsL),
+    GaffelInre:+f2(D.GaffelInre), RullZ:+f2(D.RullZ), Ganga:`M${D.GangD}x2`, FingerD0:+f2(D.FingerD0), FingerD1:+f2(D.FingerD1), Adapter:D.adapter, AdapterL:+f2(D.AdapterL), MutterD:D.MutterD, varningar:D.W });
+  return JSON.stringify(out, null, 2);
+}
+document.getElementById('bCopy').onclick = async () => {
+  const s = exportJSON();
+  try { await navigator.clipboard.writeText(s); toast('Mått kopierade – klistra in i chatten'); }
+  catch (e) { const ta = document.createElement('textarea'); ta.value = s; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); toast('Mått kopierade'); } catch (e2) { toast('Kunde inte kopiera – använd Ladda ner'); } ta.remove(); }
+};
+function download(name, data, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+document.getElementById('bDl').onclick = () => download(`rollpen_matt_${new Date().toISOString().slice(0,10)}.json`, exportJSON(), 'application/json');
+document.getElementById('bReset').onclick = () => { if (!confirm('Återställ alla mått till standard?')) return; P = { ...DEF }; edited = {}; save(); refreshInputs(); build(); fit(); };
+const exporter = new STLExporter();
+function stlOf(key) {
+  const g = new THREE.Group();
+  parts[key].traverse(o => { if (o.isMesh && o.userData.stl) { const m = new THREE.Mesh(o.geometry.clone().applyMatrix4(o.matrixWorld)); g.add(m); } });
+  if (key === 'rulle') {}
+  return exporter.parse(g, { binary:true });
+}
+document.querySelectorAll('[data-stl]').forEach(b => b.onclick = () => {
+  const map = { hylsa:'sleeve', mutter:'nut', adapter:'adapter', rulle:'roller' };
+  const k = map[b.dataset.stl]; if (!parts[k].children.length) return toast('Delen finns inte (adapter avstängd)');
+  const ex = V.explode; V.explode = false; applyView(); root.updateMatrixWorld(true);
+  download(`rollpen_${b.dataset.stl}_forenklad.stl`, stlOf(k), 'model/stl');
+  V.explode = ex; applyView(); render();
+});
+
+let pend = 0;
+function changed() { refreshGuess(); save(); build(); }
+
+// test-krokar
+window.__P = P;
+window.__app = {
+  set(k, v) { P[k] = v; edited[k] = 1; refreshInputs(); save(); build(); return D; },
+  view(o) { Object.assign(V, o); syncToolbar(); applyView(); applyMatState(); fit(); render(); },
+  build, fit, render, get D() { return D; }, V, exportJSON, stlBytes: k => stlOf(k).byteLength,
+};
+window.__rebuild = () => { build(); return D; }; window.__three = { camera, controls, root, parts, THREE };
+build(); resize(); fit();
+window.__ok = true;
+</script>
+</body>
+</html>
