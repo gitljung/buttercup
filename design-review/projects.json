@@ -182,24 +182,24 @@
   "fusion_project": "yamay-utekok"
  },
  {
+  "slug": "yatai",
+  "name": "Yatai",
+  "doc": "Yatai",
+  "version": 21,
+  "exported": "2026-11-28 00:38"
+ },
+ {
   "slug": "yatai-event",
   "name": "Yatai – event (grill ute, allt utfällt)",
   "doc": "Yatai",
-  "version": 19,
-  "exported": "2026-11-26 11:48"
+  "version": 21,
+  "exported": "2026-11-28 00:45"
  },
  {
   "slug": "yatai-transport",
   "name": "Yatai – transport (allt infällt)",
   "doc": "Yatai",
-  "version": 19,
-  "exported": "2026-11-26 11:54"
- },
- {
-  "slug": "yatai",
-  "name": "Yatai",
-  "doc": "Yatai",
-  "version": 20,
-  "exported": "2026-11-28 00:01"
+  "version": 21,
+  "exported": "2026-11-28 00:51"
  }
 ]
