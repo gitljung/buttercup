@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#120a2a">
-<title>Hasses Hälsoresa · RETRO-test (Swing + drag)</title>
+<title>Hasses Hälsoresa · RETRO-test (Swing + drag · 15 min helkropp)</title>
 <!-- Kort #735: retro-testsida. Live-appen (/halsoresa/) är orörd. Pixel-Hasse ur appens egna ark (src/pix.py), egen tolkning av 16-bitarsstil. -->
 <style>
 @font-face{font-family:P2P;src:url(fonts/PressStart2P.woff2) format('woff2');font-display:block}
@@ -53,8 +53,8 @@ button.gul{background:var(--gul);color:var(--ink);box-shadow:inset -3px -3px 0 #
 #mitt{position:fixed;left:0;right:0;top:34%;text-align:center;pointer-events:none;font-size:clamp(22px,7vw,56px)}
 #mitt .big{color:var(--gul);text-shadow:4px 4px 0 var(--rod),-2px -2px 0 var(--ink),2px -2px 0 var(--ink),-2px 2px 0 var(--ink),7px 7px 0 var(--ink);display:inline-block}
 #mitt .big.pop{animation:pop .5s steps(5) both}@keyframes pop{0%{transform:scale(3);opacity:0}60%{transform:scale(.9);opacity:1}100%{transform:none}}
-#next{position:fixed;left:50%;top:calc(max(8px,env(safe-area-inset-top)) + 150px);transform:translateX(-50%);display:none;pointer-events:none;
-  background:#000;padding:10px 14px;font-size:11px;line-height:1.7;text-align:center;box-shadow:0 0 0 3px var(--mag),0 0 0 6px #000,0 0 18px var(--mag);white-space:nowrap}
+#next{position:fixed;left:0;right:0;margin:0 auto;width:max-content;max-width:calc(100vw - 28px);box-sizing:border-box;top:calc(max(8px,env(safe-area-inset-top)) + 150px);display:none;pointer-events:none;
+  background:#000;padding:10px 14px;font-size:11px;line-height:1.7;text-align:center;box-shadow:0 0 0 3px var(--mag),0 0 0 6px #000,0 0 18px var(--mag);white-space:normal}
 #next .r{color:var(--rod)}#next .y{color:var(--gul);font-size:15px}
 #next.vis{display:block;animation:skin .45s steps(6) both}
 /* startskärm */
@@ -87,7 +87,7 @@ body.pre .ui,body.pre #next{visibility:hidden}
 
 <div class="ui sk" id="top">
   <div><b>1UP</b><span id="score">000000</span></div>
-  <div class="m"><b>TIME</b><span id="klocka">00:00</span></div>
+  <div class="m"><b id="klab">TIME</b><span id="klocka">00:00</span></div>
   <div class="h"><b>HI</b><span id="hi">000000</span></div>
 </div>
 <div class="ui sk" id="meter"><span id="stage">STAGE 1-5</span><span class="seg" id="seg"></span><span id="set">SET 1/4</span></div>
@@ -108,10 +108,11 @@ body.pre .ui,body.pre #next{visibility:hidden}
 <div id="start">
   <h1><span class="a">HASSES HÄLSORESA</span><span class="b">RETRO</span></h1>
   <div class="lista" id="lista"></div>
-  <button class="gul" id="bStart">► PRESS START</button>
+  <button class="gul" id="bStart">► PASS A: SWING + DRAG</button>
+  <button class="gul" id="bStartB">► PASS B: 15 MIN HELKROPP</button>
   <button id="bHasse">HASSE: 2D-PIXEL</button>
-  <span class="ps">EN KLOCKA · CA 15 MIN</span>
-  <p>Testversion av passet Swing + drag i 16-bitarsstil. Hasse räknar takten – gör en rep per varv. Live-appen finns kvar på <span style="color:#fff">buttercup.nu/halsoresa</span>.</p>
+  <span class="ps">EN KLOCKA · 15 MIN</span>
+  <p>Pass B: 3 varv × 5 övningar, 30 s jobb / 30 s vila, med pixel-3D-Hasse. Testversion av passet Swing + drag i 16-bitarsstil. Hasse räknar takten – gör en rep per varv. Live-appen finns kvar på <span style="color:#fff">buttercup.nu/halsoresa</span>.</p>
 </div>
 <div id="slut"><div id="mittS" style="font-size:clamp(22px,7vw,52px)"></div><div class="t" id="slutT"></div><button class="gul" id="bIgen">► SPELA IGEN</button></div>
 
@@ -135,6 +136,28 @@ const EX = {
 const PASS = [['swing',4,10],['goblet',3,8],['rodd',3,8],['halo',2,5],['deadbug',3,6]];
 const NAMN = {swing:'SWING', goblet:'KNÄBÖJ', rodd:'RODD', halo:'HALO', deadbug:'DEAD BUG'};
 const VILA = 20, BYT = 6, NASTA = 25, REDO = 4;
+// ---------- kort #740: pass B "15 min helkropp" (3 varv × 5 övningar, 30 s jobb / 30 s vila, ingen paus mellan varven) ----------
+// Strukturen efter trainwithmurph "15 Minute Full Body Kettlebell Routine"; rörelserna är egen rörelsedata anpassad till Hasse (pixel-3D).
+Object.assign(EX, {
+  atw:    {a:'AROUND THE',     b:'WORLD!',       t:2.4, vand:true, ner:'● RUNT', upp:'MIDJAN ●', tips:'Byt riktning halvvägs'},
+  rdlrow: {a:'MARKLYFT +',     b:'UPRIGHT ROW!', t:4.4, ner:'▼ FÄLL FRAM', upp:'DRA UPP ▲'},
+  pushmc: {a:'ARMHÄVNING +',   b:'KLÄTTRARE!',   t:3.6, ner:'▼ ARMHÄVNING', upp:'KNÄ V + H ▲'},
+  sqcurl: {a:'KNÄBÖJ-CURL +',  b:'PULLOVER!',    t:5.2, ner:'▼ BÖJ + CURL', upp:'PULLOVER ▲'},
+});
+Object.assign(NAMN, {atw:'AROUND THE WORLD', rdlrow:'MARKLYFT + ROW', pushmc:'ARMHÄVN. + KLÄTTRARE', sqcurl:'KNÄBÖJ-CURL + PULLOVER'});
+const PASS_B = ['swing', 'atw', 'rdlrow', 'pushmc', 'sqcurl'], ARB = 30, VILAB = 30, VARV = 3;
+let PASSID = Q.get('pass') === 'b' ? 'b' : 'a';
+function planB() {
+  const st = [{typ:'redo', d:REDO, ex:PASS_B[0], xi:0, nv:1, b:true}];
+  for (let v = 1; v <= VARV; v++) PASS_B.forEach((id, xi) => {
+    st.push({typ:'jobb', ex:id, xi, s:v, S:VARV, reps:Math.floor(ARB / EX[id].t), d:ARB, b:true});
+    const sista = v === VARV && xi === PASS_B.length - 1, nx = (xi + 1) % PASS_B.length;
+    st.push({typ:'vila', ex:sista ? id : PASS_B[nx], xi:sista ? xi : nx, s:v, S:VARV, d:VILAB, b:true, nv:nx ? v : v + 1, sista});
+  });
+  st.push({typ:'klar', d:0});
+  return st;
+}
+const passKvar = () => ST.slice(I).reduce((a, x) => a + (x.typ === 'redo' ? 0 : x.d), 0) - (ST[I] && ST[I].typ !== 'redo' ? EL : 0);
 
 function plan() {
   const st = [{typ:'redo', d:REDO, ex:PASS[0][0], xi:0}];
@@ -189,9 +212,10 @@ const rep = (s) => s.typ === 'jobb' ? Math.min(s.reps, Math.floor(EL / EX[s.ex].
 function uiStep() {
   const s = ST[I], e = EX[s.ex] || {}, J = s.typ === 'jobb';
   $('#stage').textContent = 'STAGE ' + ((s.xi ?? 4) + 1) + '-5';
-  $('#set').textContent = s.S ? `SET ${s.s}/${s.S}` : 'SET -';
+  $('#set').textContent = s.b ? `VARV ${s.typ === 'vila' && !s.sista ? s.nv : s.s || 1}/${VARV}` : s.S ? `SET ${s.s}/${s.S}` : 'SET -';
   const sk = $('#skylt'); sk.classList.remove('in'); void sk.offsetWidth; sk.classList.add('in');
-  if (s.typ === 'vila') { $('#skA').textContent = 'ANDAS UT'; $('#skB').textContent = 'VILA!'; }
+  if (s.typ === 'vila' && s.b) { $('#skA').textContent = s.sista ? 'NEDVARVNING' : 'VILA 30 S'; $('#skB').textContent = s.sista ? 'ANDAS UT!' : 'ANDAS!'; }
+  else if (s.typ === 'vila') { $('#skA').textContent = 'ANDAS UT'; $('#skB').textContent = 'VILA!'; }
   else if (s.typ === 'byt') { $('#skA').textContent = 'BYT'; $('#skB').textContent = 'SIDA!'; }
   else if (s.typ === 'nasta') { $('#skA').textContent = 'STAGE ' + pad(s.xi, 1) + ' CLEAR'; $('#skB').textContent = 'BRA JOBBAT!'; }
   else { $('#skA').textContent = e.a; $('#skB').textContent = e.b; }
@@ -199,9 +223,11 @@ function uiStep() {
   $('#timLab').textContent = J ? 'TID KVAR' : s.typ === 'redo' ? 'START OM' : s.typ === 'byt' ? 'BYT SIDA' : 'VILA';
   $('#tNer').textContent = e.ner || '▼'; $('#tUpp').textContent = e.upp || '▲';
   $('#tTakt').textContent = 'TAKT ' + String(e.t || 0).replace('.', ',') + ' S';
-  const nx = s.typ === 'nasta' || s.typ === 'redo';
+  $('#klab').textContent = PASSID === 'b' ? 'PASS KVAR' : 'TIME';
+  const nx = s.typ === 'nasta' || s.typ === 'redo' || (s.b && s.typ === 'vila' && !s.sista);
   $('#next').classList.toggle('vis', nx);
-  if (nx) { const p = PASS[s.xi]; $('#nextN').textContent = NAMN[p[0]]; $('#nextX').textContent = `${KORT ? 1 : p[1]} SET × ${p[2]}${EX[p[0]].sida ? ' / SIDA' : EX[p[0]].alt ? ' / SIDA' : ''}${EX[p[0]].varv ? ' VARV' : ''}`; }
+  if (nx && s.b) { $('#nextN').textContent = NAMN[s.ex]; $('#nextX').textContent = `30 S · VARV ${s.nv}/${VARV}`; }
+  else if (nx) { const p = PASS[s.xi]; $('#nextN').textContent = NAMN[p[0]]; $('#nextX').textContent = `${KORT ? 1 : p[1]} SET × ${p[2]}${EX[p[0]].sida ? ' / SIDA' : EX[p[0]].alt ? ' / SIDA' : ''}${EX[p[0]].varv ? ' VARV' : ''}`; }
   // segmentmätare: ett block per jobb-steg
   const jobb = ST.filter(x => x.typ === 'jobb'); const nu = ST.slice(0, I + 1).filter(x => x.typ === 'jobb').length - (J ? 1 : 0);
   $('#seg').innerHTML = jobb.map((x, i) => `<i class="${i < nu ? 'k' : i === nu ? 'n' : ''}"></i>`).join('');
@@ -245,7 +271,8 @@ function tick(dt) {
 function hud() {
   const s = ST[I]; if (!s || s.typ === 'klar') { if (s) { $('#score').textContent = pad(SCORE, 6); $('#hi').textContent = pad(Math.max(HI, SCORE), 6); } return; }
   $('#score').textContent = pad(SCORE, 6); $('#hi').textContent = pad(Math.max(HI, SCORE), 6);
-  $('#klocka').textContent = pad(TOT / 60, 2) + ':' + pad(TOT % 60, 2);
+  if (PASSID === 'b') { const k = Math.max(0, Math.ceil(passKvar())); $('#klocka').textContent = pad(k / 60, 2) + ':' + pad(k % 60, 2); }
+  else $('#klocka').textContent = pad(TOT / 60, 2) + ':' + pad(TOT % 60, 2);
   const kvar = s.d - EL;
   $('#timD').textContent = mmss(kvar);
   $('#tim').classList.toggle('sist', s.typ !== 'jobb' && kvar <= 3.2 && s.typ !== 'klar');
@@ -344,6 +371,18 @@ function hasse(t) {
   else { f = 0; yb = ((t / 500 | 0) % 2); flip = s.sida === 'H'; }                                     // vila: andas
   if (!START_KLAR) { id = 'swing'; f = Math.floor((t / 110) % 16); }
   const gy = golvY();
+  if (START_KLAR && PASSID === 'b') {                  // kort #740: pass B – alla fem övningarna som pixel-3D-Hasse
+    const o = PX3D && PX3D.ovn && PX3D.ovn[id];
+    if (!o) { X.font = '8px P2P'; X.textAlign = 'center'; X.textBaseline = 'top'; X.fillStyle = '#33f0ff'; X.fillText('LADDAR 3D-HASSE…', W / 2, gy - 50); return; }
+    const e = EX[id]; let p = 0, yb2 = 0;
+    if (s.typ === 'jobb') { p = (EL / e.t) % 1; if (e.vand && EL > s.d / 2) p = 1 - p; }        // around the world: byt håll halvvägs
+    else if (s.typ === 'vila' && s.sista) { p = 0; yb2 = ((t / 500 | 0) % 2); }
+    else p = (t / (e.t * 1600)) % 1;                                                              // vila/redo: nästa övning i slow motion
+    const r = o.ruta(p), x = (W - o.RW) / 2 | 0, y = gy - o.RH + 3 + yb2;
+    rect('rgba(0,0,0,.45)', W / 2 - (id === 'pushmc' ? 44 : 22), gy, id === 'pushmc' ? 88 : 44, 2);
+    X.drawImage(r, x, y);
+    return;
+  }
   if (H3 && id === 'swing' && PX3D) {                 // kort #739: pixel-3D-Hasse (förrenderade rutor, ~12 fps)
     let p = 0;
     if (s.typ === 'jobb') p = (EL / EX.swing.t) % 1;
@@ -368,7 +407,7 @@ let START_KLAR = false, T0 = 0;
 let H3 = Q.has('hasse') ? Q.get('hasse') === '3d' : localStorage.getItem('hr_retro_h3') === '1', PX3D = null, PX3D_LADDAR = null;
 function laddaPx3d() {
   if (PX3D || PX3D_LADDAR) return PX3D_LADDAR;
-  PX3D_LADDAR = laddat.then(() => import('./px3d.js')).then(mod => mod.bygg(META.palett)).then(r => { PX3D = r; window.__px3d = r; })
+  PX3D_LADDAR = laddat.then(() => import('./px3d.js')).then(mod => mod.bygg(META.palett, ['atw', 'rdlrow', 'pushmc', 'sqcurl'])).then(r => { PX3D = r; window.__px3d = r; })
     .catch(e => { console.error(e); window.__err = 'px3d: ' + e; H3 = false; hTxt(); });
   return PX3D_LADDAR;
 }
@@ -388,26 +427,29 @@ function ram(ts) {
 }
 
 // ---------- knappar ----------
-function startaPass() {
+function startaPass(pid) {
+  if (pid === 'a' || pid === 'b') PASSID = pid;
+  if (PASSID === 'b') laddaPx3d();
   ac(); LJ.start(); START_KLAR = true;
-  ST = plan(); I = 0; EL = 0; TOT = 0; SCORE = 0; PAUS = false; KOR = true;
+  ST = PASSID === 'b' ? planB() : plan(); I = 0; EL = 0; TOT = 0; SCORE = 0; PAUS = false; KOR = true;
   $('#start').classList.add('dold'); document.body.classList.remove('pre'); $('#slut').classList.remove('vis');
   uiStep(); mitt('GET READY', 1500);
   if (navigator.wakeLock) navigator.wakeLock.request('screen').catch(() => {});
 }
-$('#bStart').onclick = startaPass; $('#bIgen').onclick = startaPass;
+$('#bStart').onclick = () => startaPass('a'); $('#bStartB').onclick = () => startaPass('b'); $('#bIgen').onclick = () => startaPass();
 $('#bPaus').onclick = () => { if (!KOR) return; PAUS = !PAUS; $('#bPaus').textContent = PAUS ? '► SPELA' : '❚❚ PAUS'; mitt(PAUS ? 'PAUSE' : '', PAUS ? 0 : 1); };
 $('#bSkip').onclick = () => { if (KOR) { EL = ST[I].d; LJ.takt(); } };
 const ljudTxt = () => $('#bLjud').textContent = LJUD ? '♪ PÅ' : '♪ AV';
 $('#bLjud').onclick = () => { LJUD = !LJUD; localStorage.setItem('hr_retro_ljud', LJUD ? '1' : '0'); ljudTxt(); if (LJUD) LJ.rep(); };
 ljudTxt();
 addEventListener('keydown', e => { if (e.key === ' ') { e.preventDefault(); KOR ? $('#bPaus').click() : startaPass(); } if (e.key === 'ArrowRight') $('#bSkip').click(); });
-$('#lista').innerHTML = PASS.map(([id, s, r], i) => `${i + 1}-5 <span>${NAMN[id]}</span> ${s}×${r}${EX[id].sida || EX[id].alt ? '/SIDA' : ''}`).join('<br>');
+$('#lista').innerHTML = 'A: ' + PASS.map(([id]) => `<span>${NAMN[id]}</span>`).join(' · ') + '<br>B: 3 VARV × ' + PASS_B.map(id => `<span>${NAMN[id]}</span>`).join(' · ') + ' (30/30)';
 $('#hi').textContent = pad(HI, 6);
 
 storlek();
 Promise.all([laddat, document.fonts.load('8px P2P'), document.fonts.load('20px VT')]).then(() => {
   storlek(); ST = plan(); requestAnimationFrame(ram); window.__ready = true;
+  if (PASSID === 'b') laddaPx3d();
   if (Q.has('auto')) startaPass();
 });
 window.__retro = {get I(){return I}, get ST(){return ST}, get EL(){return EL}, hopp(i){ I = i; EL = 0; uiStep(); }, startaPass,

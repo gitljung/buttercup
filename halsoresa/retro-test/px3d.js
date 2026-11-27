@@ -1,4 +1,5 @@
 // Kort #739: pixel-3D-Hasse för swing på retro-testsidan (live-appen orörd).
+// Kort #740: fler klipp (atw, rdlrow, pushmc, sqcurl) ur hasse_v3.glb – samma rendering, egen rutstorlek/kamera per klipp.
 // 3D-Hasse v2.2 (../3d-test/hasse_v2.glb, samma rigg + swingklipp) renderas i låg upplösning med låst ortografisk
 // kamera, 4 skuggsteg, gemensam palett (pixel-arkens 20 färger + gult + svart), lätt Bayer-dither och 1 px svart kontur.
 // Alla rutor förrenderas EN gång (STEG per rep ≈ 12 fps vid takt 1,6 s) → identiska pixlar varje varv = inget flimmer.
@@ -10,6 +11,14 @@ import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 
 const Q = new URLSearchParams(location.search);
 export const RW = 84, RH = 96;            // ruta i spelpixlar (2D-arkets Hasse är 84 hög)
+// kort #740: övningar i passet '15 min helkropp': klipp, sekunder per rep, rutstorlek och kamerans mitt (z, m)
+export const KLIPP = {
+  atw:    {t: 2.4, RW: 84,  RH: 96,  zc: 0.02},
+  rdlrow: {t: 4.4, RW: 84,  RH: 96,  zc: 0.10},
+  pushmc: {t: 3.6, RW: 104, RH: 96,  zc: 0.88},
+  sqcurl: {t: 5.2, RW: 84,  RH: 108, zc: 0.05},
+};
+const FPS = 12;
 const STEG = 19;                           // rutor per rep (1,6 s takt → ~12 fps)
 const PX = 1.80 / 84;                      // meter per spelpixel (Hasse ~1,75 m + hår ≈ 82 px)
 const HUVUD = +(Q.get('huvud') || 1.18);
@@ -18,7 +27,7 @@ const KA = +(Q.get('ka') || 0.32), KH = +(Q.get('kh') || 0.12), KB = +(Q.get('kb
 
 function hex(h) { return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]; }
 
-export async function bygg(palettHex) {
+export async function bygg(palettHex, klipp = []) {
   const PAL = palettHex.concat(['#ffd23f', '#0b0614']).map(hex);
   const R = new THREE.WebGLRenderer({ antialias: false, alpha: true, preserveDrawingBuffer: true });
   R.setPixelRatio(1); R.setSize(RW * 2, RH * 2, false);   // 2× översampling, sedan ruta-för-ruta-majoritet ned till 1×
@@ -34,7 +43,7 @@ export async function bygg(palettHex) {
   const grad = new THREE.DataTexture(new Uint8Array([70, 70, 70, 255, 130, 130, 130, 255, 195, 195, 195, 255, 255, 255, 255, 255]), 4, 1);
   grad.minFilter = grad.magFilter = THREE.NearestFilter; grad.needsUpdate = true;
 
-  const g = await new Promise((ok, fel) => { const L = new GLTFLoader(); L.setMeshoptDecoder(MeshoptDecoder); L.load('../3d-test/hasse_v2.glb', ok, undefined, fel); });
+  const g = await new Promise((ok, fel) => { const L = new GLTFLoader(); L.setMeshoptDecoder(MeshoptDecoder); L.load(klipp.length ? '../3d-test/hasse_v3.glb' : '../3d-test/hasse_v2.glb', ok, undefined, fel); });
   const root = g.scene; scene.add(root);
   let kb = null, huvud = null, kropp = null; const ben = {};
   root.traverse(o => {
@@ -97,8 +106,8 @@ export async function bygg(palettHex) {
   }
 
   // ---- en ruta: ställ klippet, rendera, kvantisera ----
-  const off = document.createElement('canvas'); off.width = RW * 2; off.height = RH * 2;
-  const ox = off.getContext('2d', { willReadFrequently: true });
+  let off = document.createElement('canvas'); off.width = RW * 2; off.height = RH * 2;
+  let ox = off.getContext('2d', { willReadFrequently: true });
   const B4 = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
   const fotY0 = {};
   function stall(c) {
@@ -114,9 +123,13 @@ export async function bygg(palettHex) {
       root.position.y = fotY0.y - v.y; root.position.z = fotY0.z - v.z; root.updateMatrixWorld(true);
     }
   }
-  function ruta(c) {
-    stall(c);
-    R.render(scene, cam);
+  function ruta(c, RW = 84, RH = 96, kam = cam, stallFn = stall) {
+    if (off.width !== RW * 2 || off.height !== RH * 2) {
+      R.setSize(RW * 2, RH * 2, false); off = document.createElement('canvas'); off.width = RW * 2; off.height = RH * 2;
+      ox = off.getContext('2d', { willReadFrequently: true });
+    }
+    stallFn(c);
+    R.render(scene, kam);
     ox.clearRect(0, 0, off.width, off.height); ox.drawImage(R.domElement, 0, 0);
     const src = ox.getImageData(0, 0, off.width, off.height).data;
     const ut = new ImageData(RW, RH), d = ut.data, A = new Uint8Array(RW * RH);
@@ -152,5 +165,26 @@ export async function bygg(palettHex) {
     cv.getContext('2d').putImageData(ruta(fas2klipp(i / STEG)), 0, 0); RUTOR.push(cv);
   }
   window.__px3dStall = (c) => { stall(c); };
-  return { RW, RH, STEG, RUTOR, ruta: p => RUTOR[Math.floor((((p % 1) + 1) % 1) * STEG) % STEG] };
+  const UT = { RW, RH, STEG, RUTOR, ruta: p => RUTOR[Math.floor((((p % 1) + 1) % 1) * STEG) % STEG], ovn: {} };
+  UT.ovn.swing = { RW, RH, STEG, RUTOR, ruta: UT.ruta };
+  // ---- kort #740: övriga klipp. Rotens läge står i klippet (fötter/tår/händer i golvet), ingen fotlåsning här ----
+  for (const id of klipp) {
+    const K = KLIPP[id], cl = g.animations.find(a => a.name === id);
+    if (!K || !cl) { console.warn('px3d: saknar klipp', id); continue; }
+    act.stop(); const a2 = mixer.clipAction(cl); a2.play();
+    const kc = new THREE.OrthographicCamera(-K.RW / 2 * PX, K.RW / 2 * PX, K.RH * PX + y0, y0, 0.1, 20);
+    kc.position.set(-6, 0, K.zc); kc.lookAt(0, 0, K.zc); kc.position.y = 0; kc.updateMatrixWorld();
+    const st = c => { a2.time = c * cl.duration; mixer.update(0); if (huvud) huvud.scale.setScalar(HUVUD); if (kb) kb.scale.setScalar(1.25);
+      root.position.set(0, 0, 0); root.updateMatrixWorld(true); };
+    const n = Math.max(12, Math.round(K.t * FPS)), RR = [];
+    for (let i = 0; i < n; i++) {
+      const cv = document.createElement('canvas'); cv.width = K.RW; cv.height = K.RH;
+      cv.getContext('2d').putImageData(ruta(i / n, K.RW, K.RH, kc, st), 0, 0); RR.push(cv);
+    }
+    a2.stop(); act.play();
+    UT.ovn[id] = { RW: K.RW, RH: K.RH, STEG: n, RUTOR: RR, t: K.t, ruta: p => RR[Math.floor((((p % 1) + 1) % 1) * n) % n] };
+    await new Promise(r => setTimeout(r, 0));          // låt sidan andas mellan klippen
+  }
+  window.__px3dKlipp = (id, c) => { const K = KLIPP[id], cl = g.animations.find(a => a.name === id); act.stop(); const a2 = mixer.clipAction(cl); a2.play(); a2.time = c * cl.duration; mixer.update(0); };
+  return UT;
 }
