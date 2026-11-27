@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#120a2a">
+<title>Hasses Hälsoresa · RETRO-test (Swing + drag)</title>
+<!-- Kort #735: retro-testsida. Live-appen (/halsoresa/) är orörd. Pixel-Hasse ur appens egna ark (src/pix.py), egen tolkning av 16-bitarsstil. -->
+<style>
+@font-face{font-family:P2P;src:url(fonts/PressStart2P.woff2) format('woff2');font-display:block}
+@font-face{font-family:VT;src:url(fonts/VT323.woff2) format('woff2');font-display:block}
+:root{--gul:#ffd23f;--rod:#ff3b30;--cyan:#33f0ff;--mag:#ff3fb4;--lila:#120a2a;--ink:#0b0614}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--lila);color:#fff;overflow:hidden;font-family:P2P,monospace;-webkit-tap-highlight-color:transparent;user-select:none}
+#scen{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;image-rendering:pixelated;image-rendering:crisp-edges}
+/* scanlines + vinjett */
+#crt{position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px);mix-blend-mode:multiply}
+#crt::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.45))}
+.ui{position:fixed;left:0;right:0;pointer-events:none;padding:0 max(10px,env(safe-area-inset-left))}
+.sk{text-shadow:2px 2px 0 var(--ink),-1px -1px 0 var(--ink),1px -1px 0 var(--ink),-1px 1px 0 var(--ink)}
+#top{top:max(8px,env(safe-area-inset-top));display:flex;justify-content:space-between;gap:8px;font-size:11px;line-height:1.5}
+#top b{display:block;color:var(--rod);font-weight:normal}
+#top .m{text-align:center}#top .h{text-align:right}
+#meter{top:calc(max(8px,env(safe-area-inset-top)) + 40px);display:flex;align-items:center;gap:8px;font-size:9px}
+#meter .seg{display:flex;gap:2px;flex:1}
+#meter .seg i{flex:1;height:8px;background:#2a1a46;box-shadow:inset 0 0 0 1px #000}
+#meter .seg i.k{background:var(--cyan)}#meter .seg i.n{background:var(--gul);animation:bl .5s steps(1) infinite}
+@keyframes bl{50%{opacity:.25}}
+#skylt{top:calc(max(8px,env(safe-area-inset-top)) + 64px);text-align:center;font-size:clamp(18px,5.6vw,40px);line-height:1.25;letter-spacing:1px}
+#skylt .a{color:#fff;display:block;font-size:.55em;letter-spacing:2px}
+#skylt .b{color:var(--gul);text-shadow:3px 3px 0 var(--rod),-2px -2px 0 var(--ink),2px -2px 0 var(--ink),-2px 2px 0 var(--ink),5px 5px 0 var(--ink)}
+#skylt.in{animation:skin .45s steps(6) both}
+@keyframes skin{0%{transform:translateX(-110%)}70%{transform:translateX(4%)}100%{transform:none}}
+#sida{display:block;margin-top:6px;font-size:11px;color:var(--cyan)}
+#bot{bottom:0;padding-bottom:max(10px,env(safe-area-inset-bottom));background:linear-gradient(transparent,rgba(11,6,20,.85) 22%)}
+#rad{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;padding-top:20px}
+.lab{font-size:9px;color:var(--mag);letter-spacing:1px}
+.dig{font-family:VT,monospace;font-size:clamp(54px,15vw,96px);line-height:.85;color:var(--gul);text-shadow:3px 3px 0 var(--rod),5px 5px 0 var(--ink)}
+.dig small{font-size:.5em;color:#fff;text-shadow:2px 2px 0 var(--ink)}
+#reps.tick{animation:tk .22s steps(3)}@keyframes tk{0%{transform:scale(1.35)}100%{transform:none}}
+#tim{text-align:right}#tim.sist .dig{color:var(--rod);text-shadow:3px 3px 0 var(--gul),5px 5px 0 var(--ink);animation:bl .5s steps(1) infinite}
+#tempo{margin:10px 0 4px;display:flex;gap:3px;height:18px}
+#tempo i{flex:1;background:#2a1a46;box-shadow:inset 0 0 0 2px #000}
+#tempo i.p{background:var(--gul)}#tempo i.u{background:var(--mag)}
+#tlab{display:flex;justify-content:space-between;font-size:9px;color:#c9b8ff}
+#knappar{display:flex;gap:8px;margin-top:10px;pointer-events:auto}
+button{font-family:P2P,monospace;font-size:11px;color:#fff;background:#2a1a46;border:0;padding:12px 10px;min-height:44px;flex:1;cursor:pointer;
+  box-shadow:inset -3px -3px 0 #000,inset 3px 3px 0 #5a3f8f,0 0 0 2px #000}
+button:active{box-shadow:inset 3px 3px 0 #000,0 0 0 2px #000}
+button.gul{background:var(--gul);color:var(--ink);box-shadow:inset -3px -3px 0 #b8860b,inset 3px 3px 0 #fff3a0,0 0 0 2px #000}
+/* mittskyltar */
+#mitt{position:fixed;left:0;right:0;top:34%;text-align:center;pointer-events:none;font-size:clamp(22px,7vw,56px)}
+#mitt .big{color:var(--gul);text-shadow:4px 4px 0 var(--rod),-2px -2px 0 var(--ink),2px -2px 0 var(--ink),-2px 2px 0 var(--ink),7px 7px 0 var(--ink);display:inline-block}
+#mitt .big.pop{animation:pop .5s steps(5) both}@keyframes pop{0%{transform:scale(3);opacity:0}60%{transform:scale(.9);opacity:1}100%{transform:none}}
+#next{position:fixed;left:50%;top:calc(max(8px,env(safe-area-inset-top)) + 150px);transform:translateX(-50%);display:none;pointer-events:none;
+  background:#000;padding:10px 14px;font-size:11px;line-height:1.7;text-align:center;box-shadow:0 0 0 3px var(--mag),0 0 0 6px #000,0 0 18px var(--mag);white-space:nowrap}
+#next .r{color:var(--rod)}#next .y{color:var(--gul);font-size:15px}
+#next.vis{display:block;animation:skin .45s steps(6) both}
+/* startskärm */
+#start{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;background:rgba(10,4,24,.55);padding:20px}
+#start h1{margin:0;font-weight:normal;font-size:clamp(20px,6.4vw,52px);line-height:1.35}
+#start h1 .a{color:#fff;display:block;font-size:.55em}
+#start h1 .b{color:var(--gul);text-shadow:4px 4px 0 var(--rod),-2px -2px 0 var(--ink),2px -2px 0 var(--ink),-2px 2px 0 var(--ink),7px 7px 0 var(--ink)}
+#start p{margin:0;font-size:10px;line-height:1.9;color:#d7c8ff;max-width:520px}
+#start .ps{color:var(--cyan);font-size:14px;animation:bl 1s steps(1) infinite}
+#start button{flex:none;min-width:230px;font-size:14px;padding:16px}
+#start .lista{font-family:VT,monospace;font-size:22px;color:#fff;line-height:1.1;text-align:left}
+#start .lista span{color:var(--gul)}
+#slut{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;background:rgba(10,4,24,.6);padding:20px}
+#slut.vis{display:flex}
+#slut .t{font-size:10px;color:#d7c8ff;line-height:2}
+#slut button{flex:none;min-width:230px}
+.dold{display:none!important}
+body.pre .ui,body.pre #next{visibility:hidden}
+@media (min-width:900px){#top{font-size:14px}#meter{font-size:11px}#meter .seg i{height:10px}.ui{padding:0 max(24px,calc(50vw - 520px))}
+  #next{font-size:13px;top:200px}#next .y{font-size:20px}#rad{padding-top:28px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body class="pre">
+<canvas id="scen"></canvas>
+<div id="crt"></div>
+
+<div class="ui sk" id="top">
+  <div><b>1UP</b><span id="score">000000</span></div>
+  <div class="m"><b>TIME</b><span id="klocka">00:00</span></div>
+  <div class="h"><b>HI</b><span id="hi">000000</span></div>
+</div>
+<div class="ui sk" id="meter"><span id="stage">STAGE 1-5</span><span class="seg" id="seg"></span><span id="set">SET 1/4</span></div>
+<div class="ui sk" id="skylt"><span class="a" id="skA">HASSES HÄLSORESA</span><span class="b" id="skB">SWING + DRAG</span><span id="sida"></span></div>
+<div id="mitt"><span class="big" id="mittT"></span></div>
+<div id="next" class="sk"><span class="r">NEXT ►</span><br><span class="y" id="nextN">KNÄBÖJ</span><br><span id="nextX">3 × 8</span></div>
+
+<div class="ui" id="bot">
+  <div id="rad">
+    <div><div class="lab sk">REPS</div><div class="dig" id="reps">00<small>/10</small></div></div>
+    <div id="tim"><div class="lab sk" id="timLab">TID KVAR</div><div class="dig" id="timD">0:16</div></div>
+  </div>
+  <div id="tempo"></div>
+  <div id="tlab" class="sk"><span id="tNer">▼ NER</span><span id="tTakt">TAKT 1,6 S</span><span id="tUpp">UPP ▲</span></div>
+  <div id="knappar"><button id="bPaus">❚❚ PAUS</button><button id="bSkip">SKIP ►►</button><button id="bLjud">♪ PÅ</button></div>
+</div>
+
+<div id="start">
+  <h1><span class="a">HASSES HÄLSORESA</span><span class="b">RETRO</span></h1>
+  <div class="lista" id="lista"></div>
+  <button class="gul" id="bStart">► PRESS START</button>
+  <span class="ps">EN KLOCKA · CA 15 MIN</span>
+  <p>Testversion av passet Swing + drag i 16-bitarsstil. Hasse räknar takten – gör en rep per varv. Live-appen finns kvar på <span style="color:#fff">buttercup.nu/halsoresa</span>.</p>
+</div>
+<div id="slut"><div id="mittS" style="font-size:clamp(22px,7vw,52px)"></div><div class="t" id="slutT"></div><button class="gul" id="bIgen">► SPELA IGEN</button></div>
+
+<script>
+'use strict';
+const Q = new URLSearchParams(location.search);
+const FART = Math.max(0.25, Math.min(20, +Q.get('fart') || 1));     // ?fart=4 för test/film
+const KORT = Q.has('kort');                                          // ?kort = 1 set per övning (test)
+const $ = s => document.querySelector(s);
+const pad = (n, l) => String(Math.max(0, Math.floor(n))).padStart(l, '0');
+const mmss = s => { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + pad(s % 60, 2); };
+
+// ---------- passet: Swing + drag (samma som live-appens pass A, 15 min) ----------
+const EX = {
+  swing:  {a:'KETTLEBELL', b:'SWING!',  t:1.6, ner:'▼ HÖFT BAK', upp:'HÖFT FRAM ▲', tips:'Höften fram – klockan flyter'},
+  goblet: {a:'KNÄBÖJ MOT', b:'BÄNK!',   t:3.0, ner:'▼ SÄTT DIG', upp:'RES DIG ▲'},
+  rodd:   {a:'ENARMS',     b:'RODD!',   t:2.4, sida:true, ner:'▼ DRA', upp:'SÄNK ▲'},
+  halo:   {a:'KETTLEBELL', b:'HALO!',   t:4.0, sida:true, varv:true, ner:'● RUNT', upp:'HUVUDET ●'},
+  deadbug:{a:'BÅLEN:',     b:'DEAD BUG!', t:3.0, alt:true, ner:'▶ STRÄCK', upp:'TILLBAKA ◀'},
+};
+const PASS = [['swing',4,10],['goblet',3,8],['rodd',3,8],['halo',2,5],['deadbug',3,6]];
+const NAMN = {swing:'SWING', goblet:'KNÄBÖJ', rodd:'RODD', halo:'HALO', deadbug:'DEAD BUG'};
+const VILA = 20, BYT = 6, NASTA = 25, REDO = 4;
+
+function plan() {
+  const st = [{typ:'redo', d:REDO, ex:PASS[0][0], xi:0}];
+  PASS.forEach(([id, sets, reps], xi) => {
+    const e = EX[id], S = KORT ? 1 : sets;
+    for (let s = 1; s <= S; s++) {
+      const sidor = e.sida ? ['V', 'H'] : [null];
+      sidor.forEach((sd, si) => {
+        const n = e.alt ? reps * 2 : reps;
+        st.push({typ:'jobb', ex:id, xi, s, S, reps:n, sida:sd, d:n * e.t});
+        if (si < sidor.length - 1) st.push({typ:'byt', ex:id, xi, s, S, d:BYT});
+      });
+      if (s < S) st.push({typ:'vila', ex:id, xi, s, S, d:VILA});
+    }
+    if (xi < PASS.length - 1) st.push({typ:'nasta', ex:PASS[xi + 1][0], xi:xi + 1, fran:id, d:NASTA});
+  });
+  st.push({typ:'klar', d:0});
+  return st;
+}
+
+// ---------- sprites ----------
+const SP = {}; let META;
+const laddat = fetch('px/sprites.json').then(r => r.json()).then(m => { META = m;
+  return Promise.all(Object.keys(m.ovn).map(k => new Promise(ok => { const i = new Image(); i.onload = ok; i.src = `px/${k}.png`; SP[k] = i; })));
+});
+
+// ---------- ljud: 8-bitars syntes (WebAudio, inga filer) ----------
+let AC = null, LJUD = localStorage.getItem('hr_retro_ljud') !== '0';
+function ac() { if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } if (AC && AC.state === 'suspended') AC.resume(); return AC; }
+function ton(f, t0, d, typ = 'square', v = .12, slut) {
+  const a = ac(); if (!a || !LJUD) return;
+  const o = a.createOscillator(), g = a.createGain(); o.type = typ; o.frequency.setValueAtTime(f, a.currentTime + t0);
+  if (slut) o.frequency.exponentialRampToValueAtTime(slut, a.currentTime + t0 + d);
+  g.gain.setValueAtTime(v, a.currentTime + t0); g.gain.exponentialRampToValueAtTime(.001, a.currentTime + t0 + d);
+  o.connect(g).connect(a.destination); o.start(a.currentTime + t0); o.stop(a.currentTime + t0 + d + .02);
+}
+const LJ = {
+  start(){ [523,659,784,1047].forEach((f,i)=>ton(f,i*.09,.12)); ton(1568,.36,.35,'square',.1); },
+  rep(){ ton(988,0,.05,'square',.08); ton(1319,.05,.09,'square',.08); },
+  takt(){ ton(220,0,.04,'triangle',.12); },
+  nedr(){ ton(440,0,.1,'square',.1); },
+  go(){ ton(880,0,.25,'square',.12); ton(1760,0,.25,'square',.05); },
+  set(){ [784,988,1175,1568].forEach((f,i)=>ton(f,i*.07,.09,'square',.09)); },
+  klar(){ [523,523,523,659,784,659,784,1047].forEach((f,i)=>ton(f,i*.13,i==7?.6:.11,'square',.11)); [131,131,165,196].forEach((f,i)=>ton(f,i*.26,.24,'triangle',.18)); },
+};
+
+// ---------- spelets läge ----------
+let ST = [], I = 0, EL = 0, TOT = 0, PAUS = false, SCORE = 0, LASTREP = -1, LASTSEK = -1, KOR = false;
+let HI = +localStorage.getItem('hr_retro_hi') || 0;
+const rep = (s) => s.typ === 'jobb' ? Math.min(s.reps, Math.floor(EL / EX[s.ex].t)) : 0;
+
+function uiStep() {
+  const s = ST[I], e = EX[s.ex] || {}, J = s.typ === 'jobb';
+  $('#stage').textContent = 'STAGE ' + ((s.xi ?? 4) + 1) + '-5';
+  $('#set').textContent = s.S ? `SET ${s.s}/${s.S}` : 'SET -';
+  const sk = $('#skylt'); sk.classList.remove('in'); void sk.offsetWidth; sk.classList.add('in');
+  if (s.typ === 'vila') { $('#skA').textContent = 'ANDAS UT'; $('#skB').textContent = 'VILA!'; }
+  else if (s.typ === 'byt') { $('#skA').textContent = 'BYT'; $('#skB').textContent = 'SIDA!'; }
+  else if (s.typ === 'nasta') { $('#skA').textContent = 'STAGE ' + pad(s.xi, 1) + ' CLEAR'; $('#skB').textContent = 'BRA JOBBAT!'; }
+  else { $('#skA').textContent = e.a; $('#skB').textContent = e.b; }
+  $('#sida').textContent = J && s.sida ? (s.sida === 'V' ? '◄ VÄNSTER ARM' : 'HÖGER ARM ►') : J && e.alt ? '◄ VARANNAN SIDA ►' : '';
+  $('#timLab').textContent = J ? 'TID KVAR' : s.typ === 'redo' ? 'START OM' : s.typ === 'byt' ? 'BYT SIDA' : 'VILA';
+  $('#tNer').textContent = e.ner || '▼'; $('#tUpp').textContent = e.upp || '▲';
+  $('#tTakt').textContent = 'TAKT ' + String(e.t || 0).replace('.', ',') + ' S';
+  const nx = s.typ === 'nasta' || s.typ === 'redo';
+  $('#next').classList.toggle('vis', nx);
+  if (nx) { const p = PASS[s.xi]; $('#nextN').textContent = NAMN[p[0]]; $('#nextX').textContent = `${KORT ? 1 : p[1]} SET × ${p[2]}${EX[p[0]].sida ? ' / SIDA' : EX[p[0]].alt ? ' / SIDA' : ''}${EX[p[0]].varv ? ' VARV' : ''}`; }
+  // segmentmätare: ett block per jobb-steg
+  const jobb = ST.filter(x => x.typ === 'jobb'); const nu = ST.slice(0, I + 1).filter(x => x.typ === 'jobb').length - (J ? 1 : 0);
+  $('#seg').innerHTML = jobb.map((x, i) => `<i class="${i < nu ? 'k' : i === nu ? 'n' : ''}"></i>`).join('');
+  if (!J) $('#reps').innerHTML = '--<small>/--</small>';
+  if (J) { $('#reps').innerHTML = '00<small>/' + pad(s.reps, 2) + '</small>'; mitt(I === 1 || ST[I - 1].typ !== 'jobb' ? 'GO!' : '', 700); LJ.go(); }
+  if (s.typ === 'vila' || s.typ === 'byt') LJ.set();
+  if (s.typ === 'nasta') { LJ.set(); mitt('STAGE CLEAR', 1600); }
+  LASTREP = 0; LASTSEK = -1;
+}
+let mittT = null;
+function mitt(txt, ms) { const m = $('#mittT'); m.textContent = txt; m.classList.remove('pop'); void m.offsetWidth; if (txt) m.classList.add('pop'); clearTimeout(mittT); if (ms) mittT = setTimeout(() => m.textContent = '', ms); }
+
+function nasta() {
+  if (ST[I].typ === 'jobb') { SCORE += 500; $('#reps').firstChild.nodeValue = pad(ST[I].reps, 2); }
+  I++; EL = 0;
+  if (ST[I].typ === 'klar') return slut();
+  uiStep();
+}
+function slut() {
+  KOR = false; LJ.klar();
+  SCORE += Math.max(0, 5000 - Math.floor(TOT)) ; if (SCORE > HI) { HI = SCORE; localStorage.setItem('hr_retro_hi', HI); }
+  $('#mittS').innerHTML = '<span class="big" style="color:var(--gul);text-shadow:4px 4px 0 var(--rod),7px 7px 0 #000">PASS KLART!</span>';
+  $('#slutT').innerHTML = `SCORE ${pad(SCORE, 6)}<br>TID ${mmss(TOT)}<br>HI ${pad(HI, 6)}<br><span style="color:var(--cyan)">HALLÅ GÄNGET – BRA JOBBAT!</span>`;
+  $('#slut').classList.add('vis'); hud();
+}
+
+function tick(dt) {
+  if (!KOR || PAUS) return;
+  const s = ST[I]; dt *= FART; EL += dt; TOT += dt;
+  if (s.typ === 'jobb') {
+    const r = rep(s);
+    if (r > LASTREP) { LASTREP = r; if (r > 0) { SCORE += 100; LJ.rep(); const el = $('#reps'); el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick'); } }
+    // takt-klick i mitten av varje rep
+    const fas = (EL % s.d) / EX[s.ex].t % 1;
+  }
+  const kvar = s.d - EL, sek = Math.ceil(kvar);
+  if (sek !== LASTSEK) { LASTSEK = sek; if (s.typ !== 'jobb' && sek <= 3 && sek > 0) { LJ.nedr(); if (s.typ === 'redo' || s.typ === 'vila' || s.typ === 'nasta' || s.typ === 'byt') mitt(String(sek), 800); } }
+  if (EL >= s.d) nasta();
+}
+
+function hud() {
+  const s = ST[I]; if (!s || s.typ === 'klar') { if (s) { $('#score').textContent = pad(SCORE, 6); $('#hi').textContent = pad(Math.max(HI, SCORE), 6); } return; }
+  $('#score').textContent = pad(SCORE, 6); $('#hi').textContent = pad(Math.max(HI, SCORE), 6);
+  $('#klocka').textContent = pad(TOT / 60, 2) + ':' + pad(TOT % 60, 2);
+  const kvar = s.d - EL;
+  $('#timD').textContent = mmss(kvar);
+  $('#tim').classList.toggle('sist', s.typ !== 'jobb' && kvar <= 3.2 && s.typ !== 'klar');
+  if (s.typ === 'jobb') {
+    const r = rep(s); $('#reps').firstChild.nodeValue = pad(r, 2);
+    const p = (EL / EX[s.ex].t) % 1, n = 12, on = Math.floor(p * n);
+    TEMPO.forEach((b, i) => { b.className = i < on ? (i < n / 2 ? 'p' : 'u') : ''; });
+  } else TEMPO.forEach(b => b.className = '');
+}
+const TEMPO = []; for (let i = 0; i < 12; i++) { const b = document.createElement('i'); $('#tempo').appendChild(b); TEMPO.push(b); }
+
+// ---------- scen: synthwave + pixelgym (ritas i låg upplösning) ----------
+const C = $('#scen'), X = C.getContext('2d'); let P = 2, W = 0, H = 0, BOTH = 200, STJ = [], BERG = [];
+function storlek() {
+  const vw = innerWidth, vh = innerHeight;
+  P = Math.min(vw / 168, vh / 235); P = P >= 3 ? Math.floor(P) : Math.max(1.6, P);   // mobil: bråktal så att Hasse fyller bredden
+  BOTH = ($('#bot') || {}).offsetHeight || 200;
+  W = Math.ceil(vw / P); H = Math.ceil(vh / P); C.width = W; C.height = H; X.imageSmoothingEnabled = false;
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  STJ = Array.from({length: Math.round(W * H / 260)}, () => ({x: rnd() * W | 0, y: rnd() * H * .5 | 0, f: rnd() * 6.28, s: rnd() < .15}));
+  BERG = []; let y = 0; for (let x = 0; x <= W; x++) { y += (rnd() - .5) * 2.2; y = Math.max(-2, Math.min(16, y)); BERG.push(y); }
+}
+addEventListener('resize', storlek);
+const golvY = () => Math.round(Math.min(H * .86, (innerHeight - BOTH - 26) / P));
+const horY = () => golvY() - Math.round(Math.min(46, H * .12));
+const rect = (c, x, y, w, h) => { X.fillStyle = c; X.fillRect(x | 0, y | 0, w | 0, h | 0); };
+
+function himmel(t) {
+  const hy = horY();
+  const band = ['#0d0722', '#150a30', '#1f0c3d', '#2e0f4f', '#43125c', '#5e1666', '#7d1b6c', '#a1246f', '#c7336b', '#ec4f5e'];
+  const bh = hy / band.length;
+  band.forEach((c, i) => { rect(c, 0, i * bh, W, bh + 1); if (i > 0) for (let x = (i % 2); x < W; x += 2) rect(band[i - 1], x, i * bh, 1, 1); });
+  // stjärnor som blinkar
+  STJ.forEach(s => { if (s.y > hy - 18) return; const v = Math.sin(t / 600 + s.f); if (v > .2) rect(v > .85 ? '#ffffff' : '#9f8fd6', s.x, s.y, 1, 1); if (s.s && v > .7) { rect('#ffffff', s.x - 1, s.y, 3, 1); rect('#ffffff', s.x, s.y - 1, 1, 3); } });
+  // sol med ränder som glider nedåt
+  const r = Math.round(Math.min(W * .26, hy * .55)), cx = W / 2 | 0, cy = hy - r * .45 | 0;
+  const sf = ['#fff27a', '#ffd23f', '#ffb13b', '#ff8a3d', '#ff5f4f', '#ff3f7a'];
+  for (let y = -r; y <= r; y++) {
+    const yy = cy + y; if (yy >= hy) break;
+    const lo = y > -r * .1;
+    if (lo) { const per = 7, k = ((y + r * .1 + t / 140) % per + per) % per; const tj = 1 + (y + r * .1) / r * 3.2; if (k < tj) continue; }
+    const w = Math.round(Math.sqrt(r * r - y * y)), c = sf[Math.min(sf.length - 1, Math.floor((y + r) / (2 * r) * sf.length))];
+    rect(c, cx - w, yy, w * 2, 1);
+  }
+  // berg
+  for (let x = 0; x < W; x++) { const h = 6 + BERG[x]; rect('#1a0b33', x, hy - h, 1, h); rect('#3a1a6a', x, hy - h, 1, 1); }
+}
+function golv(t) {
+  const hy = horY(), gy = golvY();
+  rect('#12061f', 0, hy, W, H - hy);
+  // horisontlinjer i perspektiv som rullar mot betraktaren
+  const fas = (t / 900) % 1;
+  for (let k = 0; k < 14; k++) { const z = 14 - k - fas; if (z <= .3) continue; const y = hy + Math.round((H - hy) * 1.6 / z) - 1; if (y > H || y < hy) continue; rect(k > 9 ? '#ff3fb4' : '#a0267f', 0, y, W, 1); }
+  rect('#ff7ad1', 0, hy, W, 1);
+  const vx = W / 2;
+  for (let i = -14; i <= 14; i++) { const x0 = vx + i * W / 9; X.strokeStyle = '#a0267f'; X.lineWidth = 1; X.beginPath(); X.moveTo(vx + i * 3 + .5, hy); X.lineTo(x0 + .5, H); X.stroke(); }
+  // gymmatta
+  const mw = Math.min(W - 10, 150); rect('#1d1a2b', W / 2 - mw / 2, gy - 2, mw, 6); rect('#3a3456', W / 2 - mw / 2, gy - 2, mw, 1); rect('#0b0614', W / 2 - mw / 2, gy + 4, mw, 1);
+}
+function gym(t) {
+  const gy = golvY(), cx = W / 2 | 0;
+  // ställning till vänster (squat rack) med neonkant
+  const rx = Math.max(12, cx - 112); {
+    rect('#0b0614', rx, gy - 70, 4, 72); rect('#0b0614', rx + 26, gy - 70, 4, 72); rect('#0b0614', rx - 2, gy - 72, 34, 4);
+    rect('#33f0ff', rx, gy - 70, 1, 70); rect('#33f0ff', rx + 26, gy - 70, 1, 70); rect('#33f0ff', rx - 2, gy - 72, 34, 1);
+    for (let h = 0; h < 6; h++) { rect('#33f0ff', rx + 4, gy - 60 + h * 9, 2, 1); rect('#33f0ff', rx + 24, gy - 60 + h * 9, 2, 1); }
+    // skivstång i ställningen
+    rect('#c9c9d6', rx - 10, gy - 44, 52, 2); rect('#ff3fb4', rx - 14, gy - 50, 5, 14); rect('#ff3fb4', rx + 39, gy - 50, 5, 14);
+    rect('#ffd23f', rx - 14, gy - 50, 5, 1); rect('#ffd23f', rx + 39, gy - 50, 5, 1);
+    // neonskylt på ställningen (flimrar ibland)
+    const fl = (Math.sin(t / 97) > -.92) && !(t % 4000 > 3700 && t % 4000 < 3780);
+    X.font = '8px P2P'; X.textAlign = 'center'; X.textBaseline = 'top';
+    rect('#0b0614', rx - 8, gy - 96, 46, 20); rect(fl ? '#ff3fb4' : '#4a1a3a', rx - 8, gy - 96, 46, 1); rect(fl ? '#ff3fb4' : '#4a1a3a', rx - 8, gy - 77, 46, 1);
+    rect('#0b0614', rx + 4, gy - 76, 1, 4); rect('#0b0614', rx + 26, gy - 76, 1, 4);
+    X.fillStyle = fl ? '#33f0ff' : '#1d5a66'; X.fillText('GYM', rx + 15, gy - 92);
+  }
+  // kettlebellhylla till höger med studsande glimt
+  const kx = Math.min(W - 48, cx + 78); {
+    rect('#0b0614', kx, gy - 22, 46, 3); rect('#0b0614', kx + 2, gy - 22, 3, 24); rect('#0b0614', kx + 41, gy - 22, 3, 24); rect('#ff3fb4', kx, gy - 22, 46, 1);
+    [[kx + 5, 9, '#ffd23f'], [kx + 19, 8, '#ff5f4f'], [kx + 32, 7, '#33f0ff']].forEach(([x, r, c], i) => {
+      const y = gy - 23 - r;
+      rect('#0b0614', x - 1, y - 1, r + 2, r + 2); rect('#2b2840', x, y, r, r); rect(c, x, y, r, 1); rect(c, x, y, 1, r);
+      rect('#0b0614', x + 1, y - 5, r - 2, 1); rect('#0b0614', x + 1, y - 5, 1, 5); rect('#0b0614', x + r - 2, y - 5, 1, 5);
+      if (((t / 700 | 0) % 3) === i) rect('#ffffff', x + 2, y + 2, 1, 1);
+    });
+    // vattenflaska
+    rect('#0b0614', kx + 14, gy - 12, 6, 13); rect('#33f0ff', kx + 15, gy - 11, 4, 11); rect('#ffffff', kx + 15, gy - 14, 4, 2);
+  }
+}
+function hasse(t) {
+  if (!META) return;
+  const s = ST[I] || {typ:'redo', ex:'swing'};
+  let id = s.ex || (s.typ === 'klar' ? 'deadbug' : PASS[0][0]), f = 0, flip = false, yb = 0;
+  if (s.typ === 'jobb') { const e = EX[id]; f = Math.floor(((EL / e.t) % 1) * 16); flip = s.sida === 'H'; }
+  else if (s.typ === 'nasta' || s.typ === 'redo') { f = Math.floor((t / 160) % 16); }                 // förhandsvisning av nästa övning
+  else { f = 0; yb = ((t / 500 | 0) % 2); flip = s.sida === 'H'; }                                     // vila: andas
+  if (!START_KLAR) { id = 'swing'; f = Math.floor((t / 110) % 16); }
+  const m = META.ovn[id], img = SP[id]; if (!m || !img.complete) return;
+  const gy = golvY(), x = (W - m.w) / 2 | 0, y = gy - m.h + 1 + yb;
+  // skugga
+  rect('rgba(0,0,0,.45)', W / 2 - m.w * .32, gy, m.w * .64, 2);
+  X.save();
+  if (flip) { X.translate(x * 2 + m.w, 0); X.scale(-1, 1); }
+  X.drawImage(img, f * m.w, 0, m.w, m.h, x, y, m.w, m.h);
+  X.restore();
+}
+let START_KLAR = false, T0 = 0;
+function ram(ts) {
+  const dt = T0 ? Math.min(.25, (ts - T0) / 1000) : 0; T0 = ts;
+  tick(dt);
+  const tv = ts * FART; himmel(tv); golv(tv); gym(tv); hasse(tv);
+  if (KOR) hud();
+  requestAnimationFrame(ram);
+}
+
+// ---------- knappar ----------
+function startaPass() {
+  ac(); LJ.start(); START_KLAR = true;
+  ST = plan(); I = 0; EL = 0; TOT = 0; SCORE = 0; PAUS = false; KOR = true;
+  $('#start').classList.add('dold'); document.body.classList.remove('pre'); $('#slut').classList.remove('vis');
+  uiStep(); mitt('GET READY', 1500);
+  if (navigator.wakeLock) navigator.wakeLock.request('screen').catch(() => {});
+}
+$('#bStart').onclick = startaPass; $('#bIgen').onclick = startaPass;
+$('#bPaus').onclick = () => { if (!KOR) return; PAUS = !PAUS; $('#bPaus').textContent = PAUS ? '► SPELA' : '❚❚ PAUS'; mitt(PAUS ? 'PAUSE' : '', PAUS ? 0 : 1); };
+$('#bSkip').onclick = () => { if (KOR) { EL = ST[I].d; LJ.takt(); } };
+const ljudTxt = () => $('#bLjud').textContent = LJUD ? '♪ PÅ' : '♪ AV';
+$('#bLjud').onclick = () => { LJUD = !LJUD; localStorage.setItem('hr_retro_ljud', LJUD ? '1' : '0'); ljudTxt(); if (LJUD) LJ.rep(); };
+ljudTxt();
+addEventListener('keydown', e => { if (e.key === ' ') { e.preventDefault(); KOR ? $('#bPaus').click() : startaPass(); } if (e.key === 'ArrowRight') $('#bSkip').click(); });
+$('#lista').innerHTML = PASS.map(([id, s, r], i) => `${i + 1}-5 <span>${NAMN[id]}</span> ${s}×${r}${EX[id].sida || EX[id].alt ? '/SIDA' : ''}`).join('<br>');
+$('#hi').textContent = pad(HI, 6);
+
+storlek();
+Promise.all([laddat, document.fonts.load('8px P2P'), document.fonts.load('20px VT')]).then(() => {
+  storlek(); ST = plan(); requestAnimationFrame(ram); window.__ready = true;
+  if (Q.has('auto')) startaPass();
+});
+window.__retro = {get I(){return I}, get ST(){return ST}, get EL(){return EL}, hopp(i){ I = i; EL = 0; uiStep(); }, startaPass};
+</script>
+</body>
+</html>
