@@ -76,7 +76,10 @@ body.pre .ui,body.pre #next{visibility:hidden}
 @media (min-width:900px){#top{font-size:14px}#meter{font-size:11px}#meter .seg i{height:10px}.ui{padding:0 max(24px,calc(50vw - 520px))}
   #next{font-size:13px;top:200px}#next .y{font-size:20px}#rad{padding-top:28px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+#bHasse{flex:none;min-width:230px;font-size:11px}
+#knappar #bH3{flex:.8}
 </style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
 </head>
 <body class="pre">
 <canvas id="scen"></canvas>
@@ -99,13 +102,14 @@ body.pre .ui,body.pre #next{visibility:hidden}
   </div>
   <div id="tempo"></div>
   <div id="tlab" class="sk"><span id="tNer">▼ NER</span><span id="tTakt">TAKT 1,6 S</span><span id="tUpp">UPP ▲</span></div>
-  <div id="knappar"><button id="bPaus">❚❚ PAUS</button><button id="bSkip">SKIP ►►</button><button id="bLjud">♪ PÅ</button></div>
+  <div id="knappar"><button id="bPaus">❚❚ PAUS</button><button id="bSkip">SKIP ►►</button><button id="bLjud">♪ PÅ</button><button id="bH3">2D</button></div>
 </div>
 
 <div id="start">
   <h1><span class="a">HASSES HÄLSORESA</span><span class="b">RETRO</span></h1>
   <div class="lista" id="lista"></div>
   <button class="gul" id="bStart">► PRESS START</button>
+  <button id="bHasse">HASSE: 2D-PIXEL</button>
   <span class="ps">EN KLOCKA · CA 15 MIN</span>
   <p>Testversion av passet Swing + drag i 16-bitarsstil. Hasse räknar takten – gör en rep per varv. Live-appen finns kvar på <span style="color:#fff">buttercup.nu/halsoresa</span>.</p>
 </div>
@@ -339,8 +343,19 @@ function hasse(t) {
   else if (s.typ === 'nasta' || s.typ === 'redo') { f = Math.floor((t / 160) % 16); }                 // förhandsvisning av nästa övning
   else { f = 0; yb = ((t / 500 | 0) % 2); flip = s.sida === 'H'; }                                     // vila: andas
   if (!START_KLAR) { id = 'swing'; f = Math.floor((t / 110) % 16); }
+  const gy = golvY();
+  if (H3 && id === 'swing' && PX3D) {                 // kort #739: pixel-3D-Hasse (förrenderade rutor, ~12 fps)
+    let p = 0;
+    if (s.typ === 'jobb') p = (EL / EX.swing.t) % 1;
+    else if (!START_KLAR) p = (t / 1760) % 1;
+    else if (s.typ === 'nasta' || s.typ === 'redo') p = (t / 2560) % 1;
+    const r = PX3D.ruta(p), x = (W - PX3D.RW) / 2 | 0, y = gy - PX3D.RH + 3 + yb;
+    rect('rgba(0,0,0,.45)', W / 2 - 22, gy, 44, 2);
+    X.drawImage(r, x, y);
+    return;
+  }
   const m = META.ovn[id], img = SP[id]; if (!m || !img.complete) return;
-  const gy = golvY(), x = (W - m.w) / 2 | 0, y = gy - m.h + 1 + yb;
+  const x = (W - m.w) / 2 | 0, y = gy - m.h + 1 + yb;
   // skugga
   rect('rgba(0,0,0,.45)', W / 2 - m.w * .32, gy, m.w * .64, 2);
   X.save();
@@ -349,6 +364,21 @@ function hasse(t) {
   X.restore();
 }
 let START_KLAR = false, T0 = 0;
+// ---------- kort #739: val 2D-pixel / 3D-pixel-Hasse (bara swing; övriga övningar har 2D-arken) ----------
+let H3 = Q.has('hasse') ? Q.get('hasse') === '3d' : localStorage.getItem('hr_retro_h3') === '1', PX3D = null, PX3D_LADDAR = null;
+function laddaPx3d() {
+  if (PX3D || PX3D_LADDAR) return PX3D_LADDAR;
+  PX3D_LADDAR = laddat.then(() => import('./px3d.js')).then(mod => mod.bygg(META.palett)).then(r => { PX3D = r; window.__px3d = r; })
+    .catch(e => { console.error(e); window.__err = 'px3d: ' + e; H3 = false; hTxt(); });
+  return PX3D_LADDAR;
+}
+function hTxt() {
+  $('#bHasse').textContent = 'HASSE: ' + (H3 ? (PX3D ? '3D-PIXEL' : '3D LADDAR…') : '2D-PIXEL');
+  $('#bH3').textContent = H3 ? '3D' : '2D';
+}
+function satH3(v) { H3 = v; localStorage.setItem('hr_retro_h3', v ? '1' : '0'); if (v) laddaPx3d().then(hTxt); hTxt(); }
+$('#bHasse').onclick = () => satH3(!H3); $('#bH3').onclick = () => satH3(!H3);
+hTxt(); if (H3) laddaPx3d().then(hTxt);
 function ram(ts) {
   const dt = T0 ? Math.min(.25, (ts - T0) / 1000) : 0; T0 = ts;
   tick(dt);
@@ -380,7 +410,8 @@ Promise.all([laddat, document.fonts.load('8px P2P'), document.fonts.load('20px V
   storlek(); ST = plan(); requestAnimationFrame(ram); window.__ready = true;
   if (Q.has('auto')) startaPass();
 });
-window.__retro = {get I(){return I}, get ST(){return ST}, get EL(){return EL}, hopp(i){ I = i; EL = 0; uiStep(); }, startaPass};
+window.__retro = {get I(){return I}, get ST(){return ST}, get EL(){return EL}, hopp(i){ I = i; EL = 0; uiStep(); }, startaPass,
+  rita(tv, el){ if (el !== undefined) EL = el; himmel(tv); golv(tv); gym(tv); hasse(tv); if (KOR) hud(); }, satKor(v){ KOR = v; }};   // test/film (kort #739)
 </script>
 </body>
 </html>
