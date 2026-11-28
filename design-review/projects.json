@@ -185,21 +185,21 @@
   "slug": "yatai",
   "name": "Yatai",
   "doc": "Yatai",
-  "version": 21,
-  "exported": "2026-11-28 00:38"
+  "version": 22,
+  "exported": "2026-11-28 10:56"
  },
  {
   "slug": "yatai-event",
   "name": "Yatai – event (grill ute, allt utfällt)",
   "doc": "Yatai",
-  "version": 21,
-  "exported": "2026-11-28 00:45"
+  "version": 22,
+  "exported": "2026-11-28 11:02"
  },
  {
   "slug": "yatai-transport",
   "name": "Yatai – transport (allt infällt)",
   "doc": "Yatai",
-  "version": 21,
-  "exported": "2026-11-28 00:51"
+  "version": 22,
+  "exported": "2026-11-28 11:08"
  }
 ]
